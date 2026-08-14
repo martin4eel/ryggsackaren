@@ -92,6 +92,8 @@ export class App {
   private travelTarget: City | null = null;
   private mapHighlight: string | null = null;
   private toast: string | null = null;
+  /** Visas när spelaren tryckt på Börja om och ska bekräfta */
+  private confirmRestart = false;
   private toastTimer: number | null = null;
   private startPick: { cityId: string; difficulty: Difficulty } = {
     cityId: 'goteborg',
@@ -217,6 +219,9 @@ export class App {
 
     if (this.toast) {
       shell.append(el('div', { class: 'toast', role: 'status' }, this.toast));
+    }
+    if (this.confirmRestart) {
+      shell.append(this.renderRestartDialog());
     }
     this.root.append(shell);
   }
@@ -398,8 +403,69 @@ export class App {
       stat('Skuld', this.money(s.debt), s.debt > 0 ? 'warn' : undefined)
     );
 
-    hud.append(left, stats);
+    // Börja om finns alltid tillgängligt, oavsett vilken skärm du är på.
+    const restart = button('Börja om', () => this.askRestart(), {
+      class: 'hud-restart',
+      title: 'Avsluta resan och börja om från början',
+    });
+
+    hud.append(left, stats, restart);
     return hud;
+  }
+
+  /**
+   * Frågar först, eftersom en resa kan ha pågått länge. Bekräftelsen visas som
+   * en egen ruta i stället för en systemdialog, så att den fungerar likadant
+   * på telefon och dator.
+   */
+  private askRestart(): void {
+    if (this.confirmRestart) return;
+    stopAllMinigames();
+    this.confirmRestart = true;
+    this.render();
+  }
+
+  private renderRestartDialog(): HTMLElement {
+    const s = this.state!;
+    const overlay = el('div', { class: 'overlay', role: 'dialog', 'aria-modal': 'true' });
+    const box = el('section', { class: 'panel dialog' });
+    box.append(
+      el('h2', {}, 'Börja om från början?'),
+      el(
+        'p',
+        { class: 'muted' },
+        `Din nuvarande resa raderas: dag ${s.days}, ${
+          new Set(s.visited).size
+        } besökta städer och ${this.money(s.money)} i kassan. Det går inte att ångra.`
+      ),
+      el('div', { class: 'row' },
+        button(
+          'Ja, börja om',
+          () => {
+            stopAllMinigames();
+            clearSave();
+            this.state = null;
+            this.quiz = null;
+            this.confirmRestart = false;
+            this.travelTarget = null;
+            this.mapHighlight = null;
+            this.toast = null;
+            this.render();
+          },
+          { class: 'btn btn-primary' }
+        ),
+        button(
+          'Nej, fortsätt spela',
+          () => {
+            this.confirmRestart = false;
+            this.render();
+          },
+          { class: 'btn btn-ghost' }
+        )
+      )
+    );
+    overlay.append(box);
+    return overlay;
   }
 
   // ------------------------------------------------------------------- stad
@@ -1517,11 +1583,16 @@ export class App {
     const actions = el('section', { class: 'panel actions-panel' });
     actions.append(
       button(
-        'Ny resa',
+        'Börja om med ny resa',
         () => {
+          stopAllMinigames();
           clearSave();
           this.state = null;
           this.quiz = null;
+          this.confirmRestart = false;
+          this.travelTarget = null;
+          this.mapHighlight = null;
+          this.toast = null;
           this.render();
         },
         { class: 'btn btn-primary btn-big' }

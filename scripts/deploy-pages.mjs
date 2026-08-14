@@ -54,7 +54,6 @@ if (process.env.GH_TOKEN) {
 const work = mkdtempSync(join(tmpdir(), 'ryggsackaren-gh-pages-'));
 
 try {
-  // Fristående historik: varje deploy är en enda commit, inget gammalt skräp.
   run('git', ['init', '-q', '-b', BRANCH], { cwd: work });
   run('git', ['config', 'user.name', run('git', ['config', 'user.name']).trim()], { cwd: work });
   run('git', ['config', 'user.email', run('git', ['config', 'user.email']).trim()], { cwd: work });
@@ -74,14 +73,49 @@ try {
   );
   run('git', ['remote', 'add', 'origin', remote], { cwd: work });
 
-  console.log(`Publicerar ${DIST}/ till ${BRANCH} ...`);
-  run('git', ['-c', 'credential.helper=', 'push', '-f', 'origin', BRANCH], {
-    cwd: work,
-    env,
-    stdio: 'inherit',
-  });
+  // Hämta befintlig gh-pages och lägg den nya versionen ovanpå. En vanlig
+  // commit på toppen av historiken är det som får GitHub Pages att bygga om;
+  // en force-push med fristående historik ignoreras ibland.
+  let nothingToDo = false;
+  let hasRemoteBranch = true;
+  try {
+    run('git', ['-c', 'credential.helper=', 'fetch', '-q', '--depth', '1', 'origin', BRANCH], {
+      cwd: work,
+      env,
+    });
+  } catch {
+    hasRemoteBranch = false;
+  }
 
-  const match = remote.match(/github\.com[:/]([^/]+)\/([^/.]+)/);
+  if (hasRemoteBranch) {
+    // Behåll historiken men ersätt innehållet med det nya bygget.
+    run('git', ['reset', '--soft', 'FETCH_HEAD'], { cwd: work });
+    run('git', ['add', '-A'], { cwd: work });
+    const changed = run('git', ['status', '--porcelain'], { cwd: work }).trim();
+    if (!changed) {
+      console.log(
+        'Inget nytt att publicera, bygget är identiskt med det som ligger ute.'
+      );
+      nothingToDo = true;
+    } else {
+      run(
+        'git',
+        ['commit', '-q', '-m', `Publicera spelet, byggt från ${sourceCommit}`],
+        { cwd: work }
+      );
+    }
+  }
+
+  if (!nothingToDo) {
+    console.log(`Publicerar ${DIST}/ till ${BRANCH} ...`);
+    run('git', ['-c', 'credential.helper=', 'push', 'origin', BRANCH], {
+      cwd: work,
+      env,
+      stdio: 'inherit',
+    });
+  }
+
+  const match = nothingToDo ? null : remote.match(/github\.com[:/]([^/]+)\/([^/.]+)/);
   if (match) {
     const [, user, repo] = match;
     console.log(`\nKlart. Spelet blir tillgängligt på:`);
