@@ -28,6 +28,68 @@ Bygget i `dist/` är helt statiskt och använder relativa sökvägar, så det ka
 läggas rakt upp på GitHub Pages, Netlify eller vilken statisk webbserver som
 helst utan konfiguration.
 
+## Publicera så att andra kan spela
+
+### Alternativ 1: GitHub Pages, permanent länk
+
+Repot innehåller ett färdigt arbetsflöde i `.github/workflows/deploy.yml` som
+bygger och publicerar spelet varje gång du pushar till `main`.
+
+1. Skapa ett nytt, tomt repo på <https://github.com/new>. Döp det till
+   `ryggsackaren`. Lägg **inte** till README eller .gitignore, repot ska vara
+   tomt.
+2. Koppla ihop och pusha, med ditt eget användarnamn i stället för `DITTNAMN`:
+
+   ```bash
+   git remote add origin https://github.com/DITTNAMN/ryggsackaren.git
+   git push -u origin main
+   ```
+
+3. Gå till repots **Settings → Pages**. Under _Build and deployment_ väljer du
+   `GitHub Actions` som källa. Det är allt som behöver ställas in.
+4. Öppna fliken **Actions** och vänta på att körningen blir grön, ungefär en
+   minut. Länken dyker upp i körningen och blir:
+
+   ```
+   https://DITTNAMN.github.io/ryggsackaren/
+   ```
+
+Den länken kan du skicka till vem som helst. Varje gång du pushar en ändring
+till `main` byggs spelet om och uppdateras automatiskt. Om bygget hittar ett
+fel i speldatan stoppas publiceringen, så en trasig version kan inte gå ut.
+
+### Alternativ 2: Netlify Drop, utan konto eller repo
+
+```bash
+npm run build
+```
+
+Dra sedan mappen `dist` till <https://app.netlify.com/drop> i webbläsaren. Du
+får en permanent länk direkt. Nackdelen är att du måste dra dit mappen igen
+varje gång du ändrat något.
+
+### Alternativ 3: Bara samma wifi
+
+```bash
+npm run dev
+```
+
+Vite skriver ut en `Network:`-adress, till exempel
+`http://192.168.1.42:5173`. Den kan öppnas i telefonen så länge alla är på
+samma nätverk. Kräver att din dator är på och att kommandot körs.
+
+## Spela på telefonen
+
+Spelet är en installerbar webbapp. Öppnar dina bröder länken i telefonen kan de
+lägga den på hemskärmen och köra den i helskärm utan adressfält:
+
+- **iPhone, Safari:** Dela-knappen → _Lägg till på hemskärmen_
+- **Android, Chrome:** menyn ⋮ → _Installera app_ eller _Lägg till på hemskärmen_
+
+När spelet laddats en gång fungerar det även **offline**, tack vare en service
+worker. Bra på tåget eller flyget. Varje spelare har sin egen sparfil i sin egen
+webbläsare, så ni kan tävla om vem som får flest poäng på samma antal dagar.
+
 ## Så spelas det
 
 1. **Välj svårighetsgrad.** _Turist_ ger lättare frågor, tre svarsalternativ,
@@ -74,6 +136,12 @@ dag). Skulden dras av.
 ## Struktur
 
 ```
+.github/workflows/
+  deploy.yml               Bygger och publicerar till GitHub Pages vid push
+public/
+  manifest.webmanifest     Gör spelet installerbart på hemskärmen
+  sw.js                    Service worker för offline-spel
+  icon*.png, icon.svg      App- och favicon-ikoner
 src/
   data/
     types.ts               Typer för städer, jobb, souvenirer och frågor
@@ -93,6 +161,7 @@ src/
     map.ts                 Världskartan som SVG med etikettplacering
     dom.ts                 Små hjälpare för att bygga element
   styles/main.css          All stilsättning
+  sw-register.ts           Registrerar service workern i produktionsbygget
 scripts/
   validate-data.mjs        Kontrollerar speldatan, körs vid varje bygge
 ```

@@ -5,40 +5,28 @@
  *
  * Körs med: npm run validate
  */
-import { execFileSync } from 'node:child_process';
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+// Vi laddar TypeScript-datafilerna genom Vites egen modulkörare. Vite är ett
+// deklarerat beroende, till skillnad från esbuild som bara följer med
+// indirekt, så valideringen kan inte gå sönder av att Vite byter bundlare.
+import { createServer } from 'vite';
 
-const out = mkdtempSync(join(tmpdir(), 'ryggsackaren-validate-'));
 const problems = [];
+const server = await createServer({
+  configFile: false,
+  logLevel: 'error',
+  server: { middlewareMode: true },
+  optimizeDeps: { noDiscovery: true, include: [] },
+});
 
 try {
-  execFileSync(
-    'npx',
-    [
-      'esbuild',
-      'src/data/questions/categoryQuestions.ts',
-      'src/data/questions/cityQuestions.ts',
-      'src/data/cities.ts',
-      'src/data/jobs.ts',
-      'src/data/souvenirs.ts',
-      '--bundle',
-      '--format=esm',
-      '--platform=node',
-      `--outdir=${out}`,
-      '--log-level=error',
-    ],
-    { stdio: 'inherit' }
+  const load = (p) => server.ssrLoadModule(p);
+  const { CATEGORY_QUESTIONS } = await load(
+    '/src/data/questions/categoryQuestions.ts'
   );
-
-  const load = (p) => import(pathToFileURL(join(out, p)).href);
-  const { CATEGORY_QUESTIONS } = await load('questions/categoryQuestions.js');
-  const { CITY_QUESTIONS } = await load('questions/cityQuestions.js');
-  const { CITIES } = await load('cities.js');
-  const { JOBS } = await load('jobs.js');
-  const { SOUVENIR_BY_ID } = await load('souvenirs.js');
+  const { CITY_QUESTIONS } = await load('/src/data/questions/cityQuestions.ts');
+  const { CITIES } = await load('/src/data/cities.ts');
+  const { JOBS } = await load('/src/data/jobs.ts');
+  const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
 
   const jobById = Object.fromEntries(JOBS.map((j) => [j.id, j]));
   const seen = new Map();
@@ -135,7 +123,7 @@ try {
     `Kategorier: ${Object.keys(CATEGORY_QUESTIONS).length} · Städer: ${CITIES.length} · Jobb: ${JOBS.length}`
   );
 } finally {
-  rmSync(out, { recursive: true, force: true });
+  await server.close();
 }
 
 if (problems.length > 0) {
