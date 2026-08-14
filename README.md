@@ -28,37 +28,32 @@ Bygget i `dist/` är helt statiskt och använder relativa sökvägar, så det ka
 läggas rakt upp på GitHub Pages, Netlify eller vilken statisk webbserver som
 helst utan konfiguration.
 
-## Publicera så att andra kan spela
+## Spelet ligger uppe här
 
-### Alternativ 1: GitHub Pages, permanent länk
+<https://martin4eel.github.io/ryggsackaren/>
 
-Repot innehåller ett färdigt arbetsflöde i `.github/workflows/deploy.yml` som
-bygger och publicerar spelet varje gång du pushar till `main`.
+### Publicera en uppdatering
 
-1. Skapa ett nytt, tomt repo på <https://github.com/new>. Döp det till
-   `ryggsackaren`. Lägg **inte** till README eller .gitignore, repot ska vara
-   tomt.
-2. Koppla ihop och pusha, med ditt eget användarnamn i stället för `DITTNAMN`:
+Spelet publiceras från branchen `gh-pages`. När du ändrat något:
 
-   ```bash
-   git remote add origin https://github.com/DITTNAMN/ryggsackaren.git
-   git push -u origin main
-   ```
+```bash
+git add -A
+git commit -m "Beskriv ändringen"
+git push                # sparar källkoden på GitHub
+npm run deploy          # bygger och publicerar till gh-pages
+```
 
-3. Gå till repots **Settings → Pages**. Under _Build and deployment_ väljer du
-   `GitHub Actions` som källa. Det är allt som behöver ställas in.
-4. Öppna fliken **Actions** och vänta på att körningen blir grön, ungefär en
-   minut. Länken dyker upp i körningen och blir:
+`npm run deploy` kör typkoll och datavalidering först. Hittas ett fel avbryts
+allt innan något publiceras, så en trasig version kan inte nå spelarna. Den
+nya versionen ligger ute efter ungefär en minut.
 
-   ```
-   https://DITTNAMN.github.io/ryggsackaren/
-   ```
+Pages är inställt på _Deploy from a branch_, branch `gh-pages`, mapp `/`
+(root). Det behöver bara göras en gång och är redan gjort.
 
-Den länken kan du skicka till vem som helst. Varje gång du pushar en ändring
-till `main` byggs spelet om och uppdateras automatiskt. Om bygget hittar ett
-fel i speldatan stoppas publiceringen, så en trasig version kan inte gå ut.
+Vill du hellre ha automatisk publicering vid varje push kan du lägga tillbaka
+ett GitHub Actions-arbetsflöde, men det kräver en token med `workflow`-scope.
 
-### Alternativ 2: Netlify Drop, utan konto eller repo
+### Alternativ: Netlify Drop, utan konto eller repo
 
 ```bash
 npm run build
@@ -68,7 +63,7 @@ Dra sedan mappen `dist` till <https://app.netlify.com/drop> i webbläsaren. Du
 får en permanent länk direkt. Nackdelen är att du måste dra dit mappen igen
 varje gång du ändrat något.
 
-### Alternativ 3: Bara samma wifi
+### Alternativ: Bara samma wifi
 
 ```bash
 npm run dev
@@ -136,8 +131,6 @@ dag). Skulden dras av.
 ## Struktur
 
 ```
-.github/workflows/
-  deploy.yml               Bygger och publicerar till GitHub Pages vid push
 public/
   manifest.webmanifest     Gör spelet installerbart på hemskärmen
   sw.js                    Service worker för offline-spel
@@ -164,6 +157,7 @@ src/
   sw-register.ts           Registrerar service workern i produktionsbygget
 scripts/
   validate-data.mjs        Kontrollerar speldatan, körs vid varje bygge
+  deploy-pages.mjs         Publicerar bygget till gh-pages-branchen
 ```
 
 ### Att lägga till innehåll
