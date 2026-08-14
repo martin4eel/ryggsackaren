@@ -45,7 +45,14 @@ function overlaps(a: Box, b: Box): boolean {
 }
 
 const LABEL_FONT_SIZE = 13;
-const CHAR_WIDTH = 7.1;
+/**
+ * Uppmätt textbredd varierar med vilka tecken namnet innehåller. Korta namn
+ * som "Rom" är breda per tecken, långa som "Reykjavík" smalare. Vi räknar
+ * därför med ett påslag plus en fast marginal, så att kollisionsrutan aldrig
+ * blir mindre än den renderade texten.
+ */
+const CHAR_WIDTH = 8.6;
+const LABEL_PAD = 6;
 const LABEL_GAP = 11;
 
 type Anchor = 'start' | 'end' | 'middle';
@@ -57,21 +64,42 @@ interface Placement {
 }
 
 /** Kandidatplaceringar i prioritetsordning: höger, vänster, under, över. */
-const PLACEMENTS: Placement[] = [
-  { dx: LABEL_GAP, dy: 4.5, anchor: 'start' },
-  { dx: -LABEL_GAP, dy: 4.5, anchor: 'end' },
-  { dx: 0, dy: 19, anchor: 'middle' },
-  { dx: 0, dy: -11, anchor: 'middle' },
-  { dx: LABEL_GAP, dy: 19, anchor: 'start' },
-  { dx: -LABEL_GAP, dy: -11, anchor: 'end' },
-  { dx: -LABEL_GAP, dy: 19, anchor: 'end' },
-  { dx: LABEL_GAP, dy: -11, anchor: 'start' },
-  { dx: -LABEL_GAP, dy: 30, anchor: 'end' },
-  { dx: LABEL_GAP, dy: 30, anchor: 'start' },
-  { dx: 0, dy: 30, anchor: 'middle' },
-  { dx: -LABEL_GAP, dy: -22, anchor: 'end' },
-  { dx: LABEL_GAP, dy: -22, anchor: 'start' },
-];
+/**
+ * Kandidatplaceringar, genererade i växande ringar runt punkten. Nära
+ * placeringar provas först, och först när allt är fullt flyttas etiketten
+ * längre ut. Då ritas en tunn hjälplinje så att det syns vilken punkt
+ * etiketten hör till, ungefär som i en tryckt atlas.
+ */
+const PLACEMENTS: Placement[] = (() => {
+  const out: Placement[] = [];
+  // Avstånd i steg utåt. Det första steget är den täta placeringen intill.
+  const rings = [
+    { dx: LABEL_GAP, dy: 4.5 },
+    { dx: LABEL_GAP, dy: 18 },
+    { dx: LABEL_GAP, dy: -10 },
+    { dx: LABEL_GAP + 10, dy: 30 },
+    { dx: LABEL_GAP + 10, dy: -22 },
+    { dx: LABEL_GAP + 22, dy: 44 },
+    { dx: LABEL_GAP + 22, dy: -36 },
+    { dx: LABEL_GAP + 34, dy: 58 },
+    { dx: LABEL_GAP + 34, dy: -50 },
+  ];
+  for (const r of rings) {
+    out.push({ dx: r.dx, dy: r.dy, anchor: 'start' });
+    out.push({ dx: -r.dx, dy: r.dy, anchor: 'end' });
+  }
+  // Rakt under och rakt över punkten fungerar också när sidorna är fulla.
+  for (const dy of [19, -11, 32, -24, 46, -38]) {
+    out.push({ dx: 0, dy, anchor: 'middle' });
+  }
+  return out;
+})();
+
+/**
+ * Etiketter vars ankarpunkt ligger längre bort än så här från kartpunkten får
+ * en hjälplinje, så att det alltid går att se vilken stad namnet hör till.
+ */
+const LEADER_THRESHOLD = 20;
 
 function labelBox(
   x: number,
@@ -79,16 +107,18 @@ function labelBox(
   text: string,
   p: Placement
 ): Box {
-  const w = text.length * CHAR_WIDTH;
+  const w = text.length * CHAR_WIDTH + LABEL_PAD;
   const cx = x + p.dx;
   const cy = y + p.dy;
   const x1 =
     p.anchor === 'start' ? cx : p.anchor === 'end' ? cx - w : cx - w / 2;
+  // Textens baslinje ligger i cy, så rutan sträcker sig uppåt över versalhöjd
+  // och en bit nedåt för staplar som i g och j.
   return {
     x1,
-    y1: cy - LABEL_FONT_SIZE * 0.8,
+    y1: cy - LABEL_FONT_SIZE,
     x2: x1 + w,
-    y2: cy + LABEL_FONT_SIZE * 0.25,
+    y2: cy + LABEL_FONT_SIZE * 0.4,
   };
 }
 
@@ -283,6 +313,26 @@ export function renderMap(options: MapOptions): SVGElement {
 
     const placement = labelPlacement.get(city.id) ?? null;
     if (placement) {
+      // Ligger etiketten långt bort behöver den en linje tillbaka till punkten.
+      // Vi mäter faktiskt avstånd, så att regeln blir densamma för alla städer.
+      const far = Math.hypot(placement.dx, placement.dy) > LEADER_THRESHOLD;
+      if (far) {
+        const endX =
+          placement.anchor === 'end'
+            ? x + placement.dx + 3
+            : placement.anchor === 'start'
+              ? x + placement.dx - 3
+              : x;
+        group.append(
+          svgEl('line', {
+            class: 'pin-leader',
+            x1: x,
+            y1: y,
+            x2: endX,
+            y2: y + placement.dy - 4,
+          })
+        );
+      }
       group.append(
         svgEl(
           'text',

@@ -1377,3 +1377,16 @@ body {
 .dialog .btn {
   flex: 1 1 auto;
 }
+
+/* Hjälplinje från punkt till etikett när kartan är trång */
+.worldmap .pin-leader {
+  stroke: rgba(246, 239, 224, 0.7);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 2;
+  pointer-events: none;
+}
+
+.worldmap .pin-current .pin-leader,
+.worldmap .pin-highlight .pin-leader {
+  stroke: rgba(255, 217, 160, 0.85);
+}

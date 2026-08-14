@@ -143,9 +143,9 @@ dag). Skulden dras av.
 
 ## Innehåll
 
-- 22 destinationer på sex kontinenter
+- 24 destinationer på sex kontinenter
 - 64 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 696 frågor uppdelade i två svårighetsgrader, varav 512 jobbfrågor
+- 714 frågor uppdelade i två svårighetsgrader, varav 512 jobbfrågor
 - 4 arkadmoment som avslutar arbetsskiften
 - 41 souvenirer med regional prissättning
 - 24 valutor

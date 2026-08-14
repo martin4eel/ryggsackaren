@@ -7,6 +7,51 @@ import type { City } from './types';
  */
 export const CITIES: City[] = [
   {
+    id: 'stockholm',
+    name: 'Stockholm',
+    country: 'Sverige',
+    region: 'norden',
+    currency: 'SEK',
+    lat: 59.33,
+    lon: 18.07,
+    utc: 1,
+    costIndex: 1.15,
+    blurb:
+      'Sveriges huvudstad, byggd på fjorton öar där Mälaren möter Östersjön. Gamla stans gränder är från medeltiden och skärgården börjar direkt utanför kajen.',
+    landmark: 'Vasamuseet',
+    jobs: [
+      'hotellstadare',
+      'tunnelbanevard',
+      'museivard',
+      'skargardsguide',
+      'sjukvardsbitrade',
+      'borsmaklare',
+    ],
+    souvenirs: ['dalahast', 'sillburk', 'vikingahjalm'],
+  },
+  {
+    id: 'malmo',
+    name: 'Malmö',
+    country: 'Sverige',
+    region: 'norden',
+    currency: 'SEK',
+    lat: 55.6,
+    lon: 13.0,
+    utc: 1,
+    costIndex: 0.95,
+    blurb:
+      'Sveriges sydligaste storstad, med Öresundsbron till Köpenhamn och kontinenten inom räckhåll. Kranarna i gamla varvsområdet har bytts mot ett vridet höghus.',
+    landmark: 'Turning Torso',
+    jobs: [
+      'cykelkurir',
+      'hamnarbetare',
+      'farjematros',
+      'bagare',
+      'farmarbetare',
+    ],
+    souvenirs: ['sillburk', 'ullvantar', 'dalahast'],
+  },
+  {
     id: 'goteborg',
     name: 'Göteborg',
     country: 'Sverige',

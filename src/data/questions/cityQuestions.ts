@@ -5,6 +5,103 @@ import type { Question } from '../types';
  * söka i staden. Första alternativet i varje fråga är det rätta svaret.
  */
 export const CITY_QUESTIONS: Record<string, Question[]> = {
+  stockholm: [
+    {
+      q: 'Vilken är Sveriges huvudstad?',
+      a: ['Stockholm', 'Göteborg', 'Malmö', 'Uppsala'],
+      d: 1,
+    },
+    {
+      q: 'Vad heter Stockholms gamla stadskärna med sina medeltida gränder?',
+      a: ['Gamla stan', 'Södermalm', 'Östermalm', 'Kungsholmen'],
+      d: 1,
+    },
+    {
+      q: 'Vilket regalskepp sjönk 1628 och visas i dag på ett museum i Stockholm?',
+      a: ['Vasa', 'Kronan', 'Mars', 'Riksäpplet'],
+      d: 1,
+      info: 'Skeppet bärgades 1961 efter 333 år på botten.',
+    },
+    {
+      q: 'Vilken sjö möter Östersjön i Stockholm?',
+      a: ['Mälaren', 'Vättern', 'Vänern', 'Hjälmaren'],
+      d: 1,
+    },
+    {
+      q: 'I vilken stad delas Nobelpriset ut, utom fredspriset?',
+      a: ['Stockholm', 'Oslo', 'Köpenhamn', 'Helsingfors'],
+      d: 1,
+      info: 'Fredspriset delas ut i Oslo.',
+    },
+    {
+      q: 'Vad kallas det stora ö-området utanför Stockholm?',
+      a: ['Skärgården', 'Fjordarna', 'Deltat', 'Atollen'],
+      d: 1,
+    },
+    {
+      q: 'Ungefär hur många öar är Stockholms innerstad byggd på?',
+      a: ['Fjorton', 'Tre', 'Trettio', 'Sextio'],
+      d: 2,
+    },
+    {
+      q: 'Vad kallas Stockholms tunnelbana med sina utsmyckade stationer?',
+      a: ['Världens längsta konstutställning', 'The Tube', 'Metropolitanen', 'Ringlinjen'],
+      d: 2,
+      info: 'Över nittio av stationerna är konstnärligt utformade.',
+    },
+    {
+      q: 'Vilket djur syns i Stockholms stadsvapen?',
+      a: ['Sankt Erik med krona', 'En lejonhuvud', 'En örn', 'En björn'],
+      d: 2,
+    },
+  ],
+  malmo: [
+    {
+      q: 'Vilket land når man från Malmö via Öresundsbron?',
+      a: ['Danmark', 'Norge', 'Tyskland', 'Polen'],
+      d: 1,
+    },
+    {
+      q: 'Vilket sund ligger Malmö vid?',
+      a: ['Öresund', 'Kattegatt', 'Bottenhavet', 'Skagerrak'],
+      d: 1,
+    },
+    {
+      q: 'I vilket landskap ligger Malmö?',
+      a: ['Skåne', 'Halland', 'Blekinge', 'Småland'],
+      d: 1,
+    },
+    {
+      q: 'Vad heter Malmös vridna höghus vid havet?',
+      a: ['Turning Torso', 'Turning Tower', 'Öresundstornet', 'Kockumskranen'],
+      d: 1,
+    },
+    {
+      q: 'Vilken dansk huvudstad ligger närmast Malmö?',
+      a: ['Köpenhamn', 'Århus', 'Odense', 'Aalborg'],
+      d: 1,
+    },
+    {
+      q: 'Vilket bakverk med kanel och kardemumma hör till skånsk fika?',
+      a: ['Kanelbulle', 'Croissant', 'Cannoli', 'Baklava'],
+      d: 1,
+    },
+    {
+      q: 'Vilket år invigdes Öresundsbron?',
+      a: ['2000', '1991', '2008', '1985'],
+      d: 2,
+    },
+    {
+      q: 'Vad kallas den skånska specialiteten av gås som äts i november?',
+      a: ['Mårtengås', 'Julskinka', 'Surströmming', 'Lutfisk'],
+      d: 2,
+    },
+    {
+      q: 'Vilket slott från 1400-talet ligger i Malmö?',
+      a: ['Malmöhus', 'Kronborg', 'Gripsholm', 'Kalmar slott'],
+      d: 2,
+    },
+  ],
   goteborg: [
     {
       q: 'Vilken kung grundade Göteborg år 1621?',

@@ -96,7 +96,7 @@ export class App {
   private confirmRestart = false;
   private toastTimer: number | null = null;
   private startPick: { cityId: string; difficulty: Difficulty } = {
-    cityId: 'goteborg',
+    cityId: 'stockholm',
     difficulty: 'turist',
   };
 
