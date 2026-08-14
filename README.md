@@ -173,7 +173,7 @@ src/
     rules.ts               Avstånd, priser, löner, poäng och frågeurval
   ui/
     app.ts                 Skärmar och spelloop
-    map.ts                 Världskartan som SVG med etikettplacering
+    map.ts                 Världskartan: zoom, panorering och etikettplacering
     minigames.ts           De fyra arkadmomenten
     dom.ts                 Små hjälpare för att bygga element
   styles/main.css          All stilsättning

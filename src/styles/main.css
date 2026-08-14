@@ -161,6 +161,9 @@ body {
   position: sticky;
   top: 0;
   z-index: 20;
+  /* Raden är genomskinlig för klick utanför sina egna kontroller, annars
+     skulle den sticky-placerade rutan täcka kartan under sig. */
+  pointer-events: none;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -178,6 +181,13 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.15;
+}
+
+/* Knappar och text i raden ska förstås gå att använda. */
+.hud-restart,
+.hud-stats,
+.hud-place {
+  pointer-events: auto;
 }
 
 .hud-city {
@@ -366,23 +376,83 @@ body {
 /* ---------------------------------------------------------------- karta */
 
 .map-frame {
+  position: relative;
   border-radius: 12px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
+  overflow: hidden;
   background: var(--sea-deep);
+  /* Statusraden är klistrad högst upp. Utan detta hamnar kartans övre del
+     under raden när man rullar ner till den, och de nordligaste städerna
+     göms bakom den. */
+  scroll-margin-top: 150px;
 }
 
 .worldmap {
   display: block;
   width: 100%;
-  /* På smala skärmar behöver kartan vara bredare än skärmen för att bli
-     läsbar. Behållaren scrollas då i sidled. */
-  min-width: 660px;
   height: auto;
+  /* På telefon blev kartan mycket låg. Vi ger den en rimlig minsta höjd så
+     att det finns något att zooma i. */
+  min-height: 230px;
   background: var(--sea-deep);
-  touch-action: pan-x pinch-zoom;
+  /* Vi hanterar zoom och panorering själva, så webbläsaren ska inte
+     rulla eller zooma sidan när man drar på kartan. */
+  touch-action: none;
+  cursor: grab;
+}
+
+.worldmap:active {
+  cursor: grabbing;
+}
+
+/* Zoomreglage, placerade över kartans nedre högra hörn */
+.map-controls {
+  position: absolute;
+  /* Nedre vänstra hörnet är tomt hav på kartan, medan Sydney och Auckland
+     ligger i det högra. */
+  left: 8px;
+  bottom: 8px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.map-btn {
+  appearance: none;
+  cursor: pointer;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(246, 239, 224, 0.35);
+  background: rgba(7, 26, 41, 0.82);
+  color: var(--paper);
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1;
+  backdrop-filter: blur(4px);
+  transition: background 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+}
+
+.map-btn:hover:not(:disabled) {
+  background: rgba(242, 166, 59, 0.28);
+  border-color: var(--sun);
+}
+
+.map-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.map-btn-reset {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.map-btn[hidden] {
+  display: none;
 }
 
 .map-hint {
@@ -392,11 +462,7 @@ body {
   text-align: center;
 }
 
-@media (min-width: 700px) {
-  .map-hint {
-    display: none;
-  }
-}
+
 
 .worldmap .land {
   fill: #274c3c;

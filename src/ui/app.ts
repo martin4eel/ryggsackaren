@@ -334,7 +334,11 @@ export class App {
       })
     );
     cityPanel.append(
-      el('p', { class: 'map-hint' }, 'Svep i sidled för att se hela kartan.')
+      el(
+        'p',
+        { class: 'map-hint' },
+        'Zooma med två fingrar eller knapparna, dra för att flytta kartan.'
+      )
     );
 
     const select = el('select', { class: 'select', 'aria-label': 'Välj startstad' });
@@ -1089,7 +1093,8 @@ export class App {
       el(
         'p',
         { class: 'map-hint' },
-        'Svep i sidled för att se hela kartan, eller använd listan nedan.'
+        'Zooma med två fingrar eller knapparna. Trånga områden som Norden blir ' +
+          'lättare att träffa när du zoomar in. Listan nedan fungerar också.'
       )
     );
     wrap.append(panel);
