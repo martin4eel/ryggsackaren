@@ -99,11 +99,22 @@ function startSorting(host: HTMLElement, game: Minigame, onDone: Done): void {
     const wanted = Math.floor(Math.random() * buckets.length);
     const label = buckets[wanted]!;
     item.textContent = label;
-    item.className = 'mg-item mg-item-moving';
     status.textContent = `Föremål ${round + 1} av ${ROUNDS} · rätt: ${correct}`;
 
     // Tiden krymper något per omgång så tempot stiger.
     const total = Math.max(1400, 2600 - round * 130);
+
+    /**
+     * Föremålet ska glida över bandet på exakt den tid rundan varar, annars
+     * ligger det kvar efter att tiden gått ut eller försvinner medan det
+     * fortfarande går att svara. Klassen tas bort och sätts tillbaka efter en
+     * påtvingad omritning, så att animationen startar om från början.
+     */
+    item.className = 'mg-item';
+    item.style.setProperty('--belt-time', `${total}ms`);
+    void item.offsetWidth;
+    item.className = 'mg-item mg-item-moving';
+
     const startedAt = Date.now();
     bar.style.width = '100%';
     ticker = every(50, () => {

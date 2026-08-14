@@ -13,6 +13,13 @@ export interface MapOptions {
   selectableIds?: string[];
   /** Rita reslinje från nuvarande stad till hovrad/vald stad */
   highlightId?: string;
+  /**
+   * Namn på kartans vy. Zoom och panorering sparas under nyckeln och
+   * återställs nästa gång samma karta ritas. Spelskärmen byggs om från grunden
+   * vid varje förändring, och utan detta hoppade kartan tillbaka till hela
+   * världen så fort man tryckt på en stad.
+   */
+  viewKey?: string;
 }
 
 const PAD = 8;
@@ -140,6 +147,18 @@ interface ViewState {
 }
 
 /**
+ * Sparade vyer per nyckel. Ligger i modulen och inte i speltillståndet,
+ * eftersom zoomläget hör till skärmen och inte till resan: det ska inte
+ * hamna i sparfilen.
+ */
+const savedViews = new Map<string, ViewState>();
+
+/** Glömmer en sparad vy, t.ex. när en ny resa börjar. */
+export function forgetMapView(viewKey: string): void {
+  savedViews.delete(viewKey);
+}
+
+/**
  * Kartan i en behållare, med zoomreglage. Zoom och panorering ändrar bara
  * kartans transform och ritar om pinnlagret, aldrig hela spelskärmen.
  */
@@ -210,6 +229,7 @@ export function renderMap(options: MapOptions): MapHandle {
     onSelect,
     selectableIds,
     highlightId,
+    viewKey,
   } = options;
 
   const svg = svgEl('svg', {
@@ -299,7 +319,11 @@ export function renderMap(options: MapOptions): MapHandle {
   clipped.append(overlay);
   svg.append(clipped);
 
-  const view: ViewState = { k: 1, tx: 0, ty: 0 };
+  // Återuppta där spelaren lämnade kartan, om vyn har en nyckel.
+  const remembered = viewKey ? savedViews.get(viewKey) : undefined;
+  const view: ViewState = remembered
+    ? { ...remembered }
+    : { k: 1, tx: 0, ty: 0 };
 
   /** Håller kartan inom rutan så att man inte kan dra ut i tomma intet. */
   const clampView = (next: ViewState): ViewState => {
@@ -325,6 +349,10 @@ export function renderMap(options: MapOptions): MapHandle {
       `translate(${view.tx.toFixed(3)} ${view.ty.toFixed(3)}) scale(${view.k.toFixed(4)})`
     );
     drawOverlay();
+    if (viewKey) {
+      if (view.k <= MIN_ZOOM + 0.001) savedViews.delete(viewKey);
+      else savedViews.set(viewKey, { ...view });
+    }
     svg.dispatchEvent(new CustomEvent('ryggsackaren:view'));
   };
 

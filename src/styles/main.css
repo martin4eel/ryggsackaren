@@ -1173,8 +1173,10 @@ body {
   box-shadow: 0 3px 8px rgba(4, 16, 26, 0.18);
 }
 
+/* Bandets hastighet styrs av samma tid som rundans nedräkning, så att
+   föremålet når slutet av bandet precis när tiden går ut. */
 .mg-item-moving {
-  animation: belt-slide 2.4s linear forwards;
+  animation: belt-slide var(--belt-time, 2.4s) linear forwards;
 }
 
 @keyframes belt-slide {

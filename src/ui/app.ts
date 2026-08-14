@@ -38,7 +38,7 @@ import {
   stopAllMinigames,
   type MinigameResult,
 } from './minigames';
-import { renderMapFrame } from './map';
+import { forgetMapView, renderMapFrame } from './map';
 
 interface QuizSession {
   kind: 'turistbyra' | 'jobb';
@@ -95,6 +95,14 @@ export class App {
   /** Visas när spelaren tryckt på Börja om och ska bekräfta */
   private confirmRestart = false;
   private toastTimer: number | null = null;
+  /**
+   * Skärmen byggs om från grunden vid varje förändring. Vid skärmbyte ska vyn
+   * börja högst upp, men vid en ombyggnad på samma skärm - som när man svarat
+   * på en fråga - ska rullningen ligga kvar där den var.
+   */
+  private scrollToTopNext = true;
+  /** Element som ska ha tangentbordsfokus när ombyggnaden är klar. */
+  private focusAfterRender: HTMLElement | null = null;
   private startPick: { cityId: string; difficulty: Difficulty } = {
     cityId: 'stockholm',
     difficulty: 'turist',
@@ -132,8 +140,36 @@ export class App {
     if (!this.state) return;
     // Ett arkadmoment kan ha timers igång. Stäng av dem vid skärmbyte.
     stopAllMinigames();
+    const changed = this.state.screen !== screen;
     this.state.screen = screen;
     saveGame(this.state);
+    // Bara ett faktiskt skärmbyte ska rulla upp till toppen.
+    if (changed) this.scrollToTopNext = true;
+    this.render();
+  }
+
+  /**
+   * Tillbaka till startskärmen med allt nollställt. Används både av Börja om
+   * i statusraden och av knappen på slutskärmen, så att de två inte kan glida
+   * ifrån varandra och lämna kvar något.
+   */
+  private resetToStart(): void {
+    stopAllMinigames();
+    clearSave();
+    this.state = null;
+    this.quiz = null;
+    this.confirmRestart = false;
+    this.travelTarget = null;
+    this.mapHighlight = null;
+    this.toast = null;
+    if (this.toastTimer !== null) {
+      window.clearTimeout(this.toastTimer);
+      this.toastTimer = null;
+    }
+    // Kartornas zoomläge hör till den avslutade resan.
+    forgetMapView('start');
+    forgetMapView('resebyra');
+    this.scrollToTopNext = true;
     this.render();
   }
 
@@ -169,11 +205,17 @@ export class App {
   // ------------------------------------------------------------------ render
 
   private render(): void {
+    // Rullningsläget måste läsas av innan innehållet rivs, annars har sidan
+    // redan krympt och webbläsaren har justerat positionen.
+    const keepScroll = this.scrollToTopNext ? null : window.scrollY;
+    this.scrollToTopNext = false;
+
     clear(this.root);
     const s = this.state;
 
     if (!s) {
       this.root.append(this.renderStart());
+      this.afterRender(keepScroll);
       return;
     }
 
@@ -224,6 +266,23 @@ export class App {
       shell.append(this.renderRestartDialog());
     }
     this.root.append(shell);
+    this.afterRender(keepScroll);
+  }
+
+  /**
+   * Återställer rullning och flyttar fokus efter en ombyggnad. Fokus måste
+   * sättas om explicit, eftersom elementet som var fokuserat har hunnit
+   * tas bort ur dokumentet och fokus då hamnar på body.
+   */
+  private afterRender(keepScroll: number | null): void {
+    if (keepScroll === null) window.scrollTo(0, 0);
+    else window.scrollTo(0, keepScroll);
+
+    const target = this.focusAfterRender;
+    this.focusAfterRender = null;
+    // preventScroll, så att fokuseringen inte rullar undan det vi just
+    // återställt ovan.
+    if (target?.isConnected) target.focus({ preventScroll: true });
   }
 
   // ------------------------------------------------------------- startskärm
@@ -255,6 +314,7 @@ export class App {
             if (saved.screen === 'jobb' || saved.screen === 'turistbyra') {
               saved.screen = 'stad';
             }
+            this.scrollToTopNext = true;
             this.render();
           },
           { class: 'btn btn-primary' }
@@ -327,6 +387,7 @@ export class App {
         homeCityId: this.startPick.cityId,
         visited: [],
         highlightId: this.startPick.cityId,
+        viewKey: 'start',
         onSelect: (city) => {
           this.startPick.cityId = city.id;
           this.render();
@@ -369,6 +430,7 @@ export class App {
           this.notify(
             `Resan börjar i ${city.name}. Besök minst ${MIN_CITIES_TO_FINISH} städer innan du kommer hem.`
           );
+          this.scrollToTopNext = true;
           this.render();
         },
         { class: 'btn btn-primary btn-big' }
@@ -433,6 +495,14 @@ export class App {
     const s = this.state!;
     const overlay = el('div', { class: 'overlay', role: 'dialog', 'aria-modal': 'true' });
     const box = el('section', { class: 'panel dialog' });
+    const cancel = button(
+      'Nej, fortsätt spela',
+      () => {
+        this.confirmRestart = false;
+        this.render();
+      },
+      { class: 'btn btn-ghost' }
+    );
     box.append(
       el('h2', {}, 'Börja om från början?'),
       el(
@@ -443,32 +513,16 @@ export class App {
         } besökta städer och ${this.money(s.money)} i kassan. Det går inte att ångra.`
       ),
       el('div', { class: 'row' },
-        button(
-          'Ja, börja om',
-          () => {
-            stopAllMinigames();
-            clearSave();
-            this.state = null;
-            this.quiz = null;
-            this.confirmRestart = false;
-            this.travelTarget = null;
-            this.mapHighlight = null;
-            this.toast = null;
-            this.render();
-          },
-          { class: 'btn btn-primary' }
-        ),
-        button(
-          'Nej, fortsätt spela',
-          () => {
-            this.confirmRestart = false;
-            this.render();
-          },
-          { class: 'btn btn-ghost' }
-        )
+        button('Ja, börja om', () => this.resetToStart(), {
+          class: 'btn btn-primary',
+        }),
+        cancel
       )
     );
     overlay.append(box);
+    // Fokus läggs på det ofarliga valet, så att ett slentrianmässigt Enter
+    // inte råkar radera resan.
+    this.focusAfterRender = cancel;
     return overlay;
   }
 
@@ -771,7 +825,12 @@ export class App {
       el('div', { class: 'progress' },
         el('span', {
           class: 'progress-bar',
-          style: `width:${Math.round((q.index / total) * 100)}%`,
+          /**
+           * Den besvarade frågan räknas som avklarad, annars stannar mätaren
+           * på fyra femtedelar när sista frågan är besvarad och når aldrig
+           * hela vägen fram.
+           */
+          style: `width:${Math.round(((q.index + (q.answered ? 1 : 0)) / total) * 100)}%`,
         })
       ),
       el('h1', { class: 'question' }, current.question.q)
@@ -825,19 +884,21 @@ export class App {
       }
       panel.append(feedback);
       const last = q.index + 1 >= total;
-      panel.append(
-        button(
-          last
-            ? isJob
-              ? `Avsluta dagen och gå till ${q.job?.minigame.title.toLowerCase() ?? 'sista uppgiften'}`
-              : 'Se resultatet'
-            : isJob
-              ? 'Nästa arbetsdag'
-              : 'Nästa fråga',
-          () => this.advanceQuiz(),
-          { class: 'btn btn-primary btn-big' }
-        )
+      const next = button(
+        last
+          ? isJob
+            ? `Avsluta dagen och gå till ${q.job?.minigame.title.toLowerCase() ?? 'sista uppgiften'}`
+            : 'Se resultatet'
+          : isJob
+            ? 'Nästa arbetsdag'
+            : 'Nästa fråga',
+        () => this.advanceQuiz(),
+        { class: 'btn btn-primary btn-big' }
       );
+      panel.append(next);
+      // Fokus följer med till knappen som ska tryckas, så att svaret kan
+      // kvitteras med tangentbordet utan att leta sig tillbaka dit.
+      this.focusAfterRender = next;
     }
 
     if (!isJob) {
@@ -1082,6 +1143,7 @@ export class App {
         homeCityId: s.homeCityId,
         visited: s.visited,
         highlightId: this.mapHighlight ?? undefined,
+        viewKey: 'resebyra',
         onSelect: (city) => {
           this.travelTarget = city;
           this.mapHighlight = city.id;
@@ -1587,21 +1649,9 @@ export class App {
 
     const actions = el('section', { class: 'panel actions-panel' });
     actions.append(
-      button(
-        'Börja om med ny resa',
-        () => {
-          stopAllMinigames();
-          clearSave();
-          this.state = null;
-          this.quiz = null;
-          this.confirmRestart = false;
-          this.travelTarget = null;
-          this.mapHighlight = null;
-          this.toast = null;
-          this.render();
-        },
-        { class: 'btn btn-primary btn-big' }
-      )
+      button('Börja om med ny resa', () => this.resetToStart(), {
+        class: 'btn btn-primary btn-big',
+      })
     );
     wrap.append(actions);
     return wrap;
