@@ -7,7 +7,39 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v1';
+const CACHE = 'ryggsackaren-v2';
+
+/**
+ * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
+ * installationen, så att stadsvyerna fungerar offline även på ställen man
+ * inte besökt än. Listan matchar städerna i src/data/cities.ts.
+ */
+const CITY_PHOTOS = [
+  'amsterdam',
+  'auckland',
+  'bangkok',
+  'cusco',
+  'goteborg',
+  'istanbul',
+  'kairo',
+  'kapstaden',
+  'london',
+  'malmo',
+  'marrakech',
+  'mexikocity',
+  'moskva',
+  'mumbai',
+  'nairobi',
+  'newyork',
+  'paris',
+  'peking',
+  'reykjavik',
+  'rio',
+  'rom',
+  'stockholm',
+  'sydney',
+  'tokyo',
+].map((id) => `./cities/${id}.jpg`);
 
 self.addEventListener('install', (event) => {
   // Aktivera den nya versionen direkt istället för att vänta på att alla
@@ -15,8 +47,13 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE).then((cache) =>
-      // Lägg in startsidan så att offline-start fungerar.
-      cache.add(new Request('./', { cache: 'reload' })).catch(() => undefined)
+      Promise.all([
+        // Lägg in startsidan så att offline-start fungerar.
+        cache.add(new Request('./', { cache: 'reload' })).catch(() => undefined),
+        // Fotona får inte stoppa installationen om något saknas – de hämtas
+        // då i stället vid första visningen och cachas löpande.
+        cache.addAll(CITY_PHOTOS).catch(() => undefined),
+      ])
     )
   );
 });
