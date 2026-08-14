@@ -53,6 +53,18 @@ Pages är inställt på _Deploy from a branch_, branch `gh-pages`, mapp `/`
 Vill du hellre ha automatisk publicering vid varje push kan du lägga tillbaka
 ett GitHub Actions-arbetsflöde, men det kräver en token med `workflow`-scope.
 
+### Om en uppdatering inte syns
+
+Kontrollera att Pages fortfarande står på rätt källa. Om _Source_ har hamnat på
+`GitHub Actions` väntar Pages på ett arbetsflöde som inte finns, och då byggs
+`gh-pages` aldrig om även om branchen har nya filer:
+
+**Settings → Pages → Build and deployment → Source** ska vara
+`Deploy from a branch`, branch `gh-pages`, mapp `/ (root)`.
+
+Kom också ihåg att spelet cachas av sin service worker. Ladda om sidan två
+gånger, eller hårdladda, om du inte ser ändringen direkt.
+
 ### Alternativ: Netlify Drop, utan konto eller repo
 
 ```bash
@@ -112,13 +124,16 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    Tid är också en resurs eftersom boendet kostar varje dag.
 8. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-9. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+9. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+   frågar först, och visar vad som går förlorat, innan resan raderas.
+10. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
    avsluta resan och få poäng.
 
 Går kassan under −1 500 är resan över och ambassaden skickar hem dig.
 
 Spelet sparas automatiskt i webbläsarens `localStorage`, så du kan stänga
-fliken och fortsätta senare.
+fliken och fortsätta senare. Vill du börja från början finns _Börja om_ i
+statusraden, eller _Radera sparfil_ på startskärmen.
 
 ### Poäng
 
