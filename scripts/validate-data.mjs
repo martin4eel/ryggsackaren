@@ -8,7 +8,12 @@
 // Vi laddar TypeScript-datafilerna genom Vites egen modulkörare. Vite är ett
 // deklarerat beroende, till skillnad från esbuild som bara följer med
 // indirekt, så valideringen kan inte gå sönder av att Vite byter bundlare.
+import { existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const problems = [];
 const server = await createServer({
@@ -69,6 +74,11 @@ try {
 
   const CITY_QUIZ_LENGTH = 5;
   for (const city of CITIES) {
+    // Stadsvyn visar alltid ett foto; bygget ska inte gå igenom utan det.
+    // Saknas filen hämtas den med: node scripts/fetch-city-photos.mjs
+    if (!existsSync(join(ROOT, 'public', 'cities', `${city.id}.jpg`)))
+      problems.push(`stad ${city.id} saknar foto public/cities/${city.id}.jpg`);
+
     const questions = CITY_QUESTIONS[city.id];
     if (!questions) {
       problems.push(`stad ${city.id} saknar frågor helt`);

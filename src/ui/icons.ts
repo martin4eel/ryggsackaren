@@ -1,0 +1,116 @@
+/**
+ * Inline SVG-ikoner i enkel streckstil (24x24). Inga externa ikonbibliotek –
+ * varje ikon är ett par handskrivna path-element som ärver textfärgen.
+ */
+
+import { svgEl } from './dom';
+
+export type IconName =
+  | 'ljud-pa'
+  | 'ljud-av'
+  | 'flagga'
+  | 'tidning'
+  | 'souvenir'
+  | 'ryggsack'
+  | 'resa'
+  | 'telefon';
+
+interface Part {
+  tag: 'path' | 'polygon' | 'line' | 'rect' | 'circle';
+  attrs: Record<string, string>;
+}
+
+const ICONS: Record<IconName, Part[]> = {
+  'ljud-pa': [
+    {
+      tag: 'polygon',
+      attrs: {
+        points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
+    { tag: 'path', attrs: { d: 'M15.54 8.46a5 5 0 0 1 0 7.07' } },
+    { tag: 'path', attrs: { d: 'M19.07 4.93a10 10 0 0 1 0 14.14' } },
+  ],
+  'ljud-av': [
+    {
+      tag: 'polygon',
+      attrs: {
+        points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
+    { tag: 'line', attrs: { x1: '23', y1: '9', x2: '17', y2: '15' } },
+    { tag: 'line', attrs: { x1: '17', y1: '9', x2: '23', y2: '15' } },
+  ],
+  flagga: [
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z',
+      },
+    },
+    { tag: 'line', attrs: { x1: '4', y1: '22', x2: '4', y2: '15' } },
+  ],
+  tidning: [
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2V9.5C2 8.67 2.67 8 3.5 8H6',
+      },
+    },
+    { tag: 'path', attrs: { d: 'M18 14h-8' } },
+    { tag: 'path', attrs: { d: 'M15 18h-5' } },
+    { tag: 'path', attrs: { d: 'M10 6h8v4h-8V6Z' } },
+  ],
+  souvenir: [
+    {
+      tag: 'path',
+      attrs: { d: 'M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z' },
+    },
+    { tag: 'path', attrs: { d: 'M3 6h18' } },
+    { tag: 'path', attrs: { d: 'M16 10a4 4 0 0 1-8 0' } },
+  ],
+  ryggsack: [
+    {
+      tag: 'path',
+      attrs: { d: 'M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z' },
+    },
+    { tag: 'path', attrs: { d: 'M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2' } },
+    { tag: 'path', attrs: { d: 'M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5' } },
+    { tag: 'path', attrs: { d: 'M8 10h8' } },
+  ],
+  resa: [
+    { tag: 'path', attrs: { d: 'M22 2 11 13' } },
+    { tag: 'path', attrs: { d: 'M22 2 15 22l-4-9-9-4Z' } },
+  ],
+  telefon: [
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z',
+      },
+    },
+  ],
+};
+
+/** Bygger en ikon. Dekorativ – dölj den för skärmläsare och sätt text/aria-label på knappen. */
+export function icon(name: IconName, cls = ''): SVGElement {
+  const svg = svgEl('svg', {
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    'stroke-width': '2',
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    class: `icon${cls ? ` ${cls}` : ''}`,
+    'aria-hidden': 'true',
+    focusable: 'false',
+  });
+  for (const part of ICONS[name]) {
+    svg.append(svgEl(part.tag, part.attrs));
+  }
+  return svg;
+}

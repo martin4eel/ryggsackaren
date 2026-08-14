@@ -1,4 +1,5 @@
 import type { Minigame } from '../data/types';
+import { playSound } from './audio';
 import { button, clear, el } from './dom';
 
 /**
@@ -129,7 +130,10 @@ function startSorting(host: HTMLElement, game: Minigame, onDone: Done): void {
     clear(controls);
     buckets.forEach((name, i) => {
       controls.append(
-        button(name, () => judge(i, wanted), { class: 'btn mg-btn' })
+        button(name, () => judge(i, wanted), {
+          class: 'btn mg-btn',
+          'data-sound': 'av',
+        })
       );
     });
   };
@@ -139,6 +143,7 @@ function startSorting(host: HTMLElement, game: Minigame, onDone: Done): void {
     answered = true;
     stop(ticker);
     const right = picked === wanted;
+    playSound(right ? 'blipp' : 'fel');
     if (right) correct += 1;
     item.className = `mg-item ${right ? 'mg-item-right' : 'mg-item-wrong'}`;
     item.textContent = right
@@ -209,7 +214,10 @@ function startInstruments(host: HTMLElement, game: Minigame, onDone: Done): void
     clear(panel);
     items.forEach((name, i) => {
       panel.append(
-        button(name, () => judge(i, wanted), { class: 'mg-knob' })
+        button(name, () => judge(i, wanted), {
+          class: 'mg-knob',
+          'data-sound': 'av',
+        })
       );
     });
   };
@@ -219,6 +227,7 @@ function startInstruments(host: HTMLElement, game: Minigame, onDone: Done): void
     answered = true;
     stop(ticker);
     const right = picked === wanted;
+    playSound(right ? 'blipp' : 'fel');
     if (right) correct += 1;
     order.className = `mg-order ${right ? 'mg-order-right' : 'mg-order-wrong'}`;
     order.textContent = right ? 'Rätt reglage!' : `Det var ${items[wanted]}`;
@@ -252,7 +261,10 @@ function startSequence(host: HTMLElement, game: Minigame, onDone: Done): void {
   const padEls: HTMLElement[] = [];
   clear(pads);
   items.forEach((name, i) => {
-    const pad = button(name, () => press(i), { class: 'mg-pad' });
+    const pad = button(name, () => press(i), {
+      class: 'mg-pad',
+      'data-sound': 'av',
+    });
     padEls.push(pad);
     pads.append(pad);
   });
@@ -298,6 +310,7 @@ function startSequence(host: HTMLElement, game: Minigame, onDone: Done): void {
   const press = (i: number) => {
     if (!accepting) return;
     if (i === sequence[inputIndex]) {
+      playSound('blipp');
       void flash(i, 'mg-pad-right', 180);
       inputIndex += 1;
       if (inputIndex >= sequence.length) {
@@ -305,11 +318,13 @@ function startSequence(host: HTMLElement, game: Minigame, onDone: Done): void {
         cleared += 1;
         level += 1;
         hint.textContent = 'Rätt hela vägen!';
+        playSound('ratt');
         after(700, nextLevel);
       }
       return;
     }
     accepting = false;
+    playSound('fel');
     void flash(i, 'mg-pad-wrong', 320);
     hint.textContent = 'Fel ordning. Nästa sekvens kommer.';
     level += 1;
@@ -382,7 +397,10 @@ function startPrecision(host: HTMLElement, game: Minigame, onDone: Done): void {
 
     clear(actions);
     actions.append(
-      button('Stoppa', judge, { class: 'btn btn-primary mg-stop' })
+      button('Stoppa', judge, {
+        class: 'btn btn-primary mg-stop',
+        'data-sound': 'av',
+      })
     );
   };
 
@@ -391,6 +409,7 @@ function startPrecision(host: HTMLElement, game: Minigame, onDone: Done): void {
     running = false;
     stop(ticker);
     const inside = pos >= zoneStart && pos <= zoneStart + zoneWidth;
+    playSound(inside ? 'ratt' : 'fel');
     if (inside) hits += 1;
     gauge.classList.add(inside ? 'mg-gauge-right' : 'mg-gauge-wrong');
     const unit = game.unit ? ` ${game.unit}` : '';

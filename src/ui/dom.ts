@@ -1,3 +1,5 @@
+import { playSound } from './audio';
+
 type Attrs = Record<string, string | number | boolean | undefined>;
 type Child = Node | string | null | undefined | false;
 
@@ -57,6 +59,11 @@ export function button(
   const b = el('button', { type: 'button', ...attrs }, label);
   b.addEventListener('click', (event) => {
     event.preventDefault();
+    // Diskret knappklick i hela spelet. Ljudet respekterar tyst läge och
+    // startas alltid ur en gest, så webbläsarnas ljudspärr tillåter det.
+    // Knappar med egna ljudeffekter (arkadmomentens kontroller) kan stänga
+    // av klicket med data-sound="av" så att det inte låter dubbelt.
+    if (!b.disabled && b.dataset['sound'] !== 'av') playSound('klick');
     onClick();
   });
   return b;

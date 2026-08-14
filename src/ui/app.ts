@@ -32,7 +32,9 @@ import {
   type Difficulty,
   type GameState,
 } from '../game/state';
+import { isMuted, playSound, toggleMuted } from './audio';
 import { button, clear, el } from './dom';
+import { icon, type IconName } from './icons';
 import {
   renderMinigame,
   stopAllMinigames,
@@ -84,6 +86,64 @@ const CATEGORY_LABELS: Record<string, string> = {
   bygg: 'Bygg',
   mode: 'Mode och textil',
 };
+
+/**
+ * Stadsfotona hämtas från Wikimedia Commons av scripts/fetch-city-photos.mjs
+ * och ligger med stabila namn i public/cities/, så att service workern kan
+ * cacha dem för offline-spel. Relativ sökväg, precis som ikonerna, så att
+ * det fungerar när spelet ligger i en undermapp.
+ */
+function cityPhotoUrl(city: City): string {
+  return `./cities/${city.id}.jpg`;
+}
+
+/**
+ * Ett stadsfoto som döljer sig självt om filen saknas, så att en trasig
+ * bildikon aldrig visas. Klassen sätts på containern om den getts.
+ */
+function photoImg(city: City, cls: string, hideParent?: HTMLElement): HTMLImageElement {
+  const img = el('img', {
+    class: cls,
+    src: cityPhotoUrl(city),
+    alt: `${city.landmark} i ${city.name}`,
+    loading: 'lazy',
+    decoding: 'async',
+  });
+  img.addEventListener(
+    'error',
+    () => {
+      if (hideParent) hideParent.classList.add('no-photo');
+      else img.classList.add('no-photo');
+    },
+    { once: true }
+  );
+  return img;
+}
+
+/** Ljudknappen med högtalarikon – speglas mot sparat ljudläge. */
+function audioButton(cls: string): HTMLButtonElement {
+  const muted = isMuted();
+  const b = button(
+    icon(muted ? 'ljud-av' : 'ljud-pa'),
+    () => {
+      toggleMuted();
+      // Byt ikon utan att bygga om hela skärmen – knappen ligger kvar under
+      // fingret och sidans scrollning störs inte.
+      const nowMuted = isMuted();
+      clear(b);
+      b.append(icon(nowMuted ? 'ljud-av' : 'ljud-pa'));
+      const label = nowMuted ? 'Sätt på ljudet' : 'Stäng av ljudet';
+      b.setAttribute('aria-label', label);
+      b.setAttribute('title', label);
+    },
+    {
+      class: cls,
+      'aria-label': muted ? 'Sätt på ljudet' : 'Stäng av ljudet',
+      title: muted ? 'Sätt på ljudet' : 'Stäng av ljudet',
+    }
+  );
+  return b;
+}
 
 export class App {
   private root: HTMLElement;
@@ -198,6 +258,7 @@ export class App {
     s.finalScore = finalScore(s);
     s.screen = 'slut';
     saveGame(s);
+    playSound('fel');
     this.render();
     return true;
   }
@@ -291,6 +352,8 @@ export class App {
     const wrap = el('div', { class: 'shell start-shell' });
     const hero = el('section', { class: 'panel hero' });
     hero.append(
+      // Startskärmen saknar statusrad, så ljudknappen får en egen plats här.
+      audioButton('hud-icon-btn hero-audio'),
       el('p', { class: 'kicker' }, 'Jorden runt på frågor och jobb'),
       el('h1', { class: 'title' }, 'Ryggsäckaren'),
       el(
@@ -381,6 +444,8 @@ export class App {
           }).`
       )
     );
+    // Vykortet byts ut i takt med att man väljer stad på kartan eller i listan.
+    cityPanel.append(photoImg(chosen, 'start-photo'));
     cityPanel.append(
       renderMapFrame({
         currentCityId: '',
@@ -475,7 +540,10 @@ export class App {
       title: 'Avsluta resan och börja om från början',
     });
 
-    hud.append(left, stats, restart);
+    // Ljudknappen ligger alltid synlig i statusraden, som i förlagan.
+    const actions = el('div', { class: 'hud-actions' }, audioButton('hud-icon-btn'), restart);
+
+    hud.append(left, stats, actions);
     return hud;
   }
 
@@ -534,10 +602,39 @@ export class App {
     const p = getProgress(s, city.id);
     const wrap = el('div', { class: 'stack' });
 
+    // Stadsvyn öppnar med ett vykort av staden, likt förlagan. Namn och
+    // land ligger ovanpå bilden; saknas fotot faller vyn tillbaka på en
+    // enfärgad bricka (klassen no-photo) i stället för en bruten bildikon.
+    const hero = el('section', { class: 'city-hero' });
+    hero.append(
+      photoImg(city, 'city-hero-img', hero),
+      el('div', { class: 'city-hero-scrim' }),
+      el(
+        'div',
+        { class: 'city-hero-text' },
+        el(
+          'p',
+          { class: 'kicker' },
+          `${city.country} · ${CURRENCIES[city.currency]?.name ?? city.currency}`
+        ),
+        el('h1', { class: 'city-hero-title' }, city.name)
+      ),
+      el(
+        'a',
+        {
+          class: 'photo-credit',
+          href: './cities/ATTRIBUTION.md',
+          target: '_blank',
+          rel: 'noopener',
+          title: 'Fotokrediter',
+        },
+        'Foto: Wikimedia Commons'
+      )
+    );
+    wrap.append(hero);
+
     const info = el('section', { class: 'panel city-panel' });
     info.append(
-      el('p', { class: 'kicker' }, `${city.country} · ${CURRENCIES[city.currency]?.name ?? city.currency}`),
-      el('h1', { class: 'title' }, city.name),
       el('p', { class: 'lede' }, city.blurb),
       el(
         'p',
@@ -555,6 +652,7 @@ export class App {
 
     grid.append(
       menuButton(
+        'flagga',
         'Turistbyrån',
         p.visits === 0
           ? 'Svara på frågor om staden för att få ett betyg som öppnar bättre jobb.'
@@ -562,26 +660,31 @@ export class App {
         () => this.startCityQuiz()
       ),
       menuButton(
+        'tidning',
         'Tidningen',
         'Läs platsannonserna och ta ett arbetsskift.',
         () => this.go('tidning')
       ),
       menuButton(
+        'souvenir',
         'Souvenirbutiken',
         'Köp lokalt och sälj där varan är eftertraktad.',
         () => this.go('souvenir')
       ),
       menuButton(
+        'ryggsack',
         'Ryggsäcken',
         `${s.backpack.length} souvenirer, certifikat och statistik.`,
         () => this.go('ryggsack')
       ),
       menuButton(
+        'resa',
         'Resebyrån',
         'Välj nästa destination på kartan.',
         () => this.go('karta')
       ),
       menuButton(
+        'telefon',
         'Telefonkiosken',
         'Ring hem och låna pengar om kassan är tom.',
         () => this.go('telefon')
@@ -612,6 +715,7 @@ export class App {
             () => {
               s.outcome = 'vinst';
               s.finalScore = finalScore(s);
+              playSound('fanfar');
               this.go('slut');
             },
             { class: 'btn btn-primary' }
@@ -1016,6 +1120,7 @@ export class App {
       s.wrongStreak += 1;
     }
 
+    playSound(right ? 'ratt' : 'fel');
     q.dayResults[q.index] = right;
     q.answered = { picked, wasCorrect: payout };
     saveGame(s);
@@ -1106,6 +1211,7 @@ export class App {
     saveGame(s);
     if (this.checkBroke()) return;
 
+    playSound(gotCert ? 'fanfar' : 'kassa');
     const parts = [
       `${job.title}: ${q.correct}/${total} rätt.`,
       `Lön ${this.money(q.earnings)}.`,
@@ -1206,6 +1312,8 @@ export class App {
     const tz = Math.abs(target.utc - from.utc);
 
     const panel = el('section', { class: 'panel' });
+    // Foto av målstaden, så att biljettsidan visar vart resan går.
+    panel.append(photoImg(target, 'travel-photo'));
     panel.append(
       el('p', { class: 'kicker' }, `${from.name} → ${target.name}`),
       el('h1', { class: 'title' }, target.name),
@@ -1301,6 +1409,7 @@ export class App {
     this.mapHighlight = null;
     saveGame(s);
     if (this.checkBroke()) return;
+    playSound('resa');
     this.notify(
       `Framme i ${target.name} efter ${option.days} dagar. Klockan står på UTC${
         target.utc >= 0 ? '+' : ''
@@ -1420,6 +1529,7 @@ export class App {
       boughtIn: s.currentCityId,
     });
     saveGame(s);
+    playSound('kassa');
     this.notify(`${souvenir.name} ligger i ryggsäcken.`);
     this.render();
   }
@@ -1434,6 +1544,7 @@ export class App {
     const name = SOUVENIR_BY_ID[item.souvenirId]?.name ?? 'Souveniren';
     const profit = price - item.paid;
     saveGame(s);
+    playSound('kassa');
     this.notify(
       `${name} såld för ${this.money(price)} (${
         profit >= 0 ? '+' : '-'
@@ -1566,6 +1677,7 @@ export class App {
           s.debt += amount;
           s.callsHome += 1;
           saveGame(s);
+          playSound('kassa');
           this.notify(
             `${this.money(amount)} insatt. "Och glöm inte att skicka vykort!"`
           );
@@ -1676,14 +1788,18 @@ function stat(label: string, value: string, tone?: string): HTMLElement {
 }
 
 function menuButton(
+  iconName: IconName,
   title: string,
   desc: string,
   onClick: () => void
 ): HTMLElement {
   return button(
-    el('span', { class: 'choice-body' },
-      el('span', { class: 'choice-name' }, title),
-      el('span', { class: 'choice-desc' }, desc)
+    el('span', { class: 'choice-body choice-with-icon' },
+      el('span', { class: 'choice-icon' }, icon(iconName)),
+      el('span', { class: 'choice-text' },
+        el('span', { class: 'choice-name' }, title),
+        el('span', { class: 'choice-desc' }, desc)
+      )
     ),
     onClick,
     { class: 'choice menu-item' }

@@ -103,7 +103,8 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    billigare boende och mer startkapital. _Globetrotter_ ger svårare frågor,
    fyra alternativ, högre löner och tuffare ekonomi.
 2. **Välj startstad.** Staden blir också ditt slutmål, och dess valuta är den
-   som alla belopp visas i under resan.
+   som alla belopp visas i under resan. Varje stad visas med ett foto av sin
+   sevärdhet, som ett vykort högst upp på stadsskärmen.
 3. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
@@ -124,10 +125,13 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    Tid är också en resurs eftersom boendet kostar varje dag.
 8. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-9. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
-   frågar först, och visar vad som går förlorat, innan resan raderas.
-10. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
-   avsluta resan och få poäng.
+9. **Ljud.** Ljudeffekterna (rätt/fel svar, lön, resor och arkadmomenten) är
+   syntetiserade i webbläsaren, så inga ljudfiler behövs. Högtalarknappen i
+   statusraden stänger av eller sätter på ljudet; valet sparas.
+10. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+    frågar först, och visar vad som går förlorat, innan resan raderas.
+11. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+    avsluta resan och få poäng.
 
 Går kassan under −1 500 är resan över och ambassaden skickar hem dig.
 
@@ -143,20 +147,22 @@ dag). Skulden dras av.
 
 ## Innehåll
 
-- 24 destinationer på sex kontinenter
+- 24 destinationer på sex kontinenter, var och en med eget fotografi
 - 64 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
 - 714 frågor uppdelade i två svårighetsgrader, varav 512 jobbfrågor
 - 4 arkadmoment som avslutar arbetsskiften
 - 41 souvenirer med regional prissättning
 - 24 valutor
+- Syntetiserade ljudeffekter (WebAudio) med högtalarknapp i statusraden
 
 ## Struktur
 
 ```
 public/
   manifest.webmanifest     Gör spelet installerbart på hemskärmen
-  sw.js                    Service worker för offline-spel
+  sw.js                    Service worker för offline-spel (cachar även fotona)
   icon*.png, icon.svg      App- och favicon-ikoner
+  cities/                  Ett foto per stad (Wikimedia Commons) + ATTRIBUTION.md
 src/
   data/
     types.ts               Typer för städer, jobb, souvenirer och frågor
@@ -176,11 +182,15 @@ src/
     map.ts                 Världskartan: zoom, panorering och etikettplacering
     minigames.ts           De fyra arkadmomenten
     dom.ts                 Små hjälpare för att bygga element
+    audio.ts               Syntetiserade ljudeffekter och ljudstyrning
+    icons.ts               Inline SVG-ikoner (högtalare, menyer)
   styles/main.css          All stilsättning
   sw-register.ts           Registrerar service workern i produktionsbygget
 scripts/
   validate-data.mjs        Kontrollerar speldatan, körs vid varje bygge
   deploy-pages.mjs         Publicerar bygget till gh-pages-branchen
+  fetch-city-photos.mjs    Hämtar stadsfoton från Wikimedia Commons
+  compress-city-photos.py  Komprimerar fotona (Pillow), körs av fetch-skriptet
 ```
 
 ### Att lägga till innehåll
@@ -202,7 +212,25 @@ Kör `npm run validate` efter ändringar. Den kontrollerar bland annat att varje
 stad har minst fem lätta frågor, att varje jobb har egna frågor och nog många
 lätta för hela skiftet, att varje stad har minst ett jobb i löneklass 1 (så att
 en spelare utan stadsbetyg alltid kan tjäna pengar), att inga frågor är
-dubbletter någonstans i spelet, och att varje jobbs arkadmoment är komplett.
+dubbletter någonstans i spelet, att varje jobbs arkadmoment är komplett, och
+att varje stad har ett foto i `public/cities/`.
+
+### Nya städer och foton
+
+En ny stad behöver ett foto som heter `public/cities/<stads-id>.jpg`, annars
+stoppar valideringen bygget. Fotona hämtas från Wikimedia Commons:
+
+```bash
+node scripts/fetch-city-photos.mjs
+```
+
+Lägg till staden i `CITY_ARTICLES` i skriptet först – antingen en
+Wikipedia-artikel vars ledningsbild används, eller en specifik Commons-fil
+(`file:`) om ledningsbilden är stående (bilderna beskärs till liggande format
+vid visning). Skriptet komprimerar fotona via `compress-city-photos.py`
+(kräver Python 3 med Pillow) och skriver om `public/cities/ATTRIBUTION.md`
+med upphovsmän och licenser. Kom också ihåg att lägga till staden i
+service workerns fotolista i `public/sw.js`.
 
 Kartans landmassa är genererad från Natural Earths 110m-dataset (public domain)
 och ligger färdig i `src/data/worldMap.ts`, så inga kartberoenden behövs vid
