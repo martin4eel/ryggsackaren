@@ -33,6 +33,11 @@ import {
   type GameState,
 } from '../game/state';
 import { button, clear, el } from './dom';
+import {
+  renderMinigame,
+  stopAllMinigames,
+  type MinigameResult,
+} from './minigames';
 import { renderMapFrame } from './map';
 
 interface QuizSession {
@@ -45,6 +50,18 @@ interface QuizSession {
   job?: Job;
   /** Svar som väntar på att bekräftas */
   answered?: { picked: number; wasCorrect: number };
+  /** Utfall per arbetsdag, används till stämpelkortet */
+  dayResults: boolean[];
+  /**
+   * Skiftets sista moment är ett arkadspel. 'fragor' medan frågorna pågår,
+   * 'brief' när uppgiften presenteras, 'spelar' under spelet och 'klart' när
+   * resultatet visas.
+   */
+  phase: 'fragor' | 'brief' | 'spelar' | 'klart';
+  /** Resultatet av arkadmomentet */
+  minigameResult?: MinigameResult;
+  /** Bonus som arkadmomentet gav */
+  bonus?: number;
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -111,6 +128,8 @@ export class App {
 
   private go(screen: GameState['screen']): void {
     if (!this.state) return;
+    // Ett arkadmoment kan ha timers igång. Stäng av dem vid skärmbyte.
+    stopAllMinigames();
     this.state.screen = screen;
     saveGame(this.state);
     this.render();
@@ -496,6 +515,8 @@ export class App {
       index: 0,
       correct: 0,
       earnings: 0,
+      dayResults: [],
+      phase: 'fragor',
     };
     this.go('turistbyra');
   }
@@ -594,6 +615,8 @@ export class App {
       correct: 0,
       earnings: 0,
       job,
+      dayResults: [],
+      phase: 'fragor',
     };
     this.go('jobb');
   }
@@ -613,14 +636,66 @@ export class App {
       return wrap;
     }
 
-    const current = q.questions[q.index]!;
     const total = q.questions.length;
+    const isJob = q.kind === 'jobb';
 
-    const panel = el('section', { class: 'panel quiz' });
+    // Arkadmomentet tar över skärmen när arbetsdagarna är avklarade.
+    if (isJob && q.job && q.phase !== 'fragor') {
+      return this.renderShiftFinale(q, q.job);
+    }
+
+    const current = q.questions[q.index]!;
+
+    // Arbetsplatsen får en egen rubrik med miljöbild, stämpelkort och
+    // lönemätare, så att ett skift känns som en arbetsdag och inte som ett prov.
+    if (isJob && q.job) {
+      const job = q.job;
+      const wage = wagePerCorrect(job, this.city, s.difficulty);
+      const site = el('section', { class: 'panel worksite' });
+      site.append(
+        el('div', { class: 'worksite-head' },
+          el('div', {},
+            el('p', { class: 'kicker' }, job.employer),
+            el('h1', { class: 'worksite-title' }, job.title)
+          ),
+          el('span', { class: `tag tag-w${job.wageClass}` }, `Löneklass ${job.wageClass}`)
+        ),
+        el('p', { class: 'worksite-scene' }, job.scene)
+      );
+
+      // Stämpelkort: en ruta per arbetsdag, ifylld när dagen är avklarad.
+      const card = el('div', { class: 'timecard', 'aria-label': 'Stämpelkort' });
+      for (let i = 0; i < total; i++) {
+        const state =
+          i < q.index ? (q.dayResults[i] ? 'day-ok' : 'day-fail') : i === q.index ? 'day-now' : 'day-todo';
+        card.append(
+          el('span', { class: `day ${state}` },
+            el('span', { class: 'day-num' }, String(i + 1))
+          )
+        );
+      }
+      site.append(
+        el('div', { class: 'timecard-row' },
+          el('span', { class: 'timecard-label' }, 'Stämpelkort'),
+          card
+        )
+      );
+
+      site.append(
+        el('div', { class: 'wage-row' },
+          stat('Dagslön', this.money(wage)),
+          stat('Intjänat', this.money(q.earnings)),
+          stat('Rätt', `${q.correct}/${q.index + (q.answered ? 1 : 0)}`)
+        )
+      );
+      wrap.append(site);
+    }
+
+    const panel = el('section', { class: `panel quiz ${isJob ? 'quiz-job' : ''}` });
     panel.append(
       el('p', { class: 'kicker' },
-        q.kind === 'jobb'
-          ? `${heading} · arbetsdag ${q.index + 1} av ${total}`
+        isJob
+          ? `Arbetsdag ${q.index + 1} av ${total}`
           : `${heading} · fråga ${q.index + 1} av ${total}`
       ),
       el('div', { class: 'progress' },
@@ -667,41 +742,125 @@ export class App {
           'span',
           {},
           right
-            ? q.kind === 'jobb'
-              ? ` Du tjänade ${this.money(answered.wasCorrect)}.`
+            ? isJob
+              ? ` Dagen är avklarad och du tjänade ${this.money(answered.wasCorrect)}.`
               : ' Ett steg närmare ett bra stadsbetyg.'
-            : ` Rätt var: ${current.options[current.correctIndex]}.`
+            : isJob
+              ? ` Rätt var: ${current.options[current.correctIndex]}. Dagen gav ingen lön.`
+              : ` Rätt var: ${current.options[current.correctIndex]}.`
         )
       );
       if (current.question.info) {
         feedback.append(el('p', { class: 'info' }, current.question.info));
       }
       panel.append(feedback);
+      const last = q.index + 1 >= total;
       panel.append(
         button(
-          q.index + 1 >= total ? 'Se resultatet' : 'Nästa fråga',
+          last
+            ? isJob
+              ? `Avsluta dagen och gå till ${q.job?.minigame.title.toLowerCase() ?? 'sista uppgiften'}`
+              : 'Se resultatet'
+            : isJob
+              ? 'Nästa arbetsdag'
+              : 'Nästa fråga',
           () => this.advanceQuiz(),
           { class: 'btn btn-primary btn-big' }
         )
       );
     }
 
-    const tally = el('p', { class: 'muted' },
-      `Rätt så här långt: ${q.correct} av ${q.index + (answered ? 1 : 0)}` +
-        (q.kind === 'jobb' ? ` · Intjänat: ${this.money(q.earnings)}` : '')
-    );
-    panel.append(tally);
+    if (!isJob) {
+      panel.append(
+        el('p', { class: 'muted' },
+          `Rätt så här långt: ${q.correct} av ${q.index + (answered ? 1 : 0)}`
+        )
+      );
+    }
     wrap.append(panel);
 
-    if (q.kind === 'jobb' && !answered) {
+    if (isJob && !answered) {
       wrap.append(
         this.backRow('Sjukanmäl dig och gå (ingen lön)', () => {
+          stopAllMinigames();
           this.quiz = null;
           this.go('stad');
         })
       );
     }
     void s;
+    return wrap;
+  }
+
+  /**
+   * Skiftets avslutande arkadmoment: först en genomgång, sedan spelet och
+   * till sist resultatet med bonus.
+   */
+  private renderShiftFinale(q: QuizSession, job: Job): HTMLElement {
+    const wrap = el('div', { class: 'stack' });
+    const game = job.minigame;
+
+    const head = el('section', { class: 'panel worksite' });
+    head.append(
+      el('div', { class: 'worksite-head' },
+        el('div', {},
+          el('p', { class: 'kicker' }, job.employer),
+          el('h1', { class: 'worksite-title' }, game.title)
+        ),
+        el('span', { class: 'tag tag-mg' }, 'Sista passet')
+      )
+    );
+    wrap.append(head);
+
+    if (q.phase === 'brief') {
+      const panel = el('section', { class: 'panel' });
+      panel.append(
+        el('p', { class: 'lede' }, game.brief),
+        el(
+          'p',
+          { class: 'muted' },
+          'Går det bra får du en bonus på upp till tre dagslöner. Momentet går ' +
+            'lika bra att styra med finger som med mus.'
+        ),
+        button('Sätt igång', () => this.startMinigame(), {
+          class: 'btn btn-primary btn-big',
+        })
+      );
+      wrap.append(panel);
+      return wrap;
+    }
+
+    if (q.phase === 'spelar') {
+      const panel = el('section', { class: 'panel' });
+      panel.append(
+        renderMinigame(game, (result) => this.finishMinigame(result))
+      );
+      wrap.append(panel);
+      return wrap;
+    }
+
+    // Klart: visa resultatet och låt spelaren kvittera ut lönen.
+    const result = q.minigameResult;
+    const panel = el('section', { class: 'panel' });
+    const grade =
+      (result?.score ?? 0) >= 0.8
+        ? 'Snyggt jobbat!'
+        : (result?.score ?? 0) >= 0.5
+          ? 'Godkänt.'
+          : 'Det där gick trögt.';
+    panel.append(
+      el('h2', {}, grade),
+      el('p', { class: 'lede' }, result?.summary ?? ''),
+      el('div', { class: 'stat-grid' },
+        stat('Frågor rätt', `${q.correct}/${q.questions.length}`),
+        stat('Bonus', this.money(q.bonus ?? 0)),
+        stat('Total lön', this.money(q.earnings))
+      ),
+      button('Kvittera ut lönen', () => this.finishQuiz(), {
+        class: 'btn btn-primary btn-big',
+      })
+    );
+    wrap.append(panel);
     return wrap;
   }
 
@@ -726,6 +885,7 @@ export class App {
       s.wrongStreak += 1;
     }
 
+    q.dayResults[q.index] = right;
     q.answered = { picked, wasCorrect: payout };
     saveGame(s);
     this.render();
@@ -739,7 +899,37 @@ export class App {
       this.render();
       return;
     }
+    // Arbetsdagarna är slut. Jobb avslutas med ett arkadmoment.
+    if (q.kind === 'jobb' && q.job) {
+      q.phase = 'brief';
+      this.render();
+      return;
+    }
     this.finishQuiz();
+  }
+
+  /** Startar skiftets arkadmoment. */
+  private startMinigame(): void {
+    const q = this.quiz!;
+    q.phase = 'spelar';
+    this.render();
+  }
+
+  /** Tar emot resultatet från arkadmomentet och räknar ut bonusen. */
+  private finishMinigame(result: MinigameResult): void {
+    const s = this.state!;
+    const q = this.quiz!;
+    if (q.phase === 'klart') return;
+    const job = q.job!;
+    // Bonusen motsvarar upp till tre dagslöner, efter hur bra momentet gick.
+    const wage = wagePerCorrect(job, this.city, s.difficulty);
+    const bonus = Math.round(wage * 3 * result.score);
+    q.minigameResult = result;
+    q.bonus = bonus;
+    q.earnings += bonus;
+    q.phase = 'klart';
+    saveGame(s);
+    this.render();
   }
 
   private finishQuiz(): void {
@@ -771,9 +961,12 @@ export class App {
     s.earned += q.earnings;
     this.spendDays(job.shiftLength, city);
 
-    // Certifikat om du klarar minst 70 procent av skiftet.
+    // Certifikat om du klarar minst 70 procent av skiftet. Arkadmomentet
+    // väger in, så ett svagt frågeresultat kan räddas av gott handlag.
+    const mgScore = q.minigameResult?.score ?? 0;
+    const shiftScore = Math.round(score * 0.75 + mgScore * 100 * 0.25);
     let gotCert = false;
-    if (score >= 70) {
+    if (shiftScore >= 70) {
       const prev = s.certificates[job.category] ?? 0;
       s.certificates[job.category] = prev + 1;
       gotCert = true;
@@ -787,6 +980,8 @@ export class App {
       `Lön ${this.money(q.earnings)}.`,
       `${job.shiftLength} dagar gick åt.`,
     ];
+    if ((q.bonus ?? 0) > 0)
+      parts.push(`${job.minigame.title} gav ${this.money(q.bonus ?? 0)} i bonus.`);
     if (gotCert)
       parts.push(
         `Certifikat i ${CATEGORY_LABELS[job.category] ?? job.category}!`

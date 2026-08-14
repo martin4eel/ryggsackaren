@@ -2,7 +2,7 @@ import { CITY_BY_ID } from '../data/cities';
 import { JOB_BY_ID } from '../data/jobs';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City, Job, Question, Souvenir } from '../data/types';
-import { CATEGORY_QUESTIONS } from '../data/questions/categoryQuestions';
+import { JOB_QUESTIONS } from '../data/questions/jobQuestions';
 import { CITY_QUESTIONS } from '../data/questions/cityQuestions';
 import type { Difficulty, GameState } from './state';
 import { getProgress } from './state';
@@ -211,7 +211,7 @@ export function jobQuestions(
   job: Job,
   difficulty: Difficulty
 ): PreparedQuestion[] {
-  const pool = CATEGORY_QUESTIONS[job.category] ?? [];
+  const pool = JOB_QUESTIONS[job.id] ?? [];
   const eligible =
     difficulty === 'turist' ? pool.filter((q) => q.d === 1) : pool;
   const source = eligible.length >= job.shiftLength ? eligible : pool;

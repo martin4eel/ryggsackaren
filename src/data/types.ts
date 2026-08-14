@@ -66,6 +66,33 @@ export type Category =
   | 'bygg'
   | 'mode';
 
+/** Arkadmoment som bryter av frågorna, precis som i originalet. */
+export type MinigameKind =
+  /** Sortera föremål som rullar förbi på ett band */
+  | 'sortering'
+  /** Tryck på rätt instrument eller reglage när det efterfrågas */
+  | 'instrument'
+  /** Upprepa en sekvens ur minnet */
+  | 'sekvens'
+  /** Stoppa en mätare inom rätt zon */
+  | 'precision';
+
+export interface Minigame {
+  kind: MinigameKind;
+  /** Rubrik på uppgiften, t.ex. "Sortera fångsten" */
+  title: string;
+  /** Instruktion som visas innan man börjar */
+  brief: string;
+  /**
+   * Etiketter för det som ska hanteras. Betydelsen beror på typen:
+   * sortering och sekvens använder dem som föremål, instrument som reglage
+   * och precision som namn på det som ska mätas in.
+   */
+  items: string[];
+  /** Enhet eller måttord som visas i precisionsspelet */
+  unit?: string;
+}
+
 export interface Job {
   id: string;
   /** Yrkestitel, t.ex. "Flygvärdinna" */
@@ -79,6 +106,10 @@ export interface Job {
   shiftLength: number;
   /** Annonstext i tidningen */
   ad: string;
+  /** Arkadmomentet som avslutar skiftet */
+  minigame: Minigame;
+  /** Kort miljöbeskrivning som visas på arbetsplatsen */
+  scene: string;
 }
 
 export interface Souvenir {

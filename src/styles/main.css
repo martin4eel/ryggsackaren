@@ -951,3 +951,369 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* -------------------------------------------------- arbetsplats och skift */
+
+.worksite {
+  background:
+    linear-gradient(135deg, rgba(47, 125, 99, 0.18), transparent 60%),
+    var(--paper);
+  border-left: 5px solid var(--palm);
+}
+
+.worksite-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.worksite-title {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 5vw, 1.9rem);
+  line-height: 1.1;
+}
+
+.worksite-scene {
+  margin: 0;
+  font-size: 0.97rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.tag-mg {
+  background: rgba(242, 166, 59, 0.24);
+  color: var(--sun-dark);
+}
+
+/* Stämpelkort: en ruta per arbetsdag */
+.timecard-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.timecard-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.timecard {
+  display: flex;
+  gap: 6px;
+}
+
+.day {
+  width: 30px;
+  height: 34px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border: 2px solid var(--line);
+  background: #fff;
+  color: var(--ink-soft);
+  position: relative;
+}
+
+.day-ok {
+  background: var(--palm);
+  border-color: var(--palm);
+  color: #fff;
+}
+
+.day-fail {
+  background: rgba(200, 69, 47, 0.16);
+  border-color: var(--stamp);
+  color: var(--stamp);
+}
+
+.day-now {
+  border-color: var(--sun-dark);
+  box-shadow: 0 0 0 3px rgba(242, 166, 59, 0.3);
+  color: var(--ink);
+}
+
+.wage-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+}
+
+.quiz-job .question {
+  font-size: clamp(1.12rem, 4vw, 1.45rem);
+}
+
+/* ------------------------------------------------------------- minispel */
+
+.minigame {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mg-status {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.mg-hint {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+/* Löpande band */
+.mg-belt {
+  position: relative;
+  height: 78px;
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(29, 43, 52, 0.1) 0 18px,
+      rgba(29, 43, 52, 0.04) 18px 36px
+    ),
+    var(--paper-dim);
+  border: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+}
+
+.mg-item {
+  position: absolute;
+  left: 0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #fff;
+  border: 2px solid var(--ink-soft);
+  font-weight: 700;
+  font-size: 0.98rem;
+  white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(4, 16, 26, 0.18);
+}
+
+.mg-item-moving {
+  animation: belt-slide 2.4s linear forwards;
+}
+
+@keyframes belt-slide {
+  from {
+    left: -30%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.mg-item-right {
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: var(--palm);
+  background: rgba(71, 163, 130, 0.2);
+  color: #1f5a46;
+}
+
+.mg-item-wrong {
+  left: 50%;
+  transform: translateX(-50%);
+  border-color: var(--stamp);
+  background: rgba(200, 69, 47, 0.16);
+  color: var(--stamp);
+}
+
+/* Tidsmätare */
+.mg-timer {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--paper-dim);
+  overflow: hidden;
+}
+
+.mg-timebar {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--sun), var(--stamp));
+  border-radius: 999px;
+}
+
+.mg-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 9px;
+}
+
+.mg-btn {
+  background: var(--paper-dim);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  font-size: 0.95rem;
+}
+
+.mg-btn:hover {
+  border-color: var(--sun-dark);
+  background: #fff;
+}
+
+/* Instrumentpanel */
+.mg-order {
+  margin: 0;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--sea-deep);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid rgba(246, 239, 224, 0.2);
+}
+
+.mg-order-right {
+  background: #1f5a46;
+  border-color: var(--palm-light);
+}
+
+.mg-order-wrong {
+  background: #7d2418;
+  border-color: var(--stamp);
+}
+
+.mg-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mg-knob {
+  appearance: none;
+  cursor: pointer;
+  min-height: 62px;
+  border-radius: 12px;
+  border: 3px solid #7d5a2a;
+  background: linear-gradient(180deg, #f5d9a8 0%, #dbb277 100%);
+  color: #3a2a12;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 800;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.16);
+  transition: transform 0.08s ease;
+}
+
+.mg-knob:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Minnessekvens */
+.mg-pads {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mg-pad {
+  appearance: none;
+  cursor: pointer;
+  min-height: 76px;
+  border-radius: 14px;
+  border: 3px solid var(--line);
+  background: var(--paper-dim);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 800;
+  transition: background 0.1s ease, transform 0.1s ease, border-color 0.1s ease;
+}
+
+.mg-pad-on {
+  background: var(--sun);
+  border-color: var(--sun-dark);
+  transform: scale(1.03);
+}
+
+.mg-pad-right {
+  background: rgba(71, 163, 130, 0.4);
+  border-color: var(--palm);
+}
+
+.mg-pad-wrong {
+  background: rgba(200, 69, 47, 0.35);
+  border-color: var(--stamp);
+}
+
+/* Precisionsmätare */
+.mg-gauge {
+  position: relative;
+  height: 54px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #e9dfc8, #d8ccb0);
+  border: 2px solid var(--line);
+  overflow: hidden;
+}
+
+.mg-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(71, 163, 130, 0.45);
+  border-left: 2px solid var(--palm);
+  border-right: 2px solid var(--palm);
+}
+
+.mg-needle {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 4px;
+  margin-left: -2px;
+  background: var(--stamp);
+  box-shadow: 0 0 8px rgba(200, 69, 47, 0.7);
+}
+
+.mg-gauge-right {
+  box-shadow: 0 0 0 3px rgba(71, 163, 130, 0.5);
+}
+
+.mg-gauge-wrong {
+  box-shadow: 0 0 0 3px rgba(200, 69, 47, 0.45);
+}
+
+.mg-readout {
+  margin: 0;
+  font-size: 0.97rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mg-stop {
+  width: 100%;
+  min-height: 54px;
+  font-size: 1.05rem;
+}
+
+@media (min-width: 700px) {
+  .mg-panel,
+  .mg-pads {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mg-stop {
+    width: auto;
+    min-width: 240px;
+  }
+}

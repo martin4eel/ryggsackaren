@@ -96,17 +96,23 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
 4. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
-   arbetsdag: rätt svar ger lön, och boendet dras oavsett. Klarar du minst
-   70 procent av skiftet får du ett **certifikat**, som öppnar bättre betalda
-   jobb i samma ämne i alla städer.
-5. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
+   arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
+   för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
+   Ett stämpelkort visar hur dagarna gått.
+5. **Sista passet.** Varje skift avslutas med ett arkadmoment: sortera på
+   löpande band, träffa rätt reglage, upprepa en sekvens ur minnet eller
+   stoppa en mätare i rätt zon. Det ger upp till tre dagslöner i bonus och
+   räknas in när certifikatet avgörs. Klarar du 70 procent av skiftet totalt
+   får du ett **certifikat**, som öppnar bättre betalda jobb i samma ämne i
+   alla städer.
+6. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
-6. **Resebyrån.** Välj destination på kartan eller i listan. Varje sträcka har
+7. **Resebyrån.** Välj destination på kartan eller i listan. Varje sträcka har
    tre biljetter: billigt och långsamt, mellanting, eller dyrt och snabbt.
    Tid är också en resurs eftersom boendet kostar varje dag.
-7. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
+8. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-8. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+9. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
    avsluta resan och få poäng.
 
 Går kassan under −1 500 är resan över och ambassaden skickar hem dig.
@@ -123,8 +129,9 @@ dag). Skulden dras av.
 ## Innehåll
 
 - 22 destinationer på sex kontinenter
-- 64 yrken i tre löneklasser och 18 ämnesområden
-- 441 frågor, uppdelade i två svårighetsgrader
+- 64 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
+- 696 frågor uppdelade i två svårighetsgrader, varav 512 jobbfrågor
+- 4 arkadmoment som avslutar arbetsskiften
 - 41 souvenirer med regional prissättning
 - 24 valutor
 
@@ -145,13 +152,14 @@ src/
     worldMap.ts            Genererad landmassa som SVG-path (Natural Earth)
     questions/
       cityQuestions.ts     Frågor till turistbyrån, per stad
-      categoryQuestions.ts Jobbfrågor, per ämneskategori
+      jobQuestions.ts      Jobbfrågor, egen uppsättning per yrke
   game/
     state.ts               Speltillstånd, sparning och laddning
     rules.ts               Avstånd, priser, löner, poäng och frågeurval
   ui/
     app.ts                 Skärmar och spelloop
     map.ts                 Världskartan som SVG med etikettplacering
+    minigames.ts           De fyra arkadmomenten
     dom.ts                 Små hjälpare för att bygga element
   styles/main.css          All stilsättning
   sw-register.ts           Registrerar service workern i produktionsbygget
@@ -176,10 +184,10 @@ när frågan visas. `d: 1` betyder att frågan används på båda svårighetsgra
 ```
 
 Kör `npm run validate` efter ändringar. Den kontrollerar bland annat att varje
-stad har minst fem lätta frågor, att varje ämneskategori har nog med frågor för
-det längsta skiftet, att varje stad har minst ett jobb i löneklass 1 (så att en
-spelare utan stadsbetyg alltid kan tjäna pengar), och att inga frågor är
-dubbletter.
+stad har minst fem lätta frågor, att varje jobb har egna frågor och nog många
+lätta för hela skiftet, att varje stad har minst ett jobb i löneklass 1 (så att
+en spelare utan stadsbetyg alltid kan tjäna pengar), att inga frågor är
+dubbletter någonstans i spelet, och att varje jobbs arkadmoment är komplett.
 
 Kartans landmassa är genererad från Natural Earths 110m-dataset (public domain)
 och ligger färdig i `src/data/worldMap.ts`, så inga kartberoenden behövs vid

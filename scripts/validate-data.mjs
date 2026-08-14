@@ -20,9 +20,7 @@ const server = await createServer({
 
 try {
   const load = (p) => server.ssrLoadModule(p);
-  const { CATEGORY_QUESTIONS } = await load(
-    '/src/data/questions/categoryQuestions.ts'
-  );
+  const { JOB_QUESTIONS } = await load('/src/data/questions/jobQuestions.ts');
   const { CITY_QUESTIONS } = await load('/src/data/questions/cityQuestions.ts');
   const { CITIES } = await load('/src/data/cities.ts');
   const { JOBS } = await load('/src/data/jobs.ts');
@@ -62,8 +60,8 @@ try {
     }
   };
 
-  for (const [category, questions] of Object.entries(CATEGORY_QUESTIONS)) {
-    checkQuestions(`kategori:${category}`, questions);
+  for (const [jobId, questions] of Object.entries(JOB_QUESTIONS)) {
+    checkQuestions(`jobb:${jobId}`, questions);
   }
   for (const [cityId, questions] of Object.entries(CITY_QUESTIONS)) {
     checkQuestions(`stad:${cityId}`, questions);
@@ -105,22 +103,64 @@ try {
       );
   }
 
+  const MINIGAME_KINDS = new Set([
+    'sortering',
+    'instrument',
+    'sekvens',
+    'precision',
+  ]);
+
   for (const job of JOBS) {
-    const pool = CATEGORY_QUESTIONS[job.category] ?? [];
+    // Varje jobb måste ha sin egen frågeuppsättning, aldrig delad med andra.
+    const pool = JOB_QUESTIONS[job.id];
+    if (!pool) {
+      problems.push(`jobb ${job.id} saknar egna frågor`);
+      continue;
+    }
     if (pool.length < job.shiftLength)
       problems.push(
-        `jobb ${job.id}: kategorin ${job.category} har ${pool.length} frågor men skiftet är ${job.shiftLength}`
+        `jobb ${job.id} har ${pool.length} frågor men skiftet är ${job.shiftLength}`
       );
     const easy = pool.filter((q) => q.d === 1).length;
     if (easy < job.shiftLength)
       problems.push(
-        `jobb ${job.id} på Turist: ${job.category} har ${easy} lätta frågor men skiftet är ${job.shiftLength}`
+        `jobb ${job.id} på Turist: ${easy} lätta frågor men skiftet är ${job.shiftLength}`
       );
+
+    // Arkadmomentet måste vara komplett och spelbart.
+    const mg = job.minigame;
+    if (!mg) {
+      problems.push(`jobb ${job.id} saknar minispel`);
+    } else {
+      if (!MINIGAME_KINDS.has(mg.kind))
+        problems.push(`jobb ${job.id} har okänd minispelstyp ${mg.kind}`);
+      if (!mg.title?.trim()) problems.push(`jobb ${job.id}: minispel utan titel`);
+      if (!mg.brief?.trim()) problems.push(`jobb ${job.id}: minispel utan instruktion`);
+      const needed = mg.kind === 'precision' ? 1 : 3;
+      if (!Array.isArray(mg.items) || mg.items.length < needed)
+        problems.push(
+          `jobb ${job.id}: minispelet ${mg.kind} behöver minst ${needed} poster, har ${mg.items?.length ?? 0}`
+        );
+      if (new Set(mg.items ?? []).size !== (mg.items ?? []).length)
+        problems.push(`jobb ${job.id}: minispelet har dubbletter bland posterna`);
+    }
+    if (!job.scene?.trim())
+      problems.push(`jobb ${job.id} saknar miljöbeskrivning (scene)`);
+  }
+
+  // Inga två jobb får dela frågeuppsättning av misstag.
+  const poolIds = Object.keys(JOB_QUESTIONS);
+  const jobIds = new Set(JOBS.map((j) => j.id));
+  for (const id of poolIds) {
+    if (!jobIds.has(id))
+      problems.push(`frågeuppsättningen ${id} hör inte till något jobb`);
   }
 
   console.log(`Frågor: ${total}`);
   console.log(
-    `Kategorier: ${Object.keys(CATEGORY_QUESTIONS).length} · Städer: ${CITIES.length} · Jobb: ${JOBS.length}`
+    `Städer: ${CITIES.length} · Jobb: ${JOBS.length} · Jobbfrågor: ${Object.values(
+      JOB_QUESTIONS
+    ).reduce((a, b) => a + b.length, 0)}`
   );
 } finally {
   await server.close();
