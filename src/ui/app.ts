@@ -67,6 +67,7 @@ import {
 } from './minigames';
 import type { Stamp } from '../data/stamps';
 import { forgetMapView, renderMapFrame, renderTravelScene } from './map';
+import { renderGlobePicker } from './globepicker';
 
 interface QuizSession {
   kind: 'turistbyra' | 'jobb';
@@ -274,8 +275,6 @@ export class App {
   private stampTimer: number | null = null;
   /** Sökfältet på startskärmens stadslista */
   private cityFilter = '';
-  /** Har spelaren fällt ut hela stadslistan på startskärmen? */
-  private showAllCities = false;
   /**
    * Är spelförklaringen utfälld? Första gången någon öppnar spelet står den
    * öppen; därefter ligger den bakom hjälpknappen.
@@ -693,40 +692,10 @@ export class App {
     wrap.append(hero);
 
     /**
-     * Namnet. Det trycks i passet och i den maskinläsbara raden, så det är
-     * det första man anger. Fältet ligger i sin egen panel för att inte
-     * drunkna bland kartan och stadslistan.
+     * Ordningen är medveten: först vilket slags resenär man är, sedan vem man
+     * är, och sist var man är född. Svårighetsgraden färgar allt annat, så den
+     * ska väljas innan man börjar fundera på städer.
      */
-    const namePanel = el('section', { class: 'panel' });
-    namePanel.append(
-      el('h2', {}, 'Vem är du?'),
-      el(
-        'p',
-        { class: 'muted' },
-        'Namnet trycks i ditt pass och följer med i resedagboken.'
-      )
-    );
-    const nameInput = el('input', {
-      // Egen klass, inte 'search': det är ett namnfält, inte en sökruta.
-      class: 'field name-input',
-      type: 'text',
-      maxlength: '24',
-      placeholder: 'Ditt namn',
-      'aria-label': 'Ditt namn',
-      value: this.startPick.name,
-      autocomplete: 'off',
-    }) as HTMLInputElement;
-    nameInput.addEventListener('input', () => {
-      this.startPick.name = nameInput.value;
-      // Startknappen speglar om namnet är ifyllt, utan att bygga om sidan och
-      // slå ut fokus mitt i att man skriver.
-      paintStartButton();
-    });
-    namePanel.append(el('div', { class: 'row' }, nameInput));
-    wrap.append(namePanel);
-
-    // Svårighetsgrad. Två stora kort med samma uppbyggnad, så att skillnaden
-    // går att läsa rad för rad i stället för att gissas ur en textmassa.
     const diffPanel = el('section', { class: 'panel' });
     diffPanel.append(
       el('h2', {}, 'Hur van resenär är du?'),
@@ -770,85 +739,175 @@ export class App {
     diffPanel.append(diffRow);
     wrap.append(diffPanel);
 
-    // Startstad
+    // Namnet trycks i passet och följer med i resedagboken.
+    const namePanel = el('section', { class: 'panel' });
+    namePanel.append(
+      el('h2', {}, 'Vem är du?'),
+      el(
+        'p',
+        { class: 'muted' },
+        'Namnet trycks i ditt pass och följer med i resedagboken.'
+      )
+    );
+    // Startknappen speglar om namnet är ifyllt. Den byggs längre ned, så
+    // callbackerna går via en indirektion i stället för att fånga den direkt.
+    let uppdateraStart: () => void = () => {};
+    const nameInput = el('input', {
+      class: 'field name-input',
+      type: 'text',
+      maxlength: '24',
+      placeholder: 'Ditt namn',
+      'aria-label': 'Ditt namn',
+      value: this.startPick.name,
+      autocomplete: 'off',
+    }) as HTMLInputElement;
+    nameInput.addEventListener('input', () => {
+      this.startPick.name = nameInput.value;
+      uppdateraStart();
+    });
+    namePanel.append(el('div', { class: 'row' }, nameInput));
+    wrap.append(namePanel);
+
+    /**
+     * Födelsestaden. Globen, ett kort om den valda staden och en rullbar
+     * lista står bredvid varandra, så att man ser vilken stad man pekat ut
+     * utan att behöva scrolla tillbaka upp.
+     */
     const cityPanel = el('section', { class: 'panel' });
-    const chosen = CITY_BY_ID[this.startPick.cityId]!;
     cityPanel.append(
       el('h2', {}, 'Var är du född?'),
       el(
         'p',
         { class: 'muted' },
         'Din födelsestad står i passet, är där resan börjar och dit du ska ta dig ' +
-          'tillbaka. Dess valuta blir den du räknar i. ' +
-          `Just nu: ${chosen.name}, ${chosen.country} (${
-            CURRENCIES[chosen.currency]?.name ?? chosen.currency
-          }).`
-      )
-    );
-    // Vykortet byts ut i takt med att man väljer stad på kartan eller i listan.
-    cityPanel.append(photoImg(chosen, 'start-photo'));
-    cityPanel.append(
-      renderMapFrame({
-        currentCityId: '',
-        homeCityId: this.startPick.cityId,
-        visited: [],
-        highlightId: this.startPick.cityId,
-        viewKey: 'start',
-        onSelect: (city) => {
-          this.startPick.cityId = city.id;
-          this.render();
-        },
-      })
-    );
-    cityPanel.append(
-      el(
-        'p',
-        { class: 'map-hint' },
-        'Zooma med två fingrar eller knapparna, dra för att flytta kartan.'
+          'tillbaka. Dess valuta blir den du räknar i.'
       )
     );
 
-    /**
-     * Med fyrtiofem destinationer blir en rullgardin oöverskådlig. I stället
-     * söker man fritt på stad eller land, och träffarna visas grupperade per
-     * region så att man ser var i världen de ligger.
-     */
+    // Kortet om den valda staden byggs om på plats när valet ändras.
+    const cityCard = el('div', { class: 'city-card' });
+    const paintCityCard = () => {
+      clear(cityCard);
+      const c = CITY_BY_ID[this.startPick.cityId]!;
+      const foto = photoImg(c, 'city-card-photo', cityCard);
+      cityCard.append(
+        foto,
+        el('div', { class: 'city-card-body' },
+          el('p', { class: 'kicker' }, c.country),
+          el('h3', { class: 'city-card-name' }, c.name),
+          el('p', { class: 'city-card-blurb' }, c.blurb),
+          el('div', { class: 'city-card-facts' },
+            el('span', {}, `Sevärdhet: ${c.landmark}`),
+            el('span', {},
+              `Valuta: ${CURRENCIES[c.currency]?.name ?? c.currency}`),
+            el('span', {}, `Prisnivå: ${prisniva(c.costIndex)}`)
+          )
+        )
+      );
+    };
+
+    const globe = renderGlobePicker({
+      selectedId: this.startPick.cityId,
+      onSelect: (c) => {
+        this.startPick.cityId = c.id;
+        playSound('valj');
+        globe.focus(c);
+        paintCityCard();
+        paintList();
+        uppdateraStart();
+      },
+    });
+
     const search = el('input', {
-      class: 'search',
+      class: 'field search',
       type: 'search',
       placeholder: 'Sök stad eller land',
-      'aria-label': 'Sök startstad',
+      'aria-label': 'Sök födelsestad',
       value: this.cityFilter,
     }) as HTMLInputElement;
+    const list = el('div', { class: 'city-list' });
+
+    const paintList = () => {
+      clear(list);
+      const needle = searchKey(this.cityFilter.trim());
+      const matches = CITIES.filter(
+        (c) =>
+          needle === '' ||
+          searchKey(c.name).includes(needle) ||
+          searchKey(c.country).includes(needle)
+      );
+      if (matches.length === 0) {
+        list.append(el('p', { class: 'muted' }, 'Ingen stad matchar sökningen.'));
+        return;
+      }
+      // Svenska städer först: nästan alla som spelar är födda i någon av dem.
+      const svenska = matches.filter((c) => c.country === 'Sverige');
+      const ovriga = matches.filter((c) => c.country !== 'Sverige');
+      const grupp = (rubrik: string, stader: City[]) => {
+        if (stader.length === 0) return;
+        list.append(el('h3', { class: 'city-group' }, rubrik));
+        for (const c of stader) {
+          const on = c.id === this.startPick.cityId;
+          list.append(
+            button(
+              el('span', { class: 'city-row' },
+                el('span', { class: 'city-row-name' }, c.name),
+                el('span', { class: 'city-row-country' }, c.country)
+              ),
+              () => {
+                this.startPick.cityId = c.id;
+                playSound('valj');
+                globe.focus(c);
+                paintCityCard();
+                paintList();
+                uppdateraStart();
+              },
+              { class: `city-row-btn ${on ? 'city-row-on' : ''}`, 'data-sound': 'av' }
+            )
+          );
+        }
+      };
+      const ordning = ['stockholm', 'goteborg', 'malmo', 'vasteras', 'koping'];
+      svenska.sort(
+        (a, b) =>
+          (ordning.indexOf(a.id) + 1 || 99) - (ordning.indexOf(b.id) + 1 || 99)
+      );
+      grupp('Sverige', svenska);
+      for (const region of Object.keys(REGION_LABELS)) {
+        grupp(
+          REGION_LABELS[region] ?? region,
+          ovriga
+            .filter((c) => c.region === region)
+            .sort((a, b) => a.name.localeCompare(b.name, 'sv'))
+        );
+      }
+    };
+
     search.addEventListener('input', () => {
       this.cityFilter = search.value;
-      this.renderStartCityList(list);
+      paintList();
     });
-    const list = el('div', { class: 'city-picker' });
-    /**
-     * Fyrtiofem städer i regiongrupper gjorde startskärmen åtta tusen pixlar
-     * hög på telefon. Kartan och sökrutan är de vägar folk faktiskt använder,
-     * så listan ligger hopfälld bakom en knapp och fälls ut av sig själv så
-     * fort man börjar söka.
-     */
-    const toggle = button(
-      '',
-      () => {
-        this.showAllCities = !this.showAllCities;
-        this.renderStartCityList(list);
-        paintToggle();
-      },
-      { class: 'btn btn-ghost city-toggle', 'data-sound': 'av' }
+
+    paintCityCard();
+    paintList();
+
+    cityPanel.append(
+      el('div', { class: 'birth-grid' },
+        el('div', { class: 'birth-globe' },
+          globe.node,
+          el(
+            'p',
+            { class: 'map-hint' },
+            'Dra för att snurra jorden, zooma med knapparna, tryck på en prick.'
+          )
+        ),
+        el('div', { class: 'birth-list' },
+          el('div', { class: 'row' }, search),
+          list
+        )
+      ),
+      cityCard
     );
-    const paintToggle = () => {
-      toggle.textContent = this.showAllCities
-        ? 'Dölj listan'
-        : `Bläddra bland alla ${CITIES.length} städer`;
-      toggle.setAttribute('aria-expanded', this.showAllCities ? 'true' : 'false');
-    };
-    paintToggle();
-    this.renderStartCityList(list);
-    cityPanel.append(el('div', { class: 'row' }, search, toggle), list);
     wrap.append(cityPanel);
 
     const actions = el('div', { class: 'panel actions-panel' });
@@ -860,10 +919,10 @@ export class App {
           /**
            * Ingen notis här: notify() ritar inte om av sig själv, och ett
            * render() skulle byta ut fältet och slå ut fokus vi just satt.
-           * Fokus plus en kort skakning säger samma sak, direkt vid fältet
-           * där svaret ska skrivas.
+           * Fokus plus en kort skakning säger samma sak, direkt vid fältet.
            */
           nameInput.focus();
+          nameInput.scrollIntoView({ block: 'center', behavior: 'smooth' });
           nameInput.classList.remove('input-nudge');
           void nameInput.offsetWidth;
           nameInput.classList.add('input-nudge');
@@ -889,18 +948,14 @@ export class App {
     );
     const paintStartButton = () => {
       const ready = this.startPick.name.trim().length > 0;
+      const stad = CITY_BY_ID[this.startPick.cityId]!;
       startBtn.textContent = ready
-        ? `Res iväg från ${chosen.name}`
+        ? `Res iväg från ${stad.name}`
         : 'Skriv ditt namn först';
       startBtn.classList.toggle('btn-waiting', !ready);
-      /**
-       * Knappen är avsiktligt inte disabled. En avstängd knapp går varken
-       * att fokusera eller trycka på, och säger aldrig varför. Den här
-       * säger vad som saknas i sin egen etikett, och ett tryck flyttar
-       * fokus till namnfältet.
-       */
     };
     paintStartButton();
+    uppdateraStart = paintStartButton;
     actions.append(startBtn);
     wrap.append(actions);
 
@@ -915,88 +970,6 @@ export class App {
       )
     );
     return wrap;
-  }
-
-  /**
-   * Ritar om träfflistan på startskärmen utan att bygga om hela sidan, så att
-   * texten man skriver i sökrutan inte tappar fokus mellan tangenttryckningar.
-   */
-  private renderStartCityList(host: HTMLElement): void {
-    clear(host);
-    const needle = searchKey(this.cityFilter.trim());
-    const matches = CITIES.filter(
-      (c) =>
-        needle === '' ||
-        searchKey(c.name).includes(needle) ||
-        searchKey(c.country).includes(needle)
-    );
-
-    if (matches.length === 0) {
-      host.append(el('p', { class: 'muted' }, 'Ingen stad matchar sökningen.'));
-      return;
-    }
-
-    /**
-     * Utan sökning och utan utfälld lista visas de svenska städerna. Spelet är
-     * enspråkigt svenskt och spelas i praktiken av svenskar, som nästan alltid
-     * är födda i någon av dem. Resten av världen ligger ett sökord eller en
-     * knapptryckning bort, och kartan står redan ovanför.
-     */
-    if (needle === '' && !this.showAllCities) {
-      const svenska = CITIES.filter((c) => c.country === 'Sverige');
-      // Ordningen är medveten: största och mest kända först.
-      const ordning = ['stockholm', 'goteborg', 'malmo', 'vasteras', 'koping'];
-      svenska.sort(
-        (a, b) =>
-          (ordning.indexOf(a.id) + 1 || 99) - (ordning.indexOf(b.id) + 1 || 99)
-      );
-      host.append(el('h3', { class: 'city-group' }, 'Född i Sverige?'));
-      const row = el('div', { class: 'city-chips' });
-      // Landet står redan i rubriken, så brickorna visar bara stadsnamnet.
-      for (const c of svenska) row.append(this.cityChip(c, false));
-      host.append(
-        row,
-        el(
-          'p',
-          { class: 'muted city-hint' },
-          `Född någon annanstans? Sök ovan, tryck på en punkt på kartan, eller ` +
-            `bläddra bland alla ${CITIES.length} städer.`
-        )
-      );
-      return;
-    }
-
-    const order = Object.keys(REGION_LABELS);
-    for (const region of order) {
-      const inRegion = matches
-        .filter((c) => c.region === region)
-        .sort((a, b) => a.name.localeCompare(b.name, 'sv'));
-      if (inRegion.length === 0) continue;
-      host.append(el('h3', { class: 'city-group' }, REGION_LABELS[region] ?? region));
-      const row = el('div', { class: 'city-chips' });
-      for (const c of inRegion) row.append(this.cityChip(c));
-      host.append(row);
-    }
-  }
-
-  /**
-   * En stadsbricka på startskärmen. Landet kan utelämnas när det redan står i
-   * rubriken ovanför, som i listan över svenska städer.
-   */
-  private cityChip(c: City, showCountry = true): HTMLElement {
-    const on = c.id === this.startPick.cityId;
-    return button(
-      el('span', { class: 'chip-body' },
-        el('span', { class: 'chip-name' }, c.name),
-        showCountry ? el('span', { class: 'chip-country' }, c.country) : null
-      ),
-      () => {
-        this.startPick.cityId = c.id;
-        playSound('valj');
-        this.render();
-      },
-      { class: `chip ${on ? 'chip-on' : ''}`, 'data-sound': 'av' }
-    );
   }
 
   /**
@@ -3140,6 +3113,14 @@ function countUp(node: HTMLElement, to: number, ms = 1100): void {
     if (t < 1) window.requestAnimationFrame(step);
   };
   window.requestAnimationFrame(step);
+}
+
+/** Prisnivån i klartext, i stället för ett indextal ingen kan tolka. */
+function prisniva(costIndex: number): string {
+  if (costIndex >= 1.25) return 'dyr';
+  if (costIndex >= 1.0) return 'ganska dyr';
+  if (costIndex >= 0.8) return 'lagom';
+  return 'billig';
 }
 
 function stat(label: string, value: string, tone?: string): HTMLElement {

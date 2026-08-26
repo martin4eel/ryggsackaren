@@ -99,7 +99,12 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 
 ## Så spelas det
 
-Startskärmen förklarar spelloopen i fyra steg första gången någon öppnar
+Startskärmen frågar i tur och ordning: **vilket läge**, **vem du är** och
+**var du är född**. Födelsestaden väljs på en snurrbar och zoombar jordglob
+eller i en sökbar lista, och den valda staden visas med foto, sevärdhet,
+valuta och prisnivå.
+
+Startskärmen förklarar också spelloopen i fyra steg första gången någon öppnar
 spelet. Därefter ligger förklaringen bakom knappen _Hur spelar man?_, så att
 den inte tar en halv skärm varje gång. Flaggan sparas för sig själv i
 webbläsaren och överlever att sparfilen raderas.
@@ -268,6 +273,7 @@ src/
                            samt resesekvensen mellan två städer
     globe.ts               Ortografisk jordglob: landmassan omprojicerad från
                            platt karta till klot, storcirklar och horisontklipp
+    globepicker.ts         Startskärmens glob: snurra, zooma och välja stad
     minigames.ts           De åtta arkadmomenten
     dom.ts                 Små hjälpare för att bygga element
     audio.ts               Syntetiserade ljudeffekter och ljudstyrning

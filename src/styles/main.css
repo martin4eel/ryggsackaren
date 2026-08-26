@@ -1701,66 +1701,202 @@ img.no-photo {
   outline-offset: 1px;
 }
 
-.city-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
+/* -------------------------------------------- födelsestad: glob och lista */
+
+.birth-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 12px;
 }
 
-.city-group {
-  margin: 10px 0 2px;
+@media (min-width: 820px) {
+  .birth-grid {
+    /* Globen får den större halvan; listan behöver bara läsbar bredd. */
+    grid-template-columns: 1.15fr 1fr;
+    align-items: start;
+  }
+}
+
+.globe-picker {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--line);
+  background:
+    radial-gradient(circle at 30% 25%, #14405c 0%, transparent 55%),
+    linear-gradient(180deg, #0a2333 0%, #061722 100%);
+}
+
+.globe-interactive {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+.globe-interactive:active {
+  cursor: grabbing;
+}
+
+.globe-zoom {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.globe-city circle {
+  fill: var(--paper);
+  stroke: #061722;
+}
+
+.globe-city-on circle {
+  fill: var(--sun);
+}
+
+.globe-city-label {
+  fill: var(--paper);
+  font-family: var(--font);
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: rgba(6, 23, 34, 0.9);
+}
+
+/* Rullbar stadslista, så att fyrtiosju städer inte gör panelen oändlig. */
+.city-list {
+  margin-top: 10px;
+  max-height: 340px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 4px;
+  border-radius: 10px;
+}
+
+.city-list .city-group {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 8px 0 2px;
+  padding: 4px 0;
+  background: var(--paper);
   font-family: var(--font-display);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
 
-.city-chips {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 7px;
+.city-list .city-group:first-child {
+  margin-top: 0;
 }
 
-.chip {
+.city-row-btn {
   display: block;
+  width: 100%;
   text-align: left;
-  padding: 9px 11px;
-  border-radius: 10px;
-  border: 2px solid var(--line);
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 2px solid transparent;
   background: var(--paper-dim);
   color: var(--ink);
   cursor: pointer;
   font-family: inherit;
-  transition: border-color 0.12s ease, background 0.12s ease;
 }
 
-.chip:hover {
+.city-row-btn:hover {
   border-color: var(--sun-dark);
   background: #fff;
 }
 
-.chip-on {
+.city-row-on {
   border-color: var(--stamp);
   background: #fff;
-  box-shadow: inset 0 0 0 2px rgba(200, 69, 47, 0.22);
 }
 
-.chip-body {
+.city-row {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.chip-name {
+.city-row-name {
   font-weight: 700;
-  font-size: 0.97rem;
+  font-size: 0.96rem;
 }
 
-.chip-country {
+.city-row-country {
   font-size: 0.8rem;
   color: var(--ink-soft);
+}
+
+/* ------------------------------------------------ kortet om den valda staden */
+
+.city-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--line);
+  background: var(--paper-dim);
+}
+
+@media (min-width: 640px) {
+  .city-card {
+    grid-template-columns: 240px 1fr;
+  }
+}
+
+.city-card-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 170px;
+  object-fit: cover;
+}
+
+.city-card.no-photo .city-card-photo {
+  display: none;
+}
+
+.city-card-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.city-card-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 5vw, 1.7rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.city-card-blurb {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+.city-card-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  font-weight: 600;
 }
 
 .dest-poor {
