@@ -1182,7 +1182,8 @@ export class App {
       el('div', { class: 'city-hero-scrim' }),
       el(
         'div',
-        { class: 'city-hero-text' },
+        // Texten ligger överst i bilden; skyltarna tar underkanten.
+        { class: 'city-hero-text city-hero-text-top' },
         el(
           'p',
           { class: 'kicker' },
@@ -1202,7 +1203,82 @@ export class App {
         'Foto: Wikimedia Commons'
       )
     );
-    wrap.append(hero);
+
+    /**
+     * Skyltarna ligger på stadsbilden, som i förlagan, i stället för i en
+     * meny under den. Raden med förklaringen byts ut mot beskrivningen av den
+     * skylt man pekar på, så att texten finns kvar för den som behöver den
+     * utan att ta plats hela tiden.
+     */
+    const hint = el(
+      'p',
+      { class: 'sign-hint' },
+      'Tryck på en skylt för att gå dit.'
+    );
+    const signs = el('div', { class: 'signs' });
+    const addSign = (
+      ikon: IconName,
+      namn: string,
+      beskrivning: string,
+      onClick: () => void
+    ) => {
+      const b = button(
+        el('span', { class: 'sign-body' },
+          el('span', { class: 'sign-badge' }, icon(ikon)),
+          el('span', { class: 'sign-name' }, namn)
+        ),
+        onClick,
+        { class: 'sign', title: beskrivning, 'aria-label': `${namn}. ${beskrivning}` }
+      );
+      const visa = () => {
+        hint.textContent = beskrivning;
+      };
+      const doljs = () => {
+        hint.textContent = 'Tryck på en skylt för att gå dit.';
+      };
+      b.addEventListener('pointerenter', visa);
+      b.addEventListener('focus', visa);
+      b.addEventListener('pointerleave', doljs);
+      b.addEventListener('blur', doljs);
+      signs.append(b);
+    };
+
+    addSign(
+      'skylt-info',
+      'Turistbyrån',
+      p.visits === 0
+        ? 'Svara på frågor om staden för att få ett betyg som öppnar bättre jobb.'
+        : `Gör om provet för att höja ditt betyg (nu ${p.rating}/100).`,
+      () => this.startCityQuiz()
+    );
+    addSign('skylt-tidning', 'Tidningen', 'Läs platsannonserna och ta ett arbetsskift.', () => {
+      playSound('sida');
+      this.go('tidning');
+    });
+    addSign(
+      'skylt-souvenir',
+      'Souvenirer',
+      'Köp lokalt och sälj där varan är eftertraktad.',
+      () => {
+        playSound('marknad');
+        this.go('souvenir');
+      }
+    );
+    addSign(
+      'skylt-ryggsack',
+      'Ryggsäck',
+      `${s.backpack.length} souvenirer, ${s.stamps.length} stämplar och all statistik.`,
+      () => this.go('ryggsack')
+    );
+    addSign('skylt-resa', 'Resebyrån', 'Välj nästa destination på jordgloben.', () =>
+      this.go('karta')
+    );
+    addSign('skylt-telefon', 'Telefonen', 'Ring hem och låna pengar om kassan är tom.', () => {
+      playSound('telefonbabbel');
+      this.go('telefon');
+    });
+    hero.append(signs);
+    wrap.append(hero, hint);
 
     // Resehändelsen från senaste sträckan visas överst, en gång, och
     // kvitteras bort så att den inte ligger kvar när man kommer tillbaka.
@@ -1280,62 +1356,6 @@ export class App {
       )
     );
     wrap.append(info);
-
-    const menu = el('section', { class: 'panel' });
-    menu.append(el('h2', {}, 'Vad gör du i dag?'));
-    const grid = el('div', { class: 'menu-grid' });
-
-    grid.append(
-      menuButton(
-        'flagga',
-        'Turistbyrån',
-        p.visits === 0
-          ? 'Svara på frågor om staden för att få ett betyg som öppnar bättre jobb.'
-          : `Gör om provet för att höja ditt betyg (nu ${p.rating}/100).`,
-        () => this.startCityQuiz()
-      ),
-      menuButton(
-        'tidning',
-        'Tidningen',
-        'Läs platsannonserna och ta ett arbetsskift.',
-        () => {
-          playSound('sida');
-          this.go('tidning');
-        }
-      ),
-      menuButton(
-        'souvenir',
-        'Souvenirbutiken',
-        'Köp lokalt och sälj där varan är eftertraktad.',
-        () => {
-          playSound('marknad');
-          this.go('souvenir');
-        }
-      ),
-      menuButton(
-        'ryggsack',
-        'Ryggsäck och pass',
-        `${s.backpack.length} souvenirer, ${s.stamps.length} stämplar och all statistik.`,
-        () => this.go('ryggsack')
-      ),
-      menuButton(
-        'resa',
-        'Resebyrån',
-        'Välj nästa destination på kartan.',
-        () => this.go('karta')
-      ),
-      menuButton(
-        'telefon',
-        'Telefonkiosken',
-        'Ring hem och låna pengar om kassan är tom.',
-        () => {
-          playSound('telefonbabbel');
-          this.go('telefon');
-        }
-      )
-    );
-    menu.append(grid);
-    wrap.append(menu);
 
     if (s.currentCityId === s.homeCityId && new Set(s.visited).size > 1) {
       const finish = el('section', { class: 'panel' });
@@ -3160,21 +3180,3 @@ function stat(label: string, value: string, tone?: string): HTMLElement {
   );
 }
 
-function menuButton(
-  iconName: IconName,
-  title: string,
-  desc: string,
-  onClick: () => void
-): HTMLElement {
-  return button(
-    el('span', { class: 'choice-body choice-with-icon' },
-      el('span', { class: 'choice-icon' }, icon(iconName)),
-      el('span', { class: 'choice-text' },
-        el('span', { class: 'choice-name' }, title),
-        el('span', { class: 'choice-desc' }, desc)
-      )
-    ),
-    onClick,
-    { class: 'choice menu-item' }
-  );
-}

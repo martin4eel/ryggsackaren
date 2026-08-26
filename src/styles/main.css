@@ -225,10 +225,12 @@ body {
   text-shadow: 0 2px 10px rgba(7, 26, 41, 0.65);
 }
 
+/* Krediten ligger uppe till höger. Nertill skrev den över skyltraden. */
 .photo-credit {
   position: absolute;
-  right: 10px;
-  bottom: 8px;
+  right: 12px;
+  top: 12px;
+  z-index: 3;
   font-size: 0.66rem;
   color: rgba(246, 239, 224, 0.75);
   text-decoration: none;
@@ -3715,4 +3717,142 @@ input:focus-visible {
   margin: 10px 0 0;
   text-align: center;
   font-size: 0.84rem;
+}
+
+/* ======================================================= skyltar på stadsbilden
+   Som i förlagan sitter valen på gatan i stället för i en meny under den.
+   Skyltarna ligger över fotot och måste därför bära sin egen läsbarhet.
+   ======================================================================== */
+
+.signs {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 10px;
+  /* Mörk botten under skyltarna så att de läses mot vilket foto som helst. */
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(7, 26, 41, 0.55) 35%,
+    rgba(7, 26, 41, 0.85) 100%
+  );
+}
+
+@media (min-width: 760px) {
+  .signs {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.sign {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-family: inherit;
+  transition: transform 0.12s ease;
+}
+
+.sign:hover,
+.sign:focus-visible {
+  transform: translateY(-3px);
+}
+
+.sign-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Själva skylten: en rund bricka i papper med mörk ikon, som en emaljskylt. */
+.sign-badge {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--paper);
+  color: #0d2430;
+  box-shadow: 0 2px 6px rgba(4, 16, 26, 0.5);
+  border: 2px solid rgba(13, 36, 48, 0.25);
+}
+
+.sign:hover .sign-badge,
+.sign:focus-visible .sign-badge {
+  background: var(--sun);
+  border-color: var(--sun-dark);
+}
+
+.sign-badge .icon {
+  width: 26px;
+  height: 26px;
+}
+
+.sign-name {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: var(--paper);
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(4, 16, 26, 0.9);
+}
+
+/* Raden under bilden visar beskrivningen av den skylt man pekar på. */
+.sign-hint {
+  margin: -4px 0 0;
+  text-align: center;
+  font-size: 0.88rem;
+  color: rgba(246, 239, 224, 0.75);
+  min-height: 1.4em;
+}
+
+/* Stadsbilden behöver mer höjd nu när skyltarna ligger i den. */
+.city-hero {
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 700px) {
+  .city-hero {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* Urtagen i skyltikonerna målas i brickans bakgrundsfärg, så att de följer
+   med när brickan byter färg. Med ikonens egen färg blev tidningen och
+   telefonkiosken solida klumpar. */
+.sign-badge {
+  --skylt-bg: var(--paper);
+}
+
+.sign:hover .sign-badge,
+.sign:focus-visible .sign-badge {
+  --skylt-bg: var(--sun);
+}
+
+.icon-knockout {
+  fill: var(--skylt-bg, #f6efe0);
+}
+
+/* Stadens namn högst upp i bilden, med egen övertoning för läsbarhet. */
+.city-hero-text-top {
+  top: 0;
+  bottom: auto;
+  left: 0;
+  right: 0;
+  padding: 12px 18px 28px;
+  background: linear-gradient(
+    180deg,
+    rgba(7, 26, 41, 0.8) 0%,
+    rgba(7, 26, 41, 0.35) 60%,
+    transparent 100%
+  );
 }

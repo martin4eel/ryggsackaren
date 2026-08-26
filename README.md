@@ -128,10 +128,14 @@ webbläsaren och överlever att sparfilen raderas.
 
    Det finns ingen livlina och ingen hjälp att få under en fråga. Turisten
    får lättare frågor och färre alternativ, inte färre chanser att tänka.
-3. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
+3. **Stadsbilden.** Valen sitter som skyltar på gatan, ovanpå stadens foto,
+   som i förlagan: turistbyrån, tidningen, souvenirbutiken, ryggsäcken,
+   resebyrån och telefonen. Raden under bilden berättar vad skylten man pekar
+   på gör.
+4. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
-4. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
+5. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
@@ -140,16 +144,16 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
-5. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
+6. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
    sortera på löpande band, utföra order i rätt följd, upprepa en sekvens ur
    minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
    saker och låta resten vara, hålla balansen eller slå i takt. Det ger upp
    till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
    till. Klarar du 70 procent av skiftet totalt får du ett **certifikat**,
    som öppnar bättre betalda jobb i samma ämne i alla städer.
-6. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
+7. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
-7. **Resebyrån.** Välj destination på kartan eller i listan, som går att
+8. **Resebyrån.** Välj destination på kartan eller i listan, som går att
    söka i. Vilka färdsätt som erbjuds beror på geografin, inte på en fast
    mall: buss och tåg kräver landförbindelse, färja kräver en linje och flyget
    når allt över 35 mil. Går ett färdsätt inte, står det utskrivet varför.
@@ -173,9 +177,9 @@ webbläsaren och överlever att sparfilen raderas.
    Tid är också en resurs eftersom boendet kostar varje dag, så det billigaste
    är sällan självklart bäst. Långa flyg från en stad utan interkontinental
    flygplats går via en hub och kostar en dag extra.
-8. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
+9. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-9. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
+10. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
 
    Den första är personuppgiftssidan: hemstad, resenärstyp, dag på resan,
    städer, stämplar och flugna kilometer – och ditt **personbästa** ur
@@ -188,21 +192,21 @@ webbläsaren och överlever att sparfilen raderas.
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet.
-10. **Ljud.** Ett trettiotal effekter (rätt och fel svar, lön, avresa, ankomst,
+11. **Ljud.** Ett trettiotal effekter (rätt och fel svar, lön, avresa, ankomst,
    metronom, trumslag, stämpel och alla arkadmoment) syntetiseras i
    webbläsaren, så inga ljudfiler behövs. Varje färdsätt har sitt eget
    avgångsljud, och i telefonkiosken babblar det redan i luren
    när man kliver in – rösterna är formantsyntes genom ett telefonfilter,
    alltså pladder utan ord. Högtalarknappen i statusraden
    stegar mellan avstängt, dämpat och fullt ljud; valet sparas.
-11. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
+12. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
    och backa till staden med `Esc`. Balansmomentet styrs med piltangenterna
    och taktmomentet med mellanslag.
-12. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+13. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
     frågar först, och visar vad som går förlorat, innan resan raderas.
-13. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+14. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
     avsluta resan, få poäng och en titel.
-14. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
+15. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
     startskärmen, med poäng, titel, dagar, städer och träffsäkerhet. Varje rad
     visar också vilken stad du hade bäst koll på och vilken som avslöjade dig.
     Spelet räknar rätt och fel per stad, både på turistbyrån och på jobben.
