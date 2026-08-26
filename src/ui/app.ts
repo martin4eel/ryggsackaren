@@ -19,6 +19,7 @@ import {
   distanceKm,
   finalScore,
   jobQuestions,
+  prepareQuestion,
   jobRequirementText,
   arcadeSlack,
   certificateThreshold,
@@ -87,9 +88,15 @@ import {
 } from '../game/events';
 import { renderEventCard } from './eventcard';
 import { quizImageAlt, quizImageUrl } from '../data/quizImages';
+import { COIN_QUESTIONS } from '../data/questions/coinQuestions';
 
 interface QuizSession {
-  kind: 'turistbyra' | 'jobb';
+  /**
+   * `mynt` är en enda fråga om staden, från en bricka på stadsbilden. Den
+   * kostar ingen dag och ger inget skift - bara ett stadsbetyg och en slant
+   * om man kan svaret.
+   */
+  kind: 'turistbyra' | 'jobb' | 'mynt';
   questions: PreparedQuestion[];
   index: number;
   correct: number;
@@ -715,7 +722,9 @@ export class App {
         main.append(this.renderCity());
         break;
       case 'turistbyra':
-        main.append(this.renderQuiz('Turistbyrån'));
+        main.append(
+          this.renderQuiz(this.quiz?.kind === 'mynt' ? this.city.name : 'Turistbyrån')
+        );
         break;
       case 'tidning':
         main.append(this.renderNewspaper());
@@ -1025,6 +1034,20 @@ export class App {
       value: this.cityFilter,
     }) as HTMLInputElement;
     const list = el('div', { class: 'city-list' });
+    /**
+     * Listan rymmer fyrtiosju städer i en ruta på trehundra bildpunkter, och
+     * att den gick att rulla i syntes inte. Nu ligger den i en ram med en
+     * uttoning i underkanten som försvinner när man nått botten, och en rad
+     * ovanför som säger hur många städer som finns.
+     */
+    const listRam = el('div', { class: 'city-list-ram' }, list);
+    const listRakna = el('p', { class: 'city-list-antal' });
+    const uppdateraSkugga = () => {
+      const kvar = list.scrollHeight - list.scrollTop - list.clientHeight;
+      listRam.dataset['slut'] = kvar <= 4 ? 'ja' : 'nej';
+      listRam.dataset['rullbar'] = list.scrollHeight > list.clientHeight + 4 ? 'ja' : 'nej';
+    };
+    list.addEventListener('scroll', uppdateraSkugga);
 
     const paintList = () => {
       clear(list);
@@ -1071,6 +1094,10 @@ export class App {
         (a, b) =>
           (ordning.indexOf(a.id) + 1 || 99) - (ordning.indexOf(b.id) + 1 || 99)
       );
+      listRakna.textContent =
+        matches.length === CITIES.length
+          ? `${CITIES.length} städer att välja mellan. Rulla i listan eller sök.`
+          : `${matches.length} ${matches.length === 1 ? 'träff' : 'träffar'}.`;
       grupp('Sverige', svenska);
       for (const region of Object.keys(REGION_LABELS)) {
         grupp(
@@ -1089,6 +1116,8 @@ export class App {
 
     paintCityCard();
     paintList();
+    // Höjden är inte känd förrän listan sitter i dokumentet.
+    requestAnimationFrame(uppdateraSkugga);
 
     cityPanel.append(
       el('div', { class: 'birth-grid' },
@@ -1102,7 +1131,8 @@ export class App {
         ),
         el('div', { class: 'birth-list' },
           el('div', { class: 'row' }, search),
-          list
+          listRakna,
+          listRam
         )
       ),
       cityCard
@@ -1341,8 +1371,37 @@ export class App {
       );
     }
 
+    /**
+     * Ryggsäcken ligger uppe till höger på varje skärm, större än de andra
+     * knapparna. Den var förut en skylt bland tio andra på stadsbilden, vilket
+     * betydde att man fick resa hem till staden för att titta i sin egen
+     * ryggsäck. Antalet souvenirer och stämplar står på den.
+     */
+    let packKnapp: HTMLButtonElement | null = null;
+    if (s.screen !== 'slut') {
+      const packat = s.backpack.length;
+      packKnapp = (
+        button(
+          el('span', { class: 'hud-pack-body' },
+            icon('skylt-ryggsack'),
+            el('span', { class: 'hud-pack-tal' }, String(packat))
+          ),
+          () => this.go('ryggsack'),
+          {
+            class: `hud-pack ${s.screen === 'ryggsack' ? 'hud-pack-har' : ''}`,
+            title: `Ryggsäck och pass: ${packat} ${
+              packat === 1 ? 'souvenir' : 'souvenirer'
+            }, ${s.stamps.length} stämplar`,
+            'aria-label': `Ryggsäck och pass. ${packat} souvenirer, ${s.stamps.length} stämplar.`,
+          }
+        )
+      );
+    }
+
     // Ljudknappen ligger alltid synlig i statusraden, som i förlagan.
     actions.append(audioButton('hud-icon-btn'), restart);
+    // Ryggsäcken sist, alltså ytterst till höger.
+    if (packKnapp) actions.append(packKnapp);
 
     hud.append(left, stats, actions);
     return hud;
@@ -1434,11 +1493,14 @@ export class App {
       { class: 'sign-hint' },
       'Tryck på en skylt för att gå dit.'
     );
+    /** Uppvända ikoner, i en rad under bilden där de är lätta att hitta. */
     const signs = el('div', { class: 'signs' });
+    /** Nedvända mynt, utspridda över stadsbilden. */
+    const mynt = el('div', { class: 'city-coins' });
 
     /**
-     * En plats på stadsbilden. Antingen en av stadens funktioner, eller en
-     * mystikskylt som döljer en händelse.
+     * En plats i staden. Antingen en av stadens funktioner, en mystikbricka
+     * som döljer en händelse, eller en frågebricka om staden man står i.
      */
     interface Plats {
       id: string;
@@ -1446,8 +1508,19 @@ export class App {
       namn: string;
       beskrivning: string;
       onClick: () => void;
-      /** Sant för mystikskyltarna, som försvinner när de använts. */
-      mystik?: boolean;
+      /**
+       * En bricka som löser ut sig själv när den vänds: mystikbrickorna och
+       * frågebrickan. De försvinner efteråt.
+       */
+      bricka?: boolean;
+      /**
+       * En handling som bara går att göra en gång per stad. Till skillnad från
+       * en bricka vänds den upp som vilken ikon som helst och används sedan
+       * när man vill - men bara den gången.
+       */
+      engangs?: boolean;
+      /** Sant när platsen är förbrukad och ska bära en bock. */
+      klar?: boolean;
     }
 
     const platser: Plats[] = [];
@@ -1456,8 +1529,9 @@ export class App {
       ikon: IconName,
       namn: string,
       beskrivning: string,
-      onClick: () => void
-    ) => platser.push({ id, ikon, namn, beskrivning, onClick });
+      onClick: () => void,
+      extra: Partial<Plats> = {}
+    ) => platser.push({ id, ikon, namn, beskrivning, onClick, ...extra });
 
     plats(
       'turistbyra',
@@ -1482,13 +1556,6 @@ export class App {
         this.go('souvenir');
       }
     );
-    plats(
-      'ryggsack',
-      'skylt-ryggsack',
-      'Ryggsäck',
-      `${s.backpack.length} souvenirer, ${s.stamps.length} stämplar och all statistik.`,
-      () => this.go('ryggsack')
-    );
     /**
      * Stationerna. En skylt sätts upp bara om färdsättet faktiskt tar en
      * någonstans: på Island finns varken buss eller tåg som når en annan stad
@@ -1511,12 +1578,6 @@ export class App {
         () => {
           this.travelFilter = mode;
           playSound('valj');
-          /**
-           * Att vänta på en avgång är ett tillfälle. Slaget görs här, när man
-           * kliver in, och inte i skärmens byggfunktion - den körs om varje
-           * gång tillståndet ändras, och då skulle varje händelse kunna följas
-           * direkt av nästa.
-           */
           this.go('station');
           this.fireEvent('vantan');
           this.render();
@@ -1524,18 +1585,36 @@ export class App {
       );
     }
     /**
-     * Att gå ut utan ärende. Dagen kostar boende, och i utbyte händer något -
-     * på gatan eller i mötet med någon. Det är den enda handlingen i spelet
-     * vars hela poäng är att man inte vet vad den ger.
+     * Sevärdheten och en dag ute på gatorna. Båda kostar en dag och ger
+     * garanterat en händelse - och båda finns bara en gång per stad. Att kunna
+     * trycka om och om igen gjorde dem till en spak att dra i, inte till något
+     * man gör en gång och minns.
      */
+    const stanKlar = (p.spent ?? []).includes('stan');
     plats(
       'stan',
       'skylt-stad',
       'Ut på stan',
-      `Gå runt på gatorna en dag och se vad som händer. Kostar en dag (${this.money(
-        dailyCost(city, s.difficulty)
-      )}).`,
-      () => this.gaUtPaStan()
+      stanKlar
+        ? `Du har redan gått runt i ${city.name}. Nästa stad har egna gator.`
+        : `Gå runt på gatorna en dag och se vad som händer. Kostar en dag (${this.money(
+            dailyCost(city, s.difficulty)
+          )}).`,
+      () => this.gaUtPaStan(),
+      { engangs: true, klar: stanKlar }
+    );
+    const sevardKlar = (p.spent ?? []).includes('sevardhet');
+    plats(
+      'sevardhet',
+      'skylt-sevardhet',
+      city.landmark,
+      sevardKlar
+        ? `Du har varit vid ${city.landmark}. En gång räcker.`
+        : `Tillbringa en dag vid ${city.landmark}. Kostar en dag (${this.money(
+            dailyCost(city, s.difficulty)
+          )}).`,
+      () => this.besokSevardhet(),
+      { engangs: true, klar: sevardKlar }
     );
     plats(
       'karta',
@@ -1553,15 +1632,24 @@ export class App {
     });
 
     /**
-     * Mystikskyltarna. De ser ut som alla andra så länge de ligger nedvända,
-     * och det är hela poängen: första gången man kommer till en stad vet man
-     * inte vilken bricka som är flygplatsen och vilken som är något annat.
-     *
-     * Antalet följer stadens storlek, så en storstad har mer att snubbla över.
-     * En använd skylt kommer inte tillbaka.
+     * Brickorna som inte är funktioner. Antalet följer stadens storlek, och
+     * den största av dem är alltid en fråga om staden man står i - resten
+     * döljer händelser. Båda sorterna finns bara en gång per stad.
      */
     const spent = p.spent ?? [];
-    for (let i = 0; i < mysterySpotCount(city.id); i++) {
+    const antalBrickor = mysterySpotCount(city.id);
+    const harFraga = antalBrickor >= 2;
+    if (harFraga && !spent.includes('fraga')) {
+      platser.push({
+        id: 'fraga',
+        ikon: 'skylt-mystik',
+        namn: 'En fråga om staden',
+        beskrivning: 'Något att svara på om platsen du står på.',
+        bricka: true,
+        onClick: () => this.oppnaMyntfraga(),
+      });
+    }
+    for (let i = 0; i < antalBrickor - (harFraga ? 1 : 0); i++) {
       const id = `mystik-${i}`;
       if (spent.includes(id)) continue;
       platser.push({
@@ -1569,7 +1657,7 @@ export class App {
         ikon: 'skylt-mystik',
         namn: 'Något händer',
         beskrivning: 'Något du inte visste fanns här.',
-        mystik: true,
+        bricka: true,
         onClick: () => this.oppnaMystik(id),
       });
     }
@@ -1577,8 +1665,7 @@ export class App {
     /**
      * Ordningen lottas per stad och ligger fast. Med en fast ordning skulle en
      * spelare lära sig att första brickan alltid är turistbyrån, och då är det
-     * ingen upptäckt kvar att göra. Att varje stad ligger olika gör dessutom
-     * att de känns som olika platser.
+     * ingen upptäckt kvar att göra.
      */
     platser.sort(
       (a, b) =>
@@ -1589,34 +1676,102 @@ export class App {
     const revealed = p.revealed ?? [];
     /** Hemstaden känner man till. Där ligger funktionerna uppvända från start. */
     const arVand = (pl: Plats) =>
-      revealed.includes(pl.id) || (!pl.mystik && city.id === s.homeCityId);
+      revealed.includes(pl.id) || (!pl.bricka && city.id === s.homeCityId);
 
     const DOLD_TIPS = 'Nedvänd bricka. Tryck för att se vad som finns här.';
-    for (const pl of platser) {
-      const vand = arVand(pl);
-      const beskrivning = vand ? pl.beskrivning : DOLD_TIPS;
+    const nedvanda = platser.filter((pl) => !arVand(pl));
+
+    /**
+     * Myntens placering på fotot. Bilden delas i ett rutnät och varje mynt får
+     * sin egen ruta, med en lottad förskjutning inuti den. Utan rutnätet
+     * hamnar två mynt ovanpå varandra så fort det är fler än ett par, och en
+     * rad längs nederkanten var vad vi ville bort från.
+     *
+     * Övre vänstra hörnet lämnas fritt: där står stadens namn.
+     */
+    /**
+     * Rutnätet måste rymma alla brickor på en gång. En stad kan ha elva
+     * funktioner och fyra brickor, alltså femton mynt; med tolv rutor lade sig
+     * två av dem ovanpå varandra och det gick inte att träffa den understa.
+     */
+    const KOLUMNER = 5;
+    const RADER = 4;
+    const rutor: number[] = [];
+    for (let r = 0; r < RADER; r++) {
+      for (let k = 0; k < KOLUMNER; k++) {
+        if (r === 0 && k < 2) continue;
+        rutor.push(r * KOLUMNER + k);
+      }
+    }
+    const valdaRutor = rutor
+      .map((ruta) => ({
+        ruta,
+        k: pseudoRandom(`${city.id}|ruta|${ruta}`),
+      }))
+      .sort((a, b) => a.k - b.k)
+      .map((x) => x.ruta);
+
+    nedvanda.forEach((pl, i) => {
+      const ruta = valdaRutor[i % valdaRutor.length]!;
+      const rad = Math.floor(ruta / KOLUMNER);
+      const kol = ruta % KOLUMNER;
+      const jx = pseudoRandom(`${city.id}|${pl.id}|x`);
+      const jy = pseudoRandom(`${city.id}|${pl.id}|y`);
+      /**
+       * Förskjutningen hålls liten. Ett helt fritt läge inuti rutan låter två
+       * grannar glida ihop tills de överlappar, och då är den ena omöjlig att
+       * trycka på.
+       */
+      const vanster = ((kol + 0.35 + jx * 0.3) / KOLUMNER) * 100;
+      const topp = ((rad + 0.35 + jy * 0.3) / RADER) * 100;
       const b = button(
-        el('span', { class: 'sign-body' },
-          el('span', { class: 'sign-badge' },
-            vand ? icon(pl.ikon) : icon('mynt')
-          ),
-          el('span', { class: 'sign-name' }, vand ? pl.namn : '?')
-        ),
-        () => (vand ? pl.onClick() : this.vandBricka(pl.id, pl.mystik === true)),
+        el('span', { class: 'coin-body' }, icon('mynt')),
+        // Mystik- och frågebrickor löser ut sig själva när de vänds. En
+        // funktion vänds bara upp och ligger sedan kvar i raden nedanför.
+        () => this.vandBricka(pl.id, pl.bricka ? pl.onClick : undefined),
         {
-          class: `sign ${vand ? '' : 'sign-mynt'}`,
-          title: beskrivning,
-          'aria-label': vand ? `${pl.namn}. ${pl.beskrivning}` : DOLD_TIPS,
+          class: 'city-coin',
+          style: `left:${vanster.toFixed(1)}%;top:${topp.toFixed(1)}%`,
+          title: DOLD_TIPS,
+          'aria-label': DOLD_TIPS,
           'data-spot': pl.id,
         }
       );
+      mynt.append(b);
+    });
+
+    for (const pl of platser) {
+      if (!arVand(pl)) continue;
+      const b = button(
+        el('span', { class: 'sign-body' },
+          el('span', { class: `sign-badge ${pl.klar ? 'sign-badge-klar' : ''}` },
+            icon(pl.ikon),
+            pl.klar ? el('span', { class: 'sign-bock', 'aria-hidden': 'true' }, '\u2713') : ''
+          ),
+          el('span', { class: 'sign-name' }, pl.namn)
+        ),
+        () => {
+          if (pl.klar) return;
+          pl.onClick();
+        },
+        {
+          class: `sign ${pl.klar ? 'sign-klar' : ''}`,
+          title: pl.beskrivning,
+          'aria-label': `${pl.namn}. ${pl.beskrivning}`,
+          'data-spot': pl.id,
+          disabled: pl.klar ? true : undefined,
+        }
+      );
       const visa = () => {
-        hint.textContent = beskrivning;
+        hint.textContent = pl.beskrivning;
       };
       const doljs = () => {
-        hint.textContent = revealed.length === 0 && city.id !== s.homeCityId
-          ? 'Du har aldrig varit här. Vänd på brickorna för att se vad staden har.'
-          : 'Tryck på en skylt för att gå dit.';
+        hint.textContent =
+          nedvanda.length > 0
+            ? `${nedvanda.length} ${
+                nedvanda.length === 1 ? 'bricka' : 'brickor'
+              } kvar att vända på.`
+            : 'Tryck på en skylt för att gå dit.';
       };
       b.addEventListener('pointerenter', visa);
       b.addEventListener('focus', visa);
@@ -1624,17 +1779,20 @@ export class App {
       b.addEventListener('blur', doljs);
       signs.append(b);
     }
-    if (!platser.every(arVand)) {
+    if (nedvanda.length > 0) {
       hint.textContent =
         revealed.length === 0 && city.id !== s.homeCityId
           ? 'Du har aldrig varit här. Vänd på brickorna för att se vad staden har.'
-          : 'Tryck på en skylt för att gå dit.';
+          : `${nedvanda.length} ${
+              nedvanda.length === 1 ? 'bricka' : 'brickor'
+            } kvar att vända på.`;
     }
-    hero.append(signs);
-    // Krediten låg tidigare i bilden och krockade omväxlande med stadsnamnet
-    // och med skyltraden. Under bilden stör den ingenting.
+    hero.append(mynt);
+    // Ikonraden ligger under fotot, inte ovanpå det: fotot är stadsbilden och
+    // ska synas, och en uppvänd ikon ska vara lätt att hitta igen.
     wrap.append(
       hero,
+      signs,
       el('div', { class: 'hero-foot' },
         hint,
         el(
@@ -1693,25 +1851,6 @@ export class App {
           dailyCost(city, s.difficulty)
         )} per dag. Stadsbetyg: ${p.rating}/100.`
       ),
-      /**
-       * Sevärdheten är en egen handling och inte en skylt i raden: skyltarna
-       * är stadens funktioner, det här är stadens enda sak. En dag går åt, och
-       * något händer alltid - kön, guiden, vakten eller ljuset.
-       */
-      el('div', { class: 'city-sevardhet' },
-        el('div', { class: 'city-sevardhet-text' },
-          el('span', { class: 'kicker' }, 'Sevärdhet'),
-          el('strong', {}, city.landmark)
-        ),
-        button(
-          'Besök',
-          () => this.besokSevardhet(),
-          {
-            class: 'btn btn-ghost',
-            title: `Tillbringa en dag vid ${city.landmark}. Kostar en dag.`,
-          }
-        )
-      )
     );
     wrap.append(info);
 
@@ -1763,7 +1902,12 @@ export class App {
    * sevärdheten och mötet med någon lika sannolika sinsemellan.
    */
   private gaUtPaStan(): void {
+    const s0 = this.state!;
     const city = this.city;
+    const p = getProgress(s0, city.id);
+    p.spent ??= [];
+    if (p.spent.includes('stan')) return;
+    p.spent.push('stan');
     playSound('valj');
     this.spendDays(1, city);
     this.commit();
@@ -1785,23 +1929,23 @@ export class App {
    * myntet hinner snurra klart och landa. Utan pausen byts brickan ut mitt i
    * rörelsen och det ser ut som ett fel i stället för som en avslöjning.
    */
-  private vandBricka(spotId: string, mystik: boolean): void {
+  private vandBricka(spotId: string, losUt?: () => void): void {
     const s = this.state!;
     const p = getProgress(s, s.currentCityId);
     if (p.revealed?.includes(spotId)) return;
     playSound('mynt');
     const knapp = this.root.querySelector<HTMLElement>(
-      `.sign[data-spot="${spotId}"]`
+      `.city-coin[data-spot="${spotId}"]`
     );
-    knapp?.classList.add('sign-mynt-vand');
+    knapp?.classList.add('city-coin-vand');
     window.setTimeout(() => {
       const nu = this.state;
       if (!nu) return;
       const prog = getProgress(nu, nu.currentCityId);
       prog.revealed ??= [];
       if (!prog.revealed.includes(spotId)) prog.revealed.push(spotId);
-      if (mystik) {
-        this.oppnaMystik(spotId);
+      if (losUt) {
+        losUt();
         return;
       }
       this.commit();
@@ -1832,9 +1976,46 @@ export class App {
     this.render();
   }
 
+  /**
+   * En frågebricka. En enda fråga om staden man står i, alltid med ett foto
+   * till. Den kostar ingen dag - det är något man hittar, inte något man
+   * ägnar en dag åt - och finns bara en gång per stad.
+   */
+  private oppnaMyntfraga(): void {
+    const s0 = this.state!;
+    const city = this.city;
+    const p = getProgress(s0, city.id);
+    p.spent ??= [];
+    if (p.spent.includes('fraga')) return;
+    const fraga = COIN_QUESTIONS[city.id];
+    if (!fraga) return;
+    p.spent.push('fraga');
+    playSound('sida');
+    this.quiz = {
+      kind: 'mynt',
+      questions: [prepareQuestion(fraga, s0.difficulty)],
+      index: 0,
+      correct: 0,
+      earnings: 0,
+      bonus: 0,
+      streak: 0,
+      bestStreak: 0,
+      dayResults: [],
+      phase: 'fragor',
+      askedAt: performance.now(),
+    };
+    this.commit();
+    this.go('turistbyra');
+  }
+
   /** En dag vid stadens sevärdhet. Alltid en händelse, som gatan. */
   private besokSevardhet(): void {
+    const s0 = this.state!;
     const city = this.city;
+    const p = getProgress(s0, city.id);
+    p.spent ??= [];
+    if (p.spent.includes('sevardhet')) return;
+    p.spent.push('sevardhet');
     playSound('sida');
     this.spendDays(1, city);
     this.commit();
@@ -2505,6 +2686,31 @@ export class App {
     const p = getProgress(s, city.id);
     const total = q.questions.length;
     const score = Math.round((q.correct / total) * 100);
+
+    /**
+     * En frågebricka är en fråga och ingenting mer. Ingen dag går åt, inget
+     * skift avslutas: rätt svar ger ett bättre stadsbetyg och en slant, fel
+     * svar ger svaret.
+     */
+    if (q.kind === 'mynt') {
+      const ratt = q.correct > 0;
+      if (ratt) {
+        p.rating = Math.min(100, p.rating + 10);
+        s.money += 250;
+        s.earned += 250;
+        s.peakMoney = Math.max(s.peakMoney, s.money);
+      }
+      this.quiz = null;
+      this.commit();
+      playSound(ratt ? 'fanfar' : 'fel');
+      this.notify(
+        ratt
+          ? `Rätt! Stadsbetyget i ${city.name} steg till ${p.rating}, och du hittade ${this.money(250)} i fickan.`
+          : `Fel den här gången. Stadsbetyget i ${city.name} står kvar på ${p.rating}.`
+      );
+      this.go('stad');
+      return;
+    }
 
     if (q.kind === 'turistbyra') {
       p.visits += 1;

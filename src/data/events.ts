@@ -117,10 +117,12 @@ export interface GameEvent {
    */
   text: string;
   tone: EventTone;
-  /** Hur ofta händelsen dyker upp i förhållande till de andra. */
+  /**
+   * Hur ofta händelsen dyker upp i förhållande till de andra. Alla händelser
+   * inträffar högst en gång per resa, så vikten avgör bara i vilken ordning
+   * banken töms.
+   */
   weight: number;
-  /** Bara en gång per resa. */
-  once?: boolean;
   /** Villkor för att händelsen alls ska kunna slå till. */
   villkor?: (ctx: EventContext) => boolean;
   /** Valen. Saknas de är händelsen något som bara händer. */
@@ -1629,6 +1631,675 @@ export const EVENTS: GameEvent[] = [
     title: 'Stationen har en katt',
     text: 'Den bor i biljetthallen, har ett eget namn på en skylt, och sover i en låda som personalen värmer med en lampa.',
     tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+
+  // ------------------------------------- fler händelser, för längre resor
+
+  {
+    id: 'nycklarna-borta',
+    triggers: ['stad'],
+    title: 'Nyckeln till vandrarhemmet är borta',
+    text: 'Fickan är tom. Du har gått samma runda i fyra timmar och kan inte säga var i den nyckeln ligger.',
+    tone: 'daligt',
+    weight: 3,
+    choices: [
+      {
+        label: 'Gå tillbaka och leta',
+        outcomes: [
+          { text: 'Den låg på kaféet, i en burk märkt "hittegods". Fyra timmar för en nyckel.', weight: 3, effect: { days: 1 } },
+          { text: 'Den låg i den andra fickan hela tiden. Du säger det till ingen.', weight: 2, tone: 'absurd' },
+        ],
+      },
+      {
+        label: 'Betala för en ny',
+        outcomes: ett('Receptionen tar betalt utan att blinka och ger dig två stycken.', { money: -280 }),
+      },
+    ],
+  },
+  {
+    id: 'gatuschack',
+    triggers: ['stad'],
+    title: 'Tre koppar och en boll',
+    text: 'Mannen flyttar kopparna långsamt, nästan hjälpsamt, och två i publiken har redan vunnit.',
+    tone: 'allvar',
+    weight: 3,
+    choices: [
+      {
+        label: 'Satsa en gång',
+        outcomes: [
+          { text: 'Bollen låg inte under någon av dem. Det gör den aldrig.', weight: 5, effect: { money: -400 } },
+          { text: 'Du gissar rätt, tar pengarna och går innan han hinner erbjuda en andra omgång.', weight: 1, tone: 'bra', effect: { money: 700 } },
+        ],
+      },
+      {
+        label: 'Gå vidare',
+        outcomes: ett('De två som vann följer efter honom till nästa kvarter. De hör till.', { rating: 3 }, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'bibliotekskortet',
+    triggers: ['stad'],
+    title: 'Stadsbiblioteket har öppet',
+    text: 'Det är svalt, tyst och gratis, och hyllan med lokalhistoria är tre meter lång.',
+    tone: 'bra',
+    weight: 3,
+    choices: [
+      {
+        label: 'Läs en eftermiddag',
+        outcomes: ett('Du kan mer om {stad} när du går ut än när du kom in.', { rating: 12 }),
+      },
+      {
+        label: 'Bara sitta ner en stund',
+        outcomes: ett('Du somnar i en fåtölj och vaknar av att någon dammsuger.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'tvatten',
+    triggers: ['stad'],
+    title: 'Tvätten kan inte vänta längre',
+    text: 'Det luktar om ryggsäcken på ett sätt som andra resenärer har börjat kommentera artigt.',
+    tone: 'blandat',
+    weight: 3,
+    choices: [
+      {
+        label: 'Lämna in på tvätteriet',
+        outcomes: ett('Allt kommer tillbaka vikt, varmt och en aning krympt.', { money: -180, rykte: 1 }),
+      },
+      {
+        label: 'Tvätta i handfatet',
+        outcomes: [
+          { text: 'Det torkar på en dag i värmen. Gratis och nästan lika bra.', weight: 3 },
+          { text: 'Ingenting torkar. Du reser vidare med blöta strumpor i en plastpåse.', weight: 2, tone: 'absurd' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'demonstrationsgrupp',
+    triggers: ['stad'],
+    title: 'Någon delar ut mat på torget',
+    text: 'Ett bord, en gryta och en kö. Ingen frågar vem du är eller varifrån du kommer.',
+    tone: 'stamning',
+    weight: 3,
+    effect: { money: 60 },
+  },
+  {
+    id: 'skomakaren',
+    triggers: ['stad'],
+    title: 'Sulan har släppt',
+    text: 'Kängan gapar i framkanten och det är fyra kvarter till vandrarhemmet.',
+    tone: 'blandat',
+    weight: 3,
+    choices: [
+      {
+        label: 'Gå in till skomakaren',
+        outcomes: ett('Han syr den medan du väntar och tar knappt betalt.', { money: -90, rykte: 1 }),
+      },
+      {
+        label: 'Tejpa och hoppas',
+        outcomes: [
+          { text: 'Tejpen håller hela resan. Ingen ser det under bordet.', weight: 2, tone: 'absurd' },
+          { text: 'Tejpen håller till nästa regn. Sedan får du köpa nya skor.', weight: 3, tone: 'daligt', effect: { money: -520 } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'gatukonstnaren',
+    triggers: ['stad'],
+    title: 'Någon ritar av dig',
+    text: 'Hon har suttit på samma pall hela eftermiddagen och håller redan upp ett halvfärdigt porträtt.',
+    tone: 'bra',
+    weight: 3,
+    choices: [
+      {
+        label: 'Köp porträttet',
+        outcomes: ett('Det är bättre än du väntat dig, och det rullas ihop i en pappersrulle.', { money: -220, rykte: 1 }),
+      },
+      {
+        label: 'Le och gå',
+        outcomes: ett('Hon river inte sönder det. Det hänger kvar bland de andra ansiktena.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'brandkaren',
+    triggers: ['stad'],
+    title: 'Hela gatan är avspärrad',
+    text: 'Tre brandbilar, mycket rök och ingen som verkar särskilt orolig.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'valuta-svartabors',
+    triggers: ['stad'],
+    title: 'Någon vill växla på gatan',
+    text: 'Kursen han viskar är betydligt bättre än bankens. Han har sedelbunten i handen.',
+    tone: 'allvar',
+    weight: 3,
+    choices: [
+      {
+        label: 'Växla med honom',
+        outcomes: [
+          { text: 'Kursen höll. Du gick därifrån med mer än banken hade gett dig.', weight: 2, effect: { money: 700, rykte: -1 } },
+          { text: 'Bunten var tjock i ändarna och tidningspapper i mitten.', weight: 3, tone: 'daligt', effect: { money: -900 } },
+        ],
+      },
+      {
+        label: 'Gå till banken i stället',
+        outcomes: ett('Sämre kurs, men du räknar sedlarna själv och det stämmer.', { money: 90 }),
+      },
+    ],
+  },
+  {
+    id: 'blomsterflickan',
+    triggers: ['stad', 'mote'],
+    title: 'En ros i handen',
+    text: 'Hon trycker den i din hand, säger "present", och håller sedan kvar handen framsträckt.',
+    tone: 'absurd',
+    weight: 3,
+    choices: [
+      {
+        label: 'Betala för rosen',
+        outcomes: ett('Du bär den hela dagen och ger bort den till någon på vandrarhemmet.', { money: -70, rykte: 1 }),
+      },
+      {
+        label: 'Ge tillbaka den',
+        outcomes: ett('Hon tar den utan att ändra en min och går till nästa.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'takterrass-inbjudan',
+    triggers: ['stad'],
+    title: 'Någon vinkar från ett tak',
+    text: 'Fyra personer på en takterrass ropar ner något och pekar på en dörr i porten.',
+    tone: 'blandat',
+    weight: 2,
+    choices: [
+      {
+        label: 'Gå upp',
+        outcomes: [
+          { text: 'Det blir kvällen då du såg {stad} uppifrån, med folk du aldrig träffar igen.', weight: 3, tone: 'bra', effect: { rating: 10, rykte: 1 } },
+          { text: 'Det var en försäljning av tidsandelar. Du tar dig ut efter fyrtio minuter.', weight: 2, tone: 'absurd' },
+        ],
+      },
+      {
+        label: 'Vinka tillbaka och gå',
+        outcomes: ett('De ropar något till. Du hör inte vad.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'parkbanken',
+    triggers: ['stad'],
+    title: 'En bänk i solen',
+    text: 'Du sätter dig för att vila fötterna en stund och blir sittande i två timmar. Ingenting händer, och det är hela poängen.',
+    tone: 'stamning',
+    weight: 4,
+    effect: {},
+  },
+
+  {
+    id: 'reskamraten',
+    triggers: ['mote'],
+    title: 'Någon vill följa med',
+    text: 'Ni har rest åt samma håll i tre dagar utan att planera det, och nu frågar hen rakt ut.',
+    tone: 'blandat',
+    weight: 3,
+    choices: [
+      {
+        label: 'Res tillsammans en bit',
+        outcomes: [
+          { text: 'Ni delar på allt i en vecka och det blir billigare för båda.', weight: 3, effect: { money: 600, rykte: 1 } },
+          { text: 'Ni upptäcker på tredje dagen att ni vill helt olika saker. Ni skiljs vänligt.', weight: 2 },
+        ],
+      },
+      {
+        label: 'Res ensam',
+        outcomes: ett('Det är därför du åkte. Hen förstår.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'gamla-kvinnan-tyget',
+    triggers: ['mote'],
+    title: 'Hon väver på trottoaren',
+    text: 'Väven är halvfärdig och mönstret är sådant du aldrig sett. Hon pekar på en pall.',
+    tone: 'bra',
+    weight: 3,
+    choices: [
+      {
+        label: 'Sitt ner och lär dig',
+        outcomes: ett(
+          'Två timmar senare kan du grunderna, och hon skickar med dig en remsa som present.',
+          { rating: 8, rykte: 2 },
+          'bra'
+        ),
+      },
+      {
+        label: 'Köp det färdiga stycket',
+        outcomes: ett('Det är för dyrt och det är värt det.', { money: -320 }),
+      },
+    ],
+  },
+  {
+    id: 'barnen-fotboll',
+    triggers: ['mote'],
+    title: 'De behöver en till',
+    text: 'Bollen rullar fram till dina fötter och sex par ögon väntar på vad du gör med den.',
+    tone: 'bra',
+    weight: 3,
+    choices: [
+      {
+        label: 'Spela med',
+        outcomes: [
+          { text: 'Ditt lag förlorar med tolv mot fyra. Du blir kvar i en timme.', weight: 3, effect: { rykte: 2 } },
+          { text: 'Du gör mål. Hela gatan skriker. Du minns det längre än de gör.', weight: 2, tone: 'bra', effect: { rykte: 2 } },
+        ],
+      },
+      {
+        label: 'Sparka tillbaka bollen',
+        outcomes: ett('De ropar tack och glömmer dig inom tio sekunder.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'journalisten',
+    triggers: ['mote'],
+    title: 'En lokal journalist vill fråga',
+    text: 'Hon skriver om vad utlänningar tror om {land} och har en penna redo.',
+    tone: 'blandat',
+    weight: 2,
+    choices: [
+      {
+        label: 'Svara ärligt',
+        outcomes: [
+          { text: 'Citatet hamnar i tidningen dagen därpå och vandrarhemmets personal skrattar gott.', weight: 3, effect: { rykte: 1 } },
+          { text: 'Citatet blir kortare i tryck än du sa det, och betyder något annat.', weight: 2, tone: 'blandat', effect: { rykte: -1 } },
+        ],
+      },
+      {
+        label: 'Be att få slippa',
+        outcomes: ett('Hon nickar och letar upp någon annan inom en minut.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'gamle-sjomannen',
+    triggers: ['mote'],
+    title: 'Han har seglat överallt',
+    text: 'Mannen på kajen räknar upp hamnar i en ordning som bara han förstår, och har varit i dem alla.',
+    tone: 'stamning',
+    weight: 3,
+    effect: { rating: 6 },
+  },
+  {
+    id: 'munken',
+    triggers: ['mote'],
+    title: 'Någon ber om en tjänst',
+    text: 'En äldre man frågar om du kan bära hans väska en bit. Han går långsamt och du har tid.',
+    tone: 'bra',
+    weight: 3,
+    choices: [
+      {
+        label: 'Bär den hela vägen',
+        outcomes: ett(
+          'Det blir längre än en bit. Han bjuder på te och berättar om staden i en timme.',
+          { rating: 8, rykte: 3, days: 1 }
+        ),
+      },
+      {
+        label: 'Bär den till hörnet',
+        outcomes: ett('Han tackar och klarar resten själv.', { rykte: 1 }),
+      },
+    ],
+  },
+  {
+    id: 'kortspelet',
+    triggers: ['mote'],
+    title: 'Fyra vid ett bord vill ha en femte',
+    text: 'Reglerna förklaras på trettio sekunder och stämmer inte överens mellan de fyra.',
+    tone: 'absurd',
+    weight: 3,
+    choices: [
+      {
+        label: 'Sätt dig och spela',
+        outcomes: [
+          { text: 'Du förlorar allt du satsat och lär dig reglerna precis när ni slutar.', weight: 3, effect: { money: -260 } },
+          { text: 'Du vinner utan att veta hur. Ingen ifrågasätter det.', weight: 2, tone: 'bra', effect: { money: 480 } },
+        ],
+      },
+      {
+        label: 'Titta på',
+        outcomes: ett('Efter en timme förstår du fortfarande ingenting.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'brevet',
+    triggers: ['mote'],
+    title: 'Kan du posta det här?',
+    text: 'En kvinna räcker fram ett brev med frimärke och en adress i ett land du ska till.',
+    tone: 'allvar',
+    weight: 2,
+    choices: [
+      {
+        label: 'Ta med det',
+        outcomes: [
+          { text: 'Du postar det tre städer senare. Du får aldrig veta vad som stod i det.', weight: 4, effect: { rykte: 2 } },
+          { text: 'Det ligger kvar i sidfickan hela resan. Du hittar det när du packar upp hemma.', weight: 2, tone: 'blandat', effect: { rykte: -1 } },
+        ],
+      },
+      {
+        label: 'Säga nej',
+        outcomes: ett('Hon förstår, och frågar nästa.', undefined, 'stamning'),
+      },
+    ],
+  },
+
+  {
+    id: 'museivakten-somnar',
+    triggers: ['sevardhet'],
+    title: 'Vakten har somnat',
+    text: 'Han sitter på sin stol vid {sevardhet} med hakan i bröstet, och salen är helt tom.',
+    tone: 'absurd',
+    weight: 3,
+    choices: [
+      {
+        label: 'Väck honom försiktigt',
+        outcomes: ett(
+          'Han spritter till, blir generad och visar dig en sal som inte står i broschyren.',
+          { rating: 10, rykte: 1 },
+          'bra'
+        ),
+      },
+      {
+        label: 'Låt honom sova',
+        outcomes: ett('Du går runt i tystnad och har hela salen för dig själv.', { rating: 5 }, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'regn-vid-sevardheten',
+    triggers: ['sevardhet'],
+    title: 'Regnet kom precis',
+    text: 'Du står under ett tak vid {sevardhet} tillsammans med en busslast pensionärer som sjunger.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'guidebok-fel',
+    triggers: ['sevardhet'],
+    title: 'Guideboken har fel',
+    text: 'Enligt boken öppnar {sevardhet} klockan nio. Enligt skylten på dörren gäller det inte på tisdagar.',
+    tone: 'daligt',
+    weight: 3,
+    choices: [
+      {
+        label: 'Vänta till i morgon',
+        outcomes: ett('Du kommer in först, före alla andra, och det var värt dagen.', { days: 1, rating: 10 }),
+      },
+      {
+        label: 'Strunta i det',
+        outcomes: ett('Du ser den utifrån och går vidare. Det får duga.', { rating: 2 }, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'arkeologen',
+    triggers: ['sevardhet'],
+    title: 'Någon gräver bakom staketet',
+    text: 'En arkeolog vid {sevardhet} vinkar in dig och pekar på något i jorden som du inte ser.',
+    tone: 'bra',
+    weight: 2,
+    choices: [
+      {
+        label: 'Fråga vad det är',
+        outcomes: ett(
+          'Hon förklarar i tjugo minuter och du ser det till slut. En keramikskärva, tolvhundratalet.',
+          { rating: 12 }
+        ),
+      },
+      {
+        label: 'Nicka och gå vidare',
+        outcomes: ett('Hon böjer sig ner igen utan att se upp.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'souvenirstandet',
+    triggers: ['sevardhet'],
+    title: 'Stånden utanför',
+    text: 'Tjugo bord med samma sak, och en försäljare som säger att just hans är handgjord.',
+    tone: 'blandat',
+    weight: 3,
+    choices: [
+      {
+        label: 'Köp något litet',
+        outcomes: [
+          { text: 'Den går sönder i ryggsäcken innan nästa stad.', weight: 3, effect: { money: -140 } },
+          { text: 'Den håller hela resan och blir den sak du minns platsen genom.', weight: 2, tone: 'bra', effect: { money: -140, rykte: 1 } },
+        ],
+      },
+      {
+        label: 'Gå förbi allihop',
+        outcomes: ett('Tjugo röster följer dig ut på gatan.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'trappan-upp',
+    triggers: ['sevardhet'],
+    title: 'Det går att gå upp',
+    text: 'En trappa vid {sevardhet} leder till en utsiktsplats. Skylten säger fyrahundra steg.',
+    tone: 'blandat',
+    weight: 3,
+    choices: [
+      {
+        label: 'Gå upp allihop',
+        outcomes: ett('Benen värker i två dagar. Utsikten var värd båda.', { rating: 10 }),
+      },
+      {
+        label: 'Stanna nere',
+        outcomes: ett('Du hör folk flämta på väg ner och känner dig nöjd med beslutet.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'skolklassen',
+    triggers: ['sevardhet'],
+    title: 'Fyrtio barn i matchande kepsar',
+    text: 'De fyller hela {sevardhet}, och läraren räknar dem två gånger utan att komma till samma tal.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'gratis-guide',
+    triggers: ['sevardhet'],
+    title: 'En student erbjuder sig',
+    text: 'Hon guidar gratis för att öva språket, säger hon, och menar det.',
+    tone: 'bra',
+    weight: 3,
+    choices: [
+      {
+        label: 'Följ med och ge dricks efteråt',
+        outcomes: ett('Turen är bättre än den betalda, och hon blir uppriktigt glad.', { money: -120, rating: 12, rykte: 2 }),
+      },
+      {
+        label: 'Följ med utan att ge något',
+        outcomes: ett('Hon säger inget om det. Du tänker på det senare.', { rating: 12, rykte: -1 }),
+      },
+    ],
+  },
+
+  {
+    id: 'perrongen-sover',
+    triggers: ['vantan'],
+    title: 'Någon sover på bänken bredvid',
+    text: 'En ryggsäck som kudde, en jacka som filt och en väckarklocka inställd på tre olika tider.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'biljettkontroll-kon',
+    triggers: ['vantan'],
+    title: 'Kön till luckan står stilla',
+    text: 'Framför dig diskuterar någon en ombokning som verkar röra fyra länder och tre datum.',
+    tone: 'blandat',
+    weight: 3,
+    choices: [
+      {
+        label: 'Vänta ut det',
+        outcomes: ett('Fyrtio minuter senare är det din tur, och ditt ärende tar nittio sekunder.', undefined, 'stamning'),
+      },
+      {
+        label: 'Prova automaten',
+        outcomes: [
+          { text: 'Den fungerar. Du står vid perrongen medan kön inte har rört sig.', weight: 3, effect: { money: 40 } },
+          { text: 'Den tar ditt kort, tänker i en minut och lämnar tillbaka det utan biljett.', weight: 2, tone: 'daligt' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'hunden-i-hallen',
+    triggers: ['vantan'],
+    title: 'En hund i tjänst',
+    text: 'Den går igenom hallen med sin förare, nosar på varje väska och bryr sig inte om någon.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'vantsalens-tv',
+    triggers: ['vantan'],
+    title: 'TV:n i väntsalen',
+    text: 'Den visar en match på ett språk ingen förstår, och halva hallen tittar ändå.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+
+  {
+    id: 'vandrarhemmets-gitarr',
+    triggers: ['boende'],
+    title: 'Det står en gitarr i hörnet',
+    text: 'Den saknar en sträng och alla på våningen har provat den i kväll.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'rumskamraten-reser',
+    triggers: ['boende'],
+    title: 'Rumskamraten packar klockan fem',
+    text: 'Plastpåsar, blixtlås och en pannlampa rakt i ansiktet på var och en i rummet.',
+    tone: 'absurd',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'boka-om-natten',
+    triggers: ['boende'],
+    title: 'Priset gick upp över natten',
+    text: 'Samma säng, samma rum, men receptionen har en ny lapp på disken.',
+    tone: 'daligt',
+    weight: 3,
+    choices: [
+      {
+        label: 'Betala och stanna',
+        outcomes: ett('Dyrare, men du slipper packa ihop igen.', { money: -240 }),
+      },
+      {
+        label: 'Leta upp något annat',
+        outcomes: [
+          { text: 'Du hittar ett billigare ställe två kvarter bort, med bättre frukost.', weight: 3, effect: { money: 120 } },
+          { text: 'Allt är fullt. Du kommer tillbaka och betalar det nya priset ändå.', weight: 2, tone: 'daligt', effect: { money: -240, days: 1 } },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'arbetsintyget',
+    triggers: ['arbete'],
+    title: 'Någon slutar samma dag',
+    text: 'En kollega har jobbat här i elva år och går hem för sista gången utan att någon säger något.',
+    tone: 'allvar',
+    weight: 3,
+    choices: [
+      {
+        label: 'Säg något innan hen går',
+        outcomes: ett('Ni står i porten i tio minuter. Hen tackar och menar det.', { rykte: 2 }),
+      },
+      {
+        label: 'Låt bli, du är ju bara här en vecka',
+        outcomes: ett('Dörren går igen och skiftet fortsätter.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'kunden-klagar',
+    triggers: ['arbete', 'handel'],
+    title: 'En kund är arg på fel person',
+    text: 'Något har gått snett tidigare i dag och du står närmast disken.',
+    tone: 'blandat',
+    weight: 3,
+    choices: [
+      {
+        label: 'Lyssna färdigt',
+        outcomes: ett(
+          'Efter fem minuter tar ilskan slut av sig själv, och kunden ber om ursäkt.',
+          { rykte: 2 }
+        ),
+      },
+      {
+        label: 'Hämta arbetsledaren',
+        outcomes: ett('Det löser sig, men du fick inte veta vad det handlade om.', undefined, 'stamning'),
+      },
+    ],
+  },
+  {
+    id: 'aterlamnat',
+    triggers: ['handel'],
+    title: 'Någon har glömt sin väska',
+    text: 'Den står vid disken och ägaren är redan ute på gatan.',
+    tone: 'bra',
+    weight: 3,
+    choices: [
+      {
+        label: 'Spring efter',
+        outcomes: ett('Du hinner ifatt vid hörnet. Tacksamheten är översvallande och kort.', { rykte: 2, money: 100 }),
+      },
+      {
+        label: 'Lämna den till handlaren',
+        outcomes: ett('Handlaren ställer den bakom disken och nickar åt dig.', { rykte: 1 }),
+      },
+    ],
+  },
+  {
+    id: 'medresenaren-somnar',
+    triggers: ['resa'],
+    title: 'Någon somnar på din axel',
+    text: 'Det är fyra timmar kvar och du vågar inte röra dig.',
+    tone: 'stamning',
+    weight: 3,
+    effect: {},
+  },
+  {
+    id: 'fel-vagn',
+    triggers: ['resa'],
+    title: 'Fel vagn, rätt tåg',
+    text: 'Din plats visar sig ligga sex vagnar bort, och gången är full av bagage.',
+    tone: 'absurd',
     weight: 3,
     effect: {},
   },

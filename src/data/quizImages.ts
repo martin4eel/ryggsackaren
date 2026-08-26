@@ -25,6 +25,8 @@ export interface QuizImage {
   alt: string;
   article?: string;
   file?: string;
+  /** Bred vinjett: komprimeringen sparar fler pixlar. */
+  bred?: boolean;
 }
 
 export const QUIZ_IMAGES: QuizImage[] = [
@@ -105,6 +107,29 @@ export const QUIZ_IMAGES: QuizImage[] = [
     article: 'The Great Wave off Kanagawa',
   },
   { id: 'venusfodelse', alt: 'Botticellis Venus födelse', article: 'The Birth of Venus' },
+
+  /**
+   * Stationsmiljöerna. Fyra foton per färdsätt, valda per stad så att inte
+   * varje flygplats i spelet ser likadan ut. De ligger i samma manifest som
+   * frågebilderna men är breda vinjetter, och `bred` säger åt komprimeringen
+   * att spara fler pixlar på dem.
+   */
+  { id: 'station-flyg-1', alt: 'En avgångshall på en flygplats', bred: true, file: 'Mumbai 03-2016 114 Airport international terminal interior.jpg' },
+  { id: 'station-flyg-2', alt: 'Incheckningsdiskarna på en flygplats', bred: true, file: 'CHECK IN HALL INTERNATIONAL TERMINAL HANEDA AIRPORT TOKYO JAPAN JUNE 2012 (7413572948).jpg' },
+  { id: 'station-flyg-3', alt: 'En avgångshall med resenärer', bred: true, file: 'Heathrow Airport, Terminal 5, departure hall - geograph.org.uk - 2191951.jpg' },
+  { id: 'station-flyg-4', alt: 'En terminalbyggnad inifrån', bred: true, file: 'Narita International Airport, Terminal 1, Departure Hall 14.JPG' },
+  { id: 'station-tag-1', alt: 'En stationshall med tavla och resenärer', bred: true, file: 'Grand Central Station Main Concourse Jan 2006.jpg' },
+  { id: 'station-tag-2', alt: 'En perrong med resenärer', bred: true, file: 'Hauptbahnhof, 1, Gebiet der DR, Ost, Halle (Saale).jpg' },
+  { id: 'station-tag-3', alt: 'En perrong med tåg vid plattformen', bred: true, file: 'Tokyo-Station-2005-7-21 4.jpg' },
+  { id: 'station-tag-4', alt: 'En stationshall med välvt tak', bred: true, file: 'The Grand Concourse at Central railway station, Sydney, 2022.jpg' },
+  { id: 'station-buss-1', alt: 'En bussterminal med bussar i lägena', bred: true, file: 'Chur Busbahnhof ext 2015 wide.jpg' },
+  { id: 'station-buss-2', alt: 'En bussterminal inifrån', bred: true, file: 'Interior de la estación de autobuses Plaza de Armas.JPG' },
+  { id: 'station-buss-3', alt: 'Bussar vid en terminal', bred: true, file: 'Bus station at Zurich airport (2019).jpg' },
+  { id: 'station-buss-4', alt: 'Bussar vid sina lägen på en terminal', bred: true, file: 'Estación de autobuses de Vitoria 05.JPG' },
+  { id: 'station-farja-1', alt: 'En färjeterminal vid kajen', bred: true, file: 'The Irish Ferries Passenger Terminal, Dublin Port - geograph.org.uk - 2198686.jpg' },
+  { id: 'station-farja-2', alt: 'Ett fartyg vid passagerarterminalen', bred: true, file: 'Cruise ship at Overseas Passenger Terminal - panoramio.jpg' },
+  { id: 'station-farja-3', alt: 'En färjeterminal i hamnen', bred: true, file: 'Ferry Terminal, Port of Hull - geograph.org.uk - 5243839.jpg' },
+  { id: 'station-farja-4', alt: 'Terminalbyggnaden i en färjehamn', bred: true, file: 'Passenger services building, Ferry Terminal, Port of Dover - geograph.org.uk - 7562437.jpg' },
 ];
 
 export const QUIZ_IMAGE_BY_ID: Record<string, QuizImage> = Object.fromEntries(

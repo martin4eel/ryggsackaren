@@ -23,6 +23,13 @@ MAX_PIXELS = 420_000
 SKIP_BYTES = 70 * 1024
 QUALITY = 72
 
+# Stationsvinjetterna ligger i samma mapp men visas i full skärmbredd, och
+# behöver därför fler pixlar än en bild i en fyrfältsruta.
+BRED_PREFIX = "station-"
+BRED_WIDTH = 1100
+BRED_PIXELS = 620_000
+BRED_SKIP = 140 * 1024
+
 here = os.path.dirname(os.path.abspath(__file__))
 quiz_dir = os.path.normpath(os.path.join(here, "..", "public", "quiz"))
 
@@ -36,14 +43,19 @@ for name in sorted(os.listdir(quiz_dir)):
     before = os.path.getsize(path)
     total_before += before
 
+    bred = name.startswith(BRED_PREFIX)
+    max_width = BRED_WIDTH if bred else MAX_WIDTH
+    max_pixels = BRED_PIXELS if bred else MAX_PIXELS
+    skip_bytes = BRED_SKIP if bred else SKIP_BYTES
+
     with Image.open(path) as img:
         img = ImageOps.exif_transpose(img).convert("RGB")
         scale = min(
             1.0,
-            MAX_WIDTH / img.width,
-            (MAX_PIXELS / (img.width * img.height)) ** 0.5,
+            max_width / img.width,
+            (max_pixels / (img.width * img.height)) ** 0.5,
         )
-        if scale >= 1.0 and before <= SKIP_BYTES:
+        if scale >= 1.0 and before <= skip_bytes:
             total_after += before
             print(f"= {name}: {before // 1024} kB (redan liten, orörd)")
             continue

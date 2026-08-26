@@ -139,20 +139,28 @@ webbläsaren och överlever att sparfilen raderas.
    Köping får man ta tåget innan man kan flyga.
 
    **Första gången du kommer till en stad ligger alla brickor nedvända.** De
-   snurrar som mynt på högkant och visar bara ett frågetecken; du vet inte
-   vilken som är flygplatsen och vilken som är något annat förrän du vänt på
-   dem, en och en. Hemstaden är undantaget – där har du bott.
+   ligger utspridda över stadsbilden som vita mynt och vaggar långsamt; du vet
+   inte vilken som är flygplatsen och vilken som är något annat förrän du vänt
+   på dem, en och en. Hemstaden är undantaget – där har du bott. Ett uppvänt
+   mynt lämnar fotot och lägger sig i **ikonraden under bilden**, där allt är
+   lätt att hitta igen.
 
-   Några av brickorna är inte funktioner alls utan **mystikbrickor**, och
-   vänder du upp en sådan händer något i stället. Hur många en stad har följer
-   folkmängden: Cusco och Reykjavík har en, Stockholm två, Istanbul och Bangkok
-   fyra. En mystikbricka finns bara en gång – när den gett det den hade att ge
-   försvinner den ur staden.
+   Några av brickorna är inte funktioner alls. En av dem är en **fråga om
+   staden** med stadens eget foto till, och resten är **mystikbrickor** som
+   döljer en händelse. Hur många en stad har följer folkmängden: Cusco och
+   Reykjavík har en, Stockholm två, Istanbul och Bangkok fyra. Båda sorterna
+   finns bara en gång per stad.
+
+   **Ut på stan** och **sevärdheten** går också bara att göra en gång per stad.
+   De kostar en dag var och ger garanterat en händelse; när de är förbrukade
+   ligger ikonen kvar med en grön bock.
 
    Ordningen på brickorna lottas per stad och ligger sedan fast. Med en fast
    ordning skulle man lära sig att första brickan alltid är turistbyrån, och då
-   fanns det ingen upptäckt kvar att göra. Antalet brickor varierar också med
-   staden – nio i Cusco, fjorton i Istanbul.
+   fanns det ingen upptäckt kvar att göra.
+
+   **Ryggsäcken** ligger inte bland skyltarna utan uppe till höger i
+   statusraden, på varje skärm, med antalet souvenirer på sig.
 
    Raden under bilden berättar vad skylten man pekar på gör.
 4. **Stationerna.** Bakom varje stationsskylt ligger en egen plats, inte en
@@ -244,7 +252,9 @@ webbläsaren och överlever att sparfilen raderas.
 
    Vilka färdsätt som finns beror på geografin, inte på en fast mall: buss och
    tåg kräver landförbindelse, färja kräver en linje och flyget når allt över
-   35 mil. Söker du på tavlan efter en stad som inte går att nå därifrån får du
+   35 mil. Avståndstaken ligger vid 340 respektive 440 mil, vilket rymmer de
+   riktigt långa landresorna – bussen Kairo–Addis, tåget Peking–Hanoi, Amtrak
+   tvärs över USA. Bara fyra städer nås enbart med flyg, och tre av dem är öar. Söker du på tavlan efter en stad som inte går att nå därifrån får du
    skälet utskrivet i stället för ett tomt resultat.
 
    När biljetten är bokad spelas resan upp på en roterande jordglob: klotet
@@ -309,6 +319,10 @@ webbläsaren och överlever att sparfilen raderas.
     dag var, i utbyte mot att något garanterat händer. De andra sex slår till
     av sig själva när man ändå gör det man gör.
 
+    **Varje händelse inträffar högst en gång per resa.** Att möta samma hund på
+    samma gata två gånger får världen att krympa. Priset är att banken måste
+    vara djup, och den är 113 händelser stor.
+
     De flesta händelser ställer en fråga med två eller tre svar, och svaret
     spelar roll: du hittar en plånbok på trottoaren och kan lämna in den,
     behålla pengarna eller leta rätt på ägaren. Vad valet leder till är inte
@@ -367,8 +381,10 @@ _Legendarisk ryggsäckare_.
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften
 - 19 stämplar att samla i passet
-- 73 händelser med 83 val och 117 möjliga utfall, spridda över åtta tillfällen
-- 9-14 nedvända brickor per stad, varav 1-4 döljer en händelse
+- 113 händelser med 137 val och 185 möjliga utfall, spridda över åtta
+  tillfällen, var och en högst en gång per resa
+- 9–15 nedvända brickor per stad, varav 1–4 döljer en händelse eller en fråga
+- 47 myntfrågor, en per stad, alla med stadens eget foto
 - 64 souvenirer med regional prissättning
 - 40 valutor
 - 4 stationsmiljöer med egen avgångstavla, egna ord och egen ljudmatta
@@ -407,6 +423,7 @@ src/
     quizImages.ts          Frågornas fotografier: id, motiv och Commons-källa
     questions/
       cityQuestions.ts     Frågor till turistbyrån, per stad
+      coinQuestions.ts     Myntfrågorna: en per stad, alltid med foto
       jobQuestions.ts      Jobbfrågor, egen uppsättning per yrke
   game/
     state.ts               Speltillstånd, sparning och laddning
@@ -554,6 +571,13 @@ så att ingen station kan hamna med ett namnlöst reservbolag på tavlan.
 Kartans landmassa är genererad från Natural Earths 110m-dataset (public domain)
 och ligger färdig i `src/data/worldMap.ts`, så inga kartberoenden behövs vid
 körning. Den används av både atlasen och globerna.
+
+Banan är efterbehandlad två gånger för hand, båda gångerna mot artefakter i den
+platta projektionen: två fullbreda ränder på ett par tiondels grads höjd är
+bortplockade, och polygoner som korsar datumgränsen är brutna i två delbanor
+vid hoppet. En equirektangulär karta kan inte visa att Tjukotka fortsätter på
+andra sidan kanten, så utan brytningen drogs en rak linje tillbaka över hela
+jorden – det var de streck man såg genom Norra ishavet.
 
 En ny stad behöver också en rad i `CITY_POPULATION` och ett land i
 `COUNTRY_FACTS` i `src/data/facts.ts`, annars stoppar valideringen bygget -

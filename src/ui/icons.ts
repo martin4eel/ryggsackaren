@@ -28,6 +28,7 @@ export type IconName =
   | 'skylt-karta'
   | 'skylt-stad'
   | 'skylt-mystik'
+  | 'skylt-sevardhet'
   | 'mynt'
   | 'buss-profil'
   | 'tag-profil'
@@ -103,30 +104,61 @@ const ICONS: Record<IconName, Part[]> = {
     { tag: 'path', attrs: { d: 'M17.8 19.2 16 11l3.5-3.5a2.12 2.12 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1 1.6L8 11l-2 2-2.2-.4a.8.8 0 0 0-.8 1.3l2.2 2.2 2.2 2.2a.8.8 0 0 0 1.3-.8L8 16l2-2 3.2 4.2a1 1 0 0 0 1.6-1z' } },
   ],
   'flyg-profil': [
+    /**
+     * Ett trafikflygplan uppifrån, med nosen åt höger. Filmen roterar hela
+     * ikonen efter kursen, så det är ovanifrån man ser planet korsa kartan -
+     * inte från sidan. Den gamla banan var ett hopkok av båda och såg ut som
+     * varken det ena eller det andra.
+     */
     {
       tag: 'path',
       attrs: {
-        d: 'M2 12h4l3-5h2l-1.5 5H16l2.5-3h2l-1.5 3h2.5a1.5 1.5 0 0 1 0 3H19l1.5 3h-2L16 15H9.5l1.5 5H9l-3-5H2Z',
+        d: 'M22.4 12 17.6 10.4 13.2 10 11 3.5H9L9.6 10.2 5.4 10.5 3.8 7.2H2.2L2.7 11.4 2 12l.7.6L2.2 16.8h1.6l1.6-3.3 4.2.3L9 20.5h2l2.2-6.5 4.4-.4z',
         fill: 'currentColor',
         stroke: 'none',
       },
     },
   ],
   'buss-profil': [
-    { tag: 'rect', attrs: { x: '2', y: '7', width: '18', height: '9', rx: '2', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'circle', attrs: { cx: '7', cy: '17', r: '2', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'circle', attrs: { cx: '16', cy: '17', r: '2', fill: 'currentColor', stroke: 'none' } },
+    // Bussen sedd från sidan med fronten åt höger, som tåget och färjan.
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M2.5 7h15.5c1.6 0 2.6.7 3.1 2l1 2.6c.2.5.3 1 .3 1.5V16h-20z',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
+    { tag: 'circle', attrs: { cx: '6.5', cy: '17.4', r: '2.1', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '16.5', cy: '17.4', r: '2.1', fill: 'currentColor', stroke: 'none' } },
   ],
   'tag-profil': [
-    { tag: 'rect', attrs: { x: '2', y: '7', width: '13', height: '9', rx: '1.5', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'path', attrs: { d: 'M15 9h4l2 4v3h-6Z', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'circle', attrs: { cx: '6', cy: '17.5', r: '1.6', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'circle', attrs: { cx: '17', cy: '17.5', r: '1.6', fill: 'currentColor', stroke: 'none' } },
+    // Ett loktåg i en enda siluett med sluttande nos åt höger. Två separata
+    // lådor läste ögat som en lastbil med släp, inte som ett tåg.
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M2.4 7h12.4l3.6 2.6 3.2 3.4V16h-19.2z',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
+    { tag: 'circle', attrs: { cx: '6', cy: '17.4', r: '1.9', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '11.5', cy: '17.4', r: '1.9', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '17.5', cy: '17.4', r: '1.9', fill: 'currentColor', stroke: 'none' } },
   ],
   'farja-profil': [
-    { tag: 'path', attrs: { d: 'M3 16h18l-2.5 4h-13Z', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'rect', attrs: { x: '6', y: '10', width: '10', height: '5', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'rect', attrs: { x: '9', y: '6', width: '4', height: '3', fill: 'currentColor', stroke: 'none' } },
+    // Skrov med bog åt höger, överbyggnad och skorsten - samma riktning som
+    // de andra fordonen, eftersom filmen vrider dem efter kursen.
+    {
+      tag: 'path',
+      attrs: { d: 'M2.5 15.5h16.5l2.5 2-3 3.5H5.5l-3-3.5z', fill: 'currentColor', stroke: 'none' },
+    },
+    {
+      tag: 'path',
+      attrs: { d: 'M5.5 9.5h11l2 5.5h-13z', fill: 'currentColor', stroke: 'none' },
+    },
+    { tag: 'rect', attrs: { x: '8', y: '5', width: '3.4', height: '4.5', fill: 'currentColor', stroke: 'none' } },
   ],
   /**
    * Skyltarna på stadsbilden. De ritas fyllda i stället för i streckstil,
@@ -212,6 +244,19 @@ const ICONS: Record<IconName, Part[]> = {
         class: 'icon-knockout',
         stroke: 'none',
       },
+    },
+  ],
+  'skylt-sevardhet': [
+    // Monument på en sockel: sevärdheten, vilken den än är.
+    { tag: 'path', attrs: { d: 'M3.5 19.5h17v2.2h-17z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'path', attrs: { d: 'M6 17h12v2H6z', fill: 'currentColor', stroke: 'none' } },
+    {
+      tag: 'path',
+      attrs: { d: 'M12 2.2l4.6 5.1v9.2H7.4V7.3z', fill: 'currentColor', stroke: 'none' },
+    },
+    {
+      tag: 'path',
+      attrs: { d: 'M10.4 9.6h3.2v4.2h-3.2z', class: 'icon-knockout', stroke: 'none' },
     },
   ],
   'skylt-mystik': [

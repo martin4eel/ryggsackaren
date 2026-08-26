@@ -29,6 +29,7 @@ try {
   const load = (p) => server.ssrLoadModule(p);
   const { JOB_QUESTIONS } = await load('/src/data/questions/jobQuestions.ts');
   const { CITY_QUESTIONS } = await load('/src/data/questions/cityQuestions.ts');
+  const { COIN_QUESTIONS } = await load('/src/data/questions/coinQuestions.ts');
   const { CITIES } = await load('/src/data/cities.ts');
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
@@ -419,6 +420,22 @@ try {
   }
 
   /**
+   * Myntfrågorna: en per stad, alla med en bild. En stad utan myntfråga får en
+   * bricka som inte går att lösa ut, och en fråga utan bild är inte den sorts
+   * fråga brickan lovar.
+   */
+  for (const c of CITIES) {
+    const f = COIN_QUESTIONS[c.id];
+    if (!f) {
+      problems.push(`${c.name} saknar myntfråga i questions/coinQuestions.ts`);
+      continue;
+    }
+    if (!f.bild && !f.bilder)
+      problems.push(`myntfrågan för ${c.name} saknar bild`);
+  }
+  checkQuestions('myntfrågor', Object.values(COIN_QUESTIONS));
+
+  /**
    * Atlasens fakta. En stad utan folkmängd visar en tom rad, och ett land utan
    * fakta visar en ursäkt i stället för en uppslagssida - båda ser ut som fel
    * för den som slår upp landet hen just rest till.
@@ -616,6 +633,9 @@ try {
   console.log(
     `Bilder: ${QUIZ_IMAGES.length} frågefoton, ` +
       `${[...bildIdn].length} bildhänvisningar i frågorna`
+  );
+  console.log(
+    `Myntfrågor: ${Object.keys(COIN_QUESTIONS).length} stycken, en per stad, alla med foto`
   );
   console.log(`Frågor: ${total}`);
   console.log(

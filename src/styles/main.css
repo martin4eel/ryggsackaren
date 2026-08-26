@@ -171,7 +171,9 @@ body {
   overflow: hidden;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  aspect-ratio: 16 / 9;
+  /* Högre bild på telefonen: brickorna ligger utspridda över den och behöver
+     höjd för att inte trängas. */
+  aspect-ratio: 4 / 3;
   background: linear-gradient(160deg, var(--sea) 0%, var(--sea-deep) 100%);
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
@@ -324,6 +326,9 @@ img.no-photo {
   display: flex;
   align-items: center;
   gap: 8px;
+  /* Håller knapparna i högerkanten också när statusraden radbryter på en
+     telefon. Utan det hamnar ryggsäcken längst till vänster på den nya raden. */
+  margin-left: auto;
 }
 
 .hud-icon-btn {
@@ -1653,16 +1658,70 @@ img.no-photo {
   stroke: rgba(6, 23, 34, 0.9);
 }
 
+/* Antalet städer ovanför listan, som en upplysning om att den fortsätter. */
+.city-list-antal {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/**
+ * Ramen kring listan bär uttoningen i underkanten. Den är det som säger att
+ * listan fortsätter nedanför kanten; utan den ser fyrtiosju städer ut som nio.
+ */
+.city-list-ram {
+  position: relative;
+}
+
+.city-list-ram::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 6px;
+  bottom: 0;
+  height: 54px;
+  pointer-events: none;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(180deg, rgba(246, 239, 224, 0) 0%, var(--paper) 92%);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* Uttoningen försvinner när man rullat i botten, och finns inte alls när
+   listan redan får plats. */
+.city-list-ram[data-slut='ja']::after,
+.city-list-ram[data-rullbar='nej']::after {
+  opacity: 0;
+}
+
 /* Rullbar stadslista, så att fyrtiosju städer inte gör panelen oändlig. */
 .city-list {
-  margin-top: 10px;
+  margin-top: 6px;
   max-height: 340px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sun-dark) transparent;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding-right: 4px;
   border-radius: 10px;
+}
+
+/* Synlig rullningslist också i webbläsare som gömmer den som standard. */
+.city-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.city-list::-webkit-scrollbar-track {
+  background: rgba(29, 43, 52, 0.08);
+  border-radius: 999px;
+}
+
+.city-list::-webkit-scrollbar-thumb {
+  background: var(--sun-dark);
+  border-radius: 999px;
+  border: 2px solid var(--paper);
 }
 
 .city-list .city-group {
@@ -3495,23 +3554,22 @@ input:focus-visible {
 
 /* Antalet skyltar varierar med staden: alla har inte tåg, färja eller flyg.
    Rutnätet packar därför så många som får plats på raden. */
+/* En tom rad ritas inte alls: en stad där ingenting är uppvänt ska inte ha en
+   svart list under fotot. */
+.signs:empty {
+  display: none;
+}
+
 .signs {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 4px;
-  padding: 8px 6px;
-  /* Mörk botten under skyltarna så att de läses mot vilket foto som helst. */
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(7, 26, 41, 0.55) 35%,
-    rgba(7, 26, 41, 0.85) 100%
-  );
+  padding: 10px 8px;
+  border-radius: var(--radius);
+  /* Egen platta under bilden i stället för en övertoning ovanpå den. Fotot
+     är stadsbilden och ska få synas hela vägen ner. */
+  background: rgba(7, 26, 41, 0.72);
+  border: 1px solid rgba(246, 239, 224, 0.14);
 }
 
 @media (min-width: 560px) {
@@ -3674,173 +3732,28 @@ input:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Fotot är utsikten genom fönstret, inte motivet. Det ska ligga bakom. */
-  filter: brightness(0.5) saturate(0.75) blur(1.5px);
+  /* Fotot är hela hallen nu, inte en utsikt bakom en ritad siluett. Det ska
+     synas - bara mörkas så pass att skylten går att läsa ovanpå. */
+  filter: brightness(0.68) saturate(0.9);
 }
 
-/* Skylten sitter överst och hallen fyller resten. Låg skylt gav en perrong
-   där tåget stod bakom rubriken och folket var avklippt vid knäna. */
+/* Skylten sitter överst, så övertoningen är tyngst där och släpper fotot
+   fritt i nederkanten. */
 .station-scene-scrim {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(4, 18, 28, 0.92) 0%,
-    rgba(4, 18, 28, 0.72) 34%,
-    rgba(4, 18, 28, 0.08) 58%,
-    rgba(4, 18, 28, 0.55) 100%
+    rgba(4, 18, 28, 0.9) 0%,
+    rgba(4, 18, 28, 0.6) 38%,
+    rgba(4, 18, 28, 0.05) 70%,
+    rgba(4, 18, 28, 0.3) 100%
   );
 }
 
-.station-scene-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
 /* Siluetterna. Tre djup: tak och golv, fordon, och folket närmast. */
-.scene-tak,
-.scene-golv,
-.scene-post,
-.scene-kant {
-  fill: #030d15;
-}
-
-.scene-golv {
-  fill: #05121b;
-}
-
-.scene-sjo {
-  fill: #072230;
-}
-
-.scene-mg {
-  fill: #0b2a3b;
-}
 
 /* Tunn kantljusning på fordonet, annars smälter siluetten in i fotot. */
-.scene-fordon > path:first-child,
-.scene-fordon-bak > path:first-child {
-  stroke: rgba(255, 255, 255, 0.16);
-  stroke-width: 1;
-}
-
-.scene-fg {
-  fill: #010a11;
-}
-
-.scene-fg-line {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.12);
-  stroke-width: 1.2;
-}
-
-.scene-ruta,
-.scene-lastport {
-  fill: rgba(242, 166, 59, 0.5);
-}
-
-.scene-lastport {
-  fill: rgba(242, 166, 59, 0.22);
-}
-
-.scene-blind {
-  fill: rgba(255, 210, 74, 0.72);
-}
-
-.scene-lykta {
-  fill: rgba(255, 246, 214, 0.82);
-}
-
-.scene-skorsten {
-  fill: #061a26;
-}
-
-.scene-valv-bage {
-  fill: none;
-  stroke: #030d15;
-  stroke-width: 4;
-}
-
-.scene-ral {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.16);
-  stroke-width: 1.6;
-}
-
-.scene-markering {
-  fill: none;
-  stroke: rgba(242, 166, 59, 0.28);
-  stroke-width: 2;
-  stroke-dasharray: 10 8;
-}
-
-.scene-skyltplatta {
-  fill: #02141d;
-  stroke: rgba(242, 166, 59, 0.4);
-  stroke-width: 1;
-  rx: 3;
-}
-
-.scene-skylttext {
-  fill: var(--sun);
-  font-family: var(--font-display);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-anchor: middle;
-}
-
-.scene-klockskiva {
-  fill: #f3ead7;
-  stroke: #030d15;
-  stroke-width: 2.5;
-}
-
-.scene-visare {
-  stroke: #1d2b34;
-  stroke-width: 2;
-  stroke-linecap: round;
-  fill: none;
-}
-
-.scene-vag {
-  fill: none;
-  stroke: rgba(180, 220, 240, 0.28);
-  stroke-width: 1.6;
-  animation: vagor 7s linear infinite;
-}
-
-.scene-vag-2 {
-  animation-duration: 11s;
-  animation-direction: reverse;
-  stroke: rgba(180, 220, 240, 0.18);
-}
-
-@keyframes vagor {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-40px);
-  }
-}
-
-.scene-blink {
-  fill: #ff5b3a;
-  animation: fyrblink 2.6s steps(1, end) infinite;
-}
-
-@keyframes fyrblink {
-  0%,
-8% {
-    opacity: 1;
-  }
-  9%,
-100% {
-    opacity: 0.12;
-  }
-}
 
 .station-plate {
   position: absolute;
@@ -4463,11 +4376,9 @@ body.sheet-oppen {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scene-blink,
-.scene-vag,
-.board-ticker-text,
-.board-dot,
-.board-row[data-status] .col-status {
+  .board-ticker-text,
+  .board-dot,
+  .board-row[data-status] .col-status {
     animation: none;
   }
 
@@ -4542,10 +4453,22 @@ body.sheet-oppen {
    ==================================================================== */
 
 .atlas-ram {
+  position: relative;
   border-radius: 12px;
   overflow: hidden;
-  background: #071d2b;
+  background: #0a2a3e;
   border: 1px solid rgba(29, 43, 52, 0.25);
+}
+
+/* Mjuk vinjett i kanterna, så att kartan ligger i rutan i stället för att
+   sluta tvärt mot den. */
+.atlas-ram::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 40px rgba(4, 16, 26, 0.45);
+  border-radius: inherit;
 }
 
 .atlas-map {
@@ -4554,26 +4477,10 @@ body.sheet-oppen {
   height: auto;
 }
 
-.atlas-hav {
-  fill: #0d3149;
-}
-
+/* Landmassan utan kontur. En streckbredd på en halv bildpunkt kantutjämnas
+   till en ludd runt varje ö, och kartan såg smutsig ut i kanterna. */
 .atlas-land {
-  fill: #2f7d63;
-  stroke: #1d5b47;
-  stroke-width: 0.6;
-}
-
-.atlas-latitud,
-.atlas-ekvator {
-  stroke: rgba(246, 239, 224, 0.14);
-  stroke-width: 1;
-  stroke-dasharray: 5 7;
-}
-
-.atlas-ekvator {
-  stroke: rgba(246, 239, 224, 0.26);
-  stroke-dasharray: none;
+  fill: #35876c;
 }
 
 /* Reserutan, dragen genom städerna i besöksordning. */
@@ -4595,7 +4502,7 @@ body.sheet-oppen {
 }
 
 .atlas-prick {
-  fill: rgba(246, 239, 224, 0.42);
+  fill: rgba(246, 239, 224, 0.34);
 }
 
 .atlas-bevist {
@@ -4776,7 +4683,6 @@ body.sheet-oppen {
     opacity: 0.4;
   }
 }
-
 
 /* ====================================================================
    HÄNDELSER
@@ -5025,308 +4931,233 @@ body.sheet-oppen {
   flex: 0 0 auto;
 }
 
-
 /* ====================================================================
    NEDVÄNDA BRICKOR
    En stad man aldrig varit i visar inte vad den har. Brickorna ligger
-   med baksidan upp och snurrar långsamt som mynt på högkant, tills man
-   vänder på dem en och en. Några av dem är stadens funktioner, några
-   döljer något som händer.
+   utspridda över stadsbilden och snurrar långsamt som mynt på högkant,
+   tills man vänder på dem en och en. Några är stadens funktioner, en
+   är en fråga om staden, resten döljer något som händer.
    ==================================================================== */
 
-.sign-mynt .sign-badge {
-  /* Ett mynt är runt. Skyltarnas rundade fyrkant hör till skyltarna. */
+.city-coins {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.city-coin {
+  position: absolute;
+  /* Vänster och topp sätts i procent per mynt; översättningen centrerar det
+     kring den punkten så att rutnätet blir jämnt. */
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
   border-radius: 50%;
-  /* Myntet ska snurra kring sin egen lodräta axel, inte glida i sidled. */
+  /* Halo, så att ett vitt mynt syns också mot en vit fasad eller en molnhimmel. */
+  box-shadow: 0 4px 16px rgba(4, 16, 26, 0.55);
+}
+
+.coin-body {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* Vitt mynt med grå kant: syns mot vilket foto som helst och ser modernt
+     ut i stället för som en skattkista. */
+  background: linear-gradient(160deg, #ffffff 0%, #f2f2f0 55%, #e2e2df 100%);
+  color: #6f7780;
+  border: 2px solid rgba(120, 130, 140, 0.55);
   transform-style: preserve-3d;
-  animation: myntsnurr 4.2s linear infinite;
-  background: linear-gradient(145deg, #f4c86a 0%, #d99b2f 48%, #b8791d 100%);
-  color: #6b3f0a;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 4px 10px rgba(4, 16, 26, 0.4);
+  animation: myntsnurr 3.6s ease-in-out infinite;
+}
+
+.city-coin:hover .coin-body,
+.city-coin:focus-visible .coin-body {
+  color: var(--sun-dark);
+  border-color: var(--sun);
+}
+
+.city-coin:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 3px;
+}
+
+.city-coin svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (min-width: 700px) {
+  .coin-body {
+    width: 52px;
+    height: 52px;
+  }
+
+  .city-coin svg {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 /*
- * Varje bricka får sin egen fasförskjutning, annars snurrar hela raden i
- * takt och det ser ut som en enda sak i stället för som tio brickor.
+ * Varje bricka får sin egen fasförskjutning, annars snurrar hela rutan i takt
+ * och det ser ut som en enda sak i stället för som flera mynt.
  */
-.sign-mynt:nth-child(3n) .sign-badge {
+.city-coin:nth-child(3n) .coin-body {
   animation-delay: -1.4s;
 }
 
-.sign-mynt:nth-child(3n + 1) .sign-badge {
+.city-coin:nth-child(3n + 1) .coin-body {
   animation-delay: -2.8s;
 }
 
+/*
+ * Myntet vaggar i stället för att snurra runt. Ett helt varv gör att brickan
+ * står på högkant en stund varje sekund, och då är den både osynlig och svår
+ * att träffa med fingret. Knappt sextio grader åt vardera hållet läser ögat
+ * ändå som en roterande bricka.
+ */
 @keyframes myntsnurr {
-  0% {
-    transform: rotateY(0deg);
-  }
+  0%,
   100% {
-    transform: rotateY(360deg);
+    transform: rotateY(-58deg);
   }
-}
-
-.sign-mynt .sign-name {
-  letter-spacing: 0.1em;
-  opacity: 0.72;
+  50% {
+    transform: rotateY(58deg);
+  }
 }
 
 /* Vändningen: myntet tar fart, ställer sig på högkant och landar. */
-.sign-mynt-vand .sign-badge {
+.city-coin-vand .coin-body {
   animation: myntvand 0.48s cubic-bezier(0.35, 0, 0.3, 1) forwards;
 }
 
+/* Vändningen får däremot snurra hela varv - där är det just det som är poängen. */
 @keyframes myntvand {
   0% {
     transform: rotateY(0deg) scale(1);
   }
   55% {
-    transform: rotateY(540deg) scale(1.22);
+    transform: rotateY(540deg) scale(1.3);
   }
   100% {
     transform: rotateY(1080deg) scale(1);
   }
 }
 
+/* Förbrukade handlingar bär en grön bock i stället för att försvinna. */
+.sign-klar {
+  cursor: default;
+}
+
+.sign-klar .sign-name {
+  opacity: 0.55;
+}
+
+.sign-badge {
+  position: relative;
+}
+
+.sign-badge-klar {
+  opacity: 0.55;
+}
+
+.sign-bock {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--palm);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  border: 2px solid var(--paper);
+  opacity: 1;
+}
+
+/* Ryggsäcken i statusraden, uppe till höger på varje skärm. */
+.hud-pack {
+  pointer-events: auto;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid rgba(246, 239, 224, 0.35);
+  background: rgba(246, 239, 224, 0.1);
+  color: var(--paper);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.hud-pack:hover,
+.hud-pack:focus-visible {
+  background: rgba(242, 166, 59, 0.24);
+  border-color: var(--sun);
+}
+
+.hud-pack:active {
+  transform: translateY(1px);
+}
+
+.hud-pack-har {
+  background: rgba(242, 166, 59, 0.3);
+  border-color: var(--sun);
+}
+
+.hud-pack-body {
+  display: grid;
+  place-items: center;
+}
+
+.hud-pack svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Antalet souvenirer som en liten bricka i hörnet. */
+.hud-pack-tal {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--sun);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .sign-mynt .sign-badge,
-  .sign-mynt-vand .sign-badge {
+  .coin-body,
+  .city-coin-vand .coin-body {
     animation: myntpuls 2.6s ease-in-out infinite;
   }
 
   @keyframes myntpuls {
     0%,
     100% {
-      opacity: 0.7;
+      opacity: 0.75;
     }
     50% {
       opacity: 1;
     }
-  }
-}
-
-
-/* ====================================================================
-   BILD- OCH REGLAGEFRÅGOR
-   Alla bilder är riktiga fotografier från Wikimedia Commons. En fråga
-   om vad en marulk är ska visa en marulk, inte en teckning av en.
-   ==================================================================== */
-
-.quiz-bild {
-  margin: 0 0 14px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--paper-dim);
-  line-height: 0;
-}
-
-.quiz-bild img {
-  display: block;
-  width: 100%;
-  max-height: 260px;
-  object-fit: cover;
-}
-
-/* Fyra foton som svarsalternativ. */
-.options-bilder {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.option-bild {
-  padding: 0;
-  overflow: hidden;
-}
-
-.option-body-bild {
-  display: block;
-  position: relative;
-  line-height: 0;
-}
-
-.option-foto {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-}
-
-/* Bokstaven ligger i hörnet på fotot i stället för bredvid texten. */
-.option-body-bild .option-key {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 1;
-  box-shadow: 0 2px 8px rgba(4, 16, 26, 0.55);
-}
-
-/* Namnet skrivs ut först när frågan är besvarad - dessförinnan är det
-   hela uppgiften att veta vilket foto som är vilket. */
-.option-facit {
-  display: block;
-  padding: 8px 10px;
-  line-height: 1.35;
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  text-align: left;
-}
-
-/* ------------------------------------------------------------ reglaget */
-
-.reglage {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 14px;
-  padding: 16px;
-  border-radius: 12px;
-  background: var(--paper-dim);
-}
-
-.reglage-varde {
-  flex: 0 0 auto;
-  min-width: 5.5em;
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 7vw, 2.3rem);
-  font-variant-numeric: tabular-nums;
-  color: var(--ink);
-  text-align: center;
-}
-
-.reglage-bana {
-  flex: 1 1 auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.reglage-spann {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.72rem;
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Liggande: skalan löper i läsriktningen, som en tidslinje. */
-.reglage-liggande {
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.reglage-liggande .reglage-bana {
-  flex-direction: column;
-  align-items: stretch;
-  gap: 4px;
-}
-
-.reglage-liggande .reglage-input {
-  width: 100%;
-}
-
-.reglage-liggande .reglage-spann {
-  flex-direction: row-reverse;
-}
-
-/* Stående: skalan löper uppåt, som en höjd eller ett djup. */
-.reglage-staende {
-  justify-content: center;
-  gap: 24px;
-}
-
-.reglage-staende .reglage-bana {
-  flex: 0 0 auto;
-  height: 190px;
-}
-
-.reglage-staende .reglage-input {
-  /* writing-mode är det som numera vänder ett range-element på högkant;
-     `orient` behövs fortfarande för äldre Firefox och skadar inget. */
-  writing-mode: vertical-lr;
-  direction: rtl;
-  width: 34px;
-  height: 100%;
-}
-
-.reglage-staende .reglage-spann {
-  flex-direction: column;
-  height: 100%;
-}
-
-.reglage-input {
-  appearance: none;
-  -webkit-appearance: none;
-  background: transparent;
-  cursor: grab;
-}
-
-.reglage-input:active {
-  cursor: grabbing;
-}
-
-.reglage-input::-webkit-slider-runnable-track {
-  background: linear-gradient(90deg, var(--sea) 0%, var(--palm) 100%);
-  border-radius: 999px;
-  height: 10px;
-}
-
-.reglage-staende .reglage-input::-webkit-slider-runnable-track {
-  background: linear-gradient(180deg, var(--palm) 0%, var(--sea) 100%);
-  width: 10px;
-  height: 100%;
-}
-
-.reglage-input::-moz-range-track {
-  background: var(--sea);
-  border-radius: 999px;
-  height: 10px;
-}
-
-.reglage-input::-webkit-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 30px;
-  height: 30px;
-  margin-top: -10px;
-  border-radius: 50%;
-  background: var(--sun);
-  border: 3px solid var(--paper);
-  box-shadow: 0 3px 10px rgba(4, 16, 26, 0.45);
-}
-
-.reglage-staende .reglage-input::-webkit-slider-thumb {
-  margin-top: 0;
-  margin-left: -10px;
-}
-
-.reglage-input::-moz-range-thumb {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--sun);
-  border: 3px solid var(--paper);
-}
-
-.reglage-input:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.reglage-ok {
-  width: 100%;
-  margin-bottom: 14px;
-}
-
-@media (min-width: 620px) {
-  .options-bilder {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .quiz-bild img {
-    max-height: 320px;
   }
 }

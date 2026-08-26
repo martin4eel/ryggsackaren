@@ -10,7 +10,9 @@ import {
 import type { Route } from '../game/travel';
 import type { Difficulty } from '../game/state';
 import { renderBoard, type BoardHandle } from './board';
-import { button, el, svgEl } from './dom';
+import { button, el } from './dom';
+import { quizImageAlt, quizImageUrl } from '../data/quizImages';
+import { pseudoRandom } from '../game/rules';
 import { startStation, stopStation } from './audio';
 import { icon } from './icons';
 
@@ -93,181 +95,19 @@ export function airportCode(city: City): string {
 // ------------------------------------------------------------------ miljöer
 
 /**
- * Hallens siluett, ritad i SVG ovanpå stadens foto. Fotot ligger kvar som det
- * man ser genom fönstret, så att stationen fortfarande hör till just den här
- * staden.
+ * Hallens foto.
+ *
+ * Här satt tidigare en tecknad siluett - glasfasad, perrongtak, bussnosar,
+ * skrov - ritad i SVG. Den fyllde sin plats men det syntes att den var ritad,
+ * och en station ska se ut som en station. Nu är det fotografier, fyra per
+ * färdsätt, valda ur stadens id så att samma stad alltid får samma hall och
+ * två grannstäder sällan får samma.
  */
-function scen(mode: TransportMode): SVGElement {
-  const svg = svgEl('svg', {
-    class: 'station-scene-svg',
-    viewBox: '0 0 400 170',
-    preserveAspectRatio: 'xMidYMax slice',
-    'aria-hidden': 'true',
-  });
-  const p = (d: string, cls: string) => svgEl('path', { d, class: cls });
-  const rect = (x: number, y: number, w: number, h: number, cls: string) =>
-    svgEl('rect', { x, y, width: w, height: h, class: cls });
+const HALL_ANTAL = 4;
 
-  /** Resenärer i förgrunden. Samma familj av former på alla stationer. */
-  const folk = (positions: Array<[number, number, boolean]>) => {
-    const g = svgEl('g', { class: 'scene-folk' });
-    for (const [x, h, vaska] of positions) {
-      const y = 170 - h;
-      g.append(
-        svgEl('circle', { cx: x, cy: y + 5, r: 4.6, class: 'scene-fg' }),
-        p(
-          `M${x - 5.4} ${y + 11} q5.4 -3 10.8 0 l1.8 ${h - 12} h-14.4 z`,
-          'scene-fg'
-        )
-      );
-      if (vaska) {
-        g.append(
-          rect(x + 8, 170 - h * 0.42, 5.5, h * 0.42, 'scene-fg'),
-          p(`M${x + 10.7} ${170 - h * 0.42} v-${h * 0.3}`, 'scene-fg-line')
-        );
-      }
-    }
-    return g;
-  };
-
-  if (mode === 'flyg') {
-    // Glasfasad med planet utanför, hängande gateskylt och rullband.
-    svg.append(
-      rect(0, 0, 400, 26, 'scene-tak'),
-      p('M0 26 h400 v3 h-400 z', 'scene-kant'),
-      svgEl('g', { class: 'scene-glas' },
-        ...[40, 100, 160, 220, 280, 340].map((x) => rect(x - 2, 26, 4, 96, 'scene-post'))
-      ),
-      // Flygplan i profil utanför glaset.
-      svgEl('g', { class: 'scene-fordon' },
-        p('M196 104 q34 -13 92 -9 l38 3 q10 1 10 5 t-10 5 l-40 3 q-58 4 -90 -7 z', 'scene-mg'),
-        p('M244 96 l16 -22 h9 l-8 22 z', 'scene-mg'),
-        p('M262 103 l30 -6 l26 4 l-28 6 z', 'scene-mg'),
-        svgEl('circle', { cx: 322, cy: 100, r: 2.4, class: 'scene-blink' })
-      ),
-      rect(0, 122, 400, 48, 'scene-golv'),
-      p('M0 122 h400', 'scene-fg-line'),
-      folk([[54, 40, true], [92, 36, false], [300, 42, true], [346, 34, true]]),
-      // Hängande gateskylt, i högra halvan så att den inte hamnar under
-      // stationsnamnet på en smal skärm.
-      svgEl('g', { class: 'scene-skylt' },
-        rect(248, 30, 112, 22, 'scene-skyltplatta'),
-        svgEl('text', { x: 304, y: 45, class: 'scene-skylttext' }, 'GATE A–F →')
-      )
-    );
-    return svg;
-  }
-
-  if (mode === 'tag') {
-    // Perrongtak på pelare, spår som viker av och en stationsklocka.
-    svg.append(
-      rect(0, 0, 400, 20, 'scene-tak'),
-      svgEl('g', { class: 'scene-valv' },
-        ...[0, 80, 160, 240, 320].map((x) =>
-          p(`M${x} 20 q40 26 80 0`, 'scene-valv-bage')
-        )
-      ),
-      ...[16, 130, 270, 384].map((x) => rect(x - 3, 20, 6, 104, 'scene-post')),
-      // Tåget vid perrongen.
-      /**
-       * Tåget vid perrongen. Allt som ska synas ligger under y=70: skylten
-       * upptar den övre tredjedelen av rutan, och ett tåg bakom rubriken är
-       * inget tåg.
-       */
-      svgEl('g', { class: 'scene-fordon' },
-        p('M0 74 h150 q14 0 16 12 v38 h-166 z', 'scene-mg'),
-        ...[18, 46, 74, 102].map((x) => rect(x, 84, 18, 16, 'scene-ruta')),
-        rect(126, 86, 16, 14, 'scene-ruta'),
-        svgEl('circle', { cx: 158, cy: 114, r: 3.4, class: 'scene-blink' })
-      ),
-      rect(0, 124, 400, 46, 'scene-golv'),
-      p('M0 124 h400', 'scene-fg-line'),
-      // Spåret bortom perrongkanten.
-      p('M172 168 L262 118 M196 168 L272 118', 'scene-ral'),
-      folk([[212, 38, true], [246, 34, false], [318, 40, true]]),
-      /**
-       * Stationsklockan. Läget är valt för att överleva beskärningen: SVG:n
-       * fyller rutan med `slice`, och på en telefon klipps kanterna medan en
-       * bred skärm klipper toppen. Det som alltid syns är x 40-360, y 25-170.
-       */
-      svgEl('g', { class: 'scene-klocka' },
-        rect(338, 26, 4, 14, 'scene-post'),
-        svgEl('circle', { cx: 340, cy: 54, r: 15, class: 'scene-klockskiva' }),
-        p('M340 54 v-9 M340 54 l6 4', 'scene-visare')
-      )
-    );
-    return svg;
-  }
-
-  if (mode === 'buss') {
-    // Terminaltak, numrerade lägen och två bussar med nosen mot perrongen.
-    svg.append(
-      rect(0, 8, 400, 12, 'scene-tak'),
-      ...[30, 200, 370].map((x) => rect(x - 3, 20, 6, 100, 'scene-post')),
-      svgEl('g', { class: 'scene-fordon' },
-        p('M40 68 h116 q10 0 10 10 v54 h-126 z', 'scene-mg'),
-        // Destinationsskylten över vindrutan, som på en riktig buss.
-        rect(50, 74, 74, 9, 'scene-blind'),
-        rect(50, 88, 96, 24, 'scene-ruta'),
-        // Strålkastare och stötfångare, så att lådan blir en buss.
-        svgEl('circle', { cx: 56, cy: 122, r: 4, class: 'scene-lykta' }),
-        svgEl('circle', { cx: 150, cy: 122, r: 4, class: 'scene-lykta' }),
-        rect(40, 128, 126, 4, 'scene-fg'),
-        svgEl('circle', { cx: 160, cy: 112, r: 3, class: 'scene-blink' })
-      ),
-      svgEl('g', { class: 'scene-fordon-bak' },
-        p('M246 78 h96 q8 0 8 8 v46 h-104 z', 'scene-mg'),
-        rect(254, 83, 58, 7, 'scene-blind'),
-        rect(254, 94, 80, 20, 'scene-ruta'),
-        svgEl('circle', { cx: 260, cy: 124, r: 3, class: 'scene-lykta' }),
-        svgEl('circle', { cx: 338, cy: 124, r: 3, class: 'scene-lykta' })
-      ),
-      rect(0, 132, 400, 38, 'scene-golv'),
-      p('M0 132 h400', 'scene-fg-line'),
-      // Målade markeringar på asfalten.
-      p('M20 150 h60 M120 150 h60 M220 150 h60 M320 150 h60', 'scene-markering'),
-      folk([[186, 32, true], [216, 28, false], [362, 34, true]]),
-      svgEl('g', { class: 'scene-skylt' },
-        rect(272, 30, 78, 20, 'scene-skyltplatta'),
-        svgEl('text', { x: 311, y: 44, class: 'scene-skylttext' }, 'LÄGE 1–26')
-      )
-    );
-    return svg;
-  }
-
-  // Hamnen: kaj, pollare, landgång och en skrovsida med lastport.
-  svg.append(
-    svgEl('g', { class: 'scene-fordon' },
-      p('M212 30 h176 v78 q-88 12 -176 0 z', 'scene-mg'),
-      ...[228, 254, 280, 306, 332].map((x) =>
-        svgEl('circle', { cx: x, cy: 62, r: 6, class: 'scene-ruta' })
-      ),
-      rect(236, 82, 34, 26, 'scene-lastport'),
-      rect(300, 6, 26, 26, 'scene-skorsten'),
-      svgEl('circle', { cx: 216, cy: 34, r: 3, class: 'scene-blink' })
-    ),
-    // Landgång från kajen upp till lastporten.
-    p('M150 148 L238 96 l10 6 L162 156 z', 'scene-mg'),
-    rect(0, 118, 400, 52, 'scene-golv'),
-    /**
-     * Vattnet tar vid där kajen slutar. Utan den egna ytan låg vågorna ovanpå
-     * kajen och det gick inte att se var man stod och var man skulle segla.
-     */
-    rect(178, 118, 222, 52, 'scene-sjo'),
-    p('M0 118 h400 M178 118 v52', 'scene-fg-line'),
-    svgEl('g', { class: 'scene-vatten' },
-      p('M186 130 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag'),
-      p('M182 146 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag scene-vag-2')
-    ),
-    ...[36, 96].map((x) =>
-      svgEl('g', {},
-        p(`M${x} 118 v-14 q0 -5 6 -5 t6 5 v14 z`, 'scene-fg'),
-        p(`M${x + 6} 106 q26 16 54 2`, 'scene-fg-line')
-      )
-    ),
-    folk([[132, 36, true], [166, 32, true]])
-  );
-  return svg;
+function hallBild(city: City, mode: TransportMode): string {
+  const n = 1 + (Math.floor(pseudoRandom(`${city.id}|hall|${mode}`) * HALL_ANTAL) % HALL_ANTAL);
+  return `station-${mode}-${n}`;
 }
 
 // ------------------------------------------------------------------- skärmen
@@ -282,15 +122,16 @@ export function renderStation(opts: StationOpts): StationHandle {
 
   // ---- hallen
   const scene = el('section', { class: 'station-scene' });
+  const bildId = hallBild(city, mode);
   const foto = el('img', {
     class: 'station-scene-photo',
-    src: `./cities/${city.id}.jpg`,
-    alt: '',
-    loading: 'lazy',
+    src: quizImageUrl(bildId),
+    alt: quizImageAlt(bildId),
+    loading: 'eager',
     decoding: 'async',
   }) as HTMLImageElement;
   foto.addEventListener('error', () => foto.remove());
-  scene.append(foto, el('div', { class: 'station-scene-scrim' }), scen(mode));
+  scene.append(foto, el('div', { class: 'station-scene-scrim' }));
   scene.append(
     el('div', { class: 'station-plate' },
       // Kicker och landsmärke på samma rad, så att skylten blir två rader

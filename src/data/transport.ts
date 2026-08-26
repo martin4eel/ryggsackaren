@@ -29,9 +29,13 @@ export const MODE_LABELS: Record<TransportMode, string> = {
  * Vilka landregioner som hänger ihop på marken. Listan läses åt båda hållen;
  * valideringen kontrollerar att den är symmetrisk.
  *
- * Regioner som saknas här är öar eller landområden utan rimlig landförbindelse
- * till någon annan stad i spelet: Irland, Island, Japan, Kuba, Nya Zeeland,
- * Korea, Kina, Australien och de tre afrikanska hörnen.
+ * Grannskapen är de sträckor ryggsäckare faktiskt tar över land, inte varje
+ * teoretiskt gångbar landmassa. Sahara korsas med buss från Marocko till
+ * Senegal, den afrikanska ryggraden går Kairo-Addis, Vänskapsvägen går över
+ * Tibet till Katmandu och tåget söderut från Peking når Hanoi.
+ *
+ * Kvar utanför står bara öarna: Island, Irland, Japan, Kuba, Nya Zeeland,
+ * Korea, Australien och Storbritannien - de når man med färja eller flyg.
  */
 export const LAND_ADJACENCY: Record<string, string[]> = {
   norden: ['centraleuropa'],
@@ -42,7 +46,13 @@ export const LAND_ADJACENCY: Record<string, string[]> = {
   osteuropa: ['centraleuropa', 'balkan', 'finland', 'mellanostern'],
   finland: ['osteuropa'],
   mellanostern: ['osteuropa', 'nordafrika'],
-  nordafrika: ['mellanostern'],
+  nordafrika: ['mellanostern', 'vastafrika', 'ostafrika'],
+  vastafrika: ['nordafrika'],
+  ostafrika: ['nordafrika', 'sodraafrika'],
+  sodraafrika: ['ostafrika'],
+  kina: ['sydostasien', 'sydasien'],
+  sydostasien: ['kina'],
+  sydasien: ['kina'],
 };
 
 /**
@@ -141,12 +151,16 @@ export const FERRY_LINKS: Array<[string, string, string]> = FERRY_LINES.map(
  * Avståndstak per färdsätt, i kilometer. Över taket erbjuds färdsättet inte
  * alls, oavsett hur bra förbindelserna är.
  *
- * Taken är satta så att de klassiska ryggsäcksrutterna ryms - nattbussen
- * Rio–Buenos Aires, tåget Aten–Prag - men inte det orimliga.
+ * Taken satt vid 200 mil gjorde elva av fyrtiosju städer till rena flygplatser
+ * - Peking hade ingen tågstation, New York ingen bussterminal. Riktiga
+ * ryggsäckare åker betydligt längre än så: bussen Kairo-Addis är tre dygn,
+ * tåget Peking-Hanoi två, och Amtraks tvärbana över USA fyra. Taken ligger nu
+ * där de sträckorna ryms, och tiden får vara det som avskräcker i stället för
+ * en spärr - en buss på 300 mil kostar fem resdagar boende.
  */
 export const MODE_RANGE: Record<TransportMode, { min: number; max: number }> = {
-  buss: { min: 0, max: 2000 },
-  tag: { min: 0, max: 2200 },
+  buss: { min: 0, max: 3400 },
+  tag: { min: 0, max: 4400 },
   farja: { min: 0, max: 2600 },
   // Under 35 mil tar ingen flyget, och det behövs inte: så korta sträckor
   // ligger alltid inom räckhåll för buss eller tåg.
@@ -161,10 +175,17 @@ export const MODE_COST: Record<TransportMode, { base: number; perKm: number }> =
   flyg: { base: 450, perKm: 0.62 },
 };
 
-/** Ungefärlig sträcka per resdag, används för att räkna restid. */
+/**
+ * Ungefärlig sträcka per resdag, används för att räkna restid.
+ *
+ * Fjärrbussar byter förare och rullar en bra bit mer än sex hundra kilometer
+ * om dygnet, och ett nattåg gör tolv hundra utan att någon höjer på
+ * ögonbrynen. Talen är höjda i takt med avståndstaken, så att en riktigt lång
+ * landresa blir dryg men inte orimlig.
+ */
 export const MODE_KM_PER_DAY: Record<TransportMode, number> = {
-  buss: 600,
-  tag: 1000,
+  buss: 750,
+  tag: 1200,
   farja: 450,
   flyg: 5000,
 };

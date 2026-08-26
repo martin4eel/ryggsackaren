@@ -56,11 +56,11 @@ async function pageImage(article) {
 }
 
 /** En namngiven Commons-fil i 900 pixlars bredd. */
-async function commonsFile(fileName) {
+async function commonsFile(fileName, bredd = 900) {
   const url =
     'https://commons.wikimedia.org/w/api.php?action=query&format=json' +
     `&titles=File:${encodeURIComponent(fileName)}` +
-    '&prop=imageinfo&iiprop=url&iiurlwidth=900';
+    `&prop=imageinfo&iiprop=url&iiurlwidth=${bredd}`;
   const data = await api(url);
   const thumb = Object.values(data.query?.pages ?? {})[0]?.imageinfo?.[0]?.thumburl;
   if (!thumb) throw new Error(`Commons-filen "${fileName}" hittades inte`);
@@ -109,7 +109,7 @@ for (const bild of QUIZ_IMAGES) {
   const dest = join(OUT_DIR, `${bild.id}.jpg`);
   try {
     const { thumbUrl, fileName } = bild.file
-      ? await commonsFile(bild.file)
+      ? await commonsFile(bild.file, bild.bred ? 1400 : 900)
       : await pageImage(bild.article);
     const credit = await fileCredits(fileName);
     credits.push({ id: bild.id, alt: bild.alt, fileName, ...credit });

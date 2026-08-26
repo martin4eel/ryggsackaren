@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v9';
+const CACHE = 'ryggsackaren-v10';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -112,6 +112,22 @@ const QUIZ_IMAGES = [
   'sjostjarna',
   'skriet',
   'solros',
+  'station-buss-1',
+  'station-buss-2',
+  'station-buss-3',
+  'station-buss-4',
+  'station-farja-1',
+  'station-farja-2',
+  'station-farja-3',
+  'station-farja-4',
+  'station-flyg-1',
+  'station-flyg-2',
+  'station-flyg-3',
+  'station-flyg-4',
+  'station-tag-1',
+  'station-tag-2',
+  'station-tag-3',
+  'station-tag-4',
   'stjarnenatt',
   'storavagen',
   'svartpeppar',

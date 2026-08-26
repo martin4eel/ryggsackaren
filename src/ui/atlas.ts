@@ -84,28 +84,38 @@ function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
     'aria-label': `Världskarta med ${city.name} utmärkt`,
   });
 
+  /**
+   * Havet ligger underst. Gradienten är svag med flit: en karta ska läsas, inte
+   * beundras, och en kraftig ton drar blicken till bakgrunden.
+   */
+  const grad = svgEl('linearGradient', {
+    id: 'atlas-havston',
+    x1: '0',
+    y1: '0',
+    x2: '0',
+    y2: '1',
+  });
+  grad.append(
+    svgEl('stop', { offset: '0', 'stop-color': '#0e3750' }),
+    svgEl('stop', { offset: '1', 'stop-color': '#0a2a3e' })
+  );
+  svg.append(svgEl('defs', {}, grad));
   svg.append(
     svgEl('rect', {
       x: 0,
       y: VIEW_TOP,
       width: MAP_WIDTH,
       height: VIEW_BOTTOM - VIEW_TOP,
-      class: 'atlas-hav',
+      fill: 'url(#atlas-havston)',
     })
   );
 
-  // Latitudlinjer: ekvatorn kraftigare än vändkretsarna.
-  const latLinje = (lat: number, cls: string) => {
-    const y = ((90 - lat) / 180) * MAP_HEIGHT;
-    return svgEl('line', { x1: 0, y1: y, x2: MAP_WIDTH, y2: y, class: cls });
-  };
-  svg.append(
-    latLinje(23.44, 'atlas-latitud'),
-    latLinje(-23.44, 'atlas-latitud'),
-    latLinje(66.56, 'atlas-latitud'),
-    latLinje(0, 'atlas-ekvator')
-  );
-
+  /**
+   * Ingen gradnät. Kartan hade förut ekvatorn, vändkretsarna och polcirkeln
+   * inritade, och de linjerna låg tvärs över Afrika och Grönland utan att
+   * betyda något för spelaren - det såg ut som repor i bilden. Det som är kvar
+   * är land, hav, rutt och städer.
+   */
   svg.append(svgEl('path', { d: LAND_PATH, class: 'atlas-land' }));
 
   /**

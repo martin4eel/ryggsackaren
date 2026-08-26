@@ -134,14 +134,11 @@ export interface GameState {
    * det finns ett skäl att lämna in plånboken som inte är pengar.
    */
   rykte: number;
-  /** Händelser som redan slagit till, för dem som bara får hända en gång. */
-  eventsSeen: string[];
   /**
-   * De senaste händelserna, nyast först. De vägs ner kraftigt när nästa
-   * händelse lottas, så att samma hund inte följer efter en två gånger på en
-   * kvart. Listan hålls kort med flit: allt ska kunna komma tillbaka.
+   * Händelser som redan slagit till. Varje händelse inträffar högst en gång
+   * per resa, så listan är också spärren mot att något upprepas.
    */
-  recentEvents: string[];
+  eventsSeen: string[];
   /**
    * Händelsen som väntar på svar eller på att kvitteras. Den ligger i
    * tillståndet i stället för i gränssnittet, så att ett val man ställts inför
@@ -205,7 +202,6 @@ export function createGame(
     cityStats: {},
     rykte: 0,
     eventsSeen: [],
-    recentEvents: [],
   };
 }
 
@@ -287,7 +283,6 @@ function migrate(
   state.cityStats ??= {};
   state.rykte ??= 0;
   state.eventsSeen ??= [];
-  state.recentEvents ??= [];
   /**
    * Det gamla resehändelsesystemet sparade hela händelsen i `lastEvent`. Den
    * formen finns inte längre, och en halvkvitterad gammal händelse är inte

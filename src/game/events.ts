@@ -61,9 +61,6 @@ export function mysterySpotCount(cityId: string): number {
   return 1;
 }
 
-/** Hur många händelser tillbaka spelet minns när nästa ska lottas. */
-const RECENT_MEMORY = 9;
-
 /** Allt motorn behöver veta om spelaren, i en form datan kan läsa. */
 export function eventContext(state: GameState, city: City): EventContext {
   return {
@@ -118,7 +115,13 @@ export function eligibleEvents(
 ): GameEvent[] {
   return EVENTS.filter((e) => {
     if (!e.triggers.includes(trigger)) return false;
-    if (e.once && seen.includes(e.id)) return false;
+    /**
+     * Varje händelse inträffar högst en gång per resa. Att möta samma hund på
+     * samma gata två gånger får världen att krympa, och att möta den två
+     * gånger i samma stad får den att se trasig ut. Priset är att banken måste
+     * vara djup nog för en lång resa, vilket valideringen vakar över.
+     */
+    if (seen.includes(e.id)) return false;
     if (e.villkor && !e.villkor(ctx)) return false;
     return true;
   });
@@ -142,23 +145,10 @@ export function rollEvent(
   if (Math.random() >= chance) return null;
   const ctx = eventContext(state, city);
   const kandidater = eligibleEvents(trigger, ctx, state.eventsSeen);
-  /**
-   * En händelse man nyss sett vägs ner kraftigt, men aldrig till noll. Utan
-   * dämpningen kan samma hund följa efter en två gånger på en kvart, och då
-   * ser världen mindre ut än den är. Med en spärr i stället för en dämpning
-   * skulle en spelare som sett allt en gång plötsligt inte råka ut för något.
-   */
-  const vagda = kandidater.map((e) => {
-    const i = state.recentEvents.indexOf(e.id);
-    const dampning = i === -1 ? 1 : 0.08 + i * 0.1;
-    return { event: e, weight: e.weight * dampning };
-  });
-  const vald = weighted(vagda)?.event;
+  const vald = weighted(kandidater);
   if (!vald) return null;
   state.pendingEvent = { eventId: vald.id };
-  if (!state.eventsSeen.includes(vald.id)) state.eventsSeen.push(vald.id);
-  state.recentEvents.unshift(vald.id);
-  state.recentEvents = state.recentEvents.slice(0, RECENT_MEMORY);
+  state.eventsSeen.push(vald.id);
   return vald;
 }
 
