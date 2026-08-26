@@ -1,0 +1,473 @@
+import type { TransportMode } from '../data/transport';
+import type { City } from '../data/types';
+import {
+  durationText,
+  hhmm,
+  stationDestinations,
+  statusText,
+  travelMinutes,
+  STAND_LABEL,
+  type Departure,
+} from '../game/departures';
+import type { Route } from '../game/travel';
+import type { Difficulty } from '../game/state';
+import { renderBoard, wallClock, type BoardHandle } from './board';
+import { button, clear, el, svgEl } from './dom';
+import { startStation, stopStation } from './audio';
+import { icon } from './icons';
+
+/**
+ * Stationerna som platser.
+ *
+ * En busstation och en flygplats hade tidigare exakt samma skärm: en lista med
+ * städer. Det är den enskilt största skillnaden mellan ett spel och en meny.
+ * Här får varje färdsätt en egen hall, en egen avgångstavla, en egen ljudbild
+ * och ett eget ordval - "gate" på flygplatsen, "spår" på stationen, "läge" vid
+ * bussterminalen och "kaj" i hamnen.
+ *
+ * Allt som går att boka kommer fortfarande ur game/travel.ts. Stationen hittar
+ * aldrig på en förbindelse.
+ */
+
+export interface StationHandle {
+  node: HTMLElement;
+  stop: () => void;
+}
+
+export interface StationOpts {
+  city: City;
+  mode: TransportMode;
+  difficulty: Difficulty;
+  money: (amount: number) => string;
+  /** Spelarens kassa, för att gråa ut det man inte har råd med */
+  cash: number;
+  onBuy: (city: City, route: Route) => void;
+  onBack: () => void;
+  onAllModes: () => void;
+}
+
+const STATION_NAMN: Record<TransportMode, (c: City) => string> = {
+  flyg: (c) => `${c.name} flygplats`,
+  tag: (c) => `${c.name} centralstation`,
+  buss: (c) => `${c.name} bussterminal`,
+  farja: (c) => `${c.name} färjeterminal`,
+};
+
+const STATION_KICKER: Record<TransportMode, string> = {
+  flyg: 'Avgående · Departures',
+  tag: 'Fjärrtrafik · Avgångar',
+  buss: 'Långfärdsbuss · Avgångar',
+  farja: 'Färjetrafik · Avgångar',
+};
+
+const STATION_INFO: Record<TransportMode, string> = {
+  flyg: 'Incheckning stänger 45 minuter före avgång. Håll utkik efter gateändringar.',
+  tag: 'Spårändringar meddelas i högtalarna. Vagn 1 längst fram i tågets färdriktning.',
+  buss: 'Bussarna avgår från numrerade lägen utanför terminalen. Bagage lastas i sidoluckan.',
+  farja: 'Ombordstigning börjar en timme före avgång. Fordonsdäck stänger 20 minuter före.',
+};
+
+/**
+ * Flygplatskod i tre bokstäver, härledd ur stadens namn. Ingen försöker
+ * gissa den riktiga koden - poängen är att skylten ska se ut som en skylt.
+ */
+export function airportCode(city: City): string {
+  const rent = city.name
+    .toUpperCase()
+    .normalize('NFD')
+    .replace(/[^A-Z]/g, '');
+  if (rent.length <= 3) return rent.padEnd(3, 'X');
+  const forsta = rent[0]!;
+  const resten = rent.slice(1).replace(/[AEIOUY]/g, '');
+  return (forsta + resten).slice(0, 3).padEnd(3, rent[rent.length - 1]!);
+}
+
+// ------------------------------------------------------------------ miljöer
+
+/**
+ * Hallens siluett, ritad i SVG ovanpå stadens foto. Fotot ligger kvar som det
+ * man ser genom fönstret, så att stationen fortfarande hör till just den här
+ * staden.
+ */
+function scen(mode: TransportMode): SVGElement {
+  const svg = svgEl('svg', {
+    class: 'station-scene-svg',
+    viewBox: '0 0 400 170',
+    preserveAspectRatio: 'xMidYMax slice',
+    'aria-hidden': 'true',
+  });
+  const p = (d: string, cls: string) => svgEl('path', { d, class: cls });
+  const rect = (x: number, y: number, w: number, h: number, cls: string) =>
+    svgEl('rect', { x, y, width: w, height: h, class: cls });
+
+  /** Resenärer i förgrunden. Samma familj av former på alla stationer. */
+  const folk = (positions: Array<[number, number, boolean]>) => {
+    const g = svgEl('g', { class: 'scene-folk' });
+    for (const [x, h, vaska] of positions) {
+      const y = 170 - h;
+      g.append(
+        svgEl('circle', { cx: x, cy: y + 5, r: 4.6, class: 'scene-fg' }),
+        p(
+          `M${x - 5.4} ${y + 11} q5.4 -3 10.8 0 l1.8 ${h - 12} h-14.4 z`,
+          'scene-fg'
+        )
+      );
+      if (vaska) {
+        g.append(
+          rect(x + 8, 170 - h * 0.42, 5.5, h * 0.42, 'scene-fg'),
+          p(`M${x + 10.7} ${170 - h * 0.42} v-${h * 0.3}`, 'scene-fg-line')
+        );
+      }
+    }
+    return g;
+  };
+
+  if (mode === 'flyg') {
+    // Glasfasad med planet utanför, hängande gateskylt och rullband.
+    svg.append(
+      rect(0, 0, 400, 26, 'scene-tak'),
+      p('M0 26 h400 v3 h-400 z', 'scene-kant'),
+      svgEl('g', { class: 'scene-glas' },
+        ...[40, 100, 160, 220, 280, 340].map((x) => rect(x - 2, 26, 4, 96, 'scene-post'))
+      ),
+      // Flygplan i profil utanför glaset.
+      svgEl('g', { class: 'scene-fordon' },
+        p('M196 104 q34 -13 92 -9 l38 3 q10 1 10 5 t-10 5 l-40 3 q-58 4 -90 -7 z', 'scene-mg'),
+        p('M244 96 l16 -22 h9 l-8 22 z', 'scene-mg'),
+        p('M262 103 l30 -6 l26 4 l-28 6 z', 'scene-mg'),
+        svgEl('circle', { cx: 322, cy: 100, r: 2.4, class: 'scene-blink' })
+      ),
+      rect(0, 122, 400, 48, 'scene-golv'),
+      p('M0 122 h400', 'scene-fg-line'),
+      folk([[54, 40, true], [92, 36, false], [300, 42, true], [346, 34, true]]),
+      // Hängande skylt med gatepilar.
+      svgEl('g', { class: 'scene-skylt' },
+        rect(140, 6, 120, 22, 'scene-skyltplatta'),
+        svgEl('text', { x: 200, y: 21, class: 'scene-skylttext' }, 'GATE A–F →')
+      )
+    );
+    return svg;
+  }
+
+  if (mode === 'tag') {
+    // Perrongtak på pelare, spår som viker av och en stationsklocka.
+    svg.append(
+      rect(0, 0, 400, 20, 'scene-tak'),
+      svgEl('g', { class: 'scene-valv' },
+        ...[0, 80, 160, 240, 320].map((x) =>
+          p(`M${x} 20 q40 26 80 0`, 'scene-valv-bage')
+        )
+      ),
+      ...[16, 130, 270, 384].map((x) => rect(x - 3, 20, 6, 104, 'scene-post')),
+      // Tåget vid perrongen.
+      svgEl('g', { class: 'scene-fordon' },
+        p('M0 62 h150 q14 0 16 12 v42 h-166 z', 'scene-mg'),
+        ...[18, 46, 74, 102].map((x) => rect(x, 72, 18, 16, 'scene-ruta')),
+        rect(126, 74, 16, 14, 'scene-ruta'),
+        svgEl('circle', { cx: 158, cy: 104, r: 3.4, class: 'scene-blink' })
+      ),
+      rect(0, 124, 400, 46, 'scene-golv'),
+      p('M0 124 h400', 'scene-fg-line'),
+      // Spåret bortom perrongkanten.
+      p('M172 168 L262 118 M196 168 L272 118', 'scene-ral'),
+      folk([[212, 38, true], [246, 34, false], [318, 40, true]]),
+      svgEl('g', { class: 'scene-klocka' },
+        svgEl('circle', { cx: 340, cy: 40, r: 17, class: 'scene-klockskiva' }),
+        p('M340 40 v-10 M340 40 l7 5', 'scene-visare'),
+        rect(338, 6, 4, 8, 'scene-post')
+      )
+    );
+    return svg;
+  }
+
+  if (mode === 'buss') {
+    // Terminaltak, numrerade lägen och två bussar med nosen mot perrongen.
+    svg.append(
+      rect(0, 8, 400, 12, 'scene-tak'),
+      ...[30, 200, 370].map((x) => rect(x - 3, 20, 6, 100, 'scene-post')),
+      svgEl('g', { class: 'scene-fordon' },
+        p('M40 52 h116 q10 0 10 10 v58 h-126 z', 'scene-mg'),
+        rect(50, 60, 96, 22, 'scene-ruta'),
+        rect(52, 90, 20, 12, 'scene-ruta'),
+        svgEl('circle', { cx: 148, cy: 112, r: 3, class: 'scene-blink' })
+      ),
+      svgEl('g', { class: 'scene-fordon-bak' },
+        p('M246 66 h96 q8 0 8 8 v46 h-104 z', 'scene-mg'),
+        rect(254, 72, 80, 18, 'scene-ruta')
+      ),
+      rect(0, 120, 400, 50, 'scene-golv'),
+      p('M0 120 h400', 'scene-fg-line'),
+      // Målade markeringar på asfalten.
+      p('M20 140 h60 M120 140 h60 M220 140 h60 M320 140 h60', 'scene-markering'),
+      folk([[186, 36, true], [216, 32, false], [362, 38, true]]),
+      svgEl('g', { class: 'scene-skylt' },
+        rect(168, 24, 64, 20, 'scene-skyltplatta'),
+        svgEl('text', { x: 200, y: 38, class: 'scene-skylttext' }, 'LÄGE 1–26')
+      )
+    );
+    return svg;
+  }
+
+  // Hamnen: kaj, pollare, landgång och en skrovsida med lastport.
+  svg.append(
+    svgEl('g', { class: 'scene-fordon' },
+      p('M212 30 h176 v78 q-88 12 -176 0 z', 'scene-mg'),
+      ...[228, 254, 280, 306, 332].map((x) =>
+        svgEl('circle', { cx: x, cy: 62, r: 6, class: 'scene-ruta' })
+      ),
+      rect(236, 82, 34, 26, 'scene-lastport'),
+      rect(300, 6, 26, 26, 'scene-skorsten'),
+      svgEl('circle', { cx: 216, cy: 34, r: 3, class: 'scene-blink' })
+    ),
+    // Landgång från kajen upp till lastporten.
+    p('M150 148 L238 96 l10 6 L162 156 z', 'scene-mg'),
+    rect(0, 118, 400, 52, 'scene-golv'),
+    p('M0 118 h400', 'scene-fg-line'),
+    // Vattnet mellan kaj och skrov.
+    svgEl('g', { class: 'scene-vatten' },
+      p('M196 128 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag'),
+      p('M188 140 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag scene-vag-2')
+    ),
+    ...[36, 96].map((x) =>
+      svgEl('g', {},
+        p(`M${x} 118 v-14 q0 -5 6 -5 t6 5 v14 z`, 'scene-fg'),
+        p(`M${x + 6} 106 q26 16 54 2`, 'scene-fg-line')
+      )
+    ),
+    folk([[132, 36, true], [166, 32, true]])
+  );
+  return svg;
+}
+
+// ------------------------------------------------------------------- skärmen
+
+export function renderStation(opts: StationOpts): StationHandle {
+  const { city, mode, difficulty, money, onBuy, onBack, onAllModes } = opts;
+  const wrap = el('div', { class: 'stack station', 'data-mode': mode });
+  let board: BoardHandle | null = null;
+  let sheet: HTMLElement | null = null;
+
+  startStation(mode);
+
+  // ---- hallen
+  const scene = el('section', { class: 'station-scene' });
+  const foto = el('img', {
+    class: 'station-scene-photo',
+    src: `./cities/${city.id}.jpg`,
+    alt: '',
+    loading: 'lazy',
+    decoding: 'async',
+  }) as HTMLImageElement;
+  foto.addEventListener('error', () => foto.remove());
+  scene.append(foto, el('div', { class: 'station-scene-scrim' }), scen(mode));
+  scene.append(
+    el('div', { class: 'station-plate' },
+      el('span', { class: 'station-kicker' }, STATION_KICKER[mode]),
+      el('h1', { class: 'station-name' }, STATION_NAMN[mode](city)),
+      el('span', { class: 'station-code' },
+        icon(mode),
+        mode === 'flyg' ? airportCode(city) : city.country
+      )
+    )
+  );
+  wrap.append(scene);
+
+  // ---- biljettvyn
+  const stangSheet = () => {
+    if (!sheet) return;
+    sheet.classList.add('sheet-ut');
+    const gammal = sheet;
+    sheet = null;
+    window.setTimeout(() => gammal.remove(), 220);
+  };
+
+  const oppnaSheet = (d: Departure) => {
+    stangSheet();
+    const rad = (etikett: string, varde: string | Node, tone?: string) =>
+      el('div', { class: `ticket-line ${tone ?? ''}` },
+        el('span', { class: 'ticket-label' }, etikett),
+        el('span', { class: 'ticket-value' }, varde)
+      );
+    const gate = `${STAND_LABEL[mode]} ${d.stand}`;
+    const har_rad = opts.cash >= d.route.price;
+    const kort = el('div', { class: 'ticket-sheet', role: 'dialog', 'aria-modal': 'true' },
+      el('div', { class: 'ticket-stub' },
+        el('span', { class: 'ticket-kicker' }, `${city.name} → ${d.city.name}`),
+        el('h2', { class: 'ticket-dest' }, d.city.name),
+        el('span', { class: 'ticket-country' }, d.city.country)
+      ),
+      el('div', { class: 'ticket-body' },
+        rad('Avgång', hhmm(d.time + d.delay)),
+        rad('Restid', durationText(d.minutes)),
+        rad(
+          'Transport',
+          `${d.operator} · ${d.code}`
+        ),
+        rad(gate.split(' ')[0]!, d.stand),
+        d.code === '—' ? '' : rad('Status', statusText(d)),
+        d.terminal ? rad('Terminal', d.terminal.replace('Terminal ', '')) : '',
+        rad(
+          'Resdagar',
+          `${d.route.days} ${d.route.days === 1 ? 'dag' : 'dagar'}`
+        ),
+        rad('Pris', money(d.route.price), 'ticket-price'),
+        d.status === 'installd'
+          ? el('p', { class: 'ticket-note ticket-note-varning' },
+              'Turen är inställd. Du bokas om till nästa avgång utan extra kostnad.')
+          : d.delay > 0
+            ? el('p', { class: 'ticket-note' },
+                `Avgången är ${d.delay} minuter försenad. Resan tar lika lång tid ändå.`)
+            : el('p', { class: 'ticket-note' }, d.route.desc)
+      ),
+      el('div', { class: 'ticket-actions' },
+        button(
+          har_rad ? 'Köp biljett' : 'Kassan räcker inte',
+          () => {
+            if (!har_rad) return;
+            stangSheet();
+            onBuy(d.city, d.route);
+          },
+          {
+            class: `btn ${har_rad ? 'btn-primary' : 'btn-ghost'}`,
+            disabled: har_rad ? undefined : true,
+          }
+        ),
+        button('Avbryt', stangSheet, { class: 'btn btn-ghost' })
+      )
+    );
+    const overlay = el('div', { class: 'sheet-overlay' }, kort);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) stangSheet();
+    });
+    sheet = overlay;
+    document.body.append(overlay);
+    kort.querySelector('button')?.focus({ preventScroll: true });
+  };
+
+  // ---- tavlan
+  board = renderBoard({
+    from: city,
+    mode,
+    difficulty,
+    money,
+    onPick: oppnaSheet,
+  });
+  wrap.append(board.node);
+  wrap.append(el('p', { class: 'station-info' }, STATION_INFO[mode]));
+
+  // ---- hela linjenätet härifrån
+  const alla = stationDestinations(city, mode, difficulty);
+  const lista = el('section', { class: 'panel station-alla' });
+  lista.append(
+    el('div', { class: 'panel-head' },
+      el('h2', {}, 'Alla linjer härifrån'),
+      el(
+        'span',
+        { class: 'tag' },
+        `${alla.length} ${alla.length === 1 ? 'destination' : 'destinationer'}`
+      )
+    ),
+    el('p', { class: 'muted' },
+      `Tavlan visar de närmaste avgångarna. Här står hela linjenätet, med det ` +
+        `pris och den restid som gäller för ${
+          mode === 'flyg' ? 'flyget' : mode === 'tag' ? 'tåget' : mode === 'buss' ? 'bussen' : 'färjan'
+        }.`
+    )
+  );
+  const sok = el('input', {
+    class: 'search',
+    type: 'search',
+    placeholder: 'Sök stad eller land',
+    'aria-label': 'Sök destination',
+  }) as HTMLInputElement;
+  const tabell = el('div', { class: 'dest-list' });
+  /**
+   * Listan är stationens linjenät, inte dess skyltfönster. På en storflygplats
+   * är den fyrtiofyra rader lång och trycker ner tavlan ur skärmen, så den
+   * börjar hopfälld och fälls ut av den som verkligen letar.
+   */
+  const FORST = 8;
+  let visaAlla = false;
+  const merKnapp = button('', () => {
+    visaAlla = !visaAlla;
+    mala();
+  }, { class: 'btn btn-ghost station-mer' });
+  const nyckel = (t: string) =>
+    t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  const mala = () => {
+    clear(tabell);
+    const behov = nyckel(sok.value.trim());
+    const trafffar = alla.filter(
+      (a) =>
+        behov === '' ||
+        nyckel(a.city.name).includes(behov) ||
+        nyckel(a.city.country).includes(behov)
+    );
+    if (trafffar.length === 0) {
+      tabell.append(el('p', { class: 'muted' }, 'Ingen destination matchar sökningen.'));
+      merKnapp.hidden = true;
+      return;
+    }
+    // En sökning visar alltid allt den hittat; det är ju det man sökt efter.
+    const soker = behov !== '';
+    const synliga = soker || visaAlla ? trafffar : trafffar.slice(0, FORST);
+    merKnapp.hidden = soker || trafffar.length <= FORST;
+    merKnapp.textContent = visaAlla
+      ? 'Visa färre'
+      : `Visa alla ${trafffar.length} linjer`;
+    for (const { city: to, route } of synliga) {
+      const rad = opts.cash >= route.price;
+      tabell.append(
+        button(
+          el('span', { class: 'dest-row' },
+            el('span', { class: 'dest-name' }, to.name),
+            el('span', { class: 'dest-country' }, to.country),
+            el('span', { class: 'dest-km' }, durationText(travelMinutes(city, to, mode))),
+            el('span', { class: 'dest-mode' }, icon(mode), el('span', {}, route.label)),
+            el('span', { class: `dest-price ${rad ? '' : 'dest-price-out'}` }, money(route.price)),
+            el('span', { class: 'dest-days' },
+              `${route.days} ${route.days === 1 ? 'dag' : 'dagar'}`)
+          ),
+          () =>
+            oppnaSheet({
+              id: `lista|${to.id}`,
+              city: to,
+              mode,
+              route,
+              // Nästa rimliga avgång, så att biljetten ser ut som en biljett.
+              time: Math.round(wallClock() + 25),
+              dag: 0,
+              delay: 0,
+              code: '—',
+              operator: '—',
+              stand: '—',
+              minutes: travelMinutes(city, to, mode),
+              status: 'itid',
+            }),
+          { class: `dest ${rad ? '' : 'dest-poor'}`, 'data-sound': 'av' }
+        )
+      );
+    }
+  };
+  sok.addEventListener('input', mala);
+  mala();
+  lista.append(el('div', { class: 'row' }, sok), tabell, merKnapp);
+  wrap.append(lista);
+
+  wrap.append(
+    el('div', { class: 'row station-utgang' },
+      button('Se alla färdsätt på kartan', onAllModes, { class: 'btn btn-ghost' }),
+      button('Tillbaka till staden', onBack, { class: 'btn btn-ghost' })
+    )
+  );
+
+  return {
+    node: wrap,
+    stop: () => {
+      board?.stop();
+      stangSheet();
+      stopStation();
+    },
+  };
+}

@@ -128,6 +128,12 @@ export function cycleVolume(): VolumeLevel {
   }
   const c = ensureCtx();
   if (c && master) master.gain.setValueAtTime(LEVEL_GAIN[level], c.currentTime);
+  /**
+   * Slog spelaren på ljudet medan hen stod på en station fanns ingen
+   * ljudkontext att bygga mattan i när stationen öppnades. Den startas därför
+   * om här, annars förblir stationen tyst tills man gått ut och in igen.
+   */
+  if (level > 0 && onskadStation && !aktivStation) startStation(onskadStation);
   return level;
 }
 
@@ -283,7 +289,9 @@ function stavelse(
   dur: number,
   pitch: number,
   vokal: Formant,
-  gain: number
+  gain: number,
+  /** Vart rösten ska - luren, högtalaren eller rakt ut. */
+  dest?: AudioNode
 ): void {
   if (!ctx || !master) return;
   const osc = ctx.createOscillator();
@@ -326,7 +334,7 @@ function stavelse(
   g.gain.setValueAtTime(gain, t0 + dur * 0.7);
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
 
-  summa.connect(lur).connect(g).connect(master);
+  summa.connect(lur).connect(g).connect(dest ?? master);
   osc.start(t0);
   osc.stop(t0 + dur + 0.02);
 }
@@ -341,7 +349,8 @@ function replik(
   bas: number,
   gain = 0.09,
   /** Över 1 ger längre, mer mumlande stavelser. */
-  tempo = 1
+  tempo = 1,
+  dest?: AudioNode
 ): void {
   let t = t0;
   for (let i = 0; i < stavelser; i++) {
@@ -349,7 +358,7 @@ function replik(
     // Tonfallet sjunker mot slutet, som i ett påstående på svenska.
     const lage = bas * (1 - (i / stavelser) * 0.18 + (Math.random() - 0.5) * 0.06);
     const vokal = VOKALER[Math.floor(Math.random() * VOKALER.length)]!;
-    stavelse(t, dur, lage, vokal, gain);
+    stavelse(t, dur, lage, vokal, gain, dest);
     t += dur + (0.02 + Math.random() * 0.03) * tempo;
   }
 }
@@ -539,5 +548,445 @@ export function playSound(name: Sound): void {
         { type: 'sawtooth', gain: 0.07 }
       );
       break;
+  }
+}
+
+// ------------------------------------------------------------- stationsljud
+
+/**
+ * Stationernas ljudbild.
+ *
+ * En avgångstavla som är tyst är en tabell. Det som gör skillnaden mellan en
+ * meny och en flygplats är att det låter runtomkring: sorl, rullväskor, ett
+ * utrop i högtalaren som ingen hör orden i.
+ *
+ * Ljudet byggs i två lager. Underst en matta som ligger och går så länge man
+ * står kvar - sorlet, motorljudet, vågorna. Ovanpå den enstaka händelser som
+ * slår till med några sekunders mellanrum och aldrig låter exakt likadant två
+ * gånger, eftersom både tidpunkt, tonhöjd och längd lottas.
+ *
+ * Ingen musik. Det är miljön som ska höras.
+ */
+
+export type StationKind = 'flyg' | 'tag' | 'buss' | 'farja';
+
+/** Ett enda brusbuffert-objekt som alla loopar delar på. */
+let brusbuffert: AudioBuffer | null = null;
+
+function loopbuffert(c: AudioContext): AudioBuffer {
+  if (brusbuffert) return brusbuffert;
+  const len = c.sampleRate * 4;
+  const buf = c.createBuffer(1, len, c.sampleRate);
+  const data = buf.getChannelData(0);
+  // Brunt brus: integrerat vitt brus, mjukare och mer likt rumston.
+  let last = 0;
+  for (let i = 0; i < len; i++) {
+    const white = Math.random() * 2 - 1;
+    last = (last + 0.02 * white) / 1.02;
+    data[i] = last * 3.5;
+  }
+  brusbuffert = buf;
+  return buf;
+}
+
+/**
+ * En efterklang som räcker för en stationshall. Ingen faltning, bara en kort
+ * återkopplad fördröjning - det är billigt och örat hör ändå ett rum.
+ */
+function hall(c: AudioContext, dest: AudioNode, tid = 0.19, aterkoppling = 0.3) {
+  const delay = c.createDelay(1);
+  delay.delayTime.value = tid;
+  const fb = c.createGain();
+  fb.gain.value = aterkoppling;
+  const dampning = c.createBiquadFilter();
+  dampning.type = 'lowpass';
+  dampning.frequency.value = 2200;
+  delay.connect(dampning).connect(fb).connect(delay);
+  delay.connect(dest);
+  return delay;
+}
+
+interface Lager {
+  noder: AudioNode[];
+  kallor: AudioBufferSourceNode[];
+  oscar: OscillatorNode[];
+}
+
+/** Loopande, filtrerat brus - grunden i varje stationsmatta. */
+function matta(
+  c: AudioContext,
+  ut: AudioNode,
+  lager: Lager,
+  opts: {
+    typ?: BiquadFilterType;
+    frekvens: number;
+    q?: number;
+    gain: number;
+    /** Långsam vaggning av filtret, i hertz. Ger vågor och vindbyar. */
+    svaj?: { hz: number; djup: number };
+  }
+): void {
+  const src = c.createBufferSource();
+  src.buffer = loopbuffert(c);
+  src.loop = true;
+  const filter = c.createBiquadFilter();
+  filter.type = opts.typ ?? 'lowpass';
+  filter.frequency.value = opts.frekvens;
+  filter.Q.value = opts.q ?? 0.7;
+  const g = c.createGain();
+  g.gain.setValueAtTime(0, c.currentTime);
+  g.gain.linearRampToValueAtTime(opts.gain, c.currentTime + 1.2);
+  src.connect(filter).connect(g).connect(ut);
+  src.start();
+  lager.kallor.push(src);
+  lager.noder.push(filter, g);
+
+  if (opts.svaj) {
+    const lfo = c.createOscillator();
+    lfo.frequency.value = opts.svaj.hz;
+    const lfoGain = c.createGain();
+    lfoGain.gain.value = opts.svaj.djup;
+    lfo.connect(lfoGain).connect(filter.frequency);
+    lfo.start();
+    lager.oscar.push(lfo);
+    lager.noder.push(lfoGain);
+  }
+}
+
+/** Låg, brummande motor: dieselbuss, fartygsmaskin, avlägsen jetmotor. */
+function motor(
+  c: AudioContext,
+  ut: AudioNode,
+  lager: Lager,
+  grundton: number,
+  gain: number,
+  svaj = 0.6
+): void {
+  for (const [mult, niva] of [
+    [1, 1],
+    [2.01, 0.5],
+    [3.02, 0.22],
+  ] as const) {
+    const osc = c.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.value = grundton * mult;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0, c.currentTime);
+    g.gain.linearRampToValueAtTime(gain * niva, c.currentTime + 1.5);
+    const lp = c.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 320;
+    osc.connect(lp).connect(g).connect(ut);
+    osc.start();
+    lager.oscar.push(osc);
+    lager.noder.push(g, lp);
+  }
+  // Varvtalet vandrar långsamt, annars låter motorn som en synt.
+  const lfo = c.createOscillator();
+  lfo.frequency.value = 0.09;
+  const lfoGain = c.createGain();
+  lfoGain.gain.value = svaj;
+  lfo.connect(lfoGain);
+  for (const osc of lager.oscar) lfoGain.connect(osc.frequency);
+  lfo.start();
+  lager.oscar.push(lfo);
+  lager.noder.push(lfoGain);
+}
+
+let aktivStation: {
+  kind: StationKind;
+  lager: Lager;
+  ut: GainNode;
+  timer: number;
+} | null = null;
+
+/** Vilken station spelaren står på, även när ljudet råkar vara avstängt. */
+let onskadStation: StationKind | null = null;
+
+/** Högtalarutrop: pling-plong och sedan ett obegripligt meddelande. */
+function utrop(kind: StationKind): void {
+  const c = ensureCtx();
+  if (!c || !master) return;
+  const t0 = c.currentTime + 0.05;
+  const rum = hall(c, master, kind === 'flyg' ? 0.24 : 0.3, 0.34);
+  const buss = c.createGain();
+  buss.gain.value = 0.9;
+  buss.connect(master);
+  buss.connect(rum);
+
+  // Signalen före utropet. Flyget har sitt bing-bong, tåget en tretonsslinga.
+  const signal: Array<[number, number]> =
+    kind === 'flyg'
+      ? [[987.77, 0], [739.99, 0.28]]
+      : kind === 'tag'
+        ? [[659.25, 0], [880, 0.16], [1174.66, 0.32]]
+        : [[880, 0], [659.25, 0.22]];
+  for (const [f, at] of signal) {
+    const osc = c.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0, t0 + at);
+    g.gain.linearRampToValueAtTime(0.09, t0 + at + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + at + 0.55);
+    osc.connect(g).connect(buss);
+    osc.start(t0 + at);
+    osc.stop(t0 + at + 0.6);
+  }
+
+  /**
+   * Själva meddelandet går genom ett smalt band kring 1 400 Hz, vilket är vad
+   * en takhögtalare släpper igenom. Man ska höra att någon säger något, och
+   * inte en stavelse av vad.
+   */
+  const horn = c.createBiquadFilter();
+  horn.type = 'bandpass';
+  horn.frequency.value = 1400;
+  horn.Q.value = 1.4;
+  const rost = c.createGain();
+  rost.gain.value = 0.75;
+  horn.connect(rost).connect(buss);
+  const bas = 150 + Math.random() * 70;
+  const stavelser = 9 + Math.floor(Math.random() * 9);
+  replik(t0 + 0.9, stavelser, bas, 0.075, 1.15, horn);
+}
+
+/** En enskild stationshändelse. Vilken lottas ur stationens egen lista. */
+function stationsHandelse(kind: StationKind): void {
+  const c = ensureCtx();
+  if (!c || !master) return;
+  const t = c.currentTime + 0.02;
+  const r = Math.random();
+
+  if (kind === 'flyg') {
+    if (r < 0.28) return utrop('flyg');
+    if (r < 0.5) {
+      // Rullväska: ett dovt muller med hjulskarvar i.
+      const dur = 1.4 + Math.random() * 1.4;
+      noise(dur, t, { gain: 0.05, from: 260, to: 150, q: 0.8, type: 'lowpass' });
+      for (let i = 0; i < 7; i++) {
+        noise(0.03, t + i * (dur / 7) + Math.random() * 0.05, {
+          gain: 0.025,
+          from: 1800,
+          to: 900,
+          q: 2,
+        });
+      }
+      return;
+    }
+    if (r < 0.68) {
+      // Boardingpiper vid gaten.
+      for (let i = 0; i < 2 + Math.floor(Math.random() * 2); i++) {
+        tone(2093, t + i * 0.22, 0.09, { type: 'square', gain: 0.035 });
+      }
+      return;
+    }
+    // Ett plan som drar förbi längre bort.
+    noise(3.4, t, { gain: 0.055, from: 420, to: 1100, q: 0.6, type: 'bandpass' });
+    tone(96, t, 3.4, { type: 'sawtooth', gain: 0.02, slide: 128 });
+    return;
+  }
+
+  if (kind === 'tag') {
+    if (r < 0.24) return utrop('tag');
+    if (r < 0.45) {
+      // Bromsar: metallisk gnissling som klingar av.
+      const bas = 1500 + Math.random() * 900;
+      tone(bas, t, 1.9, { type: 'sine', gain: 0.035, slide: bas * 0.45 });
+      tone(bas * 1.5, t + 0.1, 1.5, { type: 'sine', gain: 0.018, slide: bas * 0.6 });
+      noise(2.1, t, { gain: 0.035, from: 900, to: 260, q: 1.2 });
+      return;
+    }
+    if (r < 0.66) {
+      // Dörrsignalen: tre pip och ett dovt slag när dörren går igen.
+      for (let i = 0; i < 3; i++) {
+        tone(1046, t + i * 0.24, 0.11, { type: 'square', gain: 0.04 });
+      }
+      noise(0.18, t + 0.85, { gain: 0.06, from: 320, to: 120, q: 0.9, type: 'lowpass' });
+      return;
+    }
+    if (r < 0.85) {
+      // Hjul över skarvarna, allt glesare när tåget rullar iväg.
+      let dt = 0;
+      for (let i = 0; i < 14; i++) {
+        noise(0.05, t + dt, { gain: 0.045, from: 420, to: 180, q: 1.4 });
+        dt += 0.12 + i * 0.012;
+      }
+      return;
+    }
+    tone(880, t, 0.7, { type: 'sawtooth', gain: 0.045, slide: 1320 });
+    return;
+  }
+
+  if (kind === 'buss') {
+    if (r < 0.22) return utrop('buss');
+    if (r < 0.48) {
+      // Tryckluftsbroms.
+      noise(0.9, t, { gain: 0.08, from: 3200, to: 900, q: 0.8, type: 'highpass' });
+      return;
+    }
+    if (r < 0.7) {
+      // Dörren viker upp sig och slår igen.
+      noise(0.55, t, { gain: 0.05, from: 2400, to: 1200, q: 1 });
+      noise(0.14, t + 0.75, { gain: 0.07, from: 300, to: 110, q: 0.9, type: 'lowpass' });
+      return;
+    }
+    if (r < 0.88) {
+      // Någon gasar ut från läget.
+      tone(58, t, 2.2, { type: 'sawtooth', gain: 0.05, slide: 104 });
+      noise(2.2, t, { gain: 0.03, from: 260, to: 520, q: 0.7, type: 'lowpass' });
+      return;
+    }
+    tone(392, t, 0.3, { type: 'square', gain: 0.03 });
+    return;
+  }
+
+  // Hamnen
+  if (r < 0.2) return utrop('farja');
+  if (r < 0.4) {
+    // Mistlur: två toner i kvint, långa och dova.
+    tone(104, t, 2.6, { type: 'sawtooth', gain: 0.07 });
+    tone(156, t + 0.06, 2.4, { type: 'sawtooth', gain: 0.045 });
+    noise(2.6, t, { gain: 0.02, from: 180, to: 90, q: 0.6, type: 'lowpass' });
+    return;
+  }
+  if (r < 0.62) {
+    // Trut. Tonhöjden vaggar, annars låter det som en visselpipa.
+    const bas = 1400 + Math.random() * 500;
+    for (let i = 0; i < 2 + Math.floor(Math.random() * 3); i++) {
+      tone(bas, t + i * 0.34, 0.26, { type: 'sawtooth', gain: 0.028, slide: bas * 1.5 });
+    }
+    return;
+  }
+  if (r < 0.84) {
+    // En våg som slår i kajen.
+    noise(1.5, t, { gain: 0.06, from: 900, to: 260, q: 0.6, type: 'lowpass' });
+    return;
+  }
+  // Kätting och landgång.
+  for (let i = 0; i < 5; i++) {
+    noise(0.06, t + i * 0.13, { gain: 0.03, from: 2600, to: 1400, q: 2.5 });
+  }
+}
+
+/**
+ * Startar stationens ljudmatta. Anropas när en station öppnas och byts ut om
+ * spelaren går direkt från en station till en annan.
+ */
+export function startStation(kind: StationKind): void {
+  onskadStation = kind;
+  if (aktivStation?.kind === kind) return;
+  stopStation(true);
+  const c = ensureCtx();
+  if (!c || !master) return;
+
+  const ut = c.createGain();
+  ut.gain.value = 1;
+  ut.connect(master);
+  const lager: Lager = { noder: [ut], kallor: [], oscar: [] };
+  const rum = hall(c, ut, kind === 'farja' ? 0.14 : 0.26, kind === 'farja' ? 0.16 : 0.32);
+  const hallbuss = c.createGain();
+  hallbuss.gain.value = 0.5;
+  hallbuss.connect(rum);
+  lager.noder.push(hallbuss);
+
+  if (kind === 'flyg') {
+    // Sorl i en hög hall, plus ventilation och en avlägsen jetmotor.
+    matta(c, hallbuss, lager, { frekvens: 620, gain: 0.075, svaj: { hz: 0.07, djup: 180 } });
+    matta(c, ut, lager, { frekvens: 180, gain: 0.05 });
+    matta(c, ut, lager, { typ: 'bandpass', frekvens: 2400, q: 0.9, gain: 0.012 });
+    motor(c, ut, lager, 41, 0.012, 0.4);
+  } else if (kind === 'tag') {
+    // Lägre tak, hårdare ytor: mer eko och ett svagt rälsbrum.
+    matta(c, hallbuss, lager, { frekvens: 720, gain: 0.07, svaj: { hz: 0.05, djup: 220 } });
+    matta(c, ut, lager, { frekvens: 140, gain: 0.055 });
+    motor(c, ut, lager, 33, 0.01, 0.3);
+  } else if (kind === 'buss') {
+    // Utomhus: trafik, tomgång och betydligt mindre eko.
+    matta(c, ut, lager, { frekvens: 480, gain: 0.055, svaj: { hz: 0.11, djup: 150 } });
+    matta(c, ut, lager, { frekvens: 220, gain: 0.05 });
+    motor(c, ut, lager, 47, 0.026, 1.1);
+  } else {
+    // Vatten och vind, och en fartygsmaskin som går på tomgång vid kaj.
+    matta(c, ut, lager, {
+      typ: 'lowpass',
+      frekvens: 700,
+      gain: 0.085,
+      svaj: { hz: 0.13, djup: 380 },
+    });
+    matta(c, ut, lager, {
+      typ: 'bandpass',
+      frekvens: 900,
+      q: 0.5,
+      gain: 0.035,
+      svaj: { hz: 0.06, djup: 500 },
+    });
+    motor(c, ut, lager, 28, 0.02, 0.5);
+  }
+
+  /**
+   * Händelserna kommer oregelbundet. Ett fast intervall hörs som ett mönster
+   * efter ett par varv, och då är illusionen borta.
+   */
+  const schemalagg = (): number =>
+    window.setTimeout(() => {
+      if (!aktivStation || aktivStation.kind !== kind) return;
+      stationsHandelse(kind);
+      aktivStation.timer = schemalagg();
+    }, 2500 + Math.random() * 7000);
+
+  aktivStation = { kind, lager, ut, timer: 0 };
+  aktivStation.timer = schemalagg();
+}
+
+/** Tystar stationen. Mattan tonas ut i stället för att klippas. */
+export function stopStation(byte = false): void {
+  if (!byte) onskadStation = null;
+  const s = aktivStation;
+  if (!s) return;
+  aktivStation = null;
+  window.clearTimeout(s.timer);
+  const c = ctx;
+  if (!c) return;
+  const t = c.currentTime;
+  s.ut.gain.cancelScheduledValues(t);
+  s.ut.gain.setValueAtTime(s.ut.gain.value, t);
+  s.ut.gain.linearRampToValueAtTime(0, t + 0.45);
+  window.setTimeout(() => {
+    for (const osc of s.lager.oscar) {
+      try {
+        osc.stop();
+      } catch {
+        // redan stoppad
+      }
+    }
+    for (const k of s.lager.kallor) {
+      try {
+        k.stop();
+      } catch {
+        // redan stoppad
+      }
+    }
+    for (const n of s.lager.noder) n.disconnect();
+  }, 600);
+}
+
+/** Enstaka ljud som hör till tavlan snarare än till hallen. */
+export function playStation(kind: StationKind, what: 'tavla' | 'utrop'): void {
+  const c = ensureCtx();
+  if (!c) return;
+  if (what === 'utrop') {
+    utrop(kind);
+    return;
+  }
+  // Tavlan som bläddrar: en handfull torra klick, som en fallbladstavla.
+  const t = c.currentTime;
+  for (let i = 0; i < 5 + Math.floor(Math.random() * 6); i++) {
+    noise(0.022, t + i * 0.028 + Math.random() * 0.01, {
+      gain: 0.03,
+      from: 2600,
+      to: 1500,
+      q: 3,
+    });
   }
 }

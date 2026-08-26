@@ -3875,3 +3875,823 @@ input:focus-visible {
     transparent 100%
   );
 }
+
+/* ====================================================================
+   STATIONERNA
+   Flygplats, tågstation, bussterminal och hamn. Varje station ska se ut
+   som sig själv: egen hall, egen tavla, egna ord. Färgen på tavlan sätts
+   av --led och byts per färdsätt, precis som verkliga anläggningar har
+   olika displayer.
+   ==================================================================== */
+
+.station {
+  gap: 12px;
+}
+
+/* ------------------------------------------------------------ hallen */
+
+.station-scene {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 400 / 170;
+  min-height: 190px;
+  /* På en bred skärm skulle proportionen ge en halvmeter hall. Taket gör att
+     hallen förblir en vinjett, och SVG:n beskär mot golvet där folket står. */
+  max-height: 300px;
+  background: #04121c;
+  box-shadow: var(--shadow);
+  isolation: isolate;
+}
+
+.station-scene-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Fotot är utsikten genom fönstret, inte motivet. Det ska ligga bakom. */
+  filter: brightness(0.5) saturate(0.75) blur(1.5px);
+}
+
+.station-scene-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(4, 18, 28, 0.85) 0%, rgba(4, 18, 28, 0.1) 42%, rgba(4, 18, 28, 0.9) 100%);
+}
+
+.station-scene-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Siluetterna. Tre djup: tak och golv, fordon, och folket närmast. */
+.scene-tak,
+.scene-golv,
+.scene-post,
+.scene-kant {
+  fill: #030d15;
+}
+
+.scene-golv {
+  fill: #05121b;
+}
+
+.scene-mg {
+  fill: #08202e;
+}
+
+.scene-fg {
+  fill: #010a11;
+}
+
+.scene-fg-line {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 1.2;
+}
+
+.scene-ruta,
+.scene-lastport {
+  fill: rgba(242, 166, 59, 0.5);
+}
+
+.scene-lastport {
+  fill: rgba(242, 166, 59, 0.22);
+}
+
+.scene-skorsten {
+  fill: #061a26;
+}
+
+.scene-valv-bage {
+  fill: none;
+  stroke: #030d15;
+  stroke-width: 4;
+}
+
+.scene-ral {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 1.6;
+}
+
+.scene-markering {
+  fill: none;
+  stroke: rgba(242, 166, 59, 0.28);
+  stroke-width: 2;
+  stroke-dasharray: 10 8;
+}
+
+.scene-skyltplatta {
+  fill: #02141d;
+  stroke: rgba(242, 166, 59, 0.4);
+  stroke-width: 1;
+  rx: 3;
+}
+
+.scene-skylttext {
+  fill: var(--sun);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-anchor: middle;
+}
+
+.scene-klockskiva {
+  fill: #f3ead7;
+  stroke: #030d15;
+  stroke-width: 2.5;
+}
+
+.scene-visare {
+  stroke: #1d2b34;
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.scene-vag {
+  fill: none;
+  stroke: rgba(180, 220, 240, 0.28);
+  stroke-width: 1.6;
+  animation: vagor 7s linear infinite;
+}
+
+.scene-vag-2 {
+  animation-duration: 11s;
+  animation-direction: reverse;
+  stroke: rgba(180, 220, 240, 0.18);
+}
+
+@keyframes vagor {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-40px);
+  }
+}
+
+.scene-blink {
+  fill: #ff5b3a;
+  animation: fyrblink 2.6s steps(1, end) infinite;
+}
+
+@keyframes fyrblink {
+  0%,
+  8% {
+    opacity: 1;
+  }
+  9%,
+  100% {
+    opacity: 0.12;
+  }
+}
+
+.station-plate {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+}
+
+.station-kicker {
+  font-family: var(--font-display);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sun);
+}
+
+.station-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 6vw, 2rem);
+  line-height: 1.08;
+  color: var(--paper);
+}
+
+.station-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(4, 18, 28, 0.72);
+  border: 1px solid rgba(242, 166, 59, 0.45);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: var(--paper);
+}
+
+.station-code svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ------------------------------------------------------ avgångstavlan */
+
+.board {
+  --led: #ffb02e;
+  --led-dim: rgba(255, 176, 46, 0.42);
+  --led-glow: rgba(255, 176, 46, 0.28);
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #0a1620 0%, #050d14 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  font-family: 'SF Mono', ui-monospace, 'Roboto Mono', 'Menlo', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bildpunktsrastret som gör ytan till en skärm och inte till en tabell. */
+.board::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.32) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+}
+
+.board[data-mode='tag'] {
+  --led: #f4f0e4;
+  --led-dim: rgba(244, 240, 228, 0.4);
+  --led-glow: rgba(244, 240, 228, 0.22);
+}
+
+.board[data-mode='buss'] {
+  --led: #ffd24a;
+  --led-dim: rgba(255, 210, 74, 0.4);
+  --led-glow: rgba(255, 210, 74, 0.24);
+}
+
+.board[data-mode='farja'] {
+  --led: #7fe0ff;
+  --led-dim: rgba(127, 224, 255, 0.4);
+  --led-glow: rgba(127, 224, 255, 0.22);
+}
+
+.board-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px 9px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.board-title {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--led);
+  text-shadow: 0 0 14px var(--led-glow);
+}
+
+.board-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.board-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--palm-light);
+  animation: livepuls 2.4s ease-in-out infinite;
+}
+
+@keyframes livepuls {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.board-clock {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--led);
+  text-shadow: 0 0 16px var(--led-glow);
+  letter-spacing: 0.04em;
+}
+
+.board-cols,
+.board-pick {
+  display: grid;
+  gap: 2px 10px;
+  grid-template-columns: 4.5em minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    'time dest dest status'
+    'time code stand price';
+  align-items: center;
+}
+
+.board-cols {
+  padding: 7px 14px;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Kolumnrubrikerna hör till den breda layouten; smalt läge har etiketter
+   i cellerna i stället, annars stämmer inte rubrikerna med raderna. */
+.board-cols {
+  display: none;
+}
+
+.board-rows {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 6px;
+  max-height: 62vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.board-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    max-height 0.35s ease;
+  max-height: 120px;
+}
+
+.board-row:last-child {
+  border-bottom: 0;
+}
+
+.board-row-ny {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.board-row-bort {
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0;
+  overflow: hidden;
+}
+
+.board-pick {
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: 0;
+  text-align: left;
+  color: var(--led);
+  font: inherit;
+  cursor: pointer;
+}
+
+.board-pick:hover,
+.board-pick:focus-visible {
+  background: rgba(255, 255, 255, 0.05);
+  outline: none;
+}
+
+.board-pick:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--led-dim);
+}
+
+.board-cell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-time {
+  grid-area: time;
+  display: block;
+  font-size: 1.32rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 12px var(--led-glow);
+  align-self: center;
+}
+
+.col-dest {
+  grid-area: dest;
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  min-width: 0;
+}
+
+.col-dest-name {
+  /* Stadsnamnet är radens ärende. Landet får krympa först. */
+  flex: 0 1 auto;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 12px var(--led-glow);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-dest-land {
+  flex: 0 100 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  white-space: nowrap;
+}
+
+/* Avgångar som inte går i dag. Färjan till Helsingfors gick klockan 16:45,
+   och det är i morgon den går igen. */
+.col-dag {
+  display: block;
+  margin-top: -2px;
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  text-shadow: none;
+}
+
+.col-code {
+  grid-area: code;
+  font-size: 0.76rem;
+  color: var(--led-dim);
+  letter-spacing: 0.08em;
+}
+
+.col-stand {
+  grid-area: stand;
+  font-size: 0.76rem;
+  color: var(--led);
+  letter-spacing: 0.06em;
+}
+
+.col-stand::before {
+  content: attr(data-label) ' ';
+  color: rgba(255, 255, 255, 0.34);
+}
+
+.col-price {
+  grid-area: price;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: right;
+}
+
+.col-status {
+  grid-area: status;
+  justify-self: end;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--palm-light);
+  white-space: nowrap;
+}
+
+/* Statusarnas färger. Det är de som gör att tavlan går att läsa på avstånd. */
+.board-row[data-status='boarding'] .col-status,
+.board-row[data-status='snart'] .col-status {
+  color: #6ddf9f;
+  animation: statusblink 1.6s steps(1, end) infinite;
+}
+
+.board-row[data-status='sistautrop'] .col-status {
+  color: #ffd24a;
+  animation: statusblink 0.9s steps(1, end) infinite;
+}
+
+.board-row[data-status='incheckning'] .col-status {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.board-row[data-status='forsenad'] .col-status {
+  color: #ff9a4d;
+}
+
+.board-row[data-status='installd'] {
+  opacity: 0.55;
+}
+
+.board-row[data-status='installd'] .col-status {
+  color: #ff6b52;
+}
+
+.board-row[data-status='installd'] .col-time-h,
+.board-row[data-status='installd'] .col-dest-name {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+@keyframes statusblink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  61%,
+  100% {
+    opacity: 0.25;
+  }
+}
+
+/* Fallbladet: cellen viker ihop sig och slår upp med det nya värdet. */
+.flip {
+  animation: fallblad 0.36s ease;
+}
+
+@keyframes fallblad {
+  0% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+  35% {
+    transform: scaleY(0.08);
+    filter: brightness(2.4);
+  }
+  100% {
+    transform: scaleY(1);
+    filter: brightness(1);
+  }
+}
+
+/* Textremsan: samma besked som högtalaren ger, fast läsbart. */
+.board-ticker {
+  position: relative;
+  overflow: hidden;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--led-dim);
+}
+
+.board-ticker-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: remsa 26s linear infinite;
+}
+
+@keyframes remsa {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.station-mer {
+  width: 100%;
+}
+
+.station-mer[hidden] {
+  display: none;
+}
+
+.board-tom {
+  padding: 18px 14px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85rem;
+}
+
+.station-info {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 0.78rem;
+  color: rgba(246, 239, 224, 0.62);
+}
+
+.station-alla .dest-km {
+  font-variant-numeric: tabular-nums;
+}
+
+.station-utgang {
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------- biljetten */
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(3, 12, 20, 0.72);
+  backdrop-filter: blur(3px);
+  animation: sheetin 0.22s ease;
+}
+
+@media (min-width: 640px) {
+  .sheet-overlay {
+    align-items: center;
+  }
+}
+
+.sheet-ut {
+  animation: sheetut 0.2s ease forwards;
+}
+
+@keyframes sheetin {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheetut {
+  to {
+    opacity: 0;
+  }
+}
+
+.ticket-sheet {
+  width: min(420px, 100%);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  animation: sheetupp 0.26s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes sheetupp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+.ticket-stub {
+  padding: 16px 18px 14px;
+  background: linear-gradient(135deg, var(--sea) 0%, var(--sea-deep) 100%);
+  color: var(--paper);
+  /* Perforeringen mellan talongen och biljetten, som på ett riktigt kort. */
+  border-bottom: 2px dashed rgba(246, 239, 224, 0.35);
+}
+
+.ticket-kicker {
+  font-family: var(--font-display);
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sun);
+}
+
+.ticket-dest {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1.1;
+}
+
+.ticket-country {
+  font-size: 0.78rem;
+  color: rgba(246, 239, 224, 0.65);
+}
+
+.ticket-body {
+  padding: 12px 18px;
+}
+
+.ticket-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.ticket-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.ticket-value {
+  font-family: 'SF Mono', ui-monospace, 'Roboto Mono', 'Menlo', monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  text-align: right;
+}
+
+.ticket-price .ticket-value {
+  font-size: 1.15rem;
+  color: var(--stamp);
+}
+
+.ticket-note {
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.ticket-note-varning {
+  color: var(--stamp);
+  font-weight: 600;
+}
+
+.ticket-actions {
+  display: flex;
+  gap: 10px;
+  padding: 0 18px 18px;
+}
+
+.ticket-actions .btn {
+  flex: 1;
+}
+
+/* ------------------------------------------------- bredare skärmar */
+
+@media (min-width: 720px) {
+  .board-cols,
+  .board-pick {
+    display: grid;
+    grid-template-columns: 5.4em minmax(0, 1fr) 7.5em 6em 7em 8.5em;
+    grid-template-areas: 'time dest code stand price status';
+    gap: 12px;
+  }
+
+  .board-cols {
+    display: grid;
+  }
+
+  .col-dest {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .col-stand::before {
+    content: none;
+  }
+
+  .board-row {
+    max-height: 74px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-blink,
+  .scene-vag,
+  .board-ticker-text,
+  .board-dot,
+  .board-row[data-status] .col-status {
+    animation: none;
+  }
+
+  .flip {
+    animation: none;
+  }
+
+  /* Utan rullning står remsan still, och då får den inte ligga kvar
+     utanför skärmkanten där ingen ser den. */
+  .board-ticker-text {
+    padding-left: 14px;
+    white-space: normal;
+  }
+
+  .board-row,
+  .ticket-sheet,
+  .sheet-overlay {
+    animation: none;
+    transition: none;
+  }
+}

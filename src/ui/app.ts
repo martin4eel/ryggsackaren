@@ -69,6 +69,7 @@ import {
 import type { Stamp } from '../data/stamps';
 import { forgetMapView, renderMapFrame, renderTravelScene } from './map';
 import { renderGlobePicker } from './globepicker';
+import { renderStation, type StationHandle } from './station';
 
 interface QuizSession {
   kind: 'turistbyra' | 'jobb';
@@ -304,6 +305,20 @@ export class App {
    */
   private travelFilter: TransportMode | null = null;
 
+  /**
+   * Stationsskärmen äger egna timers, en ljudmatta och en tavla som lever
+   * vidare medan den ligger uppe. Den får därför inte byggas om för varje
+   * render - en avisering som dyker upp skulle annars nolla tavlan och starta
+   * om hallens ljud. Handtaget sparas med sin identitet och återanvänds så
+   * länge det är samma station och samma kassa.
+   */
+  private station: {
+    handle: StationHandle;
+    mode: TransportMode;
+    cityId: string;
+    cash: number;
+  } | null = null;
+
   constructor(root: HTMLElement) {
     this.root = root;
   }
@@ -496,6 +511,26 @@ export class App {
     const keepScroll = this.scrollToTopNext ? null : window.scrollY;
     this.scrollToTopNext = false;
 
+    /**
+     * Stationen rivs innan DOM töms, annars ligger dess timers och ljudmatta
+     * kvar och spelar för en skärm som inte finns längre. Är det samma station
+     * som ska ritas igen sparas den däremot - noden överlever att kopplas ur
+     * dokumentet, och tavlan tappar varken sina rader eller sin ljudbild.
+     */
+    const s0 = this.state;
+    const behallStation =
+      this.station !== null &&
+      s0 !== null &&
+      s0.screen === 'karta' &&
+      this.travelFilter === this.station.mode &&
+      s0.currentCityId === this.station.cityId &&
+      s0.money === this.station.cash &&
+      !this.travelScene;
+    if (!behallStation) {
+      this.station?.handle.stop();
+      this.station = null;
+    }
+
     clear(this.root);
     const s = this.state;
 
@@ -539,7 +574,12 @@ export class App {
         main.append(this.renderQuiz(this.quiz?.job?.title ?? 'Arbete'));
         break;
       case 'karta':
-        main.append(this.renderMapScreen());
+        // Med ett färdsätt valt är det en station man står på, inte en karta.
+        main.append(
+          this.travelFilter
+            ? this.renderStationScreen(this.travelFilter)
+            : this.renderMapScreen()
+        );
         break;
       case 'resa':
         main.append(this.renderTravel());
@@ -2030,6 +2070,40 @@ export class App {
   }
 
   // ------------------------------------------------------------------ karta
+
+  /**
+   * Stationen som plats: hall, avgångstavla, ljud och biljettlucka. Skärmen
+   * lever vidare av sig själv medan den ligger uppe, så handtaget sparas för
+   * att kunna stängas av när spelaren går vidare.
+   */
+  private renderStationScreen(mode: TransportMode): HTMLElement {
+    const s = this.state!;
+    // Samma station som förra gången ritas inte om, den hängs bara tillbaka.
+    if (this.station) return this.station.handle.node;
+    const handle = renderStation({
+      city: this.city,
+      mode,
+      difficulty: s.difficulty,
+      money: (n) => this.money(n),
+      cash: s.money,
+      onBuy: (target, route) => this.doTravel(target, route),
+      onBack: () => {
+        this.travelFilter = null;
+        this.go('stad');
+      },
+      onAllModes: () => {
+        this.travelFilter = null;
+        this.render();
+      },
+    });
+    this.station = {
+      handle,
+      mode,
+      cityId: s.currentCityId,
+      cash: s.money,
+    };
+    return handle.node;
+  }
 
   private renderMapScreen(): HTMLElement {
     const s = this.state!;

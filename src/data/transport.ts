@@ -48,16 +48,94 @@ export const LAND_ADJACENCY: Record<string, string[]> = {
 /**
  * Färjelinjer, angivna en gång per par och lästa åt båda hållen. Bara sträckor
  * där båt är det man faktiskt tar, inte varje teoretiskt segelbar rutt.
+ *
+ * Varje linje har ett fartyg och ett rederi, så att hamnens avgångstavla kan
+ * skylta med `M/S Aurora` i stället för bara ordet "Färja". `avgangar` är de
+ * tider linjen brukar gå; en färja går ett par gånger om dygnet, inte var
+ * tjugonde minut, och det är just den glesheten som gör hamnen till en hamn.
  */
-export const FERRY_LINKS: Array<[string, string, string]> = [
-  ['stockholm', 'helsingfors', 'Kvällsfärjan över Ålands hav, framme till frukost.'],
-  ['kopenhamn', 'oslo', 'Nattfärjan uppför Oslofjorden.'],
-  ['london', 'dublin', 'Tåg till kusten och färja över Irländska sjön.'],
-  ['barcelona', 'rom', 'Medelhavsfärjan till Civitavecchia, en natt ombord.'],
-  ['aten', 'rom', 'Färja från Patras till Adriatiska kusten.'],
-  ['marrakech', 'barcelona', 'Buss till kusten och färja över Gibraltar sund.'],
-  ['tokyo', 'seoul', 'Färja över Koreasundet, med tåg i båda ändar.'],
+export interface FerryLink {
+  a: string;
+  b: string;
+  /** Rederiet som trafikerar linjen */
+  rederi: string;
+  /** Fartygets namn, utan M/S */
+  fartyg: string;
+  /** Beskrivning på biljetten */
+  desc: string;
+  /** Ungefärliga avgångstider, minuter efter midnatt */
+  avgangar: number[];
+}
+
+const kl = (h: number, m = 0) => h * 60 + m;
+
+export const FERRY_LINES: FerryLink[] = [
+  {
+    a: 'stockholm',
+    b: 'helsingfors',
+    rederi: 'Ålandslinjen',
+    fartyg: 'Aurora',
+    desc: 'Kvällsfärjan över Ålands hav, framme till frukost.',
+    avgangar: [kl(16, 45), kl(19, 30)],
+  },
+  {
+    a: 'kopenhamn',
+    b: 'oslo',
+    rederi: 'Fjordlinjen',
+    fartyg: 'Skagerrak',
+    desc: 'Nattfärjan uppför Oslofjorden.',
+    avgangar: [kl(16, 30)],
+  },
+  {
+    a: 'london',
+    b: 'dublin',
+    rederi: 'Irish Sea Ferries',
+    fartyg: 'Saint Brendan',
+    desc: 'Tåg till kusten och färja över Irländska sjön.',
+    avgangar: [kl(8, 15), kl(14, 40), kl(21, 5)],
+  },
+  {
+    a: 'barcelona',
+    b: 'rom',
+    rederi: 'Linea Tirreno',
+    fartyg: 'Mediterranea',
+    desc: 'Medelhavsfärjan till Civitavecchia, en natt ombord.',
+    avgangar: [kl(21, 15)],
+  },
+  {
+    a: 'aten',
+    b: 'rom',
+    rederi: 'Patras Lines',
+    fartyg: 'Adriatica',
+    desc: 'Färja från Patras till Adriatiska kusten.',
+    avgangar: [kl(17, 30)],
+  },
+  {
+    a: 'marrakech',
+    b: 'barcelona',
+    rederi: 'Détroit Ferries',
+    fartyg: 'Tarifa',
+    desc: 'Buss till kusten och färja över Gibraltar sund.',
+    avgangar: [kl(7, 0), kl(13, 45)],
+  },
+  {
+    a: 'tokyo',
+    b: 'seoul',
+    rederi: 'Genkai Ferry',
+    fartyg: 'Kaiyo',
+    desc: 'Färja över Koreasundet, med tåg i båda ändar.',
+    avgangar: [kl(12, 30), kl(23, 55)],
+  },
 ];
+
+/**
+ * Samma linjer i den korta formen `[a, b, beskrivning]`, som reselogiken och
+ * valideringen läser. Härledd, så att ett fartyg aldrig kan finnas på tavlan
+ * utan att linjen också går att boka.
+ */
+export const FERRY_LINKS: Array<[string, string, string]> = FERRY_LINES.map(
+  (l) => [l.a, l.b, l.desc]
+);
 
 /**
  * Avståndstak per färdsätt, i kilometer. Över taket erbjuds färdsättet inte
