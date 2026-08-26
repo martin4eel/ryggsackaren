@@ -2105,42 +2105,25 @@ export class App {
     return handle.node;
   }
 
+  /**
+   * Resebyrån: kartan över hela världen, med alla färdsätt vägda mot
+   * varandra. Ett valt färdsätt hör hemma på sin station i stället, så den här
+   * skärmen behöver inte längre kunna filtreras.
+   */
   private renderMapScreen(): HTMLElement {
     const s = this.state!;
     const wrap = el('div', { class: 'stack' });
 
-    const filter = this.travelFilter;
-    const stationsNamn: Record<TransportMode, string> = {
-      buss: 'Busstationen',
-      tag: 'Tågstationen',
-      farja: 'Hamnen',
-      flyg: 'Flygplatsen',
-    };
     const panel = el('section', { class: 'panel' });
     panel.append(
-      el('h1', { class: 'title' }, filter ? stationsNamn[filter] : 'Resebyrån'),
+      el('h1', { class: 'title' }, 'Resebyrån'),
       el(
         'p',
         { class: 'muted' },
-        filter
-          ? `Härifrån går ${MODE_LABELS[filter].toLowerCase()} till städerna nedan. ` +
-            `Vill du se allt som går från ${this.city.name}, byt till alla färdsätt.`
-          : `Du står i ${this.city.name}. Tryck på en stad för att se biljettpriser. ` +
-            `Hemstaden ${CITY_BY_ID[s.homeCityId]!.name} är markerad med ring.`
+        `Du står i ${this.city.name}. Tryck på en stad för att se biljettpriser. ` +
+          `Hemstaden ${CITY_BY_ID[s.homeCityId]!.name} är markerad med ring.`
       )
     );
-    if (filter) {
-      panel.append(
-        button(
-          'Visa alla färdsätt',
-          () => {
-            this.travelFilter = null;
-            this.render();
-          },
-          { class: 'btn btn-ghost' }
-        )
-      );
-    }
     panel.append(
       renderMapFrame({
         currentCityId: s.currentCityId,
@@ -2191,17 +2174,9 @@ export class App {
     const paint = () => {
       clear(table);
       const needle = searchKey(this.cityFilter.trim());
-      const nabara = filter
-        ? new Set(
-            destinationsByMode(this.city, filter, s.difficulty, CITIES).map(
-              (d) => d.city.id
-            )
-          )
-        : null;
       const sorted = CITIES.filter(
         (c) =>
           c.id !== s.currentCityId &&
-          (!nabara || nabara.has(c.id)) &&
           (needle === '' ||
             searchKey(c.name).includes(needle) ||
             searchKey(c.country).includes(needle))

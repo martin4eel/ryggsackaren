@@ -928,15 +928,20 @@ export function startStation(kind: StationKind): void {
    * Händelserna kommer oregelbundet. Ett fast intervall hörs som ett mönster
    * efter ett par varv, och då är illusionen borta.
    */
-  const schemalagg = (): number =>
-    window.setTimeout(() => {
-      if (!aktivStation || aktivStation.kind !== kind) return;
-      stationsHandelse(kind);
-      aktivStation.timer = schemalagg();
-    }, 2500 + Math.random() * 7000);
+  const schemalagg = (forsta = false): number =>
+    window.setTimeout(
+      () => {
+        if (!aktivStation || aktivStation.kind !== kind) return;
+        stationsHandelse(kind);
+        aktivStation.timer = schemalagg();
+      },
+      // Det första ljudet kommer med en gång. Annars står spelaren i tio
+      // sekunders tystnad och hinner tro att stationen är stum.
+      forsta ? 700 : 2500 + Math.random() * 7000
+    );
 
   aktivStation = { kind, lager, ut, timer: 0 };
-  aktivStation.timer = schemalagg();
+  aktivStation.timer = schemalagg(true);
 }
 
 /** Tystar stationen. Mattan tonas ut i stället för att klippas. */

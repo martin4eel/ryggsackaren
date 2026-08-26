@@ -4,7 +4,7 @@ import { operatorsFor } from '../data/operators';
 import type { TransportMode } from '../data/transport';
 import type { City } from '../data/types';
 import { distanceKm, pseudoRandom } from './rules';
-import { availableRoutes, type Route } from './travel';
+import { destinationsByMode, type Route } from './travel';
 import type { Difficulty } from './state';
 
 /**
@@ -252,13 +252,9 @@ export function stationDestinations(
   mode: TransportMode,
   difficulty: Difficulty
 ): Array<{ city: City; route: Route }> {
-  const out: Array<{ city: City; route: Route }> = [];
-  for (const to of CITIES) {
-    if (to.id === from.id) continue;
-    const route = availableRoutes(from, to, difficulty).find((r) => r.mode === mode);
-    if (route) out.push({ city: to, route });
-  }
-  return out.sort((a, b) => a.route.price - b.route.price);
+  // Samma lista som stadens skyltar räknar på, så att en skylt aldrig kan
+  // lova fler destinationer än tavlan innanför den visar.
+  return destinationsByMode(from, mode, difficulty, CITIES);
 }
 
 /**

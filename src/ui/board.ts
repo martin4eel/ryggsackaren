@@ -13,7 +13,7 @@ import type { TransportMode } from '../data/transport';
 import type { City } from '../data/types';
 import type { Difficulty } from '../game/state';
 import { clear, el } from './dom';
-import { playStation } from './audio';
+import { playSound, playStation } from './audio';
 
 /**
  * Den elektroniska avgångstavlan.
@@ -95,7 +95,9 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
    * och är det som gör att tavlan känns bemannad: någon står och skriver in
    * att tåget till Berlin har bytt spår.
    */
-  const remsa = el('div', { class: 'board-ticker' });
+  // Remsan säger samma sak som statuskolumnen. En skärmläsare ska inte läsa
+  // upp den var tolfte sekund; den som lyssnar har redan hört högtalaren.
+  const remsa = el('div', { class: 'board-ticker', 'aria-hidden': 'true' });
   wrap.append(remsa);
 
   /** Raderna som ligger ute, så att en cell kan bytas i stället för hela raden. */
@@ -153,7 +155,10 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
       cell('col-price', money(d.route.price)),
       cell('col-status', statusText(d))
     );
-    knapp.addEventListener('click', () => onPick(d));
+    knapp.addEventListener('click', () => {
+      playSound('valj');
+      onPick(d);
+    });
     li.append(knapp);
     // Klassen som får raden att glida in tas bort på nästa bildruta, annars
     // ligger den kvar och rader hoppar till vid varje uppdatering.

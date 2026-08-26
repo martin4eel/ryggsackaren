@@ -46,10 +46,15 @@ export interface StationOpts {
   onAllModes: () => void;
 }
 
+/**
+ * Skylten över ingången. En stad med interkontinental trafik har en annan
+ * anläggning än en småstad, och det ska stå på skylten: Köping har en station,
+ * Stockholm en centralstation.
+ */
 const STATION_NAMN: Record<TransportMode, (c: City) => string> = {
-  flyg: (c) => `${c.name} flygplats`,
-  tag: (c) => `${c.name} centralstation`,
-  buss: (c) => `${c.name} bussterminal`,
+  flyg: (c) => (c.hub ? `${c.name} internationella flygplats` : `${c.name} flygplats`),
+  tag: (c) => (c.hub ? `${c.name} centralstation` : `${c.name} station`),
+  buss: (c) => (c.hub ? `${c.name} bussterminal` : `${c.name} busstation`),
   farja: (c) => `${c.name} färjeterminal`,
 };
 
@@ -273,11 +278,24 @@ export function renderStation(opts: StationOpts): StationHandle {
   wrap.append(scene);
 
   // ---- biljettvyn
+  /**
+   * Escape stänger biljetten. Utan det fångar spelets egen Esc-hantering
+   * tangenten och kastar ut spelaren till stadsbilden med biljetten öppen.
+   */
+  const sheetTangent = (e: KeyboardEvent) => {
+    if (e.key !== 'Escape' || !sheet) return;
+    e.preventDefault();
+    e.stopPropagation();
+    stangSheet();
+  };
+
   const stangSheet = () => {
     if (!sheet) return;
     sheet.classList.add('sheet-ut');
     const gammal = sheet;
     sheet = null;
+    window.removeEventListener('keydown', sheetTangent, true);
+    document.body.classList.remove('sheet-oppen');
     window.setTimeout(() => gammal.remove(), 220);
   };
 
@@ -341,6 +359,8 @@ export function renderStation(opts: StationOpts): StationHandle {
     });
     sheet = overlay;
     document.body.append(overlay);
+    document.body.classList.add('sheet-oppen');
+    window.addEventListener('keydown', sheetTangent, true);
     kort.querySelector('button')?.focus({ preventScroll: true });
   };
 
