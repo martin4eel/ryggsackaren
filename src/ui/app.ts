@@ -811,7 +811,7 @@ export class App {
       onSelect: (c) => {
         this.startPick.cityId = c.id;
         playSound('valj');
-        globe.focus(c);
+        globe.select(c);
         paintCityCard();
         paintList();
         uppdateraStart();
@@ -857,7 +857,7 @@ export class App {
               () => {
                 this.startPick.cityId = c.id;
                 playSound('valj');
-                globe.focus(c);
+                globe.select(c);
                 paintCityCard();
                 paintList();
                 uppdateraStart();

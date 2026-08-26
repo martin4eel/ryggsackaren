@@ -26,8 +26,12 @@ export interface GlobePickerOptions {
 
 export interface GlobePickerHandle {
   node: HTMLElement;
-  /** Vrider klotet så att staden hamnar i mitten. */
-  focus: (city: City, animera?: boolean) => void;
+  /**
+   * Markerar staden och vrider klotet så att den hamnar i mitten. Måste
+   * anropas när valet ändras utifrån, till exempel från listan: globen har
+   * ingen annan väg att få veta det.
+   */
+  select: (city: City, animera?: boolean) => void;
 }
 
 const S = 320;
@@ -37,7 +41,13 @@ const MAX_ZOOM = 4;
 const DRAG_TROSKEL = 6;
 
 export function renderGlobePicker(options: GlobePickerOptions): GlobePickerHandle {
-  const vald = () => CITIES.find((c) => c.id === options.selectedId) ?? CITIES[0]!;
+  /**
+   * Valet hålls internt. Att läsa options.selectedId vid varje ritning såg
+   * rätt ut men läste bara startvärdet, så globen fastnade på den stad man
+   * började med hur mycket man än bytte i listan.
+   */
+  let valdId = options.selectedId;
+  const vald = () => CITIES.find((c) => c.id === valdId) ?? CITIES[0]!;
   let lon = vald().lon;
   let lat = vald().lat;
   let zoom = 1;
@@ -134,7 +144,8 @@ export function renderGlobePicker(options: GlobePickerOptions): GlobePickerHandl
 
   /** Vrider klotet mjukt till en ny mittpunkt. */
   let avbrytAnimation: (() => void) | null = null;
-  const focus = (city: City, animera = true) => {
+  const select = (city: City, animera = true) => {
+    valdId = city.id;
     if (avbrytAnimation) avbrytAnimation();
     const fran = { lon, lat };
     const till = { lon: city.lon, lat: city.lat };
@@ -215,7 +226,10 @@ export function renderGlobePicker(options: GlobePickerOptions): GlobePickerHandl
       const d = Math.hypot(t.x - x, t.y - y);
       if (!bast || d < bast.d) bast = { city: t.city, d };
     }
-    if (bast && bast.d < 14) options.onSelect(bast.city);
+    if (bast && bast.d < 14) {
+      valdId = bast.city.id;
+      options.onSelect(bast.city);
+    }
   };
   svg.addEventListener('pointerup', slappUpp);
   svg.addEventListener('pointercancel', slappUpp);
@@ -252,5 +266,5 @@ export function renderGlobePicker(options: GlobePickerOptions): GlobePickerHandl
   wrap.append(knappar);
 
   rita();
-  return { node: wrap, focus };
+  return { node: wrap, select };
 }
