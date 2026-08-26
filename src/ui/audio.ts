@@ -54,8 +54,8 @@ export type Sound =
   | 'seger'
   /** Resan tog slut i förtid */
   | 'forlust'
-  /** Gammaldags ringsignal i telefonkiosken */
-  | 'ringsignal'
+  /** Babbel ur luren när man kliver in i kiosken */
+  | 'telefonbabbel'
   /** Mynt som ramlar ner i telefonautomaten */
   | 'myntinkast'
   /** Mamma eller pappa som tjatar i luren */
@@ -300,8 +300,23 @@ function stavelse(
     f.Q.value = q;
     return f;
   };
+  /**
+   * Formanterna måste ligga PARALLELLT, inte i serie. Två smala bandpass
+   * efter varandra på 300 och 2 300 Hz släpper igenom snittet av sina band,
+   * vilket är så gott som ingenting - rösten hördes bara tack vare läckage
+   * genom filtrens flanker. Parallellt summeras i stället två resonanser,
+   * vilket är hur en vokal faktiskt låter.
+   */
   const f1 = bygg(vokal.f1, 6);
   const f2 = bygg(vokal.f2, 8);
+  const summa = ctx.createGain();
+  summa.gain.value = 1;
+  osc.connect(f1).connect(summa);
+  // Den andra formanten är svagare än den första, som i en riktig röst.
+  const f2niva = ctx.createGain();
+  f2niva.gain.value = 0.6;
+  osc.connect(f2).connect(f2niva).connect(summa);
+
   // Telefonlurens smala band: allt under 300 och över 3 400 Hz försvinner.
   const lur = bygg(1700, 0.9);
 
@@ -311,7 +326,7 @@ function stavelse(
   g.gain.setValueAtTime(gain, t0 + dur * 0.7);
   g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
 
-  osc.connect(f1).connect(f2).connect(lur).connect(g).connect(master);
+  summa.connect(lur).connect(g).connect(master);
   osc.start(t0);
   osc.stop(t0 + dur + 0.02);
 }
@@ -320,15 +335,22 @@ function stavelse(
  * En replik i luren. Antalet stavelser och tonfallet avgör om det låter som
  * en fråga eller som en utskällning.
  */
-function replik(t0: number, stavelser: number, bas: number, gain = 0.09): void {
+function replik(
+  t0: number,
+  stavelser: number,
+  bas: number,
+  gain = 0.09,
+  /** Över 1 ger längre, mer mumlande stavelser. */
+  tempo = 1
+): void {
   let t = t0;
   for (let i = 0; i < stavelser; i++) {
-    const dur = 0.1 + Math.random() * 0.07;
+    const dur = (0.1 + Math.random() * 0.07) * tempo;
     // Tonfallet sjunker mot slutet, som i ett påstående på svenska.
     const lage = bas * (1 - (i / stavelser) * 0.18 + (Math.random() - 0.5) * 0.06);
     const vokal = VOKALER[Math.floor(Math.random() * VOKALER.length)]!;
     stavelse(t, dur, lage, vokal, gain);
-    t += dur + 0.02 + Math.random() * 0.03;
+    t += dur + (0.02 + Math.random() * 0.03) * tempo;
   }
 }
 
@@ -444,15 +466,17 @@ export function playSound(name: Sound): void {
         { type: 'triangle', gain: 0.1 }
       );
       break;
-    case 'ringsignal':
-      // Två signaler av den gamla sorten, med paus emellan.
-      for (const start of [0, 0.9]) {
-        for (let i = 0; i < 12; i++) {
-          const t2 = t + start + i * 0.025;
-          tone(1100, t2, 0.02, { type: 'square', gain: 0.05 });
-          tone(1400, t2 + 0.012, 0.02, { type: 'square', gain: 0.04 });
-        }
-      }
+    case 'telefonbabbel':
+      /**
+       * Någon babblar redan i luren när man kliver in. Tre röster i olika
+       * tonlägen som överlappar varandra, långsammare och tystare än
+       * tjatrösten, så att det låter som ett samtal man kommit in mitt i i
+       * stället för att någon talar till en.
+       */
+      replik(t, 6, 210, 0.075, 1.5);
+      replik(t + 0.35, 5, 300, 0.055, 1.7);
+      replik(t + 0.8, 5, 175, 0.065, 1.4);
+      replik(t + 1.5, 4, 240, 0.06, 1.6);
       break;
     case 'myntinkast':
       // Myntet studsar ner genom automaten.
@@ -487,9 +511,10 @@ export function playSound(name: Sound): void {
       break;
     case 'marknad':
       // Sorl: flera röster i olika tonlägen, dämpade och överlappande.
-      replik(t, 4, 200, 0.025);
-      replik(t + 0.2, 4, 320, 0.02);
-      replik(t + 0.45, 3, 150, 0.022);
+      replik(t, 5, 200, 0.05, 1.3);
+      replik(t + 0.25, 5, 320, 0.038, 1.4);
+      replik(t + 0.5, 4, 150, 0.045, 1.2);
+      replik(t + 0.95, 4, 260, 0.04, 1.3);
       break;
     case 'applad':
       // Klapper av filtrerat brus i avtagande täthet.

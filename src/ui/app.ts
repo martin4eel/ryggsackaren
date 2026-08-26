@@ -1329,7 +1329,7 @@ export class App {
         'Telefonkiosken',
         'Ring hem och låna pengar om kassan är tom.',
         () => {
-          playSound('ringsignal');
+          playSound('telefonbabbel');
           this.go('telefon');
         }
       )

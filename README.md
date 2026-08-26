@@ -191,8 +191,9 @@ webbläsaren och överlever att sparfilen raderas.
 10. **Ljud.** Ett trettiotal effekter (rätt och fel svar, lön, avresa, ankomst,
    metronom, trumslag, stämpel och alla arkadmoment) syntetiseras i
    webbläsaren, så inga ljudfiler behövs. Varje färdsätt har sitt eget
-   avgångsljud, och i telefonkiosken ringer det innan mamma tar vid – rösten
-   är formantsyntes genom ett telefonfilter, alltså pladder utan ord. Högtalarknappen i statusraden
+   avgångsljud, och i telefonkiosken babblar det redan i luren
+   när man kliver in – rösterna är formantsyntes genom ett telefonfilter,
+   alltså pladder utan ord. Högtalarknappen i statusraden
    stegar mellan avstängt, dämpat och fullt ljud; valet sparas.
 11. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
    och backa till staden med `Esc`. Balansmomentet styrs med piltangenterna
