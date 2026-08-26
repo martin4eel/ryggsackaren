@@ -876,7 +876,8 @@ export class App {
       );
       host.append(el('h3', { class: 'city-group' }, 'Född i Sverige?'));
       const row = el('div', { class: 'city-chips' });
-      for (const c of svenska) row.append(this.cityChip(c));
+      // Landet står redan i rubriken, så brickorna visar bara stadsnamnet.
+      for (const c of svenska) row.append(this.cityChip(c, false));
       host.append(
         row,
         el(
@@ -902,13 +903,16 @@ export class App {
     }
   }
 
-  /** En stadsbricka på startskärmen. */
-  private cityChip(c: City): HTMLElement {
+  /**
+   * En stadsbricka på startskärmen. Landet kan utelämnas när det redan står i
+   * rubriken ovanför, som i listan över svenska städer.
+   */
+  private cityChip(c: City, showCountry = true): HTMLElement {
     const on = c.id === this.startPick.cityId;
     return button(
       el('span', { class: 'chip-body' },
         el('span', { class: 'chip-name' }, c.name),
-        el('span', { class: 'chip-country' }, c.country)
+        showCountry ? el('span', { class: 'chip-country' }, c.country) : null
       ),
       () => {
         this.startPick.cityId = c.id;
