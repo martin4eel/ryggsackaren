@@ -74,6 +74,7 @@ import { renderAtlasScreen } from './atlas';
 import {
   applyImmediate,
   chooseEvent,
+  mysterySpotCount,
   clearEvent,
   describeEffect,
   eventContext,
@@ -1419,34 +1420,32 @@ export class App {
       'Tryck på en skylt för att gå dit.'
     );
     const signs = el('div', { class: 'signs' });
-    const addSign = (
+
+    /**
+     * En plats på stadsbilden. Antingen en av stadens funktioner, eller en
+     * mystikskylt som döljer en händelse.
+     */
+    interface Plats {
+      id: string;
+      ikon: IconName;
+      namn: string;
+      beskrivning: string;
+      onClick: () => void;
+      /** Sant för mystikskyltarna, som försvinner när de använts. */
+      mystik?: boolean;
+    }
+
+    const platser: Plats[] = [];
+    const plats = (
+      id: string,
       ikon: IconName,
       namn: string,
       beskrivning: string,
       onClick: () => void
-    ) => {
-      const b = button(
-        el('span', { class: 'sign-body' },
-          el('span', { class: 'sign-badge' }, icon(ikon)),
-          el('span', { class: 'sign-name' }, namn)
-        ),
-        onClick,
-        { class: 'sign', title: beskrivning, 'aria-label': `${namn}. ${beskrivning}` }
-      );
-      const visa = () => {
-        hint.textContent = beskrivning;
-      };
-      const doljs = () => {
-        hint.textContent = 'Tryck på en skylt för att gå dit.';
-      };
-      b.addEventListener('pointerenter', visa);
-      b.addEventListener('focus', visa);
-      b.addEventListener('pointerleave', doljs);
-      b.addEventListener('blur', doljs);
-      signs.append(b);
-    };
+    ) => platser.push({ id, ikon, namn, beskrivning, onClick });
 
-    addSign(
+    plats(
+      'turistbyra',
       'skylt-info',
       'Turistbyrån',
       p.visits === 0
@@ -1454,11 +1453,12 @@ export class App {
         : `Gör om provet för att höja ditt betyg (nu ${p.rating}/100).`,
       () => this.startCityQuiz()
     );
-    addSign('skylt-tidning', 'Tidningen', 'Läs platsannonserna och ta ett arbetsskift.', () => {
+    plats('tidning', 'skylt-tidning', 'Tidningen', 'Läs platsannonserna och ta ett arbetsskift.', () => {
       playSound('sida');
       this.go('tidning');
     });
-    addSign(
+    plats(
+      'souvenir',
       'skylt-souvenir',
       'Souvenirer',
       'Köp lokalt och sälj där varan är eftertraktad.',
@@ -1467,7 +1467,8 @@ export class App {
         this.go('souvenir');
       }
     );
-    addSign(
+    plats(
+      'ryggsack',
       'skylt-ryggsack',
       'Ryggsäck',
       `${s.backpack.length} souvenirer, ${s.stamps.length} stämplar och all statistik.`,
@@ -1487,7 +1488,8 @@ export class App {
     for (const [mode, ikon, namn, beskrivning] of stationer) {
       const antal = destinationsByMode(city, mode, s.difficulty, CITIES).length;
       if (antal === 0) continue;
-      addSign(
+      plats(
+        mode,
         ikon,
         namn,
         `${beskrivning} ${antal} ${antal === 1 ? 'destination' : 'destinationer'} härifrån.`,
@@ -1508,10 +1510,11 @@ export class App {
     }
     /**
      * Att gå ut utan ärende. Dagen kostar boende, och i utbyte händer något -
-     * på gatan, vid sevärdheten eller i mötet med någon. Det är den enda
-     * handlingen i spelet vars hela poäng är att man inte vet vad den ger.
+     * på gatan eller i mötet med någon. Det är den enda handlingen i spelet
+     * vars hela poäng är att man inte vet vad den ger.
      */
-    addSign(
+    plats(
+      'stan',
       'skylt-stad',
       'Ut på stan',
       `Gå runt på gatorna en dag och se vad som händer. Kostar en dag (${this.money(
@@ -1519,7 +1522,8 @@ export class App {
       )}).`,
       () => this.gaUtPaStan()
     );
-    addSign(
+    plats(
+      'karta',
       'skylt-karta',
       'Kartan',
       'Se var i världen du står, och läs på om staden och landet.',
@@ -1528,10 +1532,89 @@ export class App {
         this.go('varldskarta');
       }
     );
-    addSign('skylt-telefon', 'Telefonen', 'Ring hem och låna pengar om kassan är tom.', () => {
+    plats('telefon', 'skylt-telefon', 'Telefonen', 'Ring hem och låna pengar om kassan är tom.', () => {
       playSound('telefonbabbel');
       this.go('telefon');
     });
+
+    /**
+     * Mystikskyltarna. De ser ut som alla andra så länge de ligger nedvända,
+     * och det är hela poängen: första gången man kommer till en stad vet man
+     * inte vilken bricka som är flygplatsen och vilken som är något annat.
+     *
+     * Antalet följer stadens storlek, så en storstad har mer att snubbla över.
+     * En använd skylt kommer inte tillbaka.
+     */
+    const spent = p.spent ?? [];
+    for (let i = 0; i < mysterySpotCount(city.id); i++) {
+      const id = `mystik-${i}`;
+      if (spent.includes(id)) continue;
+      platser.push({
+        id,
+        ikon: 'skylt-mystik',
+        namn: 'Något händer',
+        beskrivning: 'Något du inte visste fanns här.',
+        mystik: true,
+        onClick: () => this.oppnaMystik(id),
+      });
+    }
+
+    /**
+     * Ordningen lottas per stad och ligger fast. Med en fast ordning skulle en
+     * spelare lära sig att första brickan alltid är turistbyrån, och då är det
+     * ingen upptäckt kvar att göra. Att varje stad ligger olika gör dessutom
+     * att de känns som olika platser.
+     */
+    platser.sort(
+      (a, b) =>
+        pseudoRandom(`${city.id}|${a.id}|ordning`) -
+        pseudoRandom(`${city.id}|${b.id}|ordning`)
+    );
+
+    const revealed = p.revealed ?? [];
+    /** Hemstaden känner man till. Där ligger funktionerna uppvända från start. */
+    const arVand = (pl: Plats) =>
+      revealed.includes(pl.id) || (!pl.mystik && city.id === s.homeCityId);
+
+    const DOLD_TIPS = 'Nedvänd bricka. Tryck för att se vad som finns här.';
+    for (const pl of platser) {
+      const vand = arVand(pl);
+      const beskrivning = vand ? pl.beskrivning : DOLD_TIPS;
+      const b = button(
+        el('span', { class: 'sign-body' },
+          el('span', { class: 'sign-badge' },
+            vand ? icon(pl.ikon) : icon('mynt')
+          ),
+          el('span', { class: 'sign-name' }, vand ? pl.namn : '?')
+        ),
+        () => (vand ? pl.onClick() : this.vandBricka(pl.id, pl.mystik === true)),
+        {
+          class: `sign ${vand ? '' : 'sign-mynt'}`,
+          title: beskrivning,
+          'aria-label': vand ? `${pl.namn}. ${pl.beskrivning}` : DOLD_TIPS,
+          'data-spot': pl.id,
+        }
+      );
+      const visa = () => {
+        hint.textContent = beskrivning;
+      };
+      const doljs = () => {
+        hint.textContent = revealed.length === 0 && city.id !== s.homeCityId
+          ? 'Du har aldrig varit här. Vänd på brickorna för att se vad staden har.'
+          : 'Tryck på en skylt för att gå dit.';
+      };
+      b.addEventListener('pointerenter', visa);
+      b.addEventListener('focus', visa);
+      b.addEventListener('pointerleave', doljs);
+      b.addEventListener('blur', doljs);
+      signs.append(b);
+    }
+    if (!platser.every(arVand)) {
+      hint.textContent =
+        revealed.length === 0 && city.id !== s.homeCityId
+          ? 'Du har aldrig varit här. Vänd på brickorna för att se vad staden har.'
+          : 'Tryck på en skylt för att gå dit.';
+    }
     hero.append(signs);
     // Krediten låg tidigare i bilden och krockade omväxlande med stadsnamnet
     // och med skyltraden. Under bilden stör den ingenting.
@@ -1677,6 +1760,60 @@ export class App {
       // Alla händelser för tillfället var redan förbrukade. Dagen gick ändå.
       this.notify(`En dag i ${city.name} utan att något särskilt hände.`);
     }
+    this.render();
+  }
+
+  /**
+   * Vänder upp en nedvänd bricka på stadsbilden.
+   *
+   * Vändningen får en halv sekund för sig själv innan skärmen ritas om, så att
+   * myntet hinner snurra klart och landa. Utan pausen byts brickan ut mitt i
+   * rörelsen och det ser ut som ett fel i stället för som en avslöjning.
+   */
+  private vandBricka(spotId: string, mystik: boolean): void {
+    const s = this.state!;
+    const p = getProgress(s, s.currentCityId);
+    if (p.revealed?.includes(spotId)) return;
+    playSound('mynt');
+    const knapp = this.root.querySelector<HTMLElement>(
+      `.sign[data-spot="${spotId}"]`
+    );
+    knapp?.classList.add('sign-mynt-vand');
+    window.setTimeout(() => {
+      const nu = this.state;
+      if (!nu) return;
+      const prog = getProgress(nu, nu.currentCityId);
+      prog.revealed ??= [];
+      if (!prog.revealed.includes(spotId)) prog.revealed.push(spotId);
+      if (mystik) {
+        this.oppnaMystik(spotId);
+        return;
+      }
+      this.commit();
+      this.scrollToTopNext = false;
+      this.render();
+    }, 480);
+  }
+
+  /**
+   * En mystikbricka som vänts upp. Den ger en händelse ur stadens liv och
+   * försvinner sedan - den fanns bara en gång.
+   */
+  private oppnaMystik(spotId: string): void {
+    const s = this.state!;
+    const p = getProgress(s, s.currentCityId);
+    p.spent ??= [];
+    if (!p.spent.includes(spotId)) p.spent.push(spotId);
+    // Samma slags händelser som gatan och mötena ger, men utan dagskostnad:
+    // det här är något man hittar, inte något man ägnar en dag åt.
+    const trigger: EventTrigger =
+      Math.random() < 0.3 ? 'sevardhet' : Math.random() < 0.5 ? 'mote' : 'stad';
+    this.fireEvent(trigger, 1);
+    if (!this.state?.pendingEvent) {
+      this.notify('Det visade sig inte vara något särskilt.');
+    }
+    this.commit();
+    this.scrollToTopNext = false;
     this.render();
   }
 

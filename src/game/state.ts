@@ -53,6 +53,13 @@ export interface CityProgress {
   workedJobs: string[];
   /** Dagen då tidningens annonser senast förnyades */
   adsRefreshedDay?: number;
+  /**
+   * Skyltar du vänt upp på stadsbilden. En stad du aldrig varit i ligger med
+   * baksidan upp - du vet inte vad som finns här förrän du sett efter.
+   */
+  revealed?: string[];
+  /** Mystikskyltar som redan gett det de hade att ge. */
+  spent?: string[];
 }
 
 export interface GameState {
@@ -217,8 +224,13 @@ export function getCityStats(
 
 export function getProgress(state: GameState, cityId: string): CityProgress {
   let p = state.progress[cityId];
+  // Äldre sparfiler saknar fälten; de fylls i vid första uppslaget.
+  if (p) {
+    p.revealed ??= [];
+    p.spent ??= [];
+  }
   if (!p) {
-    p = { rating: 0, visits: 0, workedJobs: [] };
+    p = { rating: 0, visits: 0, workedJobs: [], revealed: [], spent: [] };
     state.progress[cityId] = p;
   }
   return p;

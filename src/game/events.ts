@@ -8,6 +8,7 @@ import {
   type EventTrigger,
   type GameEvent,
 } from '../data/events';
+import { CITY_POPULATION } from '../data/facts';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City } from '../data/types';
 import type { GameState } from './state';
@@ -43,6 +44,22 @@ export const EVENT_CHANCE: Record<EventTrigger, number> = {
   mote: 1,
   vantan: 0.25,
 };
+
+/**
+ * Hur många mystikskyltar en stad har på stadsbilden.
+ *
+ * Antalet följer folkmängden, för att en storstad ska ha mer att snubbla över
+ * än en småstad. Köping får en, Stockholm två, Tokyo fyra. Skyltarna är
+ * engångshändelser - de finns kvar tills man vänt upp dem, och sedan aldrig
+ * mer i just den staden.
+ */
+export function mysterySpotCount(cityId: string): number {
+  const folk = CITY_POPULATION[cityId] ?? 0;
+  if (folk >= 9_000_000) return 4;
+  if (folk >= 2_500_000) return 3;
+  if (folk >= 500_000) return 2;
+  return 1;
+}
 
 /** Hur många händelser tillbaka spelet minns när nästa ska lottas. */
 const RECENT_MEMORY = 9;

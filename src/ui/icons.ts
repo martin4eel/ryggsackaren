@@ -27,6 +27,8 @@ export type IconName =
   | 'skylt-telefon'
   | 'skylt-karta'
   | 'skylt-stad'
+  | 'skylt-mystik'
+  | 'mynt'
   | 'buss-profil'
   | 'tag-profil'
   | 'farja-profil'
@@ -188,6 +190,40 @@ const ICONS: Record<IconName, Part[]> = {
     { tag: 'rect', attrs: { x: '7.6', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
     { tag: 'rect', attrs: { x: '13.4', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
     { tag: 'rect', attrs: { x: '9.4', y: '4.6', width: '5.2', height: '4', rx: '0.8', fill: 'currentColor', stroke: 'none' } },
+  ],
+  mynt: [
+    // Myntets baksida: präglad kant och en kompassros i mitten.
+    { tag: 'circle', attrs: { cx: '12', cy: '12', r: '9.5', fill: 'currentColor', stroke: 'none' } },
+    {
+      tag: 'circle',
+      attrs: {
+        cx: '12',
+        cy: '12',
+        r: '7.4',
+        fill: 'none',
+        class: 'icon-knockout-stroke',
+        'stroke-width': '0.9',
+      },
+    },
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M12 6.2l1.5 4.3 4.3 1.5-4.3 1.5L12 17.8l-1.5-4.3L6.2 12l4.3-1.5z',
+        class: 'icon-knockout',
+        stroke: 'none',
+      },
+    },
+  ],
+  'skylt-mystik': [
+    // Stjärnan bakom brickan: det man hittar när man vänt på den.
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M12 2.6l2.6 6.1 6.6.6-5 4.3 1.5 6.4L12 16.6l-5.7 3.4 1.5-6.4-5-4.3 6.6-.6z',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
   ],
   'skylt-stad': [
     // Gatstumpen: två husfasader och en vandrare emellan.

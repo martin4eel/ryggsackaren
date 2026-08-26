@@ -38,6 +38,7 @@ try {
   const { OPERATORS } = await load('/src/data/operators.ts');
   const { COUNTRY_FACTS, CITY_POPULATION } = await load('/src/data/facts.ts');
   const { EVENTS } = await load('/src/data/events.ts');
+  const { mysterySpotCount } = await load('/src/game/events.ts');
   const { availableRoutes } = await load('/src/game/travel.ts');
 
   const jobById = Object.fromEntries(JOBS.map((j) => [j.id, j]));
@@ -357,6 +358,12 @@ try {
   for (const c of CITIES) {
     if (!CITY_POPULATION[c.id])
       problems.push(`${c.name} saknar folkmängd i data/facts.ts`);
+    /**
+     * Varje stad måste ha minst en mystikbricka. En stad utan blir en stad där
+     * ingenting kan hittas, och det är inte en stad man vill komma till.
+     */
+    if (mysterySpotCount(c.id) < 1)
+      problems.push(`${c.name} har inga mystikbrickor på stadsbilden`);
     const f = COUNTRY_FACTS[c.country];
     if (!f) {
       problems.push(`${c.country} saknar landsfakta i data/facts.ts`);
@@ -532,6 +539,11 @@ try {
       `${EVENTS.filter((e) => e.choices).length} med val, ` +
       `${EVENTS.reduce((n, e) => n + (e.choices?.length ?? 0), 0)} valmöjligheter, ` +
       `${EVENTS.reduce((n, e) => n + (e.choices ?? []).reduce((m, c) => m + c.outcomes.length, 0), 0)} utfall`
+  );
+  console.log(
+    `Stadsbilder: ${CITIES.reduce((n, c) => n + mysterySpotCount(c.id), 0)} ` +
+      `mystikbrickor totalt, ${Math.min(...CITIES.map((c) => mysterySpotCount(c.id)))}-` +
+      `${Math.max(...CITIES.map((c) => mysterySpotCount(c.id)))} per stad`
   );
   console.log(`Frågor: ${total}`);
   console.log(

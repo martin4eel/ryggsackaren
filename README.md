@@ -138,6 +138,22 @@ webbläsaren och överlever att sparfilen raderas.
    Köping har flygplats. Reykjavík har därför bara en flygplats, och från
    Köping får man ta tåget innan man kan flyga.
 
+   **Första gången du kommer till en stad ligger alla brickor nedvända.** De
+   snurrar som mynt på högkant och visar bara ett frågetecken; du vet inte
+   vilken som är flygplatsen och vilken som är något annat förrän du vänt på
+   dem, en och en. Hemstaden är undantaget – där har du bott.
+
+   Några av brickorna är inte funktioner alls utan **mystikbrickor**, och
+   vänder du upp en sådan händer något i stället. Hur många en stad har följer
+   folkmängden: Cusco och Reykjavík har en, Stockholm två, Istanbul och Bangkok
+   fyra. En mystikbricka finns bara en gång – när den gett det den hade att ge
+   försvinner den ur staden.
+
+   Ordningen på brickorna lottas per stad och ligger sedan fast. Med en fast
+   ordning skulle man lära sig att första brickan alltid är turistbyrån, och då
+   fanns det ingen upptäckt kvar att göra. Antalet brickor varierar också med
+   staden – nio i Cusco, fjorton i Istanbul.
+
    Raden under bilden berättar vad skylten man pekar på gör.
 4. **Stationerna.** Bakom varje stationsskylt ligger en egen plats, inte en
    lista. Hallen ritas som en siluett ovanpå stadens foto – glasfasad och
@@ -326,6 +342,7 @@ _Legendarisk ryggsäckare_.
 - 8 arkadmoment som avslutar arbetsskiften
 - 19 stämplar att samla i passet
 - 73 händelser med 83 val och 117 möjliga utfall, spridda över åtta tillfällen
+- 9-14 nedvända brickor per stad, varav 1-4 döljer en händelse
 - 64 souvenirer med regional prissättning
 - 40 valutor
 - 4 stationsmiljöer med egen avgångstavla, egna ord och egen ljudmatta

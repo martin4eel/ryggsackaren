@@ -3619,6 +3619,12 @@ input:focus-visible {
   fill: var(--skylt-bg, #f6efe0);
 }
 
+/* Samma urtag, men som linje i stället för yta. */
+.icon-knockout-stroke {
+  stroke: var(--skylt-bg, #f6efe0);
+  fill: none;
+}
+
 /* Stadens namn högst upp i bilden, med egen övertoning för läsbarhet. */
 .city-hero-text-top {
   top: 0;
@@ -5017,4 +5023,86 @@ body.sheet-oppen {
 
 .city-sevardhet .btn {
   flex: 0 0 auto;
+}
+
+
+/* ====================================================================
+   NEDVÄNDA BRICKOR
+   En stad man aldrig varit i visar inte vad den har. Brickorna ligger
+   med baksidan upp och snurrar långsamt som mynt på högkant, tills man
+   vänder på dem en och en. Några av dem är stadens funktioner, några
+   döljer något som händer.
+   ==================================================================== */
+
+.sign-mynt .sign-badge {
+  /* Ett mynt är runt. Skyltarnas rundade fyrkant hör till skyltarna. */
+  border-radius: 50%;
+  /* Myntet ska snurra kring sin egen lodräta axel, inte glida i sidled. */
+  transform-style: preserve-3d;
+  animation: myntsnurr 4.2s linear infinite;
+  background: linear-gradient(145deg, #f4c86a 0%, #d99b2f 48%, #b8791d 100%);
+  color: #6b3f0a;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 4px 10px rgba(4, 16, 26, 0.4);
+}
+
+/*
+ * Varje bricka får sin egen fasförskjutning, annars snurrar hela raden i
+ * takt och det ser ut som en enda sak i stället för som tio brickor.
+ */
+.sign-mynt:nth-child(3n) .sign-badge {
+  animation-delay: -1.4s;
+}
+
+.sign-mynt:nth-child(3n + 1) .sign-badge {
+  animation-delay: -2.8s;
+}
+
+@keyframes myntsnurr {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+.sign-mynt .sign-name {
+  letter-spacing: 0.1em;
+  opacity: 0.72;
+}
+
+/* Vändningen: myntet tar fart, ställer sig på högkant och landar. */
+.sign-mynt-vand .sign-badge {
+  animation: myntvand 0.48s cubic-bezier(0.35, 0, 0.3, 1) forwards;
+}
+
+@keyframes myntvand {
+  0% {
+    transform: rotateY(0deg) scale(1);
+  }
+  55% {
+    transform: rotateY(540deg) scale(1.22);
+  }
+  100% {
+    transform: rotateY(1080deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign-mynt .sign-badge,
+  .sign-mynt-vand .sign-badge {
+    animation: myntpuls 2.6s ease-in-out infinite;
+  }
+
+  @keyframes myntpuls {
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
 }
