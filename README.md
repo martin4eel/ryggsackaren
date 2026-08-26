@@ -213,7 +213,7 @@ _Legendarisk ryggsäckare_.
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
 - 80 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 1 205 frågor uppdelade i två svårighetsgrader, varav 819 jobbfrågor
+- 1 661 frågor uppdelade i två svårighetsgrader, varav 1 275 jobbfrågor
 - 8 arkadmoment som avslutar arbetsskiften
 - 15 stämplar att samla i passet
 - 15 resehändelser som kan slå till på vägen
@@ -284,11 +284,11 @@ när frågan visas. `d: 1` betyder att frågan används på båda svårighetsgra
 }
 ```
 
-Valideringen skriver också ut en **varningslista** över jobb vars frågebank är
-tunn i förhållande till skiftets längd. Med lika många lätta frågor som
-arbetsdagar får en Turist exakt samma frågor varje gång, bara i ny ordning.
-Varningarna stoppar inte bygget, men listan är arbetsordern: 57 jobb har ännu
-mindre än fyra frågors marginal.
+Valideringen kräver också att varje jobb har minst **fyra lätta frågor mer än
+skiftet är långt**. Med lika många lätta frågor som arbetsdagar får en Turist
+exakt samma frågor varje gång, bara i ny ordning. Samtliga åttio yrken klarar
+kravet i dag, med i snitt sexton frågor var, och regeln stoppar bygget om ett
+nytt jobb läggs till med för tunn frågebank.
 
 Kör `npm run validate` efter ändringar. Den kontrollerar bland annat att varje
 stad har minst fem lätta frågor, att varje jobb har egna frågor och nog många

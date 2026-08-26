@@ -16,11 +16,7 @@ import { createServer } from 'vite';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const problems = [];
-/**
- * Varningar stoppar inte bygget. De används för sådant som inte är trasigt
- * men som borde bli bättre, och som annars glöms bort: just nu frågebankernas
- * storlek i förhållande till skiftlängden.
- */
+/** Varningar stoppar inte bygget, men syns vid varje körning. */
 const warnings = [];
 const server = await createServer({
   configFile: false,
@@ -169,11 +165,16 @@ try {
      * ordning. Kravet skärps efter hand som banken byggs ut; siffran här är
      * den nivå hela spelet klarar i dag.
      */
-    const ONSKAD_MARGINAL = 4;
-    if (easy - job.shiftLength < ONSKAD_MARGINAL)
-      warnings.push(
-        `${job.id}: ${easy} lätta frågor på ett skift om ${job.shiftLength} dagar ` +
-          `(marginal ${easy - job.shiftLength}, önskad ${ONSKAD_MARGINAL})`
+    /**
+     * Sedan alla åttio yrken byggts ut är kravet blockerande. Med för liten
+     * marginal får en Turist nästan samma frågor varje gång jobbet tas om,
+     * vilket är precis det som gjorde skiften enformiga tidigare.
+     */
+    const MIN_MARGINAL = 4;
+    if (easy - job.shiftLength < MIN_MARGINAL)
+      problems.push(
+        `jobb ${job.id}: ${easy} lätta frågor på ett skift om ${job.shiftLength} dagar. ` +
+          `Marginalen måste vara minst ${MIN_MARGINAL}, är ${easy - job.shiftLength}`
       );
 
     // Arkadmomentet måste vara komplett och spelbart.
