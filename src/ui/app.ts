@@ -2565,12 +2565,14 @@ export class App {
     const pages: Stamp[][] = taken.length === 0 ? [[]] : [[], []];
     taken.forEach((stamp, i) => pages[i % 2]!.push(stamp));
 
+    spread.append(this.renderPassportDataPage());
+
     pages.forEach((sida, index) => {
       const page = el('div', { class: 'passport-page' });
       page.append(
         el('div', { class: 'passport-head' },
           el('span', {}, 'Gränskontroll'),
-          el('span', {}, `Sid. ${index + 1}`)
+          el('span', {}, `Sid. ${index + 2}`)
         )
       );
       const yta = el('div', { class: 'passport-stamps' });
@@ -2610,6 +2612,100 @@ export class App {
       panel.append(todo);
     }
     return panel;
+  }
+
+  /**
+   * Passets första sida: personuppgifterna, som i ett riktigt pass. Här står
+   * vem du är på den här resan och vad ditt personbästa är, så att passet går
+   * att räcka över till någon och säga "titta här".
+   *
+   * Nederst ligger en maskinläsbar rad i samma form som på ett verkligt pass.
+   * Den fyller ingen funktion i spelet - den finns för att den är rolig.
+   */
+  private renderPassportDataPage(): HTMLElement {
+    const s = this.state!;
+    const home = CITY_BY_ID[s.homeCityId];
+    const best = loadHighscores()[0];
+    const page = el('div', { class: 'passport-page passport-data' });
+
+    page.append(
+      el('div', { class: 'passport-head' },
+        el('span', {}, 'Ryggsäckarpass'),
+        el('span', {}, 'Sid. 1')
+      )
+    );
+
+    const rad = (etikett: string, varde: string) =>
+      el('div', { class: 'pdata-row' },
+        el('span', { class: 'pdata-label' }, etikett),
+        el('span', { class: 'pdata-value' }, varde)
+      );
+
+    const emblem = el('div', { class: 'pdata-emblem' },
+      el('span', { class: 'pdata-emblem-mark' }, '⊕'),
+      el('span', { class: 'pdata-emblem-text' },
+        el('strong', {}, 'Ryggsäckaren'),
+        el('span', {}, 'Utfärdat för världens skull')
+      )
+    );
+    page.append(emblem);
+
+    const grid = el('div', { class: 'pdata-grid' });
+    grid.append(
+      rad('Hemstad', home ? `${home.name}, ${home.country}` : '—'),
+      rad('Resenärstyp', DIFFICULTY_INFO[s.difficulty].name),
+      rad('Dag på resan', String(s.days)),
+      rad('Städer', `${new Set(s.visited).size} av ${CITIES.length}`),
+      rad('Stämplar', `${s.stamps.length} av ${STAMPS.length}`),
+      rad('Flugna km', s.distance.toLocaleString('sv-SE'))
+    );
+    page.append(grid);
+
+    if (best) {
+      page.append(
+        el('div', { class: 'pdata-record' },
+          el('span', { class: 'pdata-record-label' }, 'Personbästa'),
+          el('span', { class: 'pdata-record-score' }, best.score.toLocaleString('sv-SE')),
+          el('span', { class: 'pdata-record-title' }, best.title),
+          el(
+            'span',
+            { class: 'pdata-record-meta' },
+            `${DIFFICULTY_INFO[best.difficulty].name} · ${best.cities} städer på ${best.days} dagar` +
+              (best.bestCity ? ` · bäst koll på ${best.bestCity.name}` : '')
+          )
+        )
+      );
+    } else {
+      page.append(
+        el(
+          'p',
+          { class: 'pdata-record-empty' },
+          'Inget personbästa än. Kom hem från en resa så skrivs det in här.'
+        )
+      );
+    }
+
+    /**
+     * Första raden beskriver innehavaren av det här passet, andra raden det
+     * inskrivna rekordet. Att blanda nuvarande resa och personbästa på samma
+     * rad blev motsägelsefullt: poängen kom från en Globetrotterresa medan
+     * läget stod som Turist.
+     */
+    page.append(
+      el('div', { class: 'pdata-mrz' },
+        el('span', {}, mrzLine1(home?.name ?? '')),
+        el(
+          'span',
+          {},
+          mrzLine2(
+            best?.score ?? 0,
+            best?.difficulty ?? s.difficulty,
+            best?.homeCityName ?? home?.name ?? ''
+          )
+        )
+      )
+    );
+    return page;
   }
 
   /** En enskild stämpel, tryckt i passet. */
@@ -2860,6 +2956,35 @@ function utcLabel(utc: number): string {
   return minutes === 0
     ? `UTC${sign}${hours}`
     : `UTC${sign}${hours}:${String(minutes).padStart(2, '0')}`;
+}
+
+/**
+ * Maskinläsbar rad i passets nederkant, i samma form som på ett verkligt
+ * pass: versaler, siffror och fyllnadstecken. Svenska bokstäver skrivs om
+ * som de görs i verkligheten, där Å och Ä blir A och Ö blir O.
+ */
+function mrzText(input: string, length: number): string {
+  const ascii = input
+    .toUpperCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Z0-9]/g, '<');
+  return ascii.slice(0, length).padEnd(length, '<');
+}
+
+/** Rad 1: vem passet tillhör på den här resan. */
+function mrzLine1(homeCity: string): string {
+  return `P<SWERYGGSACKARE<<${mrzText(homeCity, 26)}`;
+}
+
+/** Rad 2: det inskrivna rekordet - poäng, läge och varifrån resan gick. */
+function mrzLine2(
+  score: number,
+  difficulty: Difficulty,
+  homeCity: string
+): string {
+  const poang = String(Math.min(999999, Math.round(score))).padStart(6, '0');
+  return `${poang}SWE<<${mrzText(difficulty, 14)}${mrzText(homeCity, 14)}`;
 }
 
 /** Respekterar systeminställningen för mindre rörelse. */

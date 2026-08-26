@@ -160,12 +160,19 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    flygplats går via en hub och kostar en dag extra.
 8. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-9. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med ett uppslag där
-   stämplarna sitter tryckta i bläck, snett och lite huller om buller, med
-   resdagen i kanten. Femton finns att jaga: fyra kontinenter, tio i rad,
-   perfekt skift, skuldfri och så vidare. De som ännu inte tagits står i en
-   kort lista under uppslaget, som en resplan. Varje stämpel är värd poäng
-   på slutet.
+9. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
+
+   Den första är personuppgiftssidan: hemstad, resenärstyp, dag på resan,
+   städer, stämplar och flugna kilometer – och ditt **personbästa** ur
+   resedagboken, med poäng och titel. Nederst löper en maskinläsbar rad som
+   på ett riktigt pass. Sidan finns för att passet ska gå att räcka över till
+   någon.
+
+   På sidorna därefter sitter stämplarna tryckta i bläck, snett och lite
+   huller om buller, med resdagen i kanten. Femton finns att jaga: fyra
+   kontinenter, tio i rad, perfekt skift, skuldfri och så vidare. De som ännu
+   inte tagits står i en kort lista under uppslaget, som en resplan. Varje
+   stämpel är värd poäng på slutet.
 10. **Ljud.** Ett tjugotal effekter (rätt och fel svar, lön, avresa, ankomst,
    metronom, trumslag, stämpel och alla arkadmoment) syntetiseras i
    webbläsaren, så inga ljudfiler behövs. Högtalarknappen i statusraden
