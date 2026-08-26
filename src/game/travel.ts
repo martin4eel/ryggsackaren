@@ -143,7 +143,9 @@ export function availableRoutes(
   if (onLand && km <= MODE_RANGE.buss.max) add('buss');
   if (onLand && from.rail && to.rail && km <= MODE_RANGE.tag.max) add('tag');
   if (ferryDesc(from, to) && km <= MODE_RANGE.farja.max) add('farja');
-  if (km >= MODE_RANGE.flyg.min) add('flyg');
+  // Flyg kräver en flygplats i båda ändar. Köping har ingen, så därifrån
+  // får man ta sig till en granne på marken först.
+  if (km >= MODE_RANGE.flyg.min && from.airport && to.airport) add('flyg');
 
   /**
    * Långa flyg från en stad utan interkontinental flygplats går via en hub.
@@ -198,11 +200,37 @@ export function blockedRoutes(from: City, to: City): BlockedRoute[] {
     block('farja', 'Ingen färjelinje trafikerar den här sträckan.');
   }
 
-  if (km < MODE_RANGE.flyg.min) {
+  if (!from.airport) {
+    block('flyg', `${from.name} har ingen flygplats. Ta dig vidare på marken först.`);
+  } else if (!to.airport) {
+    block('flyg', `${to.name} har ingen flygplats.`);
+  } else if (km < MODE_RANGE.flyg.min) {
     block('flyg', 'För kort sträcka för att flyga. Ta dig fram på marken.');
   }
 
   return out;
+}
+
+/**
+ * Destinationer som går att nå från en stad med ett visst färdsätt.
+ *
+ * Används av stadens skyltar: en busstation visas bara om bussen faktiskt tar
+ * en någonstans. På Island finns varken buss eller tåg som når en annan stad i
+ * spelet, så där står bara flygplatsen.
+ */
+export function destinationsByMode(
+  from: City,
+  mode: TransportMode,
+  difficulty: Difficulty,
+  cities: readonly City[]
+): Array<{ city: City; route: Route }> {
+  const ut: Array<{ city: City; route: Route }> = [];
+  for (const to of cities) {
+    if (to.id === from.id) continue;
+    const rutt = availableRoutes(from, to, difficulty).find((r) => r.mode === mode);
+    if (rutt) ut.push({ city: to, route: rutt });
+  }
+  return ut.sort((a, b) => a.route.price - b.route.price);
 }
 
 /**

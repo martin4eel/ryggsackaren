@@ -52,6 +52,12 @@ export interface City {
    */
   rail: boolean;
   /**
+   * Har staden en flygplats med reguljär passagerartrafik? Utan den går
+   * inga flyg alls till eller från staden, och man får ta sig till en
+   * granne på marken först.
+   */
+  airport: boolean;
+  /**
    * Har staden en flygplats med interkontinental trafik? Från en stad utan
    * hub får långa flyg en mellanlandning: en dag extra och ett påslag på
    * priset. Resan visas fortfarande som en enda biljett - spelet ska inte

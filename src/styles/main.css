@@ -225,12 +225,23 @@ body {
   text-shadow: 0 2px 10px rgba(7, 26, 41, 0.65);
 }
 
-/* Krediten ligger uppe till höger. Nertill skrev den över skyltraden. */
+/* Raden under bilden: förklaringen till vänster, fotokrediten till höger. */
+.hero-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: -4px;
+}
+
+.hero-foot .sign-hint {
+  margin: 0;
+  text-align: left;
+  flex: 1 1 auto;
+}
+
 .photo-credit {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  z-index: 3;
+  flex: 0 0 auto;
   font-size: 0.66rem;
   color: rgba(246, 239, 224, 0.75);
   text-decoration: none;
@@ -3724,6 +3735,8 @@ input:focus-visible {
    Skyltarna ligger över fotot och måste därför bära sin egen läsbarhet.
    ======================================================================== */
 
+/* Antalet skyltar varierar med staden: alla har inte tåg, färja eller flyg.
+   Rutnätet packar därför så många som får plats på raden. */
 .signs {
   position: absolute;
   left: 0;
@@ -3731,9 +3744,9 @@ input:focus-visible {
   bottom: 0;
   z-index: 2;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  padding: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 8px 6px;
   /* Mörk botten under skyltarna så att de läses mot vilket foto som helst. */
   background: linear-gradient(
     180deg,
@@ -3743,9 +3756,15 @@ input:focus-visible {
   );
 }
 
-@media (min-width: 760px) {
+@media (min-width: 560px) {
   .signs {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+@media (min-width: 860px) {
+  .signs {
+    grid-template-columns: repeat(9, 1fr);
   }
 }
 
@@ -3776,8 +3795,8 @@ input:focus-visible {
 .sign-badge {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: 34px;
   border-radius: 12px;
   background: var(--paper);
   color: #0d2430;
@@ -3792,12 +3811,12 @@ input:focus-visible {
 }
 
 .sign-badge .icon {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
 }
 
 .sign-name {
-  font-size: 0.68rem;
+  font-size: 0.58rem;
   font-weight: 800;
   letter-spacing: 0.03em;
   color: var(--paper);

@@ -21,6 +21,9 @@ export type IconName =
   | 'skylt-souvenir'
   | 'skylt-ryggsack'
   | 'skylt-resa'
+  | 'skylt-buss'
+  | 'skylt-tag'
+  | 'skylt-farja'
   | 'skylt-telefon'
   | 'buss-profil'
   | 'tag-profil'
@@ -142,13 +145,14 @@ const ICONS: Record<IconName, Part[]> = {
     { tag: 'path', attrs: { d: 'M9.5 13h5v7.5h-5z', class: 'icon-knockout', stroke: 'none' } },
   ],
   'skylt-ryggsack': [
-    // Axelremmar, kropp, locksöm och ytterficka. Den tidigare versionen hade
-    // en bygel upptill och lästes som ett hänglås.
-    { tag: 'rect', attrs: { x: '7.6', y: '3.4', width: '2.2', height: '6', rx: '1.1', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'rect', attrs: { x: '14.2', y: '3.4', width: '2.2', height: '6', rx: '1.1', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'rect', attrs: { x: '3.2', y: '7.6', width: '17.6', height: '13', rx: '3.4', fill: 'currentColor', stroke: 'none' } },
-    { tag: 'rect', attrs: { x: '4.9', y: '12.1', width: '14.2', height: '1.3', class: 'icon-knockout', stroke: 'none' } },
-    { tag: 'rect', attrs: { x: '8.4', y: '14.8', width: '7.2', height: '5.8', rx: '1.2', class: 'icon-knockout', stroke: 'none' } },
+    // Bärhandtag, kropp, överfallslock med spänne och ytterficka. Tidigare
+    // versioner lästes först som ett hänglås och sedan som en stickkontakt,
+    // båda gånger för att detaljerna satt upptill i stället för på locket.
+    { tag: 'path', attrs: { d: 'M10 3.2h4a2 2 0 0 1 2 2v1.4h-2.2V5.4h-3.6v1.2H8V5.2a2 2 0 0 1 2-2z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '3.4', y: '6.4', width: '17.2', height: '14.2', rx: '3.6', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '5.2', y: '11.4', width: '13.6', height: '1.3', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '10.6', y: '9.8', width: '2.8', height: '4.4', rx: '0.7', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '7.4', y: '15', width: '9.2', height: '3.6', rx: '1', class: 'icon-knockout', stroke: 'none' } },
   ],
   'skylt-resa': [
     // Trafikflygplan sett uppifrån, med nosen uppåt.
@@ -160,6 +164,28 @@ const ICONS: Record<IconName, Part[]> = {
         stroke: 'none',
       },
     },
+  ],
+  'skylt-buss': [
+    { tag: 'rect', attrs: { x: '3.4', y: '4', width: '17.2', height: '13', rx: '2.6', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '5.4', y: '6.4', width: '13.2', height: '4.6', rx: '1', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '5.4', y: '13', width: '2.6', height: '2.2', rx: '0.7', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '16', y: '13', width: '2.6', height: '2.2', rx: '0.7', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '7.6', cy: '18.6', r: '2.2', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '16.4', cy: '18.6', r: '2.2', fill: 'currentColor', stroke: 'none' } },
+  ],
+  'skylt-tag': [
+    { tag: 'rect', attrs: { x: '4.4', y: '3', width: '15.2', height: '14', rx: '3.4', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '6.4', y: '5.6', width: '11.2', height: '4.6', rx: '1', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '8.6', cy: '13.4', r: '1.3', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '15.4', cy: '13.4', r: '1.3', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'path', attrs: { d: 'M6.6 18h10.8v1.7H6.6zM7.4 20.4l2-1.4h1.9l-2 1.4zM14.7 19h1.9l2 1.4h-1.9z', fill: 'currentColor', stroke: 'none' } },
+  ],
+  'skylt-farja': [
+    { tag: 'path', attrs: { d: 'M2.4 16.4h19.2l-2.6 4.4H5z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '5.6', y: '9.6', width: '12.8', height: '5.4', rx: '1', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '7.6', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '13.4', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '9.4', y: '4.6', width: '5.2', height: '4', rx: '0.8', fill: 'currentColor', stroke: 'none' } },
   ],
   'skylt-telefon': [
     // Telefonkiosk med tak, fönsterspröjs och dörrhandtag.

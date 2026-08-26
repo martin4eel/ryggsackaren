@@ -130,8 +130,15 @@ webbläsaren och överlever att sparfilen raderas.
    får lättare frågor och färre alternativ, inte färre chanser att tänka.
 3. **Stadsbilden.** Valen sitter som skyltar på gatan, ovanpå stadens foto,
    som i förlagan: turistbyrån, tidningen, souvenirbutiken, ryggsäcken,
-   resebyrån och telefonen. Raden under bilden berättar vad skylten man pekar
-   på gör.
+   telefonen – och stationerna.
+
+   Resandet är uppdelat i **busstation, tågstation, hamn och flygplats**, och
+   varje stad har bara de skyltar som faktiskt tar en någonstans. Alla har
+   buss, trettiosex av fyrtiosju har järnväg, sju har färjeläge, och alla utom
+   Köping har flygplats. Reykjavík har därför bara en flygplats, och från
+   Köping får man ta tåget innan man kan flyga.
+
+   Raden under bilden berättar vad skylten man pekar på gör.
 4. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
@@ -331,10 +338,10 @@ sorteringen att varje korg har egna föremål i `pool`, för träffmomentet att
 foto i `public/cities/`.
 
 Den kontrollerar också transportnätverket: att landregionernas grannskap är
-symmetriskt, att färjelinjerna pekar på städer som finns, och att **alla 2 162
-stadspar har minst ett resealternativ i båda svårighetsgraderna**. Det sista är
-det viktigaste – ett par utan rutt skulle låsa fast en spelare utan att något
-syns i gränssnittet.
+symmetriskt, att färjelinjerna pekar på städer som finns, och att **varje stad går att nå
+från varje annan stad genom nätverket**, med byten. Alla par behöver alltså
+inte ha en direktförbindelse – Köping saknar flygplats – men en stad som inte
+går att ta sig ifrån skulle låsa fast en spelare utan att något syns.
 
 ### Nya städer och foton
 

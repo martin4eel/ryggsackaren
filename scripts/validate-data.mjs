@@ -306,6 +306,39 @@ try {
     if (a === b) problems.push(`färjelänk från ${a} till sig själv`);
   }
 
+  /**
+   * Alla stadspar behöver inte ha en direktförbindelse - Köping har ingen
+   * flygplats, så därifrån går inget flyg alls. Kravet är i stället att varje
+   * stad går att nå från varje annan stad genom nätverket, med byten.
+   * En stad som inte går att ta sig ifrån skulle låsa fast en spelare.
+   */
+  const grannar = new Map(
+    CITIES.map((c) => [
+      c.id,
+      CITIES.filter(
+        (d) => d.id !== c.id && availableRoutes(c, d, 'globetrotter').length > 0
+      ).map((d) => d.id),
+    ])
+  );
+  for (const start of CITIES) {
+    const sedda = new Set([start.id]);
+    const ko = [start.id];
+    while (ko.length > 0) {
+      for (const n of grannar.get(ko.shift()) ?? []) {
+        if (!sedda.has(n)) {
+          sedda.add(n);
+          ko.push(n);
+        }
+      }
+    }
+    if (sedda.size < CITIES.length) {
+      const onadda = CITIES.filter((c) => !sedda.has(c.id)).map((c) => c.name);
+      problems.push(
+        `från ${start.name} går det inte att nå ${onadda.length} städer ens med byten: ${onadda.slice(0, 4).join(', ')}`
+      );
+    }
+  }
+
   let utanRutt = 0;
   let landOverTak = 0;
   for (const from of CITIES) {
@@ -313,12 +346,7 @@ try {
       if (from.id === to.id) continue;
       for (const svårighet of ['turist', 'globetrotter']) {
         const rutter = availableRoutes(from, to, svårighet);
-        if (rutter.length === 0) {
-          utanRutt += 1;
-          problems.push(
-            `${from.name} -> ${to.name} (${svårighet}) saknar helt resealternativ`
-          );
-        }
+        if (rutter.length === 0) utanRutt += 1;
         // Buss eller tåg över 250 mil är inte trovärdigt oavsett nätverk.
         for (const r of rutter) {
           if ((r.mode === 'buss' || r.mode === 'tag') && r.days > 5) {
@@ -334,7 +362,8 @@ try {
 
   console.log(
     `Transport: ${CITIES.length * (CITIES.length - 1)} stadspar, ` +
-      `${utanRutt} utan rutt, ${landOverTak} orimliga landrutter`
+      `${utanRutt} utan direktrutt, ${landOverTak} orimliga landrutter, ` +
+      `alla städer nåbara med byten`
   );
 
   console.log(`Frågor: ${total}`);

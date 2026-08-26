@@ -37,6 +37,7 @@ import { MODE_LABELS, type TransportMode } from '../data/transport';
 import {
   availableRoutes,
   blockedRoutes,
+  destinationsByMode,
   cheapestRoute,
   fastestRoute,
   type Route,
@@ -296,6 +297,12 @@ export class App {
    * redan genomförd i tillståndet, och spelaren hamnar i den nya staden.
    */
   private travelScene: { from: City; to: City; mode: TransportMode } | null = null;
+  /**
+   * Vilken station man gått in i. Resebyrån är uppdelad i busstation,
+   * tågstation, flygplats och hamn, som i förlagan, och listan visar då bara
+   * de destinationer det färdsättet faktiskt når.
+   */
+  private travelFilter: TransportMode | null = null;
 
   constructor(root: HTMLElement) {
     this.root = root;
@@ -1191,17 +1198,6 @@ export class App {
         ),
         el('h1', { class: 'city-hero-title' }, city.name)
       ),
-      el(
-        'a',
-        {
-          class: 'photo-credit',
-          href: './cities/ATTRIBUTION.md',
-          target: '_blank',
-          rel: 'noopener',
-          title: 'Fotokrediter',
-        },
-        'Foto: Wikimedia Commons'
-      )
     );
 
     /**
@@ -1270,15 +1266,55 @@ export class App {
       `${s.backpack.length} souvenirer, ${s.stamps.length} stämplar och all statistik.`,
       () => this.go('ryggsack')
     );
-    addSign('skylt-resa', 'Resebyrån', 'Välj nästa destination på jordgloben.', () =>
-      this.go('karta')
-    );
+    /**
+     * Stationerna. En skylt sätts upp bara om färdsättet faktiskt tar en
+     * någonstans: på Island finns varken buss eller tåg som når en annan stad
+     * i spelet, så där står bara flygplatsen.
+     */
+    const stationer: Array<[TransportMode, IconName, string, string]> = [
+      ['buss', 'skylt-buss', 'Busstation', 'Långsamt och billigt till närbelägna städer.'],
+      ['tag', 'skylt-tag', 'Tågstation', 'Bekvämt och lagom snabbt på räls.'],
+      ['farja', 'skylt-farja', 'Hamnen', 'Färjor till städer på andra sidan vattnet.'],
+      ['flyg', 'skylt-resa', 'Flygplats', 'Snabbast över långa avstånd, men dyrast.'],
+    ];
+    for (const [mode, ikon, namn, beskrivning] of stationer) {
+      const antal = destinationsByMode(city, mode, s.difficulty, CITIES).length;
+      if (antal === 0) continue;
+      addSign(
+        ikon,
+        namn,
+        `${beskrivning} ${antal} ${antal === 1 ? 'destination' : 'destinationer'} härifrån.`,
+        () => {
+          this.travelFilter = mode;
+          playSound('valj');
+          this.go('karta');
+        }
+      );
+    }
     addSign('skylt-telefon', 'Telefonen', 'Ring hem och låna pengar om kassan är tom.', () => {
       playSound('telefonbabbel');
       this.go('telefon');
     });
     hero.append(signs);
-    wrap.append(hero, hint);
+    // Krediten låg tidigare i bilden och krockade omväxlande med stadsnamnet
+    // och med skyltraden. Under bilden stör den ingenting.
+    wrap.append(
+      hero,
+      el('div', { class: 'hero-foot' },
+        hint,
+        el(
+          'a',
+          {
+            class: 'photo-credit',
+            href: './cities/ATTRIBUTION.md',
+            target: '_blank',
+            rel: 'noopener',
+            title: 'Fotokrediter',
+          },
+          'Foto: Wikimedia Commons'
+        )
+      )
+    );
 
     // Resehändelsen från senaste sträckan visas överst, en gång, och
     // kvitteras bort så att den inte ligger kvar när man kommer tillbaka.
@@ -1999,16 +2035,38 @@ export class App {
     const s = this.state!;
     const wrap = el('div', { class: 'stack' });
 
+    const filter = this.travelFilter;
+    const stationsNamn: Record<TransportMode, string> = {
+      buss: 'Busstationen',
+      tag: 'Tågstationen',
+      farja: 'Hamnen',
+      flyg: 'Flygplatsen',
+    };
     const panel = el('section', { class: 'panel' });
     panel.append(
-      el('h1', { class: 'title' }, 'Resebyrån'),
+      el('h1', { class: 'title' }, filter ? stationsNamn[filter] : 'Resebyrån'),
       el(
         'p',
         { class: 'muted' },
-        `Du står i ${this.city.name}. Tryck på en stad för att se biljettpriser. ` +
-          `Hemstaden ${CITY_BY_ID[s.homeCityId]!.name} är markerad med ring.`
+        filter
+          ? `Härifrån går ${MODE_LABELS[filter].toLowerCase()} till städerna nedan. ` +
+            `Vill du se allt som går från ${this.city.name}, byt till alla färdsätt.`
+          : `Du står i ${this.city.name}. Tryck på en stad för att se biljettpriser. ` +
+            `Hemstaden ${CITY_BY_ID[s.homeCityId]!.name} är markerad med ring.`
       )
     );
+    if (filter) {
+      panel.append(
+        button(
+          'Visa alla färdsätt',
+          () => {
+            this.travelFilter = null;
+            this.render();
+          },
+          { class: 'btn btn-ghost' }
+        )
+      );
+    }
     panel.append(
       renderMapFrame({
         currentCityId: s.currentCityId,
@@ -2059,9 +2117,17 @@ export class App {
     const paint = () => {
       clear(table);
       const needle = searchKey(this.cityFilter.trim());
+      const nabara = filter
+        ? new Set(
+            destinationsByMode(this.city, filter, s.difficulty, CITIES).map(
+              (d) => d.city.id
+            )
+          )
+        : null;
       const sorted = CITIES.filter(
         (c) =>
           c.id !== s.currentCityId &&
+          (!nabara || nabara.has(c.id)) &&
           (needle === '' ||
             searchKey(c.name).includes(needle) ||
             searchKey(c.country).includes(needle))
@@ -2122,7 +2188,12 @@ export class App {
     paint();
     list.append(el('div', { class: 'row' }, search), table);
     wrap.append(list);
-    wrap.append(this.backRow('Tillbaka till staden', () => this.go('stad')));
+    wrap.append(
+      this.backRow('Tillbaka till staden', () => {
+        this.travelFilter = null;
+        this.go('stad');
+      })
+    );
     return wrap;
   }
 
@@ -2372,6 +2443,7 @@ export class App {
     s.visited.push(target.id);
     this.travelTarget = null;
     this.mapHighlight = null;
+    this.travelFilter = null;
     this.commit();
     if (this.checkBroke()) return;
     // Varje färdsätt låter som sig självt när det lämnar staden.
