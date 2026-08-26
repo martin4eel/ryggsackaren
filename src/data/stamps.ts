@@ -85,7 +85,9 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
     },
     {
       id: 'handelsresande',
-      name: 'Handelsresande',
+      // Kort namn med flit: stämpeln är 104 px bred, och ett långt
+      // sammansatt ord måste avstavas mitt itu för att rymmas.
+      name: 'Handelsman',
       desc: 'Gör minst 500 i vinst på en enda souvenir.',
       glyph: '⇄',
       test: (s) => s.bestTrade >= 500,

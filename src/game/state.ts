@@ -87,6 +87,8 @@ export interface GameState {
   bestTrade: number;
   /** Stämplar i passet, id:n ur data/stamps.ts */
   stamps: string[];
+  /** Vilken resdag varje stämpel togs, för datumet som trycks i stämpeln */
+  stampDays: Record<string, number>;
   /** Har snabbguiden i startstaden visats? */
   seenIntro: boolean;
   /** Kvarvarande samtal till en lokalbo, livlinan i frågorna */
@@ -143,6 +145,7 @@ export function createGame(
     peakMoney: difficulty === 'turist' ? 6000 : 4000,
     bestTrade: 0,
     stamps: [],
+    stampDays: {},
     seenIntro: false,
     lifelines: lifelinesFor(difficulty),
     cityStats: {},
@@ -210,6 +213,7 @@ function migrate(
   state.peakMoney ??= Math.max(0, state.money ?? 0);
   state.bestTrade ??= 0;
   state.stamps ??= [];
+  state.stampDays ??= {};
   // En pågående resa har redan passerat introduktionen.
   state.seenIntro ??= true;
   state.lifelines ??= lifelinesFor(state.difficulty);

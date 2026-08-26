@@ -1914,35 +1914,211 @@ img.no-photo {
   color: var(--ink-soft);
 }
 
-/* ------------------------------------------------------------------ passet */
+/* ------------------------------------------------------------------ passet
+   Stämplarna ritas som tryck i ett pass, inte som en checklista. Rotation,
+   bläck och form kommer från ett stabilt hasch i app.ts, så uppslaget ser
+   likadant ut varje gång det ritas om.
+   ======================================================================== */
 
-.stamp-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 9px;
-  margin-top: 10px;
-}
-
-.stamp {
-  display: flex;
-  align-items: center;
-  gap: 11px;
+.passport {
+  margin-top: 12px;
   padding: 10px;
   border-radius: 10px;
-  border: 2px dashed var(--line);
-  background: var(--paper-dim);
+  /* Pärmen: mörkt band runt sidorna, med en tunn guldkant. */
+  background: linear-gradient(160deg, #14323f 0%, #0d2430 100%);
+  box-shadow: inset 0 0 0 1.5px rgba(242, 166, 59, 0.35), var(--shadow);
 }
 
-.stamp-on {
-  border-style: solid;
-  border-color: rgba(200, 69, 47, 0.4);
-  background: #fff;
+.passport-spread {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
-.stamp-off {
-  opacity: 0.6;
+@media (min-width: 700px) {
+  .passport-spread {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
+/* En passida är högre än den är bred. Utan taket blir uppslaget en bred,
+   låg remsa på stora skärmar och slutar likna ett pass. */
+.passport {
+  max-width: 780px;
+  margin-inline: auto;
+}
+
+.passport-page {
+  position: relative;
+  min-height: 300px;
+  padding: 12px;
+  border-radius: 5px;
+  background:
+    repeating-linear-gradient(
+      -32deg,
+      rgba(29, 43, 52, 0.045) 0 2px,
+      transparent 2px 9px
+    ),
+    linear-gradient(180deg, #fbf6ea 0%, #f2e9d6 100%);
+  box-shadow: 0 2px 8px rgba(4, 16, 26, 0.25);
+}
+
+.passport-head {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 7px;
+  margin-bottom: 6px;
+  border-bottom: 1.5px solid rgba(29, 43, 52, 0.18);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(29, 43, 52, 0.45);
+}
+
+.passport-stamps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  /* Stämplarna fyller sidan uppifrån i stället för att centreras på en rad. */
+  align-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14px 0;
+  min-height: 220px;
+}
+
+.passport-empty {
+  margin: 24px 0;
+  font-size: 0.86rem;
+  color: rgba(29, 43, 52, 0.4);
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------ en stämpel */
+
+.pstamp {
+  --bläck: var(--stamp);
+  flex: 0 0 auto;
+  /* Stämplarna får tränga ihop sig något, som riktiga tryck gör, men inte så
+     mycket att namnen skriver över varandra. */
+  margin: 2px -1px;
+  transform: rotate(var(--vrid, 0deg)) translateY(var(--lyft, 0));
+}
+
+.pstamp-ring {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 104px;
+  height: 104px;
+  padding: 9px;
+  text-align: center;
+  /* Ringen är ogenomskinlig, så att en stämpel som hamnar ovanpå en annan
+     ser ut att vara tryckt efter den i stället för att smälta ihop. */
+  background: rgba(251, 246, 234, 0.82);
+  color: var(--bläck);
+  border: 2.5px solid currentColor;
+  /* Dubbel ring, som på ett gränsstämpelavtryck. */
+  box-shadow: inset 0 0 0 1.5px currentColor;
+  /* Trycket är aldrig helt jämnt. */
+  opacity: 0.82;
+}
+
+.form-rund .pstamp-ring {
+  border-radius: 50%;
+}
+
+.form-kantig .pstamp-ring {
+  border-radius: 7px;
+}
+
+.pstamp-glyph {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.pstamp-name {
+  font-size: 0.53rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  /* Namnet ska brytas inuti ringen, aldrig svämma ut över grannstämpeln. */
+  max-width: 100%;
+  /* Bryt hellre mellan ord än mitt i ett. Namnen i data/stamps.ts hålls
+     korta nog att rymmas utan avstavning. */
+  overflow-wrap: break-word;
+}
+
+.pstamp-day {
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  opacity: 0.75;
+}
+
+.ink-rod {
+  --bläck: #b8372a;
+}
+
+.ink-bla {
+  --bläck: #2c5f8a;
+}
+
+.ink-gron {
+  --bläck: #2f6b4f;
+}
+
+.ink-lila {
+  --bläck: #6b4076;
+}
+
+/* ---------------------------------------------------------- kvar att ta */
+
+.stamp-todo {
+  margin-top: 14px;
+}
+
+.stamp-todo-head {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.stamp-todo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 6px;
+}
+
+.stamp-todo-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 8px 11px;
+  border-radius: 9px;
+  border: 1.5px dashed var(--line);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.stamp-todo-list strong {
+  color: var(--ink);
+  font-size: 0.88rem;
+}
+
+/* Stämpeln i kvittensrutan behåller sitt gamla runda utseende. */
 .stamp-mark {
   flex: 0 0 auto;
   width: 40px;
@@ -1950,35 +2126,12 @@ img.no-photo {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  border: 2.5px solid var(--ink-soft);
-  color: var(--ink-soft);
+  border: 2.5px solid var(--stamp);
+  color: var(--stamp);
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.95rem;
-}
-
-.stamp-on .stamp-mark {
-  border-color: var(--stamp);
-  color: var(--stamp);
   transform: rotate(-8deg);
-}
-
-.stamp-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.stamp-name {
-  font-weight: 800;
-  color: var(--ink);
-  font-size: 0.95rem;
-}
-
-.stamp-desc {
-  font-size: 0.8rem;
-  color: var(--ink-soft);
 }
 
 .stamp-toast {

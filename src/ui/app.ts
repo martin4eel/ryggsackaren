@@ -26,6 +26,7 @@ import {
   loanAmount,
   newStamps,
   pityBonus,
+  pseudoRandom,
   rankTitle,
   shuffle,
   souvenirPrice,
@@ -401,6 +402,8 @@ export class App {
     if (!s) return;
     s.peakMoney = Math.max(s.peakMoney, s.money);
     const earned = newStamps(s);
+    // Dagen stämpeln togs trycks sedan i själva stämpeln, som ett datum.
+    for (const stamp of earned) s.stampDays[stamp.id] = s.days;
     saveGame(s);
     if (earned.length > 0) {
       // Bara den första visas som kvittens; resten finns i passet.
@@ -2513,13 +2516,23 @@ export class App {
    * som synliga mål. Att visa även dem som inte tagits är själva poängen -
    * de fungerar som en resplan man kan välja att följa.
    */
+  /**
+   * Passet, ritat som ett pass: ett uppslag med två sidor där stämplarna
+   * sitter i bläck, snett och lite överlappande, med resdagen tryckt i
+   * kanten. Varje stämpel får sin rotation, sitt bläck och sin form ur ett
+   * stabilt hasch på sitt id, så att uppslaget ser likadant ut varje gång
+   * det ritas om - annars skulle stämplarna hoppa runt vid varje omritning.
+   *
+   * De stämplar som inte tagits ligger inte i passet. De står i en kort lista
+   * under, som en resplan, så att sidorna inte förvandlas till en checklista.
+   */
   private renderStampPanel(): HTMLElement {
     const s = this.state!;
     const panel = el('section', { class: 'panel' });
     panel.append(
       el('div', { class: 'panel-head' },
-        el('h2', {}, 'Stämplar i passet'),
-        el('span', { class: 'tag' }, `${s.stamps.length} av ${STAMPS.length}`)
+        el('h2', {}, 'Passet'),
+        el('span', { class: 'tag' }, `${s.stamps.length} av ${STAMPS.length} stämplar`)
       )
     );
 
@@ -2538,26 +2551,106 @@ export class App {
       )
     );
 
-    const grid = el('div', { class: 'stamp-grid' });
-    // De tagna först, i den ordning de förtjänades.
     const taken = s.stamps
       .map((id) => STAMP_BY_ID[id])
       .filter((x): x is Stamp => Boolean(x));
-    const rest = STAMPS.filter((x) => !s.stamps.includes(x.id));
-    for (const stamp of [...taken, ...rest]) {
-      const got = s.stamps.includes(stamp.id);
-      grid.append(
-        el('div', { class: `stamp ${got ? 'stamp-on' : 'stamp-off'}` },
-          el('span', { class: 'stamp-mark' }, got ? stamp.glyph : '?'),
-          el('span', { class: 'stamp-text' },
-            el('span', { class: 'stamp-name' }, stamp.name),
-            el('span', { class: 'stamp-desc' }, stamp.desc)
-          )
+
+    const book = el('div', { class: 'passport' });
+    const spread = el('div', { class: 'passport-spread' });
+
+    /**
+     * Stämplarna fördelas jämnt över två sidor, i den ordning de togs. Ett
+     * tomt pass får bara ett uppslag - två tomma sidor ser ut som ett fel.
+     */
+    const pages: Stamp[][] = taken.length === 0 ? [[]] : [[], []];
+    taken.forEach((stamp, i) => pages[i % 2]!.push(stamp));
+
+    pages.forEach((sida, index) => {
+      const page = el('div', { class: 'passport-page' });
+      page.append(
+        el('div', { class: 'passport-head' },
+          el('span', {}, 'Gränskontroll'),
+          el('span', {}, `Sid. ${index + 1}`)
         )
       );
+      const yta = el('div', { class: 'passport-stamps' });
+      for (const stamp of sida) yta.append(this.renderStamp(stamp));
+      if (sida.length === 0 && index === 0) {
+        yta.append(
+          el(
+            'p',
+            { class: 'passport-empty' },
+            'Passet är tomt än. Första stämpeln kommer när du gjort ditt första arbetsskift.'
+          )
+        );
+      }
+      page.append(yta);
+      spread.append(page);
+    });
+
+    book.append(spread);
+    panel.append(book);
+
+    const rest = STAMPS.filter((x) => !s.stamps.includes(x.id));
+    if (rest.length > 0) {
+      const todo = el('div', { class: 'stamp-todo' });
+      todo.append(
+        el('h3', { class: 'stamp-todo-head' }, `Kvar att stämpla (${rest.length})`)
+      );
+      const list = el('ul', { class: 'stamp-todo-list' });
+      for (const stamp of rest) {
+        list.append(
+          el('li', {},
+            el('strong', {}, stamp.name),
+            el('span', {}, stamp.desc)
+          )
+        );
+      }
+      todo.append(list);
+      panel.append(todo);
     }
-    panel.append(grid);
     return panel;
+  }
+
+  /** En enskild stämpel, tryckt i passet. */
+  private renderStamp(stamp: Stamp): HTMLElement {
+    const s = this.state!;
+    // Stabilt utseende per stämpel: samma rotation och bläck varje omritning.
+    const seed = pseudoRandom(`stampel|${stamp.id}`);
+    const seed2 = pseudoRandom(`bläck|${stamp.id}`);
+    const rotation = Math.round((seed - 0.5) * 22);
+    // Ett litet lodrätt hopp per stämpel, så att de ser spridda ut över
+    // sidan i stället för att stå uppradade på en linje.
+    const lyft = Math.round((pseudoRandom(`lyft|${stamp.id}`) - 0.5) * 26);
+    const ink = ['ink-rod', 'ink-bla', 'ink-gron', 'ink-lila'][
+      Math.floor(seed2 * 4)
+    ]!;
+    const form = seed2 > 0.62 ? 'form-kantig' : 'form-rund';
+    const dag = s.stampDays[stamp.id];
+
+    const node = el(
+      'div',
+      {
+        class: `pstamp ${ink} ${form}`,
+        style: `--vrid:${rotation}deg; --lyft:${lyft}px`,
+        // Skärmläsare får hela innebörden; det visuella är dekor.
+        role: 'img',
+        'aria-label': `${stamp.name}. ${stamp.desc}${
+          dag !== undefined ? ` Stämplad dag ${dag}.` : ''
+        }`,
+        title: stamp.desc,
+      },
+      el('span', { class: 'pstamp-ring' },
+        el('span', { class: 'pstamp-glyph' }, stamp.glyph),
+        el('span', { class: 'pstamp-name' }, stamp.name),
+        el(
+          'span',
+          { class: 'pstamp-day' },
+          dag !== undefined ? `DAG ${dag}` : '— — —'
+        )
+      )
+    );
+    return node;
   }
 
   // -------------------------------------------------------------- telefonen
