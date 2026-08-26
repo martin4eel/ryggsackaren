@@ -12,6 +12,10 @@ export type IconName =
   | 'pass'
   | 'stampel'
   | 'lokalbo'
+  | 'buss'
+  | 'tag'
+  | 'farja'
+  | 'flyg'
   | 'flagga'
   | 'tidning'
   | 'souvenir'
@@ -59,6 +63,28 @@ const ICONS: Record<IconName, Part[]> = {
       },
     },
     { tag: 'path', attrs: { d: 'M15.54 8.46a5 5 0 0 1 0 7.07' } },
+  ],
+  buss: [
+    { tag: 'rect', attrs: { x: '3', y: '5', width: '18', height: '12', rx: '2' } },
+    { tag: 'path', attrs: { d: 'M3 10h18' } },
+    { tag: 'circle', attrs: { cx: '7.5', cy: '20', r: '1.6' } },
+    { tag: 'circle', attrs: { cx: '16.5', cy: '20', r: '1.6' } },
+    { tag: 'path', attrs: { d: 'M8 14h.01M16 14h.01' } },
+  ],
+  tag: [
+    { tag: 'rect', attrs: { x: '5', y: '3', width: '14', height: '13', rx: '3' } },
+    { tag: 'path', attrs: { d: 'M5 9h14' } },
+    { tag: 'path', attrs: { d: 'M8 20l-2 2M16 20l2 2' } },
+    { tag: 'path', attrs: { d: 'M9 13h.01M15 13h.01' } },
+    { tag: 'path', attrs: { d: 'M7 16h10' } },
+  ],
+  farja: [
+    { tag: 'path', attrs: { d: 'M3 18a3 3 0 0 0 3-1.5 3 3 0 0 1 5 0 3 3 0 0 0 5 0 3 3 0 0 1 5 0' } },
+    { tag: 'path', attrs: { d: 'M5 15V9h14v6' } },
+    { tag: 'path', attrs: { d: 'M8 9V5h5l3 4' } },
+  ],
+  flyg: [
+    { tag: 'path', attrs: { d: 'M17.8 19.2 16 11l3.5-3.5a2.12 2.12 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1 1.6L8 11l-2 2-2.2-.4a.8.8 0 0 0-.8 1.3l2.2 2.2 2.2 2.2a.8.8 0 0 0 1.3-.8L8 16l2-2 3.2 4.2a1 1 0 0 0 1.6-1z' } },
   ],
   lokalbo: [
     {

@@ -1120,7 +1120,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   kopenhamn: [
-    { q: 'I vilket land ligger København?', a: ['Danmark', 'Sverige', 'Norge', 'Tyskland'], d: 1 },
+    { q: 'I vilket land ligger Köpenhamn?', a: ['Danmark', 'Sverige', 'Norge', 'Tyskland'], d: 1 },
     { q: 'Vad heter Köpenhamns färgstarka kanalhamn från 1670-talet?', a: ['Nyhavn', 'Nyborg', 'Nyhamn', 'Nørrehavn'], d: 1 },
     { q: 'Vilken nöjespark mitt i Köpenhamn öppnade 1843?', a: ['Tivoli', 'Liseberg', 'Prater', 'Gröna Lund'], d: 1, info: 'Bakken norr om staden är ännu äldre och räknas som världens äldsta.' },
     { q: 'Vilken staty vid Langelinie bygger på en saga av H.C. Andersen?', a: ['Den lilla sjöjungfrun', 'Havsguden', 'Sjömannen', 'Sirenen'], d: 1 },

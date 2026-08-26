@@ -30,11 +30,16 @@ import {
   shuffle,
   souvenirPrice,
   speedBonus,
-  travelOptions,
   wagePerCorrect,
   type PreparedQuestion,
-  type TravelOption,
 } from '../game/rules';
+import {
+  availableRoutes,
+  blockedRoutes,
+  cheapestRoute,
+  fastestRoute,
+  type Route,
+} from '../game/travel';
 import {
   clearSave,
   createGame,
@@ -179,6 +184,18 @@ function audioButton(cls: string): HTMLButtonElement {
   );
   paint(b);
   return b;
+}
+
+/**
+ * Jämförelseform för sökning. Å, ä och ö är egna bokstäver i svenskan, men
+ * den som skriver fort i en sökruta hoppar över prickarna. Genom att fälla
+ * ihop diakriterna hittar "gote" Göteborg och "kopenhamn" Köpenhamn.
+ */
+function searchKey(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
 }
 
 /** Regionnamn som visas i passet och på slutskärmen. */
@@ -738,12 +755,12 @@ export class App {
    */
   private renderStartCityList(host: HTMLElement): void {
     clear(host);
-    const needle = this.cityFilter.trim().toLowerCase();
+    const needle = searchKey(this.cityFilter.trim());
     const matches = CITIES.filter(
       (c) =>
         needle === '' ||
-        c.name.toLowerCase().includes(needle) ||
-        c.country.toLowerCase().includes(needle)
+        searchKey(c.name).includes(needle) ||
+        searchKey(c.country).includes(needle)
     );
 
     if (matches.length === 0) {
@@ -1827,13 +1844,13 @@ export class App {
 
     const paint = () => {
       clear(table);
-      const needle = this.cityFilter.trim().toLowerCase();
+      const needle = searchKey(this.cityFilter.trim());
       const sorted = CITIES.filter(
         (c) =>
           c.id !== s.currentCityId &&
           (needle === '' ||
-            c.name.toLowerCase().includes(needle) ||
-            c.country.toLowerCase().includes(needle))
+            searchKey(c.name).includes(needle) ||
+            searchKey(c.country).includes(needle))
       ).sort((a, b) => distanceKm(this.city, a) - distanceKm(this.city, b));
 
       if (sorted.length === 0) {
@@ -1843,19 +1860,31 @@ export class App {
 
       for (const c of sorted) {
         const km = distanceKm(this.city, c);
-        const cheapest = travelOptions(this.city, c)[0]!;
+        const cheapest = cheapestRoute(this.city, c, s.difficulty)!;
+        const fastest = fastestRoute(this.city, c, s.difficulty)!;
         const affordable = s.money >= cheapest.price;
         const visited = s.visited.includes(c.id);
+        // Billigaste färdsättet får representera sträckan i listan, med
+        // restiden från det snabbaste, så att avvägningen syns redan här.
         const row = button(
           el('span', { class: 'dest-row' },
             el('span', { class: 'dest-name' }, c.name),
             el('span', { class: 'dest-country' },
               `${c.country}${visited ? ' · besökt' : ''}`),
             el('span', { class: 'dest-km' }, `${km.toLocaleString('sv-SE')} km`),
+            el('span', { class: 'dest-mode' },
+              icon(cheapest.mode),
+              el('span', {}, cheapest.label)
+            ),
             el(
               'span',
               { class: `dest-price ${affordable ? '' : 'dest-price-out'}` },
               `från ${this.money(cheapest.price)}`
+            ),
+            el('span', { class: 'dest-days' },
+              fastest.days === cheapest.days
+                ? `${cheapest.days} ${cheapest.days === 1 ? 'dag' : 'dagar'}`
+                : `${fastest.days}–${cheapest.days} dagar`
             )
           ),
           () => {
@@ -1906,7 +1935,9 @@ export class App {
       el(
         'p',
         { class: 'muted' },
-        `${km.toLocaleString('sv-SE')} km · ${Math.round(tz)} tidszoner · ` +
+        `${km.toLocaleString('sv-SE')} km · ${Math.round(tz)} ${
+          Math.round(tz) === 1 ? 'tidszon' : 'tidszoner'
+        } · ` +
           `${utcLabel(target.utc)} · boende där ${this.money(
             dailyCost(target, s.difficulty)
           )} per dag`
@@ -1915,23 +1946,74 @@ export class App {
     wrap.append(panel);
 
     const opts = el('section', { class: 'panel' });
-    opts.append(el('h2', {}, 'Välj biljett'));
-    const tickets = travelOptions(from, target);
+    const tickets = availableRoutes(from, target, s.difficulty);
+    opts.append(
+      el('div', { class: 'panel-head' },
+        el('h2', {}, 'Hur tar du dig dit?'),
+        el(
+          'span',
+          { class: 'tag' },
+          tickets.length === 1 ? 'Ett färdsätt' : `${tickets.length} färdsätt`
+        )
+      )
+    );
     const anyAffordable = tickets.some((t) => s.money >= t.price);
+
+    /**
+     * Turisten får en rad som säger vad den skulle ta. Rekommendationen är
+     * den billigaste biljett som inte kostar mer än en extra dag jämfört med
+     * den snabbaste - alltså den som brukar vara vettig - och den finns bara
+     * i det lättare läget. Globetrottern ska väga av själv.
+     */
+    if (s.difficulty === 'turist' && tickets.length > 1) {
+      const quickest = tickets.reduce((a, b) => (b.days < a.days ? b : a));
+      const sensible =
+        tickets.find((t) => t.days <= quickest.days + 1) ?? tickets[0]!;
+      opts.append(
+        el(
+          'p',
+          { class: 'recommend' },
+          `Tips: ${sensible.label.toLowerCase()} brukar vara den rimliga avvägningen här.`
+        )
+      );
+    }
+
+    // Etiketterna räknas ut en gång, så att samma biljett kan bära båda.
+    const cheapest = tickets[0];
+    const quickest =
+      tickets.length > 0
+        ? tickets.reduce((a, b) => (b.days < a.days ? b : a))
+        : undefined;
+
     for (const option of tickets) {
       const affordable = s.money >= option.price;
-      const card = el('article', { class: 'ticket' });
+      const card = el('article', { class: `ticket ticket-${option.mode}` });
+      const badges = el('span', { class: 'ticket-badges' });
+      if (tickets.length > 1 && option === cheapest)
+        badges.append(el('span', { class: 'ticket-badge badge-cheap' }, 'Billigast'));
+      if (tickets.length > 1 && option === quickest && quickest !== cheapest)
+        badges.append(el('span', { class: 'ticket-badge badge-fast' }, 'Snabbast'));
       card.append(
         el('div', { class: 'ticket-head' },
-          el('h3', {}, option.label),
+          el('span', { class: 'ticket-mode' },
+            icon(option.mode),
+            el('h3', {}, option.label),
+            badges
+          ),
           el('span', { class: 'ticket-price' }, this.money(option.price))
         ),
         el('p', {}, option.desc),
-        el('p', { class: 'muted' }, `${option.days} dagars restid`)
+        el('p', { class: 'muted' },
+          `${option.days} ${option.days === 1 ? 'dags' : 'dagars'} restid · ` +
+            `boende under resan drar ${this.money(
+              dailyCost(from.costIndex >= target.costIndex ? target : from, s.difficulty) *
+                option.days
+            )}`
+        )
       );
       card.append(
         button(
-          affordable ? 'Boka' : 'För dyrt just nu',
+          affordable ? `Boka ${option.label.toLowerCase()}` : 'För dyrt just nu',
           () => this.doTravel(target, option),
           {
             class: `btn ${affordable ? 'btn-primary' : 'btn-ghost'}`,
@@ -1943,6 +2025,31 @@ export class App {
     }
     wrap.append(opts);
 
+    /**
+     * Färdsätten som inte går, med skälet utskrivet. Utan den här rutan ser
+     * det ut som att spelet glömt bort tåget, och spelaren lär sig ingenting
+     * om varför Stockholm–Peking inte har räls.
+     */
+    const blocked = blockedRoutes(from, target);
+    if (blocked.length > 0) {
+      const why = el('section', { class: 'panel blocked' });
+      why.append(el('h2', {}, 'Det här går inte hit'));
+      const list = el('div', { class: 'blocked-list' });
+      for (const b of blocked) {
+        list.append(
+          el('div', { class: 'blocked-row' },
+            el('span', { class: 'blocked-icon' }, icon(b.mode)),
+            el('span', { class: 'blocked-text' },
+              el('strong', {}, b.label),
+              el('span', {}, b.reason)
+            )
+          )
+        );
+      }
+      why.append(list);
+      wrap.append(why);
+    }
+
     if (!anyAffordable) {
       const help = el('section', { class: 'panel' });
       help.append(
@@ -1950,7 +2057,8 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          'Du kan jobba ihop mer i staden du står i, välja en närmare destination, sälja souvenirer eller ringa hem efter pengar.'
+          'Långa resor kostar mest. Du kan jobba ihop mer där du står, välja en ' +
+            'närmare destination och ta dig vidare därifrån, sälja souvenirer eller ringa hem efter pengar.'
         ),
         el('div', { class: 'row' },
           button('Ring hem och låna', () => this.go('telefon'), {
@@ -1971,7 +2079,7 @@ export class App {
     return wrap;
   }
 
-  private doTravel(target: City, option: TravelOption): void {
+  private doTravel(target: City, option: Route): void {
     const s = this.state!;
     if (s.money < option.price) {
       this.notify('Du har inte råd med den biljetten.');
@@ -2010,11 +2118,12 @@ export class App {
     this.mapHighlight = null;
     this.commit();
     if (this.checkBroke()) return;
-    playSound('resa');
+    playSound(option.mode === 'flyg' ? 'resa' : 'svisch');
     window.setTimeout(() => playSound('ankomst'), 480);
     this.notify(
-      `Framme i ${target.name} efter ${option.days + (event?.days ?? 0)} dagar. ` +
-        `Klockan står på ${utcLabel(target.utc)}.`
+      `${option.label} till ${target.name}. Framme efter ${
+        option.days + (event?.days ?? 0)
+      } dagar, klockan står på ${utcLabel(target.utc)}.`
     );
     this.go('stad');
   }

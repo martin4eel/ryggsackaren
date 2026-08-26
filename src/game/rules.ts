@@ -24,50 +24,9 @@ export function distanceKm(a: City, b: City): number {
   return Math.round(2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h)));
 }
 
-export type TravelClass = 'budget' | 'standard' | 'express';
-
-export interface TravelOption {
-  klass: TravelClass;
-  label: string;
-  /** Pris i basenheter */
-  price: number;
-  /** Restid i dagar */
-  days: number;
-  desc: string;
-}
-
-/**
- * Tre alternativ per sträcka: billigt och långsamt, eller dyrt och snabbt.
- * Precis som i originalet är tid också en resurs, eftersom boendet kostar.
- */
-export function travelOptions(from: City, to: City): TravelOption[] {
-  const km = distanceKm(from, to);
-  const base = 180 + km * 0.42;
-  const flightDays = Math.max(1, Math.round(km / 4000));
-  return [
-    {
-      klass: 'budget',
-      label: 'Buss, tåg och båt',
-      price: Math.round(base * 0.55),
-      days: flightDays + Math.max(1, Math.round(km / 1400)),
-      desc: 'Långsamt, obekvämt och billigt. Du ser mer på vägen.',
-    },
-    {
-      klass: 'standard',
-      label: 'Turistklass',
-      price: Math.round(base),
-      days: flightDays + 1,
-      desc: 'Vanligt flyg med mellanlandning. Rimligt pris och tid.',
-    },
-    {
-      klass: 'express',
-      label: 'Direktflyg',
-      price: Math.round(base * 1.75),
-      days: flightDays,
-      desc: 'Snabbast möjliga väg. Kostar men sparar dagar.',
-    },
-  ];
-}
+// Resealternativen bor numera i game/travel.ts, som väger in landregioner,
+// järnväg, färjelinjer och avstånd i stället för att erbjuda samma tre
+// biljetter mellan alla städer.
 
 /** Kostnad per natt för vandrarhem och mat i en stad. */
 export function dailyCost(city: City, difficulty: Difficulty): number {

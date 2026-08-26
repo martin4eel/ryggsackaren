@@ -30,6 +30,8 @@ try {
   const { CITIES } = await load('/src/data/cities.ts');
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
+  const { LAND_ADJACENCY, FERRY_LINKS } = await load('/src/data/transport.ts');
+  const { availableRoutes } = await load('/src/game/travel.ts');
 
   const jobById = Object.fromEntries(JOBS.map((j) => [j.id, j]));
   const seen = new Map();
@@ -204,6 +206,66 @@ try {
     if (!jobIds.has(id))
       problems.push(`frågeuppsättningen ${id} hör inte till något jobb`);
   }
+
+  /**
+   * Transportnätverket. Tre saker kan gå sönder tyst när städer läggs till:
+   * en landregion utan grannskap, en färjelänk till en stad som inte finns,
+   * och - värst - ett stadspar som inte går att resa mellan alls. Det sista
+   * skulle låsa fast en spelare utan att något syns i gränssnittet.
+   */
+  const cityById = Object.fromEntries(CITIES.map((c) => [c.id, c]));
+
+  for (const [region, grannar] of Object.entries(LAND_ADJACENCY)) {
+    for (const granne of grannar) {
+      if (!(LAND_ADJACENCY[granne] ?? []).includes(region))
+        problems.push(
+          `landregionen ${region} gränsar till ${granne}, men inte tvärtom`
+        );
+    }
+  }
+
+  const kändaRegioner = new Set(CITIES.map((c) => c.landRegion));
+  for (const region of Object.keys(LAND_ADJACENCY)) {
+    if (!kändaRegioner.has(region))
+      problems.push(`landregionen ${region} har inga städer`);
+  }
+
+  for (const [a, b] of FERRY_LINKS) {
+    if (!cityById[a]) problems.push(`färjelänk pekar på okänd stad ${a}`);
+    if (!cityById[b]) problems.push(`färjelänk pekar på okänd stad ${b}`);
+    if (a === b) problems.push(`färjelänk från ${a} till sig själv`);
+  }
+
+  let utanRutt = 0;
+  let landOverTak = 0;
+  for (const from of CITIES) {
+    for (const to of CITIES) {
+      if (from.id === to.id) continue;
+      for (const svårighet of ['turist', 'globetrotter']) {
+        const rutter = availableRoutes(from, to, svårighet);
+        if (rutter.length === 0) {
+          utanRutt += 1;
+          problems.push(
+            `${from.name} -> ${to.name} (${svårighet}) saknar helt resealternativ`
+          );
+        }
+        // Buss eller tåg över 250 mil är inte trovärdigt oavsett nätverk.
+        for (const r of rutter) {
+          if ((r.mode === 'buss' || r.mode === 'tag') && r.days > 5) {
+            landOverTak += 1;
+            problems.push(
+              `${from.name} -> ${to.name}: ${r.label} tar ${r.days} dagar, orimligt`
+            );
+          }
+        }
+      }
+    }
+  }
+
+  console.log(
+    `Transport: ${CITIES.length * (CITIES.length - 1)} stadspar, ` +
+      `${utanRutt} utan rutt, ${landOverTak} orimliga landrutter`
+  );
 
   console.log(`Frågor: ${total}`);
   console.log(

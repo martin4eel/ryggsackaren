@@ -140,10 +140,24 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 6. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
 7. **Resebyrån.** Välj destination på kartan eller i listan, som går att
-   söka i. Varje sträcka har tre biljetter: billigt och långsamt, mellanting,
-   eller dyrt och snabbt. Tid är också en resurs eftersom boendet kostar varje
-   dag. Ungefär var tredje resa händer dessutom något på vägen – bagaget
-   försvinner, flyget blir överbokat eller någon bjuder på taxin.
+   söka i. Vilka färdsätt som erbjuds beror på geografin, inte på en fast
+   mall: buss och tåg kräver landförbindelse, färja kräver en linje och flyget
+   når allt över 35 mil. Går ett färdsätt inte, står det utskrivet varför.
+
+   Ungefär var tredje resa händer dessutom något på vägen – bagaget försvinner,
+   flyget blir överbokat eller någon bjuder på taxin.
+
+   | Sträcka | Vad som brukar gå |
+   | --- | --- |
+   | Stockholm–Göteborg | buss, tåg, flyg |
+   | Stockholm–Helsingfors | färja, flyg (ingen räls runt Bottenviken) |
+   | Stockholm–Berlin | buss, tåg, flyg |
+   | Stockholm–London | bara flyg |
+   | Stockholm–Peking | bara flyg |
+
+   Tid är också en resurs eftersom boendet kostar varje dag, så det billigaste
+   är sällan självklart bäst. Långa flyg från en stad utan interkontinental
+   flygplats går via en hub och kostar en dag extra.
 8. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
 9. **Passet.** Under _Ryggsäck och pass_ ligger femton stämplar att jaga:
@@ -207,6 +221,8 @@ src/
     currencies.ts          Växelkurser och formatering av belopp
     stamps.ts              Passets stämplar och villkoren för dem
     events.ts              Resehändelser som kan slå till mellan städerna
+    transport.ts           Landregionernas grannskap, färjelinjer, avstånds-
+                           tak och priser per färdsätt
     worldMap.ts            Genererad landmassa som SVG-path (Natural Earth)
     questions/
       cityQuestions.ts     Frågor till turistbyrån, per stad
@@ -214,6 +230,9 @@ src/
   game/
     state.ts               Speltillstånd, sparning och laddning
     rules.ts               Avstånd, priser, löner, poäng och frågeurval
+    travel.ts              Vilka färdsätt som går mellan två städer, och
+                           varför de andra inte gör det
+    difficulty.ts          Allt som skiljer Turist från Globetrotter
   ui/
     app.ts                 Skärmar, spelloop och tangentbordsstyrning
     map.ts                 Världskartan: zoom, panorering och etikettplacering
@@ -253,6 +272,12 @@ dubbletter någonstans i spelet, att varje jobbs arkadmoment är komplett – f�
 sorteringen att varje korg har egna föremål i `pool`, för träffmomentet att
 `avoid` är ifyllt och inte överlappar `items` – och att varje stad har ett
 foto i `public/cities/`.
+
+Den kontrollerar också transportnätverket: att landregionernas grannskap är
+symmetriskt, att färjelinjerna pekar på städer som finns, och att **alla 1 980
+stadspar har minst ett resealternativ i båda svårighetsgraderna**. Det sista är
+det viktigaste – ett par utan rutt skulle låsa fast en spelare utan att något
+syns i gränssnittet.
 
 ### Nya städer och foton
 

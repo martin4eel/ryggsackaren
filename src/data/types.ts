@@ -35,6 +35,29 @@ export interface City {
   utc: number;
   /** Prisnivå för boende och mat, 1.0 = medel */
   costIndex: number;
+  /**
+   * Landområde för resor på marken. Två städer kan nås med buss eller tåg
+   * bara om de ligger i samma landregion eller i två som gränsar till
+   * varandra enligt LAND_ADJACENCY i data/transport.ts.
+   *
+   * Regionerna är inte kontinenter utan "vad man rimligen kan bussa mellan".
+   * Helsingfors ligger därför i en egen region trots att Stockholm är fyra
+   * hundra kilometer bort fågelvägen: landvägen runt Bottenviken är fyra
+   * gånger så lång, och den riktiga förbindelsen är en färja.
+   */
+  landRegion: string;
+  /**
+   * Har staden användbar fjärrtågtrafik? Styr om tåg alls kan erbjudas.
+   * Katmandu och Reykjavík har ingen, Berlin har utmärkt.
+   */
+  rail: boolean;
+  /**
+   * Har staden en flygplats med interkontinental trafik? Från en stad utan
+   * hub får långa flyg en mellanlandning: en dag extra och ett påslag på
+   * priset. Resan visas fortfarande som en enda biljett - spelet ska inte
+   * tvinga någon att planera byten för hand.
+   */
+  hub: boolean;
   /** Kort presentationstext på turistbyrån */
   blurb: string;
   /** Sevärdhet som nämns i staden */

@@ -16,6 +16,9 @@ export const CITIES: City[] = [
     lon: 18.07,
     utc: 1,
     costIndex: 1.15,
+    landRegion: 'norden',
+    rail: true,
+    hub: true,
     blurb:
       'Sveriges huvudstad, byggd på fjorton öar där Mälaren möter Östersjön. Gamla stans gränder är från medeltiden och skärgården börjar direkt utanför kajen.',
     landmark: 'Vasamuseet',
@@ -40,6 +43,9 @@ export const CITIES: City[] = [
     lon: 13.0,
     utc: 1,
     costIndex: 0.95,
+    landRegion: 'norden',
+    rail: true,
+    hub: false,
     blurb:
       'Sveriges sydligaste storstad, med Öresundsbron till Köpenhamn och kontinenten inom räckhåll. Kranarna i gamla varvsområdet har bytts mot ett vridet höghus.',
     landmark: 'Turning Torso',
@@ -62,6 +68,9 @@ export const CITIES: City[] = [
     lon: 11.97,
     utc: 1,
     costIndex: 1.0,
+    landRegion: 'norden',
+    rail: true,
+    hub: false,
     blurb:
       'Sveriges västra port, grundad 1621 av Gustav II Adolf. Här börjar många ryggsäcksresor med en sista fika på Avenyn innan färjan eller flyget går.',
     landmark: 'Feskekörka',
@@ -78,6 +87,9 @@ export const CITIES: City[] = [
     lon: -21.94,
     utc: 0,
     costIndex: 1.45,
+    landRegion: 'island',
+    rail: false,
+    hub: false,
     blurb:
       'Världens nordligaste huvudstad, uppvärmd av geotermiskt vatten och omgiven av lavafält, gejsrar och vattenfall.',
     landmark: 'Hallgrímskirkja',
@@ -94,6 +106,9 @@ export const CITIES: City[] = [
     lon: -0.13,
     utc: 0,
     costIndex: 1.5,
+    landRegion: 'brittiska-oarna',
+    rail: true,
+    hub: true,
     blurb:
       'Metropol vid Themsen med tvåtusenårig historia, röda dubbeldäckare och fler museer än du hinner se på en resa.',
     landmark: 'Tower Bridge',
@@ -110,6 +125,9 @@ export const CITIES: City[] = [
     lon: 2.35,
     utc: 1,
     costIndex: 1.4,
+    landRegion: 'centraleuropa',
+    rail: true,
+    hub: true,
     blurb:
       'Ljusets stad med boulevarder, bagerier och Louvren. Eiffeltornet restes till världsutställningen 1889.',
     landmark: 'Eiffeltornet',
@@ -126,6 +144,9 @@ export const CITIES: City[] = [
     lon: 4.9,
     utc: 1,
     costIndex: 1.35,
+    landRegion: 'centraleuropa',
+    rail: true,
+    hub: true,
     blurb:
       'Kanalstaden byggd på pålar, med fler cyklar än invånare och ett gyllene 1600-tal som satte spår i konsthistorien.',
     landmark: 'Rijksmuseum',
@@ -142,6 +163,9 @@ export const CITIES: City[] = [
     lon: 12.5,
     utc: 1,
     costIndex: 1.25,
+    landRegion: 'sydeuropa',
+    rail: true,
+    hub: true,
     blurb:
       'Den eviga staden på sju kullar. Colosseum stod klart år 80 e.Kr. och rymde uppemot 50 000 åskådare.',
     landmark: 'Colosseum',
@@ -158,6 +182,9 @@ export const CITIES: City[] = [
     lon: 28.98,
     utc: 3,
     costIndex: 0.75,
+    landRegion: 'osteuropa',
+    rail: true,
+    hub: true,
     blurb:
       'Staden som ligger i två världsdelar, delad av Bosporen. Hette tidigare Konstantinopel och var huvudstad i både det bysantinska och det ottomanska riket.',
     landmark: 'Hagia Sofia',
@@ -174,6 +201,9 @@ export const CITIES: City[] = [
     lon: 37.62,
     utc: 3,
     costIndex: 0.85,
+    landRegion: 'osteuropa',
+    rail: true,
+    hub: true,
     blurb:
       'Kreml, Röda torget och en tunnelbana med stationer som ser ut som palats. Härifrån går Transsibiriska järnvägen österut.',
     landmark: 'Vasilijkatedralen',
@@ -190,6 +220,9 @@ export const CITIES: City[] = [
     lon: 31.24,
     utc: 2,
     costIndex: 0.55,
+    landRegion: 'nordafrika',
+    rail: true,
+    hub: true,
     blurb:
       'Afrikas största stad vid Nilens strand. Pyramiderna i Giza restes för omkring 4 500 år sedan och är världens äldsta bevarade underverk.',
     landmark: 'Cheopspyramiden',
@@ -206,6 +239,9 @@ export const CITIES: City[] = [
     lon: -7.99,
     utc: 1,
     costIndex: 0.5,
+    landRegion: 'nordafrika',
+    rail: true,
+    hub: false,
     blurb:
       'Den röda staden vid Atlasbergens fot, med labyrintiska souker och torget Jemaa el-Fna som fylls av gycklare varje kväll.',
     landmark: 'Koutoubiamoskén',
@@ -222,6 +258,9 @@ export const CITIES: City[] = [
     lon: 36.82,
     utc: 3,
     costIndex: 0.55,
+    landRegion: 'ostafrika',
+    rail: false,
+    hub: true,
     blurb:
       'Östafrikas nav, den enda storstad i världen med en nationalpark inom stadsgränsen. Perfekt utgångspunkt för safari.',
     landmark: 'Nairobi National Park',
@@ -238,6 +277,9 @@ export const CITIES: City[] = [
     lon: 18.42,
     utc: 2,
     costIndex: 0.7,
+    landRegion: 'sodraafrika',
+    rail: true,
+    hub: true,
     blurb:
       'Staden under Taffelberget, där Atlanten möter Indiska oceanen. Robben Island utanför kusten var fängelse för Nelson Mandela.',
     landmark: 'Taffelberget',
@@ -254,6 +296,9 @@ export const CITIES: City[] = [
     lon: 72.88,
     utc: 5.5,
     costIndex: 0.45,
+    landRegion: 'sydasien',
+    rail: true,
+    hub: true,
     blurb:
       'Indiens finans- och filmhuvudstad, hem för Bollywood. Byggd på sju öar som slagits samman till en halvö.',
     landmark: 'Gateway of India',
@@ -270,6 +315,9 @@ export const CITIES: City[] = [
     lon: 100.5,
     utc: 7,
     costIndex: 0.4,
+    landRegion: 'sydostasien',
+    rail: true,
+    hub: true,
     blurb:
       'Thailands huvudstad vid Chao Phraya-floden, med gyllene tempel, flytande marknader och gatukök i varje hörn.',
     landmark: 'Wat Arun',
@@ -286,6 +334,9 @@ export const CITIES: City[] = [
     lon: 116.4,
     utc: 8,
     costIndex: 0.65,
+    landRegion: 'kina',
+    rail: true,
+    hub: true,
     blurb:
       'Kinas huvudstad med Förbjudna staden i mitten och Kinesiska muren några timmar bort. Himmelska fridens port vetter mot ett av världens största torg.',
     landmark: 'Förbjudna staden',
@@ -302,6 +353,9 @@ export const CITIES: City[] = [
     lon: 139.69,
     utc: 9,
     costIndex: 1.3,
+    landRegion: 'japan',
+    rail: true,
+    hub: true,
     blurb:
       'Världens folkrikaste storstadsområde. Shinkansen-tågen går på sekunden och Shibuya-korsningen fylls av tusentals fotgängare per grönt ljus.',
     landmark: 'Tokyo Skytree',
@@ -318,6 +372,9 @@ export const CITIES: City[] = [
     lon: 151.21,
     utc: 10,
     costIndex: 1.25,
+    landRegion: 'australien',
+    rail: true,
+    hub: true,
     blurb:
       'Australiens äldsta och största stad, byggd runt en av världens vackraste naturhamnar. Operahuset invigdes 1973.',
     landmark: 'Operahuset',
@@ -334,6 +391,9 @@ export const CITIES: City[] = [
     lon: 174.76,
     utc: 12,
     costIndex: 1.15,
+    landRegion: 'nyazeeland',
+    rail: false,
+    hub: true,
     blurb:
       'Seglens stad, byggd på ett fält av slocknade vulkaner mellan två hav. Landet har fler får än människor.',
     landmark: 'Sky Tower',
@@ -350,6 +410,9 @@ export const CITIES: City[] = [
     lon: -74.01,
     utc: -5,
     costIndex: 1.55,
+    landRegion: 'nordamerika',
+    rail: true,
+    hub: true,
     blurb:
       'Staden som aldrig sover. Frihetsgudinnan var en gåva från Frankrike 1886 och Central Park är större än många europeiska stadskärnor.',
     landmark: 'Frihetsgudinnan',
@@ -366,6 +429,9 @@ export const CITIES: City[] = [
     lon: -99.13,
     utc: -6,
     costIndex: 0.6,
+    landRegion: 'nordamerika',
+    rail: false,
+    hub: true,
     blurb:
       'Byggd på ruinerna av aztekernas Tenochtitlán, på 2 240 meters höjd. Staden sjunker långsamt ned i den uttorkade sjöbottnen.',
     landmark: 'Templo Mayor',
@@ -382,6 +448,9 @@ export const CITIES: City[] = [
     lon: -71.97,
     utc: -5,
     costIndex: 0.5,
+    landRegion: 'sydamerika',
+    rail: true,
+    hub: false,
     blurb:
       'Inkarikets gamla huvudstad på 3 400 meters höjd i Anderna. Härifrån går Inkaleden till Machu Picchu.',
     landmark: 'Sacsayhuamán',
@@ -398,6 +467,9 @@ export const CITIES: City[] = [
     lon: -43.17,
     utc: -3,
     costIndex: 0.65,
+    landRegion: 'sydamerika',
+    rail: false,
+    hub: true,
     blurb:
       'Sockertoppen, Copacabana och Kristusstatyn på Corcovado. Karnevalen i februari är världens största gatufest.',
     landmark: 'Cristo Redentor',
@@ -406,7 +478,7 @@ export const CITIES: City[] = [
   },
   {
     id: 'kopenhamn',
-    name: 'København',
+    name: 'Köpenhamn',
     country: 'Danmark',
     region: 'norden',
     currency: 'DKK',
@@ -414,6 +486,9 @@ export const CITIES: City[] = [
     lon: 12.57,
     utc: 1,
     costIndex: 1.25,
+    landRegion: 'norden',
+    rail: true,
+    hub: true,
     blurb:
       'Cyklarnas huvudstad, där färgade köpmanshus speglar sig i Nyhavns kanal. Tivoli har öppnat sina grindar varje sommar sedan 1843.',
     landmark: 'Nyhavn',
@@ -430,6 +505,9 @@ export const CITIES: City[] = [
     lon: 10.75,
     utc: 1,
     costIndex: 1.4,
+    landRegion: 'norden',
+    rail: true,
+    hub: true,
     blurb:
       'Innerst i en fjord som skär nittio kilometer in i landet. Operahusets tak går att promenera upp för, rakt ur vattnet.',
     landmark: 'Operahuset',
@@ -446,6 +524,9 @@ export const CITIES: City[] = [
     lon: 24.94,
     utc: 2,
     costIndex: 1.1,
+    landRegion: 'finland',
+    rail: true,
+    hub: true,
     blurb:
       'Vit domkyrka över en hamn full av färjor, och en fästning på sex öar utanför. Här dricks mest kaffe per person i hela världen.',
     landmark: 'Sveaborg',
@@ -462,6 +543,9 @@ export const CITIES: City[] = [
     lon: 13.4,
     utc: 1,
     costIndex: 1.0,
+    landRegion: 'centraleuropa',
+    rail: true,
+    hub: true,
     blurb:
       'En stad som varit delad, sammanfogad och ombyggd. Klubbarna öppnar när andra städer stänger och museiön har fem museer på rad.',
     landmark: 'Brandenburger Tor',
@@ -478,6 +562,9 @@ export const CITIES: City[] = [
     lon: 2.17,
     utc: 1,
     costIndex: 0.95,
+    landRegion: 'sydeuropa',
+    rail: true,
+    hub: true,
     blurb:
       'Gaudís outtröttliga fantasi mellan bergen och Medelhavet. Sagrada Família har byggts sedan 1882 och är fortfarande inte klar.',
     landmark: 'Sagrada Família',
@@ -494,6 +581,9 @@ export const CITIES: City[] = [
     lon: -9.14,
     utc: 0,
     costIndex: 0.85,
+    landRegion: 'sydeuropa',
+    rail: true,
+    hub: true,
     blurb:
       'Sju kullar, gula spårvagnar och kakelklädda fasader ovanför Tejo. Härifrån seglade karavellerna ut och ritade om världskartan.',
     landmark: 'Torre de Belém',
@@ -510,6 +600,9 @@ export const CITIES: City[] = [
     lon: 23.73,
     utc: 2,
     costIndex: 0.85,
+    landRegion: 'balkan',
+    rail: true,
+    hub: false,
     blurb:
       'Parthenon står kvar på klippan mitt i en modern miljonstad. Nedanför ligger Plaka med tavernor i gränder som är äldre än de flesta länder.',
     landmark: 'Akropolis',
@@ -526,6 +619,9 @@ export const CITIES: City[] = [
     lon: 14.44,
     utc: 1,
     costIndex: 0.8,
+    landRegion: 'centraleuropa',
+    rail: true,
+    hub: false,
     blurb:
       'Hundra spiror över Vltava och en astronomisk klocka som spelat upp sitt lilla skådespel varje timme sedan 1410.',
     landmark: 'Karlsbron',
@@ -542,6 +638,9 @@ export const CITIES: City[] = [
     lon: -6.26,
     utc: 0,
     costIndex: 1.15,
+    landRegion: 'irland',
+    rail: true,
+    hub: true,
     blurb:
       'Georgianska portar i klara färger och en flod som delar staden i norr och söder. Litteraturen sitter i väggarna på varje pub.',
     landmark: 'Ha’penny Bridge',
@@ -558,6 +657,9 @@ export const CITIES: City[] = [
     lon: 55.27,
     utc: 4,
     costIndex: 1.3,
+    landRegion: 'mellanostern',
+    rail: false,
+    hub: true,
     blurb:
       'En fiskeby som på femtio år blev världens mellanlandning. Guldsouken ligger tio minuter med träbåt från skyskraporna.',
     landmark: 'Burj Khalifa',
@@ -574,6 +676,9 @@ export const CITIES: City[] = [
     lon: 35.93,
     utc: 3,
     costIndex: 0.75,
+    landRegion: 'mellanostern',
+    rail: false,
+    hub: false,
     blurb:
       'Vitt kalksten över nitton kullar, med ett romerskt teatermonument mitt i centrum. Härifrån går bussarna söderut mot ökenslottet i klippan.',
     landmark: 'Citadellet',
@@ -590,6 +695,9 @@ export const CITIES: City[] = [
     lon: 126.98,
     utc: 9,
     costIndex: 1.05,
+    landRegion: 'korea',
+    rail: true,
+    hub: true,
     blurb:
       'Palats med svängda tak i skuggan av glasfasader, och en bäck som grävts fram under en riven motorväg. Marknaderna stänger aldrig riktigt.',
     landmark: 'Gyeongbokgung',
@@ -606,6 +714,9 @@ export const CITIES: City[] = [
     lon: 103.82,
     utc: 8,
     costIndex: 1.2,
+    landRegion: 'sydostasien',
+    rail: true,
+    hub: true,
     blurb:
       'En ö-stat på Malackasundets mynning där fyra språk är officiella. Konstgjorda superträd lyser upp parken varje kväll.',
     landmark: 'Gardens by the Bay',
@@ -622,6 +733,9 @@ export const CITIES: City[] = [
     lon: 105.85,
     utc: 7,
     costIndex: 0.55,
+    landRegion: 'sydostasien',
+    rail: true,
+    hub: false,
     blurb:
       'Gamla stadens trettiosex gränder har var sitt hantverk sedan medeltiden. Frukosten är soppa och kaffet serveras med kondenserad mjölk.',
     landmark: 'Hoan Kiem-sjön',
@@ -638,6 +752,9 @@ export const CITIES: City[] = [
     lon: 85.32,
     utc: 5.75,
     costIndex: 0.5,
+    landRegion: 'sydasien',
+    rail: false,
+    hub: false,
     blurb:
       'En dal full av tempel på 1 400 meters höjd, med åttatusenmeterstopparna som kuliss. Alla vandringar norrut börjar här.',
     landmark: 'Boudhanath',
@@ -654,6 +771,9 @@ export const CITIES: City[] = [
     lon: -58.38,
     utc: -3,
     costIndex: 0.7,
+    landRegion: 'sydamerika',
+    rail: true,
+    hub: true,
     blurb:
       'Europeiska fasader vid en flod så bred att andra stranden inte syns. Tango dansas på gatan i La Boca och på golvet i Almagro.',
     landmark: 'Caminito',
@@ -670,6 +790,9 @@ export const CITIES: City[] = [
     lon: -82.38,
     utc: -5,
     costIndex: 0.7,
+    landRegion: 'karibien',
+    rail: false,
+    hub: false,
     blurb:
       'Femtiotalsbilar rullar förbi pastellfärgade kolonnader längs Malecón. Musiken kommer inifrån husen, inte från högtalare.',
     landmark: 'El Capitolio',
@@ -686,6 +809,9 @@ export const CITIES: City[] = [
     lon: -122.42,
     utc: -8,
     costIndex: 1.5,
+    landRegion: 'nordamerika',
+    rail: true,
+    hub: true,
     blurb:
       'Dimman rullar in genom sundet varje eftermiddag och kablarna under gatan drar kabelvagnarna uppför backarna sedan 1873.',
     landmark: 'Golden Gate-bron',
@@ -702,6 +828,9 @@ export const CITIES: City[] = [
     lon: -17.47,
     utc: 0,
     costIndex: 0.7,
+    landRegion: 'vastafrika',
+    rail: false,
+    hub: false,
     blurb:
       'Afrikas västligaste punkt, där Atlanten slår mot klipporna och trummorna hörs från Medina. Utanför kusten ligger ön Gorée.',
     landmark: 'Île de Gorée',
@@ -718,6 +847,9 @@ export const CITIES: City[] = [
     lon: 38.74,
     utc: 3,
     costIndex: 0.55,
+    landRegion: 'ostafrika',
+    rail: false,
+    hub: true,
     blurb:
       'Afrikas högst belägna huvudstad på 2 400 meter, sval året om. Kaffet kom härifrån och serveras fortfarande i ceremoni.',
     landmark: 'Nationalmuseet',
@@ -734,6 +866,9 @@ export const CITIES: City[] = [
     lon: 144.96,
     utc: 10,
     costIndex: 1.3,
+    landRegion: 'australien',
+    rail: true,
+    hub: true,
     blurb:
       'Rutnätsgator med gränder fulla av väggmålningar och kaffebarer. Vädret hinner byta humör fyra gånger på en eftermiddag.',
     landmark: 'Flinders Street Station',

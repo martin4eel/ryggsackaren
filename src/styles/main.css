@@ -2837,3 +2837,169 @@ input:focus-visible {
   margin: 10px 0 0;
   font-size: 0.86rem;
 }
+
+/* ================================================================= resor
+   Färdsätt i destinationslistan och på biljetterna, samt rutan som
+   förklarar varför ett färdsätt inte går.
+   ======================================================================== */
+
+.dest-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.dest-mode .icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+
+.dest-days {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.ticket-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.ticket-mode h3 {
+  margin: 0;
+}
+
+.ticket-mode .icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+/* En färgrand per färdsätt, så att biljetterna går att skilja åt på håll. */
+.ticket {
+  border-left: 5px solid var(--line);
+}
+
+.ticket-buss {
+  border-left-color: var(--palm);
+}
+
+.ticket-tag {
+  border-left-color: var(--sun-dark);
+}
+
+.ticket-farja {
+  border-left-color: #3d7fa6;
+}
+
+.ticket-flyg {
+  border-left-color: var(--stamp);
+}
+
+.ticket-buss .ticket-mode .icon {
+  color: var(--palm);
+}
+
+.ticket-tag .ticket-mode .icon {
+  color: var(--sun-dark);
+}
+
+.ticket-farja .ticket-mode .icon {
+  color: #3d7fa6;
+}
+
+.ticket-flyg .ticket-mode .icon {
+  color: var(--stamp);
+}
+
+/* --------------------------------------------- varför ett färdsätt inte går */
+
+.blocked-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.blocked-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(29, 43, 52, 0.05);
+  border: 1.5px dashed var(--line);
+}
+
+.blocked-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  color: var(--ink-soft);
+  opacity: 0.6;
+}
+
+.blocked-icon .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.blocked-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.blocked-text strong {
+  color: var(--ink);
+}
+
+@media (max-width: 560px) {
+  .dest-row {
+    row-gap: 4px;
+  }
+}
+
+/* Etiketter på biljetterna: billigast och snabbast, och tipsraden på Turist. */
+.ticket-badges {
+  display: inline-flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.ticket-badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1.5px solid currentColor;
+}
+
+.badge-cheap {
+  color: #1f5a46;
+}
+
+.badge-fast {
+  color: var(--stamp);
+}
+
+.recommend {
+  margin: 4px 0 12px;
+  padding: 10px 13px;
+  border-radius: 10px;
+  background: rgba(242, 166, 59, 0.16);
+  border: 1.5px solid var(--sun-dark);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+}
