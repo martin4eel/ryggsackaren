@@ -923,10 +923,18 @@ export const CITIES: City[] = [
     blurb:
       'Gammal handelsplats innerst i Mälarens västligaste vik, med hamn och kanal. Här verkade apotekaren Carl Wilhelm Scheele, en av kemins stora namn.',
     landmark: 'Köpings hamn',
-    jobs: ['fikabitrade', 'tidningsbud', 'pantvard', 'hamnarbetare', 'formsprutare'],
+    jobs: [
+      'fikabitrade',
+      'tidningsbud',
+      'pantvard',
+      'hamnarbetare',
+      'formsprutare',
+      'skateboardinstruktor',
+    ],
     employers: {
       hamnarbetare: 'Köpings hamn',
       tidningsbud: 'Bärgslagsbladet',
+      skateboardinstruktor: 'Köpings kommun',
     },
     souvenirs: ['dalahast', 'sillburk', 'ullvantar'],
   },

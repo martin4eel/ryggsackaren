@@ -212,8 +212,8 @@ _Legendarisk ryggsäckare_.
 
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
-- 79 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 1 191 frågor uppdelade i två svårighetsgrader, varav 805 jobbfrågor
+- 80 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
+- 1 205 frågor uppdelade i två svårighetsgrader, varav 819 jobbfrågor
 - 8 arkadmoment som avslutar arbetsskiften
 - 15 stämplar att samla i passet
 - 15 resehändelser som kan slå till på vägen

@@ -1580,6 +1580,25 @@ export const JOBS: Job[] = [
     scene:
       'Kontoret ligger en trappa upp med kaffekokare och whiteboard. Halva personalen är volontärer, och telefonen går varm.',
   },
+  {
+    id: 'skateboardinstruktor',
+    title: 'Skateboardinstruktör',
+    employer: 'Fritidsförvaltningen',
+    category: 'sport',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Håll nybörjarkurser i parken under lovet. Du ska kunna stå på en bräda och kunna din historia.',
+    minigame: {
+      kind: 'balans',
+      title: 'Håll dig på brädan',
+      brief:
+        'Du visar hur man rullar rakt genom parken. Håll tyngdpunkten över brädan, annars går du av.',
+      items: ['Brädan'],
+      unit: 'graders lutning',
+    },
+    scene:
+      'Betongen är varm och tolv nybörjare med lånade hjälmar väntar på att du ska säga till. Någon har redan glömt var bromsen sitter, och det finns ingen.',
+  },
 ];
 
 export const JOB_BY_ID: Record<string, Job> = Object.fromEntries(
