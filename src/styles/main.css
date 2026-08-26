@@ -4358,9 +4358,12 @@ input:focus-visible {
   white-space: nowrap;
 }
 
+/* Landet får aldrig tränga undan stadsnamnet. "Förenade Arabemiraten" är
+   längre än "Dubai" och gjorde destinationen till "DUB...". */
 .col-dest-land {
   flex: 0 100 auto;
   min-width: 0;
+  max-width: 36%;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.62rem;
@@ -4696,6 +4699,10 @@ body.sheet-oppen {
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
+  }
+
+  .col-dest-land {
+    max-width: 100%;
   }
 
   .col-stand::before {
