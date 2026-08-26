@@ -860,27 +860,30 @@ export class App {
       return;
     }
 
-    // Utan sökning och utan utfälld lista räcker ett urval som visar spännvidden.
+    /**
+     * Utan sökning och utan utfälld lista visas de svenska städerna. Spelet är
+     * enspråkigt svenskt och spelas i praktiken av svenskar, som nästan alltid
+     * är födda i någon av dem. Resten av världen ligger ett sökord eller en
+     * knapptryckning bort, och kartan står redan ovanför.
+     */
     if (needle === '' && !this.showAllCities) {
-      const suggested = [
-        'stockholm',
-        'london',
-        'newyork',
-        'bangkok',
-        'kapstaden',
-        'buenosaires',
-      ]
-        .map((id) => CITY_BY_ID[id])
-        .filter((c): c is City => Boolean(c));
-      host.append(el('h3', { class: 'city-group' }, 'Vanliga startstäder'));
+      const svenska = CITIES.filter((c) => c.country === 'Sverige');
+      // Ordningen är medveten: största och mest kända först.
+      const ordning = ['stockholm', 'goteborg', 'malmo', 'vasteras', 'koping'];
+      svenska.sort(
+        (a, b) =>
+          (ordning.indexOf(a.id) + 1 || 99) - (ordning.indexOf(b.id) + 1 || 99)
+      );
+      host.append(el('h3', { class: 'city-group' }, 'Född i Sverige?'));
       const row = el('div', { class: 'city-chips' });
-      for (const c of suggested) row.append(this.cityChip(c));
+      for (const c of svenska) row.append(this.cityChip(c));
       host.append(
         row,
         el(
           'p',
           { class: 'muted city-hint' },
-          'Eller tryck på en punkt på kartan, sök ovan, eller bläddra bland alla.'
+          `Född någon annanstans? Sök ovan, tryck på en punkt på kartan, eller ` +
+            `bläddra bland alla ${CITIES.length} städer.`
         )
       );
       return;
