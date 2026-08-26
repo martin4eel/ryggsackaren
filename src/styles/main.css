@@ -3456,3 +3456,114 @@ input:focus-visible {
   color: var(--ink-soft);
   font-weight: 600;
 }
+
+/* ============================================================ resesekvensen
+   Filmen mellan två städer, spelad på en roterande jordglob. Alla mått i
+   klotet sätts från map.ts, eftersom radien ändras under sekvensen.
+   ======================================================================== */
+
+.travel-panel {
+  cursor: pointer;
+}
+
+.travel-title {
+  margin: 2px 0 12px;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.travel-scene {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--line);
+  /* Rymden bakom klotet. */
+  background:
+    radial-gradient(circle at 30% 25%, #14405c 0%, transparent 55%),
+    linear-gradient(180deg, #0a2333 0%, #061722 100%);
+}
+
+.globe {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.globe-sea {
+  fill: #14405c;
+  stroke: rgba(143, 208, 174, 0.35);
+  stroke-width: 1;
+}
+
+.globe-grid {
+  fill: none;
+  stroke: rgba(143, 208, 174, 0.16);
+  stroke-width: 0.6;
+}
+
+/* Fylld landmassa. Polygoner som kapas vid horisonten sluts med en rak korda,
+   vilket är omärkligt eftersom kapningen sker längs klotets kant. */
+.globe-land {
+  fill: #2f6b4f;
+  stroke: #8fd0ae;
+  stroke-width: 0.8;
+  stroke-opacity: 0.6;
+  stroke-linejoin: round;
+}
+
+.globe-route {
+  fill: none;
+  stroke: rgba(246, 239, 224, 0.3);
+}
+
+.globe-trail {
+  fill: none;
+  stroke: var(--sun);
+  stroke-linecap: round;
+}
+
+.globe-pin circle {
+  fill: var(--paper);
+  stroke: #061722;
+}
+
+.globe-pin-to circle {
+  fill: var(--sun);
+}
+
+.globe-halo {
+  fill: var(--sun);
+  stroke: none;
+  animation: halo-puls 1.5s ease-in-out infinite;
+}
+
+@keyframes halo-puls {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.globe-pin text {
+  fill: var(--paper);
+  font-family: var(--font);
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: rgba(6, 23, 34, 0.9);
+}
+
+.globe-vehicle {
+  color: var(--paper);
+  filter: drop-shadow(0 1px 2px rgba(6, 23, 34, 0.8));
+}
+
+.travel-skip {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 0.84rem;
+}

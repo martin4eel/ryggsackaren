@@ -144,6 +144,11 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    mall: buss och tåg kräver landförbindelse, färja kräver en linje och flyget
    når allt över 35 mil. Går ett färdsätt inte, står det utskrivet varför.
 
+   När biljetten är bokad spelas resan upp på en roterande jordglob: klotet
+   zoomar ut från avresestaden, fordonet följer storcirkeln medan jorden
+   vrider sig under det, och till sist zoomar det in mot målet. Ett tryck
+   hoppar över filmen.
+
    Ungefär var tredje resa händer dessutom något på vägen – bagaget försvinner,
    flyget blir överbokat eller någon bjuder på taxin.
 
@@ -254,7 +259,10 @@ src/
     highscores.ts          Resedagboken och statistiken över stadskunskap
   ui/
     app.ts                 Skärmar, spelloop och tangentbordsstyrning
-    map.ts                 Världskartan: zoom, panorering och etikettplacering
+    map.ts                 Världskartan: zoom, panorering och etikettplacering,
+                           samt resesekvensen mellan två städer
+    globe.ts               Ortografisk jordglob: landmassan omprojicerad från
+                           platt karta till klot, storcirklar och horisontklipp
     minigames.ts           De åtta arkadmomenten
     dom.ts                 Små hjälpare för att bygga element
     audio.ts               Syntetiserade ljudeffekter och ljudstyrning

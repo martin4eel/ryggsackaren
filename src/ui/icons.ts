@@ -15,6 +15,10 @@ export type IconName =
   | 'tag'
   | 'farja'
   | 'flyg'
+  | 'flyg-profil'
+  | 'buss-profil'
+  | 'tag-profil'
+  | 'farja-profil'
   | 'flagga'
   | 'tidning'
   | 'souvenir'
@@ -85,6 +89,32 @@ const ICONS: Record<IconName, Part[]> = {
   flyg: [
     { tag: 'path', attrs: { d: 'M17.8 19.2 16 11l3.5-3.5a2.12 2.12 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1 1.6L8 11l-2 2-2.2-.4a.8.8 0 0 0-.8 1.3l2.2 2.2 2.2 2.2a.8.8 0 0 0 1.3-.8L8 16l2-2 3.2 4.2a1 1 0 0 0 1.6-1z' } },
   ],
+  'flyg-profil': [
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M2 12h4l3-5h2l-1.5 5H16l2.5-3h2l-1.5 3h2.5a1.5 1.5 0 0 1 0 3H19l1.5 3h-2L16 15H9.5l1.5 5H9l-3-5H2Z',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
+  ],
+  'buss-profil': [
+    { tag: 'rect', attrs: { x: '2', y: '7', width: '18', height: '9', rx: '2', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '7', cy: '17', r: '2', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '16', cy: '17', r: '2', fill: 'currentColor', stroke: 'none' } },
+  ],
+  'tag-profil': [
+    { tag: 'rect', attrs: { x: '2', y: '7', width: '13', height: '9', rx: '1.5', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'path', attrs: { d: 'M15 9h4l2 4v3h-6Z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '6', cy: '17.5', r: '1.6', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'circle', attrs: { cx: '17', cy: '17.5', r: '1.6', fill: 'currentColor', stroke: 'none' } },
+  ],
+  'farja-profil': [
+    { tag: 'path', attrs: { d: 'M3 16h18l-2.5 4h-13Z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '6', y: '10', width: '10', height: '5', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '9', y: '6', width: '4', height: '3', fill: 'currentColor', stroke: 'none' } },
+  ],
   pass: [
     {
       tag: 'path',
@@ -147,6 +177,28 @@ const ICONS: Record<IconName, Part[]> = {
     },
   ],
 };
+
+/**
+ * Ikonens banor som en grupp, utan omgivande svg. Används när ikonen ska
+ * placeras inuti en annan SVG: en nästlad svg tolkar sina pixelmått som den
+ * yttre ritytans användarenheter och blir då absurt stor.
+ *
+ * `size` är önskad storlek i den yttre ritytans enheter, och gruppen centreras
+ * kring sitt eget origo så att den kan roteras på plats.
+ */
+export function iconGroup(name: IconName, size: number): SVGElement {
+  const k = size / 24;
+  const g = svgEl('g', {
+    transform: `translate(${-size / 2} ${-size / 2}) scale(${k})`,
+    fill: 'none',
+    stroke: 'currentColor',
+    'stroke-width': '2',
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+  });
+  for (const part of ICONS[name]) g.append(svgEl(part.tag, part.attrs));
+  return g;
+}
 
 /** Bygger en ikon. Dekorativ – dölj den för skärmläsare och sätt text/aria-label på knappen. */
 export function icon(name: IconName, cls = ''): SVGElement {

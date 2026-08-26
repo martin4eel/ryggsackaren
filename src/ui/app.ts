@@ -33,6 +33,7 @@ import {
   wagePerCorrect,
   type PreparedQuestion,
 } from '../game/rules';
+import { MODE_LABELS, type TransportMode } from '../data/transport';
 import {
   availableRoutes,
   blockedRoutes,
@@ -58,14 +59,14 @@ import {
 } from '../game/state';
 import { cycleVolume, playCombo, playSound, volumeLabel, volumeLevel } from './audio';
 import { button, clear, el } from './dom';
-import { icon, type IconName } from './icons';
+import { icon, iconGroup, type IconName } from './icons';
 import {
   renderMinigame,
   stopAllMinigames,
   type MinigameResult,
 } from './minigames';
 import type { Stamp } from '../data/stamps';
-import { forgetMapView, renderMapFrame } from './map';
+import { forgetMapView, renderMapFrame, renderTravelScene } from './map';
 
 interface QuizSession {
   kind: 'turistbyra' | 'jobb';
@@ -261,6 +262,12 @@ export class App {
    * bästa resan i stället för den man just spelat.
    */
   private lastJourneyAt: number | undefined;
+  /**
+   * Resan som just bokats, medan filmen mellan städerna rullar. Den ligger i
+   * minnet och inte i sparfilen: laddas sidan om mitt i sekvensen är resan
+   * redan genomförd i tillståndet, och spelaren hamnar i den nya staden.
+   */
+  private travelScene: { from: City; to: City; mode: TransportMode } | null = null;
 
   constructor(root: HTMLElement) {
     this.root = root;
@@ -366,6 +373,7 @@ export class App {
     this.state = null;
     this.quiz = null;
     this.confirmRestart = false;
+    this.travelScene = null;
     this.journeySaved = false;
     this.lastJourneyAt = undefined;
     this.travelTarget = null;
@@ -459,6 +467,22 @@ export class App {
     if (!s) {
       this.root.append(this.renderStart());
       this.afterRender(keepScroll);
+      return;
+    }
+
+    /**
+     * Resesekvensen är en mellanspelsscen och ritas utan statusrad. Raden
+     * visar redan den nya staden, eftersom resan är genomförd i tillståndet
+     * innan filmen börjar, och skulle alltså avslöja vart man är på väg.
+     */
+    if (this.travelScene) {
+      const scene = this.travelScene;
+      const filmskal = el('div', { class: 'shell' });
+      const film = el('main', { class: 'view', 'data-screen': 'resefilm' });
+      film.append(this.renderTravelFilm(scene));
+      filmskal.append(film);
+      this.root.append(filmskal);
+      this.afterRender(null);
       return;
     }
 
@@ -2217,6 +2241,44 @@ export class App {
     return wrap;
   }
 
+  /**
+   * Filmen mellan två städer. Kartan zoomar in på sträckan och fordonet rör
+   * sig längs rutten. Ett tryck hoppar över resten.
+   */
+  private renderTravelFilm(scene: {
+    from: City;
+    to: City;
+    mode: TransportMode;
+  }): HTMLElement {
+    const wrap = el('div', { class: 'stack' });
+    const panel = el('section', { class: 'panel travel-panel' });
+    panel.append(
+      el(
+        'p',
+        { class: 'kicker' },
+        `${MODE_LABELS[scene.mode]} · ${scene.from.name} → ${scene.to.name}`
+      ),
+      el('h1', { class: 'travel-title' }, 'På väg')
+    );
+    panel.append(
+      renderTravelScene({
+        from: scene.from,
+        to: scene.to,
+        vehicle: (size) => iconGroup(`${scene.mode}-profil` as IconName, size),
+        onDone: () => {
+          this.travelScene = null;
+          this.scrollToTopNext = true;
+          this.render();
+        },
+      })
+    );
+    panel.append(
+      el('p', { class: 'muted travel-skip' }, 'Tryck för att hoppa över.')
+    );
+    wrap.append(panel);
+    return wrap;
+  }
+
   private doTravel(target: City, option: Route): void {
     const s = this.state!;
     if (s.money < option.price) {
@@ -2257,13 +2319,15 @@ export class App {
     this.commit();
     if (this.checkBroke()) return;
     playSound(option.mode === 'flyg' ? 'resa' : 'svisch');
-    window.setTimeout(() => playSound('ankomst'), 480);
+    // Filmen visar sträckan; ankomstsignalen kommer när den spelat klart.
+    this.travelScene = { from, to: target, mode: option.mode };
     this.notify(
       `${option.label} till ${target.name}. Framme efter ${
         option.days + (event?.days ?? 0)
       } dagar, klockan står på ${utcLabel(target.utc)}.`
     );
     this.go('stad');
+    window.setTimeout(() => playSound('ankomst'), 1200);
   }
 
   // -------------------------------------------------------------- souvenirer
