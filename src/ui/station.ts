@@ -37,8 +37,11 @@ export interface StationOpts {
   mode: TransportMode;
   difficulty: Difficulty;
   money: (amount: number) => string;
-  /** Spelarens kassa, för att gråa ut det man inte har råd med */
-  cash: number;
+  /**
+   * Spelarens kassa, läst när den behövs och inte när stationen byggs. En
+   * händelse som ändrar pengarna ska inte tvinga fram en ombyggd tavla.
+   */
+  cash: () => number;
   onBuy: (city: City, route: Route) => void;
 }
 
@@ -334,7 +337,7 @@ export function renderStation(opts: StationOpts): StationHandle {
         el('span', { class: 'ticket-value' }, varde)
       );
     const gate = `${STAND_LABEL[mode]} ${d.stand}`;
-    const har_rad = opts.cash >= d.route.price;
+    const har_rad = opts.cash() >= d.route.price;
     const kort = el('div', { class: 'ticket-sheet', role: 'dialog', 'aria-modal': 'true' },
       el('div', { class: 'ticket-stub' },
         el('span', { class: 'ticket-kicker' }, `${city.name} → ${d.city.name}`),

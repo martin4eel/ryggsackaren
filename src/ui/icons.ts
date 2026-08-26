@@ -26,6 +26,7 @@ export type IconName =
   | 'skylt-farja'
   | 'skylt-telefon'
   | 'skylt-karta'
+  | 'skylt-stad'
   | 'buss-profil'
   | 'tag-profil'
   | 'farja-profil'
@@ -187,6 +188,29 @@ const ICONS: Record<IconName, Part[]> = {
     { tag: 'rect', attrs: { x: '7.6', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
     { tag: 'rect', attrs: { x: '13.4', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
     { tag: 'rect', attrs: { x: '9.4', y: '4.6', width: '5.2', height: '4', rx: '0.8', fill: 'currentColor', stroke: 'none' } },
+  ],
+  'skylt-stad': [
+    // Gatstumpen: två husfasader och en vandrare emellan.
+    {
+      tag: 'path',
+      attrs: { d: 'M2.5 8.5h6.5V21H2.5zM15 4.5h6.5V21H15z', fill: 'currentColor', stroke: 'none' },
+    },
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M4.3 10.6h3v2.6h-3zM4.3 15.2h3v2.6h-3zM16.8 6.6h3v2.6h-3zM16.8 11.2h3v2.6h-3zM16.8 15.8h3v2.6h-3z',
+        class: 'icon-knockout',
+        stroke: 'none',
+      },
+    },
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M12 8.4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM10.6 12.2h2.8l1.1 4h-1.5l.5 4.8h-3l.5-4.8H9.5z',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
   ],
   'skylt-karta': [
     // Vikt karta i tre fält, med en nål i mitten.

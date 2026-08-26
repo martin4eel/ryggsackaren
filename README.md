@@ -211,8 +211,8 @@ webbläsaren och överlever att sparfilen raderas.
    vrider sig under det, och till sist zoomar det in mot målet. Ett tryck
    hoppar över filmen.
 
-   Ungefär var tredje resa händer dessutom något på vägen – bagaget försvinner,
-   flyget blir överbokat eller någon bjuder på taxin.
+   Ungefär var tredje resa händer dessutom något på vägen. Se _Händelser_
+   nedan.
 
    | Sträcka | Vad som brukar gå |
    | --- | --- |
@@ -236,7 +236,7 @@ webbläsaren och överlever att sparfilen raderas.
    någon.
 
    På sidorna därefter sitter stämplarna tryckta i bläck, snett och lite
-   huller om buller, med resdagen i kanten. Sjutton finns att jaga: fyra
+   huller om buller, med resdagen i kanten. Nitton finns att jaga: fyra
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet.
@@ -257,17 +257,44 @@ webbläsaren och överlever att sparfilen raderas.
    alltså pladder utan ord. Högtalarknappen i statusraden
    stegar mellan avstängt, dämpat och fullt ljud; valet sparas.
 13. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
-   och backa till staden med `Esc`. Balansmomentet styrs med piltangenterna
-   och taktmomentet med mellanslag.
-14. **Vägen tillbaka.** Knappen _Till staden_ sitter i statusraden, som ligger
+   och backa till staden med `Esc`. Ett händelsekort svarar man på med `A`–`C`
+   och kvitterar med `Enter`; `Esc` gör ingenting där, eftersom en fråga man
+   ställts inför ska besvaras och inte kringgås. Balansmomentet styrs med
+   piltangenterna och taktmomentet med mellanslag.
+14. **Händelser.** Något kan hända på åtta olika sorters tillfällen: på vägen,
+    på vandrarhemmet, på jobbet, vid sevärdheten, ute på gatorna, i butiken, i
+    mötet med någon, och i väntan på en avgång. Två av dem har egna knappar på
+    stadsskärmen – _Ut på stan_ och _Besök_ vid sevärdheten – och kostar en
+    dag var, i utbyte mot att något garanterat händer. De andra sex slår till
+    av sig själva när man ändå gör det man gör.
+
+    De flesta händelser ställer en fråga med två eller tre svar, och svaret
+    spelar roll: du hittar en plånbok på trottoaren och kan lämna in den,
+    behålla pengarna eller leta rätt på ägaren. Vad valet leder till är inte
+    givet – varje val har flera möjliga utfall som lottas, så att leta upp
+    ägaren kan sluta med hittelön och kaffe eller med en bortkastad dag.
+
+    Följderna är avsiktligt inte bara pengar. Ett utfall kan kosta eller ge
+    dagar, höja eller sänka stadsbetyget, ge eller ta en souvenir, ge ett
+    certifikat – eller ingenting alls utom en historia. Ungefär var femte
+    händelse är helt kosmetisk: hunden som somnar på ditt knä på nattbussen,
+    katten som bor i biljetthallen, skyfallet du väntar ut under ett portvalv
+    tillsammans med sex främlingar och en cykel.
+
+15. **Anseende.** Hederliga val bygger upp ett anseende och oärliga river ner
+    det. Det syns i passet, öppnar och stänger vissa händelser, ger två egna
+    stämplar åt var sitt håll, och räknas in i slutpoängen – så att det finns
+    ett skäl att lämna in plånboken som inte är pengar.
+
+16. **Vägen tillbaka.** Knappen _Till staden_ sitter i statusraden, som ligger
     fast i överkanten på varje skärm. Under ett arbetsskift finns den inte:
     där ligger pengarna på spel, och skiftet lämnar man genom att sjukanmäla
     sig.
-15. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+17. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
     frågar först, och visar vad som går förlorat, innan resan raderas.
-16. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+18. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
     avsluta resan, få poäng och en titel.
-17. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
+19. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
     startskärmen, med poäng, titel, dagar, städer och träffsäkerhet. Varje rad
     visar också vilken stad du hade bäst koll på och vilken som avslöjade dig.
     Spelet räknar rätt och fel per stad, både på turistbyrån och på jobben.
@@ -286,8 +313,8 @@ statusraden, eller _Radera sparfil_ på startskärmen.
 
 Slutpoängen väger samman kassa, ryggsäckens värde hemma, antal besökta städer,
 hur många av världens åtta regioner du hunnit till, stämplarna i passet,
-certifikat, träffsäkerhet på frågorna och hur effektivt du reste (städer per
-dag). Skulden dras av. Poängen ger också en titel, från _Hemvändare_ till
+certifikat, träffsäkerhet på frågorna, ditt anseende och hur effektivt du reste
+(städer per dag). Skulden dras av. Poängen ger också en titel, från _Hemvändare_ till
 _Legendarisk ryggsäckare_.
 
 ## Innehåll
@@ -297,8 +324,8 @@ _Legendarisk ryggsäckare_.
 - 80 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
 - 1 624 frågor uppdelade i två svårighetsgrader, varav 1 238 jobbfrågor
 - 8 arkadmoment som avslutar arbetsskiften
-- 17 stämplar att samla i passet
-- 15 resehändelser som kan slå till på vägen
+- 19 stämplar att samla i passet
+- 73 händelser med 83 val och 117 möjliga utfall, spridda över åtta tillfällen
 - 64 souvenirer med regional prissättning
 - 40 valutor
 - 4 stationsmiljöer med egen avgångstavla, egna ord och egen ljudmatta
@@ -324,7 +351,7 @@ src/
     souvenirs.ts           Handelsvaror med billiga och eftertraktade regioner
     currencies.ts          Växelkurser och formatering av belopp
     stamps.ts              Passets stämplar och villkoren för dem
-    events.ts              Resehändelser som kan slå till mellan städerna
+    events.ts              Händelserna: texter, val och utfall. Ingen kod.
     facts.ts               Atlasens uppslagsdata: huvudstad, språk, religion
                            och folkmängd per land, folkmängd per stad
     operators.ts           Flyg-, tåg- och bussbolag per land, med
@@ -339,6 +366,8 @@ src/
   game/
     state.ts               Speltillstånd, sparning och laddning
     rules.ts               Avstånd, priser, löner, poäng och frågeurval
+    events.ts              Händelsemotorn: när något händer, vad som väljs ut,
+                           och vad ett val leder till
     travel.ts              Vilka färdsätt som går mellan två städer, och
                            varför de andra inte gör det
     departures.ts          Avgångstavlornas innehåll: linjenummer, gate, spår,
@@ -347,6 +376,7 @@ src/
     highscores.ts          Resedagboken och statistiken över stadskunskap
   ui/
     app.ts                 Skärmar, spelloop och tangentbordsstyrning
+    eventcard.ts           Händelsekortet med sina val och sitt utfall
     station.ts             Stationshallarna: siluetter i SVG, biljettvyn och
                            linjenätet härifrån
     board.ts               Den elektroniska avgångstavlan, som uppdaterar sig
@@ -411,6 +441,14 @@ symmetriskt, att färjelinjerna pekar på städer som finns, och att **varje sta
 från varje annan stad genom nätverket**, med byten. Alla par behöver alltså
 inte ha en direktförbindelse – Köping saknar flygplats – men en stad som inte
 går att ta sig ifrån skulle låsa fast en spelare utan att något syns.
+
+**Händelserna** kontrolleras också: att inga två delar id, att varje händelse
+hör till minst ett tillfälle och har antingen val eller en effekt (aldrig
+båda), att ingen har fler än tre val eftersom tangenterna räcker till `A`–`C`,
+att varje val har minst ett utfall, att souvenirer som delas ut finns, att
+inga okända platshållare som `{stad}` står kvar oöversatta, och att varje
+tillfälle har minst fem händelser att välja bland – annars ser en spelare
+samma sak andra gången hen går ut på stan.
 
 Sedan stationerna kom till kontrolleras också **trafikbolagen**: att varje
 stads land finns i `data/operators.ts`, att en stad med fjärrtåg ligger i ett

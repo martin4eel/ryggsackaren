@@ -154,5 +154,19 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       glyph: '♁',
       test: (s) => s.callsHome === 0 && new Set(s.visited).size >= 5,
     },
+    {
+      id: 'hederlig',
+      name: 'Hederlig',
+      desc: 'Bygg upp ett anseende på sex genom att göra rätt när det kostar.',
+      glyph: '⚖',
+      test: (s) => (s.rykte ?? 0) >= 6,
+    },
+    {
+      id: 'okand',
+      name: 'Ökänd',
+      desc: 'Sjunk till ett anseende på minus fyra. Någon minns det.',
+      glyph: '☠',
+      test: (s) => (s.rykte ?? 0) <= -4,
+    },
   ];
 }

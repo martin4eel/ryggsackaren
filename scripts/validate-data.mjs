@@ -37,6 +37,7 @@ try {
   );
   const { OPERATORS } = await load('/src/data/operators.ts');
   const { COUNTRY_FACTS, CITY_POPULATION } = await load('/src/data/facts.ts');
+  const { EVENTS } = await load('/src/data/events.ts');
   const { availableRoutes } = await load('/src/game/travel.ts');
 
   const jobById = Object.fromEntries(JOBS.map((j) => [j.id, j]));
@@ -367,6 +368,86 @@ try {
     }
   }
 
+  /**
+   * Händelserna. En trasig händelse märks först när den slår till, kanske
+   * timmar in i en resa, och då är det för sent att göra något åt den.
+   */
+  const TRIGGERS = new Set([
+    'resa',
+    'boende',
+    'arbete',
+    'sevardhet',
+    'stad',
+    'handel',
+    'mote',
+    'vantan',
+  ]);
+  const TONER = new Set(['bra', 'daligt', 'blandat', 'absurd', 'allvar', 'stamning']);
+  const PLATSHALLARE = /\{(\w+)\}/g;
+  const KANDA_PLATSHALLARE = new Set(['stad', 'land', 'sevardhet']);
+  const eventIds = new Set();
+  const perTrigger = new Map();
+
+  for (const e of EVENTS) {
+    const namn = `händelsen ${e.id}`;
+    if (eventIds.has(e.id)) problems.push(`${namn} har samma id som en annan`);
+    eventIds.add(e.id);
+    if (!e.title?.trim()) problems.push(`${namn} saknar rubrik`);
+    if (!e.text?.trim()) problems.push(`${namn} saknar text`);
+    if (!TONER.has(e.tone)) problems.push(`${namn} har okänd ton: ${e.tone}`);
+    if (!(e.weight > 0)) problems.push(`${namn} har ingen vikt`);
+    if (!Array.isArray(e.triggers) || e.triggers.length === 0)
+      problems.push(`${namn} hör inte till något tillfälle`);
+    for (const t of e.triggers ?? []) {
+      if (!TRIGGERS.has(t)) problems.push(`${namn} har okänt tillfälle: ${t}`);
+      perTrigger.set(t, (perTrigger.get(t) ?? 0) + 1);
+    }
+    // Platshållare som inte fylls i skulle skrivas ut som {stad} i klartext.
+    const texter = [
+      e.title,
+      e.text,
+      ...(e.choices ?? []).flatMap((c) => [c.label, c.hint, ...c.outcomes.map((o) => o.text)]),
+    ].filter(Boolean);
+    for (const text of texter) {
+      for (const m of String(text ?? '').matchAll(PLATSHALLARE)) {
+        if (!KANDA_PLATSHALLARE.has(m[1]))
+          problems.push(`${namn} har okänd platshållare: {${m[1]}}`);
+      }
+    }
+    if (e.choices) {
+      if (e.choices.length < 2) problems.push(`${namn} har bara ett val`);
+      if (e.choices.length > 3)
+        problems.push(`${namn} har fler än tre val, och tangenterna räcker till A-C`);
+      if (e.effect)
+        problems.push(`${namn} har både val och en egen effekt; effekten skulle aldrig gå fram`);
+      for (const [i, c] of e.choices.entries()) {
+        if (!c.label?.trim()) problems.push(`${namn}, val ${i + 1}: saknar text`);
+        if (!Array.isArray(c.outcomes) || c.outcomes.length === 0)
+          problems.push(`${namn}, val ${i + 1}: saknar utfall`);
+        for (const o of c.outcomes ?? []) {
+          if (!o.text?.trim()) problems.push(`${namn}, val ${i + 1}: utfall utan text`);
+          if (o.tone && !TONER.has(o.tone))
+            problems.push(`${namn}, val ${i + 1}: okänd ton ${o.tone}`);
+          for (const id of [o.effect?.souvenir].filter(Boolean)) {
+            if (!SOUVENIR_BY_ID[id])
+              problems.push(`${namn} delar ut en souvenir som inte finns: ${id}`);
+          }
+        }
+      }
+    } else if (!e.effect) {
+      problems.push(`${namn} har varken val eller effekt`);
+    }
+  }
+
+  /**
+   * Varje tillfälle behöver ett djup som räcker. Med bara ett par händelser
+   * per tillfälle ser en spelare samma sak andra gången hen går ut på stan.
+   */
+  for (const t of TRIGGERS) {
+    const n = perTrigger.get(t) ?? 0;
+    if (n < 5) problems.push(`tillfället ${t} har bara ${n} händelser, minst 5 krävs`);
+  }
+
   /** Två länder får inte dela flygbolagskod - flightnumren blir tvetydiga. */
   const koder = new Map();
   for (const [land, ops] of Object.entries(OPERATORS)) {
@@ -445,6 +526,12 @@ try {
   console.log(
     `Atlas: ${Object.keys(COUNTRY_FACTS).length} länder med fakta, ` +
       `${Object.keys(CITY_POPULATION).length} städer med folkmängd`
+  );
+  console.log(
+    `Händelser: ${EVENTS.length} stycken, ` +
+      `${EVENTS.filter((e) => e.choices).length} med val, ` +
+      `${EVENTS.reduce((n, e) => n + (e.choices?.length ?? 0), 0)} valmöjligheter, ` +
+      `${EVENTS.reduce((n, e) => n + (e.choices ?? []).reduce((m, c) => m + c.outcomes.length, 0), 0)} utfall`
   );
   console.log(`Frågor: ${total}`);
   console.log(

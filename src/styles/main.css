@@ -4770,3 +4770,251 @@ body.sheet-oppen {
     opacity: 0.4;
   }
 }
+
+
+/* ====================================================================
+   HÄNDELSER
+   Kortet ligger över hela skärmen, eftersom en händelse kan slå till
+   var som helst och ska se likadan ut överallt. Färgen kommer av tonen:
+   en absurd händelse ska inte se ut som en förlust, och en stämnings-
+   bild ska knappt se ut som något alls.
+   ==================================================================== */
+
+.event-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(3, 12, 20, 0.74);
+  backdrop-filter: blur(3px);
+  animation: sheetin 0.24s ease;
+  overflow-y: auto;
+}
+
+@media (min-width: 640px) {
+  .event-overlay {
+    align-items: center;
+  }
+}
+
+.event-card {
+  width: min(460px, 100%);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  /* Vänsterkanten bär tonen, som en färgad flik i en pärm. */
+  border-left: 6px solid var(--ink-soft);
+  animation: sheetupp 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.event-bra {
+  border-left-color: var(--palm);
+}
+
+.event-daligt {
+  border-left-color: var(--stamp);
+}
+
+.event-blandat {
+  border-left-color: var(--sun-dark);
+}
+
+.event-absurd {
+  border-left-color: #8b5cf6;
+}
+
+.event-allvar {
+  border-left-color: #1d4e6b;
+}
+
+.event-stamning {
+  border-left-color: var(--ink-soft);
+}
+
+.event-kicker {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.event-title {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  /* Rubriker i det här spelet behöver mer än ett i radavstånd; annars
+     kolliderar prickarna på å, ä och ö med raden ovanför. */
+  line-height: 1.15;
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
+}
+
+.event-text {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.event-utfall {
+  margin: 14px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: 1rem;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.event-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.event-choice {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper-dim);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.event-choice:hover,
+.event-choice:focus-visible {
+  border-color: var(--sun-dark);
+  background: #f0e6d2;
+  outline: none;
+}
+
+.event-choice:active {
+  transform: translateY(1px);
+}
+
+.event-choice-av {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.event-choice-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.event-choice-key {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--sea);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+}
+
+.event-choice-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.event-choice-hint,
+.event-choice-sparr {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.event-choice-sparr {
+  color: var(--stamp);
+}
+
+.event-tangent {
+  margin: 12px 0 0;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* Följderna, en bricka per sak som ändrade sig. */
+.event-effekter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.event-effekt {
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  background: rgba(29, 43, 52, 0.08);
+  color: var(--ink);
+}
+
+.event-effekt-bra {
+  background: rgba(47, 125, 99, 0.16);
+  color: #1f5c47;
+}
+
+.event-effekt-daligt {
+  background: rgba(189, 63, 42, 0.14);
+  color: var(--stamp);
+}
+
+.event-inget {
+  margin: 14px 0 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.event-vidare {
+  margin-top: 18px;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-overlay,
+  .event-card {
+    animation: none;
+  }
+}
+
+/* Sevärdheten i stadens infopanel: en rad med namnet och en knapp. */
+.city-sevardhet {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--paper-dim);
+}
+
+.city-sevardhet-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.city-sevardhet-text strong {
+  font-size: 1.05rem;
+}
+
+.city-sevardhet .btn {
+  flex: 0 0 auto;
+}

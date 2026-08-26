@@ -1,6 +1,6 @@
 import { CITIES, CITY_BY_ID } from '../data/cities';
 import { CURRENCIES, formatMoney } from '../data/currencies';
-import { pickTravelEvent, type TravelEvent } from '../data/events';
+import type { EventTone, EventTrigger } from '../data/events';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City, Job, Souvenir } from '../data/types';
 import {
@@ -51,7 +51,14 @@ import {
   type Difficulty,
   type GameState,
 } from '../game/state';
-import { cycleVolume, playCombo, playSound, volumeLabel, volumeLevel } from './audio';
+import {
+  cycleVolume,
+  playCombo,
+  playSound,
+  volumeLabel,
+  volumeLevel,
+  type Sound,
+} from './audio';
 import { button, clear, el } from './dom';
 import { icon, iconGroup, type IconName } from './icons';
 import {
@@ -64,6 +71,20 @@ import { renderTravelScene } from './map';
 import { renderGlobePicker } from './globepicker';
 import { renderStation, type StationHandle } from './station';
 import { renderAtlasScreen } from './atlas';
+import {
+  applyImmediate,
+  chooseEvent,
+  clearEvent,
+  describeEffect,
+  eventContext,
+  fillText,
+  pendingEffect,
+  pendingEvent,
+  pendingOutcome,
+  rollEvent,
+  type EffectLine,
+} from '../game/events';
+import { renderEventCard } from './eventcard';
 
 interface QuizSession {
   kind: 'turistbyra' | 'jobb';
@@ -212,6 +233,19 @@ function employerFor(city: City, job: Job): string {
  * inte i sparfilen: startskärmen har inget speltillstånd att läsa ur, och
  * förklaringen ska förbli undanstoppad även efter att en resa raderats.
  */
+/**
+ * Ljudet som hör till en händelses ton. En absurd händelse ska inte låta som
+ * en förlust, och en stämningsbild ska knappt låta alls.
+ */
+const EVENT_LJUD: Record<EventTone, Sound> = {
+  bra: 'mynt',
+  daligt: 'fel',
+  blandat: 'valj',
+  absurd: 'blipp',
+  allvar: 'varning',
+  stamning: 'sida',
+};
+
 const HJALP_NYCKEL = 'ryggsackaren.hjalp-visad';
 
 function harSettHjalpen(): boolean {
@@ -298,6 +332,14 @@ export class App {
   private travelFilter: TransportMode | null = null;
 
   /**
+   * Sammanfattningen av vad den senaste händelsen ledde till. Den lever bara i
+   * gränssnittet; efter en omladdning härleds den ur den sparade händelsen i
+   * stället, vilket ger samma rader så när som på vilken souvenir som föll
+   * bort.
+   */
+  private eventEffects: EffectLine[] | null = null;
+
+  /**
    * Stationsskärmen äger egna timers, en ljudmatta och en tavla som lever
    * vidare medan den ligger uppe. Den får därför inte byggas om för varje
    * render - en avisering som dyker upp skulle annars nolla tavlan och starta
@@ -308,7 +350,6 @@ export class App {
     handle: StationHandle;
     mode: TransportMode;
     cityId: string;
-    cash: number;
   } | null = null;
 
   constructor(root: HTMLElement) {
@@ -342,6 +383,33 @@ export class App {
       if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
       const s = this.state;
       if (!s || this.confirmRestart) return;
+
+      /**
+       * En obesvarad händelse äger tangentbordet. A-C väljer, Enter går vidare
+       * när svaret är givet, och Escape gör ingenting - en fråga man ställts
+       * inför ska besvaras, inte kringgås.
+       */
+      const handelse = pendingEvent(s);
+      if (handelse) {
+        const besvarad = s.pendingEvent?.chosen !== undefined;
+        if (!besvarad && handelse.choices) {
+          const val = 'abc'.indexOf(event.key.toLowerCase());
+          const siffra = '123'.indexOf(event.key);
+          const i = val >= 0 ? val : siffra;
+          const choice = i >= 0 ? handelse.choices[i] : undefined;
+          if (choice) {
+            event.preventDefault();
+            const ctx = eventContext(s, this.city);
+            if (!choice.villkor || choice.villkor(ctx)) this.answerEvent(i);
+          }
+          return;
+        }
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          this.closeEvent();
+        }
+        return;
+      }
 
       const quiz = this.quiz;
       const inQuestions =
@@ -468,6 +536,85 @@ export class App {
   }
 
   /** Drar levnadskostnad för ett antal dagar och kontrollerar konkurs. */
+  /**
+   * Ett tillfälle inträffar. Motorn slår om något händer, och en händelse utan
+   * val verkställs på en gång - den har inget att svara på. En händelse med
+   * val ligger kvar tills spelaren svarat.
+   */
+  private fireEvent(trigger: EventTrigger, chance?: number): void {
+    const s = this.state!;
+    const city = this.city;
+    const event = rollEvent(s, city, trigger, chance);
+    if (!event) return;
+    const kostnad = dailyCost(city, s.difficulty);
+    this.eventEffects = event.choices
+      ? []
+      : applyImmediate(s, event, city, kostnad, (n) => this.money(n));
+    playSound(EVENT_LJUD[event.tone]);
+    this.commit();
+  }
+
+  /** Spelaren svarar. Utfallet lottas och verkställs. */
+  private answerEvent(index: number): void {
+    const s = this.state!;
+    const city = this.city;
+    this.eventEffects = chooseEvent(
+      s,
+      index,
+      city,
+      dailyCost(city, s.difficulty),
+      (n) => this.money(n)
+    );
+    const utfall = pendingOutcome(s);
+    playSound(EVENT_LJUD[utfall?.tone ?? pendingEvent(s)?.tone ?? 'blandat']);
+    this.commit();
+    if (this.checkBroke()) return;
+    this.render();
+  }
+
+  /** Kvitterar händelsen och går vidare. */
+  private closeEvent(): void {
+    const s = this.state!;
+    clearEvent(s);
+    this.eventEffects = null;
+    this.commit();
+    if (this.checkBroke()) return;
+    this.render();
+  }
+
+  /**
+   * Kortet som ligger över skärmen. Byggs ur tillståndet, så att en obesvarad
+   * fråga finns kvar efter en omladdning i stället för att tyst försvinna.
+   */
+  private renderEventOverlay(): HTMLElement | null {
+    const s = this.state!;
+    const event = pendingEvent(s);
+    if (!event) return null;
+    const city = this.city;
+    const besvarad = s.pendingEvent?.chosen !== undefined;
+    const utfall = pendingOutcome(s);
+    const rader =
+      this.eventEffects ??
+      describeEffect(
+        pendingEffect(s),
+        (n) => this.money(n),
+        dailyCost(city, s.difficulty)
+      );
+    const kort = renderEventCard({
+      event,
+      city,
+      ctx: eventContext(s, city),
+      text: (raw) => fillText(raw, city),
+      money: (n) => this.money(n),
+      outcomeText: besvarad || !event.choices ? (utfall?.text ?? '') : undefined,
+      outcomeTone: utfall?.tone,
+      effects: besvarad || !event.choices ? rader : undefined,
+      onChoose: (i) => this.answerEvent(i),
+      onClose: () => this.closeEvent(),
+    });
+    return el('div', { class: 'event-overlay' }, kort);
+  }
+
   private spendDays(count: number, city: City): void {
     const s = this.state!;
     const cost = dailyCost(city, s.difficulty) * count;
@@ -512,7 +659,6 @@ export class App {
       s0.screen === 'station' &&
       this.travelFilter === this.station.mode &&
       s0.currentCityId === this.station.cityId &&
-      s0.money === this.station.cash &&
       !this.travelScene;
     if (!behallStation) {
       this.station?.handle.stop();
@@ -602,6 +748,13 @@ export class App {
         )
       );
     }
+    /**
+     * Händelsekortet läggs sist, över allt annat. En obesvarad fråga ska inte
+     * gå att klicka förbi - och en händelse kan slå till på vilken skärm som
+     * helst, så kortet hör hemma här och inte i en enskild vy.
+     */
+    const eventCard = this.renderEventOverlay();
+    if (eventCard) shell.append(eventCard);
     if (this.confirmRestart) {
       shell.append(this.renderRestartDialog());
     }
@@ -1341,10 +1494,31 @@ export class App {
         () => {
           this.travelFilter = mode;
           playSound('valj');
+          /**
+           * Att vänta på en avgång är ett tillfälle. Slaget görs här, när man
+           * kliver in, och inte i skärmens byggfunktion - den körs om varje
+           * gång tillståndet ändras, och då skulle varje händelse kunna följas
+           * direkt av nästa.
+           */
           this.go('station');
+          this.fireEvent('vantan');
+          this.render();
         }
       );
     }
+    /**
+     * Att gå ut utan ärende. Dagen kostar boende, och i utbyte händer något -
+     * på gatan, vid sevärdheten eller i mötet med någon. Det är den enda
+     * handlingen i spelet vars hela poäng är att man inte vet vad den ger.
+     */
+    addSign(
+      'skylt-stad',
+      'Ut på stan',
+      `Gå runt på gatorna en dag och se vad som händer. Kostar en dag (${this.money(
+        dailyCost(city, s.difficulty)
+      )}).`,
+      () => this.gaUtPaStan()
+    );
     addSign(
       'skylt-karta',
       'Kartan',
@@ -1378,38 +1552,6 @@ export class App {
         )
       )
     );
-
-    // Resehändelsen från senaste sträckan visas överst, en gång, och
-    // kvitteras bort så att den inte ligger kvar när man kommer tillbaka.
-    if (s.lastEvent) {
-      const event = s.lastEvent;
-      const card = el('section', { class: `panel event event-${event.tone}` });
-      const parts: string[] = [];
-      if (event.money !== 0)
-        parts.push(
-          `${event.money > 0 ? '+' : '−'}${this.money(Math.abs(event.money))}`
-        );
-      if (event.days !== 0)
-        parts.push(`${event.days} ${event.days === 1 ? 'extra dag' : 'extra dagar'}`);
-      card.append(
-        el('p', { class: 'kicker' }, 'På vägen hit'),
-        el('h2', {}, event.title),
-        el('p', { class: 'lede' }, event.text),
-        parts.length > 0
-          ? el('p', { class: 'event-effect' }, parts.join(' · '))
-          : el('p', { class: 'muted' }, 'Ingen skada skedd.'),
-        button(
-          'Okej',
-          () => {
-            s.lastEvent = undefined;
-            this.commit();
-            this.render();
-          },
-          { class: 'btn btn-ghost' }
-        )
-      );
-      wrap.append(card);
-    }
 
     // Snabbguiden visas en enda gång, i startstaden, innan första resan.
     if (!s.seenIntro) {
@@ -1449,9 +1591,28 @@ export class App {
       el(
         'p',
         { class: 'muted' },
-        `Sevärdhet: ${city.landmark}. Vandrarhem och mat kostar ${this.money(
+        `Vandrarhem och mat kostar ${this.money(
           dailyCost(city, s.difficulty)
         )} per dag. Stadsbetyg: ${p.rating}/100.`
+      ),
+      /**
+       * Sevärdheten är en egen handling och inte en skylt i raden: skyltarna
+       * är stadens funktioner, det här är stadens enda sak. En dag går åt, och
+       * något händer alltid - kön, guiden, vakten eller ljuset.
+       */
+      el('div', { class: 'city-sevardhet' },
+        el('div', { class: 'city-sevardhet-text' },
+          el('span', { class: 'kicker' }, 'Sevärdhet'),
+          el('strong', {}, city.landmark)
+        ),
+        button(
+          'Besök',
+          () => this.besokSevardhet(),
+          {
+            class: 'btn btn-ghost',
+            title: `Tillbringa en dag vid ${city.landmark}. Kostar en dag.`,
+          }
+        )
       )
     );
     wrap.append(info);
@@ -1497,6 +1658,41 @@ export class App {
   }
 
   // ----------------------------------------------------------- turistbyrån
+
+  /**
+   * En dag ute i staden. Alltid en händelse - annars vore det bara en dag som
+   * kostade pengar. Vilken sorts tillfälle det blir lottas: gatan är vanligast,
+   * sevärdheten och mötet med någon lika sannolika sinsemellan.
+   */
+  private gaUtPaStan(): void {
+    const city = this.city;
+    playSound('valj');
+    this.spendDays(1, city);
+    this.commit();
+    if (this.checkBroke()) return;
+    // Gatan är vanligast, men ungefär var tredje gång är det någon man möter.
+    const trigger: EventTrigger = Math.random() < 0.36 ? 'mote' : 'stad';
+    this.fireEvent(trigger, 1);
+    if (!this.state?.pendingEvent) {
+      // Alla händelser för tillfället var redan förbrukade. Dagen gick ändå.
+      this.notify(`En dag i ${city.name} utan att något särskilt hände.`);
+    }
+    this.render();
+  }
+
+  /** En dag vid stadens sevärdhet. Alltid en händelse, som gatan. */
+  private besokSevardhet(): void {
+    const city = this.city;
+    playSound('sida');
+    this.spendDays(1, city);
+    this.commit();
+    if (this.checkBroke()) return;
+    this.fireEvent('sevardhet', 1);
+    if (!this.state?.pendingEvent) {
+      this.notify(`En stilla dag vid ${city.landmark}.`);
+    }
+    this.render();
+  }
 
   private startCityQuiz(): void {
     const s = this.state!;
@@ -2045,6 +2241,8 @@ export class App {
       this.notify(
         `Turistbyrån: ${q.correct}/${total} rätt, betyg ${score}. Bästa betyg i ${city.name}: ${p.rating}.`
       );
+      // Dagen slutar på vandrarhemmet, och där kan något hända.
+      this.fireEvent('boende');
       this.go('stad');
       return;
     }
@@ -2088,6 +2286,13 @@ export class App {
         `Certifikat i ${CATEGORY_LABELS[job.category] ?? job.category}!`
       );
     this.notify(parts.join(' '));
+    /**
+     * Skiftet är över. Något kan ha hänt på jobbet; annars kan något ha hänt
+     * på vandrarhemmet under de nätter skiftet varade. Bara ett av dem, så att
+     * ett skift aldrig slutar med två kort på rad.
+     */
+    this.fireEvent('arbete');
+    this.fireEvent('boende');
     this.go('stad');
   }
 
@@ -2107,15 +2312,10 @@ export class App {
       mode,
       difficulty: s.difficulty,
       money: (n) => this.money(n),
-      cash: s.money,
+      cash: () => this.state?.money ?? 0,
       onBuy: (target, route) => this.doTravel(target, route),
     });
-    this.station = {
-      handle,
-      mode,
-      cityId: s.currentCityId,
-      cash: s.money,
-    };
+    this.station = { handle, mode, cityId: s.currentCityId };
     return handle.node;
   }
 
@@ -2197,18 +2397,8 @@ export class App {
 
     /**
      * Ungefär var tredje resa händer något. Händelsen läggs i tillståndet i
-     * stället för att visas direkt, så att den överlever en omladdning och
-     * alltid kvitteras på stadsskärmen.
+     * stället för att visas direkt, så att den överlever en omladdning.
      */
-    let event: TravelEvent | undefined;
-    if (Math.random() < 0.35) {
-      event = pickTravelEvent();
-      s.money += event.money;
-      if (event.money > 0) s.earned += event.money;
-      else s.spent += -event.money;
-      if (event.days > 0) this.spendDays(event.days, avgCity);
-    }
-    s.lastEvent = event;
     // Jobben i staden du lämnar blir sökbara igen nästa gång du kommer hit,
     // annars kan en återvändande resenär inte tjäna något alls.
     getProgress(s, from.id).workedJobs = [];
@@ -2225,12 +2415,15 @@ export class App {
       farja: 'skeppstuta',
     } as const;
     playSound(avgangsljud[option.mode]);
+    // Något kan ha hänt på vägen. Kortet ligger kvar tills det kvitterats, och
+    // syns först när resefilmen spelat klart.
+    this.fireEvent('resa');
     // Filmen visar sträckan; ankomstsignalen kommer när den spelat klart.
     this.travelScene = { from, to: target, mode: option.mode };
     this.notify(
-      `${option.label} till ${target.name}. Framme efter ${
-        option.days + (event?.days ?? 0)
-      } dagar, klockan står på ${utcLabel(target.utc)}.`
+      `${option.label} till ${target.name}. Framme efter ${option.days} ${
+        option.days === 1 ? 'dag' : 'dagar'
+      }, klockan står på ${utcLabel(target.utc)}.`
     );
     this.go('stad');
     window.setTimeout(() => playSound('ankomst'), 1200);
@@ -2365,6 +2558,8 @@ export class App {
     this.commit();
     playSound('mynt');
     this.notify(`${souvenir.name} ligger i ryggsäcken.`);
+    // I butiken pruttas det, växlas fel och viskas om tullen.
+    this.fireEvent('handel');
     this.render();
   }
 
@@ -2385,6 +2580,7 @@ export class App {
         profit >= 0 ? '+' : '-'
       }${this.money(Math.abs(profit))}).`
     );
+    this.fireEvent('handel');
     this.render();
   }
 
@@ -2639,6 +2835,7 @@ export class App {
       rad('Dag på resan', String(s.days)),
       rad('Städer', `${new Set(s.visited).size} av ${CITIES.length}`),
       rad('Stämplar', `${s.stamps.length} av ${STAMPS.length}`),
+      rad('Anseende', ryktesord(s.rykte)),
       rad('Flugna km', s.distance.toLocaleString('sv-SE'))
     );
     page.append(grid);
@@ -2893,6 +3090,7 @@ export class App {
           `${Object.values(s.certificates).reduce((a, b) => a + (b ?? 0), 0)}`
         ),
         stat('Stämplar', `${s.stamps.length}/${STAMPS.length}`),
+        stat('Anseende', ryktesord(s.rykte)),
         stat('Längsta svit', `${s.bestStreak}`),
         stat('Tidszoner', `${Math.round(s.timezonesCrossed)}`)
       ),
@@ -3007,6 +3205,20 @@ function markKm(s: GameState): number {
 }
 
 /** Prisnivån i klartext, i stället för ett indextal ingen kan tolka. */
+/**
+ * Anseendet i ord i stället för i siffror. Ett tal utan skala säger ingenting
+ * om det är bra eller dåligt, och det här är inte en poäng man samlar - det är
+ * ett rykte som går före en.
+ */
+function ryktesord(rykte: number): string {
+  if (rykte >= 8) return 'Omtalat gott';
+  if (rykte >= 4) return 'Gott';
+  if (rykte >= 1) return 'Hyggligt';
+  if (rykte === 0) return 'Oskrivet blad';
+  if (rykte >= -3) return 'Skamfilat';
+  return 'Ökänd';
+}
+
 function prisniva(costIndex: number): string {
   if (costIndex >= 1.25) return 'dyr';
   if (costIndex >= 1.0) return 'ganska dyr';

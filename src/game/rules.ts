@@ -297,6 +297,12 @@ export function finalScore(state: GameState): number {
   ).size;
   const stampPoints = state.stamps.length * 900;
   /**
+   * Anseendet räknas in, åt båda hållen. Att lämna in plånboken ska löna sig
+   * på slutet också för den som inte fick hittelön, och att behålla pengarna
+   * ska kosta något mer än en rad i en resedagbok.
+   */
+  const rykte = Math.max(-6, Math.min(12, state.rykte ?? 0)) * 700;
+  /**
    * Effektivitetsbonus istället för ren snabbhet: den som ser många städer
    * på få dagar belönas, men en grundlig resa nollas inte ut.
    */
@@ -310,6 +316,7 @@ export function finalScore(state: GameState): number {
         cityPoints +
         regions * 1400 +
         stampPoints +
+        rykte +
         certs * 700 +
         accuracy * 6000 +
         efficiency

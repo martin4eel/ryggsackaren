@@ -1,4 +1,3 @@
-import type { TravelEvent } from '../data/events';
 import type { TransportMode } from '../data/transport';
 import type { Category } from '../data/types';
 
@@ -123,10 +122,32 @@ export interface GameState {
    */
   cityStats: Record<string, { correct: number; wrong: number }>;
   /**
-   * Händelsen från senaste resan. Den ligger kvar tills spelaren kvitterat
-   * den på stadsskärmen, så att den överlever en omladdning mitt i.
+   * Anseende. Byggs upp av hederliga val i händelserna och rivs av oärliga.
+   * Öppnar och stänger vissa händelser, och räknas in i slutpoängen - så att
+   * det finns ett skäl att lämna in plånboken som inte är pengar.
    */
-  lastEvent?: TravelEvent;
+  rykte: number;
+  /** Händelser som redan slagit till, för dem som bara får hända en gång. */
+  eventsSeen: string[];
+  /**
+   * De senaste händelserna, nyast först. De vägs ner kraftigt när nästa
+   * händelse lottas, så att samma hund inte följer efter en två gånger på en
+   * kvart. Listan hålls kort med flit: allt ska kunna komma tillbaka.
+   */
+  recentEvents: string[];
+  /**
+   * Händelsen som väntar på svar eller på att kvitteras. Den ligger i
+   * tillståndet i stället för i gränssnittet, så att ett val man ställts inför
+   * inte försvinner för att fliken laddades om.
+   *
+   * `chosen` är index i händelsens `choices`, `outcome` index i det valets
+   * `outcomes`. Båda saknas tills spelaren svarat.
+   */
+  pendingEvent?: {
+    eventId: string;
+    chosen?: number;
+    outcome?: number;
+  };
   /** Sista resultatet, sätts när spelet är över */
   outcome?: 'vinst' | 'pank';
   finalScore?: number;
@@ -175,6 +196,9 @@ export function createGame(
     stampDays: {},
     seenIntro: false,
     cityStats: {},
+    rykte: 0,
+    eventsSeen: [],
+    recentEvents: [],
   };
 }
 
@@ -249,6 +273,15 @@ function migrate(
    */
   if (!KANDA_SKARMAR.has(state.screen)) state.screen = 'stad';
   state.cityStats ??= {};
+  state.rykte ??= 0;
+  state.eventsSeen ??= [];
+  state.recentEvents ??= [];
+  /**
+   * Det gamla resehändelsesystemet sparade hela händelsen i `lastEvent`. Den
+   * formen finns inte längre, och en halvkvitterad gammal händelse är inte
+   * värd att lyfta över - den slängs, och nästa resa ger en ny.
+   */
+  delete (state as { lastEvent?: unknown }).lastEvent;
   state.tripsByMode ??= {};
   state.kmByMode ??= {};
   // Resor som påbörjades innan namnet fanns får en neutral benämning.
