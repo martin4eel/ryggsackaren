@@ -212,7 +212,7 @@ _Legendarisk ryggsäckare_.
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
 - 80 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 1 661 frågor uppdelade i två svårighetsgrader, varav 1 275 jobbfrågor
+- 1 624 frågor uppdelade i två svårighetsgrader, varav 1 238 jobbfrågor
 - 8 arkadmoment som avslutar arbetsskiften
 - 15 stämplar att samla i passet
 - 15 resehändelser som kan slå till på vägen
@@ -282,6 +282,12 @@ när frågan visas. `d: 1` betyder att frågan används på båda svårighetsgra
   info: 'Visas som kuriosa efter att spelaren svarat.',
 }
 ```
+
+Valideringen letar också efter **nära-dubbletter inom ett jobb**: två frågor
+med samma rätta svar och samma ämne, fast olika formulerade. Exakt lika
+frågetext fångas av dubblettkontrollen, men "Vad kallas de japanska serierna?"
+och "Vad kallas japanska tryckta serier?" slank igenom förut och kunde hamna i
+samma skift.
 
 Valideringen kräver också att varje jobb har minst **fyra lätta frågor mer än
 skiftet är långt**. Med lika många lätta frågor som arbetsdagar får en Turist

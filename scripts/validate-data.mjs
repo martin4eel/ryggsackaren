@@ -76,6 +76,47 @@ try {
     checkQuestions(`stad:${cityId}`, questions);
   }
 
+  /**
+   * Nära-dubbletter inom ett jobb. Exakt lika frågetext fångas redan av
+   * kontrollen ovan, men två frågor kan ha samma rätta svar och samma ämne
+   * med olika formulering - "Vad kallas de japanska serierna?" och "Vad kallas
+   * japanska tryckta serier?" är samma fråga två gånger. Ett skift kan då
+   * ställa båda, vilket ser ut som ett fel i spelet.
+   */
+  const normalisera = (t) =>
+    String(t)
+      .toLowerCase()
+      .replace(/[^a-zåäöé0-9 ]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  const stam = (t) => normalisera(t).replace(/(en|et|na|erna|arna|n|t)$/, '');
+  const STOPPORD = new Set(
+    'vad kallas vilken vilket vem hur som den det en ett du man i på av för med till och är om vid'.split(' ')
+  );
+  const nyckelord = (t) =>
+    new Set(
+      normalisera(t)
+        .split(' ')
+        .filter((w) => !STOPPORD.has(w) && w.length > 2)
+    );
+
+  for (const [jobId, pool] of Object.entries(JOB_QUESTIONS)) {
+    for (let i = 0; i < pool.length; i++) {
+      for (let j = i + 1; j < pool.length; j++) {
+        if (stam(pool[i].a[0]) !== stam(pool[j].a[0])) continue;
+        const A = nyckelord(pool[i].q);
+        const B = nyckelord(pool[j].q);
+        const gemensamma = [...A].filter((w) => B.has(w)).length;
+        const andel = gemensamma / Math.max(1, Math.min(A.size, B.size));
+        if (andel >= 0.34)
+          problems.push(
+            `jobb ${jobId}: två frågor med samma svar "${pool[i].a[0]}" och samma ämne:\n` +
+              `      "${pool[i].q}"\n      "${pool[j].q}"`
+          );
+      }
+    }
+  }
+
   const CITY_QUIZ_LENGTH = 5;
   for (const city of CITIES) {
     // Stadsvyn visar alltid ett foto; bygget ska inte gå igenom utan det.
