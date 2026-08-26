@@ -52,17 +52,21 @@ export interface StationOpts {
  * Stockholm en centralstation.
  */
 const STATION_NAMN: Record<TransportMode, (c: City) => string> = {
-  flyg: (c) => (c.hub ? `${c.name} internationella flygplats` : `${c.name} flygplats`),
+  // "Stockholm internationella flygplats" blev tre rader på en telefon och la
+  // sig över hela terminalen. Interkontinental trafik står i kickern i stället.
+  flyg: (c) => `${c.name} flygplats`,
   tag: (c) => (c.hub ? `${c.name} centralstation` : `${c.name} station`),
   buss: (c) => (c.hub ? `${c.name} bussterminal` : `${c.name} busstation`),
   farja: (c) => `${c.name} färjeterminal`,
 };
 
-const STATION_KICKER: Record<TransportMode, string> = {
-  flyg: 'Avgående · Departures',
-  tag: 'Fjärrtrafik · Avgångar',
-  buss: 'Långfärdsbuss · Avgångar',
-  farja: 'Färjetrafik · Avgångar',
+/** Skyltraden ovanför namnet. Flygplatser skyltar tvåspråkigt, som på riktigt. */
+const STATION_KICKER: Record<TransportMode, (c: City) => string> = {
+  flyg: (c) =>
+    c.hub ? 'Avgående · International departures' : 'Avgående · Departures',
+  tag: () => 'Fjärrtrafik · Avgångar',
+  buss: () => 'Långfärdsbuss · Avgångar',
+  farja: () => 'Färjetrafik · Avgångar',
 };
 
 const STATION_INFO: Record<TransportMode, string> = {
@@ -145,10 +149,11 @@ function scen(mode: TransportMode): SVGElement {
       rect(0, 122, 400, 48, 'scene-golv'),
       p('M0 122 h400', 'scene-fg-line'),
       folk([[54, 40, true], [92, 36, false], [300, 42, true], [346, 34, true]]),
-      // Hängande skylt med gatepilar.
+      // Hängande gateskylt, i högra halvan så att den inte hamnar under
+      // stationsnamnet på en smal skärm.
       svgEl('g', { class: 'scene-skylt' },
-        rect(140, 6, 120, 22, 'scene-skyltplatta'),
-        svgEl('text', { x: 200, y: 21, class: 'scene-skylttext' }, 'GATE A–F →')
+        rect(248, 30, 112, 22, 'scene-skyltplatta'),
+        svgEl('text', { x: 304, y: 45, class: 'scene-skylttext' }, 'GATE A–F →')
       )
     );
     return svg;
@@ -165,21 +170,31 @@ function scen(mode: TransportMode): SVGElement {
       ),
       ...[16, 130, 270, 384].map((x) => rect(x - 3, 20, 6, 104, 'scene-post')),
       // Tåget vid perrongen.
+      /**
+       * Tåget vid perrongen. Allt som ska synas ligger under y=70: skylten
+       * upptar den övre tredjedelen av rutan, och ett tåg bakom rubriken är
+       * inget tåg.
+       */
       svgEl('g', { class: 'scene-fordon' },
-        p('M0 62 h150 q14 0 16 12 v42 h-166 z', 'scene-mg'),
-        ...[18, 46, 74, 102].map((x) => rect(x, 72, 18, 16, 'scene-ruta')),
-        rect(126, 74, 16, 14, 'scene-ruta'),
-        svgEl('circle', { cx: 158, cy: 104, r: 3.4, class: 'scene-blink' })
+        p('M0 74 h150 q14 0 16 12 v38 h-166 z', 'scene-mg'),
+        ...[18, 46, 74, 102].map((x) => rect(x, 84, 18, 16, 'scene-ruta')),
+        rect(126, 86, 16, 14, 'scene-ruta'),
+        svgEl('circle', { cx: 158, cy: 114, r: 3.4, class: 'scene-blink' })
       ),
       rect(0, 124, 400, 46, 'scene-golv'),
       p('M0 124 h400', 'scene-fg-line'),
       // Spåret bortom perrongkanten.
       p('M172 168 L262 118 M196 168 L272 118', 'scene-ral'),
       folk([[212, 38, true], [246, 34, false], [318, 40, true]]),
+      /**
+       * Stationsklockan. Läget är valt för att överleva beskärningen: SVG:n
+       * fyller rutan med `slice`, och på en telefon klipps kanterna medan en
+       * bred skärm klipper toppen. Det som alltid syns är x 40-360, y 25-170.
+       */
       svgEl('g', { class: 'scene-klocka' },
-        svgEl('circle', { cx: 340, cy: 40, r: 17, class: 'scene-klockskiva' }),
-        p('M340 40 v-10 M340 40 l7 5', 'scene-visare'),
-        rect(338, 6, 4, 8, 'scene-post')
+        rect(338, 26, 4, 14, 'scene-post'),
+        svgEl('circle', { cx: 340, cy: 54, r: 15, class: 'scene-klockskiva' }),
+        p('M340 54 v-9 M340 54 l6 4', 'scene-visare')
       )
     );
     return svg;
@@ -191,23 +206,31 @@ function scen(mode: TransportMode): SVGElement {
       rect(0, 8, 400, 12, 'scene-tak'),
       ...[30, 200, 370].map((x) => rect(x - 3, 20, 6, 100, 'scene-post')),
       svgEl('g', { class: 'scene-fordon' },
-        p('M40 52 h116 q10 0 10 10 v58 h-126 z', 'scene-mg'),
-        rect(50, 60, 96, 22, 'scene-ruta'),
-        rect(52, 90, 20, 12, 'scene-ruta'),
-        svgEl('circle', { cx: 148, cy: 112, r: 3, class: 'scene-blink' })
+        p('M40 68 h116 q10 0 10 10 v54 h-126 z', 'scene-mg'),
+        // Destinationsskylten över vindrutan, som på en riktig buss.
+        rect(50, 74, 74, 9, 'scene-blind'),
+        rect(50, 88, 96, 24, 'scene-ruta'),
+        // Strålkastare och stötfångare, så att lådan blir en buss.
+        svgEl('circle', { cx: 56, cy: 122, r: 4, class: 'scene-lykta' }),
+        svgEl('circle', { cx: 150, cy: 122, r: 4, class: 'scene-lykta' }),
+        rect(40, 128, 126, 4, 'scene-fg'),
+        svgEl('circle', { cx: 160, cy: 112, r: 3, class: 'scene-blink' })
       ),
       svgEl('g', { class: 'scene-fordon-bak' },
-        p('M246 66 h96 q8 0 8 8 v46 h-104 z', 'scene-mg'),
-        rect(254, 72, 80, 18, 'scene-ruta')
+        p('M246 78 h96 q8 0 8 8 v46 h-104 z', 'scene-mg'),
+        rect(254, 83, 58, 7, 'scene-blind'),
+        rect(254, 94, 80, 20, 'scene-ruta'),
+        svgEl('circle', { cx: 260, cy: 124, r: 3, class: 'scene-lykta' }),
+        svgEl('circle', { cx: 338, cy: 124, r: 3, class: 'scene-lykta' })
       ),
-      rect(0, 120, 400, 50, 'scene-golv'),
-      p('M0 120 h400', 'scene-fg-line'),
+      rect(0, 132, 400, 38, 'scene-golv'),
+      p('M0 132 h400', 'scene-fg-line'),
       // Målade markeringar på asfalten.
-      p('M20 140 h60 M120 140 h60 M220 140 h60 M320 140 h60', 'scene-markering'),
-      folk([[186, 36, true], [216, 32, false], [362, 38, true]]),
+      p('M20 150 h60 M120 150 h60 M220 150 h60 M320 150 h60', 'scene-markering'),
+      folk([[186, 32, true], [216, 28, false], [362, 34, true]]),
       svgEl('g', { class: 'scene-skylt' },
-        rect(168, 24, 64, 20, 'scene-skyltplatta'),
-        svgEl('text', { x: 200, y: 38, class: 'scene-skylttext' }, 'LÄGE 1–26')
+        rect(272, 30, 78, 20, 'scene-skyltplatta'),
+        svgEl('text', { x: 311, y: 44, class: 'scene-skylttext' }, 'LÄGE 1–26')
       )
     );
     return svg;
@@ -227,11 +250,15 @@ function scen(mode: TransportMode): SVGElement {
     // Landgång från kajen upp till lastporten.
     p('M150 148 L238 96 l10 6 L162 156 z', 'scene-mg'),
     rect(0, 118, 400, 52, 'scene-golv'),
-    p('M0 118 h400', 'scene-fg-line'),
-    // Vattnet mellan kaj och skrov.
+    /**
+     * Vattnet tar vid där kajen slutar. Utan den egna ytan låg vågorna ovanpå
+     * kajen och det gick inte att se var man stod och var man skulle segla.
+     */
+    rect(178, 118, 222, 52, 'scene-sjo'),
+    p('M0 118 h400 M178 118 v52', 'scene-fg-line'),
     svgEl('g', { class: 'scene-vatten' },
-      p('M196 128 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag'),
-      p('M188 140 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag scene-vag-2')
+      p('M186 130 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag'),
+      p('M182 146 q10 -4 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0', 'scene-vag scene-vag-2')
     ),
     ...[36, 96].map((x) =>
       svgEl('g', {},
@@ -267,12 +294,16 @@ export function renderStation(opts: StationOpts): StationHandle {
   scene.append(foto, el('div', { class: 'station-scene-scrim' }), scen(mode));
   scene.append(
     el('div', { class: 'station-plate' },
-      el('span', { class: 'station-kicker' }, STATION_KICKER[mode]),
-      el('h1', { class: 'station-name' }, STATION_NAMN[mode](city)),
-      el('span', { class: 'station-code' },
-        icon(mode),
-        mode === 'flyg' ? airportCode(city) : city.country
-      )
+      // Kicker och landsmärke på samma rad, så att skylten blir två rader
+      // och inte tre. Tre rader lade sig över tåget vid perrongen.
+      el('div', { class: 'station-plate-top' },
+        el('span', { class: 'station-kicker' }, STATION_KICKER[mode](city)),
+        el('span', { class: 'station-code' },
+          icon(mode),
+          mode === 'flyg' ? airportCode(city) : city.country
+        )
+      ),
+      el('h1', { class: 'station-name' }, STATION_NAMN[mode](city))
     )
   );
   wrap.append(scene);
