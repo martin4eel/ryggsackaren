@@ -29,3 +29,24 @@ under vilken licens den publicerats.
 - **mexikocity.jpg** – [Templo_Mayor_50.jpg](https://commons.wikimedia.org/wiki/File:Templo_Mayor_50.jpg) av GAED, CC BY-SA 3.0.
 - **cusco.jpg** – [Sacsayhuamán,_Cusco,_Perú,_2015-07-31,_DD_27.JPG](https://commons.wikimedia.org/wiki/File:Sacsayhuam%C3%A1n,_Cusco,_Per%C3%BA,_2015-07-31,_DD_27.JPG) av Diego Delso, CC BY-SA 4.0.
 - **rio.jpg** – [Christ the Redeemer - From Above.jpg](https://commons.wikimedia.org/wiki/File:Christ_the_Redeemer_-_From_Above.jpg) av Alexandre Cesar Salem e Silva, CC BY-SA 3.0.
+- **kopenhamn.jpg** – [The_Nyhavn_Canal_3.jpg](https://commons.wikimedia.org/wiki/File:The_Nyhavn_Canal_3.jpg) av European Commission, CC BY 4.0.
+- **oslo.jpg** – [Oslo_Opera_House_-_2025.jpg](https://commons.wikimedia.org/wiki/File:Oslo_Opera_House_-_2025.jpg) av Pierre Blaché, CC0.
+- **helsingfors.jpg** – [Suomenlinna_aerial.JPG](https://commons.wikimedia.org/wiki/File:Suomenlinna_aerial.JPG) av Migro, Public domain.
+- **berlin.jpg** – [Brandenburger_Tor_abends.jpg](https://commons.wikimedia.org/wiki/File:Brandenburger_Tor_abends.jpg) av Thomas Wolf , www.foto-tw.de, CC BY-SA 3.0.
+- **barcelona.jpg** – [Parc_guell_-_panoramio.jpg](https://commons.wikimedia.org/wiki/File:Parc_guell_-_panoramio.jpg) av essetefano, CC BY 3.0.
+- **lissabon.jpg** – [Belém_Tower_in_Lisbon,_Portugal.jpg](https://commons.wikimedia.org/wiki/File:Bel%C3%A9m_Tower_in_Lisbon,_Portugal.jpg) av Lisbon Photoshoots, CC BY-SA 4.0.
+- **aten.jpg** – [The_Parthenon_in_Athens.jpg](https://commons.wikimedia.org/wiki/File:The_Parthenon_in_Athens.jpg) av Steve Swayne, CC BY 2.0.
+- **prag.jpg** – [Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg](https://commons.wikimedia.org/wiki/File:Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg) av A.Savin, FAL.
+- **dublin.jpg** – [HalfPennyBridge.jpg](https://commons.wikimedia.org/wiki/File:HalfPennyBridge.jpg) av okänd, Public domain.
+- **dubai.jpg** – [Dubai_Marina_Skyline.jpg](https://commons.wikimedia.org/wiki/File:Dubai_Marina_Skyline.jpg) av Norlando Pobre, CC BY 2.0.
+- **amman.jpg** – [Amman_Citadel.jpg](https://commons.wikimedia.org/wiki/File:Amman_Citadel.jpg) av David Bjorgen, CC BY 2.5.
+- **seoul.jpg** – [광화문_월대.jpg](https://commons.wikimedia.org/wiki/File:%EA%B4%91%ED%99%94%EB%AC%B8_%EC%9B%94%EB%8C%80.jpg) av 서울관광 아카이브, KOGL Type 1.
+- **singapore.jpg** – [Supertree_Grove,_Gardens_by_the_Bay,_Singapore_-_20120712-02.jpg](https://commons.wikimedia.org/wiki/File:Supertree_Grove,_Gardens_by_the_Bay,_Singapore_-_20120712-02.jpg) av Shiny Things ., CC BY 2.0.
+- **hanoi.jpg** – [Thap_Rua.jpg](https://commons.wikimedia.org/wiki/File:Thap_Rua.jpg) av Cyril Doussin from London, United Kingdom, CC BY-SA 2.0.
+- **kathmandu.jpg** – [Boudhanath_stupa_,_Kathmandu,_Nepal.jpg](https://commons.wikimedia.org/wiki/File:Boudhanath_stupa_,_Kathmandu,_Nepal.jpg) av Sumitbhatt222, CC BY-SA 4.0.
+- **buenosaires.jpg** – [Caminito_-_Entrada.jpg](https://commons.wikimedia.org/wiki/File:Caminito_-_Entrada.jpg) av Hernán Piñera, CC BY-SA 2.0.
+- **havanna.jpg** – [El_Capitolio_Havana_Cuba.jpg](https://commons.wikimedia.org/wiki/File:El_Capitolio_Havana_Cuba.jpg) av Nigel Pacquette, CC BY-SA 3.0.
+- **sanfrancisco.jpg** – [Golden_Gate_Bridge_as_seen_from_Battery_East.jpg](https://commons.wikimedia.org/wiki/File:Golden_Gate_Bridge_as_seen_from_Battery_East.jpg) av Frank Schulenburg, CC BY-SA 4.0.
+- **dakar.jpg** – [Ile-de-goree.jpg](https://commons.wikimedia.org/wiki/File:Ile-de-goree.jpg) av Gregor Rom, CC BY-SA 4.0.
+- **addisabeba.jpg** – [Meskal_Square_(11237676556).jpg](https://commons.wikimedia.org/wiki/File:Meskal_Square_(11237676556).jpg) av David Stanley from Nanaimo, Canada, CC BY 2.0.
+- **melbourne.jpg** – [Flinders_Station_and_trams.jpg](https://commons.wikimedia.org/wiki/File:Flinders_Station_and_trams.jpg) av Created by Philip Mallis in 2021; cropped by HappyWaldo, CC BY-SA 3.0.
