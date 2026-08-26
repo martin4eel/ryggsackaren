@@ -111,14 +111,13 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    | --- | --- | --- |
    | Svarsalternativ | 3 | 4 |
    | Frågor | bara de lättare | hela banken |
-   | Samtal till en lokalbo | 5 | 2 |
    | Arkadmomentens marginal | 20 % mer | 8 % mindre |
    | Certifikat vid | 65 % | 75 % |
    | Startkapital | 6 000 | 4 000 |
    | Boende | 20 % billigare | fullpris, men högre lön |
 
-   _Fråga en lokalbo_ är livlinan i frågorna: den stryker hälften av de
-   felaktiga alternativen, men lämnar alltid minst två kvar.
+   Det finns ingen livlina och ingen hjälp att få under en fråga. Turisten
+   får lättare frågor och färre alternativ, inte färre chanser att tänka.
 3. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.

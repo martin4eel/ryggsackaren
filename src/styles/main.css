@@ -2941,50 +2941,6 @@ img.no-photo {
   color: var(--sun);
 }
 
-/* ------------------------------------------------------------------ livlina */
-
-.lifeline-row {
-  margin-top: 10px;
-}
-
-.lifeline {
-  width: 100%;
-  padding: 11px 14px;
-}
-
-.lifeline-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  font-weight: 700;
-}
-
-.lifeline-body .icon {
-  width: 19px;
-  height: 19px;
-}
-
-.lifeline-count {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(29, 43, 52, 0.12);
-  font-size: 0.76rem;
-  font-weight: 800;
-}
-
-.lifeline-spent {
-  opacity: 0.45;
-}
-
-/* Alternativ som lokalbon strukit: kvar men tydligt ur spel. */
-.option-struck {
-  opacity: 0.4;
-  text-decoration: line-through;
-  text-decoration-thickness: 2px;
-  cursor: not-allowed;
-}
-
 /* ------------------------------------------------------- bredare desktoplayout */
 
 @media (min-width: 1120px) {

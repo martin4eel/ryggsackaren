@@ -40,7 +40,6 @@ export {
   DIFFICULTY_INFO,
   arcadeSlack,
   certificateThreshold,
-  lifelinesFor,
   optionCount,
 } from './difficulty';
 

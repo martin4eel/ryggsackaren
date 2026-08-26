@@ -17,15 +17,6 @@ export function optionCount(difficulty: Difficulty): number {
 }
 
 /**
- * Livlinan "Fråga en lokalbo" plockar bort felaktiga alternativ. Turisten får
- * fler samtal, Globetrottern nästan inga - det är den skillnad som märks mest
- * i stunden, utan att spelen blir olika.
- */
-export function lifelinesFor(difficulty: Difficulty): number {
-  return difficulty === 'turist' ? 5 : 2;
-}
-
-/**
  * Hur stor andel av skiftet som krävs för certifikat. Turisten belönas för
  * att ha varit med hela vägen, Globetrottern för att ha kunnat sin sak.
  */
@@ -52,7 +43,7 @@ export const DIFFICULTY_INFO: Record<
     tagline: 'För dig som vill upptäcka världen i lagom takt.',
     bullets: [
       'Tre svarsalternativ och de mer välkända frågorna',
-      'Fem samtal till en lokalbo som stryker felaktiga alternativ',
+      'Mer förlåtande ekonomi och mer pengar att börja med',
       'Lugnare arkadmoment och billigare boende',
       'Certifikat redan vid 65 procent av skiftet',
     ],
@@ -62,7 +53,7 @@ export const DIFFICULTY_INFO: Record<
     tagline: 'För dig som kan din geografi – och vill bli utmanad.',
     bullets: [
       'Fyra svarsalternativ och hela frågebanken, även de svåra',
-      'Bara två samtal till en lokalbo på hela resan',
+      'Ingen hjälp att få: du står och faller med vad du kan',
       'Snävare arkadmoment och tuffare ekonomi',
       'Certifikat först vid 75 procent, men lönen är högre',
     ],

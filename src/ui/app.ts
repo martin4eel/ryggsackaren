@@ -28,7 +28,6 @@ import {
   pityBonus,
   pseudoRandom,
   rankTitle,
-  shuffle,
   souvenirPrice,
   speedBonus,
   wagePerCorrect,
@@ -92,11 +91,6 @@ interface QuizSession {
   streak: number;
   /** Längsta sviten under passet */
   bestStreak: number;
-  /**
-   * Alternativ som livlinan strukit på den aktuella frågan. Sparas per
-   * fråga och nollas när nästa fråga visas.
-   */
-  struck: number[];
   /** Utfall per arbetsdag, används till stämpelkortet */
   dayResults: boolean[];
   /**
@@ -1341,7 +1335,6 @@ export class App {
       askedAt: performance.now(),
       streak: 0,
       bestStreak: 0,
-      struck: [],
     };
     this.go('turistbyra');
   }
@@ -1445,7 +1438,6 @@ export class App {
       askedAt: performance.now(),
       streak: 0,
       bestStreak: 0,
-      struck: [],
     };
     this.go('jobb');
   }
@@ -1567,10 +1559,8 @@ export class App {
 
     const answered = q.answered;
     const options = el('div', { class: 'options' });
-    const struck = q.struck ?? [];
     current.options.forEach((text, i) => {
       const classes = ['option'];
-      if (!answered && struck.includes(i)) classes.push('option-struck');
       if (answered) {
         if (i === current.correctIndex) classes.push('option-right');
         else if (i === answered.picked) classes.push('option-wrong');
@@ -1587,46 +1577,13 @@ export class App {
         },
         {
           class: classes.join(' '),
-          disabled: answered || struck.includes(i) ? true : undefined,
-          title: struck.includes(i)
-            ? 'Lokalbon har strukit det här alternativet'
-            : `Tangent ${i + 1} eller ${String.fromCharCode(65 + i)}`,
+          disabled: answered ? true : undefined,
+          title: `Tangent ${i + 1} eller ${String.fromCharCode(65 + i)}`,
         }
       );
       options.append(b);
     });
     panel.append(options);
-
-    /**
-     * Livlinan. Den stryker hälften av de felaktiga alternativen och är den
-     * tydligaste skillnaden mellan lägena i stunden: Turisten har fem samtal
-     * på resan, Globetrottern två.
-     */
-    if (!answered) {
-      const remaining = current.options.length - struck.length;
-      const canUse = s.lifelines > 0 && remaining > 2;
-      const row = el('div', { class: 'lifeline-row' });
-      row.append(
-        button(
-          el('span', { class: 'lifeline-body' },
-            icon('lokalbo'),
-            el('span', {}, 'Fråga en lokalbo'),
-            el('span', { class: 'lifeline-count' }, `${s.lifelines} kvar`)
-          ),
-          () => this.useLifeline(),
-          {
-            class: `btn btn-ghost lifeline ${canUse ? '' : 'lifeline-spent'}`,
-            disabled: canUse ? undefined : true,
-            title: canUse
-              ? 'Stryker felaktiga alternativ'
-              : s.lifelines === 0
-                ? 'Du har ringt slut på dina kontakter'
-                : 'Det går inte att stryka fler alternativ på den här frågan',
-          }
-        )
-      );
-      panel.append(row);
-    }
 
     if (answered) {
       const right = answered.picked === current.correctIndex;
@@ -1841,45 +1798,12 @@ export class App {
     this.render();
   }
 
-  /**
-   * Stryker hälften av de kvarvarande felaktiga alternativen, avrundat uppåt,
-   * men lämnar alltid minst två kvar att välja mellan. Kostar ett samtal
-   * oavsett hur många alternativ som ströks.
-   */
-  private useLifeline(): void {
-    const s = this.state!;
-    const q = this.quiz;
-    if (!q || q.answered || s.lifelines <= 0) return;
-    const current = q.questions[q.index]!;
-    const struck = q.struck ?? [];
-    const wrong = current.options
-      .map((_, i) => i)
-      .filter((i) => i !== current.correctIndex && !struck.includes(i));
-    if (wrong.length === 0) return;
-
-    const remaining = current.options.length - struck.length;
-    const canStrike = Math.min(Math.ceil(wrong.length / 2), remaining - 2);
-    if (canStrike <= 0) return;
-
-    q.struck = [...struck, ...shuffle(wrong).slice(0, canStrike)];
-    s.lifelines -= 1;
-    playSound('valj');
-    this.commit();
-    this.notify(
-      s.lifelines > 0
-        ? `Lokalbon strök ${canStrike === 1 ? 'ett alternativ' : `${canStrike} alternativ`}. ${s.lifelines} samtal kvar.`
-        : 'Lokalbon strök ett alternativ. Det var ditt sista samtal.'
-    );
-    this.render();
-  }
-
   private advanceQuiz(): void {
     const q = this.quiz!;
     q.answered = undefined;
     if (q.index + 1 < q.questions.length) {
       q.index += 1;
       q.askedAt = performance.now();
-      q.struck = [];
       this.render();
       return;
     }

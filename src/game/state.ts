@@ -1,5 +1,4 @@
 import type { TravelEvent } from '../data/events';
-import { lifelinesFor } from './difficulty';
 import type { Category } from '../data/types';
 
 export type Difficulty = 'turist' | 'globetrotter';
@@ -93,8 +92,6 @@ export interface GameState {
   stampDays: Record<string, number>;
   /** Har snabbguiden i startstaden visats? */
   seenIntro: boolean;
-  /** Kvarvarande samtal till en lokalbo, livlinan i frågorna */
-  lifelines: number;
   /**
    * Rätt och fel per stad, räknat på både turistbyråns prov och jobbfrågorna
    * som besvarats där. Används för att visa vilka städer du hade koll på och
@@ -151,7 +148,6 @@ export function createGame(
     stamps: [],
     stampDays: {},
     seenIntro: false,
-    lifelines: lifelinesFor(difficulty),
     cityStats: {},
   };
 }
@@ -220,7 +216,6 @@ function migrate(
   state.stampDays ??= {};
   // En pågående resa har redan passerat introduktionen.
   state.seenIntro ??= true;
-  state.lifelines ??= lifelinesFor(state.difficulty);
   state.cityStats ??= {};
   // Resor som påbörjades innan namnet fanns får en neutral benämning.
   state.playerName ||= 'Resenären';

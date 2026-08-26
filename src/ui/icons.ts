@@ -11,7 +11,6 @@ export type IconName =
   | 'ljud-av'
   | 'pass'
   | 'stampel'
-  | 'lokalbo'
   | 'buss'
   | 'tag'
   | 'farja'
@@ -85,14 +84,6 @@ const ICONS: Record<IconName, Part[]> = {
   ],
   flyg: [
     { tag: 'path', attrs: { d: 'M17.8 19.2 16 11l3.5-3.5a2.12 2.12 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1 1.6L8 11l-2 2-2.2-.4a.8.8 0 0 0-.8 1.3l2.2 2.2 2.2 2.2a.8.8 0 0 0 1.3-.8L8 16l2-2 3.2 4.2a1 1 0 0 0 1.6-1z' } },
-  ],
-  lokalbo: [
-    {
-      tag: 'path',
-      attrs: { d: 'M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z' },
-    },
-    { tag: 'path', attrs: { d: 'M9 10h6' } },
-    { tag: 'path', attrs: { d: 'M9 13.5h4' } },
   ],
   pass: [
     {
