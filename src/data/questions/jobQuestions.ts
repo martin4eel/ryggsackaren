@@ -272,6 +272,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
 
   // ------------------------------------------------------- löneklass 2
   bagare: [
+    { q: 'Vid vilken ugnstemperatur gräddas en vanlig vetelimpa?', a: ['Omkring 220 °C'], reglage: { min: 100, max: 300, steg: 5, svar: 220, tolerans: 20, enhet: '°C', lagst: '100', hogst: '300' }, d: 1 },
     { q: 'Vad får degen att jäsa?', a: ['Jäst', 'Salt', 'Socker enbart', 'Vatten'], d: 1 },
     { q: 'Vad kallas fransk avlång vetelimpa med knaprig skorpa?', a: ['Baguette', 'Ciabatta', 'Focaccia', 'Brioche'], d: 1 },
     { q: 'Vad bidrar saltet med i ett bröd?', a: ['Smak och styr jäsningen', 'Bara färgen', 'Får degen att jäsa snabbare', 'Gör degen kall'], d: 1 },
@@ -290,6 +291,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas det mörka tyska rågbrödet som bakas mycket länge på låg värme?', a: ['Pumpernickel', 'Pretzel', 'Stollen', 'Zopf'], d: 2 },
   ],
   kock: [
+    { q: 'Vilken av dem är färsk ingefära?', a: ['Ingefära', 'Vitlök', 'Kardemumma', 'Svartpeppar'], bilder: ['ingefara', 'vitlok', 'kardemumma', 'svartpeppar'], d: 1 },
+    { q: 'Vad avgör hur stark frukten på bilden är?', a: ['Kapsaicinet i fröhinnorna', 'Färgen på skalet', 'Hur lång den är', 'Var den odlats'], bild: 'chili', d: 2 },
     { q: 'Vad kallas den franska grundsåsen av mjöl, smör och mjölk?', a: ['Bechamel', 'Hollandaise', 'Vinägrett', 'Aioli'], d: 1 },
     { q: 'Vad betyder "mise en place" i ett restaurangkök?', a: ['Allt förberett på sin plats', 'Servera maten', 'Diska', 'Skriva menyn'], d: 1 },
     { q: 'Vad kallas den blandning av smör och mjöl som reder en sås?', a: ['Redning med roux', 'Marinad', 'Panering', 'Glasyr'], d: 1 },
@@ -326,6 +329,9 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken italiensk stad har gett namn åt en tunn, rektangulär pizza på plåt?', a: ['Rom', 'Venedig', 'Genua', 'Bologna'], d: 1 },
   ],
   kryddhandlare: [
+    { q: 'Kunden ber om kardemumma. Vilken skål pekar du på?', a: ['Kardemumma', 'Svartpeppar', 'Saffran', 'Kanel'], bilder: ['kardemumma', 'svartpeppar', 'saffran', 'kanel'], d: 1 },
+    { q: 'Vilken av kryddorna är saffran?', a: ['Saffran', 'Kanel', 'Kardemumma', 'Svartpeppar'], bilder: ['saffran', 'kanel', 'kardemumma', 'svartpeppar'], d: 1, info: 'Saffran är pistillerna ur en krokus, och plockas för hand.' },
+    { q: 'Vad är kryddan på bilden i botaniskt hänseende?', a: ['Torkad innerbark', 'En rot', 'En frukt', 'Ett blad'], bild: 'kanel', d: 2 },
     { q: 'Vilken krydda är världens dyraste per kilo?', a: ['Saffran', 'Svartpeppar', 'Kanel', 'Oregano'], d: 1 },
     { q: 'Vilken del av växten är saffran?', a: ['Pistillerna i blomman', 'Barken', 'Roten', 'Fröet'], d: 1 },
     { q: 'Vilken krydda ger curryblandningar sin gula färg?', a: ['Gurkmeja', 'Paprika', 'Kummin', 'Ingefära'], d: 1 },
@@ -360,6 +366,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken händelse 1773 blev en vändpunkt i USA:s frigörelse och handlade om te?', a: ['Tefesten i Boston', 'Stämpelskatteupproret', 'Bostonmassakern', 'Lexington'], d: 2 },
   ],
   kaffeprovare: [
+    { q: 'Vid vilken vattentemperatur bryggs kaffe bäst?', a: ['Omkring 93 °C'], reglage: { min: 60, max: 100, steg: 1, svar: 93, tolerans: 4, enhet: '°C', lagst: '60', hogst: '100' }, d: 2 },
     { q: 'Vad kallas den formella provsmakningen av kaffe?', a: ['Cupping', 'Tasting', 'Blending', 'Roasting'], d: 1 },
     { q: 'Vilka är de två dominerande kaffearterna?', a: ['Arabica och robusta', 'Sativa och indica', 'Merlot och syrah', 'Sencha och matcha'], d: 1 },
     { q: 'Vilken art anses ge finare smak?', a: ['Arabica', 'Robusta', 'Liberica', 'Excelsa'], d: 1 },
@@ -377,6 +384,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den ihåliga kaffeböna som växer ensam i frukten?', a: ['Pärlböna', 'Tvillingböna', 'Skalböna', 'Kärnböna'], d: 2 },
   ],
   sushikock: [
+    { q: 'Gästen har beställt makrill. Vilken fisk lägger du på skärbrädan?', a: ['Makrill', 'Torsk', 'Havsabborre', 'Marulk'], bilder: ['makrill', 'torsk', 'havsabborre', 'marulk'], d: 1 },
+    { q: 'Vad heter skaldjuret på bilden på japanska menyer?', a: ['Ise-ebi', 'Unagi', 'Tako', 'Ikura'], bild: 'hummer', d: 2, info: 'Ise-ebi är den japanska languststen; ordet används brett om hummer på menyer.' },
     { q: 'Vilken risvariant används till sushi?', a: ['Kortkornigt japanskt ris', 'Basmati', 'Jasminris', 'Arborio'], d: 1 },
     { q: 'Vad blandas i sushiriset för att ge det rätt smak?', a: ['Risvinäger, socker och salt', 'Olivolja', 'Grädde', 'Soja och vatten'], d: 1 },
     { q: 'Vad kallas den torkade algen man rullar maki i?', a: ['Nori', 'Wakame', 'Kombu', 'Hijiki'], d: 1 },
@@ -412,6 +421,9 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas de garvämnen som ger rött vin dess strävhet?', a: ['Tanniner', 'Sulfiter', 'Estrar', 'Fenoler'], d: 2 },
   ],
   blomsterhandlare: [
+    { q: 'Kunden vill ha en kungsprotea. Vilken av blommorna är det?', a: ['Kungsprotea', 'Lotus', 'Orkidé', 'Solros'], bilder: ['protea', 'lotus', 'orkide', 'solros'], d: 1, info: 'Kungsprotean är Sydafrikas nationalblomma.' },
+    { q: 'Vilken av blommorna är en lotus?', a: ['Lotus', 'Solros', 'Tulpan', 'Kungsprotea'], bilder: ['lotus', 'solros', 'tulpan', 'protea'], d: 1 },
+    { q: 'Blomman på bilden vänder sig efter något. Efter vad?', a: ['Solen', 'Månen', 'Vinden', 'Regnet'], bild: 'solros', d: 1, info: 'Unga solrosor följer solen. Fullvuxna står stilla och vetter mot öster.' },
     { q: 'Vilket land är känt för sina tulpaner och blomsterauktioner?', a: ['Nederländerna', 'Norge', 'Portugal', 'Polen'], d: 1 },
     { q: 'Vad kallas tulpanens underjordiska förökningsorgan?', a: ['Lök', 'Frö', 'Rotknöl', 'Stickling'], d: 1 },
     { q: 'Vilken årstid planteras tulpanlökar för blomning till våren?', a: ['Höst', 'Vår', 'Sommar', 'Vinter'], d: 1 },
@@ -430,6 +442,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den japanska konsten att arrangera blommor?', a: ['Ikebana', 'Bonsai', 'Origami', 'Kintsugi'], d: 2 },
   ],
   museivard: [
+    { q: 'En besökare letar efter Munchs Skriet. Vilket av verken är det?', a: ['Skriet', 'Stjärnenatt', 'Mona Lisa', 'Venus födelse'], bilder: ['skriet', 'stjarnenatt', 'monalisa', 'venusfodelse'], d: 1 },
+    { q: 'Vem målade verket på bilden?', a: ['Leonardo da Vinci', 'Rafael', 'Michelangelo', 'Botticelli'], bild: 'monalisa', d: 1 },
     { q: 'Vad kallas den korta texten på väggen intill ett konstverk?', a: ['Objektstext', 'Katalog', 'Kolofon', 'Signatur'], d: 1 },
     { q: 'Varför får man inte använda blixt i många museisalar?', a: ['Ljuset bryter ned färgpigment', 'Det stör larmet', 'Det bländar vakterna', 'Det är för dyrt'], d: 1 },
     { q: 'Vad kallas en tillfällig visning som bara pågår en period?', a: ['Tillfällig utställning', 'Permanent samling', 'Depå', 'Arkiv'], d: 1 },
@@ -448,6 +462,9 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken konstnär är känd för sina smältande klockor?', a: ['Salvador Dalí', 'René Magritte', 'Joan Miró', 'Max Ernst'], d: 2 },
   ],
   konstguide: [
+    { q: 'Vilket av verken är Hokusais Den stora vågen utanför Kanagawa?', a: ['Den stora vågen', 'Stjärnenatt', 'Venus födelse', 'Skriet'], bilder: ['storavagen', 'stjarnenatt', 'venusfodelse', 'skriet'], d: 1 },
+    { q: 'Vem har målat verket du guidar framför?', a: ['Vincent van Gogh', 'Paul Gauguin', 'Claude Monet', 'Edvard Munch'], bild: 'stjarnenatt', d: 1 },
+    { q: 'Vilken målning på bilden kallas ibland Nordens Mona Lisa?', a: ['Flickan med pärlörhänget', 'Venus födelse', 'Skriet', 'Stjärnenatt'], bild: 'parlorhange', d: 2, info: 'Vermeers flicka målades omkring 1665 och hänger i Haag.' },
     { q: 'Vem målade Mona Lisa?', a: ['Leonardo da Vinci', 'Michelangelo', 'Rafael', 'Botticelli'], d: 1 },
     { q: 'Vilken konstriktning bygger på ljusets flyktiga verkan och snabba penseldrag?', a: ['Impressionismen', 'Kubismen', 'Barocken', 'Gotiken'], d: 1 },
     { q: 'Vem skar upp motivet i geometriska plan tillsammans med Braque?', a: ['Pablo Picasso', 'Claude Monet', 'Edvard Munch', 'Rembrandt'], d: 1 },
@@ -518,6 +535,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilket lag har vunnit flest engelska ligatitlar i fotboll?', a: ['Manchester United', 'Liverpool', 'Arsenal', 'Everton'], d: 2 },
   ],
   sparvagnsforare: [
+    { q: 'Vilket år öppnade världens första tunnelbana, i London?', a: ['1863'], reglage: { artal: true, min: 1800, max: 1950, steg: 1, svar: 1863, tolerans: 5, liggande: true, lagst: '1800', hogst: '1950' }, d: 2 },
     { q: 'Vad kallas den räls spårvagnen går på i gatan?', a: ['Spår', 'Ledning', 'Vägbana', 'Perrong'], d: 1 },
     { q: 'Varifrån får spårvagnen sin ström?', a: ['Kontaktledningen ovanför', 'Ett batteri i taket enbart', 'Dieselmotor', 'Solceller'], d: 1 },
     { q: 'Vad ska du göra när en passagerare springer mot en stängd dörr?', a: ['Vänta och öppna igen om det är säkert', 'Köra iväg direkt', 'Tuta och accelerera', 'Larma polis'], d: 1 },
@@ -608,6 +626,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den broms där två klossar klämmer mot fälgen?', a: ['Fälgbroms', 'Skivbroms', 'Trumbroms', 'Rullbroms'], d: 2 },
   ],
   kanalskeppare: [
+    { q: 'Hur lång är Suezkanalen?', a: ['193 km'], reglage: { min: 50, max: 400, steg: 1, svar: 193, tolerans: 20, enhet: 'km', liggande: true, lagst: '50', hogst: '400' }, d: 2 },
     { q: 'Vad måste du kontrollera innan du kör under en låg bro?', a: ['Fri höjd och vattenstånd', 'Motoroljan', 'Radion', 'Ankarvikten'], d: 1 },
     { q: 'Vilken stad har ett kanalsystem från 1600-talet på Unescos världsarvslista?', a: ['Amsterdam', 'Bern', 'Prag', 'Wien'], d: 1 },
     { q: 'Vad kallas anläggningen som lyfter båtar mellan olika vattennivåer?', a: ['Sluss', 'Damm', 'Fyr', 'Kaj'], d: 1 },
@@ -661,6 +680,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas markeringarna som visar den farbara rännan i en flod?', a: ['Farledsprickar', 'Fyrar', 'Bojlinor', 'Ledfyrar'], d: 2 },
   ],
   nilbatskapten: [
+    { q: 'Hur lång är Nilen ungefär?', a: ['6 650 km'], reglage: { min: 2000, max: 10000, steg: 50, svar: 6650, tolerans: 500, enhet: 'km', liggande: true, lagst: '2 000', hogst: '10 000' }, d: 1 },
     { q: 'Vad kallas den traditionella segelbåten på Nilen?', a: ['Felucka', 'Gondol', 'Junk', 'Dhow seglar i Indiska oceanen'], d: 1 },
     { q: 'I vilken riktning rinner Nilen?', a: ['Från syd mot nord', 'Från nord mot syd', 'Från öst mot väst', 'I en cirkel'], d: 1 },
     { q: 'Vilken vind utnyttjar feluckan för att segla uppströms?', a: ['Nordliga vindar', 'Sydliga vindar', 'Västliga stormar', 'Ingen vind alls'], d: 1 },
@@ -696,6 +716,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas det när man seglar i sicksack för att ta sig mot vinden?', a: ['Kryssa', 'Gippa', 'Länsa', 'Ankra'], d: 2 },
   ],
   skargardsguide: [
+    { q: 'Vilken av fåglarna är en havsörn?', a: ['Havsörn', 'Pelikan', 'Flamingo', 'Pingvin'], bilder: ['havsorn', 'pelikan', 'flamingo', 'pingvin'], d: 1 },
     { q: 'Vilket berg av sten formade den svenska skärgården?', a: ['Inlandsisen slipade berggrunden', 'Vulkaner byggde öarna', 'Korallrev växte upp', 'Sanddyner blåste dit'], d: 1 },
     { q: 'Vilket djur ligger ofta och solar på klipphällarna i skärgården?', a: ['Säl', 'Kamel', 'Krokodil', 'Pingvin'], d: 1 },
     { q: 'Vad kallas fenomenet där landet fortfarande höjer sig efter istiden?', a: ['Landhöjning', 'Erosion', 'Sedimentation', 'Tidvatten'], d: 1 },
@@ -713,6 +734,9 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas det grunda vatten mellan öarna där båtar kan gå?', a: ['Farled', 'Djuprännan', 'Sundet', 'Fjärden'], d: 2 },
   ],
   safariguide: [
+    { q: 'Gästerna vill se en gepard. Vilket av djuren är det?', a: ['Gepard', 'Leopard', 'Lejon', 'Gnu'], bilder: ['gepard', 'leopard', 'lejon', 'gnu'], d: 1, info: 'Geparden har tårränder i ansiktet och fläckar utan ringar. Leoparden har rosetter.' },
+    { q: 'Vilket av djuren är en gnu?', a: ['Gnu', 'Afrikansk buffel', 'Stäppzebra', 'Noshörning'], bilder: ['gnu', 'buffel', 'zebra', 'noshorning'], d: 1 },
+    { q: 'En gäst frågar vad djuret på bilden äter.', a: ['Löv högt uppe i akaciorna', 'Gräs vid marken', 'Fisk vid floden', 'Insekter under bark'], bild: 'giraff', d: 1 },
     { q: 'Vilka räknas som de fem stora?', a: ['Lejon, leopard, elefant, noshörning, buffel', 'Lejon, giraff, zebra, gnu, gepard', 'Elefant, flodhäst, krokodil, struts, hyena', 'Gorilla, lejon, elefant, zebra, buffel'], d: 1 },
     { q: 'Vilket är världens snabbaste landdjur?', a: ['Geparden', 'Lejonet', 'Gnun', 'Strutsen'], d: 1 },
     { q: 'Vad äter en giraff mest av?', a: ['Blad från akaciaträd', 'Gräs', 'Kött', 'Fisk'], d: 1 },
@@ -729,6 +753,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Hur lång är en elefants dräktighet ungefär?', a: ['22 månader', '9 månader', '6 månader', '36 månader'], d: 2 },
   ],
   veterinarassistent: [
+    { q: 'Vilket av djuren är en flodhäst?', a: ['Flodhäst', 'Noshörning', 'Afrikansk buffel', 'Elefant'], bilder: ['flodhast', 'noshorning', 'buffel', 'elefant'], d: 1 },
     { q: 'Vad används för att söva ett vilt djur på avstånd?', a: ['Bedövningspil', 'Nät enbart', 'Ljudsignal', 'Ljus'], d: 1 },
     { q: 'Varför måste ett sövt djur hållas under uppsikt hela tiden?', a: ['Andning och temperatur kan svikta', 'Det kan rymma', 'Det blir hungrigt', 'Pilen ska tas bort direkt'], d: 1 },
     { q: 'Vad kallas det när man mäter djurets puls, andning och temperatur?', a: ['Kontroll av vitalparametrar', 'Vaccinering', 'Kastrering', 'Avmaskning'], d: 1 },
@@ -746,6 +771,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas läran om djurs beteende?', a: ['Etologi', 'Ekologi', 'Genetik', 'Patologi'], d: 2 },
   ],
   valskadeguide: [
+    { q: 'Gästerna ropar och pekar. Vilken av bilderna visar en knölval?', a: ['Knölval', 'Flasknosdelfin', 'Grön havsskoldpadda', 'Bläckfisk'], bilder: ['knolval', 'delfin', 'havsskoldpadda', 'blackfisk'], d: 1 },
+    { q: 'Vad är djuret på bilden mest känt för?', a: ['Sina långa sånger', 'Att jaga i flock på land', 'Att bygga bon av tång', 'Att byta kön varje år'], bild: 'knolval', d: 2, info: 'Knölvalshanarnas sång kan pågå i timmar och höras milsvitt.' },
     { q: 'Vilket är världens största djur?', a: ['Blåvalen', 'Kaskeloten', 'Elefanten', 'Vithajen'], d: 1 },
     { q: 'Är valar fiskar eller däggdjur?', a: ['Däggdjur', 'Fiskar', 'Kräldjur', 'Groddjur'], d: 1 },
     { q: 'Vad kallas det när valen blåser ut luft vid ytan?', a: ['Blåst', 'Skum', 'Dyk', 'Sång'], d: 1 },
@@ -762,6 +789,9 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken valart har en lång spiralvriden bete och kallas havets enhörning?', a: ['Narvalen', 'Vitvalen', 'Grönlandsvalen', 'Bardvalen'], d: 2 },
   ],
   dykguide: [
+    { q: 'En gäst pekar på fångsten i nätet. Vilken av bilderna visar en marulk?', a: ['Marulk', 'Torsk', 'Havsabborre', 'Makrill'], bilder: ['marulk', 'torsk', 'havsabborre', 'makrill'], d: 1, info: 'Marulken ligger nedgrävd i botten och lockar bytet med ett spö i pannan.' },
+    { q: 'Vilken av bilderna visar en bläckfisk?', a: ['Bläckfisk', 'Sjöstjärna', 'Öronmanet', 'Hummer'], bilder: ['blackfisk', 'sjostjarna', 'manet', 'hummer'], d: 1 },
+    { q: 'Vad säger du till gästen om djuret på bilden?', a: ['Rör den inte, den bränns', 'Den går bra att lyfta upp', 'Den är en fisk', 'Den lever bara i sötvatten'], bild: 'manet', d: 1, info: 'Öronmaneten bränns svagt, men regeln vid revet är att inget rörs.' },
     { q: 'Vad är det viktigaste du aldrig får göra vid uppstigning?', a: ['Hålla andan', 'Andas ut', 'Titta uppåt', 'Röra fenorna'], d: 1 },
     { q: 'Vilket djupgräns gäller normalt för grundcertifierade sportdykare?', a: ['18 meter', '40 meter', '60 meter', '5 meter'], d: 1 },
     { q: 'Vad kallas sjukdomen som uppstår vid för snabb uppstigning?', a: ['Tryckfallssjuka', 'Solsting', 'Hypotermi', 'Öroninflammation'], d: 1 },
@@ -815,6 +845,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den japanska massageform som arbetar med tryck längs meridianer?', a: ['Shiatsu', 'Rolfing', 'Reiki', 'Tuina'], d: 2 },
   ],
   geologassistent: [
+    { q: 'Hur gammal är jorden, i miljarder år?', a: ['4,5 miljarder år'], reglage: { min: 1, max: 10, steg: 0.1, svar: 4.5, tolerans: 0.4, enhet: 'md år', lagst: '1', hogst: '10' }, d: 1 },
     { q: 'Vad kallas smält berg som runnit ut på markytan?', a: ['Lava', 'Magma', 'Granit', 'Sandsten'], d: 1 },
     { q: 'Vad kallas den skål som bildas när en vulkan kollapsar?', a: ['Kaldera', 'Krater av meteorit', 'Dolin', 'Fjord'], d: 1 },
     { q: 'Varför har Island så många vulkaner?', a: ['Ön ligger på en plattgräns med het mantel under', 'Den ligger vid ekvatorn', 'Den är gjord av sandsten', 'Den träffas ofta av meteoriter'], d: 1 },
@@ -831,6 +862,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den zon där två plattor glider isär och ny havsbotten bildas?', a: ['Spridningszon', 'Subduktionszon', 'Transformzon', 'Kollisionszon'], d: 2 },
   ],
   bergsguide: [
+    { q: 'Hur högt är Mount Everest över havet? Dra reglaget.', a: ['8 849 m'], reglage: { min: 6000, max: 10000, steg: 10, svar: 8849, tolerans: 80, enhet: 'm', lagst: '6 000', hogst: '10 000' }, d: 1, info: 'Nepal och Kina enades 2020 om 8 848,86 meter.' },
+    { q: 'Hur högt ligger Everest Base Camp på nepalesiska sidan?', a: ['5 364 m'], reglage: { min: 3000, max: 7000, steg: 50, svar: 5364, tolerans: 200, enhet: 'm', lagst: '3 000', hogst: '7 000' }, d: 2 },
     { q: 'Vad händer med lufttrycket när du klättrar högre?', a: ['Det sjunker', 'Det stiger', 'Det är konstant', 'Det försvinner helt'], d: 1 },
     { q: 'Vad är den viktigaste åtgärden vid tecken på höjdsjuka?', a: ['Gå ner till lägre höjd', 'Klättra snabbare uppåt', 'Sova högre upp', 'Dricka mindre'], d: 1 },
     { q: 'Vad kallas det att vänja kroppen vid hög höjd gradvis?', a: ['Acklimatisering', 'Hydrering', 'Uppvärmning', 'Nedvarvning'], d: 1 },
@@ -969,6 +1002,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den del av en låt där en musiker spelar ensam?', a: ['Solo', 'Intro', 'Refräng', 'Coda'], d: 1 },
   ],
   fotbollstranare: [
+    { q: 'Hur lång får en fotbollsplan som mest vara enligt regelboken?', a: ['105 m'], reglage: { min: 60, max: 140, steg: 1, svar: 105, tolerans: 5, enhet: 'm', liggande: true, lagst: '60', hogst: '140' }, d: 2 },
     { q: 'Hur många utespelare förutom målvakten står ett lag med?', a: ['Tio', 'Nio', 'Elva', 'Tolv'], d: 1 },
     { q: 'Vilket land har vunnit flest fotbolls-VM?', a: ['Brasilien', 'Tyskland', 'Italien', 'Argentina'], d: 1 },
     { q: 'Vad innebär offside i korthet?', a: ['Angriparen är närmare mållinjen än boll och näst siste försvarare', 'Bollen går ur spel på sidlinjen', 'Målvakten lämnar straffområdet', 'Spelaren byts ut fel'], d: 1 },
@@ -986,6 +1020,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas det när ett lag vinner liga, cup och Europacup samma år?', a: ['Trippeln', 'Dubbeln', 'Slaget', 'Grand slam'], d: 2 },
   ],
   flygplatsvard: [
+    { q: 'På vilken höjd marschflyger ett trafikflygplan normalt?', a: ['Cirka 11 000 m'], reglage: { min: 2000, max: 20000, steg: 250, svar: 11000, tolerans: 1500, enhet: 'm', lagst: '2 000', hogst: '20 000' }, d: 1 },
     { q: 'Vad kallas den treställiga koden som identifierar en flygplats?', a: ['IATA-kod', 'ISBN', 'IBAN', 'VIN'], d: 1 },
     { q: 'Vad kallas det när en passagerare byter flyg på vägen?', a: ['Transfer', 'Check-in', 'Boarding', 'Landning'], d: 1 },
     { q: 'Vilken flygplatskod har London Heathrow?', a: ['LHR', 'LGW', 'STN', 'LCY'], d: 1 },
@@ -1004,6 +1039,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad står förkortningen ARN för?', a: ['Stockholm Arlanda', 'Arendal', 'Arnhem', 'Arica'], d: 2 },
   ],
   sjukvardsbitrade: [
+    { q: 'Vad är en normal vilopuls för en vuxen? Ställ in reglaget.', a: ['Omkring 70 slag i minuten'], reglage: { min: 30, max: 140, steg: 1, svar: 70, tolerans: 10, enhet: 'slag/min', liggande: true, lagst: '30', hogst: '140' }, d: 1, info: 'Spannet 60-100 räknas som normalt i vila.' },
+    { q: 'Vad räknas som normal kroppstemperatur?', a: ['37,0 °C'], reglage: { min: 34, max: 42, steg: 0.1, svar: 37, tolerans: 0.4, enhet: '°C', lagst: '34', hogst: '42' }, d: 1 },
     { q: 'Hur många ben har en vuxen människa?', a: ['206', '150', '300', '412'], d: 1 },
     { q: 'Vilket organ pumpar blodet runt i kroppen?', a: ['Hjärtat', 'Levern', 'Lungan', 'Njuren'], d: 1 },
     { q: 'Vad är normal kroppstemperatur?', a: ['Omkring 37 grader', 'Omkring 35 grader', 'Omkring 39 grader', 'Omkring 41 grader'], d: 1 },
@@ -1021,6 +1058,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas det system i kroppen som försvarar mot infektioner?', a: ['Immunförsvaret', 'Nervsystemet', 'Lymfsystemet', 'Endokrina systemet'], d: 2 },
   ],
   arkeologassistent: [
+    { q: 'Vilket år hittade Howard Carter Tutankhamons grav?', a: ['1922'], reglage: { artal: true, min: 1850, max: 1980, steg: 1, svar: 1922, tolerans: 4, liggande: true, lagst: '1850', hogst: '1980' }, d: 1 },
+    { q: 'Hur många år gammal är Stonehenge ungefär?', a: ['Omkring 5 000 år'], reglage: { min: 1000, max: 9000, steg: 100, svar: 5000, tolerans: 600, enhet: 'år', liggande: true, lagst: '1 000', hogst: '9 000' }, d: 2 },
     { q: 'Vilket redskap används för att sålla jord efter små fynd?', a: ['Såll', 'Spade enbart', 'Hacka', 'Skottkärra'], d: 1 },
     { q: 'Varför grävs en utgrävning i tydliga lager?', a: ['Lagren visar tidens ordning', 'Det går snabbare', 'Jorden är hårdare nedåt', 'Det ser prydligare ut'], d: 1 },
     { q: 'Vad kallas metoden att åldersbestämma organiskt material?', a: ['Kol-14-metoden', 'Röntgen', 'Magnetisering', 'Vägning'], d: 1 },
@@ -1075,6 +1114,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilket land har flest industrirobotar per anställd i tillverkningen?', a: ['Sydkorea', 'Tyskland', 'USA', 'Japan'], d: 2 },
   ],
   rymdtekniker: [
+    { q: 'Hur många minuter tar solljuset på sig till jorden?', a: ['Cirka 8 minuter'], reglage: { min: 1, max: 30, steg: 1, svar: 8, tolerans: 1, enhet: 'min', liggande: true, lagst: '1', hogst: '30' }, d: 1, info: 'Åtta minuter och tjugo sekunder, i runda tal.' },
+    { q: 'Hur högt över jordytan går rymdstationen ISS i sin bana?', a: ['Cirka 400 km'], reglage: { min: 100, max: 1000, steg: 10, svar: 400, tolerans: 60, enhet: 'km', lagst: '100', hogst: '1 000' }, d: 2 },
     { q: 'Vem var första människan i rymden?', a: ['Jurij Gagarin', 'Neil Armstrong', 'Alan Shepard', 'John Glenn'], d: 1 },
     { q: 'Vad hette den första satelliten i omloppsbana?', a: ['Sputnik 1', 'Explorer 1', 'Vostok 1', 'Telstar'], d: 1 },
     { q: 'Vilket år landade människan på månen första gången?', a: ['1969', '1961', '1972', '1957'], d: 1 },
@@ -1113,6 +1154,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den som syr upp plaggen efter designerns skisser?', a: ['Sömmerskan', 'Modellen', 'Stylisten', 'Fotografen'], d: 1 },
   ],
   olympiavard: [
+    { q: 'Vilket år hölls de första moderna olympiska spelen?', a: ['1896'], reglage: { artal: true, min: 1850, max: 1950, steg: 1, svar: 1896, tolerans: 4, liggande: true, lagst: '1850', hogst: '1950' }, d: 1, info: 'I Aten, med fjorton deltagande länder.' },
     { q: 'Hur ofta hålls de olympiska sommarspelen?', a: ['Var fjärde år', 'Varannat år', 'Varje år', 'Var femte år'], d: 1 },
     { q: 'Hur många ringar finns i den olympiska symbolen?', a: ['Fem', 'Fyra', 'Sex', 'Tre'], d: 1 },
     { q: 'Var hölls de första moderna olympiska spelen 1896?', a: ['Athen', 'Paris', 'London', 'Rom'], d: 1 },
@@ -1132,6 +1174,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
   ],
   // ------------------------------------------------- nya yrken
   postsorterare: [
+    { q: 'Vilket år gavs världens första frimärke ut?', a: ['1840'], reglage: { artal: true, min: 1750, max: 1950, steg: 1, svar: 1840, tolerans: 6, liggande: true, lagst: '1750', hogst: '1950' }, d: 2, info: 'Penny Black, i Storbritannien.' },
     { q: 'Ett brev ska till Reykjavík. Vilket land lägger du det i?', a: ['Island', 'Irland', 'Grönland', 'Färöarna'], d: 1 },
     { q: 'Vilket land har landskoden DE på försändelserna?', a: ['Tyskland', 'Danmark', 'Nederländerna', 'Belgien'], d: 1 },
     { q: 'Ett vykort är adresserat till Wien. Vilket land?', a: ['Österrike', 'Tyskland', 'Schweiz', 'Ungern'], d: 1 },
@@ -1185,6 +1228,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den valutareserv en centralbank håller?', a: ['Valutareserven', 'Kassakravet', 'Basräntan', 'Penningmängden'], d: 2 },
   ],
   torghandlare: [
+    { q: 'Vilken av frukterna är en durian?', a: ['Durian', 'Ananas', 'Granatäpple', 'Kiwifrukt'], bilder: ['durian', 'ananas', 'granatapple', 'kiwifrukt'], d: 1, info: 'Durianen är förbjuden på hotell och i tunnelbanor i flera länder, för luktens skull.' },
+    { q: 'Frukten på bilden har ett rykte på hotellen. Vilket?', a: ['Den luktar så illa att den är förbjuden inomhus', 'Den färgar av sig på lakan', 'Den lockar till sig myror', 'Den exploderar i värme'], bild: 'durian', d: 1 },
     { q: 'Vilken frukt pressas till olivolja?', a: ['Oliven', 'Druvan', 'Fikonet', 'Dadeln'], d: 1 },
     { q: 'Vilken ost tillverkas traditionellt av buffelmjölk?', a: ['Mozzarella', 'Cheddar', 'Gouda', 'Feta'], d: 1 },
     { q: 'Vad kallas torkade vindruvor?', a: ['Russin', 'Katrinplommon', 'Aprikoser', 'Korinter'], d: 1 },
@@ -1239,6 +1284,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken temperatur bör champagne serveras i?', a: ['Omkring 8 grader', 'Omkring 18 grader', 'Omkring 2 grader', 'Omkring 14 grader'], d: 2 },
   ],
   barare: [
+    { q: 'Hur tungt får en bärare enligt riktlinjerna bära på en trek?', a: ['Omkring 20 kg'], reglage: { min: 5, max: 60, steg: 1, svar: 20, tolerans: 4, enhet: 'kg', lagst: '5', hogst: '60' }, d: 1 },
     { q: 'Vad kallas sjukdomen man kan få av att stiga för snabbt på hög höjd?', a: ['Höjdsjuka', 'Dykarsjuka', 'Solsting', 'Köldskada'], d: 1 },
     { q: 'Hur många toppar över 8 000 meter finns det i världen?', a: ['14', '5', '30', '8'], d: 1, info: 'Alla ligger i Himalaya eller Karakoram.' },
     { q: 'Vad händer med luften när man stiger uppåt i bergen?', a: ['Trycket sjunker så varje andetag ger mindre syre', 'Syret försvinner helt', 'Syrehalten stiger', 'Ingenting alls'], d: 1 },
@@ -1311,6 +1357,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den låg­passfiltrering som tar bort diskanten under en uppbyggnad?', a: ['Lågpassfilter', 'Högpassfilter', 'Bandpassfilter', 'Notchfilter'], d: 2 },
   ],
   ostronplockare: [
+    { q: 'Vilken av bilderna visar ostron?', a: ['Ostron', 'Hummer', 'Sjöstjärna', 'Öronmanet'], bilder: ['ostron', 'hummer', 'sjostjarna', 'manet'], d: 1 },
     { q: 'Vad kallas det när havsvattnet drar sig tillbaka?', a: ['Ebb', 'Flod', 'Bränning', 'Dyning'], d: 1 },
     { q: 'Vad orsakar framför allt tidvattnet?', a: ['Månens dragningskraft', 'Vindarna', 'Havsströmmarna', 'Jordens lutning'], d: 1, info: 'Solen bidrar också, men månen står för det mesta.' },
     { q: 'Vilken djurgrupp tillhör ostronet?', a: ['Blötdjuren', 'Kräftdjuren', 'Fiskarna', 'Tagghudingarna'], d: 1 },
@@ -1347,6 +1394,8 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken drink görs på whisky, socker, bitters och ett citruszest?', a: ['Old fashioned', 'Whisky sour', 'Highball', 'Boulevardier'], d: 2 },
   ],
   parkvaktare: [
+    { q: 'Vilket av djuren är en afrikansk buffel?', a: ['Afrikansk buffel', 'Gnu', 'Noshörning', 'Flodhäst'], bilder: ['buffel', 'gnu', 'noshorning', 'flodhast'], d: 1 },
+    { q: 'Vilket av de fem stora är djuret på bilden?', a: ['Leopard', 'Gepard', 'Lejon', 'Buffel'], bild: 'leopard', d: 2 },
     { q: 'Vad kallas det när ett djur jagas olagligt?', a: ['Tjuvjakt', 'Safari', 'Inventering', 'Avlysning'], d: 1 },
     { q: 'Vilket av de fem stora bär ett horn av keratin?', a: ['Noshörningen', 'Elefanten', 'Buffeln', 'Leoparden'], d: 1 },
     { q: 'Vad lever en gam på?', a: ['Kadaver', 'Gräs', 'Frukt', 'Fisk'], d: 1 },

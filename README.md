@@ -188,7 +188,32 @@ webbläsaren och överlever att sparfilen raderas.
 5. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
-6. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
+6. **Frågornas former.** De flesta frågor är fyra alternativ att välja mellan,
+   men inte alla.
+
+   - **Bildfrågor.** Fyra riktiga fotografier i stället för fyra rader text:
+     *"Gästerna vill se en gepard. Vilket av djuren är det?"* Namnen skrivs ut
+     först när man svarat, och kuriosan förklarar hur man skiljer dem åt –
+     geparden har tårränder och fläckar utan ringar, leoparden har rosetter.
+     Fisken i nätet, kryddan i skålen, målningen på väggen och blomman i
+     buketten fungerar likadant.
+   - **Bilder till vanliga frågor.** Ett foto ovanför frågan när frågan handlar
+     om något man kan se: djuret, byggnaden, frukten, konstverket. Städernas
+     egna foton återanvänds, så en fråga om Brandenburger Tor visar samma bild
+     som stadsskärmen i Berlin.
+   - **Reglagefrågor.** Ett tal som dras fram på en skala med en OK-knapp
+     under, i stället för alternativ att peka på. Liggande för årtal och
+     avstånd, stående för höjd, djup och vikt – riktningen betyder det den
+     brukar betyda. *"Vilket år föll Berlinmuren?"* har ingen lista att gissa
+     ur; man vet ungefär, och drar dit. Varje fråga har en tolerans: ett årtal
+     kräver ofta exakthet, medan höjden på ett berg får slinka igenom på
+     åttio meter.
+
+   **Alla bilder är riktiga fotografier** från Wikimedia Commons, aldrig
+   teckningar. Hela poängen med en bildfråga är att känna igen något man sett
+   i verkligheten, och då duger inte en illustration av en marulk – det ska
+   vara en marulk.
+7. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
@@ -197,16 +222,16 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
-7. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
+8. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
    sortera på löpande band, utföra order i rätt följd, upprepa en sekvens ur
    minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
    saker och låta resten vara, hålla balansen eller slå i takt. Det ger upp
    till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
    till. Klarar du 70 procent av skiftet totalt får du ett **certifikat**,
    som öppnar bättre betalda jobb i samma ämne i alla städer.
-8. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
+9. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
-9. **Kartan.** En egen skylt på gatan, och en atlas snarare än ett reglage.
+10. **Kartan.** En egen skylt på gatan, och en atlas snarare än ett reglage.
    Hela världen på en gång, utan zoom och utan panorering: rutten du rest
    dragen som en linje mellan städerna i besöksordning, en pulserande ring där
    du står, ring runt hemstaden och prickar för allt du ännu inte sett.
@@ -241,9 +266,9 @@ webbläsaren och överlever att sparfilen raderas.
    Tid är också en resurs eftersom boendet kostar varje dag, så det billigaste
    är sällan självklart bäst. Långa flyg från en stad utan interkontinental
    flygplats går via en hub och kostar en dag extra.
-10. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
+11. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-11. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
+12. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
 
    Den första är personuppgiftssidan: hemstad, resenärstyp, dag på resan,
    städer, stämplar och flugna kilometer – och ditt **personbästa** ur
@@ -256,7 +281,7 @@ webbläsaren och överlever att sparfilen raderas.
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet.
-12. **Ljud.** Varje station har dessutom en egen ljudbild som ligger och går så
+13. **Ljud.** Varje station har dessutom en egen ljudbild som ligger och går så
    länge man står kvar: sorl i en hög hall, rullväskor och avlägsna jetmotorer
    på flygplatsen; bromsar, dörrsignaler och hjul över rälsskarvar på
    stationen; tryckluftsbromsar och dieselmotorer vid bussterminalen; vågor,
@@ -272,12 +297,12 @@ webbläsaren och överlever att sparfilen raderas.
    när man kliver in – rösterna är formantsyntes genom ett telefonfilter,
    alltså pladder utan ord. Högtalarknappen i statusraden
    stegar mellan avstängt, dämpat och fullt ljud; valet sparas.
-13. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
+14. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
    och backa till staden med `Esc`. Ett händelsekort svarar man på med `A`–`C`
    och kvitterar med `Enter`; `Esc` gör ingenting där, eftersom en fråga man
    ställts inför ska besvaras och inte kringgås. Balansmomentet styrs med
    piltangenterna och taktmomentet med mellanslag.
-14. **Händelser.** Något kan hända på åtta olika sorters tillfällen: på vägen,
+15. **Händelser.** Något kan hända på åtta olika sorters tillfällen: på vägen,
     på vandrarhemmet, på jobbet, vid sevärdheten, ute på gatorna, i butiken, i
     mötet med någon, och i väntan på en avgång. Två av dem har egna knappar på
     stadsskärmen – _Ut på stan_ och _Besök_ vid sevärdheten – och kostar en
@@ -297,20 +322,20 @@ webbläsaren och överlever att sparfilen raderas.
     katten som bor i biljetthallen, skyfallet du väntar ut under ett portvalv
     tillsammans med sex främlingar och en cykel.
 
-15. **Anseende.** Hederliga val bygger upp ett anseende och oärliga river ner
+16. **Anseende.** Hederliga val bygger upp ett anseende och oärliga river ner
     det. Det syns i passet, öppnar och stänger vissa händelser, ger två egna
     stämplar åt var sitt håll, och räknas in i slutpoängen – så att det finns
     ett skäl att lämna in plånboken som inte är pengar.
 
-16. **Vägen tillbaka.** Knappen _Till staden_ sitter i statusraden, som ligger
+17. **Vägen tillbaka.** Knappen _Till staden_ sitter i statusraden, som ligger
     fast i överkanten på varje skärm. Under ett arbetsskift finns den inte:
     där ligger pengarna på spel, och skiftet lämnar man genom att sjukanmäla
     sig.
-17. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+18. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
     frågar först, och visar vad som går förlorat, innan resan raderas.
-18. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+19. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
     avsluta resan, få poäng och en titel.
-19. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
+20. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
     startskärmen, med poäng, titel, dagar, städer och träffsäkerhet. Varje rad
     visar också vilken stad du hade bäst koll på och vilken som avslöjade dig.
     Spelet räknar rätt och fel per stad, både på turistbyrån och på jobben.
@@ -338,7 +363,8 @@ _Legendarisk ryggsäckare_.
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
 - 80 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 1 624 frågor uppdelade i två svårighetsgrader, varav 1 238 jobbfrågor
+- 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
+- 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften
 - 19 stämplar att samla i passet
 - 73 händelser med 83 val och 117 möjliga utfall, spridda över åtta tillfällen
@@ -355,6 +381,7 @@ _Legendarisk ryggsäckare_.
 
 ```
 public/
+  quiz/                    Ett foto per frågebild + ATTRIBUTION.md
   manifest.webmanifest     Gör spelet installerbart på hemskärmen
   sw.js                    Service worker för offline-spel (cachar även fotona)
   icon*.png, icon.svg      App- och favicon-ikoner
@@ -377,6 +404,7 @@ src/
                            och turlista, avstånds-
                            tak och priser per färdsätt
     worldMap.ts            Genererad landmassa som SVG-path (Natural Earth)
+    quizImages.ts          Frågornas fotografier: id, motiv och Commons-källa
     questions/
       cityQuestions.ts     Frågor till turistbyrån, per stad
       jobQuestions.ts      Jobbfrågor, egen uppsättning per yrke
@@ -414,13 +442,37 @@ scripts/
   validate-data.mjs        Kontrollerar speldatan, körs vid varje bygge
   deploy-pages.mjs         Publicerar bygget till gh-pages-branchen
   fetch-city-photos.mjs    Hämtar stadsfoton från Wikimedia Commons
+  fetch-quiz-images.mjs    Hämtar frågornas foton från Wikimedia Commons
+  compress-quiz-images.py  Komprimerar frågefotona (Pillow)
   compress-city-photos.py  Komprimerar fotona (Pillow), körs av fetch-skriptet
 ```
 
 ### Att lägga till innehåll
 
 Frågor skrivs med det **rätta svaret först** i `a`-listan; alternativen blandas
-när frågan visas. `d: 1` betyder att frågan används på båda svårighetsgraderna,
+när frågan visas.
+
+En **bildfråga** lägger till `bilder` med lika många id:n som `a`, i samma
+ordning – blandningen håller ihop bild och etikett. En **bild till en vanlig
+fråga** sätts med `bild`, och `stad:<stads-id>` återanvänder ett stadsfoto som
+redan finns. En **reglagefråga** sätter `reglage` och har då bara ett svar i
+`a`: det rätta, skrivet som det ska läsas.
+
+```ts
+{ q: 'Vilket år föll Berlinmuren? Dra reglaget till rätt år.',
+  a: ['1989'],
+  reglage: { artal: true, min: 1945, max: 2000, steg: 1, svar: 1989,
+             tolerans: 1, liggande: true },
+  d: 1 }
+```
+
+Nya foton läggs i `src/data/quizImages.ts` och hämtas med
+`node scripts/fetch-quiz-images.mjs`, som också skriver
+`public/quiz/ATTRIBUTION.md`. Ledningsbilden till en Wikipedia-artikel om en
+krydda är ofta en botanisk plansch från 1800-talet, så växterna pekar på
+namngivna Commons-filer i stället – en tecknad ingefära duger inte i en fråga
+som går ut på att känna igen ingefära. Kom ihåg att lägga till bilden i
+`public/sw.js`; valideringen kräver det. `d: 1` betyder att frågan används på båda svårighetsgraderna,
 `d: 2` att den bara dyker upp på Globetrotter.
 
 ```ts
@@ -458,6 +510,12 @@ symmetriskt, att färjelinjerna pekar på städer som finns, och att **varje sta
 från varje annan stad genom nätverket**, med byten. Alla par behöver alltså
 inte ha en direktförbindelse – Köping saknar flygplats – men en stad som inte
 går att ta sig ifrån skulle låsa fast en spelare utan att något syns.
+
+**Frågeformerna** kontrolleras var för sig: en reglagefråga ska ha exakt ett
+svar i `a`, ett svar som ligger inom skalan, en steglängd och en tolerans som
+inte täcker en fjärdedel av skalan. En bildfråga ska ha lika många bilder som
+alternativ. Varje bild-id som en fråga hänvisar till måste finnas i manifestet,
+ha en fil i `public/quiz/` och stå i service workerns lista.
 
 **Händelserna** kontrolleras också: att inga två delar id, att varje händelse
 hör till minst ett tillfälle och har antingen val eller en effekt (aldrig

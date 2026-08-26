@@ -6,6 +6,8 @@ import type { Question } from '../types';
  */
 export const CITY_QUESTIONS: Record<string, Question[]> = {
   stockholm: [
+    { q: 'Sevärdheten på bilden är stadens mest besökta museum. Vad heter det?', a: ['Vasamuseet', 'Skansen', 'Nationalmuseum', 'Moderna museet'], bild: 'stad:stockholm', d: 1 },
+    { q: 'Vilket år sjönk regalskeppet Vasa?', a: ['1628'], reglage: { artal: true, min: 1500, max: 1800, steg: 1, svar: 1628, tolerans: 8, liggande: true, lagst: '1500', hogst: '1800' }, d: 1 },
     {
       q: 'Vilken är Sveriges huvudstad?',
       a: ['Stockholm', 'Göteborg', 'Malmö', 'Uppsala'],
@@ -149,6 +151,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   reykjavik: [
+    { q: 'Hur många invånare har Reykjavík ungefär?', a: ['Omkring 140 000'], reglage: { min: 10000, max: 600000, steg: 5000, svar: 140000, tolerans: 30000, liggande: true, lagst: '10 000', hogst: '600 000' }, d: 2 },
     {
       q: 'Vad är Reykjavík mest känd för att vara?',
       a: [
@@ -199,6 +202,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   london: [
+    { q: 'Vilket år öppnade Tower Bridge?', a: ['1894'], reglage: { artal: true, min: 1800, max: 1960, steg: 1, svar: 1894, tolerans: 4, liggande: true, lagst: '1800', hogst: '1960' }, d: 2 },
     {
       q: 'Vilken flod rinner genom London?',
       a: ['Themsen', 'Seine', 'Rhen', 'Donau'],
@@ -265,6 +269,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   paris: [
+    { q: 'Vilket år stod Eiffeltornet färdigt?', a: ['1889'], reglage: { artal: true, min: 1800, max: 1950, steg: 1, svar: 1889, tolerans: 3, liggande: true, lagst: '1800', hogst: '1950' }, d: 1, info: 'Till världsutställningen, och det skulle egentligen rivas efter tjugo år.' },
     {
       q: 'Till vilken händelse byggdes Eiffeltornet?',
       a: [
@@ -356,6 +361,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   rom: [
+    { q: 'Vilket år invigdes Colosseum?', a: ['År 80'], reglage: { artal: true, min: -200, max: 600, steg: 10, svar: 80, tolerans: 40, liggande: true, lagst: '200 f.Kr.', hogst: '600 e.Kr.' }, d: 2 },
     {
       q: 'Hur många kullar sägs Rom vara byggt på?',
       a: ['Sju', 'Tre', 'Tolv', 'Fem'],
@@ -400,6 +406,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   istanbul: [
+    { q: 'Vilket år erövrades Konstantinopel av osmanerna?', a: ['1453'], reglage: { artal: true, min: 1100, max: 1800, steg: 5, svar: 1453, tolerans: 30, liggande: true, lagst: '1100', hogst: '1800' }, d: 2 },
     {
       q: 'Vilka två världsdelar ligger Istanbul i?',
       a: ['Europa och Asien', 'Europa och Afrika', 'Asien och Afrika', 'Bara Europa'],
@@ -443,6 +450,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   moskva: [
+    { q: 'Vilket år nämns Moskva första gången i krönikorna?', a: ['1147'], reglage: { artal: true, min: 800, max: 1600, steg: 5, svar: 1147, tolerans: 40, liggande: true, lagst: '800', hogst: '1600' }, d: 2 },
     {
       q: 'Vad heter det befästa området i Moskvas centrum?',
       a: ['Kreml', 'Vinterpalatset', 'Peterhof', 'Smolnyj'],
@@ -506,6 +514,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   kairo: [
+    { q: 'Hur hög är Cheopspyramiden i dag?', a: ['138 m'], reglage: { min: 50, max: 300, steg: 1, svar: 138, tolerans: 12, enhet: 'm', lagst: '50', hogst: '300' }, d: 2, info: 'Ursprungligen 146 meter. Toppstenarna är borta.' },
     {
       q: 'Vilken flod rinner genom Kairo?',
       a: ['Nilen', 'Kongo', 'Niger', 'Eufrat'],
@@ -644,6 +653,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   kapstaden: [
+    { q: 'Hur högt är Taffelbergets platå över havet?', a: ['1 085 m'], reglage: { min: 200, max: 2500, steg: 5, svar: 1085, tolerans: 100, enhet: 'm', lagst: '200', hogst: '2 500' }, d: 2 },
     {
       q: 'Vilket platt berg reser sig över Kapstaden?',
       a: ['Taffelberget', 'Kilimanjaro', 'Mount Cook', 'Sockertoppen'],
@@ -772,6 +782,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   peking: [
+    { q: 'Hur lång är Kinesiska muren med alla grenar inräknade?', a: ['Cirka 21 000 km'], reglage: { min: 1000, max: 40000, steg: 500, svar: 21000, tolerans: 3000, enhet: 'km', liggande: true, lagst: '1 000', hogst: '40 000' }, d: 2 },
     {
       q: 'Vad heter det stora palatskomplexet i Pekings centrum?',
       a: ['Förbjudna staden', 'Sommarpalatset', 'Potala', 'Topkapi'],
@@ -815,6 +826,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   tokyo: [
+    { q: 'Hur högt är Tokyo Skytree?', a: ['634 m'], reglage: { min: 200, max: 1000, steg: 2, svar: 634, tolerans: 40, enhet: 'm', lagst: '200', hogst: '1 000' }, d: 2 },
     {
       q: 'Vilket land är Tokyo huvudstad i?',
       a: ['Japan', 'Kina', 'Sydkorea', 'Taiwan'],
@@ -858,6 +870,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   sydney: [
+    { q: 'Vilket år invigdes operahuset i Sydney?', a: ['1973'], reglage: { artal: true, min: 1930, max: 2000, steg: 1, svar: 1973, tolerans: 3, liggande: true, lagst: '1930', hogst: '2000' }, d: 2 },
     {
       q: 'Vilken byggnad med segelliknande skal är Sydneys landmärke?',
       a: ['Operahuset', 'Sky Tower', 'Empire State Building', 'Petronas Towers'],
@@ -943,6 +956,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   newyork: [
+    { q: 'Hur hög är Frihetsgudinnan från fot till fackla?', a: ['46 m'], reglage: { min: 10, max: 150, steg: 1, svar: 46, tolerans: 6, enhet: 'm', lagst: '10', hogst: '150' }, d: 2, info: 'Med sockeln blir det 93 meter.' },
     {
       q: 'Vilket land gav Frihetsgudinnan till USA?',
       a: ['Frankrike', 'Storbritannien', 'Spanien', 'Nederländerna'],
@@ -987,6 +1001,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   mexikocity: [
+    { q: 'Hur högt över havet ligger Mexico City?', a: ['Cirka 2 240 m'], reglage: { min: 0, max: 4000, steg: 20, svar: 2240, tolerans: 200, enhet: 'm', lagst: '0', hogst: '4 000' }, d: 2 },
     {
       q: 'Vilken forntida stad låg där Mexico City ligger idag?',
       a: ['Tenochtitlán', 'Machu Picchu', 'Chichén Itzá', 'Teotihuacán'],
@@ -1034,6 +1049,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   cusco: [
+    { q: 'Hur högt över havet ligger Cusco?', a: ['Cirka 3 400 m'], reglage: { min: 500, max: 5500, steg: 25, svar: 3400, tolerans: 250, enhet: 'm', lagst: '500', hogst: '5 500' }, d: 1, info: 'Höjdsjukan är verklig här. Ta det lugnt första dagen.' },
     {
       q: 'Vilket rike hade Cusco som huvudstad?',
       a: ['Inkariket', 'Aztekriket', 'Mayariket', 'Chimú'],
@@ -1077,6 +1093,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
   ],
   rio: [
+    { q: 'Hur hög är Kristusstatyn, med sockeln inräknad?', a: ['38 m'], reglage: { min: 10, max: 120, steg: 1, svar: 38, tolerans: 5, enhet: 'm', lagst: '10', hogst: '120' }, d: 2 },
     {
       q: 'Vilken staty står på berget Corcovado i Rio?',
       a: ['Kristusstatyn', 'Frihetsgudinnan', 'Moderlandet kallar', 'Den lilla sjöjungfrun'],
@@ -1150,6 +1167,8 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken finländsk konstnär skapade Mumintrollen?', a: ['Tove Jansson', 'Akseli Gallen-Kallela', 'Helene Schjerfbeck', 'Hugo Simberg'], d: 2 },
   ],
   berlin: [
+    { q: 'Vilket år föll Berlinmuren? Dra reglaget till rätt år.', a: ['1989'], reglage: { artal: true, min: 1945, max: 2000, steg: 1, svar: 1989, tolerans: 1, liggande: true, lagst: '1945', hogst: '2000' }, d: 1, info: 'Muren öppnades natten till den 10 november 1989.' },
+    { q: 'Byggnaden på bilden är stadens mest kända. Vad heter den?', a: ['Brandenburger Tor', 'Reichstag', 'Berliner Dom', 'Rotes Rathaus'], bild: 'stad:berlin', d: 1 },
     { q: 'I vilket land ligger Berlin?', a: ['Tyskland', 'Österrike', 'Polen', 'Schweiz'], d: 1 },
     { q: 'Vad heter stadsporten som är Berlins mest kända symbol?', a: ['Brandenburger Tor', 'Triumfbågen', 'Porta Nigra', 'Siegestor'], d: 1 },
     { q: 'Vilket år föll Berlinmuren?', a: ['1989', '1979', '1995', '1961'], d: 1, info: 'Muren restes 1961 och öppnades i november 1989.' },
@@ -1160,6 +1179,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken nedlagd flygplats i Berlin är i dag en av stadens största parker?', a: ['Tempelhof', 'Tegel', 'Schönefeld', 'Gatow'], d: 2 },
   ],
   barcelona: [
+    { q: 'Vilket år började Sagrada Família byggas?', a: ['1882'], reglage: { artal: true, min: 1800, max: 1950, steg: 1, svar: 1882, tolerans: 6, liggande: true, lagst: '1800', hogst: '1950' }, d: 2, info: 'Den är fortfarande inte färdig.' },
     { q: 'I vilket land ligger Barcelona?', a: ['Spanien', 'Portugal', 'Italien', 'Frankrike'], d: 1 },
     { q: 'Vilken arkitekt ritade Sagrada Família?', a: ['Antoni Gaudí', 'Pablo Picasso', 'Santiago Calatrava', 'Le Corbusier'], d: 1 },
     { q: 'Vilken region är Barcelona huvudstad i?', a: ['Katalonien', 'Andalusien', 'Baskien', 'Galicien'], d: 1 },
@@ -1180,6 +1200,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas det målade kakel som klär Lissabons fasader?', a: ['Azulejos', 'Terrazzo', 'Majolika', 'Tesserae'], d: 2 },
   ],
   aten: [
+    { q: 'Hur högt över havet ligger Akropolisklippan?', a: ['156 m'], reglage: { min: 0, max: 500, steg: 2, svar: 156, tolerans: 20, enhet: 'm', lagst: '0', hogst: '500' }, d: 2 },
     { q: 'I vilket land ligger Aten?', a: ['Grekland', 'Turkiet', 'Italien', 'Cypern'], d: 1 },
     { q: 'Vilket tempel står högst upp på Akropolisklippan?', a: ['Parthenon', 'Pantheon', 'Colosseum', 'Artemistemplet'], d: 1 },
     { q: 'Vilken gudinna är Aten uppkallad efter?', a: ['Athena', 'Afrodite', 'Hera', 'Artemis'], d: 1 },
@@ -1190,6 +1211,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken filosof dömdes till döden i Aten år 399 före Kristus?', a: ['Sokrates', 'Platon', 'Aristoteles', 'Pythagoras'], d: 2 },
   ],
   prag: [
+    { q: 'Vilket år stod Karlsbron färdig?', a: ['1402'], reglage: { artal: true, min: 1100, max: 1700, steg: 5, svar: 1402, tolerans: 40, liggande: true, lagst: '1100', hogst: '1700' }, d: 2 },
     { q: 'I vilket land ligger Prag?', a: ['Tjeckien', 'Slovakien', 'Polen', 'Ungern'], d: 1 },
     { q: 'Vilken flod rinner genom Prag?', a: ['Vltava', 'Donau', 'Oder', 'Elbe'], d: 1 },
     { q: 'Vad heter Prags mest kända bro, kantad av statyer?', a: ['Karlsbron', 'Kedjebron', 'Ponte Vecchio', 'Rialtobron'], d: 1 },
@@ -1210,6 +1232,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas den irländska klippkusten på västsidan, med 200 meter höga stup?', a: ['Cliffs of Moher', 'Giant’s Causeway', 'Dover', 'Cape Wrath'], d: 2 },
   ],
   dubai: [
+    { q: 'Hur högt är Burj Khalifa?', a: ['828 m'], reglage: { min: 200, max: 1200, steg: 2, svar: 828, tolerans: 50, enhet: 'm', lagst: '200', hogst: '1 200' }, d: 1 },
     { q: 'I vilket land ligger Dubai?', a: ['Förenade Arabemiraten', 'Saudiarabien', 'Qatar', 'Oman'], d: 1 },
     { q: 'Vad heter världens högsta byggnad, som står i Dubai?', a: ['Burj Khalifa', 'Shanghai Tower', 'Taipei 101', 'Empire State Building'], d: 1 },
     { q: 'Vilket språk är officiellt i Förenade Arabemiraten?', a: ['Arabiska', 'Persiska', 'Urdu', 'Turkiska'], d: 1 },
@@ -1260,6 +1283,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilket land koloniserade Vietnam fram till 1954?', a: ['Frankrike', 'Storbritannien', 'Nederländerna', 'Portugal'], d: 2 },
   ],
   kathmandu: [
+    { q: 'Hur högt över havet ligger Katmandu?', a: ['Cirka 1 400 m'], reglage: { min: 0, max: 4000, steg: 25, svar: 1400, tolerans: 200, enhet: 'm', lagst: '0', hogst: '4 000' }, d: 1 },
     { q: 'I vilket land ligger Katmandu?', a: ['Nepal', 'Bhutan', 'Indien', 'Bangladesh'], d: 1 },
     { q: 'Vilket är världens högsta berg, på gränsen mellan Nepal och Kina?', a: ['Mount Everest', 'K2', 'Kangchenjunga', 'Annapurna'], d: 1 },
     { q: 'Vad heter Nepals valuta?', a: ['Rupier', 'Taka', 'Rupiah', 'Ngultrum'], d: 1 },

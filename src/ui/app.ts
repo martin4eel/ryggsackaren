@@ -86,6 +86,7 @@ import {
   type EffectLine,
 } from '../game/events';
 import { renderEventCard } from './eventcard';
+import { quizImageAlt, quizImageUrl } from '../data/quizImages';
 
 interface QuizSession {
   kind: 'turistbyra' | 'jobb';
@@ -104,6 +105,8 @@ interface QuizSession {
     combo: number;
     /** Del av utbetalningen som kom av att svaret gick fort */
     speed: number;
+    /** Talet spelaren drog fram, för reglagefrågor */
+    reglage?: number;
   };
   /** När den nuvarande frågan visades, för snabbhetsbonusen */
   askedAt: number;
@@ -420,6 +423,18 @@ export class App {
       if (inQuestions && !quiz.answered) {
         const current = quiz.questions[quiz.index];
         if (!current) return;
+        /**
+         * En reglagefråga har inga alternativ. Piltangenterna hör till
+         * reglaget, och Enter lämnar in det tal som står inställt.
+         */
+        if (current.question.reglage) {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+          const input = this.root.querySelector<HTMLInputElement>('.reglage-input');
+          if (!input) return;
+          event.preventDefault();
+          this.answerQuestion(0, Number(input.value));
+          return;
+        }
         const key = event.key.toLowerCase();
         // 1-4 och a-d pekar på samma alternativ, i visningsordning.
         const digit = '1234'.indexOf(key);
@@ -1979,6 +1994,8 @@ export class App {
     }
 
     const current = q.questions[q.index]!;
+    /** Själva frågan, med bild, bildalternativ eller reglage. */
+    const q0 = current.question;
 
     // Arbetsplatsen får en egen rubrik med miljöbild, stämpelkort och
     // lönemätare, så att ett skift känns som en arbetsdag och inte som ett prov.
@@ -2071,35 +2088,136 @@ export class App {
     );
 
     const answered = q.answered;
-    const options = el('div', { class: 'options' });
-    current.options.forEach((text, i) => {
-      const classes = ['option'];
-      if (answered) {
-        if (i === current.correctIndex) classes.push('option-right');
-        else if (i === answered.picked) classes.push('option-wrong');
-        else classes.push('option-dim');
-      }
-      const b = button(
-        el('span', { class: 'option-body' },
-          el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
-          el('span', {}, text)
-        ),
-        () => {
-          if (this.quiz?.answered) return;
-          this.answerQuestion(i);
-        },
-        {
-          class: classes.join(' '),
-          disabled: answered ? true : undefined,
-          title: `Tangent ${i + 1} eller ${String.fromCharCode(65 + i)}`,
-        }
+    /**
+     * Bilden till frågan. Den ligger ovanför frågetexten, som ett fotografi i
+     * en uppslagsbok - det är den som ska hinna sjunka in innan man läser vad
+     * som efterfrågas.
+     */
+    if (q0.bild) {
+      const bildruta = el('figure', { class: 'quiz-bild' });
+      const img = el('img', {
+        src: quizImageUrl(q0.bild),
+        alt: quizImageAlt(q0.bild, this.city.name),
+        loading: 'eager',
+        decoding: 'async',
+      }) as HTMLImageElement;
+      img.addEventListener('error', () => bildruta.remove());
+      bildruta.append(img);
+      panel.append(bildruta);
+    }
+
+    /**
+     * Reglagefrågan. Inget att peka på, bara en skala att dra sig fram på och
+     * en knapp att stå för svaret med. Stående för höjd och djup, liggande för
+     * årtal och avstånd - riktningen ska betyda vad den brukar betyda.
+     */
+    if (q0.reglage) {
+      const r = q0.reglage;
+      const skala = el('div', {
+        class: `reglage ${r.liggande ? 'reglage-liggande' : 'reglage-staende'}`,
+      });
+      const startvarde = answered?.reglage ?? Math.round((r.min + r.max) / 2 / r.steg) * r.steg;
+      /**
+       * Ett årtal skrivs utan tusentalsavgränsare. "1 989" är en summa,
+       * "1989" är ett år, och skillnaden syns direkt.
+       */
+      const skriv = (v: number) =>
+        `${r.artal ? String(v) : v.toLocaleString('sv-SE')}${
+          r.enhet ? ` ${r.enhet}` : ''
+        }`;
+      const visning = el('div', { class: 'reglage-varde' }, skriv(startvarde));
+      const input = el('input', {
+        class: 'reglage-input',
+        type: 'range',
+        min: String(r.min),
+        max: String(r.max),
+        step: String(r.steg),
+        value: String(startvarde),
+        'aria-label': q0.q,
+        disabled: answered ? true : undefined,
+        ...(r.liggande ? {} : { orient: 'vertical' }),
+      }) as HTMLInputElement;
+      let varde = startvarde;
+      input.addEventListener('input', () => {
+        varde = Number(input.value);
+        visning.textContent = skriv(varde);
+      });
+      const spann = el('div', { class: 'reglage-spann' },
+        el('span', {}, r.hogst ?? skriv(r.max)),
+        el('span', {}, r.lagst ?? skriv(r.min))
       );
-      options.append(b);
-    });
-    panel.append(options);
+      skala.append(visning, el('div', { class: 'reglage-bana' }, input, spann));
+      panel.append(skala);
+      if (!answered) {
+        panel.append(
+          button('OK', () => {
+            if (this.quiz?.answered) return;
+            this.answerQuestion(0, varde);
+          }, { class: 'btn btn-primary reglage-ok' })
+        );
+      }
+    } else {
+      const bildfraga = Boolean(current.images);
+      const options = el('div', {
+        class: `options ${bildfraga ? 'options-bilder' : ''}`,
+      });
+      current.options.forEach((text, i) => {
+        const classes = ['option'];
+        if (bildfraga) classes.push('option-bild');
+        if (answered) {
+          if (i === current.correctIndex) classes.push('option-right');
+          else if (i === answered.picked) classes.push('option-wrong');
+          else classes.push('option-dim');
+        }
+        const bildId = current.images?.[i];
+        const innehall = bildId
+          ? el('span', { class: 'option-body option-body-bild' },
+              el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
+              el('img', {
+                class: 'option-foto',
+                src: quizImageUrl(bildId),
+                // Alt-texten får inte avslöja svaret: hela uppgiften är att
+                // känna igen motivet. Skärmläsare får bokstaven i stället.
+                alt: `Alternativ ${String.fromCharCode(65 + i)}`,
+                loading: 'eager',
+                decoding: 'async',
+              }),
+              answered ? el('span', { class: 'option-facit' }, text) : ''
+            )
+          : el('span', { class: 'option-body' },
+              el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
+              el('span', {}, text)
+            );
+        const b = button(
+          innehall,
+          () => {
+            if (this.quiz?.answered) return;
+            this.answerQuestion(i);
+          },
+          {
+            class: classes.join(' '),
+            disabled: answered ? true : undefined,
+            title: `Tangent ${i + 1} eller ${String.fromCharCode(65 + i)}`,
+          }
+        );
+        options.append(b);
+      });
+      panel.append(options);
+    }
 
     if (answered) {
-      const right = answered.picked === current.correctIndex;
+      const right = q0.reglage
+        ? Math.abs((answered.reglage ?? Number.NaN) - q0.reglage.svar) <=
+          q0.reglage.tolerans
+        : answered.picked === current.correctIndex;
+      /**
+       * Vad som var rätt. En reglagefråga har inget alternativ att peka på, så
+       * där står svaret skrivet i `a[0]` - "1989", "8 849 m".
+       */
+      const facit = q0.reglage
+        ? (q0.a[0] ??
+          `${q0.reglage.svar}${q0.reglage.enhet ? ` ${q0.reglage.enhet}` : ''}`)
+        : (current.options[current.correctIndex] ?? '');
       const feedback = el('div', {
         class: `feedback ${right ? 'feedback-right' : 'feedback-wrong'}`,
       });
@@ -2118,8 +2236,8 @@ export class App {
               ? ` Dagen är avklarad och du tjänade ${this.money(answered.payout)}.`
               : ' Ett steg närmare ett bra stadsbetyg.'
             : isJob
-              ? ` Rätt var: ${current.options[current.correctIndex]}. Dagen gav ingen lön.`
-              : ` Rätt var: ${current.options[current.correctIndex]}.`
+              ? ` Rätt var: ${facit}. Dagen gav ingen lön.`
+              : ` Rätt var: ${facit}.`
         )
       );
       // Bonusarna redovisas var för sig, annars ser lönen bara ut att hoppa.
@@ -2166,7 +2284,15 @@ export class App {
     }
     if (!answered) {
       panel.append(
-        el('p', { class: 'keyhint' }, 'Svara med 1-4 eller A-D, eller tryck på alternativet.')
+        el(
+          'p',
+          { class: 'keyhint' },
+          q0.reglage
+            ? 'Dra reglaget till rätt tal och tryck OK. Piltangenterna finjusterar, Enter svarar.'
+            : current.images
+              ? 'Tryck på rätt bild, eller svara med 1-4 eller A-D.'
+              : 'Svara med 1-4 eller A-D, eller tryck på alternativet.'
+        )
       );
     }
     wrap.append(panel);
@@ -2264,11 +2390,19 @@ export class App {
     return wrap;
   }
 
-  private answerQuestion(picked: number): void {
+  /**
+   * Ett svar lämnas in. `picked` är alternativets index; för en reglagefråga
+   * skickas i stället talet spelaren dragit fram, och rättningen sker mot
+   * frågans tolerans i stället för mot ett index.
+   */
+  private answerQuestion(picked: number, reglageVarde?: number): void {
     const s = this.state!;
     const q = this.quiz!;
     const current = q.questions[q.index]!;
-    const right = picked === current.correctIndex;
+    const reglage = current.question.reglage;
+    const right = reglage
+      ? Math.abs((reglageVarde ?? Number.NaN) - reglage.svar) <= reglage.tolerans
+      : picked === current.correctIndex;
     const elapsed = performance.now() - q.askedAt;
     let payout = 0;
     let comboPart = 0;
@@ -2306,7 +2440,13 @@ export class App {
     if (right && q.streak >= 3) playCombo(q.streak);
     else playSound(right ? 'ratt' : 'fel');
     q.dayResults[q.index] = right;
-    q.answered = { picked, payout, combo: comboPart, speed: speedPart };
+    q.answered = {
+      picked,
+      payout,
+      combo: comboPart,
+      speed: speedPart,
+      reglage: reglageVarde,
+    };
     this.commit();
     this.render();
   }

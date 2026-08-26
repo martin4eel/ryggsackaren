@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v8';
+const CACHE = 'ryggsackaren-v9';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -64,6 +64,66 @@ const CITY_PHOTOS = [
   'vasteras',
 ].map((id) => `./cities/${id}.jpg`);
 
+/**
+ * Frågebilderna. De är små - några tiotal kilobyte styck - och en fråga som
+ * visar en bruten bildikon för att man råkar sitta på ett flyg är sämre än
+ * några megabyte i cachen. Listan matchar src/data/quizImages.ts, vilket
+ * valideringen kontrollerar.
+ */
+const QUIZ_IMAGES = [
+  'ananas',
+  'blackfisk',
+  'buffel',
+  'chili',
+  'delfin',
+  'durian',
+  'elefant',
+  'flamingo',
+  'flodhast',
+  'gepard',
+  'giraff',
+  'gnu',
+  'granatapple',
+  'havsabborre',
+  'havsorn',
+  'havsskoldpadda',
+  'hummer',
+  'ingefara',
+  'kanel',
+  'kardemumma',
+  'kiwifrukt',
+  'knolval',
+  'lavendel',
+  'lejon',
+  'leopard',
+  'lotus',
+  'makrill',
+  'manet',
+  'marulk',
+  'monalisa',
+  'noshorning',
+  'orkide',
+  'ostron',
+  'parlorhange',
+  'pelikan',
+  'pingvin',
+  'protea',
+  'saffran',
+  'sjostjarna',
+  'skriet',
+  'solros',
+  'stjarnenatt',
+  'storavagen',
+  'svartpeppar',
+  'torsk',
+  'tulpan',
+  'vanilj',
+  'venusfodelse',
+  'vitlok',
+  'zebra',
+].map((id) => `./quiz/${id}.jpg`);
+
+
 self.addEventListener('install', (event) => {
   // Aktivera den nya versionen direkt istället för att vänta på att alla
   // flikar stängs.
@@ -76,6 +136,7 @@ self.addEventListener('install', (event) => {
         // Fotona får inte stoppa installationen om något saknas – de hämtas
         // då i stället vid första visningen och cachas löpande.
         cache.addAll(CITY_PHOTOS).catch(() => undefined),
+        cache.addAll(QUIZ_IMAGES).catch(() => undefined),
       ])
     )
   );

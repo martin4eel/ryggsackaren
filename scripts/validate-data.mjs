@@ -8,7 +8,7 @@
 // Vi laddar TypeScript-datafilerna genom Vites egen modulkörare. Vite är ett
 // deklarerat beroende, till skillnad från esbuild som bara följer med
 // indirekt, så valideringen kan inte gå sönder av att Vite byter bundlare.
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
@@ -42,6 +42,8 @@ try {
   const { availableRoutes } = await load('/src/game/travel.ts');
 
   const jobById = Object.fromEntries(JOBS.map((j) => [j.id, j]));
+  /** Alla bild-id:n som frågorna hänvisar till, med var de stod. */
+  const bildIdn = new Set();
   const seen = new Map();
   let total = 0;
 
@@ -49,8 +51,35 @@ try {
     for (const q of questions) {
       total += 1;
       if (!q.q?.trim()) problems.push(`${label}: tom frågetext`);
+      /**
+       * En reglagefråga har inga alternativ att välja bland - svaret dras
+       * fram på en skala. `a[0]` bär det rätta svaret skrivet i klartext, för
+       * facittexten efteråt.
+       */
+      if (q.reglage) {
+        if (!Array.isArray(q.a) || q.a.length !== 1)
+          problems.push(`${label}: reglagefråga ska ha exakt ett svar i a: ${q.q}`);
+        const r = q.reglage;
+        if (!(r.max > r.min)) problems.push(`${label}: reglagets max är inte större än min: ${q.q}`);
+        if (!(r.steg > 0)) problems.push(`${label}: reglaget saknar steglängd: ${q.q}`);
+        if (r.svar < r.min || r.svar > r.max)
+          problems.push(`${label}: reglagets svar ligger utanför skalan: ${q.q}`);
+        if (!(r.tolerans >= 0)) problems.push(`${label}: reglaget saknar tolerans: ${q.q}`);
+        // En tolerans som täcker halva skalan gör frågan gratis.
+        if (r.tolerans * 2 > (r.max - r.min) * 0.25)
+          problems.push(`${label}: reglagets tolerans är för generös: ${q.q}`);
+        if (q.bilder) problems.push(`${label}: reglagefråga kan inte ha bildalternativ: ${q.q}`);
+        continue;
+      }
       if (!Array.isArray(q.a) || q.a.length < 3)
         problems.push(`${label}: färre än 3 alternativ: ${q.q}`);
+      /** Bildfrågor: lika många bilder som alternativ, och alla ska finnas. */
+      if (q.bilder) {
+        if (q.bilder.length !== q.a.length)
+          problems.push(`${label}: ${q.bilder.length} bilder men ${q.a.length} alternativ: ${q.q}`);
+        for (const id of q.bilder) bildIdn.add(`${label}|${id}`);
+      }
+      if (q.bild) bildIdn.add(`${label}|${q.bild}`);
       if (q.d !== 1 && q.d !== 2)
         problems.push(`${label}: ogiltig svårighetsgrad: ${q.q}`);
       const unique = new Set(q.a.map((a) => a.trim().toLowerCase()));
@@ -300,6 +329,45 @@ try {
     }
   }
 
+  /**
+   * Frågebilderna. En fråga som pekar på en bild som inte finns visar en
+   * bruten bildikon mitt i ett arbetsskift, och en bild i manifestet utan fil
+   * på disken gör samma sak. Båda ska stoppa bygget.
+   */
+  const { QUIZ_IMAGES } = await load('/src/data/quizImages.ts');
+  const bildManifest = new Set(QUIZ_IMAGES.map((b) => b.id));
+  for (const b of QUIZ_IMAGES) {
+    if (!b.alt?.trim()) problems.push(`bilden ${b.id} saknar alt-text`);
+    if (!b.article && !b.file)
+      problems.push(`bilden ${b.id} saknar både artikel och Commons-fil`);
+    if (!existsSync(join(ROOT, 'public', 'quiz', `${b.id}.jpg`)))
+      problems.push(
+        `bilden ${b.id} saknar fil i public/quiz/ – kör node scripts/fetch-quiz-images.mjs`
+      );
+  }
+  /**
+   * Service workern förcachar bilderna för offline-spel. En bild som saknas
+   * där ger en bruten bildikon mitt i ett skift för den som sitter på ett
+   * flyg, och det märks aldrig under utveckling.
+   */
+  const swKalla = readFileSync(join(ROOT, 'public', 'sw.js'), 'utf8');
+  for (const b of QUIZ_IMAGES) {
+    if (!new RegExp(`'${b.id}',`).test(swKalla))
+      problems.push(`bilden ${b.id} saknas i fotolistan i public/sw.js`);
+  }
+
+  for (const post of bildIdn) {
+    const [label, id] = post.split('|');
+    if (id.startsWith('stad:')) {
+      const stad = id.slice(5);
+      if (!cityById[stad])
+        problems.push(`${label}: bilden pekar på okänd stad: ${id}`);
+      continue;
+    }
+    if (!bildManifest.has(id))
+      problems.push(`${label}: bilden ${id} saknas i data/quizImages.ts`);
+  }
+
   const kändaRegioner = new Set(CITIES.map((c) => c.landRegion));
   for (const region of Object.keys(LAND_ADJACENCY)) {
     if (!kändaRegioner.has(region))
@@ -544,6 +612,10 @@ try {
     `Stadsbilder: ${CITIES.reduce((n, c) => n + mysterySpotCount(c.id), 0)} ` +
       `mystikbrickor totalt, ${Math.min(...CITIES.map((c) => mysterySpotCount(c.id)))}-` +
       `${Math.max(...CITIES.map((c) => mysterySpotCount(c.id)))} per stad`
+  );
+  console.log(
+    `Bilder: ${QUIZ_IMAGES.length} frågefoton, ` +
+      `${[...bildIdn].length} bildhänvisningar i frågorna`
   );
   console.log(`Frågor: ${total}`);
   console.log(

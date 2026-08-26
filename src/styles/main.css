@@ -5106,3 +5106,227 @@ body.sheet-oppen {
     }
   }
 }
+
+
+/* ====================================================================
+   BILD- OCH REGLAGEFRÅGOR
+   Alla bilder är riktiga fotografier från Wikimedia Commons. En fråga
+   om vad en marulk är ska visa en marulk, inte en teckning av en.
+   ==================================================================== */
+
+.quiz-bild {
+  margin: 0 0 14px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--paper-dim);
+  line-height: 0;
+}
+
+.quiz-bild img {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+}
+
+/* Fyra foton som svarsalternativ. */
+.options-bilder {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.option-bild {
+  padding: 0;
+  overflow: hidden;
+}
+
+.option-body-bild {
+  display: block;
+  position: relative;
+  line-height: 0;
+}
+
+.option-foto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* Bokstaven ligger i hörnet på fotot i stället för bredvid texten. */
+.option-body-bild .option-key {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  box-shadow: 0 2px 8px rgba(4, 16, 26, 0.55);
+}
+
+/* Namnet skrivs ut först när frågan är besvarad - dessförinnan är det
+   hela uppgiften att veta vilket foto som är vilket. */
+.option-facit {
+  display: block;
+  padding: 8px 10px;
+  line-height: 1.35;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+/* ------------------------------------------------------------ reglaget */
+
+.reglage {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--paper-dim);
+}
+
+.reglage-varde {
+  flex: 0 0 auto;
+  min-width: 5.5em;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 7vw, 2.3rem);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-align: center;
+}
+
+.reglage-bana {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.reglage-spann {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Liggande: skalan löper i läsriktningen, som en tidslinje. */
+.reglage-liggande {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.reglage-liggande .reglage-bana {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.reglage-liggande .reglage-input {
+  width: 100%;
+}
+
+.reglage-liggande .reglage-spann {
+  flex-direction: row-reverse;
+}
+
+/* Stående: skalan löper uppåt, som en höjd eller ett djup. */
+.reglage-staende {
+  justify-content: center;
+  gap: 24px;
+}
+
+.reglage-staende .reglage-bana {
+  flex: 0 0 auto;
+  height: 190px;
+}
+
+.reglage-staende .reglage-input {
+  /* writing-mode är det som numera vänder ett range-element på högkant;
+     `orient` behövs fortfarande för äldre Firefox och skadar inget. */
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 34px;
+  height: 100%;
+}
+
+.reglage-staende .reglage-spann {
+  flex-direction: column;
+  height: 100%;
+}
+
+.reglage-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: grab;
+}
+
+.reglage-input:active {
+  cursor: grabbing;
+}
+
+.reglage-input::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, var(--sea) 0%, var(--palm) 100%);
+  border-radius: 999px;
+  height: 10px;
+}
+
+.reglage-staende .reglage-input::-webkit-slider-runnable-track {
+  background: linear-gradient(180deg, var(--palm) 0%, var(--sea) 100%);
+  width: 10px;
+  height: 100%;
+}
+
+.reglage-input::-moz-range-track {
+  background: var(--sea);
+  border-radius: 999px;
+  height: 10px;
+}
+
+.reglage-input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  margin-top: -10px;
+  border-radius: 50%;
+  background: var(--sun);
+  border: 3px solid var(--paper);
+  box-shadow: 0 3px 10px rgba(4, 16, 26, 0.45);
+}
+
+.reglage-staende .reglage-input::-webkit-slider-thumb {
+  margin-top: 0;
+  margin-left: -10px;
+}
+
+.reglage-input::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--sun);
+  border: 3px solid var(--paper);
+}
+
+.reglage-input:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.reglage-ok {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+@media (min-width: 620px) {
+  .options-bilder {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .quiz-bild img {
+    max-height: 320px;
+  }
+}

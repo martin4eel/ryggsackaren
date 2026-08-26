@@ -165,6 +165,11 @@ export interface PreparedQuestion {
   options: string[];
   /** Index i options som är rätt */
   correctIndex: number;
+  /**
+   * Bilderna parallellt med `options`, för bildfrågor. Blandas ihop med
+   * alternativen så att bild och etikett aldrig kan glida isär.
+   */
+  images?: string[];
 }
 
 /** Väljer alternativ enligt svårighetsgrad och blandar dem. */
@@ -172,8 +177,39 @@ export function prepareQuestion(
   question: Question,
   difficulty: Difficulty
 ): PreparedQuestion {
+  /**
+   * En reglagefråga har inga alternativ att blanda. Svaret dras fram på en
+   * skala, och rättningen sker mot talet i `reglage` i stället för mot ett
+   * index.
+   */
+  if (question.reglage) {
+    return { question, options: [], correctIndex: 0 };
+  }
+
   const count = Math.min(optionCount(difficulty), question.a.length);
   const correct = question.a[0]!;
+
+  /**
+   * Bildfrågor blandas som par. Att blanda etiketterna för sig och bilderna
+   * för sig skulle ge fyra foton med fel namn under - och det märks först när
+   * spelaren svarat fel på något hen kunde.
+   */
+  if (question.bilder) {
+    const par = question.a.map((label, i) => ({
+      label,
+      bild: question.bilder![i] ?? '',
+    }));
+    const ratt = par[0]!;
+    const fel = shuffle(par.slice(1)).slice(0, count - 1);
+    const blandade = shuffle([ratt, ...fel]);
+    return {
+      question,
+      options: blandade.map((p) => p.label),
+      correctIndex: blandade.indexOf(ratt),
+      images: blandade.map((p) => p.bild),
+    };
+  }
+
   const distractors = shuffle(question.a.slice(1)).slice(0, count - 1);
   const options = shuffle([correct, ...distractors]);
   return {

@@ -187,13 +187,65 @@ export interface Souvenir {
   desc: string;
 }
 
+/**
+ * Reglagefråga: svaret är ett tal man drar sig fram till, inte ett alternativ
+ * man pekar på. "Vilket år föll Berlinmuren?" har inga fyra svar att välja
+ * mellan - man vet ungefär, och drar reglaget dit.
+ *
+ * `tolerans` är hur nära man måste komma. Ett årtal kräver ofta exakthet,
+ * medan höjden på ett berg får slinka igenom på hundra meter.
+ */
+export interface Reglage {
+  min: number;
+  max: number;
+  /** Steglängd: 1 för årtal, 10 för meter, 0.5 för grader. */
+  steg: number;
+  /** Rätt tal. */
+  svar: number;
+  /** Hur långt fel man får ligga och ändå ha rätt. */
+  tolerans: number;
+  /** Enhet efter talet, t.ex. "m" eller "°C". */
+  enhet?: string;
+  /**
+   * Talet är ett årtal. Då skrivs det utan tusentalsavgränsare - "1989", inte
+   * "1 989" - vilket är skillnaden mellan ett årtal och en summa.
+   */
+  artal?: boolean;
+  /**
+   * Liggande reglage i stället för stående. Stående passar höjd och djup,
+   * liggande passar årtal och avstånd - riktningen ska betyda något.
+   */
+  liggande?: boolean;
+  /** Etiketter i ändarna, när skalan behöver förklaras. */
+  lagst?: string;
+  hogst?: string;
+}
+
 export interface Question {
   /** Frågetext */
   q: string;
-  /** Svarsalternativ. Första alternativet är alltid det rätta. */
+  /**
+   * Svarsalternativ. Första alternativet är alltid det rätta.
+   *
+   * En reglagefråga har bara ett: det rätta svaret skrivet som det ska läsas,
+   * eftersom det inte finns några alternativ att välja bland.
+   */
   a: string[];
   /** Svårighet: 1 = lätt (Turist), 2 = svår (Globetrotter) */
   d: 1 | 2;
   /** Frivillig kuriosa som visas efter svaret */
   info?: string;
+  /**
+   * Bild som visas ovanför frågan. Id ur data/quizImages.ts, eller
+   * `stad:<stads-id>` för att återanvända ett stadsfoto som redan finns.
+   */
+  bild?: string;
+  /**
+   * Bildfråga: svaren är bilderna. Lika många som `a` och i samma ordning, så
+   * att blandningen håller ihop bild och rätt svar. Etiketterna i `a` används
+   * inte som knappar utan bara för att kunna säga vad det var efteråt.
+   */
+  bilder?: string[];
+  /** Reglagefråga i stället för svarsalternativ. */
+  reglage?: Reglage;
 }
