@@ -2049,6 +2049,59 @@ img.no-photo {
   color: rgba(29, 43, 52, 0.5);
 }
 
+/* Innehavarens namn: passets största text, som på fotosidan i ett riktigt. */
+.pdata-holder {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-bottom: 7px;
+  border-bottom: 1.5px solid rgba(29, 43, 52, 0.14);
+}
+
+.pdata-name {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+
+/* Startknappen innan namnet är ifyllt: synlig men tydligt inte redo. */
+.btn-waiting {
+  background: var(--paper-dim);
+  color: var(--ink-soft);
+  box-shadow: none;
+}
+
+/* Kort skakning när man försöker resa utan att ha skrivit sitt namn. */
+.input-nudge {
+  animation: input-nudge 0.32s ease;
+  border-color: var(--stamp);
+}
+
+@keyframes input-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  55% {
+    transform: translateX(4px);
+  }
+  80% {
+    transform: translateX(-2px);
+  }
+}
+
+.name-input {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
 .pdata-grid {
   display: grid;
   gap: 5px;

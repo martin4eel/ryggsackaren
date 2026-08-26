@@ -99,7 +99,11 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 
 ## Så spelas det
 
-1. **Välj svårighetsgrad.** Lägena delar mekanik, kartor och progression –
+1. **Vem är du, och var är du född?** Namnet trycks i passet och följer med i
+   resedagboken. Födelsestaden är där resan börjar, dit du ska ta dig tillbaka,
+   och dess valuta är den du räknar i. Varje stad visas med ett foto av sin
+   sevärdhet, som ett vykort högst upp på stadsskärmen.
+2. **Välj svårighetsgrad.** Lägena delar mekanik, kartor och progression –
    det är kraven som skiljer. Allt som skiljer dem ligger samlat i
    `src/game/difficulty.ts`.
 
@@ -115,9 +119,6 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 
    _Fråga en lokalbo_ är livlinan i frågorna: den stryker hälften av de
    felaktiga alternativen, men lämnar alltid minst två kvar.
-2. **Välj startstad.** Staden blir också ditt slutmål, och dess valuta är den
-   som alla belopp visas i under resan. Varje stad visas med ett foto av sin
-   sevärdhet, som ett vykort högst upp på stadsskärmen.
 3. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
@@ -209,7 +210,7 @@ _Legendarisk ryggsäckare_.
 
 ## Innehåll
 
-- 45 destinationer i 41 länder och alla åtta regioner, var och en med eget
+- 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
 - 77 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
 - 986 frågor uppdelade i två svårighetsgrader, varav 616 jobbfrågor
@@ -292,7 +293,7 @@ sorteringen att varje korg har egna föremål i `pool`, för träffmomentet att
 foto i `public/cities/`.
 
 Den kontrollerar också transportnätverket: att landregionernas grannskap är
-symmetriskt, att färjelinjerna pekar på städer som finns, och att **alla 1 980
+symmetriskt, att färjelinjerna pekar på städer som finns, och att **alla 2 162
 stadspar har minst ett resealternativ i båda svårighetsgraderna**. Det sista är
 det viktigaste – ett par utan rutt skulle låsa fast en spelare utan att något
 syns i gränssnittet.

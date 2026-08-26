@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v3';
+const CACHE = 'ryggsackaren-v4';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -37,6 +37,7 @@ const CITY_PHOTOS = [
   'kapstaden',
   'kathmandu',
   'kopenhamn',
+  'koping',
   'lissabon',
   'london',
   'malmo',
@@ -60,6 +61,7 @@ const CITY_PHOTOS = [
   'stockholm',
   'sydney',
   'tokyo',
+  'vasteras',
 ].map((id) => `./cities/${id}.jpg`);
 
 self.addEventListener('install', (event) => {

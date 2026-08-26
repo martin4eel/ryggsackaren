@@ -1,7 +1,7 @@
 import type { City } from './types';
 
 /**
- * 45 destinationer spridda över jordens kontinenter. Koordinater är
+ * 47 destinationer spridda över jordens kontinenter. Koordinater är
  * ungefärliga centrumpositioner, utc är normal tidszonsoffset och costIndex
  * styr priset på vandrarhem, mat och souvenirer.
  */
@@ -874,6 +874,44 @@ export const CITIES: City[] = [
     landmark: 'Flinders Street Station',
     jobs: ['fikabitrade', 'sparvagnsforare', 'klubbdj', 'livraddare', 'kaffeprovare', 'filmstatist'],
     souvenirs: ['kaffefilter', 'surfvax', 'korkhatt'],
+  },
+  {
+    id: 'vasteras',
+    name: 'Västerås',
+    country: 'Sverige',
+    region: 'norden',
+    currency: 'SEK',
+    lat: 59.61,
+    lon: 16.55,
+    utc: 1,
+    costIndex: 0.85,
+    landRegion: 'norden',
+    rail: true,
+    hub: false,
+    blurb:
+      'Mälarstad med domkyrka från 1200-talet och en industrihistoria som börjar med ASEA. Utanför staden reser sig Sveriges största gravhög från vikingatiden.',
+    landmark: 'Anundshög',
+    jobs: ['fikabitrade', 'pantvard', 'tagvard', 'museivard', 'cykelkurir', 'robottekniker'],
+    souvenirs: ['dalahast', 'vikingahjalm', 'sillburk'],
+  },
+  {
+    id: 'koping',
+    name: 'Köping',
+    country: 'Sverige',
+    region: 'norden',
+    currency: 'SEK',
+    lat: 59.51,
+    lon: 16.0,
+    utc: 1,
+    costIndex: 0.75,
+    landRegion: 'norden',
+    rail: true,
+    hub: false,
+    blurb:
+      'Gammal handelsplats innerst i Mälarens västligaste vik, med hamn och kanal. Här verkade apotekaren Carl Wilhelm Scheele, en av kemins stora namn.',
+    landmark: 'Köpings hamn',
+    jobs: ['fikabitrade', 'postsorterare', 'pantvard', 'hamnarbetare', 'farmarbetare'],
+    souvenirs: ['dalahast', 'sillburk', 'ullvantar'],
   },
 ];
 

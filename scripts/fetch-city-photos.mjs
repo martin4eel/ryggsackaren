@@ -77,6 +77,8 @@ const CITY_ARTICLES = {
   dakar: { article: 'Gorée' },
   addisabeba: { article: 'Meskel Square' },
   melbourne: { article: 'Flinders Street railway station' },
+  vasteras: { article: 'Anundshög' },
+  koping: { file: 'Köping 2013-08-23 image01.jpg' },
 };
 
 async function api(url) {

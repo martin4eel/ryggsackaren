@@ -41,6 +41,8 @@ export interface GameState {
   version: 2;
   screen: Screen;
   difficulty: Difficulty;
+  /** Resenärens namn, angivet vid start och tryckt i passet */
+  playerName: string;
   /** Startstaden, som också är slutmålet */
   homeCityId: string;
   /** Valutan alla belopp visas i */
@@ -114,12 +116,14 @@ const STORAGE_KEY = 'ryggsackaren.save.v1';
 export function createGame(
   homeCityId: string,
   homeCurrency: string,
-  difficulty: Difficulty
+  difficulty: Difficulty,
+  playerName: string
 ): GameState {
   return {
     version: 2,
     screen: 'stad',
     difficulty,
+    playerName,
     homeCityId,
     homeCurrency,
     currentCityId: homeCityId,
@@ -218,6 +222,8 @@ function migrate(
   state.seenIntro ??= true;
   state.lifelines ??= lifelinesFor(state.difficulty);
   state.cityStats ??= {};
+  // Resor som påbörjades innan namnet fanns får en neutral benämning.
+  state.playerName ||= 'Resenären';
   return state;
 }
 

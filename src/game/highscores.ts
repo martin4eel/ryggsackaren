@@ -24,6 +24,8 @@ export interface Highscore {
   /** Träffsäkerhet i procent */
   accuracy: number;
   homeCityName: string;
+  /** Vem som gjorde resan */
+  playerName: string;
   /** Staden med bäst respektive sämst facit, om underlaget räcker */
   bestCity?: { name: string; correct: number; total: number };
   worstCity?: { name: string; correct: number; total: number };

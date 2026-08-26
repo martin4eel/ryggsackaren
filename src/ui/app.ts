@@ -236,9 +236,10 @@ export class App {
   private scrollToTopNext = true;
   /** Element som ska ha tangentbordsfokus när ombyggnaden är klar. */
   private focusAfterRender: HTMLElement | null = null;
-  private startPick: { cityId: string; difficulty: Difficulty } = {
+  private startPick: { cityId: string; difficulty: Difficulty; name: string } = {
     cityId: 'stockholm',
     difficulty: 'turist',
+    name: '',
   };
   /** Stämplar som just delats ut och ska visas som en kvittens */
   private stampToast: Stamp | null = null;
@@ -614,6 +615,38 @@ export class App {
     }
     wrap.append(hero);
 
+    /**
+     * Namnet. Det trycks i passet och i den maskinläsbara raden, så det är
+     * det första man anger. Fältet ligger i sin egen panel för att inte
+     * drunkna bland kartan och stadslistan.
+     */
+    const namePanel = el('section', { class: 'panel' });
+    namePanel.append(
+      el('h2', {}, 'Vem är du?'),
+      el(
+        'p',
+        { class: 'muted' },
+        'Namnet trycks i ditt pass och följer med i resedagboken.'
+      )
+    );
+    const nameInput = el('input', {
+      class: 'search name-input',
+      type: 'text',
+      maxlength: '24',
+      placeholder: 'Ditt namn',
+      'aria-label': 'Ditt namn',
+      value: this.startPick.name,
+      autocomplete: 'off',
+    }) as HTMLInputElement;
+    nameInput.addEventListener('input', () => {
+      this.startPick.name = nameInput.value;
+      // Startknappen speglar om namnet är ifyllt, utan att bygga om sidan och
+      // slå ut fokus mitt i att man skriver.
+      paintStartButton();
+    });
+    namePanel.append(el('div', { class: 'row' }, nameInput));
+    wrap.append(namePanel);
+
     // Svårighetsgrad. Två stora kort med samma uppbyggnad, så att skillnaden
     // går att läsa rad för rad i stället för att gissas ur en textmassa.
     const diffPanel = el('section', { class: 'panel' });
@@ -663,11 +696,12 @@ export class App {
     const cityPanel = el('section', { class: 'panel' });
     const chosen = CITY_BY_ID[this.startPick.cityId]!;
     cityPanel.append(
-      el('h2', {}, 'Startstad'),
+      el('h2', {}, 'Var är du född?'),
       el(
         'p',
         { class: 'muted' },
-        'Staden du väljer blir också ditt slutmål, och dess valuta blir den du räknar i. ' +
+        'Din födelsestad står i passet, är där resan börjar och dit du ska ta dig ' +
+          'tillbaka. Dess valuta blir den du räknar i. ' +
           `Just nu: ${chosen.name}, ${chosen.country} (${
             CURRENCIES[chosen.currency]?.name ?? chosen.currency
           }).`
@@ -740,26 +774,54 @@ export class App {
     wrap.append(cityPanel);
 
     const actions = el('div', { class: 'panel actions-panel' });
-    actions.append(
-      button(
-        `Res iväg från ${chosen.name}`,
-        () => {
-          const city = CITY_BY_ID[this.startPick.cityId]!;
-          this.state = createGame(
-            city.id,
-            city.currency,
-            this.startPick.difficulty
-          );
-          saveGame(this.state);
-          this.notify(
-            `Resan börjar i ${city.name}. Besök minst ${MIN_CITIES_TO_FINISH} städer innan du kommer hem.`
-          );
-          this.scrollToTopNext = true;
-          this.render();
-        },
-        { class: 'btn btn-primary btn-big' }
-      )
+    const startBtn = button(
+      '',
+      () => {
+        const name = this.startPick.name.trim();
+        if (!name) {
+          /**
+           * Ingen notis här: notify() ritar inte om av sig själv, och ett
+           * render() skulle byta ut fältet och slå ut fokus vi just satt.
+           * Fokus plus en kort skakning säger samma sak, direkt vid fältet
+           * där svaret ska skrivas.
+           */
+          nameInput.focus();
+          nameInput.classList.remove('input-nudge');
+          void nameInput.offsetWidth;
+          nameInput.classList.add('input-nudge');
+          return;
+        }
+        const city = CITY_BY_ID[this.startPick.cityId]!;
+        this.state = createGame(
+          city.id,
+          city.currency,
+          this.startPick.difficulty,
+          name
+        );
+        saveGame(this.state);
+        this.notify(
+          `${name}, resan börjar i ${city.name}. Besök minst ${MIN_CITIES_TO_FINISH} städer innan du kommer hem.`
+        );
+        this.scrollToTopNext = true;
+        this.render();
+      },
+      { class: 'btn btn-primary btn-big' }
     );
+    const paintStartButton = () => {
+      const ready = this.startPick.name.trim().length > 0;
+      startBtn.textContent = ready
+        ? `Res iväg från ${chosen.name}`
+        : 'Skriv ditt namn först';
+      startBtn.classList.toggle('btn-waiting', !ready);
+      /**
+       * Knappen är avsiktligt inte disabled. En avstängd knapp går varken
+       * att fokusera eller trycka på, och säger aldrig varför. Den här
+       * säger vad som saknas i sin egen etikett, och ett tryck flyttar
+       * fokus till namnfältet.
+       */
+    };
+    paintStartButton();
+    actions.append(startBtn);
     wrap.append(actions);
 
     const journal = this.renderJournal();
@@ -895,7 +957,8 @@ export class App {
           el(
             'span',
             { class: 'journal-meta' },
-            `${DIFFICULTY_INFO[h.difficulty].name} · ${h.cities} städer på ${h.days} dagar · ` +
+            `${h.playerName ? `${h.playerName} · ` : ''}` +
+              `${DIFFICULTY_INFO[h.difficulty].name} · ${h.cities} städer på ${h.days} dagar · ` +
               `${h.accuracy}% rätt · ${h.stamps} stämplar · ` +
               `${h.outcome === 'vinst' ? `hem till ${h.homeCityName}` : 'pank på vägen'} · ${date}`
           ),
@@ -2650,9 +2713,17 @@ export class App {
     );
     page.append(emblem);
 
+    // Innehavaren, i passets största text.
+    page.append(
+      el('div', { class: 'pdata-holder' },
+        el('span', { class: 'pdata-label' }, 'Innehavare'),
+        el('span', { class: 'pdata-name' }, s.playerName)
+      )
+    );
+
     const grid = el('div', { class: 'pdata-grid' });
     grid.append(
-      rad('Hemstad', home ? `${home.name}, ${home.country}` : '—'),
+      rad('Född i', home ? `${home.name}, ${home.country}` : '—'),
       rad('Resenärstyp', DIFFICULTY_INFO[s.difficulty].name),
       rad('Dag på resan', String(s.days)),
       rad('Städer', `${new Set(s.visited).size} av ${CITIES.length}`),
@@ -2693,7 +2764,7 @@ export class App {
      */
     page.append(
       el('div', { class: 'pdata-mrz' },
-        el('span', {}, mrzLine1(home?.name ?? '')),
+        el('span', {}, mrzLine1(s.playerName, home?.name ?? '')),
         el(
           'span',
           {},
@@ -2843,6 +2914,7 @@ export class App {
       stamps: s.stamps.length,
       accuracy: answered ? Math.round((s.correct / answered) * 100) : 0,
       homeCityName: CITY_BY_ID[s.homeCityId]?.name ?? '?',
+      playerName: s.playerName,
       bestCity: knowledge.best,
       worstCity: knowledge.worst,
     });
@@ -2972,9 +3044,9 @@ function mrzText(input: string, length: number): string {
   return ascii.slice(0, length).padEnd(length, '<');
 }
 
-/** Rad 1: vem passet tillhör på den här resan. */
-function mrzLine1(homeCity: string): string {
-  return `P<SWERYGGSACKARE<<${mrzText(homeCity, 26)}`;
+/** Rad 1: vem passet tillhör och varifrån hen kommer. */
+function mrzLine1(name: string, homeCity: string): string {
+  return `P<SWE${mrzText(name, 20)}<<${mrzText(homeCity, 14)}`;
 }
 
 /** Rad 2: det inskrivna rekordet - poäng, läge och varifrån resan gick. */
