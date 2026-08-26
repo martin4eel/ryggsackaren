@@ -1,9 +1,13 @@
 import { CITIES, CITY_BY_ID } from '../data/cities';
 import { CURRENCIES, formatMoney } from '../data/currencies';
+import { pickTravelEvent, type TravelEvent } from '../data/events';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City, Job, Souvenir } from '../data/types';
 import {
+  COMBO_STEPS,
   MIN_CITIES_TO_FINISH,
+  STAMPS,
+  STAMP_BY_ID,
   backpackHomeValue,
   canFinish,
   canTakeJob,
@@ -15,9 +19,13 @@ import {
   finalScore,
   jobQuestions,
   jobRequirementText,
+  comboMultiplier,
   loanAmount,
+  newStamps,
   pityBonus,
+  rankTitle,
   souvenirPrice,
+  speedBonus,
   travelOptions,
   wagePerCorrect,
   type PreparedQuestion,
@@ -32,7 +40,7 @@ import {
   type Difficulty,
   type GameState,
 } from '../game/state';
-import { isMuted, playSound, toggleMuted } from './audio';
+import { cycleVolume, playCombo, playSound, volumeLabel, volumeLevel } from './audio';
 import { button, clear, el } from './dom';
 import { icon, type IconName } from './icons';
 import {
@@ -40,6 +48,7 @@ import {
   stopAllMinigames,
   type MinigameResult,
 } from './minigames';
+import type { Stamp } from '../data/stamps';
 import { forgetMapView, renderMapFrame } from './map';
 
 interface QuizSession {
@@ -51,7 +60,21 @@ interface QuizSession {
   earnings: number;
   job?: Job;
   /** Svar som väntar på att bekräftas */
-  answered?: { picked: number; wasCorrect: number };
+  answered?: {
+    picked: number;
+    /** Utbetalning för det här svaret, 0 vid fel */
+    payout: number;
+    /** Del av utbetalningen som kom av svarsserien */
+    combo: number;
+    /** Del av utbetalningen som kom av att svaret gick fort */
+    speed: number;
+  };
+  /** När den nuvarande frågan visades, för snabbhetsbonusen */
+  askedAt: number;
+  /** Obruten svit av rätta svar inom det här passet */
+  streak: number;
+  /** Längsta sviten under passet */
+  bestStreak: number;
   /** Utfall per arbetsdag, används till stämpelkortet */
   dayResults: boolean[];
   /**
@@ -120,30 +143,46 @@ function photoImg(city: City, cls: string, hideParent?: HTMLElement): HTMLImageE
   return img;
 }
 
-/** Ljudknappen med högtalarikon – speglas mot sparat ljudläge. */
+const VOLUME_ICONS = ['ljud-av', 'ljud-halv', 'ljud-pa'] as const;
+
+/**
+ * Högtalarknappen stegar mellan av, dämpat och fullt ljud. Ikonen byts på
+ * plats i stället för att hela skärmen byggs om, så att knappen ligger kvar
+ * under fingret och sidans rullning inte störs.
+ */
 function audioButton(cls: string): HTMLButtonElement {
-  const muted = isMuted();
+  const paint = (b: HTMLButtonElement) => {
+    clear(b);
+    b.append(icon(VOLUME_ICONS[volumeLevel()]));
+    const label = `${volumeLabel()} – tryck för att byta`;
+    b.setAttribute('aria-label', label);
+    b.setAttribute('title', label);
+  };
   const b = button(
-    icon(muted ? 'ljud-av' : 'ljud-pa'),
+    '',
     () => {
-      toggleMuted();
-      // Byt ikon utan att bygga om hela skärmen – knappen ligger kvar under
-      // fingret och sidans scrollning störs inte.
-      const nowMuted = isMuted();
-      clear(b);
-      b.append(icon(nowMuted ? 'ljud-av' : 'ljud-pa'));
-      const label = nowMuted ? 'Sätt på ljudet' : 'Stäng av ljudet';
-      b.setAttribute('aria-label', label);
-      b.setAttribute('title', label);
+      cycleVolume();
+      paint(b);
+      // Kvittera det nya läget hörbart, så att man vet vad man valt.
+      playSound('valj');
     },
-    {
-      class: cls,
-      'aria-label': muted ? 'Sätt på ljudet' : 'Stäng av ljudet',
-      title: muted ? 'Sätt på ljudet' : 'Stäng av ljudet',
-    }
+    { class: cls, 'data-sound': 'av' }
   );
+  paint(b);
   return b;
 }
+
+/** Regionnamn som visas i passet och på slutskärmen. */
+const REGION_LABELS: Record<string, string> = {
+  norden: 'Norden',
+  europa: 'Europa',
+  nordamerika: 'Nordamerika',
+  latinamerika: 'Latinamerika',
+  afrika: 'Afrika',
+  mellanostern: 'Mellanöstern',
+  asien: 'Asien',
+  oceanien: 'Oceanien',
+};
 
 export class App {
   private root: HTMLElement;
@@ -167,6 +206,11 @@ export class App {
     cityId: 'stockholm',
     difficulty: 'turist',
   };
+  /** Stämplar som just delats ut och ska visas som en kvittens */
+  private stampToast: Stamp | null = null;
+  private stampTimer: number | null = null;
+  /** Sökfältet på startskärmens stadslista */
+  private cityFilter = '';
 
   constructor(root: HTMLElement) {
     this.root = root;
@@ -181,7 +225,60 @@ export class App {
         saved.screen = 'stad';
       }
     }
+    this.bindKeyboard();
     this.render();
+  }
+
+  /**
+   * Tangentbordsstyrning. Frågorna går att besvara med 1-4 eller A-D och
+   * kvitteras med Enter, så att ett helt skift kan spelas utan att flytta
+   * handen. Escape backar till staden. Genvägarna stängs av så fort fokus
+   * ligger i ett textfält eller en rullgardin.
+   */
+  private bindKeyboard(): void {
+    window.addEventListener('keydown', (event) => {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      const tag = target?.tagName;
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+      const s = this.state;
+      if (!s || this.confirmRestart) return;
+
+      const quiz = this.quiz;
+      const inQuestions =
+        quiz && quiz.phase === 'fragor' &&
+        (s.screen === 'jobb' || s.screen === 'turistbyra');
+
+      if (inQuestions && !quiz.answered) {
+        const current = quiz.questions[quiz.index];
+        if (!current) return;
+        const key = event.key.toLowerCase();
+        // 1-4 och a-d pekar på samma alternativ, i visningsordning.
+        const digit = '1234'.indexOf(key);
+        const letter = 'abcd'.indexOf(key);
+        const pick = digit >= 0 ? digit : letter;
+        if (pick >= 0 && pick < current.options.length) {
+          event.preventDefault();
+          playSound('klick');
+          this.answerQuestion(pick);
+        }
+        return;
+      }
+
+      if (inQuestions && quiz.answered && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault();
+        this.advanceQuiz();
+        return;
+      }
+
+      if (event.key === 'Escape' && s.screen !== 'stad' && s.screen !== 'slut') {
+        // Mitt i ett skift ligger pengarna på spel, så där backar vi inte.
+        if (s.screen === 'jobb') return;
+        event.preventDefault();
+        this.quiz = null;
+        this.go('stad');
+      }
+    });
   }
 
   // ---------------------------------------------------------------- hjälpare
@@ -222,9 +319,14 @@ export class App {
     this.travelTarget = null;
     this.mapHighlight = null;
     this.toast = null;
+    this.stampToast = null;
     if (this.toastTimer !== null) {
       window.clearTimeout(this.toastTimer);
       this.toastTimer = null;
+    }
+    if (this.stampTimer !== null) {
+      window.clearTimeout(this.stampTimer);
+      this.stampTimer = null;
     }
     // Kartornas zoomläge hör till den avslutade resan.
     forgetMapView('start');
@@ -239,7 +341,30 @@ export class App {
     this.toastTimer = window.setTimeout(() => {
       this.toast = null;
       this.render();
-    }, 3200);
+    }, 3600);
+  }
+
+  /**
+   * Kör efter varje förändring: håller reda på toppnoteringar, delar ut nya
+   * stämplar och sparar. Att samla det här på ett ställe gör att ingen ny
+   * händelse kan glömma bort passet.
+   */
+  private commit(): void {
+    const s = this.state;
+    if (!s) return;
+    s.peakMoney = Math.max(s.peakMoney, s.money);
+    const earned = newStamps(s);
+    saveGame(s);
+    if (earned.length > 0) {
+      // Bara den första visas som kvittens; resten finns i passet.
+      this.stampToast = earned[0]!;
+      playSound('stampla');
+      if (this.stampTimer !== null) window.clearTimeout(this.stampTimer);
+      this.stampTimer = window.setTimeout(() => {
+        this.stampToast = null;
+        this.render();
+      }, 4200);
+    }
   }
 
   /** Drar levnadskostnad för ett antal dagar och kontrollerar konkurs. */
@@ -254,11 +379,13 @@ export class App {
   private checkBroke(): boolean {
     const s = this.state!;
     if (s.money > -1500) return false;
+    // Även en resa som slutar i konkurs ska få med sig det den hunnit klara.
+    newStamps(s);
     s.outcome = 'pank';
     s.finalScore = finalScore(s);
     s.screen = 'slut';
     saveGame(s);
-    playSound('fel');
+    playSound('forlust');
     this.render();
     return true;
   }
@@ -322,6 +449,21 @@ export class App {
 
     if (this.toast) {
       shell.append(el('div', { class: 'toast', role: 'status' }, this.toast));
+    }
+    if (this.stampToast) {
+      shell.append(
+        el(
+          'div',
+          { class: 'stamp-toast', role: 'status' },
+          el('span', { class: 'stamp-mark' }, this.stampToast.glyph),
+          el(
+            'span',
+            { class: 'stamp-toast-text' },
+            el('strong', {}, `Ny stämpel: ${this.stampToast.name}`),
+            el('span', {}, this.stampToast.desc)
+          )
+        )
+      );
     }
     if (this.confirmRestart) {
       shell.append(this.renderRestartDialog());
@@ -467,17 +609,25 @@ export class App {
       )
     );
 
-    const select = el('select', { class: 'select', 'aria-label': 'Välj startstad' });
-    for (const c of [...CITIES].sort((a, b) => a.name.localeCompare(b.name, 'sv'))) {
-      const opt = el('option', { value: c.id }, `${c.name}, ${c.country}`);
-      if (c.id === this.startPick.cityId) opt.selected = true;
-      select.append(opt);
-    }
-    select.addEventListener('change', () => {
-      this.startPick.cityId = select.value;
-      this.render();
+    /**
+     * Med fyrtiofem destinationer blir en rullgardin oöverskådlig. I stället
+     * söker man fritt på stad eller land, och träffarna visas grupperade per
+     * region så att man ser var i världen de ligger.
+     */
+    const search = el('input', {
+      class: 'search',
+      type: 'search',
+      placeholder: 'Sök stad eller land',
+      'aria-label': 'Sök startstad',
+      value: this.cityFilter,
+    }) as HTMLInputElement;
+    search.addEventListener('input', () => {
+      this.cityFilter = search.value;
+      this.renderStartCityList(list);
     });
-    cityPanel.append(el('div', { class: 'row' }, select));
+    const list = el('div', { class: 'city-picker' });
+    this.renderStartCityList(list);
+    cityPanel.append(el('div', { class: 'row' }, search), list);
     wrap.append(cityPanel);
 
     const actions = el('div', { class: 'panel actions-panel' });
@@ -513,6 +663,54 @@ export class App {
     return wrap;
   }
 
+  /**
+   * Ritar om träfflistan på startskärmen utan att bygga om hela sidan, så att
+   * texten man skriver i sökrutan inte tappar fokus mellan tangenttryckningar.
+   */
+  private renderStartCityList(host: HTMLElement): void {
+    clear(host);
+    const needle = this.cityFilter.trim().toLowerCase();
+    const matches = CITIES.filter(
+      (c) =>
+        needle === '' ||
+        c.name.toLowerCase().includes(needle) ||
+        c.country.toLowerCase().includes(needle)
+    );
+
+    if (matches.length === 0) {
+      host.append(el('p', { class: 'muted' }, 'Ingen stad matchar sökningen.'));
+      return;
+    }
+
+    const order = Object.keys(REGION_LABELS);
+    for (const region of order) {
+      const inRegion = matches
+        .filter((c) => c.region === region)
+        .sort((a, b) => a.name.localeCompare(b.name, 'sv'));
+      if (inRegion.length === 0) continue;
+      host.append(el('h3', { class: 'city-group' }, REGION_LABELS[region] ?? region));
+      const row = el('div', { class: 'city-chips' });
+      for (const c of inRegion) {
+        const on = c.id === this.startPick.cityId;
+        row.append(
+          button(
+            el('span', { class: 'chip-body' },
+              el('span', { class: 'chip-name' }, c.name),
+              el('span', { class: 'chip-country' }, c.country)
+            ),
+            () => {
+              this.startPick.cityId = c.id;
+              playSound('valj');
+              this.render();
+            },
+            { class: `chip ${on ? 'chip-on' : ''}`, 'data-sound': 'av' }
+          )
+        );
+      }
+      host.append(row);
+    }
+  }
+
   // -------------------------------------------------------------------- HUD
 
   private renderHud(): HTMLElement {
@@ -530,7 +728,8 @@ export class App {
     stats.append(
       stat('Kassa', this.money(s.money), s.money < 0 ? 'bad' : undefined),
       stat('Dag', String(s.days)),
-      stat('Städer', `${new Set(s.visited).size}`),
+      stat('Städer', `${new Set(s.visited).size}/${CITIES.length}`),
+      stat('Stämplar', `${s.stamps.length}/${STAMPS.length}`),
       stat('Skuld', this.money(s.debt), s.debt > 0 ? 'warn' : undefined)
     );
 
@@ -633,6 +832,70 @@ export class App {
     );
     wrap.append(hero);
 
+    // Resehändelsen från senaste sträckan visas överst, en gång, och
+    // kvitteras bort så att den inte ligger kvar när man kommer tillbaka.
+    if (s.lastEvent) {
+      const event = s.lastEvent;
+      const card = el('section', { class: `panel event event-${event.tone}` });
+      const parts: string[] = [];
+      if (event.money !== 0)
+        parts.push(
+          `${event.money > 0 ? '+' : '−'}${this.money(Math.abs(event.money))}`
+        );
+      if (event.days !== 0)
+        parts.push(`${event.days} ${event.days === 1 ? 'extra dag' : 'extra dagar'}`);
+      card.append(
+        el('p', { class: 'kicker' }, 'På vägen hit'),
+        el('h2', {}, event.title),
+        el('p', { class: 'lede' }, event.text),
+        parts.length > 0
+          ? el('p', { class: 'event-effect' }, parts.join(' · '))
+          : el('p', { class: 'muted' }, 'Ingen skada skedd.'),
+        button(
+          'Okej',
+          () => {
+            s.lastEvent = undefined;
+            this.commit();
+            this.render();
+          },
+          { class: 'btn btn-ghost' }
+        )
+      );
+      wrap.append(card);
+    }
+
+    // Snabbguiden visas en enda gång, i startstaden, innan första resan.
+    if (!s.seenIntro) {
+      const intro = el('section', { class: 'panel intro' });
+      intro.append(
+        el('p', { class: 'kicker' }, 'Så här går det till'),
+        el('h2', {}, 'Din första dag'),
+        el(
+          'ol',
+          { class: 'intro-steps' },
+          el('li', {}, 'Gå till turistbyrån. Provet ger ett stadsbetyg som öppnar bättre jobb.'),
+          el('li', {}, 'Ta ett skift ur tidningen. Varje rätt svar är en dagslön, och sista passet är ett arkadmoment.'),
+          el('li', {}, 'Köp en souvenir där den tillverkas och sälj den långt hemifrån.'),
+          el('li', {}, `Res vidare. Besök minst ${MIN_CITIES_TO_FINISH} städer och kom tillbaka hit för att avsluta resan.`)
+        ),
+        el(
+          'p',
+          { class: 'muted' },
+          'Boendet dras varje dag, så tid är också pengar. På tangentbordet svarar du med 1-4 eller A-D.'
+        ),
+        button(
+          'Jag är med',
+          () => {
+            s.seenIntro = true;
+            this.commit();
+            this.render();
+          },
+          { class: 'btn btn-primary' }
+        )
+      );
+      wrap.append(intro);
+    }
+
     const info = el('section', { class: 'panel city-panel' });
     info.append(
       el('p', { class: 'lede' }, city.blurb),
@@ -663,7 +926,10 @@ export class App {
         'tidning',
         'Tidningen',
         'Läs platsannonserna och ta ett arbetsskift.',
-        () => this.go('tidning')
+        () => {
+          playSound('sida');
+          this.go('tidning');
+        }
       ),
       menuButton(
         'souvenir',
@@ -673,8 +939,8 @@ export class App {
       ),
       menuButton(
         'ryggsack',
-        'Ryggsäcken',
-        `${s.backpack.length} souvenirer, certifikat och statistik.`,
+        'Ryggsäck och pass',
+        `${s.backpack.length} souvenirer, ${s.stamps.length} stämplar och all statistik.`,
         () => this.go('ryggsack')
       ),
       menuButton(
@@ -713,9 +979,13 @@ export class App {
           button(
             'Kom hem och räkna poäng',
             () => {
+              // Passet stämplas färdigt innan poängen räknas, annars går de
+              // stämplar som förtjänas av själva hemkomsten förlorade och
+              // räknas heller inte in i slutpoängen.
+              this.commit();
               s.outcome = 'vinst';
               s.finalScore = finalScore(s);
-              playSound('fanfar');
+              playSound('seger');
               this.go('slut');
             },
             { class: 'btn btn-primary' }
@@ -745,6 +1015,9 @@ export class App {
       earnings: 0,
       dayResults: [],
       phase: 'fragor',
+      askedAt: performance.now(),
+      streak: 0,
+      bestStreak: 0,
     };
     this.go('turistbyra');
   }
@@ -845,6 +1118,9 @@ export class App {
       job,
       dayResults: [],
       phase: 'fragor',
+      askedAt: performance.now(),
+      streak: 0,
+      bestStreak: 0,
     };
     this.go('jobb');
   }
@@ -916,6 +1192,30 @@ export class App {
           stat('Rätt', `${q.correct}/${q.index + (q.answered ? 1 : 0)}`)
         )
       );
+
+      // Sviten visas som en mätare med lönemultiplikatorn intill, så att det
+      // syns direkt vad en obruten rad rätta svar är värd.
+      const mult = comboMultiplier(q.streak);
+      const combo = el('div', {
+        class: `combo ${q.streak >= 2 ? 'combo-on' : ''}`,
+        'aria-label': `Svarsserie ${q.streak}`,
+      });
+      const pips = el('div', { class: 'combo-pips' });
+      for (let i = 0; i < COMBO_STEPS; i++) {
+        pips.append(
+          el('span', { class: `combo-pip ${i < q.streak ? 'combo-pip-on' : ''}` })
+        );
+      }
+      combo.append(
+        el('span', { class: 'combo-label' }, q.streak >= 2 ? `${q.streak} i rad` : 'Svarsserie'),
+        pips,
+        el(
+          'span',
+          { class: 'combo-mult' },
+          `×${mult.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}`
+        )
+      );
+      site.append(combo);
       wrap.append(site);
     }
 
@@ -958,7 +1258,11 @@ export class App {
           if (this.quiz?.answered) return;
           this.answerQuestion(i);
         },
-        { class: classes.join(' '), disabled: answered ? true : undefined }
+        {
+          class: classes.join(' '),
+          disabled: answered ? true : undefined,
+          title: `Tangent ${i + 1} eller ${String.fromCharCode(65 + i)}`,
+        }
       );
       options.append(b);
     });
@@ -969,20 +1273,34 @@ export class App {
       const feedback = el('div', {
         class: `feedback ${right ? 'feedback-right' : 'feedback-wrong'}`,
       });
+      const headline = right
+        ? q.streak >= 4
+          ? `Rätt igen! ${q.streak} i rad.`
+          : 'Rätt svar!'
+        : 'Fel svar.';
       feedback.append(
-        el('strong', {}, right ? 'Rätt svar!' : 'Fel svar.'),
+        el('strong', {}, headline),
         el(
           'span',
           {},
           right
             ? isJob
-              ? ` Dagen är avklarad och du tjänade ${this.money(answered.wasCorrect)}.`
+              ? ` Dagen är avklarad och du tjänade ${this.money(answered.payout)}.`
               : ' Ett steg närmare ett bra stadsbetyg.'
             : isJob
               ? ` Rätt var: ${current.options[current.correctIndex]}. Dagen gav ingen lön.`
               : ` Rätt var: ${current.options[current.correctIndex]}.`
         )
       );
+      // Bonusarna redovisas var för sig, annars ser lönen bara ut att hoppa.
+      if (right && isJob && (answered.combo > 0 || answered.speed > 0)) {
+        const bits: string[] = [];
+        if (answered.combo > 0)
+          bits.push(`svarsserie +${this.money(answered.combo)}`);
+        if (answered.speed > 0)
+          bits.push(`snabbt svar +${this.money(answered.speed)}`);
+        feedback.append(el('p', { class: 'feedback-bonus' }, bits.join(' · ')));
+      }
       if (current.question.info) {
         feedback.append(el('p', { class: 'info' }, current.question.info));
       }
@@ -1000,6 +1318,9 @@ export class App {
         { class: 'btn btn-primary btn-big' }
       );
       panel.append(next);
+      panel.append(
+        el('p', { class: 'keyhint' }, 'Tryck Enter för att gå vidare.')
+      );
       // Fokus följer med till knappen som ska tryckas, så att svaret kan
       // kvitteras med tangentbordet utan att leta sig tillbaka dit.
       this.focusAfterRender = next;
@@ -1008,8 +1329,14 @@ export class App {
     if (!isJob) {
       panel.append(
         el('p', { class: 'muted' },
-          `Rätt så här långt: ${q.correct} av ${q.index + (answered ? 1 : 0)}`
+          `Rätt så här långt: ${q.correct} av ${q.index + (answered ? 1 : 0)}` +
+            (q.streak >= 2 ? ` · ${q.streak} i rad` : '')
         )
+      );
+    }
+    if (!answered) {
+      panel.append(
+        el('p', { class: 'keyhint' }, 'Svara med 1-4 eller A-D, eller tryck på alternativet.')
       );
     }
     wrap.append(panel);
@@ -1068,7 +1395,11 @@ export class App {
     if (q.phase === 'spelar') {
       const panel = el('section', { class: 'panel' });
       panel.append(
-        renderMinigame(game, (result) => this.finishMinigame(result))
+        renderMinigame(
+          game,
+          { money: (amount) => this.money(amount) },
+          (result) => this.finishMinigame(result)
+        )
       );
       wrap.append(panel);
       return wrap;
@@ -1077,8 +1408,9 @@ export class App {
     // Klart: visa resultatet och låt spelaren kvittera ut lönen.
     const result = q.minigameResult;
     const panel = el('section', { class: 'panel' });
-    const grade =
-      (result?.score ?? 0) >= 0.8
+    const grade = result?.perfect
+      ? 'Felfritt!'
+      : (result?.score ?? 0) >= 0.8
         ? 'Snyggt jobbat!'
         : (result?.score ?? 0) >= 0.5
           ? 'Godkänt.'
@@ -1104,26 +1436,39 @@ export class App {
     const q = this.quiz!;
     const current = q.questions[q.index]!;
     const right = picked === current.correctIndex;
+    const elapsed = performance.now() - q.askedAt;
     let payout = 0;
+    let comboPart = 0;
+    let speedPart = 0;
 
     if (right) {
       q.correct += 1;
       s.correct += 1;
+      q.streak += 1;
+      q.bestStreak = Math.max(q.bestStreak, q.streak);
+      s.bestStreak = Math.max(s.bestStreak, q.streak);
       if (q.kind === 'jobb' && q.job) {
         const wage = wagePerCorrect(q.job, this.city, s.difficulty);
-        payout = wage + pityBonus(s.wrongStreak, wage);
+        const base = wage + pityBonus(s.wrongStreak, wage);
+        // Sviten multiplicerar grundlönen, snabbheten läggs på ovanpå.
+        const withCombo = Math.round(base * comboMultiplier(q.streak));
+        comboPart = withCombo - base;
+        speedPart = speedBonus(elapsed, wage);
+        payout = withCombo + speedPart;
         q.earnings += payout;
       }
       s.wrongStreak = 0;
     } else {
       s.wrong += 1;
       s.wrongStreak += 1;
+      q.streak = 0;
     }
 
-    playSound(right ? 'ratt' : 'fel');
+    if (right && q.streak >= 3) playCombo(q.streak);
+    else playSound(right ? 'ratt' : 'fel');
     q.dayResults[q.index] = right;
-    q.answered = { picked, wasCorrect: payout };
-    saveGame(s);
+    q.answered = { picked, payout, combo: comboPart, speed: speedPart };
+    this.commit();
     this.render();
   }
 
@@ -1132,6 +1477,7 @@ export class App {
     q.answered = undefined;
     if (q.index + 1 < q.questions.length) {
       q.index += 1;
+      q.askedAt = performance.now();
       this.render();
       return;
     }
@@ -1157,14 +1503,19 @@ export class App {
     const q = this.quiz!;
     if (q.phase === 'klart') return;
     const job = q.job!;
-    // Bonusen motsvarar upp till tre dagslöner, efter hur bra momentet gick.
+    // Bonusen motsvarar upp till tre dagslöner, efter hur bra momentet gick,
+    // och ett felfritt moment ger ett halvt extra dagsverke ovanpå.
     const wage = wagePerCorrect(job, this.city, s.difficulty);
-    const bonus = Math.round(wage * 3 * result.score);
+    let bonus = Math.round(wage * 3 * result.score);
+    if (result.perfect) {
+      bonus += Math.round(wage * 0.5);
+      s.perfectMinigames += 1;
+    }
     q.minigameResult = result;
     q.bonus = bonus;
     q.earnings += bonus;
     q.phase = 'klart';
-    saveGame(s);
+    this.commit();
     this.render();
   }
 
@@ -1182,8 +1533,9 @@ export class App {
       // Ett provbesök kostar en dag.
       this.spendDays(1, city);
       this.quiz = null;
-      saveGame(s);
+      this.commit();
       if (this.checkBroke()) return;
+      playSound(score >= 85 ? 'fanfar' : 'stampla');
       this.notify(
         `Turistbyrån: ${q.correct}/${total} rätt, betyg ${score}. Bästa betyg i ${city.name}: ${p.rating}.`
       );
@@ -1195,6 +1547,8 @@ export class App {
     p.workedJobs.push(job.id);
     s.money += q.earnings;
     s.earned += q.earnings;
+    s.shiftsWorked += 1;
+    if (q.correct === total) s.perfectShifts += 1;
     this.spendDays(job.shiftLength, city);
 
     // Certifikat om du klarar minst 70 procent av skiftet. Arkadmomentet
@@ -1207,8 +1561,9 @@ export class App {
       s.certificates[job.category] = prev + 1;
       gotCert = true;
     }
+    const bestStreak = q.bestStreak;
     this.quiz = null;
-    saveGame(s);
+    this.commit();
     if (this.checkBroke()) return;
 
     playSound(gotCert ? 'fanfar' : 'kassa');
@@ -1217,6 +1572,7 @@ export class App {
       `Lön ${this.money(q.earnings)}.`,
       `${job.shiftLength} dagar gick åt.`,
     ];
+    if (bestStreak >= 4) parts.push(`Bästa svit: ${bestStreak} i rad.`);
     if ((q.bonus ?? 0) > 0)
       parts.push(`${job.minigame.title} gav ${this.money(q.bonus ?? 0)} i bonus.`);
     if (gotCert)
@@ -1268,31 +1624,81 @@ export class App {
     wrap.append(panel);
 
     const list = el('section', { class: 'panel' });
-    list.append(el('h2', {}, 'Destinationer'));
-    const sorted = CITIES.filter((c) => c.id !== s.currentCityId).sort(
-      (a, b) => distanceKm(this.city, a) - distanceKm(this.city, b)
+    list.append(
+      el('div', { class: 'panel-head' },
+        el('h2', {}, 'Destinationer'),
+        el('span', { class: 'tag' }, `${CITIES.length - 1} att välja på`)
+      ),
+      el(
+        'p',
+        { class: 'muted' },
+        'Sorterade efter avstånd härifrån. Städer du redan besökt är märkta, ' +
+          'och de du inte har råd att flyga till just nu står sist i varje rad.'
+      )
     );
+
+    const search = el('input', {
+      class: 'search',
+      type: 'search',
+      placeholder: 'Sök stad eller land',
+      'aria-label': 'Sök destination',
+      value: this.cityFilter,
+    }) as HTMLInputElement;
     const table = el('div', { class: 'dest-list' });
-    for (const c of sorted) {
-      const km = distanceKm(this.city, c);
-      const cheapest = travelOptions(this.city, c)[0]!;
-      const row = button(
-        el('span', { class: 'dest-row' },
-          el('span', { class: 'dest-name' }, `${c.name}`),
-          el('span', { class: 'dest-country' }, c.country),
-          el('span', { class: 'dest-km' }, `${km.toLocaleString('sv-SE')} km`),
-          el('span', { class: 'dest-price' }, `från ${this.money(cheapest.price)}`)
-        ),
-        () => {
-          this.travelTarget = c;
-          this.mapHighlight = c.id;
-          this.go('resa');
-        },
-        { class: `dest ${s.visited.includes(c.id) ? 'dest-visited' : ''}` }
-      );
-      table.append(row);
-    }
-    list.append(table);
+
+    const paint = () => {
+      clear(table);
+      const needle = this.cityFilter.trim().toLowerCase();
+      const sorted = CITIES.filter(
+        (c) =>
+          c.id !== s.currentCityId &&
+          (needle === '' ||
+            c.name.toLowerCase().includes(needle) ||
+            c.country.toLowerCase().includes(needle))
+      ).sort((a, b) => distanceKm(this.city, a) - distanceKm(this.city, b));
+
+      if (sorted.length === 0) {
+        table.append(el('p', { class: 'muted' }, 'Ingen destination matchar sökningen.'));
+        return;
+      }
+
+      for (const c of sorted) {
+        const km = distanceKm(this.city, c);
+        const cheapest = travelOptions(this.city, c)[0]!;
+        const affordable = s.money >= cheapest.price;
+        const visited = s.visited.includes(c.id);
+        const row = button(
+          el('span', { class: 'dest-row' },
+            el('span', { class: 'dest-name' }, c.name),
+            el('span', { class: 'dest-country' },
+              `${c.country}${visited ? ' · besökt' : ''}`),
+            el('span', { class: 'dest-km' }, `${km.toLocaleString('sv-SE')} km`),
+            el(
+              'span',
+              { class: `dest-price ${affordable ? '' : 'dest-price-out'}` },
+              `från ${this.money(cheapest.price)}`
+            )
+          ),
+          () => {
+            this.travelTarget = c;
+            this.mapHighlight = c.id;
+            this.go('resa');
+          },
+          {
+            class: `dest ${visited ? 'dest-visited' : ''} ${affordable ? '' : 'dest-poor'}`,
+            'data-sound': 'av',
+          }
+        );
+        table.append(row);
+      }
+    };
+
+    search.addEventListener('input', () => {
+      this.cityFilter = search.value;
+      paint();
+    });
+    paint();
+    list.append(el('div', { class: 'row' }, search), table);
     wrap.append(list);
     wrap.append(this.backRow('Tillbaka till staden', () => this.go('stad')));
     return wrap;
@@ -1321,9 +1727,10 @@ export class App {
       el(
         'p',
         { class: 'muted' },
-        `${km.toLocaleString('sv-SE')} km · ${tz} tidszoner · boende där ${this.money(
-          dailyCost(target, s.difficulty)
-        )} per dag`
+        `${km.toLocaleString('sv-SE')} km · ${Math.round(tz)} tidszoner · ` +
+          `${utcLabel(target.utc)} · boende där ${this.money(
+            dailyCost(target, s.difficulty)
+          )} per dag`
       )
     );
     wrap.append(panel);
@@ -1400,6 +1807,21 @@ export class App {
     const avgCity: City =
       from.costIndex >= target.costIndex ? target : from;
     this.spendDays(option.days, avgCity);
+
+    /**
+     * Ungefär var tredje resa händer något. Händelsen läggs i tillståndet i
+     * stället för att visas direkt, så att den överlever en omladdning och
+     * alltid kvitteras på stadsskärmen.
+     */
+    let event: TravelEvent | undefined;
+    if (Math.random() < 0.35) {
+      event = pickTravelEvent();
+      s.money += event.money;
+      if (event.money > 0) s.earned += event.money;
+      else s.spent += -event.money;
+      if (event.days > 0) this.spendDays(event.days, avgCity);
+    }
+    s.lastEvent = event;
     // Jobben i staden du lämnar blir sökbara igen nästa gång du kommer hit,
     // annars kan en återvändande resenär inte tjäna något alls.
     getProgress(s, from.id).workedJobs = [];
@@ -1407,13 +1829,13 @@ export class App {
     s.visited.push(target.id);
     this.travelTarget = null;
     this.mapHighlight = null;
-    saveGame(s);
+    this.commit();
     if (this.checkBroke()) return;
     playSound('resa');
+    window.setTimeout(() => playSound('ankomst'), 480);
     this.notify(
-      `Framme i ${target.name} efter ${option.days} dagar. Klockan står på UTC${
-        target.utc >= 0 ? '+' : ''
-      }${target.utc}.`
+      `Framme i ${target.name} efter ${option.days + (event?.days ?? 0)} dagar. ` +
+        `Klockan står på ${utcLabel(target.utc)}.`
     );
     this.go('stad');
   }
@@ -1442,21 +1864,38 @@ export class App {
       const price = souvenirPrice(souvenir, city, s.days, false);
       const cheap = souvenir.cheapIn.includes(city.region);
       const hot = souvenir.hotIn.includes(city.region);
+      // Prislappen jämförs med varans grundvärde, så att det syns på en gång
+      // om det här är ett fynd eller ett turistpris.
+      const ratio = price / souvenir.basePrice;
+      const trend =
+        ratio <= 0.8
+          ? { cls: 'trend-low', text: '▼ Fyndpris här' }
+          : ratio >= 1.25
+            ? { cls: 'trend-high', text: '▲ Dyrt här' }
+            : { cls: 'trend-mid', text: '● Normalpris' };
       const card = el('article', { class: 'item' });
       card.append(
         el('div', { class: 'item-head' },
           el('h3', {}, souvenir.name),
           el('span', { class: 'item-price' }, this.money(price))
         ),
+        el('p', { class: `trend ${trend.cls}` }, trend.text),
         el('p', {}, souvenir.desc),
         el(
           'p',
           { class: 'muted' },
           cheap
-            ? 'Tillverkas här - lågt pris.'
+            ? 'Tillverkas här – lägsta priset du kommer att se.'
             : hot
-              ? 'Eftertraktad här - dyrt att köpa, bra att sälja.'
+              ? 'Eftertraktad här – dyr att köpa, men lönsam att sälja.'
               : 'Normalt pris i den här delen av världen.'
+        ),
+        el(
+          'p',
+          { class: 'muted' },
+          `Säljs bäst i: ${souvenir.hotIn
+            .map((r) => REGION_LABELS[r] ?? r)
+            .join(', ')}.`
         )
       );
       const affordable = s.money >= price;
@@ -1528,8 +1967,8 @@ export class App {
       paid: price,
       boughtIn: s.currentCityId,
     });
-    saveGame(s);
-    playSound('kassa');
+    this.commit();
+    playSound('mynt');
     this.notify(`${souvenir.name} ligger i ryggsäcken.`);
     this.render();
   }
@@ -1543,8 +1982,9 @@ export class App {
     s.earned += price;
     const name = SOUVENIR_BY_ID[item.souvenirId]?.name ?? 'Souveniren';
     const profit = price - item.paid;
-    saveGame(s);
-    playSound('kassa');
+    s.bestTrade = Math.max(s.bestTrade, profit);
+    this.commit();
+    playSound(profit > 0 ? 'kassa' : 'mynt');
     this.notify(
       `${name} såld för ${this.money(price)} (${
         profit >= 0 ? '+' : '-'
@@ -1563,19 +2003,22 @@ export class App {
     const answered = s.correct + s.wrong;
     const accuracy = answered ? Math.round((s.correct / answered) * 100) : 0;
     head.append(
-      el('h1', { class: 'title' }, 'Ryggsäcken'),
+      el('h1', { class: 'title' }, 'Ryggsäck och pass'),
       el('div', { class: 'stat-grid' },
         stat('Souvenirer', `${s.backpack.length}/12`),
         stat('Värde hemma', this.money(backpackHomeValue(s))),
         stat('Rätta svar', `${s.correct}`),
         stat('Felsvar', `${s.wrong}`),
         stat('Träffsäkerhet', `${accuracy}%`),
+        stat('Längsta svit', `${s.bestStreak}`),
+        stat('Arbetsskift', `${s.shiftsWorked}`),
         stat('Flugna km', s.distance.toLocaleString('sv-SE')),
-        stat('Tidszoner', `${s.timezonesCrossed}`),
+        stat('Tidszoner', `${Math.round(s.timezonesCrossed)}`),
         stat('Samtal hem', `${s.callsHome}`)
       )
     );
     wrap.append(head);
+    wrap.append(this.renderStampPanel());
 
     const certs = el('section', { class: 'panel' });
     certs.append(el('h2', {}, 'Certifikat'));
@@ -1644,6 +2087,58 @@ export class App {
     return wrap;
   }
 
+  /**
+   * Passet: alla stämplar i spelet, de tagna först och de återstående kvar
+   * som synliga mål. Att visa även dem som inte tagits är själva poängen -
+   * de fungerar som en resplan man kan välja att följa.
+   */
+  private renderStampPanel(): HTMLElement {
+    const s = this.state!;
+    const panel = el('section', { class: 'panel' });
+    panel.append(
+      el('div', { class: 'panel-head' },
+        el('h2', {}, 'Stämplar i passet'),
+        el('span', { class: 'tag' }, `${s.stamps.length} av ${STAMPS.length}`)
+      )
+    );
+
+    const regions = new Set(
+      s.visited.map((id) => CITY_BY_ID[id]?.region).filter(Boolean)
+    );
+    panel.append(
+      el(
+        'p',
+        { class: 'muted' },
+        regions.size > 0
+          ? `Besökta regioner: ${[...regions]
+              .map((r) => REGION_LABELS[r as string] ?? r)
+              .join(', ')}.`
+          : 'Inga regioner besökta än.'
+      )
+    );
+
+    const grid = el('div', { class: 'stamp-grid' });
+    // De tagna först, i den ordning de förtjänades.
+    const taken = s.stamps
+      .map((id) => STAMP_BY_ID[id])
+      .filter((x): x is Stamp => Boolean(x));
+    const rest = STAMPS.filter((x) => !s.stamps.includes(x.id));
+    for (const stamp of [...taken, ...rest]) {
+      const got = s.stamps.includes(stamp.id);
+      grid.append(
+        el('div', { class: `stamp ${got ? 'stamp-on' : 'stamp-off'}` },
+          el('span', { class: 'stamp-mark' }, got ? stamp.glyph : '?'),
+          el('span', { class: 'stamp-text' },
+            el('span', { class: 'stamp-name' }, stamp.name),
+            el('span', { class: 'stamp-desc' }, stamp.desc)
+          )
+        )
+      );
+    }
+    panel.append(grid);
+    return panel;
+  }
+
   // -------------------------------------------------------------- telefonen
 
   private renderPhone(): HTMLElement {
@@ -1676,7 +2171,7 @@ export class App {
           s.money += amount;
           s.debt += amount;
           s.callsHome += 1;
-          saveGame(s);
+          this.commit();
           playSound('kassa');
           this.notify(
             `${this.money(amount)} insatt. "Och glöm inte att skicka vykort!"`
@@ -1694,8 +2189,12 @@ export class App {
           () => {
             s.money -= payment;
             s.debt -= payment;
-            saveGame(s);
-            this.notify('Skulden minskad. Pappa blir imponerad.');
+            this.commit();
+            this.notify(
+              s.debt === 0
+                ? 'Skulden är betald. Pappa blir tyst en lång stund.'
+                : 'Skulden minskad. Pappa blir imponerad.'
+            );
             this.go('stad');
           },
           { class: 'btn btn-ghost' }
@@ -1717,6 +2216,8 @@ export class App {
     const answered = s.correct + s.wrong;
     const accuracy = answered ? Math.round((s.correct / answered) * 100) : 0;
 
+    const score = s.finalScore ?? finalScore(s);
+    const rank = rankTitle(score);
     const panel = el('section', { class: 'panel hero' });
     panel.append(
       el('p', { class: 'kicker' }, won ? 'Resan är fullbordad' : 'Resan tog slut'),
@@ -1731,13 +2232,22 @@ export class App {
           : `Pengarna tog slut i ${this.city.name} efter ${s.days} dagar. Ambassaden skickar hem dig med nästa plan.`
       )
     );
+    if (won) {
+      panel.append(
+        el('div', { class: 'rank' },
+          el('span', { class: 'rank-kicker' }, 'Din titel'),
+          el('span', { class: 'rank-title' }, rank.title),
+          el('span', { class: 'rank-desc' }, rank.desc)
+        )
+      );
+    }
     wrap.append(panel);
 
     const scores = el('section', { class: 'panel' });
     scores.append(
       el('h2', {}, 'Slutresultat'),
       el('div', { class: 'stat-grid' },
-        stat('Poäng', (s.finalScore ?? finalScore(s)).toLocaleString('sv-SE')),
+        stat('Poäng', score.toLocaleString('sv-SE')),
         stat('Kassa', this.money(s.money)),
         stat('Skuld', this.money(s.debt)),
         stat('Ryggsäckens värde', this.money(bag)),
@@ -1749,7 +2259,9 @@ export class App {
           'Certifikat',
           `${Object.values(s.certificates).reduce((a, b) => a + (b ?? 0), 0)}`
         ),
-        stat('Tidszoner', `${s.timezonesCrossed}`)
+        stat('Stämplar', `${s.stamps.length}/${STAMPS.length}`),
+        stat('Längsta svit', `${s.bestStreak}`),
+        stat('Tidszoner', `${Math.round(s.timezonesCrossed)}`)
       ),
       el(
         'p',
@@ -1758,6 +2270,7 @@ export class App {
       )
     );
     wrap.append(scores);
+    wrap.append(this.renderStampPanel());
 
     const actions = el('section', { class: 'panel actions-panel' });
     actions.append(
@@ -1778,6 +2291,20 @@ export class App {
       button(label, onClick, { class: 'btn btn-ghost' })
     );
   }
+}
+
+/**
+ * Tidszoner som inte är hela timmar, som Nepals UTC+5:45, ska inte skrivas ut
+ * som decimaltal. Halva och kvartstimmar räknas därför om till minuter.
+ */
+function utcLabel(utc: number): string {
+  const sign = utc < 0 ? '−' : '+';
+  const abs = Math.abs(utc);
+  const hours = Math.floor(abs);
+  const minutes = Math.round((abs - hours) * 60);
+  return minutes === 0
+    ? `UTC${sign}${hours}`
+    : `UTC${sign}${hours}:${String(minutes).padStart(2, '0')}`;
 }
 
 function stat(label: string, value: string, tone?: string): HTMLElement {

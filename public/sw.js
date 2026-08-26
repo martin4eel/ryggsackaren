@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v2';
+const CACHE = 'ryggsackaren-v3';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -15,27 +15,48 @@ const CACHE = 'ryggsackaren-v2';
  * inte besökt än. Listan matchar städerna i src/data/cities.ts.
  */
 const CITY_PHOTOS = [
+  'addisabeba',
+  'amman',
   'amsterdam',
+  'aten',
   'auckland',
   'bangkok',
+  'barcelona',
+  'berlin',
+  'buenosaires',
   'cusco',
+  'dakar',
+  'dubai',
+  'dublin',
   'goteborg',
+  'hanoi',
+  'havanna',
+  'helsingfors',
   'istanbul',
   'kairo',
   'kapstaden',
+  'kathmandu',
+  'kopenhamn',
+  'lissabon',
   'london',
   'malmo',
   'marrakech',
+  'melbourne',
   'mexikocity',
   'moskva',
   'mumbai',
   'nairobi',
   'newyork',
+  'oslo',
   'paris',
   'peking',
+  'prag',
   'reykjavik',
   'rio',
   'rom',
+  'sanfrancisco',
+  'seoul',
+  'singapore',
   'stockholm',
   'sydney',
   'tokyo',

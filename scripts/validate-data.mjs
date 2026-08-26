@@ -113,12 +113,21 @@ try {
       );
   }
 
-  const MINIGAME_KINDS = new Set([
-    'sortering',
-    'instrument',
-    'sekvens',
-    'precision',
-  ]);
+  /**
+   * Varje arkadmoment behöver olika mycket data. `needed` är minsta antal
+   * poster i `items`; utöver det kontrolleras `pool` för sorteringen och
+   * `avoid` för träffmomentet, eftersom de spelen blir meningslösa utan.
+   */
+  const MINIGAME_KINDS = {
+    sortering: { needed: 3 },
+    instrument: { needed: 3 },
+    sekvens: { needed: 3 },
+    precision: { needed: 1 },
+    vaxel: { needed: 3 },
+    traffa: { needed: 2 },
+    balans: { needed: 1 },
+    takt: { needed: 2 },
+  };
 
   for (const job of JOBS) {
     // Varje jobb måste ha sin egen frågeuppsättning, aldrig delad med andra.
@@ -142,17 +151,47 @@ try {
     if (!mg) {
       problems.push(`jobb ${job.id} saknar minispel`);
     } else {
-      if (!MINIGAME_KINDS.has(mg.kind))
-        problems.push(`jobb ${job.id} har okänd minispelstyp ${mg.kind}`);
+      const spec = MINIGAME_KINDS[mg.kind];
+      if (!spec) problems.push(`jobb ${job.id} har okänd minispelstyp ${mg.kind}`);
       if (!mg.title?.trim()) problems.push(`jobb ${job.id}: minispel utan titel`);
       if (!mg.brief?.trim()) problems.push(`jobb ${job.id}: minispel utan instruktion`);
-      const needed = mg.kind === 'precision' ? 1 : 3;
+      const needed = spec?.needed ?? 3;
       if (!Array.isArray(mg.items) || mg.items.length < needed)
         problems.push(
           `jobb ${job.id}: minispelet ${mg.kind} behöver minst ${needed} poster, har ${mg.items?.length ?? 0}`
         );
       if (new Set(mg.items ?? []).size !== (mg.items ?? []).length)
         problems.push(`jobb ${job.id}: minispelet har dubbletter bland posterna`);
+
+      if (mg.kind === 'sortering') {
+        // Utan pool visas korgens eget namn som föremål och spelet blir
+        // meningslöst - det var precis felet i den första versionen.
+        if (!Array.isArray(mg.pool) || mg.pool.length !== (mg.items?.length ?? 0)) {
+          problems.push(
+            `jobb ${job.id}: sorteringen behöver en pool per korg (${mg.items?.length ?? 0} st)`
+          );
+        } else {
+          mg.pool.forEach((group, i) => {
+            if (!Array.isArray(group) || group.length < 3)
+              problems.push(
+                `jobb ${job.id}: korgen "${mg.items[i]}" har ${group?.length ?? 0} föremål, behöver 3`
+              );
+          });
+          const flat = mg.pool.flat();
+          if (new Set(flat).size !== flat.length)
+            problems.push(`jobb ${job.id}: samma föremål finns i flera korgar`);
+        }
+      }
+
+      if (mg.kind === 'traffa') {
+        if (!Array.isArray(mg.avoid) || mg.avoid.length < 2)
+          problems.push(
+            `jobb ${job.id}: träffmomentet behöver minst 2 poster i avoid, har ${mg.avoid?.length ?? 0}`
+          );
+        const overlap = (mg.avoid ?? []).filter((a) => (mg.items ?? []).includes(a));
+        if (overlap.length > 0)
+          problems.push(`jobb ${job.id}: ${overlap.join(', ')} finns både i items och avoid`);
+      }
     }
     if (!job.scene?.trim())
       problems.push(`jobb ${job.id} saknar miljöbeskrivning (scene)`);

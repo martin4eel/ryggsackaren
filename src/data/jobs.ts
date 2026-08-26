@@ -20,6 +20,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje sak till rätt korg innan vagnen rullar förbi.',
       items: ['Lakan', 'Handdukar', 'Örngott'],
+      pool: [
+        ['Dubbellakan', 'Påslakan', 'Underlakan', 'Bäddmadrasskydd', 'Enkellakan'],
+        ['Badlakan', 'Gästhandduk', 'Frottéhandduk', 'Badrumsmatta', 'Tvättlapp'],
+        ['Kuddvar med logga', 'Litet örngott', 'Nackkuddsvar', 'Örngott 50x60', 'Extra örngott'],
+      ],
     },
     scene:
       'Vagnen är fylld med rena lakan och sjutton rum väntar. Receptionen ringer om en gäst som glömt sin nyckel.',
@@ -75,6 +80,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje ingrediens till rätt wok innan den brinner.',
       items: ['Nudlar', 'Grönsaker', 'Räkor'],
+      pool: [
+        ['Risnudlar', 'Äggnudlar', 'Glasnudlar', 'Udon', 'Vetenudlar'],
+        ['Pak choi', 'Böngroddar', 'Vårlök', 'Morotsstrimlor', 'Paprikaskivor'],
+        ['Tigerräkor', 'Skalade räkor', 'Räkspett', 'Jätteräkor', 'Räkfärs'],
+      ],
     },
     scene:
       'Woken flammar över gaslågan och ångan står som en vägg. Beställningarna ropas ut på thai.',
@@ -88,12 +98,11 @@ export const JOBS: Job[] = [
     shiftLength: 5,
     ad: 'Kassa och kundservice dygnet runt. Du måste kunna räkna växel i huvudet.',
     minigame: {
-      kind: 'precision',
+      kind: 'vaxel',
       title: 'Räkna växeln',
       brief:
-        'Stoppa mätaren på rätt belopp åt kunden.',
-      items: ['Växel'],
-      unit: 'kronor',
+        'Slå ihop kundens varor, dra av sedeln och plocka fram rätt växel ur lådan.',
+      items: ['Onigiri', 'Iste', 'Tuggummi', 'Batterier', 'Paraply'],
     },
     scene:
       'Neonljuset surrar och kassan piper. Nattens kunder kommer i jämn ström.',
@@ -112,6 +121,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje container till rätt fartyg.',
       items: ['Kylgods', 'Torrgods', 'Farligt gods'],
+      pool: [
+        ['Fryst fisk', 'Kött i kylcontainer', 'Glasslast', 'Vaccin på is', 'Snittblommor'],
+        ['Rissäckar', 'Pappersrullar', 'Kaffesäckar', 'Bildelar', 'Textilbalar'],
+        ['Bensinfat', 'Klorgastub', 'Batterisyra', 'Fyrverkerier', 'Ammoniaktank'],
+      ],
     },
     scene:
       'Kranarna gnisslar och containrarna svävar in över kajen. Radion sprakar med lastordrar.',
@@ -162,12 +176,17 @@ export const JOBS: Job[] = [
     shiftLength: 6,
     ad: 'Fårklippning och stängselreparation. Working holiday-klassiker.',
     minigame: {
-      kind: 'precision',
-      title: 'Klipp fåret',
+      kind: 'traffa',
+      title: 'Driv in flocken',
       brief:
-        'Stoppa saxen innan du kommer för nära huden.',
-      items: ['Klippdjup'],
-      unit: 'millimeter',
+        'Plocka ut fåren som ska in i fållan. Låt hunden och lammen vara.',
+      items: [
+        'Oklippt tacka',
+        'Bagge med full päls',
+        'Får som vandrat utanför stängslet',
+        'Tacka märkt med blå fläck',
+      ],
+      avoid: ['Vallhunden', 'Nyfött lamm', 'Stängselstolpe', 'Vattentråg', 'Kängurun'],
     },
     scene:
       'Dammet yr i fårfållan och klippmaskinen surrar. Tusen får väntar på sin tur.',
@@ -181,11 +200,12 @@ export const JOBS: Job[] = [
     shiftLength: 5,
     ad: 'Snabba leveranser i innerstaden. Du måste kunna gatorna och reglerna.',
     minigame: {
-      kind: 'instrument',
-      title: 'Kör i trafiken',
+      kind: 'balans',
+      title: 'Genom myllret',
       brief:
-        'Tryck på rätt reglage när situationen kräver det.',
-      items: ['Ring i klockan', 'Bromsa', 'Teckna vänster', 'Teckna höger'],
+        'Väskan väger snett och kullerstenen är hal. Håll cykeln rak hela vägen.',
+      items: ['Kurirväskan'],
+      unit: 'graders lutning',
     },
     scene:
       'Regnet gör kullerstenen hal. Väskan är full av paket som skulle varit levererade i går.',
@@ -199,11 +219,12 @@ export const JOBS: Job[] = [
     shiftLength: 5,
     ad: 'Kör paket genom trånga gränder utan att repa lacken.',
     minigame: {
-      kind: 'instrument',
-      title: 'Manövrera vespan',
+      kind: 'balans',
+      title: 'Genom gränderna',
       brief:
-        'Tryck på rätt kontroll när ordern kommer.',
-      items: ['Gasa', 'Bromsa', 'Blinkers', 'Tuta'],
+        'Paketen sitter på pakethållaren och gränden lutar. Fånga upp lutningen i tid.',
+      items: ['Vespan'],
+      unit: 'graders lutning',
     },
     scene:
       'Vespan spinner mellan gränderna. En lastbil blockerar hela gatan framför dig.',
@@ -222,6 +243,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra fibrerna till rätt kvalitetsbunt.',
       items: ['Finull', 'Mellanull', 'Grovull'],
+      pool: [
+        ['Merinofäll', 'Lammull', 'Kashmirtott', 'Alpackafiber', 'Mjuk underull'],
+        ['Crossbredull', 'Höstklippt fårull', 'Blandtott', 'Korsningsull', 'Vinterfäll'],
+        ['Ryaull', 'Mattgarnsull', 'Tovull', 'Bogull', 'Svansull'],
+      ],
     },
     scene:
       'Kardmaskinerna dånar och luften är full av ulldamm. Garnet löper i tjocka strängar.',
@@ -235,12 +261,11 @@ export const JOBS: Job[] = [
     shiftLength: 6,
     ad: 'Pruta, charma och sälj. Provision på varje avslut.',
     minigame: {
-      kind: 'precision',
-      title: 'Pruta hem affären',
+      kind: 'vaxel',
+      title: 'Slut affären',
       brief:
-        'Stoppa mätaren på det pris kunden nätt och jämnt accepterar.',
-      items: ['Slutpris'],
-      unit: 'procent av utpris',
+        'Kunden köper flera saker på en gång och betalar med en stor sedel. Räkna rätt.',
+      items: ['Mässingslampa', 'Silkessjal', 'Tekanna', 'Kryddpåse', 'Amulett'],
     },
     scene:
       'Mattorna hänger i travar och doften av te ligger tät. En turist tittar nyfiket på en lampa.',
@@ -388,6 +413,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje resenär till rätt vagn.',
       items: ['Sittvagn', 'Sovvagn', 'Restaurangvagn'],
+      pool: [
+        ['Plats 42 vid fönster', 'Andraklassbiljett', 'Pendlarkort', 'Sittplats vid gången', 'Familjekupé'],
+        ['Bädd 3, övre', 'Liggvagnsbiljett', 'Kupé för två', 'Nattbiljett Berlin', 'Sovkupé ensam'],
+        ['Bordsbokning 19.00', 'Middagskupong', 'Frukostkupong', 'Bord vid fönstret', 'Kaffe och smörgås'],
+      ],
     },
     scene:
       'Vagnarna gungar genom natten. Gränskontrollen väntar om två timmar.',
@@ -443,6 +473,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje tallrik till rätt bord.',
       items: ['Förrätt', 'Varmrätt', 'Dessert'],
+      pool: [
+        ['Löksoppa', 'Gravad lax', 'Bruschetta', 'Sallad med chèvre', 'Räkcocktail'],
+        ['Fläskkarré med rotfrukter', 'Torsk med potatis', 'Svamprisotto', 'Biff i rödvinssås', 'Currygryta'],
+        ['Crème brûlée', 'Chokladfondant', 'Äppelpaj', 'Citronsorbet', 'Ostbricka'],
+      ],
     },
     scene:
       'Beställningarna hänger i rad och alla plattor är upptagna. Kökschefen ropar efter bord sju.',
@@ -480,6 +515,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje krydda till rätt säck.',
       items: ['Saffran', 'Kanel', 'Kummin'],
+      pool: [
+        ['Röda pistiller i glasrör', 'Krokusstånd', 'Trådar i kuvert', 'Ett gram i tenndosa', 'Pulver med djup färg'],
+        ['Rullade barkstänger', 'Cassiabark', 'Malen bark', 'Ceylonrulle', 'Bruten stång'],
+        ['Halvmånsformade frön', 'Rostade frön i påse', 'Malen spiskummin', 'Frön till brödet', 'Blandning till gryta'],
+      ],
     },
     scene:
       'Säckarna står öppna med saffran, kummin och kanel. Doften är överväldigande.',
@@ -517,6 +557,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje parti till rätt kvalitetsklass.',
       items: ['Toppkvalitet', 'Standard', 'Kasseras'],
+      pool: [
+        ['Jämn storlek, ingen defekt', 'Blank yta och tät doft', 'Handplockad topplott', 'Höglänt böna, hel', '88 poäng i koppen'],
+        ['Något ojämn rostning', 'Enstaka småbönor', 'Godkänd men platt doft', 'Liten färgskiftning', '79 poäng i koppen'],
+        ['Mögelfläck', 'Insektshål', 'Bränd böna', 'Sten i partiet', 'Sur, jäst doft'],
+      ],
     },
     scene:
       'Tolv skålar står uppradade för cupping. Skedarna ligger blankpolerade.',
@@ -554,6 +599,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje blomma till rätt bukett.',
       items: ['Tulpaner', 'Rosor', 'Solrosor'],
+      pool: [
+        ['Röd tulpan', 'Papegojtulpan', 'Vit tulpan', 'Fransad tulpan', 'Tulpan med lök kvar'],
+        ['Långstjälkad röd ros', 'Buskros', 'Gul te-ros', 'Rosenknopp', 'Ros med törnen'],
+        ['Stor solros', 'Solrosknopp', 'Miniatyrsolros', 'Solros med brett blad', 'Solros i kruka'],
+      ],
     },
     scene:
       'Hinkarna står fyllda med tulpaner i alla färger. Auktionen börjar om en timme.',
@@ -572,6 +622,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje verktyg till rätt låda.',
       items: ['Nycklar', 'Insex', 'Däckverktyg'],
+      pool: [
+        ['Skiftnyckel', 'Fast nyckel 15 mm', 'Pedalnyckel', 'Ekernyckel', 'Kedjepiska'],
+        ['Insex 4 mm', 'Insex 5 mm', 'Kulhuvudsinsex', 'T-handtag insex', 'Insexbits'],
+        ['Däckavtagare', 'Cykelpump', 'Lagningslapp', 'Ventiladapter', 'Slangkit'],
+      ],
     },
     scene:
       'Verkstaden luktar olja och gummi. Sex cyklar väntar på lagning före stängning.',
@@ -682,6 +737,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje art till rätt grupp.',
       items: ['Fågel', 'Säl', 'Växt'],
+      pool: [
+        ['Ejder', 'Havsörn', 'Tobisgrissla', 'Silltrut', 'Storskarv'],
+        ['Gråsäl på skär', 'Vikare', 'Knubbsäl', 'Sälunge', 'Sälspår i tången'],
+        ['Strandmalört', 'Blåstång', 'Enbuske', 'Havtorn', 'Strandråg'],
+      ],
     },
     scene:
       'Båten glider mellan kobbarna. Sälarna ligger och solar på hällarna.',
@@ -700,6 +760,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje spår till rätt djur.',
       items: ['Lejon', 'Elefant', 'Noshörning'],
+      pool: [
+        ['Rund tass utan klomärken', 'Rytande i gryningen', 'Fällt gnukadaver', 'Ljus manhårstuss', 'Spårpar vid vattenhålet'],
+        ['Fotavtryck stort som ett lock', 'Avbrutna grenar högt upp', 'Dynga full av bark', 'Lerbad vid floden', 'Trumpetande på avstånd'],
+        ['Tre tår i avtrycket', 'Dyngplats som gränsmarkering', 'Buske avbetad i rak kant', 'Hornrepor på trädstammen', 'Spår mot leran i skymningen'],
+      ],
     },
     scene:
       'Gräset står högt och solen går upp över savannen. Radion viskar om ett leopardspår.',
@@ -750,11 +815,23 @@ export const JOBS: Job[] = [
     shiftLength: 6,
     ad: 'Håll koll på strömmar och simmare hela dagen.',
     minigame: {
-      kind: 'instrument',
-      title: 'Rädda simmaren',
+      kind: 'traffa',
+      title: 'Håll koll på vattnet',
       brief:
-        'Tryck på rätt åtgärd i rätt ordning.',
-      items: ['Larma', 'Ta flythjälp', 'Simma ut', 'Starta HLR'],
+        'Plocka ut dem som är i trubbel. Låt de som simmar tryggt vara i fred.',
+      items: [
+        'Simmare i strömfåran',
+        'Vinkande arm bortom revlarna',
+        'Barn utan flytväst',
+        'Simmare som drivit förbi flaggan',
+      ],
+      avoid: [
+        'Surfare på brädan',
+        'Badgäst på grunt vatten',
+        'Boj i vattnet',
+        'Måsflock',
+        'Simmare innanför flaggorna',
+      ],
     },
     scene:
       'Stranden är full och vågorna höga. En simmare har hamnat utanför revlarna.',
@@ -898,10 +975,10 @@ export const JOBS: Job[] = [
     shiftLength: 6,
     ad: 'Håll takten hela paraden. Rytmkänsla och musikkunskap.',
     minigame: {
-      kind: 'sekvens',
+      kind: 'takt',
       title: 'Håll rytmen',
       brief:
-        'Slå trummorna i rätt ordning enligt rytmen.',
+        'Paraden går i en enda puls. Slå an när markören är mitt i fältet, inte före.',
       items: ['Surdo', 'Tamborim', 'Cuíca', 'Agogô'],
     },
     scene:
@@ -916,10 +993,10 @@ export const JOBS: Job[] = [
     shiftLength: 6,
     ad: 'Sittningar sena kvällar. Standards och historia ska sitta.',
     minigame: {
-      kind: 'sekvens',
-      title: 'Spela ackordföljden',
+      kind: 'takt',
+      title: 'Komma in på slaget',
       brief:
-        'Följ ackorden i rätt ordning genom chorusen.',
+        'Bandet swingar vidare oavsett vad du gör. Lägg dina insatser exakt på slaget.',
       items: ['Tonika', 'Subdominant', 'Dominant', 'Turnaround'],
     },
     scene:
@@ -952,11 +1029,11 @@ export const JOBS: Job[] = [
     shiftLength: 6,
     ad: 'Scenbyten mellan akterna. Repertoarkunskap krävs.',
     minigame: {
-      kind: 'sekvens',
-      title: 'Genomför scenbytet',
+      kind: 'takt',
+      title: 'Ropa in scenbytet',
       brief:
-        'Utför bytet i rätt ordning.',
-      items: ['Fond ner', 'Kulisser in', 'Ljus byte', 'Dansare in'],
+        'Fjorton sekunder mellan akterna. Varje moment ropas in på exakt rätt taktslag.',
+      items: ['Fond ner', 'Kulisser in', 'Ljusbyte', 'Dansare in'],
     },
     scene:
       'Orkestern stämmer i diket. Scenbytet ska ske på fjorton sekunder.',
@@ -1011,6 +1088,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje passagerare till rätt gate.',
       items: ['Inrikes', 'Utrikes', 'Transfer'],
+      pool: [
+        ['Boardingkort utan pass', 'Resenär till Umeå', 'Ingen passkontroll', 'Gate 12, samma terminal', 'Väska märkt inrikes'],
+        ['Pass och visum i handen', 'Avgång till Bangkok', 'Tullen till höger', 'Gate 44 efter kontrollen', 'Taxfree på vägen'],
+        ['Anslutning om 40 minuter', 'Ska aldrig ut ur terminalen', 'Bagaget checkat hela vägen', 'Byter flygbolag i gate C', 'Väntar på nästa plan'],
+      ],
     },
     scene:
       'Transferhallen är ett hav av rullväskor. Tre plan har landat samtidigt.',
@@ -1029,6 +1111,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje patient till rätt prioritet.',
       items: ['Akut', 'Brådskande', 'Kan vänta'],
+      pool: [
+        ['Andningsstopp', 'Kraftig blödning', 'Bröstsmärta och kallsvett', 'Medvetslös vid ankomst', 'Öppen fraktur'],
+        ['Hög feber och stel nacke', 'Djup skärskada', 'Bruten handled', 'Svår buksmärta', 'Brännskada på handen'],
+        ['Stukad fot', 'Fästingbett', 'Halsont sedan i går', 'Utslag på armen', 'Behöver nytt recept'],
+      ],
     },
     scene:
       'Akuten är full och triagebrickan blinkar. En ambulans backar in utanför.',
@@ -1047,6 +1134,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje fynd till rätt låda.',
       items: ['Keramik', 'Metall', 'Ben'],
+      pool: [
+        ['Krukskärva med mönster', 'Bit av en amfora', 'Glaserad kakelbit', 'Lergodsfot', 'Bränd lerklump'],
+        ['Grönärgat bronsspänne', 'Rostig järnspik', 'Silvermynt', 'Blyvikt', 'Kopparnål'],
+        ['Käkfragment', 'Benpärla med hål', 'Djurhorn', 'Revbensbit', 'Tand med emalj kvar'],
+      ],
     },
     scene:
       'Sållet är fullt av jord och solen står i zenit. Något glimmar i gruset.',
@@ -1060,12 +1152,12 @@ export const JOBS: Job[] = [
     shiftLength: 7,
     ad: 'Led vandringar på höjd. Väder, karta och höjdsjuka.',
     minigame: {
-      kind: 'precision',
-      title: 'Dosera tempot',
+      kind: 'balans',
+      title: 'Över glaciären',
       brief:
-        'Håll gruppens tempo på rätt nivå för höjden.',
-      items: ['Stigtakt'],
-      unit: 'meter per timme',
+        'Repet spänner mellan er och isen lutar. Håll gruppens tyngdpunkt mitt på leden.',
+      items: ['Replaget'],
+      unit: 'graders lutning',
     },
     scene:
       'Luften är tunn på fyra tusen meter. Gruppen andas tungt bakom dig.',
@@ -1161,6 +1253,11 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje plagg till rätt modell.',
       items: ['Öppningslook', 'Dagplagg', 'Finalklänning'],
+      pool: [
+        ['Signaturkappan', 'Första modellens set', 'Looket i husets färg', 'Öppningshatten', 'Plagg nummer ett'],
+        ['Trenchcoat', 'Stickad tröja', 'Raka byxor', 'Skjortklänning', 'Kavaj i ull'],
+        ['Släp i siden', 'Sista looken i vitt', 'Klänning med tio meter tyll', 'Broderad robe', 'Avslutningsplagget'],
+      ],
     },
     scene:
       'Backstage är kaos av tyg och nålar. Visningen börjar om tolv minuter.',
@@ -1179,9 +1276,273 @@ export const JOBS: Job[] = [
       brief:
         'Dra varje besökare till rätt sektion.',
       items: ['Läktare A', 'Läktare B', 'VIP'],
+      pool: [
+        ['Biljett A14, rad 3', 'Sektion A, ingång norr', 'A-biljett ståplats', 'Rad 12 i A', 'Familjebiljett A'],
+        ['Biljett B7, rad 22', 'Sektion B, ingång syd', 'B-biljett, skolgrupp', 'Rad 30 i B', 'Studentbiljett B'],
+        ['Ackrediteringskort', 'Inbjudan från förbundet', 'Loge 2 med lunch', 'Presskort med logeplats', 'Guldarmband'],
+      ],
     },
     scene:
       'Arenan fylls av publik från hela världen. Fem språk hörs samtidigt vid ingången.',
+  },
+  // --- Nya yrken med de fyra tillagda arkadmomenten ---
+  {
+    id: 'postsorterare',
+    title: 'Postsorterare',
+    employer: 'Centralposten',
+    category: 'geografi',
+    wageClass: 1,
+    shiftLength: 5,
+    ad: 'Nattskift bland säckarna. Du behöver veta vilket land som ligger var.',
+    minigame: {
+      kind: 'sortering',
+      title: 'Sortera posten',
+      brief: 'Varje försändelse ska i rätt säck innan bandet matar fram nästa.',
+      items: ['Inrikes', 'Europa', 'Övriga världen'],
+      pool: [
+        ['Brev till Kiruna', 'Paket till grannstaden', 'Vykort inom landet', 'Räkning till huvudkontoret', 'Julklapp till mormor'],
+        ['Brev till Lissabon', 'Paket till Warszawa', 'Vykort till Dublin', 'Katalog till Milano', 'Rekbrev till Aten'],
+        ['Paket till Nairobi', 'Brev till Melbourne', 'Vykort till Lima', 'Flygpost till Seoul', 'Rekbrev till Havanna'],
+      ],
+    },
+    scene:
+      'Facken står i tre rader och bandet matar fram nya buntar snabbare än du hinner läsa adresserna.',
+  },
+  {
+    id: 'pantvard',
+    title: 'Pantstationsvärd',
+    employer: 'Retur & Pant',
+    category: 'natur',
+    wageClass: 1,
+    shiftLength: 5,
+    ad: 'Ta emot returer och håll materialen isär. Kunskap om kretslopp uppskattas.',
+    minigame: {
+      kind: 'sortering',
+      title: 'Sortera returerna',
+      brief: 'Varje förpackning har sitt kärl. Ett fel och maskinen larmar.',
+      items: ['Glas', 'Metall', 'Plast'],
+      pool: [
+        ['Vinflaska', 'Syltburk i glas', 'Brun ölflaska', 'Parfymflaska', 'Konservglas med lock av'],
+        ['Aluminiumburk', 'Konservburk', 'Kapsyl', 'Sprayflaska av plåt', 'Folieform'],
+        ['PET-flaska', 'Schampoflaska', 'Plastlock', 'Yoghurtburk', 'Bärkasse'],
+      ],
+    },
+    scene:
+      'Automaten spottar ut kvitton i ett kör och kunderna häller in säckvis utan att titta.',
+  },
+  {
+    id: 'vaxlare',
+    title: 'Växlingsbiträde',
+    employer: 'Change & Wechsel',
+    category: 'ekonomi',
+    wageClass: 1,
+    shiftLength: 5,
+    ad: 'Sitt i luckan, växla valuta och sälj det resenärerna glömt hemma.',
+    minigame: {
+      kind: 'vaxel',
+      title: 'Räkna växeln',
+      brief:
+        'Slå ihop vad kunden köper, dra av sedeln och välj rätt växel. Kön väntar inte.',
+      items: ['Reseförsäkring', 'Kartbok', 'Telefonkort', 'Adapterkontakt', 'Frimärken'],
+    },
+    scene:
+      'Luckan är av pansarglas och kön ringlar ut på gatan. Kursen på tavlan uppdateras var tionde minut.',
+  },
+  {
+    id: 'torghandlare',
+    title: 'Torghandlare',
+    employer: 'Saluhallens torgstånd',
+    category: 'mat',
+    wageClass: 1,
+    shiftLength: 5,
+    ad: 'Sälj dagens skörd. Du ska kunna dina råvaror och räkna i huvudet.',
+    minigame: {
+      kind: 'vaxel',
+      title: 'Slå in på torget',
+      brief:
+        'Räkna ihop kundens korg, dra av sedeln och räkna fram växeln i huvudet.',
+      items: ['Tomater', 'Oliver', 'Ost', 'Bröd', 'Fikon'],
+    },
+    scene:
+      'Presenningen fladdrar och grannståndet ropar ut sina priser högre än du. Kassaskrinet är en cigarrlåda.',
+  },
+  {
+    id: 'cykeltaxiforare',
+    title: 'Cykeltaxiförare',
+    employer: 'Cyclo Express',
+    category: 'trafik',
+    wageClass: 1,
+    shiftLength: 5,
+    ad: 'Kör turister genom gamla stan. Vaderna får jobba, och trafikvettet också.',
+    minigame: {
+      kind: 'balans',
+      title: 'Håll ekipaget rakt',
+      brief:
+        'Lasten drar åt sidan i varje kurva. Styr tillbaka mot mitten innan du välter.',
+      items: ['Cykeltaxin'],
+      unit: 'graders lutning',
+    },
+    scene:
+      'Gränderna är två meter breda och mopederna kommer från alla håll samtidigt. Passageraren filmar allt.',
+  },
+  {
+    id: 'servitor',
+    title: 'Servitör',
+    employer: 'Restaurang Terrassen',
+    category: 'mat',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Uteservering i högsäsong. Vi vill ha någon som kan bära och kan sina rätter.',
+    minigame: {
+      kind: 'balans',
+      title: 'Bär brickan',
+      brief:
+        'Sex glas på en hand och kullersten under fötterna. Fånga upp lutningen i tid.',
+      items: ['Brickan'],
+      unit: 'graders lutning',
+    },
+    scene:
+      'Fjorton bord ute, alla fulla, och köket ropar upp beställningar som inte hör till någon.',
+  },
+  {
+    id: 'barare',
+    title: 'Bärarassistent',
+    employer: 'Himalaya Trek',
+    category: 'natur',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Följ med expeditionen uppför dalen. Bra kondition och höjdvana krävs.',
+    minigame: {
+      kind: 'balans',
+      title: 'Över hängbron',
+      brief:
+        'Bron svajar och packningen väger trettio kilo. Håll dig mitt på plankorna.',
+      items: ['Bärmesen'],
+      unit: 'graders lutning',
+    },
+    scene:
+      'Floden dundrar sjuttio meter under bron. Vajerna gnisslar och en mulåsna vill mötas mitt på.',
+  },
+  {
+    id: 'flamencogitarrist',
+    title: 'Flamencogitarrist',
+    employer: 'Tablao El Duende',
+    category: 'musik',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Vi söker en ackompanjatör som kan hålla compás utan att titta på dansaren.',
+    minigame: {
+      kind: 'takt',
+      title: 'Håll compás',
+      brief:
+        'Tolvslagstakten går runt och runt. Slå an exakt när markören passerar mitten.',
+      items: ['Rasgueado', 'Golpe', 'Picado'],
+    },
+    scene:
+      'Dansaren stampar och publiken sitter en meter bort. Här räknar ingen högt, allt sitter i handleden.',
+  },
+  {
+    id: 'taikotrummis',
+    title: 'Taikotrummis',
+    employer: 'Taikoensemblen Kaze',
+    category: 'musik',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Ensemblen behöver en till vid de stora trummorna inför festivalen.',
+    minigame: {
+      kind: 'takt',
+      title: 'Slå i takt',
+      brief:
+        'Hela ensemblen håller samma puls. Träffa slaget när markören är mitt i fältet.',
+      items: ['Don', 'Ka', 'Doko'],
+    },
+    scene:
+      'Trumman är större än du och står snett framåt. Klubborna heter bachi och väger som två hammare.',
+  },
+  {
+    id: 'klubbdj',
+    title: 'Klubb-DJ',
+    employer: 'Klubb Kellerloch',
+    category: 'musik',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Nattpass i källaren. Vi vill ha någon som kan mixa utan att tappa golvet.',
+    minigame: {
+      kind: 'takt',
+      title: 'Mixa in nästa låt',
+      brief:
+        'De två låtarna ska gå i samma puls. Tryck exakt på slaget, varken före eller efter.',
+      items: ['Kick', 'Snare', 'Hi-hat'],
+    },
+    scene:
+      'Rökmaskinen går och monitorn är för tyst. Fyrahundra personer märker direkt om pulsen glider.',
+  },
+  {
+    id: 'ostronplockare',
+    title: 'Ostronplockare',
+    employer: 'Kustens ostronbankar',
+    category: 'hav',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Arbete på lågvattnet. Du måste kunna skilja fullvuxet från yngel på en sekund.',
+    minigame: {
+      kind: 'traffa',
+      title: 'Plocka på lågvattnet',
+      brief:
+        'Bara de fullvuxna får följa med upp. Yngel och skräp ska ligga kvar där de ligger.',
+      items: [
+        'Fullvuxet ostron',
+        'Ostron över åtta centimeter',
+        'Tungt ostron',
+        'Ostron med tät skalkant',
+      ],
+      avoid: ['Ostronyngel', 'Krossat skal', 'Sjöstjärna', 'Tomt skal', 'Krabba'],
+    },
+    scene:
+      'Vattnet drar sig undan i två timmar, sedan kommer det tillbaka. Stövlarna sjunker en decimeter i taget.',
+  },
+  {
+    id: 'bartender',
+    title: 'Bartender',
+    employer: 'The Long Hall',
+    category: 'mat',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Kvällspass bakom disken. Snabbhet i huvudräkning värderas högre än konststycken.',
+    minigame: {
+      kind: 'vaxel',
+      title: 'Notan i baren',
+      brief:
+        'Sällskapet beställer i klump och betalar med en stor sedel. Räkna fram växeln.',
+      items: ['Stout', 'Cider', 'Läsk', 'Whiskey', 'Nötter'],
+    },
+    scene:
+      'Mahognydisken är trettio meter lång och kranarna droppar. Musiken börjar i hörnet om en kvart.',
+  },
+  {
+    id: 'parkvaktare',
+    title: 'Parkvaktare',
+    employer: 'Nationalparkens fältstation',
+    category: 'djur',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Fältarbete i reservatet. Vi rensar snaror och räknar djur, varje dag året om.',
+    minigame: {
+      kind: 'traffa',
+      title: 'Rensa snaror',
+      brief:
+        'Plocka bort varenda snara i sektorn. Forskarnas utrustning ska stå kvar orörd.',
+      items: ['Vajersnara', 'Nedgrävd fälla', 'Snara vid stigen', 'Fälla vid vattenhålet'],
+      avoid: [
+        'Viltkamera',
+        'Märkt sändarhalsband',
+        'Fågelbo',
+        'Termitstack',
+        'Forskarnas mätsticka',
+      ],
+    },
+    scene:
+      'Gräset går till midjan och sikten är tjugo meter. Radion knastrar från stationen var tjugonde minut.',
   },
 ];
 

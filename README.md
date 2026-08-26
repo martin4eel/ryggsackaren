@@ -112,26 +112,42 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
-5. **Sista passet.** Varje skift avslutas med ett arkadmoment: sortera på
-   löpande band, träffa rätt reglage, upprepa en sekvens ur minnet eller
-   stoppa en mätare i rätt zon. Det ger upp till tre dagslöner i bonus och
-   räknas in när certifikatet avgörs. Klarar du 70 procent av skiftet totalt
-   får du ett **certifikat**, som öppnar bättre betalda jobb i samma ämne i
-   alla städer.
+   - **Svarsserie.** Rätt svar på raken höjer lönemultiplikatorn upp till
+     ×2. Ett felsvar nollställer den.
+   - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
+     dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
+     kunna svaret, inte att chansa snabbt.
+5. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
+   sortera på löpande band, utföra order i rätt följd, upprepa en sekvens ur
+   minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
+   saker och låta resten vara, hålla balansen eller slå i takt. Det ger upp
+   till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
+   till. Klarar du 70 procent av skiftet totalt får du ett **certifikat**,
+   som öppnar bättre betalda jobb i samma ämne i alla städer.
 6. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
-7. **Resebyrån.** Välj destination på kartan eller i listan. Varje sträcka har
-   tre biljetter: billigt och långsamt, mellanting, eller dyrt och snabbt.
-   Tid är också en resurs eftersom boendet kostar varje dag.
+7. **Resebyrån.** Välj destination på kartan eller i listan, som går att
+   söka i. Varje sträcka har tre biljetter: billigt och långsamt, mellanting,
+   eller dyrt och snabbt. Tid är också en resurs eftersom boendet kostar varje
+   dag. Ungefär var tredje resa händer dessutom något på vägen – bagaget
+   försvinner, flyget blir överbokat eller någon bjuder på taxin.
 8. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-9. **Ljud.** Ljudeffekterna (rätt/fel svar, lön, resor och arkadmomenten) är
-   syntetiserade i webbläsaren, så inga ljudfiler behövs. Högtalarknappen i
-   statusraden stänger av eller sätter på ljudet; valet sparas.
-10. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+9. **Passet.** Under _Ryggsäck och pass_ ligger femton stämplar att jaga:
+   fyra kontinenter, tio i rad, perfekt skift, skuldfri och så vidare. De som
+   inte tagits syns också, så de fungerar som en resplan. Varje stämpel är
+   värd poäng på slutet.
+10. **Ljud.** Ett tjugotal effekter (rätt och fel svar, lön, avresa, ankomst,
+   metronom, trumslag, stämpel och alla arkadmoment) syntetiseras i
+   webbläsaren, så inga ljudfiler behövs. Högtalarknappen i statusraden
+   stegar mellan avstängt, dämpat och fullt ljud; valet sparas.
+11. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
+   och backa till staden med `Esc`. Balansmomentet styrs med piltangenterna
+   och taktmomentet med mellanslag.
+12. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
     frågar först, och visar vad som går förlorat, innan resan raderas.
-11. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
-    avsluta resan och få poäng.
+13. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+    avsluta resan, få poäng och en titel.
 
 Går kassan under −1 500 är resan över och ambassaden skickar hem dig.
 
@@ -142,18 +158,24 @@ statusraden, eller _Radera sparfil_ på startskärmen.
 ### Poäng
 
 Slutpoängen väger samman kassa, ryggsäckens värde hemma, antal besökta städer,
+hur många av världens åtta regioner du hunnit till, stämplarna i passet,
 certifikat, träffsäkerhet på frågorna och hur effektivt du reste (städer per
-dag). Skulden dras av.
+dag). Skulden dras av. Poängen ger också en titel, från _Hemvändare_ till
+_Legendarisk ryggsäckare_.
 
 ## Innehåll
 
-- 24 destinationer på sex kontinenter, var och en med eget fotografi
-- 64 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 714 frågor uppdelade i två svårighetsgrader, varav 512 jobbfrågor
-- 4 arkadmoment som avslutar arbetsskiften
-- 41 souvenirer med regional prissättning
-- 24 valutor
-- Syntetiserade ljudeffekter (WebAudio) med högtalarknapp i statusraden
+- 45 destinationer i 41 länder och alla åtta regioner, var och en med eget
+  fotografi
+- 77 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
+- 986 frågor uppdelade i två svårighetsgrader, varav 616 jobbfrågor
+- 8 arkadmoment som avslutar arbetsskiften
+- 15 stämplar att samla i passet
+- 15 resehändelser som kan slå till på vägen
+- 64 souvenirer med regional prissättning
+- 40 valutor
+- Ett tjugotal syntetiserade ljudeffekter (WebAudio) med volymknapp i
+  statusraden
 
 ## Struktur
 
@@ -170,6 +192,8 @@ src/
     jobs.ts                Yrken, löneklasser och ämneskategorier
     souvenirs.ts           Handelsvaror med billiga och eftertraktade regioner
     currencies.ts          Växelkurser och formatering av belopp
+    stamps.ts              Passets stämplar och villkoren för dem
+    events.ts              Resehändelser som kan slå till mellan städerna
     worldMap.ts            Genererad landmassa som SVG-path (Natural Earth)
     questions/
       cityQuestions.ts     Frågor till turistbyrån, per stad
@@ -178,9 +202,9 @@ src/
     state.ts               Speltillstånd, sparning och laddning
     rules.ts               Avstånd, priser, löner, poäng och frågeurval
   ui/
-    app.ts                 Skärmar och spelloop
+    app.ts                 Skärmar, spelloop och tangentbordsstyrning
     map.ts                 Världskartan: zoom, panorering och etikettplacering
-    minigames.ts           De fyra arkadmomenten
+    minigames.ts           De åtta arkadmomenten
     dom.ts                 Små hjälpare för att bygga element
     audio.ts               Syntetiserade ljudeffekter och ljudstyrning
     icons.ts               Inline SVG-ikoner (högtalare, menyer)
@@ -212,8 +236,10 @@ Kör `npm run validate` efter ändringar. Den kontrollerar bland annat att varje
 stad har minst fem lätta frågor, att varje jobb har egna frågor och nog många
 lätta för hela skiftet, att varje stad har minst ett jobb i löneklass 1 (så att
 en spelare utan stadsbetyg alltid kan tjäna pengar), att inga frågor är
-dubbletter någonstans i spelet, att varje jobbs arkadmoment är komplett, och
-att varje stad har ett foto i `public/cities/`.
+dubbletter någonstans i spelet, att varje jobbs arkadmoment är komplett – för
+sorteringen att varje korg har egna föremål i `pool`, för träffmomentet att
+`avoid` är ifyllt och inte överlappar `items` – och att varje stad har ett
+foto i `public/cities/`.
 
 ### Nya städer och foton
 

@@ -7,7 +7,10 @@ import { svgEl } from './dom';
 
 export type IconName =
   | 'ljud-pa'
+  | 'ljud-halv'
   | 'ljud-av'
+  | 'pass'
+  | 'stampel'
   | 'flagga'
   | 'tidning'
   | 'souvenir'
@@ -44,6 +47,29 @@ const ICONS: Record<IconName, Part[]> = {
     },
     { tag: 'line', attrs: { x1: '23', y1: '9', x2: '17', y2: '15' } },
     { tag: 'line', attrs: { x1: '17', y1: '9', x2: '23', y2: '15' } },
+  ],
+  'ljud-halv': [
+    {
+      tag: 'polygon',
+      attrs: {
+        points: '11 5 6 9 2 9 2 15 6 15 11 19 11 5',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
+    { tag: 'path', attrs: { d: 'M15.54 8.46a5 5 0 0 1 0 7.07' } },
+  ],
+  pass: [
+    {
+      tag: 'path',
+      attrs: { d: 'M5 4a2 2 0 0 1 2-2h11a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2Z' },
+    },
+    { tag: 'circle', attrs: { cx: '12', cy: '10', r: '3' } },
+    { tag: 'path', attrs: { d: 'M9 17h6' } },
+  ],
+  stampel: [
+    { tag: 'circle', attrs: { cx: '12', cy: '12', r: '9' } },
+    { tag: 'circle', attrs: { cx: '12', cy: '12', r: '5.5' } },
   ],
   flagga: [
     {

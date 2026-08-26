@@ -1,3 +1,4 @@
+import type { TravelEvent } from '../data/events';
 import type { Category } from '../data/types';
 
 export type Difficulty = 'turist' | 'globetrotter';
@@ -36,7 +37,7 @@ export interface CityProgress {
 }
 
 export interface GameState {
-  version: 1;
+  version: 2;
   screen: Screen;
   difficulty: Difficulty;
   /** Startstaden, som också är slutmålet */
@@ -71,6 +72,27 @@ export interface GameState {
   /** Statistik: totalt intjänat och spenderat */
   earned: number;
   spent: number;
+  /** Längsta obrutna svit av rätta svar under hela resan */
+  bestStreak: number;
+  /** Antal avslutade arbetsskift */
+  shiftsWorked: number;
+  /** Skift utan ett enda felsvar */
+  perfectShifts: number;
+  /** Felfria arkadmoment */
+  perfectMinigames: number;
+  /** Högsta kassa du haft samtidigt */
+  peakMoney: number;
+  /** Största vinsten på en enskild souvenir */
+  bestTrade: number;
+  /** Stämplar i passet, id:n ur data/stamps.ts */
+  stamps: string[];
+  /** Har snabbguiden i startstaden visats? */
+  seenIntro: boolean;
+  /**
+   * Händelsen från senaste resan. Den ligger kvar tills spelaren kvitterat
+   * den på stadsskärmen, så att den överlever en omladdning mitt i.
+   */
+  lastEvent?: TravelEvent;
   /** Sista resultatet, sätts när spelet är över */
   outcome?: 'vinst' | 'pank';
   finalScore?: number;
@@ -84,7 +106,7 @@ export function createGame(
   difficulty: Difficulty
 ): GameState {
   return {
-    version: 1,
+    version: 2,
     screen: 'stad',
     difficulty,
     homeCityId,
@@ -105,6 +127,14 @@ export function createGame(
     wrongStreak: 0,
     earned: 0,
     spent: 0,
+    bestStreak: 0,
+    shiftsWorked: 0,
+    perfectShifts: 0,
+    perfectMinigames: 0,
+    peakMoney: difficulty === 'turist' ? 6000 : 4000,
+    bestTrade: 0,
+    stamps: [],
+    seenIntro: false,
   };
 }
 
@@ -125,16 +155,40 @@ export function saveGame(state: GameState): void {
   }
 }
 
+/**
+ * Läser sparfilen och lyfter äldre versioner till dagens form. En resa som
+ * påbörjades innan passet och resehändelserna fanns ska kunna spelas klart,
+ * så de nya fälten fylls i med nollvärden i stället för att sparfilen kastas.
+ */
 export function loadGame(): GameState | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as GameState;
-    if (parsed?.version !== 1) return null;
-    return parsed;
+    const parsed = JSON.parse(raw) as Omit<Partial<GameState>, 'version'> & {
+      version?: number;
+    };
+    if (parsed?.version !== 1 && parsed?.version !== 2) return null;
+    return migrate(parsed);
   } catch {
     return null;
   }
+}
+
+function migrate(
+  save: Omit<Partial<GameState>, 'version'> & { version?: number }
+): GameState {
+  const state = save as GameState;
+  state.version = 2;
+  state.bestStreak ??= 0;
+  state.shiftsWorked ??= 0;
+  state.perfectShifts ??= 0;
+  state.perfectMinigames ??= 0;
+  state.peakMoney ??= Math.max(0, state.money ?? 0);
+  state.bestTrade ??= 0;
+  state.stamps ??= [];
+  // En pågående resa har redan passerat introduktionen.
+  state.seenIntro ??= true;
+  return state;
 }
 
 export function clearSave(): void {

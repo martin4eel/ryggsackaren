@@ -1,7 +1,7 @@
 import type { City } from './types';
 
 /**
- * 22 destinationer spridda över jordens kontinenter. Koordinater är
+ * 45 destinationer spridda över jordens kontinenter. Koordinater är
  * ungefärliga centrumpositioner, utc är normal tidszonsoffset och costIndex
  * styr priset på vandrarhem, mat och souvenirer.
  */
@@ -26,6 +26,7 @@ export const CITIES: City[] = [
       'skargardsguide',
       'sjukvardsbitrade',
       'borsmaklare',
+      'pantvard',
     ],
     souvenirs: ['dalahast', 'sillburk', 'vikingahjalm'],
   },
@@ -64,7 +65,7 @@ export const CITIES: City[] = [
     blurb:
       'Sveriges västra port, grundad 1621 av Gustav II Adolf. Här börjar många ryggsäcksresor med en sista fika på Avenyn innan färjan eller flyget går.',
     landmark: 'Feskekörka',
-    jobs: ['hamnarbetare', 'sparvagnsforare', 'fikabitrade', 'skargardsguide'],
+    jobs: ['hamnarbetare', 'sparvagnsforare', 'fikabitrade', 'skargardsguide', 'postsorterare'],
     souvenirs: ['dalahast', 'sillburk', 'ullvantar'],
   },
   {
@@ -80,7 +81,7 @@ export const CITIES: City[] = [
     blurb:
       'Världens nordligaste huvudstad, uppvärmd av geotermiskt vatten och omgiven av lavafält, gejsrar och vattenfall.',
     landmark: 'Hallgrímskirkja',
-    jobs: ['geologassistent', 'valskadeguide', 'ullfabriksarbetare', 'hotellstadare'],
+    jobs: ['geologassistent', 'valskadeguide', 'ullfabriksarbetare', 'hotellstadare', 'pantvard'],
     souvenirs: ['ullvantar', 'lavasten', 'vikingahjalm'],
   },
   {
@@ -96,7 +97,7 @@ export const CITIES: City[] = [
     blurb:
       'Metropol vid Themsen med tvåtusenårig historia, röda dubbeldäckare och fler museer än du hinner se på en resa.',
     landmark: 'Tower Bridge',
-    jobs: ['pubvard', 'museivard', 'tunnelbanevard', 'tidningsbud', 'teaterinspicient'],
+    jobs: ['pubvard', 'museivard', 'tunnelbanevard', 'tidningsbud', 'teaterinspicient', 'bartender'],
     souvenirs: ['tehandduk', 'vinylskiva', 'fotbollstroja'],
   },
   {
@@ -112,7 +113,7 @@ export const CITIES: City[] = [
     blurb:
       'Ljusets stad med boulevarder, bagerier och Louvren. Eiffeltornet restes till världsutställningen 1889.',
     landmark: 'Eiffeltornet',
-    jobs: ['bagare', 'konstguide', 'modeassistent', 'kock', 'cykelkurir'],
+    jobs: ['bagare', 'konstguide', 'modeassistent', 'kock', 'cykelkurir', 'servitor'],
     souvenirs: ['parfymflaska', 'konsttryck', 'ostkniv'],
   },
   {
@@ -128,7 +129,7 @@ export const CITIES: City[] = [
     blurb:
       'Kanalstaden byggd på pålar, med fler cyklar än invånare och ett gyllene 1600-tal som satte spår i konsthistorien.',
     landmark: 'Rijksmuseum',
-    jobs: ['cykelkurir', 'cykelmekaniker', 'blomsterhandlare', 'kanalskeppare', 'museivard'],
+    jobs: ['cykelkurir', 'cykelmekaniker', 'blomsterhandlare', 'kanalskeppare', 'museivard', 'postsorterare'],
     souvenirs: ['traskor', 'tulpanlok', 'konsttryck'],
   },
   {
@@ -144,7 +145,7 @@ export const CITIES: City[] = [
     blurb:
       'Den eviga staden på sju kullar. Colosseum stod klart år 80 e.Kr. och rymde uppemot 50 000 åskådare.',
     landmark: 'Colosseum',
-    jobs: ['arkeologassistent', 'pizzabagare', 'vespabud', 'konstguide'],
+    jobs: ['arkeologassistent', 'pizzabagare', 'vespabud', 'konstguide', 'servitor'],
     souvenirs: ['olivoljeflaska', 'laderbalte', 'konsttryck'],
   },
   {
@@ -160,7 +161,7 @@ export const CITIES: City[] = [
     blurb:
       'Staden som ligger i två världsdelar, delad av Bosporen. Hette tidigare Konstantinopel och var huvudstad i både det bysantinska och det ottomanska riket.',
     landmark: 'Hagia Sofia',
-    jobs: ['basarforsaljare', 'farjematros', 'kryddhandlare', 'mattvavare'],
+    jobs: ['basarforsaljare', 'farjematros', 'kryddhandlare', 'mattvavare', 'vaxlare'],
     souvenirs: ['matta', 'kryddpase', 'tehandduk'],
   },
   {
@@ -176,7 +177,7 @@ export const CITIES: City[] = [
     blurb:
       'Kreml, Röda torget och en tunnelbana med stationer som ser ut som palats. Härifrån går Transsibiriska järnvägen österut.',
     landmark: 'Vasilijkatedralen',
-    jobs: ['tidningsbud', 'tagvard', 'balettinspicient', 'rymdtekniker', 'tunnelbanevard'],
+    jobs: ['tidningsbud', 'tagvard', 'balettinspicient', 'rymdtekniker', 'tunnelbanevard', 'servitor'],
     souvenirs: ['matrjosjka', 'ullvantar', 'vinylskiva'],
   },
   {
@@ -192,7 +193,7 @@ export const CITIES: City[] = [
     blurb:
       'Afrikas största stad vid Nilens strand. Pyramiderna i Giza restes för omkring 4 500 år sedan och är världens äldsta bevarade underverk.',
     landmark: 'Cheopspyramiden',
-    jobs: ['arkeologassistent', 'kamelforare', 'basarforsaljare', 'nilbatskapten'],
+    jobs: ['arkeologassistent', 'kamelforare', 'basarforsaljare', 'nilbatskapten', 'vaxlare'],
     souvenirs: ['papyrusrulle', 'kryddpase', 'silverarmband'],
   },
   {
@@ -208,7 +209,7 @@ export const CITIES: City[] = [
     blurb:
       'Den röda staden vid Atlasbergens fot, med labyrintiska souker och torget Jemaa el-Fna som fylls av gycklare varje kväll.',
     landmark: 'Koutoubiamoskén',
-    jobs: ['mattvavare', 'kryddhandlare', 'kock', 'basarforsaljare'],
+    jobs: ['mattvavare', 'kryddhandlare', 'kock', 'basarforsaljare', 'torghandlare'],
     souvenirs: ['matta', 'kryddpase', 'ladertoffel'],
   },
   {
@@ -224,7 +225,7 @@ export const CITIES: City[] = [
     blurb:
       'Östafrikas nav, den enda storstad i världen med en nationalpark inom stadsgränsen. Perfekt utgångspunkt för safari.',
     landmark: 'Nairobi National Park',
-    jobs: ['safariguide', 'veterinarassistent', 'tehandlare', 'flygplatsvard', 'perlvavare'],
+    jobs: ['safariguide', 'veterinarassistent', 'tehandlare', 'flygplatsvard', 'perlvavare', 'parkvaktare'],
     souvenirs: ['trasnideri', 'kaffepase', 'perlhalsband'],
   },
   {
@@ -240,7 +241,7 @@ export const CITIES: City[] = [
     blurb:
       'Staden under Taffelberget, där Atlanten möter Indiska oceanen. Robben Island utanför kusten var fängelse för Nelson Mandela.',
     landmark: 'Taffelberget',
-    jobs: ['vinodlare', 'dykguide', 'bergsguide', 'hotellstadare'],
+    jobs: ['vinodlare', 'dykguide', 'bergsguide', 'hotellstadare', 'parkvaktare'],
     souvenirs: ['vinflaska', 'trasnideri', 'perlhalsband'],
   },
   {
@@ -256,7 +257,7 @@ export const CITIES: City[] = [
     blurb:
       'Indiens finans- och filmhuvudstad, hem för Bollywood. Byggd på sju öar som slagits samman till en halvö.',
     landmark: 'Gateway of India',
-    jobs: ['gatukoksbitrade', 'filmstatist', 'tehandlare', 'tagvard', 'kryddhandlare', 'sjukvardsbitrade'],
+    jobs: ['gatukoksbitrade', 'filmstatist', 'tehandlare', 'tagvard', 'kryddhandlare', 'sjukvardsbitrade', 'cykeltaxiforare'],
     souvenirs: ['silkessjal', 'kryddpase', 'silverarmband'],
   },
   {
@@ -272,7 +273,7 @@ export const CITIES: City[] = [
     blurb:
       'Thailands huvudstad vid Chao Phraya-floden, med gyllene tempel, flytande marknader och gatukök i varje hörn.',
     landmark: 'Wat Arun',
-    jobs: ['gatukoksbitrade', 'batfarjematros', 'massageassistent', 'dykguide'],
+    jobs: ['gatukoksbitrade', 'batfarjematros', 'massageassistent', 'dykguide', 'torghandlare'],
     souvenirs: ['silkessjal', 'buddhastatyett', 'kryddpase'],
   },
   {
@@ -288,7 +289,7 @@ export const CITIES: City[] = [
     blurb:
       'Kinas huvudstad med Förbjudna staden i mitten och Kinesiska muren några timmar bort. Himmelska fridens port vetter mot ett av världens största torg.',
     landmark: 'Förbjudna staden',
-    jobs: ['butiksvard', 'tehandlare', 'kalligrafiassistent', 'tagvard', 'kock'],
+    jobs: ['butiksvard', 'tehandlare', 'kalligrafiassistent', 'tagvard', 'kock', 'taikotrummis'],
     souvenirs: ['sidenfjader', 'teburk', 'buddhastatyett'],
   },
   {
@@ -304,7 +305,7 @@ export const CITIES: City[] = [
     blurb:
       'Världens folkrikaste storstadsområde. Shinkansen-tågen går på sekunden och Shibuya-korsningen fylls av tusentals fotgängare per grönt ljus.',
     landmark: 'Tokyo Skytree',
-    jobs: ['sushikock', 'robottekniker', 'tagvard', 'butiksvard', 'tecknare'],
+    jobs: ['sushikock', 'robottekniker', 'tagvard', 'butiksvard', 'tecknare', 'taikotrummis'],
     souvenirs: ['origamiset', 'keramikskal', 'sidenfjader'],
   },
   {
@@ -320,7 +321,7 @@ export const CITIES: City[] = [
     blurb:
       'Australiens äldsta och största stad, byggd runt en av världens vackraste naturhamnar. Operahuset invigdes 1973.',
     landmark: 'Operahuset',
-    jobs: ['livraddare', 'dykguide', 'farmarbetare', 'segelbatsmatros', 'olympiavard'],
+    jobs: ['livraddare', 'dykguide', 'farmarbetare', 'segelbatsmatros', 'olympiavard', 'ostronplockare'],
     souvenirs: ['bumerang', 'opalsmycke', 'korkhatt'],
   },
   {
@@ -336,7 +337,7 @@ export const CITIES: City[] = [
     blurb:
       'Seglens stad, byggd på ett fält av slocknade vulkaner mellan två hav. Landet har fler får än människor.',
     landmark: 'Sky Tower',
-    jobs: ['farmarbetare', 'bergsguide', 'segelbatsmatros', 'filmstatist'],
+    jobs: ['farmarbetare', 'bergsguide', 'segelbatsmatros', 'filmstatist', 'pantvard'],
     souvenirs: ['ullvantar', 'jadesmycke', 'korkhatt'],
   },
   {
@@ -352,7 +353,7 @@ export const CITIES: City[] = [
     blurb:
       'Staden som aldrig sover. Frihetsgudinnan var en gåva från Frankrike 1886 och Central Park är större än många europeiska stadskärnor.',
     landmark: 'Frihetsgudinnan',
-    jobs: ['tidningsbud', 'taxichauffor', 'jazzmusiker', 'borsmaklare', 'museivard', 'sjukvardsbitrade'],
+    jobs: ['tidningsbud', 'taxichauffor', 'jazzmusiker', 'borsmaklare', 'museivard', 'sjukvardsbitrade', 'bartender'],
     souvenirs: ['vinylskiva', 'basebollkeps', 'konsttryck'],
   },
   {
@@ -368,7 +369,7 @@ export const CITIES: City[] = [
     blurb:
       'Byggd på ruinerna av aztekernas Tenochtitlán, på 2 240 meters höjd. Staden sjunker långsamt ned i den uttorkade sjöbottnen.',
     landmark: 'Templo Mayor',
-    jobs: ['arkeologassistent', 'gatukoksbitrade', 'muralmalare', 'vespabud'],
+    jobs: ['arkeologassistent', 'gatukoksbitrade', 'muralmalare', 'vespabud', 'torghandlare'],
     souvenirs: ['solmask', 'chilipase', 'silverarmband'],
   },
   {
@@ -384,7 +385,7 @@ export const CITIES: City[] = [
     blurb:
       'Inkarikets gamla huvudstad på 3 400 meters höjd i Anderna. Härifrån går Inkaleden till Machu Picchu.',
     landmark: 'Sacsayhuamán',
-    jobs: ['bergsguide', 'lamaskotare', 'arkeologassistent', 'vavare'],
+    jobs: ['bergsguide', 'lamaskotare', 'arkeologassistent', 'vavare', 'torghandlare'],
     souvenirs: ['alpackatroja', 'panflojt', 'kaffepase'],
   },
   {
@@ -400,8 +401,344 @@ export const CITIES: City[] = [
     blurb:
       'Sockertoppen, Copacabana och Kristusstatyn på Corcovado. Karnevalen i februari är världens största gatufest.',
     landmark: 'Cristo Redentor',
-    jobs: ['gatukoksbitrade', 'livraddare', 'sambatrummis', 'fotbollstranare', 'kaffeprovare'],
+    jobs: ['gatukoksbitrade', 'livraddare', 'sambatrummis', 'fotbollstranare', 'kaffeprovare', 'ostronplockare'],
     souvenirs: ['kaffepase', 'trumma', 'fotbollstroja'],
+  },
+  {
+    id: 'kopenhamn',
+    name: 'København',
+    country: 'Danmark',
+    region: 'norden',
+    currency: 'DKK',
+    lat: 55.68,
+    lon: 12.57,
+    utc: 1,
+    costIndex: 1.25,
+    blurb:
+      'Cyklarnas huvudstad, där färgade köpmanshus speglar sig i Nyhavns kanal. Tivoli har öppnat sina grindar varje sommar sedan 1843.',
+    landmark: 'Nyhavn',
+    jobs: ['cykelkurir', 'postsorterare', 'bagare', 'farjematros', 'museivard', 'servitor'],
+    souvenirs: ['legobygge', 'sillburk', 'ostkniv'],
+  },
+  {
+    id: 'oslo',
+    name: 'Oslo',
+    country: 'Norge',
+    region: 'norden',
+    currency: 'NOK',
+    lat: 59.91,
+    lon: 10.75,
+    utc: 1,
+    costIndex: 1.4,
+    blurb:
+      'Innerst i en fjord som skär nittio kilometer in i landet. Operahusets tak går att promenera upp för, rakt ur vattnet.',
+    landmark: 'Operahuset',
+    jobs: ['hotellstadare', 'pantvard', 'segelbatsmatros', 'skargardsguide', 'museivard'],
+    souvenirs: ['ullvantar', 'trolldocka', 'ulltroja'],
+  },
+  {
+    id: 'helsingfors',
+    name: 'Helsingfors',
+    country: 'Finland',
+    region: 'norden',
+    currency: 'EUR',
+    lat: 60.17,
+    lon: 24.94,
+    utc: 2,
+    costIndex: 1.1,
+    blurb:
+      'Vit domkyrka över en hamn full av färjor, och en fästning på sex öar utanför. Här dricks mest kaffe per person i hela världen.',
+    landmark: 'Sveaborg',
+    jobs: ['fikabitrade', 'tidningsbud', 'farjematros', 'sparvagnsforare', 'blomsterhandlare'],
+    souvenirs: ['muurikka', 'ullvantar', 'kaffepase'],
+  },
+  {
+    id: 'berlin',
+    name: 'Berlin',
+    country: 'Tyskland',
+    region: 'europa',
+    currency: 'EUR',
+    lat: 52.52,
+    lon: 13.4,
+    utc: 1,
+    costIndex: 1.0,
+    blurb:
+      'En stad som varit delad, sammanfogad och ombyggd. Klubbarna öppnar när andra städer stänger och museiön har fem museer på rad.',
+    landmark: 'Brandenburger Tor',
+    jobs: ['gatukoksbitrade', 'klubbdj', 'tunnelbanevard', 'museivard', 'cykelmekaniker', 'konstguide'],
+    souvenirs: ['murbit', 'vinylskiva', 'brygghusglas'],
+  },
+  {
+    id: 'barcelona',
+    name: 'Barcelona',
+    country: 'Spanien',
+    region: 'europa',
+    currency: 'EUR',
+    lat: 41.39,
+    lon: 2.17,
+    utc: 1,
+    costIndex: 0.95,
+    blurb:
+      'Gaudís outtröttliga fantasi mellan bergen och Medelhavet. Sagrada Família har byggts sedan 1882 och är fortfarande inte klar.',
+    landmark: 'Sagrada Família',
+    jobs: ['torghandlare', 'fikabitrade', 'flamencogitarrist', 'muralmalare', 'fotbollstranare', 'livraddare'],
+    souvenirs: ['flamencosolfjader', 'kakelplatta', 'fotbollstroja'],
+  },
+  {
+    id: 'lissabon',
+    name: 'Lissabon',
+    country: 'Portugal',
+    region: 'europa',
+    currency: 'EUR',
+    lat: 38.72,
+    lon: -9.14,
+    utc: 0,
+    costIndex: 0.85,
+    blurb:
+      'Sju kullar, gula spårvagnar och kakelklädda fasader ovanför Tejo. Härifrån seglade karavellerna ut och ritade om världskartan.',
+    landmark: 'Torre de Belém',
+    jobs: ['hamnarbetare', 'fikabitrade', 'sparvagnsforare', 'kanalskeppare', 'jazzmusiker'],
+    souvenirs: ['kakelplatta', 'vinflaska', 'olivoljeflaska'],
+  },
+  {
+    id: 'aten',
+    name: 'Aten',
+    country: 'Grekland',
+    region: 'europa',
+    currency: 'EUR',
+    lat: 37.98,
+    lon: 23.73,
+    utc: 2,
+    costIndex: 0.85,
+    blurb:
+      'Parthenon står kvar på klippan mitt i en modern miljonstad. Nedanför ligger Plaka med tavernor i gränder som är äldre än de flesta länder.',
+    landmark: 'Akropolis',
+    jobs: ['torghandlare', 'hamnarbetare', 'arkeologassistent', 'segelbatsmatros', 'olympiavard'],
+    souvenirs: ['olivoljeflaska', 'olivtrasked', 'keramikskal'],
+  },
+  {
+    id: 'prag',
+    name: 'Prag',
+    country: 'Tjeckien',
+    region: 'europa',
+    currency: 'CZK',
+    lat: 50.08,
+    lon: 14.44,
+    utc: 1,
+    costIndex: 0.8,
+    blurb:
+      'Hundra spiror över Vltava och en astronomisk klocka som spelat upp sitt lilla skådespel varje timme sedan 1410.',
+    landmark: 'Karlsbron',
+    jobs: ['pubvard', 'tidningsbud', 'vavare', 'sparvagnsforare', 'teaterinspicient'],
+    souvenirs: ['marionett', 'brygghusglas', 'konsttryck'],
+  },
+  {
+    id: 'dublin',
+    name: 'Dublin',
+    country: 'Irland',
+    region: 'europa',
+    currency: 'EUR',
+    lat: 53.35,
+    lon: -6.26,
+    utc: 0,
+    costIndex: 1.15,
+    blurb:
+      'Georgianska portar i klara färger och en flod som delar staden i norr och söder. Litteraturen sitter i väggarna på varje pub.',
+    landmark: 'Ha’penny Bridge',
+    jobs: ['pubvard', 'hotellstadare', 'bartender', 'jazzmusiker', 'farjematros'],
+    souvenirs: ['ulltroja', 'brygghusglas', 'tehandduk'],
+  },
+  {
+    id: 'dubai',
+    name: 'Dubai',
+    country: 'Förenade Arabemiraten',
+    region: 'mellanostern',
+    currency: 'AED',
+    lat: 25.2,
+    lon: 55.27,
+    utc: 4,
+    costIndex: 1.3,
+    blurb:
+      'En fiskeby som på femtio år blev världens mellanlandning. Guldsouken ligger tio minuter med träbåt från skyskraporna.',
+    landmark: 'Burj Khalifa',
+    jobs: ['flygplatsvard', 'hotellstadare', 'vaxlare', 'taxichauffor', 'robottekniker', 'dykguide'],
+    souvenirs: ['dadelask', 'rokelseset', 'silkessjal'],
+  },
+  {
+    id: 'amman',
+    name: 'Amman',
+    country: 'Jordanien',
+    region: 'mellanostern',
+    currency: 'JOD',
+    lat: 31.95,
+    lon: 35.93,
+    utc: 3,
+    costIndex: 0.75,
+    blurb:
+      'Vitt kalksten över nitton kullar, med ett romerskt teatermonument mitt i centrum. Härifrån går bussarna söderut mot ökenslottet i klippan.',
+    landmark: 'Citadellet',
+    jobs: ['basarforsaljare', 'kamelforare', 'arkeologassistent', 'kryddhandlare', 'geologassistent'],
+    souvenirs: ['mosaiklampa', 'dadelask', 'laderbalte'],
+  },
+  {
+    id: 'seoul',
+    name: 'Seoul',
+    country: 'Sydkorea',
+    region: 'asien',
+    currency: 'KRW',
+    lat: 37.57,
+    lon: 126.98,
+    utc: 9,
+    costIndex: 1.05,
+    blurb:
+      'Palats med svängda tak i skuggan av glasfasader, och en bäck som grävts fram under en riven motorväg. Marknaderna stänger aldrig riktigt.',
+    landmark: 'Gyeongbokgung',
+    jobs: ['gatukoksbitrade', 'tunnelbanevard', 'kalligrafiassistent', 'klubbdj', 'robottekniker', 'tecknare'],
+    souvenirs: ['hanbokband', 'silkessjal', 'teburk'],
+  },
+  {
+    id: 'singapore',
+    name: 'Singapore',
+    country: 'Singapore',
+    region: 'asien',
+    currency: 'SGD',
+    lat: 1.35,
+    lon: 103.82,
+    utc: 8,
+    costIndex: 1.2,
+    blurb:
+      'En ö-stat på Malackasundets mynning där fyra språk är officiella. Konstgjorda superträd lyser upp parken varje kväll.',
+    landmark: 'Gardens by the Bay',
+    jobs: ['hamnarbetare', 'gatukoksbitrade', 'blomsterhandlare', 'flygplatsvard', 'borsmaklare', 'kock'],
+    souvenirs: ['teburk', 'kryddpase', 'jadesmycke'],
+  },
+  {
+    id: 'hanoi',
+    name: 'Hanoi',
+    country: 'Vietnam',
+    region: 'asien',
+    currency: 'VND',
+    lat: 21.03,
+    lon: 105.85,
+    utc: 7,
+    costIndex: 0.55,
+    blurb:
+      'Gamla stadens trettiosex gränder har var sitt hantverk sedan medeltiden. Frukosten är soppa och kaffet serveras med kondenserad mjölk.',
+    landmark: 'Hoan Kiem-sjön',
+    jobs: ['cykeltaxiforare', 'torghandlare', 'kaffeprovare', 'kock', 'mattvavare'],
+    souvenirs: ['silkessjal', 'kaffefilter', 'kaffepase'],
+  },
+  {
+    id: 'kathmandu',
+    name: 'Katmandu',
+    country: 'Nepal',
+    region: 'asien',
+    currency: 'NPR',
+    lat: 27.72,
+    lon: 85.32,
+    utc: 5.75,
+    costIndex: 0.5,
+    blurb:
+      'En dal full av tempel på 1 400 meters höjd, med åttatusenmeterstopparna som kuliss. Alla vandringar norrut börjar här.',
+    landmark: 'Boudhanath',
+    jobs: ['barare', 'hotellstadare', 'vavare', 'bergsguide', 'tehandlare'],
+    souvenirs: ['bonhandduk', 'khukuri', 'ullvantar'],
+  },
+  {
+    id: 'buenosaires',
+    name: 'Buenos Aires',
+    country: 'Argentina',
+    region: 'latinamerika',
+    currency: 'ARS',
+    lat: -34.6,
+    lon: -58.38,
+    utc: -3,
+    costIndex: 0.7,
+    blurb:
+      'Europeiska fasader vid en flod så bred att andra stranden inte syns. Tango dansas på gatan i La Boca och på golvet i Almagro.',
+    landmark: 'Caminito',
+    jobs: ['torghandlare', 'gatukoksbitrade', 'fotbollstranare', 'teaterinspicient', 'muralmalare', 'kock'],
+    souvenirs: ['matebagare', 'laderbalte', 'fotbollstroja'],
+  },
+  {
+    id: 'havanna',
+    name: 'Havanna',
+    country: 'Kuba',
+    region: 'latinamerika',
+    currency: 'CUP',
+    lat: 23.13,
+    lon: -82.38,
+    utc: -5,
+    costIndex: 0.7,
+    blurb:
+      'Femtiotalsbilar rullar förbi pastellfärgade kolonnader längs Malecón. Musiken kommer inifrån husen, inte från högtalare.',
+    landmark: 'El Capitolio',
+    jobs: ['taxichauffor', 'hotellstadare', 'vaxlare', 'sambatrummis', 'cykelmekaniker'],
+    souvenirs: ['cigarrlada', 'trumma', 'kaffepase'],
+  },
+  {
+    id: 'sanfrancisco',
+    name: 'San Francisco',
+    country: 'USA',
+    region: 'nordamerika',
+    currency: 'USD',
+    lat: 37.77,
+    lon: -122.42,
+    utc: -8,
+    costIndex: 1.5,
+    blurb:
+      'Dimman rullar in genom sundet varje eftermiddag och kablarna under gatan drar kabelvagnarna uppför backarna sedan 1873.',
+    landmark: 'Golden Gate-bron',
+    jobs: ['sparvagnsforare', 'fikabitrade', 'pantvard', 'robottekniker', 'livraddare', 'valskadeguide'],
+    souvenirs: ['kaffefilter', 'surfvax', 'brygghusglas'],
+  },
+  {
+    id: 'dakar',
+    name: 'Dakar',
+    country: 'Senegal',
+    region: 'afrika',
+    currency: 'XOF',
+    lat: 14.72,
+    lon: -17.47,
+    utc: 0,
+    costIndex: 0.7,
+    blurb:
+      'Afrikas västligaste punkt, där Atlanten slår mot klipporna och trummorna hörs från Medina. Utanför kusten ligger ön Gorée.',
+    landmark: 'Île de Gorée',
+    jobs: ['torghandlare', 'hamnarbetare', 'vavare', 'ostronplockare', 'sambatrummis', 'arkeologassistent'],
+    souvenirs: ['koradocka', 'tygbunt', 'trumma'],
+  },
+  {
+    id: 'addisabeba',
+    name: 'Addis Abeba',
+    country: 'Etiopien',
+    region: 'afrika',
+    currency: 'ETB',
+    lat: 9.03,
+    lon: 38.74,
+    utc: 3,
+    costIndex: 0.55,
+    blurb:
+      'Afrikas högst belägna huvudstad på 2 400 meter, sval året om. Kaffet kom härifrån och serveras fortfarande i ceremoni.',
+    landmark: 'Nationalmuseet',
+    jobs: ['kaffeprovare', 'fikabitrade', 'basarforsaljare', 'arkeologassistent', 'safariguide'],
+    souvenirs: ['kaffeceremoni', 'kaffepase', 'tygbunt'],
+  },
+  {
+    id: 'melbourne',
+    name: 'Melbourne',
+    country: 'Australien',
+    region: 'oceanien',
+    currency: 'AUD',
+    lat: -37.81,
+    lon: 144.96,
+    utc: 10,
+    costIndex: 1.3,
+    blurb:
+      'Rutnätsgator med gränder fulla av väggmålningar och kaffebarer. Vädret hinner byta humör fyra gånger på en eftermiddag.',
+    landmark: 'Flinders Street Station',
+    jobs: ['fikabitrade', 'sparvagnsforare', 'klubbdj', 'livraddare', 'kaffeprovare', 'filmstatist'],
+    souvenirs: ['kaffefilter', 'surfvax', 'korkhatt'],
   },
 ];
 

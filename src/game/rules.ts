@@ -1,4 +1,5 @@
 import { CITY_BY_ID } from '../data/cities';
+import { buildStamps, type Stamp } from '../data/stamps';
 import { JOB_BY_ID } from '../data/jobs';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City, Job, Question, Souvenir } from '../data/types';
@@ -125,6 +126,33 @@ export function pityBonus(wrongStreak: number, wage: number): number {
   return Math.round(wage * Math.min(1.5, (wrongStreak - 2) * 0.5));
 }
 
+/**
+ * Svarsserien ger en multiplikator på lönen. Den växer snabbt i början och
+ * planar sedan ut, så att en bra svit känns direkt utan att ett enda skift
+ * kan avgöra hela resan.
+ */
+export function comboMultiplier(streak: number): number {
+  if (streak < 2) return 1;
+  return Math.min(2, 1 + (streak - 1) * 0.2);
+}
+
+/** Hur många steg av multiplikatorn som visas i mätaren. */
+export const COMBO_STEPS = 6;
+
+/**
+ * Snabbhetsbonus: den som svarar inom några sekunder får ett påslag på
+ * dagslönen. Efter tolv sekunder ger den ingenting, så den premierar att
+ * kunna svaret utan att straffa den som tänker efter.
+ */
+export function speedBonus(ms: number, wage: number): number {
+  const fast = 2500;
+  const slow = 12000;
+  if (ms <= fast) return Math.round(wage * 0.4);
+  if (ms >= slow) return 0;
+  const share = 1 - (ms - fast) / (slow - fast);
+  return Math.round(wage * 0.4 * share);
+}
+
 /** Souvenirpris i en stad, med lokal variation som är stabil per dag. */
 export function souvenirPrice(
   souvenir: Souvenir,
@@ -249,6 +277,44 @@ export function backpackHomeValue(state: GameState): number {
   }, 0);
 }
 
+/** Passets stämplar, med stadsregionerna inkopplade. */
+export const STAMPS: Stamp[] = buildStamps((id) => CITY_BY_ID[id]?.region);
+
+export const STAMP_BY_ID: Record<string, Stamp> = Object.fromEntries(
+  STAMPS.map((s) => [s.id, s])
+);
+
+/**
+ * Prövar alla stämplar och lämnar tillbaka dem som just förtjänats. Anropas
+ * efter varje förändring; de som redan sitter i passet prövas inte om.
+ */
+export function newStamps(state: GameState): Stamp[] {
+  const earned: Stamp[] = [];
+  for (const stamp of STAMPS) {
+    if (state.stamps.includes(stamp.id)) continue;
+    if (stamp.test(state)) {
+      state.stamps.push(stamp.id);
+      earned.push(stamp);
+    }
+  }
+  return earned;
+}
+
+/** Titel att skryta med på slutskärmen. */
+export function rankTitle(score: number): { title: string; desc: string } {
+  if (score >= 90000)
+    return { title: 'Legendarisk ryggsäckare', desc: 'Det här gör ingen efter dig.' };
+  if (score >= 65000)
+    return { title: 'Världsvan globetrotter', desc: 'Du har sett mer än de flesta hinner på ett helt liv.' };
+  if (score >= 45000)
+    return { title: 'Rutinerad resenär', desc: 'Packningen sitter, ekonomin höll och kartan är läst.' };
+  if (score >= 28000)
+    return { title: 'Van ryggsäckare', desc: 'En riktig resa, med både arbete och äventyr.' };
+  if (score >= 15000)
+    return { title: 'Nyfiken nybörjare', desc: 'Du kom hem, och du kom hem klokare.' };
+  return { title: 'Hemvändare', desc: 'Resan blev kort, men den blev av.' };
+}
+
 /** Slutpoäng: pengar, souvenirvärde, kunskap och effektivitet. */
 export function finalScore(state: GameState): number {
   const cash = state.money - state.debt;
@@ -261,6 +327,11 @@ export function finalScore(state: GameState): number {
   );
   const uniqueCities = new Set(state.visited).size;
   const cityPoints = uniqueCities * 1200;
+  // Olika världsdelar är värda mer än flera städer i samma hörn av världen.
+  const regions = new Set(
+    state.visited.map((id) => CITY_BY_ID[id]?.region).filter(Boolean)
+  ).size;
+  const stampPoints = state.stamps.length * 900;
   /**
    * Effektivitetsbonus istället för ren snabbhet: den som ser många städer
    * på få dagar belönas, men en grundlig resa nollas inte ut.
@@ -273,6 +344,8 @@ export function finalScore(state: GameState): number {
       cash * 0.6 +
         bag * 0.9 +
         cityPoints +
+        regions * 1400 +
+        stampPoints +
         certs * 700 +
         accuracy * 6000 +
         efficiency

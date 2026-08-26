@@ -30,6 +30,21 @@ export const CURRENCIES: Record<string, Currency> = {
   NZD: { code: 'NZD', symbol: 'NZ$', name: 'nyzeeländska dollar', perBase: 0.163, decimals: 2 },
   RUB: { code: 'RUB', symbol: '₽', name: 'ryska rubel', perBase: 8.6, decimals: 0 },
   ISK: { code: 'ISK', symbol: 'kr', name: 'isländska kronor', perBase: 13.4, decimals: 0 },
+  CZK: { code: 'CZK', symbol: 'Kč', name: 'tjeckiska kronor', perBase: 2.2, decimals: 0 },
+  PLN: { code: 'PLN', symbol: 'zł', name: 'polska zloty', perBase: 0.38, decimals: 2 },
+  HUF: { code: 'HUF', symbol: 'Ft', name: 'ungerska forint', perBase: 34, decimals: 0 },
+  CHF: { code: 'CHF', symbol: 'Fr', name: 'schweizerfranc', perBase: 0.085, decimals: 2 },
+  AED: { code: 'AED', symbol: 'د.إ', name: 'emiratiska dirham', perBase: 0.36, decimals: 2 },
+  JOD: { code: 'JOD', symbol: 'JD', name: 'jordanska dinarer', perBase: 0.069, decimals: 2 },
+  KRW: { code: 'KRW', symbol: '₩', name: 'sydkoreanska won', perBase: 135, decimals: 0 },
+  SGD: { code: 'SGD', symbol: 'S$', name: 'singaporianska dollar', perBase: 0.128, decimals: 2 },
+  VND: { code: 'VND', symbol: '₫', name: 'vietnamesiska dong', perBase: 2500, decimals: 0 },
+  NPR: { code: 'NPR', symbol: 'Rs', name: 'nepalesiska rupier', perBase: 13.2, decimals: 0 },
+  IDR: { code: 'IDR', symbol: 'Rp', name: 'indonesiska rupiah', perBase: 1600, decimals: 0 },
+  CUP: { code: 'CUP', symbol: '$MN', name: 'kubanska peso', perBase: 2.4, decimals: 0 },
+  XOF: { code: 'XOF', symbol: 'CFA', name: 'västafrikanska franc', perBase: 59, decimals: 0 },
+  ETB: { code: 'ETB', symbol: 'Br', name: 'etiopiska birr', perBase: 11.5, decimals: 0 },
+  CLP: { code: 'CLP', symbol: 'CL$', name: 'chilenska peso', perBase: 92, decimals: 0 },
 };
 
 export function formatMoney(baseAmount: number, currencyCode: string): string {

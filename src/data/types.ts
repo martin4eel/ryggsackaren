@@ -68,14 +68,22 @@ export type Category =
 
 /** Arkadmoment som bryter av frågorna, precis som i originalet. */
 export type MinigameKind =
-  /** Sortera föremål som rullar förbi på ett band */
+  /** Sortera föremål som rullar förbi på ett band till rätt korg */
   | 'sortering'
-  /** Tryck på rätt instrument eller reglage när det efterfrågas */
+  /** Utför arbetsledarens order i rätt ordning innan tiden går ut */
   | 'instrument'
   /** Upprepa en sekvens ur minnet */
   | 'sekvens'
   /** Stoppa en mätare inom rätt zon */
-  | 'precision';
+  | 'precision'
+  /** Räkna ihop rätt växel i huvudet */
+  | 'vaxel'
+  /** Träffa det som ska plockas och låt resten vara */
+  | 'traffa'
+  /** Håll något i balans medan det driver åt sidan */
+  | 'balans'
+  /** Träffa slaget i takt med metronomen */
+  | 'takt';
 
 export interface Minigame {
   kind: MinigameKind;
@@ -85,12 +93,27 @@ export interface Minigame {
   brief: string;
   /**
    * Etiketter för det som ska hanteras. Betydelsen beror på typen:
-   * sortering och sekvens använder dem som föremål, instrument som reglage
-   * och precision som namn på det som ska mätas in.
+   *
+   * - `sortering`: korgarnas namn, med `pool` som innehåll
+   * - `instrument`: reglagen i panelen
+   * - `sekvens`: plattorna som blinkar
+   * - `precision`: namnet på det som mäts in (första posten)
+   * - `vaxel`: varorna i kassan
+   * - `traffa`: det som ska plockas, med `avoid` som det som ska undvikas
+   * - `balans`: namnet på det som ska hållas i balans (första posten)
+   * - `takt`: slagen som ska träffas i tur och ordning
    */
   items: string[];
   /** Enhet eller måttord som visas i precisionsspelet */
   unit?: string;
+  /**
+   * Bara för `sortering`: konkreta föremål per korg, i samma ordning som
+   * `items`. Utan det här blir sorteringen meningslös, eftersom föremålet
+   * annars bara är korgens eget namn.
+   */
+  pool?: string[][];
+  /** Bara för `traffa`: sådant som inte får träffas. */
+  avoid?: string[];
 }
 
 export interface Job {

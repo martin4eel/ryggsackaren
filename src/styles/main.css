@@ -1655,3 +1655,752 @@ img.no-photo {
 .worldmap .pin-highlight .pin-leader {
   stroke: rgba(255, 217, 160, 0.85);
 }
+
+/* ================================================================= tillägg
+   Stilar för passet, resehändelserna, svarsserien, de fyra nya
+   arkadmomenten och de sökbara stadslistorna.
+   ======================================================================== */
+
+/* -------------------------------------------------------------- rubrikrad */
+
+.panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.panel-head h2 {
+  margin: 0;
+}
+
+/* ----------------------------------------------------------- sökbar lista */
+
+.search {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 2px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.search:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 1px;
+}
+
+.city-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.city-group {
+  margin: 10px 0 2px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.city-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 7px;
+}
+
+.chip {
+  display: block;
+  text-align: left;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 2px solid var(--line);
+  background: var(--paper-dim);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+.chip:hover {
+  border-color: var(--sun-dark);
+  background: #fff;
+}
+
+.chip-on {
+  border-color: var(--stamp);
+  background: #fff;
+  box-shadow: inset 0 0 0 2px rgba(200, 69, 47, 0.22);
+}
+
+.chip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.chip-name {
+  font-weight: 700;
+  font-size: 0.97rem;
+}
+
+.chip-country {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.dest-poor {
+  opacity: 0.72;
+}
+
+.dest-price-out {
+  color: var(--stamp);
+  text-decoration: line-through;
+}
+
+/* ------------------------------------------------------- resehändelsekort */
+
+.event {
+  border-left: 6px solid var(--ink-soft);
+}
+
+.event h2 {
+  margin: 2px 0 6px;
+}
+
+.event-bra {
+  border-left-color: var(--palm);
+}
+
+.event-daligt {
+  border-left-color: var(--stamp);
+}
+
+.event-blandat {
+  border-left-color: var(--sun-dark);
+}
+
+.event-effect {
+  margin: 0 0 10px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+
+.event-bra .event-effect {
+  color: #1f5a46;
+}
+
+.event-daligt .event-effect {
+  color: var(--stamp);
+}
+
+/* --------------------------------------------------------------- snabbguide */
+
+.intro {
+  border-left: 6px solid var(--sun);
+}
+
+.intro-steps {
+  margin: 6px 0 10px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------- svarsserie */
+
+.combo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: var(--paper-dim);
+  border: 2px solid var(--line);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.combo-on {
+  border-color: var(--sun-dark);
+  background: rgba(242, 166, 59, 0.16);
+}
+
+.combo-label {
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.combo-pips {
+  display: flex;
+  gap: 4px;
+  flex: 1 1 auto;
+}
+
+.combo-pip {
+  flex: 1 1 0;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(29, 43, 52, 0.15);
+}
+
+.combo-pip-on {
+  background: linear-gradient(90deg, var(--sun), var(--stamp));
+}
+
+.combo-mult {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--ink);
+  min-width: 3ch;
+  text-align: right;
+}
+
+.combo-on .combo-mult {
+  color: var(--stamp);
+}
+
+.feedback-bonus {
+  margin: 6px 0 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #1f5a46;
+}
+
+.keyhint {
+  margin: 8px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* --------------------------------------------------------- souvenirtrender */
+
+.trend {
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.trend-low {
+  color: #1f5a46;
+}
+
+.trend-high {
+  color: var(--stamp);
+}
+
+.trend-mid {
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------------------ passet */
+
+.stamp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.stamp {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px dashed var(--line);
+  background: var(--paper-dim);
+}
+
+.stamp-on {
+  border-style: solid;
+  border-color: rgba(200, 69, 47, 0.4);
+  background: #fff;
+}
+
+.stamp-off {
+  opacity: 0.6;
+}
+
+.stamp-mark {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2.5px solid var(--ink-soft);
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.stamp-on .stamp-mark {
+  border-color: var(--stamp);
+  color: var(--stamp);
+  transform: rotate(-8deg);
+}
+
+.stamp-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stamp-name {
+  font-weight: 800;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.stamp-desc {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.stamp-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(76px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(460px, calc(100vw - 24px));
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 2px solid var(--stamp);
+  box-shadow: var(--shadow);
+  animation: toast-in 0.24s ease;
+}
+
+.stamp-toast-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.88rem;
+}
+
+/* --------------------------------------------------------------- rangtitel */
+
+.rank {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2.5px solid var(--stamp);
+  background: rgba(200, 69, 47, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rank-kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.rank-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--stamp);
+}
+
+.rank-desc {
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+/* ========================================================= arkadmomenten */
+
+.mg-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mg-tally {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.mg-feedback {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.mg-feedback-ok {
+  color: #1f5a46;
+}
+
+.mg-feedback-topp {
+  color: var(--sun-dark);
+}
+
+.mg-feedback-fel {
+  color: var(--stamp);
+}
+
+.mg-timebar-low {
+  background: var(--stamp);
+  animation: mg-pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes mg-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+/* Orderkön i instrumentmomentet */
+.mg-order {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.mg-chip {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: var(--paper-dim);
+  color: var(--ink-soft);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.mg-chip-now {
+  border-color: var(--sun-dark);
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(242, 166, 59, 0.25);
+}
+
+.mg-chip-done {
+  border-color: var(--palm);
+  background: rgba(71, 163, 130, 0.18);
+  color: #1f5a46;
+  text-decoration: line-through;
+}
+
+/* Prickskyttezonen i precisionsmomentet */
+.mg-bull {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(47, 125, 99, 0.45);
+  border-left: 2px solid var(--palm);
+  border-right: 2px solid var(--palm);
+}
+
+/* ------------------------------------------------------------------ växel */
+
+.mg-till {
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: #fff;
+  padding: 10px 14px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.mg-till-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 5px 0;
+  font-size: 0.95rem;
+}
+
+.mg-till-price {
+  font-weight: 700;
+}
+
+.mg-till-sum {
+  border-top: 2px solid var(--line);
+  margin-top: 4px;
+  padding-top: 8px;
+  font-weight: 800;
+}
+
+.mg-till-paid {
+  color: var(--sun-dark);
+  font-weight: 800;
+}
+
+.mg-change-options {
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+}
+
+.mg-change-btn {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.mg-change-right {
+  border-color: var(--palm);
+  background: rgba(71, 163, 130, 0.22);
+  color: #1f5a46;
+}
+
+.mg-change-wrong {
+  border-color: var(--stamp);
+  background: rgba(200, 69, 47, 0.16);
+  color: var(--stamp);
+}
+
+/* ----------------------------------------------------------------- träffa */
+
+.mg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.mg-slot {
+  min-height: 84px;
+  border-radius: 12px;
+  border: 2px dashed var(--line);
+  background: rgba(29, 43, 52, 0.06);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.86rem;
+  line-height: 1.25;
+  padding: 8px;
+  cursor: pointer;
+  transition: transform 0.09s ease, background 0.12s ease;
+}
+
+.mg-slot-up {
+  border-style: solid;
+  background: #fff;
+  animation: mg-pop 0.16s ease;
+}
+
+.mg-slot-good {
+  border-color: var(--palm);
+}
+
+.mg-slot-bad {
+  border-color: var(--sun-dark);
+}
+
+.mg-slot-taken {
+  background: rgba(71, 163, 130, 0.25);
+  transform: scale(0.94);
+}
+
+.mg-slot-oops {
+  background: rgba(200, 69, 47, 0.22);
+  transform: scale(0.94);
+}
+
+@keyframes mg-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ----------------------------------------------------------------- balans */
+
+.mg-balance-label {
+  margin: 0;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.mg-balance-track {
+  position: relative;
+  height: 58px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: linear-gradient(
+    90deg,
+    rgba(200, 69, 47, 0.2) 0%,
+    rgba(29, 43, 52, 0.05) 26%,
+    rgba(29, 43, 52, 0.05) 74%,
+    rgba(200, 69, 47, 0.2) 100%
+  );
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.mg-balance-track-bad {
+  border-color: var(--stamp);
+}
+
+.mg-balance-safe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 37%;
+  width: 26%;
+  background: rgba(71, 163, 130, 0.28);
+  border-left: 2px solid var(--palm);
+  border-right: 2px solid var(--palm);
+}
+
+.mg-balance-marker {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: 12px;
+  margin-left: -6px;
+  border-radius: 6px;
+  background: var(--ink);
+  box-shadow: 0 2px 6px rgba(4, 16, 26, 0.35);
+}
+
+.mg-balance-marker-bad {
+  background: var(--stamp);
+}
+
+.mg-hold-row {
+  grid-template-columns: 1fr 1fr;
+}
+
+.mg-hold {
+  background: var(--paper-dim);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  font-weight: 800;
+  padding: 16px 10px;
+  touch-action: none;
+  user-select: none;
+}
+
+.mg-hold-on {
+  background: var(--sun);
+  border-color: var(--sun-dark);
+}
+
+/* ------------------------------------------------------------------- takt */
+
+.mg-beat-label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.mg-beat-lane {
+  position: relative;
+  height: 62px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: var(--paper-dim);
+  overflow: hidden;
+  transition: border-color 0.1s ease;
+}
+
+.mg-beat-lane-hot {
+  border-color: var(--sun-dark);
+}
+
+.mg-beat-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 34%;
+  width: 32%;
+  background: rgba(242, 166, 59, 0.22);
+}
+
+.mg-beat-perfect {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 44%;
+  width: 12%;
+  background: rgba(71, 163, 130, 0.4);
+  border-left: 2px solid var(--palm);
+  border-right: 2px solid var(--palm);
+}
+
+.mg-beat-runner {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: 5px;
+  margin-left: -2.5px;
+  border-radius: 3px;
+  background: var(--ink);
+}
+
+.mg-beat-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.mg-beat-dot {
+  flex: 1 1 0;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(29, 43, 52, 0.15);
+}
+
+.mg-beat-dot-perfect {
+  background: var(--palm);
+}
+
+.mg-beat-dot-ok {
+  background: var(--sun);
+}
+
+.mg-beat-dot-miss {
+  background: var(--stamp);
+}
+
+.mg-strike {
+  padding: 18px 10px;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 520px) {
+  .mg-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stamp-grid {
+    grid-template-columns: 1fr;
+  }
+}
