@@ -1,4 +1,5 @@
 import type { TravelEvent } from '../data/events';
+import type { TransportMode } from '../data/transport';
 import type { Category } from '../data/types';
 
 export type Difficulty = 'turist' | 'globetrotter';
@@ -57,6 +58,10 @@ export interface GameState {
   timezonesCrossed: number;
   /** Total flugen sträcka i km */
   distance: number;
+  /** Antal resor per färdsätt */
+  tripsByMode: Partial<Record<TransportMode, number>>;
+  /** Tillryggalagd sträcka per färdsätt, i kilometer */
+  kmByMode: Partial<Record<TransportMode, number>>;
   /** Besökta städer i ordning */
   visited: string[];
   /** Framsteg per stad */
@@ -129,6 +134,8 @@ export function createGame(
     days: 0,
     timezonesCrossed: 0,
     distance: 0,
+    tripsByMode: {},
+    kmByMode: {},
     visited: [homeCityId],
     progress: {},
     backpack: [],
@@ -217,6 +224,8 @@ function migrate(
   // En pågående resa har redan passerat introduktionen.
   state.seenIntro ??= true;
   state.cityStats ??= {};
+  state.tripsByMode ??= {};
+  state.kmByMode ??= {};
   // Resor som påbörjades innan namnet fanns får en neutral benämning.
   state.playerName ||= 'Resenären';
   return state;

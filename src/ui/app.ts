@@ -2313,7 +2313,11 @@ export class App {
     const from = this.city;
     s.money -= option.price;
     s.spent += option.price;
-    s.distance += distanceKm(from, target);
+    const stracka = distanceKm(from, target);
+    s.distance += stracka;
+    // Färdsättet räknas, så att passet kan belöna den som håller sig på marken.
+    s.tripsByMode[option.mode] = (s.tripsByMode[option.mode] ?? 0) + 1;
+    s.kmByMode[option.mode] = (s.kmByMode[option.mode] ?? 0) + stracka;
     s.timezonesCrossed += Math.abs(target.utc - from.utc);
     // Restiden kostar boende i genomsnitt av de två städerna.
     const avgCity: City =
@@ -2527,7 +2531,9 @@ export class App {
         stat('Träffsäkerhet', `${accuracy}%`),
         stat('Längsta svit', `${s.bestStreak}`),
         stat('Arbetsskift', `${s.shiftsWorked}`),
-        stat('Flugna km', s.distance.toLocaleString('sv-SE')),
+        stat('Resta km', s.distance.toLocaleString('sv-SE')),
+        stat('Varav på marken', markKm(s).toLocaleString('sv-SE')),
+        stat('Tågresor', `${s.tripsByMode.tag ?? 0}`),
         stat('Tidszoner', `${Math.round(s.timezonesCrossed)}`),
         stat('Samtal hem', `${s.callsHome}`)
       )
@@ -3113,6 +3119,13 @@ function countUp(node: HTMLElement, to: number, ms = 1100): void {
     if (t < 1) window.requestAnimationFrame(step);
   };
   window.requestAnimationFrame(step);
+}
+
+/** Sträcka tillryggalagd på marken: tåg, buss och färja. */
+function markKm(s: GameState): number {
+  return (
+    (s.kmByMode.tag ?? 0) + (s.kmByMode.buss ?? 0) + (s.kmByMode.farja ?? 0)
+  );
 }
 
 /** Prisnivån i klartext, i stället för ett indextal ingen kan tolka. */

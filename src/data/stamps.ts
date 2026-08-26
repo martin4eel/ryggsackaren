@@ -77,6 +77,26 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       test: (s) => regionsVisited(s, cityRegion).size >= 8,
     },
     {
+      id: 'klimatbonus',
+      name: 'Klimatbonus',
+      desc: 'Ta tåget minst fem gånger på samma resa.',
+      glyph: '☘',
+      test: (s) => (s.tripsByMode.tag ?? 0) >= 5,
+    },
+    {
+      id: 'markresenar',
+      name: 'Markresenär',
+      desc: 'Res mer än halva sträckan på marken i stället för i luften.',
+      glyph: '⇉',
+      test: (s) => {
+        const mark =
+          (s.kmByMode.tag ?? 0) + (s.kmByMode.buss ?? 0) + (s.kmByMode.farja ?? 0);
+        const luft = s.kmByMode.flyg ?? 0;
+        // Kräver en resa av någon längd, annars räcker en bussresa i Norden.
+        return mark + luft >= 8000 && mark > luft;
+      },
+    },
+    {
       id: 'langflygare',
       name: 'Långflygare',
       desc: 'Res 50 000 kilometer.',

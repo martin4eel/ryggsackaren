@@ -184,8 +184,8 @@ webbläsaren och överlever att sparfilen raderas.
    någon.
 
    På sidorna därefter sitter stämplarna tryckta i bläck, snett och lite
-   huller om buller, med resdagen i kanten. Femton finns att jaga: fyra
-   kontinenter, tio i rad, perfekt skift, skuldfri och så vidare. De som ännu
+   huller om buller, med resdagen i kanten. Sjutton finns att jaga: fyra
+   kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet.
 10. **Ljud.** Ett tjugotal effekter (rätt och fel svar, lön, avresa, ankomst,
@@ -229,7 +229,7 @@ _Legendarisk ryggsäckare_.
 - 80 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
 - 1 624 frågor uppdelade i två svårighetsgrader, varav 1 238 jobbfrågor
 - 8 arkadmoment som avslutar arbetsskiften
-- 15 stämplar att samla i passet
+- 17 stämplar att samla i passet
 - 15 resehändelser som kan slå till på vägen
 - 64 souvenirer med regional prissättning
 - 40 valutor
