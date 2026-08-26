@@ -139,10 +139,33 @@ webbläsaren och överlever att sparfilen raderas.
    Köping får man ta tåget innan man kan flyga.
 
    Raden under bilden berättar vad skylten man pekar på gör.
-4. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
+4. **Stationerna.** Bakom varje stationsskylt ligger en egen plats, inte en
+   lista. Hallen ritas som en siluett ovanpå stadens foto – glasfasad och
+   flygplan på flygplatsen, perrongtak och stationsklocka på järnvägsstationen,
+   numrerade lägen vid bussterminalen, skrov och landgång i hamnen – och mitt i
+   bilden hänger en **elektronisk avgångstavla**.
+
+   Tavlan visar tid, destination, bolag och linjenummer, gate eller spår eller
+   läge eller kaj, pris och status. Den lever medan man står och tittar:
+   avgångar rullar bort och nya glider in underifrån, gater byts, turer blir
+   försenade eller inställda, och en textremsa längst ner upprepar det
+   högtalaren just sagt. Varje ändrad ruta vänder sig som ett fallblad.
+
+   **Tiden på tavlan styr ingenting.** Klockslagen finns för att en station ska
+   se ut som en station; en biljett går alltid att köpa, också till en tur som
+   redan gått. Priset och restiden kommer däremot alltid ur reselogiken, så
+   tavlan kan aldrig skylta med en förbindelse som inte går att boka.
+
+   Trycker man på en rad fälls biljetten upp med avgång, restid, bolag,
+   linjenummer, plats och pris, och därifrån genomförs resan som vanligt.
+
+   Orden skiljer sig åt: *gate* på flygplatsen, *spår* på stationen, *läge* vid
+   bussterminalen och *kaj* i hamnen. Det gör också anläggningen – Köping har
+   en busstation, Stockholm en bussterminal.
+5. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
-5. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
+6. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
@@ -151,16 +174,16 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
-6. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
+7. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
    sortera på löpande band, utföra order i rätt följd, upprepa en sekvens ur
    minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
    saker och låta resten vara, hålla balansen eller slå i takt. Det ger upp
    till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
    till. Klarar du 70 procent av skiftet totalt får du ett **certifikat**,
    som öppnar bättre betalda jobb i samma ämne i alla städer.
-7. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
+8. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
-8. **Resebyrån.** Välj destination på kartan eller i listan, som går att
+9. **Resebyrån.** Välj destination på kartan eller i listan, som går att
    söka i. Vilka färdsätt som erbjuds beror på geografin, inte på en fast
    mall: buss och tåg kräver landförbindelse, färja kräver en linje och flyget
    når allt över 35 mil. Går ett färdsätt inte, står det utskrivet varför.
@@ -184,9 +207,9 @@ webbläsaren och överlever att sparfilen raderas.
    Tid är också en resurs eftersom boendet kostar varje dag, så det billigaste
    är sällan självklart bäst. Långa flyg från en stad utan interkontinental
    flygplats går via en hub och kostar en dag extra.
-9. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
+10. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
    av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
-10. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
+11. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
 
    Den första är personuppgiftssidan: hemstad, resenärstyp, dag på resan,
    städer, stämplar och flugna kilometer – och ditt **personbästa** ur
@@ -199,21 +222,30 @@ webbläsaren och överlever att sparfilen raderas.
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet.
-11. **Ljud.** Ett trettiotal effekter (rätt och fel svar, lön, avresa, ankomst,
+12. **Ljud.** Varje station har dessutom en egen ljudbild som ligger och går så
+   länge man står kvar: sorl i en hög hall, rullväskor och avlägsna jetmotorer
+   på flygplatsen; bromsar, dörrsignaler och hjul över rälsskarvar på
+   stationen; tryckluftsbromsar och dieselmotorer vid bussterminalen; vågor,
+   vind, trutar och mistlur i hamnen. Ovanpå mattan går utrop i högtalaren –
+   pling-plong och sedan ett meddelande man hör men inte förstår orden i,
+   precis som på riktigt. Både tidpunkt, tonhöjd och längd lottas, så samma
+   ljud kommer aldrig två gånger likadant. Ingen musik.
+
+   Därtill ett trettiotal effekter (rätt och fel svar, lön, avresa, ankomst,
    metronom, trumslag, stämpel och alla arkadmoment) syntetiseras i
    webbläsaren, så inga ljudfiler behövs. Varje färdsätt har sitt eget
    avgångsljud, och i telefonkiosken babblar det redan i luren
    när man kliver in – rösterna är formantsyntes genom ett telefonfilter,
    alltså pladder utan ord. Högtalarknappen i statusraden
    stegar mellan avstängt, dämpat och fullt ljud; valet sparas.
-12. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
+13. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
    och backa till staden med `Esc`. Balansmomentet styrs med piltangenterna
    och taktmomentet med mellanslag.
-13. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+14. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
     frågar först, och visar vad som går förlorat, innan resan raderas.
-14. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+15. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
     avsluta resan, få poäng och en titel.
-15. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
+16. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
     startskärmen, med poäng, titel, dagar, städer och träffsäkerhet. Varje rad
     visar också vilken stad du hade bäst koll på och vilken som avslöjade dig.
     Spelet räknar rätt och fel per stad, både på turistbyrån och på jobben.
@@ -247,6 +279,8 @@ _Legendarisk ryggsäckare_.
 - 15 resehändelser som kan slå till på vägen
 - 64 souvenirer med regional prissättning
 - 40 valutor
+- 4 stationsmiljöer med egen avgångstavla, egna ord och egen ljudmatta
+- 41 länder med egna flyg-, tåg- och bussbolag, och 7 namngivna färjelinjer
 - Ett trettiotal syntetiserade ljudeffekter (WebAudio) med volymknapp i
   statusraden
 
@@ -268,7 +302,10 @@ src/
     currencies.ts          Växelkurser och formatering av belopp
     stamps.ts              Passets stämplar och villkoren för dem
     events.ts              Resehändelser som kan slå till mellan städerna
-    transport.ts           Landregionernas grannskap, färjelinjer, avstånds-
+    operators.ts           Flyg-, tåg- och bussbolag per land, med
+                           flightkoder och landets tåghastighet
+    transport.ts           Landregionernas grannskap, färjelinjer med fartyg
+                           och turlista, avstånds-
                            tak och priser per färdsätt
     worldMap.ts            Genererad landmassa som SVG-path (Natural Earth)
     questions/
@@ -279,10 +316,16 @@ src/
     rules.ts               Avstånd, priser, löner, poäng och frågeurval
     travel.ts              Vilka färdsätt som går mellan två städer, och
                            varför de andra inte gör det
+    departures.ts          Avgångstavlornas innehåll: linjenummer, gate, spår,
+                           status och restid. Presentation, inte speltid.
     difficulty.ts          Allt som skiljer Turist från Globetrotter
     highscores.ts          Resedagboken och statistiken över stadskunskap
   ui/
     app.ts                 Skärmar, spelloop och tangentbordsstyrning
+    station.ts             Stationshallarna: siluetter i SVG, biljettvyn och
+                           linjenätet härifrån
+    board.ts               Den elektroniska avgångstavlan, som uppdaterar sig
+                           cell för cell utan att ritas om
     map.ts                 Världskartan: zoom, panorering och etikettplacering,
                            samt resesekvensen mellan två städer
     globe.ts               Ortografisk jordglob: landmassan omprojicerad från
@@ -343,6 +386,13 @@ från varje annan stad genom nätverket**, med byten. Alla par behöver alltså
 inte ha en direktförbindelse – Köping saknar flygplats – men en stad som inte
 går att ta sig ifrån skulle låsa fast en spelare utan att något syns.
 
+Sedan stationerna kom till kontrolleras också **trafikbolagen**: att varje
+stads land finns i `data/operators.ts`, att en stad med fjärrtåg ligger i ett
+land som har ett järnvägsbolag, att tåghastigheterna är rimliga och att inga
+två länder delar flygbolagskod – annars blir flightnumren på tavlan tvetydiga.
+Färjelinjerna måste ha rederi, fartygsnamn och minst en avgångstid inom dygnet,
+eftersom hamnens tavla läser turlistan därifrån.
+
 ### Nya städer och foton
 
 En ny stad behöver ett foto som heter `public/cities/<stads-id>.jpg`, annars
@@ -358,7 +408,9 @@ Wikipedia-artikel vars ledningsbild används, eller en specifik Commons-fil
 vid visning). Skriptet komprimerar fotona via `compress-city-photos.py`
 (kräver Python 3 med Pillow) och skriver om `public/cities/ATTRIBUTION.md`
 med upphovsmän och licenser. Kom också ihåg att lägga till staden i
-service workerns fotolista i `public/sw.js`.
+service workerns fotolista i `public/sw.js`, och att staden behöver ett land
+med trafikbolag i `src/data/operators.ts` – valideringen stoppar bygget annars,
+så att ingen station kan hamna med ett namnlöst reservbolag på tavlan.
 
 Kartans landmassa är genererad från Natural Earths 110m-dataset (public domain)
 och ligger färdig i `src/data/worldMap.ts`, så inga kartberoenden behövs vid

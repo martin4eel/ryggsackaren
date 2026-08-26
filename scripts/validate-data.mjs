@@ -32,7 +32,10 @@ try {
   const { CITIES } = await load('/src/data/cities.ts');
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
-  const { LAND_ADJACENCY, FERRY_LINKS } = await load('/src/data/transport.ts');
+  const { LAND_ADJACENCY, FERRY_LINKS, FERRY_LINES } = await load(
+    '/src/data/transport.ts'
+  );
+  const { OPERATORS } = await load('/src/data/operators.ts');
   const { availableRoutes } = await load('/src/game/travel.ts');
 
   const jobById = Object.fromEntries(JOBS.map((j) => [j.id, j]));
@@ -307,6 +310,54 @@ try {
   }
 
   /**
+   * Hamnens avgångstavla läser turlistan ur FERRY_LINES. En linje utan
+   * avgångstider skulle ge en tom tavla i en hamn som staden ändå skyltar med.
+   */
+  for (const line of FERRY_LINES) {
+    const namn = `färjelinjen ${line.a}-${line.b}`;
+    if (!line.rederi?.trim()) problems.push(`${namn} saknar rederi`);
+    if (!line.fartyg?.trim()) problems.push(`${namn} saknar fartygsnamn`);
+    if (!Array.isArray(line.avgangar) || line.avgangar.length === 0)
+      problems.push(`${namn} saknar avgångstider`);
+    for (const t of line.avgangar ?? []) {
+      if (!Number.isInteger(t) || t < 0 || t >= 1440)
+        problems.push(`${namn} har en avgångstid utanför dygnet: ${t}`);
+    }
+  }
+
+  /**
+   * Trafikbolagen. Saknas landet i tabellen faller stationen tillbaka på ett
+   * namnlöst reservbolag, och då står det "Continental Wings" på en tavla i
+   * Hanoi utan att någon märker det förrän en spelare undrar.
+   */
+  for (const c of CITIES) {
+    const ops = OPERATORS[c.country];
+    if (!ops) {
+      problems.push(`${c.country} saknar trafikbolag i data/operators.ts`);
+      continue;
+    }
+    if (!ops.air?.name || !/^[A-Z]{2}$/.test(ops.air?.code ?? ''))
+      problems.push(`${c.country} saknar flygbolag med tvåbokstavskod`);
+    if (!ops.bus?.trim()) problems.push(`${c.country} saknar bussbolag`);
+    if (c.rail && !ops.rail)
+      problems.push(
+        `${c.name} har fjärrtåg men ${c.country} saknar järnvägsbolag`
+      );
+    if (ops.rail && !(ops.rail.speed > 20 && ops.rail.speed < 400))
+      problems.push(`${c.country} har orimlig tåghastighet: ${ops.rail.speed}`);
+  }
+
+  /** Två länder får inte dela flygbolagskod - flightnumren blir tvetydiga. */
+  const koder = new Map();
+  for (const [land, ops] of Object.entries(OPERATORS)) {
+    const kod = ops.air?.code;
+    if (!kod) continue;
+    if (koder.has(kod))
+      problems.push(`flygbolagskoden ${kod} används av både ${koder.get(kod)} och ${land}`);
+    else koder.set(kod, land);
+  }
+
+  /**
    * Alla stadspar behöver inte ha en direktförbindelse - Köping har ingen
    * flygplats, så därifrån går inget flyg alls. Kravet är i stället att varje
    * stad går att nå från varje annan stad genom nätverket, med byten.
@@ -366,6 +417,11 @@ try {
       `alla städer nåbara med byten`
   );
 
+  console.log(
+    `Trafik: ${Object.keys(OPERATORS).length} länder med trafikbolag, ` +
+      `${FERRY_LINES.length} färjelinjer, ` +
+      `${FERRY_LINES.reduce((n, l) => n + l.avgangar.length, 0)} dagliga färjeturer`
+  );
   console.log(`Frågor: ${total}`);
   console.log(
     `Städer: ${CITIES.length} · Jobb: ${JOBS.length} · Jobbfrågor: ${Object.values(
