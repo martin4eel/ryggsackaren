@@ -6,17 +6,36 @@ export type Difficulty = 'turist' | 'globetrotter';
 
 export type Screen =
   | 'start'
-  | 'valjstad'
-  | 'karta'
   | 'stad'
+  /** En station: busstation, tågstation, hamn eller flygplats */
+  | 'station'
+  /** Atlasen: var i världen du står, och fakta om staden och landet */
+  | 'varldskarta'
   | 'turistbyra'
   | 'tidning'
   | 'jobb'
   | 'souvenir'
   | 'ryggsack'
   | 'telefon'
-  | 'resa'
   | 'slut';
+
+/**
+ * Skärmar som funnits men tagits bort. En sparfil som ligger på en av dem
+ * lyfts till stadsbilden i stället för att kasta spelaren ut i en tom vy.
+ */
+const KANDA_SKARMAR = new Set<Screen>([
+  'start',
+  'stad',
+  'station',
+  'varldskarta',
+  'turistbyra',
+  'tidning',
+  'jobb',
+  'souvenir',
+  'ryggsack',
+  'telefon',
+  'slut',
+]);
 
 export interface BackpackItem {
   souvenirId: string;
@@ -223,6 +242,12 @@ function migrate(
   state.stampDays ??= {};
   // En pågående resa har redan passerat introduktionen.
   state.seenIntro ??= true;
+  /**
+   * Resebyrån och biljettvalet ('karta' och 'resa') finns inte längre - de
+   * ersattes av stationerna och atlasen. En sparfil som stannade där landar
+   * på stadsbilden, där alla skyltar finns.
+   */
+  if (!KANDA_SKARMAR.has(state.screen)) state.screen = 'stad';
   state.cityStats ??= {};
   state.tripsByMode ??= {};
   state.kmByMode ??= {};

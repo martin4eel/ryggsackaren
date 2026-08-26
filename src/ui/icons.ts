@@ -25,6 +25,7 @@ export type IconName =
   | 'skylt-tag'
   | 'skylt-farja'
   | 'skylt-telefon'
+  | 'skylt-karta'
   | 'buss-profil'
   | 'tag-profil'
   | 'farja-profil'
@@ -186,6 +187,25 @@ const ICONS: Record<IconName, Part[]> = {
     { tag: 'rect', attrs: { x: '7.6', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
     { tag: 'rect', attrs: { x: '13.4', y: '11.2', width: '3', height: '2.4', class: 'icon-knockout', stroke: 'none' } },
     { tag: 'rect', attrs: { x: '9.4', y: '4.6', width: '5.2', height: '4', rx: '0.8', fill: 'currentColor', stroke: 'none' } },
+  ],
+  'skylt-karta': [
+    // Vikt karta i tre fält, med en nål i mitten.
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M2.6 5.4 9 3.2v15.4l-6.4 2.2zM9 3.2l6 2.2v15.4L9 18.6zM15 5.4l6.4-2.2v15.4L15 20.8z',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+    },
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M12 7.4a2.5 2.5 0 0 1 2.5 2.5c0 1.8-2.5 4.6-2.5 4.6S9.5 11.7 9.5 9.9A2.5 2.5 0 0 1 12 7.4z',
+        class: 'icon-knockout',
+        stroke: 'none',
+      },
+    },
   ],
   'skylt-telefon': [
     // Telefonkiosk med tak, fönsterspröjs och dörrhandtag.

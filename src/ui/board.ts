@@ -2,15 +2,16 @@ import {
   buildBoard,
   dayLabel,
   hhmm,
-  makeDeparture,
+  rescheduleDeparture,
   statusForMinutes,
   statusText,
-  stationDestinations,
   STAND_LABEL,
   type Departure,
 } from '../game/departures';
-import type { TransportMode } from '../data/transport';
+import { CITIES } from '../data/cities';
+import { MODE_LABELS, type TransportMode } from '../data/transport';
 import type { City } from '../data/types';
+import { blockedRoutes } from '../game/travel';
 import type { Difficulty } from '../game/state';
 import { clear, el } from './dom';
 import { playSound, playStation } from './audio';
@@ -58,13 +59,26 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
   const { from, mode, difficulty, money, onPick } = opts;
   const start = buildBoard({ from, mode, difficulty, now: wallClock() });
   let rader = start.rows;
-  /** Kommande turer att fylla på med. Färjor har en turlista att följa. */
+  /** Kommande turer att fylla på med. Bara hamnen har en turlista att följa. */
   const reserv = start.reserve;
-  const alla = stationDestinations(from, mode, difficulty);
-  let nastaSlot = rader.length;
 
   const wrap = el('section', { class: 'board', 'data-mode': mode });
   const klocka = el('span', { class: 'board-clock' }, hhmm(wallClock()));
+  /**
+   * Sökfältet. Tavlan visar hela linjenätet, och på en storflygplats är det
+   * fyrtio rader. Utan ett sätt att gallra vore det snabbare att bläddra i en
+   * lista, och då hade tavlan varit en meny igen.
+   */
+  const sok = el('input', {
+    class: 'board-sok',
+    type: 'search',
+    placeholder: 'Sök destination',
+    'aria-label': 'Sök destination på tavlan',
+  }) as HTMLInputElement;
+  const traff = el('span', { class: 'board-traff', hidden: true });
+  /** Förklaringen när sökningen inte gav något. */
+  const tomtSkal = el('p', { class: 'board-skal', hidden: true });
+
   wrap.append(
     el('div', { class: 'board-head' },
       el('span', { class: 'board-title' }, 'Avgångar'),
@@ -74,6 +88,8 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
       ),
       klocka
     ),
+    el('div', { class: 'board-sokrad' }, sok, traff),
+    tomtSkal,
     el('div', { class: 'board-cols', 'aria-hidden': 'true' },
       el('span', {}, 'Tid'),
       el('span', {}, 'Destination'),
@@ -102,6 +118,52 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
 
   /** Raderna som ligger ute, så att en cell kan bytas i stället för hela raden. */
   const noder = new Map<string, HTMLElement>();
+
+  const nyckel = (t: string) =>
+    t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  /** Gallrar tavlan efter sökningen utan att rita om en enda rad. */
+  const gallra = (): void => {
+    const behov = nyckel(sok.value.trim());
+    let synliga = 0;
+    for (const d of rader) {
+      const li = noder.get(d.id);
+      if (!li) continue;
+      const med =
+        behov === '' ||
+        nyckel(d.city.name).includes(behov) ||
+        nyckel(d.city.country).includes(behov);
+      li.hidden = !med;
+      if (med) synliga++;
+    }
+    traff.hidden = behov === '';
+    traff.textContent =
+      synliga === 0 ? 'Ingen träff' : `${synliga} av ${rader.length}`;
+
+    /**
+     * En sökning utan träff är sällan ett stavfel. Oftast är det en stad som
+     * finns, men som inte går att nå med just det här färdsättet - och då är
+     * skälet mer värt än ett "ingen träff". Reglerna för vad som går och inte
+     * ligger i game/travel.ts, samma regler som sätter upp stadens skyltar.
+     */
+    tomtSkal.hidden = !(behov !== '' && synliga === 0);
+    if (!tomtSkal.hidden) {
+      const traffad = CITIES.find(
+        (c) =>
+          c.id !== from.id &&
+          (nyckel(c.name).includes(behov) || nyckel(c.country).includes(behov))
+      );
+      if (!traffad) {
+        tomtSkal.textContent = `Ingen destination heter så. ${MODE_LABELS[mode]} härifrån går till ${rader.length} städer.`;
+      } else {
+        const skal = blockedRoutes(from, traffad).find((b) => b.mode === mode);
+        tomtSkal.textContent = skal
+          ? `${traffad.name}: ${skal.reason}`
+          : `${traffad.name} går inte att nå med ${MODE_LABELS[mode].toLowerCase()} härifrån.`;
+      }
+    }
+  };
+  sok.addEventListener('input', gallra);
 
   /** Byter text i en cell och blinkar till, men bara när den ändrat sig. */
   const setCell = (row: HTMLElement, cls: string, text: string): void => {
@@ -137,7 +199,13 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
         { class: `board-cell ${cls}`, 'data-v': text, 'data-label': label },
         text
       );
-    const dagtext = dayLabel(d.dag);
+    /**
+     * Dagsmärket sätts bara i hamnen. Där betyder det något: nästa båt går
+     * i morgon bitti. På en flygplats sträcker sig tavlan några timmar framåt
+     * och passerar midnatt av sig själv, och då blir märket bara brus på
+     * trettio rader.
+     */
+    const dagtext = mode === 'farja' ? dayLabel(d.dag) : undefined;
     knapp.append(
       // Klockslaget ligger i en egen cell inuti tiden, så att dagsmärket
       // ("i morgon") överlever när tiden skrivs om vid en försening.
@@ -181,27 +249,6 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
     }
   };
 
-  /**
-   * Ny avgång längst ner på tavlan, till en stad som inte redan står där.
-   * Utan spärren mot dubbletter kan samma stad ligga på tre rader i rad, och
-   * då ser det ut som ett fel i stället för som trafik.
-   */
-  const fyllPa = (now: number): void => {
-    // Färjor har en turlista. Nästa rad är nästa tur, inte en lottad avgång.
-    if (reserv.length > 0) {
-      const nasta = reserv.shift()!;
-      rader.push(nasta);
-      return;
-    }
-    if (alla.length === 0) return;
-    const ute = new Set(rader.map((r) => r.city.id));
-    const kandidater = alla.filter((a) => !ute.has(a.city.id));
-    const pool = kandidater.length > 0 ? kandidater : alla;
-    const val = pool[Math.floor(Math.random() * pool.length)]!;
-    const sist = rader.length > 0 ? rader[rader.length - 1]!.time : now;
-    const tid = Math.max(now + 25, sist + 5 + Math.floor(Math.random() * 20));
-    rader.push(makeDeparture(from, val, mode, tid, nastaSlot++, now));
-  };
 
   /** En knuff på tavlan: förseningar, gatebyten och enstaka inställda turer. */
   const rucka = (): void => {
@@ -277,21 +324,30 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
     const now = wallClock();
     klocka.textContent = hhmm(now);
 
-    // Avgångar som gått rullar bort, och tavlan fyller på underifrån.
-    const kvar = rader.filter((d) => d.time + d.delay - now > -3);
-    const borta = rader.length - kvar.length;
-    if (borta > 0) {
-      for (const d of rader) {
-        if (kvar.includes(d)) continue;
-        const li = noder.get(d.id);
-        if (li) {
-          li.classList.add('board-row-bort');
-          window.setTimeout(() => li.remove(), 420);
-          noder.delete(d.id);
+    /**
+     * Avgångar som gått. På en station med turlista - hamnen - rullar raden
+     * bort och nästa tur glider in underifrån. På övriga stationer skrivs
+     * raden i stället om till nästa tur samma dag, så att destinationen aldrig
+     * försvinner från tavlan medan någon står och letar efter den.
+     */
+    const gangna = rader.filter((d) => d.time + d.delay - now <= -3);
+    if (gangna.length > 0) {
+      const senaste = rader.reduce((m, d) => Math.max(m, d.time), now);
+      for (const d of gangna) {
+        if (mode === 'farja') {
+          const li = noder.get(d.id);
+          if (li) {
+            li.classList.add('board-row-bort');
+            window.setTimeout(() => li.remove(), 420);
+            noder.delete(d.id);
+          }
+          rader = rader.filter((r) => r !== d);
+          const nasta = reserv.shift();
+          if (nasta) rader.push(nasta);
+        } else {
+          rescheduleDeparture(from, d, senaste);
         }
       }
-      rader = kvar;
-      for (let i = 0; i < borta; i++) fyllPa(now);
       playStation(mode, 'tavla');
     }
 
@@ -340,9 +396,12 @@ export function renderBoard(opts: BoardOpts): BoardHandle {
       const li = noder.get(d.id);
       if (li) lista.append(li);
     }
+    // En rad som just skrivits om kan ha fallit utanför sökningen.
+    gallra();
   };
 
   paint();
+  gallra();
   nyttUtrop(false);
   const timer = window.setInterval(tick, TICK_MS);
   const klockTimer = window.setInterval(() => {

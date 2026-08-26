@@ -216,21 +216,23 @@ function terminalFor(mode: TransportMode, seed: string): string | undefined {
 }
 
 /**
- * Hur många avgångar en tavla visar. En storflygplats har fler rader än en
- * färjeterminal, och det är just skillnaden som gör stationerna olika.
+ * Hur många rader hamnens tavla visar. Övriga stationer visar hela sitt
+ * linjenät - en avgångstavla som döljer destinationer är en meny med extra
+ * steg, och spelaren ska kunna hitta staden hen tänkt sig utan att vänta på
+ * att den ska dyka upp.
  */
-const BOARD_SIZE: Record<TransportMode, number> = {
-  flyg: 11,
-  tag: 10,
-  buss: 9,
-  farja: 5,
-};
+const FERRY_BOARD_SIZE = 6;
 
-/** Hur tätt avgångarna ligger i minuter. Färjan är gles, tunnelbanan tät. */
+/**
+ * Hur tätt avgångarna ligger i minuter. Tavlan visar hela linjenätet, så
+ * mellanrummet avgör hur långt fram i tiden den sträcker sig: fyrtiofyra
+ * destinationer med en kvart emellan skulle ge en tavla som slutar i
+ * gryningen. Färjan är gles av andra skäl - den går ett par gånger om dygnet.
+ */
 const SPACING: Record<TransportMode, number> = {
-  flyg: 14,
-  tag: 17,
-  buss: 21,
+  flyg: 6,
+  tag: 8,
+  buss: 11,
   farja: 55,
 };
 
@@ -255,39 +257,6 @@ export function stationDestinations(
   // Samma lista som stadens skyltar räknar på, så att en skylt aldrig kan
   // lova fler destinationer än tavlan innanför den visar.
   return destinationsByMode(from, mode, difficulty, CITIES);
-}
-
-/**
- * Väljer ut de destinationer som står på tavlan just nu.
- *
- * Urvalet viktas mot de närmaste - dit går det flest turer - men var tredje
- * plats reserveras för en längre linje, så att tavlan i Stockholm också kan
- * skylta med Bangkok. `rotation` gör att urvalet förskjuts över tid, vilket är
- * det som får tavlan att byta innehåll medan man står och tittar.
- */
-function selectDestinations(
-  all: Array<{ city: City; route: Route }>,
-  count: number,
-  rotation: number
-): Array<{ city: City; route: Route }> {
-  if (all.length <= count) return all.slice();
-  const nara = all.slice(0, Math.ceil(all.length / 2));
-  const langt = all.slice(Math.ceil(all.length / 2));
-  const valda: Array<{ city: City; route: Route }> = [];
-  const sedda = new Set<string>();
-  for (let i = 0; i < count; i++) {
-    const pool = i % 3 === 2 && langt.length > 0 ? langt : nara;
-    // Rotationen förskjuter startpunkten, så att listan vandrar med tiden.
-    for (let försök = 0; försök < pool.length; försök++) {
-      const idx = (rotation + i * 7 + försök * 3) % pool.length;
-      const kandidat = pool[idx]!;
-      if (sedda.has(kandidat.city.id)) continue;
-      sedda.add(kandidat.city.id);
-      valda.push(kandidat);
-      break;
-    }
-  }
-  return valda;
 }
 
 /** Statusen som följer av hur långt det är kvar till avgång. */
@@ -340,20 +309,30 @@ export function buildBoard(opts: BoardOptions): Board {
      * skriver inte upp turen om tre dygn; den ligger i reserven och glider in
      * underifrån först när dagens sista tur lagt ut.
      */
-    const nara = turlista.filter((d) => d.dag < 2).slice(0, BOARD_SIZE.farja);
+    const nara = turlista.filter((d) => d.dag < 2).slice(0, FERRY_BOARD_SIZE);
     return {
       rows: nara,
       reserve: turlista.filter((d) => !nara.includes(d)),
     };
   }
 
-  const rotation = Math.floor(now / 37);
-  const antal = Math.min(BOARD_SIZE[mode], alla.length);
-  const valda = selectDestinations(alla, antal, rotation);
+  /**
+   * Alla destinationer står på tavlan, men inte i prisordning - då hade den
+   * lästs som en prislista. Ordningen lottas deterministiskt per sträcka, så
+   * att nära och långt blandas som på en riktig tavla, och sorteras sedan om
+   * efter avgångstid.
+   */
+  const ordnad = alla
+    .map((d) => ({
+      d,
+      k: pseudoRandom(`${from.id}|${d.city.id}|${mode}|ordning`),
+    }))
+    .sort((a, b) => a.k - b.k)
+    .map((x) => x.d);
 
   const rows: Departure[] = [];
   let tid = now + 4;
-  valda.forEach((v, i) => {
+  ordnad.forEach((v, i) => {
     tid += pick(`${from.id}|${v.city.id}|${mode}|${i}|s`, 3, SPACING[mode]);
     rows.push(makeDeparture(from, v, mode, tid, i, now));
   });
@@ -375,8 +354,15 @@ export function makeDeparture(
 ): Departure {
   const seed = `${from.id}|${dest.city.id}|${mode}|${slot}|${Math.floor(time / 60)}`;
   return {
-    // Tiden ingår i nyckeln, annars delar två turer till samma stad rad.
-    id: `${dest.city.id}|${mode}|${Math.round(time)}`,
+    /**
+     * Färjor kan ha flera turer till samma stad på tavlan samtidigt, så där
+     * ingår tiden i nyckeln. Övriga stationer har en rad per destination, och
+     * då ska raden leva kvar när turen gått och nästa skrivs in i stället -
+     * det är samma rad på tavlan, med nytt klockslag.
+     */
+    id: mode === 'farja'
+      ? `${dest.city.id}|${mode}|${Math.round(time)}`
+      : `${dest.city.id}|${mode}`,
     city: dest.city,
     mode,
     route: dest.route,
@@ -390,4 +376,25 @@ export function makeDeparture(
     minutes: travelMinutes(from, dest.city, mode),
     status: statusForMinutes(time - now, mode),
   };
+}
+
+/**
+ * Skriver om en avgången rad till nästa tur samma dag. Tavlan tappar aldrig en
+ * destination - flyget till Dubai går igen om ett par timmar, precis som på en
+ * riktig flygplats, och raden blir kvar med nytt klockslag och ny gate.
+ */
+export function rescheduleDeparture(
+  from: City,
+  d: Departure,
+  senaste: number
+): void {
+  const ny = senaste + 5 + Math.floor(Math.random() * SPACING[d.mode] * 2);
+  const seed = `${from.id}|${d.city.id}|${d.mode}|${Math.round(ny)}`;
+  d.time = ny;
+  d.dag = Math.floor(ny / 1440);
+  d.delay = 0;
+  d.status = 'itid';
+  d.code = lineCode(from, d.city, d.mode, Math.round(ny));
+  d.stand = standFor(d.mode, seed);
+  d.terminal = terminalFor(d.mode, seed);
 }

@@ -130,7 +130,7 @@ webbläsaren och överlever att sparfilen raderas.
    får lättare frågor och färre alternativ, inte färre chanser att tänka.
 3. **Stadsbilden.** Valen sitter som skyltar på gatan, ovanpå stadens foto,
    som i förlagan: turistbyrån, tidningen, souvenirbutiken, ryggsäcken,
-   telefonen – och stationerna.
+   kartan, telefonen – och stationerna.
 
    Resandet är uppdelat i **busstation, tågstation, hamn och flygplats**, och
    varje stad har bara de skyltar som faktiskt tar en någonstans. Alla har
@@ -155,6 +155,13 @@ webbläsaren och överlever att sparfilen raderas.
    se ut som en station; en biljett går alltid att köpa, också till en tur som
    redan gått. Priset och restiden kommer däremot alltid ur reselogiken, så
    tavlan kan aldrig skylta med en förbindelse som inte går att boka.
+
+   Tavlan visar **hela linjenätet** härifrån, inte ett urval, och har ett eget
+   sökfält – på en storflygplats är det fyrtiofyra rader. En tur som gått
+   försvinner inte, den skrivs om till nästa avgång samma dag, precis som
+   flyget till Dubai går igen om ett par timmar. Hamnen är undantaget: färjor
+   går ett par gånger om dygnet, så där står turlistan med i morgondagens
+   avgångar utsatta.
 
    Trycker man på en rad fälls biljetten upp med avgång, restid, bolag,
    linjenummer, plats och pris, och därifrån genomförs resan som vanligt.
@@ -183,10 +190,21 @@ webbläsaren och överlever att sparfilen raderas.
    som öppnar bättre betalda jobb i samma ämne i alla städer.
 8. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
-9. **Resebyrån.** Välj destination på kartan eller i listan, som går att
-   söka i. Vilka färdsätt som erbjuds beror på geografin, inte på en fast
-   mall: buss och tåg kräver landförbindelse, färja kräver en linje och flyget
-   når allt över 35 mil. Går ett färdsätt inte, står det utskrivet varför.
+9. **Kartan.** En egen skylt på gatan, och en atlas snarare än ett reglage.
+   Hela världen på en gång, utan zoom och utan panorering: rutten du rest
+   dragen som en linje mellan städerna i besöksordning, en pulserande ring där
+   du står, ring runt hemstaden och prickar för allt du ännu inte sett.
+
+   Under kartan står det man annars skulle ha slagit upp: folkmängd,
+   koordinater, tidszon, sevärdhet och prisnivå för staden, och huvudstad,
+   folkmängd, språk, religion och valuta för landet. Står du i huvudstaden
+   syns det på en stämpel. Att Australiens huvudstad varken är Sydney eller
+   Melbourne är den sortens sak spelet gärna får lära ut mellan skiften.
+
+   Vilka färdsätt som finns beror på geografin, inte på en fast mall: buss och
+   tåg kräver landförbindelse, färja kräver en linje och flyget når allt över
+   35 mil. Söker du på tavlan efter en stad som inte går att nå därifrån får du
+   skälet utskrivet i stället för ett tomt resultat.
 
    När biljetten är bokad spelas resan upp på en roterande jordglob: klotet
    zoomar ut från avresestaden, fordonet följer storcirkeln medan jorden
@@ -241,11 +259,15 @@ webbläsaren och överlever att sparfilen raderas.
 13. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
    och backa till staden med `Esc`. Balansmomentet styrs med piltangenterna
    och taktmomentet med mellanslag.
-14. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
+14. **Vägen tillbaka.** Knappen _Till staden_ sitter i statusraden, som ligger
+    fast i överkanten på varje skärm. Under ett arbetsskift finns den inte:
+    där ligger pengarna på spel, och skiftet lämnar man genom att sjukanmäla
+    sig.
+15. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
     frågar först, och visar vad som går förlorat, innan resan raderas.
-15. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
+16. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
     avsluta resan, få poäng och en titel.
-16. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
+17. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
     startskärmen, med poäng, titel, dagar, städer och träffsäkerhet. Varje rad
     visar också vilken stad du hade bäst koll på och vilken som avslöjade dig.
     Spelet räknar rätt och fel per stad, både på turistbyrån och på jobben.
@@ -280,6 +302,7 @@ _Legendarisk ryggsäckare_.
 - 64 souvenirer med regional prissättning
 - 40 valutor
 - 4 stationsmiljöer med egen avgångstavla, egna ord och egen ljudmatta
+- En atlas med uppslagssidor om alla 47 städer och 41 länder
 - 41 länder med egna flyg-, tåg- och bussbolag, och 7 namngivna färjelinjer
 - Ett trettiotal syntetiserade ljudeffekter (WebAudio) med volymknapp i
   statusraden
@@ -302,6 +325,8 @@ src/
     currencies.ts          Växelkurser och formatering av belopp
     stamps.ts              Passets stämplar och villkoren för dem
     events.ts              Resehändelser som kan slå till mellan städerna
+    facts.ts               Atlasens uppslagsdata: huvudstad, språk, religion
+                           och folkmängd per land, folkmängd per stad
     operators.ts           Flyg-, tåg- och bussbolag per land, med
                            flightkoder och landets tåghastighet
     transport.ts           Landregionernas grannskap, färjelinjer med fartyg
@@ -326,8 +351,9 @@ src/
                            linjenätet härifrån
     board.ts               Den elektroniska avgångstavlan, som uppdaterar sig
                            cell för cell utan att ritas om
-    map.ts                 Världskartan: zoom, panorering och etikettplacering,
-                           samt resesekvensen mellan två städer
+    atlas.ts               Kartskärmen: stillastående världskarta med reserutan,
+                           och uppslagssidorna om stad och land
+    map.ts                 Resesekvensen mellan två städer, spelad på globen
     globe.ts               Ortografisk jordglob: landmassan omprojicerad från
                            platt karta till klot, storcirklar och horisontklipp
     globepicker.ts         Startskärmens glob: snurra, zooma och välja stad
@@ -414,7 +440,11 @@ så att ingen station kan hamna med ett namnlöst reservbolag på tavlan.
 
 Kartans landmassa är genererad från Natural Earths 110m-dataset (public domain)
 och ligger färdig i `src/data/worldMap.ts`, så inga kartberoenden behövs vid
-körning.
+körning. Den används av både atlasen och globerna.
+
+En ny stad behöver också en rad i `CITY_POPULATION` och ett land i
+`COUNTRY_FACTS` i `src/data/facts.ts`, annars stoppar valideringen bygget -
+atlasen ska inte kunna visa en tom rad för den stad spelaren just rest till.
 
 ## Om förlagan
 

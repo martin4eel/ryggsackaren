@@ -274,8 +274,7 @@ img.no-photo {
 }
 
 /* Mindre foton på start- och biljettsidorna. */
-.start-photo,
-.travel-photo {
+.start-photo {
   display: block;
   width: 100%;
   aspect-ratio: 21 / 9;
@@ -589,48 +588,7 @@ img.no-photo {
 
 /* ---------------------------------------------------------------- karta */
 
-.map-frame {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--sea-deep);
-  /* Statusraden är klistrad högst upp. Utan detta hamnar kartans övre del
-     under raden när man rullar ner till den, och de nordligaste städerna
-     göms bakom den. */
-  scroll-margin-top: 150px;
-}
-
-.worldmap {
-  display: block;
-  width: 100%;
-  height: auto;
-  /* På telefon blev kartan mycket låg. Vi ger den en rimlig minsta höjd så
-     att det finns något att zooma i. */
-  min-height: 230px;
-  background: var(--sea-deep);
-  /* Vi hanterar zoom och panorering själva, så webbläsaren ska inte
-     rulla eller zooma sidan när man drar på kartan. */
-  touch-action: none;
-  cursor: grab;
-}
-
-.worldmap:active {
-  cursor: grabbing;
-}
-
 /* Zoomreglage, placerade över kartans nedre högra hörn */
-.map-controls {
-  position: absolute;
-  /* Nedre vänstra hörnet är tomt hav på kartan, medan Sydney och Auckland
-     ligger i det högra. */
-  left: 8px;
-  bottom: 8px;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
 .map-btn {
   appearance: none;
   cursor: pointer;
@@ -675,8 +633,6 @@ img.no-photo {
   color: var(--ink-soft);
   text-align: center;
 }
-
-
 
 .worldmap .land {
   fill: #274c3c;
@@ -789,77 +745,10 @@ img.no-photo {
 
 /* ------------------------------------------------------ destinationslista */
 
-.dest-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.dest {
-  appearance: none;
-  cursor: pointer;
-  background: var(--paper-dim);
-  border: 0;
-  border-left: 4px solid transparent;
-  border-radius: 10px;
-  padding: 11px 14px;
-  font-family: var(--font);
-  color: var(--ink);
-  text-align: left;
-  min-height: 44px;
-}
-
-.dest:hover {
-  background: #fff;
-  border-left-color: var(--sun);
-}
-
-.dest-visited {
-  border-left-color: rgba(242, 166, 59, 0.5);
-}
-
-.dest-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2px 12px;
-  align-items: baseline;
-}
-
-.dest-name {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.dest-country {
-  grid-column: 1;
-  font-size: 0.8rem;
-  color: var(--ink-soft);
-}
-
-.dest-km {
-  grid-column: 2;
-  grid-row: 1;
-  font-size: 0.84rem;
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-}
-
-.dest-price {
-  grid-column: 2;
-  grid-row: 2;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--palm);
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
 /* -------------------------------------------------------- jobb och varor */
 
 .job,
-.item,
-.ticket {
+.item {
   background: var(--paper-dim);
   border-radius: 12px;
   padding: 14px;
@@ -869,14 +758,12 @@ img.no-photo {
 }
 
 .job + .job,
-.item + .item,
-.ticket + .ticket {
+.item + .item {
   margin-top: 10px;
 }
 
 .job p,
-.item p,
-.ticket p {
+.item p {
   margin: 0;
   font-size: 0.92rem;
   line-height: 1.5;
@@ -887,8 +774,7 @@ img.no-photo {
 }
 
 .job-head,
-.item-head,
-.ticket-head {
+.item-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -896,8 +782,7 @@ img.no-photo {
 }
 
 .job-head h3,
-.item-head h3,
-.ticket-head h3 {
+.item-head h3 {
   margin: 0;
   font-family: var(--font-display);
   font-size: 1.12rem;
@@ -1184,8 +1069,7 @@ img.no-photo {
   }
 
   .job,
-  .item,
-  .ticket {
+  .item {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
@@ -1195,15 +1079,12 @@ img.no-photo {
   .job > .job-head,
   .job > p,
   .item > .item-head,
-  .item > p,
-  .ticket > .ticket-head,
-  .ticket > p {
+  .item > p {
     grid-column: 1;
   }
 
   .job > .btn,
   .item > .btn,
-  .ticket > .btn,
   .job > .note,
   .item > .note {
     grid-column: 2;
@@ -1216,12 +1097,6 @@ img.no-photo {
   .btn-big {
     width: auto;
     min-width: 260px;
-  }
-}
-
-@media (min-width: 980px) {
-  .worldmap {
-    max-height: 62vh;
   }
 }
 
@@ -1590,7 +1465,7 @@ img.no-photo {
 
 @media (min-width: 700px) {
   .mg-panel,
-  .mg-pads {
+.mg-pads {
     grid-template-columns: repeat(4, 1fr);
   }
 
@@ -1912,15 +1787,6 @@ img.no-photo {
   font-weight: 600;
 }
 
-.dest-poor {
-  opacity: 0.72;
-}
-
-.dest-price-out {
-  color: var(--stamp);
-  text-decoration: line-through;
-}
-
 /* ------------------------------------------------------- resehändelsekort */
 
 .event {
@@ -2233,7 +2099,7 @@ img.no-photo {
 
 @keyframes input-nudge {
   0%,
-  100% {
+100% {
     transform: translateX(0);
   }
   25% {
@@ -3135,8 +3001,8 @@ img.no-photo {
  */
 @media (prefers-reduced-motion: reduce) {
   *,
-  *::before,
-  *::after {
+*::before,
+*::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -3186,7 +3052,7 @@ img.no-photo {
 
 @keyframes option-shake {
   0%,
-  100% {
+100% {
     transform: translateX(0);
   }
   25% {
@@ -3315,35 +3181,10 @@ input:focus-visible {
    Färdsätt i destinationslistan och på biljetterna, samt rutan som
    förklarar varför ett färdsätt inte går.
    ======================================================================== */
-
-.dest-mode {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--ink-soft);
-}
-
 .dest-mode .icon {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
-}
-
-.dest-days {
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-}
-
-.ticket-mode {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.ticket-mode h3 {
-  margin: 0;
 }
 
 .ticket-mode .icon {
@@ -3353,10 +3194,6 @@ input:focus-visible {
 }
 
 /* En färgrand per färdsätt, så att biljetterna går att skilja åt på håll. */
-.ticket {
-  border-left: 5px solid var(--line);
-}
-
 .ticket-buss {
   border-left-color: var(--palm);
 }
@@ -3391,91 +3228,12 @@ input:focus-visible {
 
 /* --------------------------------------------- varför ett färdsätt inte går */
 
-.blocked-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.blocked-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(29, 43, 52, 0.05);
-  border: 1.5px dashed var(--line);
-}
-
-.blocked-icon {
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  color: var(--ink-soft);
-  opacity: 0.6;
-}
-
 .blocked-icon .icon {
   width: 20px;
   height: 20px;
 }
 
-.blocked-text {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  font-size: 0.88rem;
-  color: var(--ink-soft);
-}
-
-.blocked-text strong {
-  color: var(--ink);
-}
-
-@media (max-width: 560px) {
-  .dest-row {
-    row-gap: 4px;
-  }
-}
-
 /* Etiketter på biljetterna: billigast och snabbast, och tipsraden på Turist. */
-.ticket-badges {
-  display: inline-flex;
-  gap: 5px;
-  flex-wrap: wrap;
-}
-
-.ticket-badge {
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 0.66rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: 1.5px solid currentColor;
-}
-
-.badge-cheap {
-  color: #1f5a46;
-}
-
-.badge-fast {
-  color: var(--stamp);
-}
-
-.recommend {
-  margin: 4px 0 12px;
-  padding: 10px 13px;
-  border-radius: 10px;
-  background: rgba(242, 166, 59, 0.16);
-  border: 1.5px solid var(--sun-dark);
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--ink);
-}
 
 /* ============================================================ resedagboken
    Avslutade resor på start- och slutskärmen, samt vad man kunde bäst.
@@ -3703,7 +3461,7 @@ input:focus-visible {
 
 @keyframes halo-puls {
   0%,
-  100% {
+100% {
     opacity: 0.15;
   }
   50% {
@@ -4069,11 +3827,11 @@ input:focus-visible {
 
 @keyframes fyrblink {
   0%,
-  8% {
+8% {
     opacity: 1;
   }
   9%,
-  100% {
+100% {
     opacity: 0.12;
   }
 }
@@ -4221,7 +3979,7 @@ input:focus-visible {
 
 @keyframes livepuls {
   0%,
-  100% {
+100% {
     opacity: 0.35;
   }
   50% {
@@ -4363,7 +4121,7 @@ input:focus-visible {
 .col-dest-land {
   flex: 0 100 auto;
   min-width: 0;
-  max-width: 36%;
+  max-width: 28%;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.62rem;
@@ -4457,11 +4215,11 @@ input:focus-visible {
 
 @keyframes statusblink {
   0%,
-  60% {
+60% {
     opacity: 1;
   }
   61%,
-  100% {
+100% {
     opacity: 0.25;
   }
 }
@@ -4511,14 +4269,6 @@ input:focus-visible {
   }
 }
 
-.station-mer {
-  width: 100%;
-}
-
-.station-mer[hidden] {
-  display: none;
-}
-
 .board-tom {
   padding: 18px 14px;
   color: rgba(255, 255, 255, 0.45);
@@ -4530,14 +4280,6 @@ input:focus-visible {
   padding: 0 4px;
   font-size: 0.78rem;
   color: rgba(246, 239, 224, 0.62);
-}
-
-.station-alla .dest-km {
-  font-variant-numeric: tabular-nums;
-}
-
-.station-utgang {
-  flex-wrap: wrap;
 }
 
 /* --------------------------------------------------------- biljetten */
@@ -4684,7 +4426,7 @@ body.sheet-oppen {
 
 @media (min-width: 720px) {
   .board-cols,
-  .board-pick {
+.board-pick {
     display: grid;
     grid-template-columns: 5.4em minmax(0, 1fr) 7.5em 6em 7em 8.5em;
     grid-template-areas: 'time dest code stand price status';
@@ -4716,10 +4458,10 @@ body.sheet-oppen {
 
 @media (prefers-reduced-motion: reduce) {
   .scene-blink,
-  .scene-vag,
-  .board-ticker-text,
-  .board-dot,
-  .board-row[data-status] .col-status {
+.scene-vag,
+.board-ticker-text,
+.board-dot,
+.board-row[data-status] .col-status {
     animation: none;
   }
 
@@ -4735,9 +4477,296 @@ body.sheet-oppen {
   }
 
   .board-row,
-  .ticket-sheet,
-  .sheet-overlay {
+.ticket-sheet,
+.sheet-overlay {
     animation: none;
     transition: none;
+  }
+}
+
+/* ====================================================================
+   VÄGEN TILLBAKA
+   Knappen hör hemma i statusraden, som sitter fast i överkanten på
+   varje skärm. Tidigare låg den längst ner på sidan, vilket betydde
+   att man fick rulla förbi tjugo platsannonser för att komma ut ur
+   tidningen - och på turistbyrån fanns den inte alls.
+   ==================================================================== */
+
+.hud-back {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 166, 59, 0.55);
+  background: rgba(242, 166, 59, 0.14);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.hud-back:hover,
+.hud-back:focus-visible {
+  background: rgba(242, 166, 59, 0.26);
+}
+
+.hud-back:active {
+  transform: translateY(1px);
+}
+
+.hud-back-body {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.hud-back-pil {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+/* ====================================================================
+   ATLASEN
+   Kartan som karta: hela världen på en gång, rutten inritad och ett
+   kryss där du står. Ingen zoom och ingen panorering - det finns inget
+   att träffa här, så det finns inget att missa heller.
+   ==================================================================== */
+
+.atlas-ram {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #071d2b;
+  border: 1px solid rgba(29, 43, 52, 0.25);
+}
+
+.atlas-map {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.atlas-hav {
+  fill: #0d3149;
+}
+
+.atlas-land {
+  fill: #2f7d63;
+  stroke: #1d5b47;
+  stroke-width: 0.6;
+}
+
+.atlas-latitud,
+.atlas-ekvator {
+  stroke: rgba(246, 239, 224, 0.14);
+  stroke-width: 1;
+  stroke-dasharray: 5 7;
+}
+
+.atlas-ekvator {
+  stroke: rgba(246, 239, 224, 0.26);
+  stroke-dasharray: none;
+}
+
+/* Reserutan, dragen genom städerna i besöksordning. */
+.atlas-rutt {
+  fill: none;
+  stroke: var(--sun);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 7 6;
+  opacity: 0.9;
+  animation: ruttvandring 2.4s linear infinite;
+}
+
+@keyframes ruttvandring {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+.atlas-prick {
+  fill: rgba(246, 239, 224, 0.42);
+}
+
+.atlas-bevist {
+  fill: var(--paper);
+}
+
+.atlas-har {
+  fill: var(--stamp);
+  stroke: var(--paper);
+  stroke-width: 1.8;
+}
+
+.atlas-hemring {
+  fill: none;
+  stroke: var(--sun);
+  stroke-width: 1.8;
+}
+
+.atlas-puls {
+  fill: none;
+  stroke: var(--stamp);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: atlaspuls 2.2s ease-out infinite;
+}
+
+@keyframes atlaspuls {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+.atlas-dunamn {
+  fill: var(--paper);
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgba(7, 26, 41, 0.85);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.atlas-teckenforklaring {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+}
+
+.atlas-nyckel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.atlas-nyckel::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(29, 43, 52, 0.3);
+}
+
+.atlas-nyckel-har::before {
+  background: var(--stamp);
+}
+
+.atlas-nyckel-bevist::before {
+  background: var(--ink);
+}
+
+.atlas-nyckel-hem::before {
+  background: transparent;
+  border: 2px solid var(--sun-dark);
+}
+
+/* Faktalistorna om staden och landet. */
+.fakta {
+  display: flex;
+  flex-direction: column;
+}
+
+.fakta-rad {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.fakta-rad:last-child {
+  border-bottom: 0;
+}
+
+.fakta-etikett {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.fakta-varde {
+  flex: 1 1 auto;
+  text-align: right;
+  font-weight: 600;
+}
+
+.tag-huvudstad {
+  background: var(--sun);
+  color: var(--ink);
+}
+
+/* Sökfältet på avgångstavlan. */
+.board-sokrad {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.board-sok {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--led);
+  font: inherit;
+  font-size: 0.86rem;
+}
+
+.board-sok::placeholder {
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.board-sok:focus-visible {
+  outline: none;
+  border-color: var(--led-dim);
+  box-shadow: 0 0 0 2px var(--led-glow);
+}
+
+.board-traff {
+  flex: 0 0 auto;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.board-traff[hidden] {
+  display: none;
+}
+
+.board-row[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-rutt,
+  .atlas-puls {
+    animation: none;
+  }
+
+  .atlas-puls {
+    opacity: 0.4;
   }
 }

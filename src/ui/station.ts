@@ -3,16 +3,14 @@ import type { City } from '../data/types';
 import {
   durationText,
   hhmm,
-  stationDestinations,
   statusText,
-  travelMinutes,
   STAND_LABEL,
   type Departure,
 } from '../game/departures';
 import type { Route } from '../game/travel';
 import type { Difficulty } from '../game/state';
-import { renderBoard, wallClock, type BoardHandle } from './board';
-import { button, clear, el, svgEl } from './dom';
+import { renderBoard, type BoardHandle } from './board';
+import { button, el, svgEl } from './dom';
 import { startStation, stopStation } from './audio';
 import { icon } from './icons';
 
@@ -42,8 +40,6 @@ export interface StationOpts {
   /** Spelarens kassa, för att gråa ut det man inte har råd med */
   cash: number;
   onBuy: (city: City, route: Route) => void;
-  onBack: () => void;
-  onAllModes: () => void;
 }
 
 /**
@@ -274,7 +270,7 @@ function scen(mode: TransportMode): SVGElement {
 // ------------------------------------------------------------------- skärmen
 
 export function renderStation(opts: StationOpts): StationHandle {
-  const { city, mode, difficulty, money, onBuy, onBack, onAllModes } = opts;
+  const { city, mode, difficulty, money, onBuy } = opts;
   const wrap = el('div', { class: 'stack station', 'data-mode': mode });
   let board: BoardHandle | null = null;
   let sheet: HTMLElement | null = null;
@@ -406,113 +402,13 @@ export function renderStation(opts: StationOpts): StationHandle {
   wrap.append(board.node);
   wrap.append(el('p', { class: 'station-info' }, STATION_INFO[mode]));
 
-  // ---- hela linjenätet härifrån
-  const alla = stationDestinations(city, mode, difficulty);
-  const lista = el('section', { class: 'panel station-alla' });
-  lista.append(
-    el('div', { class: 'panel-head' },
-      el('h2', {}, 'Alla linjer härifrån'),
-      el(
-        'span',
-        { class: 'tag' },
-        `${alla.length} ${alla.length === 1 ? 'destination' : 'destinationer'}`
-      )
-    ),
-    el('p', { class: 'muted' },
-      `Tavlan visar de närmaste avgångarna. Här står hela linjenätet, med det ` +
-        `pris och den restid som gäller för ${
-          mode === 'flyg' ? 'flyget' : mode === 'tag' ? 'tåget' : mode === 'buss' ? 'bussen' : 'färjan'
-        }.`
-    )
-  );
-  const sok = el('input', {
-    class: 'search',
-    type: 'search',
-    placeholder: 'Sök stad eller land',
-    'aria-label': 'Sök destination',
-  }) as HTMLInputElement;
-  const tabell = el('div', { class: 'dest-list' });
   /**
-   * Listan är stationens linjenät, inte dess skyltfönster. På en storflygplats
-   * är den fyrtiofyra rader lång och trycker ner tavlan ur skärmen, så den
-   * börjar hopfälld och fälls ut av den som verkligen letar.
+   * Ingen stadslista under tavlan längre. Tavlan visar hela linjenätet och har
+   * ett eget sökfält, så listan var samma uppgifter en gång till - och den var
+   * så lång på en storflygplats att tavlan trycktes ur bild.
+   *
+   * Vägen tillbaka ligger i statusraden, som sitter fast i överkanten.
    */
-  const FORST = 8;
-  let visaAlla = false;
-  const merKnapp = button('', () => {
-    visaAlla = !visaAlla;
-    mala();
-  }, { class: 'btn btn-ghost station-mer' });
-  const nyckel = (t: string) =>
-    t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-  const mala = () => {
-    clear(tabell);
-    const behov = nyckel(sok.value.trim());
-    const trafffar = alla.filter(
-      (a) =>
-        behov === '' ||
-        nyckel(a.city.name).includes(behov) ||
-        nyckel(a.city.country).includes(behov)
-    );
-    if (trafffar.length === 0) {
-      tabell.append(el('p', { class: 'muted' }, 'Ingen destination matchar sökningen.'));
-      merKnapp.hidden = true;
-      return;
-    }
-    // En sökning visar alltid allt den hittat; det är ju det man sökt efter.
-    const soker = behov !== '';
-    const synliga = soker || visaAlla ? trafffar : trafffar.slice(0, FORST);
-    merKnapp.hidden = soker || trafffar.length <= FORST;
-    merKnapp.textContent = visaAlla
-      ? 'Visa färre'
-      : `Visa alla ${trafffar.length} linjer`;
-    for (const { city: to, route } of synliga) {
-      const rad = opts.cash >= route.price;
-      tabell.append(
-        button(
-          el('span', { class: 'dest-row' },
-            el('span', { class: 'dest-name' }, to.name),
-            el('span', { class: 'dest-country' }, to.country),
-            el('span', { class: 'dest-km' }, durationText(travelMinutes(city, to, mode))),
-            el('span', { class: 'dest-mode' }, icon(mode), el('span', {}, route.label)),
-            el('span', { class: `dest-price ${rad ? '' : 'dest-price-out'}` }, money(route.price)),
-            el('span', { class: 'dest-days' },
-              `${route.days} ${route.days === 1 ? 'dag' : 'dagar'}`)
-          ),
-          () =>
-            oppnaSheet({
-              id: `lista|${to.id}`,
-              city: to,
-              mode,
-              route,
-              // Nästa rimliga avgång, så att biljetten ser ut som en biljett.
-              time: Math.round(wallClock() + 25),
-              dag: 0,
-              delay: 0,
-              code: '—',
-              operator: '—',
-              stand: '—',
-              minutes: travelMinutes(city, to, mode),
-              status: 'itid',
-            }),
-          { class: `dest ${rad ? '' : 'dest-poor'}`, 'data-sound': 'av' }
-        )
-      );
-    }
-  };
-  sok.addEventListener('input', mala);
-  mala();
-  lista.append(el('div', { class: 'row' }, sok), tabell, merKnapp);
-  wrap.append(lista);
-
-  wrap.append(
-    el('div', { class: 'row station-utgang' },
-      button('Se alla färdsätt på kartan', onAllModes, { class: 'btn btn-ghost' }),
-      button('Tillbaka till staden', onBack, { class: 'btn btn-ghost' })
-    )
-  );
-
   return {
     node: wrap,
     stop: () => {

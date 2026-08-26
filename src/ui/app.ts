@@ -34,14 +34,7 @@ import {
   type PreparedQuestion,
 } from '../game/rules';
 import { MODE_LABELS, type TransportMode } from '../data/transport';
-import {
-  availableRoutes,
-  blockedRoutes,
-  destinationsByMode,
-  cheapestRoute,
-  fastestRoute,
-  type Route,
-} from '../game/travel';
+import { destinationsByMode, type Route } from '../game/travel';
 import {
   cityKnowledge,
   loadHighscores,
@@ -67,9 +60,10 @@ import {
   type MinigameResult,
 } from './minigames';
 import type { Stamp } from '../data/stamps';
-import { forgetMapView, renderMapFrame, renderTravelScene } from './map';
+import { renderTravelScene } from './map';
 import { renderGlobePicker } from './globepicker';
 import { renderStation, type StationHandle } from './station';
+import { renderAtlasScreen } from './atlas';
 
 interface QuizSession {
   kind: 'turistbyra' | 'jobb';
@@ -253,8 +247,6 @@ export class App {
   private root: HTMLElement;
   private state: GameState | null = null;
   private quiz: QuizSession | null = null;
-  private travelTarget: City | null = null;
-  private mapHighlight: string | null = null;
   private toast: string | null = null;
   /** Visas när spelaren tryckt på Börja om och ska bekräfta */
   private confirmRestart = false;
@@ -426,8 +418,6 @@ export class App {
     this.travelScene = null;
     this.journeySaved = false;
     this.lastJourneyAt = undefined;
-    this.travelTarget = null;
-    this.mapHighlight = null;
     this.toast = null;
     this.stampToast = null;
     if (this.toastTimer !== null) {
@@ -439,8 +429,6 @@ export class App {
       this.stampTimer = null;
     }
     // Kartornas zoomläge hör till den avslutade resan.
-    forgetMapView('start');
-    forgetMapView('resebyra');
     this.scrollToTopNext = true;
     this.render();
   }
@@ -521,7 +509,7 @@ export class App {
     const behallStation =
       this.station !== null &&
       s0 !== null &&
-      s0.screen === 'karta' &&
+      s0.screen === 'station' &&
       this.travelFilter === this.station.mode &&
       s0.currentCityId === this.station.cityId &&
       s0.money === this.station.cash &&
@@ -573,16 +561,11 @@ export class App {
       case 'jobb':
         main.append(this.renderQuiz(this.quiz?.job?.title ?? 'Arbete'));
         break;
-      case 'karta':
-        // Med ett färdsätt valt är det en station man står på, inte en karta.
-        main.append(
-          this.travelFilter
-            ? this.renderStationScreen(this.travelFilter)
-            : this.renderMapScreen()
-        );
+      case 'station':
+        main.append(this.renderStationScreen(this.travelFilter ?? 'buss'));
         break;
-      case 'resa':
-        main.append(this.renderTravel());
+      case 'varldskarta':
+        main.append(this.renderAtlas());
         break;
       case 'souvenir':
         main.append(this.renderShop());
@@ -1158,8 +1141,39 @@ export class App {
       title: 'Avsluta resan och börja om från början',
     });
 
+    const actions = el('div', { class: 'hud-actions' });
+
+    /**
+     * Vägen tillbaka hör hemma här uppe, inte längst ner på sidan. Statusraden
+     * sitter fast i överkanten på varje skärm, så knappen är alltid inom
+     * räckhåll utan att man först måste rulla förbi tjugo platsannonser.
+     *
+     * Under ett arbetsskift finns den inte: där ligger pengarna på spel, och
+     * skiftet lämnar man genom att sjukanmäla sig.
+     */
+    if (s.screen !== 'stad' && s.screen !== 'slut' && s.screen !== 'jobb') {
+      actions.append(
+        button(
+          el('span', { class: 'hud-back-body' },
+            el('span', { class: 'hud-back-pil', 'aria-hidden': 'true' }, '\u2190'),
+            el('span', {}, 'Till staden')
+          ),
+          () => {
+            this.quiz = null;
+            this.travelFilter = null;
+            this.go('stad');
+          },
+          {
+            class: 'hud-back',
+            title: `Tillbaka till ${city.name}`,
+            'aria-label': `Tillbaka till ${city.name}`,
+          }
+        )
+      );
+    }
+
     // Ljudknappen ligger alltid synlig i statusraden, som i förlagan.
-    const actions = el('div', { class: 'hud-actions' }, audioButton('hud-icon-btn'), restart);
+    actions.append(audioButton('hud-icon-btn'), restart);
 
     hud.append(left, stats, actions);
     return hud;
@@ -1327,10 +1341,19 @@ export class App {
         () => {
           this.travelFilter = mode;
           playSound('valj');
-          this.go('karta');
+          this.go('station');
         }
       );
     }
+    addSign(
+      'skylt-karta',
+      'Kartan',
+      'Se var i världen du står, och läs på om staden och landet.',
+      () => {
+        playSound('sida');
+        this.go('varldskarta');
+      }
+    );
     addSign('skylt-telefon', 'Telefonen', 'Ring hem och låna pengar om kassan är tom.', () => {
       playSound('telefonbabbel');
       this.go('telefon');
@@ -1573,7 +1596,6 @@ export class App {
       list.append(card);
     }
     wrap.append(list);
-    wrap.append(this.backRow('Tillbaka till staden', () => this.go('stad')));
     return wrap;
   }
 
@@ -2087,14 +2109,6 @@ export class App {
       money: (n) => this.money(n),
       cash: s.money,
       onBuy: (target, route) => this.doTravel(target, route),
-      onBack: () => {
-        this.travelFilter = null;
-        this.go('stad');
-      },
-      onAllModes: () => {
-        this.travelFilter = null;
-        this.render();
-      },
     });
     this.station = {
       handle,
@@ -2106,311 +2120,21 @@ export class App {
   }
 
   /**
-   * Resebyrån: kartan över hela världen, med alla färdsätt vägda mot
-   * varandra. Ett valt färdsätt hör hemma på sin station i stället, så den här
-   * skärmen behöver inte längre kunna filtreras.
+   * Atlasen. Ingen resebyrå och ingen biljettlucka - biljetterna köps på
+   * stationerna nu. Det här är kartan som karta: var i världen du står, hur
+   * långt du rest, och vad som är värt att veta om staden och landet.
    */
-  private renderMapScreen(): HTMLElement {
+  private renderAtlas(): HTMLElement {
     const s = this.state!;
-    const wrap = el('div', { class: 'stack' });
-
-    const panel = el('section', { class: 'panel' });
-    panel.append(
-      el('h1', { class: 'title' }, 'Resebyrån'),
-      el(
-        'p',
-        { class: 'muted' },
-        `Du står i ${this.city.name}. Tryck på en stad för att se biljettpriser. ` +
-          `Hemstaden ${CITY_BY_ID[s.homeCityId]!.name} är markerad med ring.`
-      )
-    );
-    panel.append(
-      renderMapFrame({
-        currentCityId: s.currentCityId,
-        homeCityId: s.homeCityId,
-        visited: s.visited,
-        highlightId: this.mapHighlight ?? undefined,
-        viewKey: 'resebyra',
-        onSelect: (city) => {
-          this.travelTarget = city;
-          this.mapHighlight = city.id;
-          this.go('resa');
-        },
-      })
-    );
-    panel.append(
-      el(
-        'p',
-        { class: 'map-hint' },
-        'Zooma med två fingrar eller knapparna. Trånga områden som Norden blir ' +
-          'lättare att träffa när du zoomar in. Listan nedan fungerar också.'
-      )
-    );
-    wrap.append(panel);
-
-    const list = el('section', { class: 'panel' });
-    list.append(
-      el('div', { class: 'panel-head' },
-        el('h2', {}, 'Destinationer'),
-        el('span', { class: 'tag' }, `${CITIES.length - 1} att välja på`)
-      ),
-      el(
-        'p',
-        { class: 'muted' },
-        'Sorterade efter avstånd härifrån. Städer du redan besökt är märkta, ' +
-          'och de du inte har råd att flyga till just nu står sist i varje rad.'
-      )
-    );
-
-    const search = el('input', {
-      class: 'search',
-      type: 'search',
-      placeholder: 'Sök stad eller land',
-      'aria-label': 'Sök destination',
-      value: this.cityFilter,
-    }) as HTMLInputElement;
-    const table = el('div', { class: 'dest-list' });
-
-    const paint = () => {
-      clear(table);
-      const needle = searchKey(this.cityFilter.trim());
-      const sorted = CITIES.filter(
-        (c) =>
-          c.id !== s.currentCityId &&
-          (needle === '' ||
-            searchKey(c.name).includes(needle) ||
-            searchKey(c.country).includes(needle))
-      ).sort((a, b) => distanceKm(this.city, a) - distanceKm(this.city, b));
-
-      if (sorted.length === 0) {
-        table.append(el('p', { class: 'muted' }, 'Ingen destination matchar sökningen.'));
-        return;
-      }
-
-      for (const c of sorted) {
-        const km = distanceKm(this.city, c);
-        const cheapest = cheapestRoute(this.city, c, s.difficulty)!;
-        const fastest = fastestRoute(this.city, c, s.difficulty)!;
-        const affordable = s.money >= cheapest.price;
-        const visited = s.visited.includes(c.id);
-        // Billigaste färdsättet får representera sträckan i listan, med
-        // restiden från det snabbaste, så att avvägningen syns redan här.
-        const row = button(
-          el('span', { class: 'dest-row' },
-            el('span', { class: 'dest-name' }, c.name),
-            el('span', { class: 'dest-country' },
-              `${c.country}${visited ? ' · besökt' : ''}`),
-            el('span', { class: 'dest-km' }, `${km.toLocaleString('sv-SE')} km`),
-            el('span', { class: 'dest-mode' },
-              icon(cheapest.mode),
-              el('span', {}, cheapest.label)
-            ),
-            el(
-              'span',
-              { class: `dest-price ${affordable ? '' : 'dest-price-out'}` },
-              `från ${this.money(cheapest.price)}`
-            ),
-            el('span', { class: 'dest-days' },
-              fastest.days === cheapest.days
-                ? `${cheapest.days} ${cheapest.days === 1 ? 'dag' : 'dagar'}`
-                : `${fastest.days}–${cheapest.days} dagar`
-            )
-          ),
-          () => {
-            this.travelTarget = c;
-            this.mapHighlight = c.id;
-            this.go('resa');
-          },
-          {
-            class: `dest ${visited ? 'dest-visited' : ''} ${affordable ? '' : 'dest-poor'}`,
-            'data-sound': 'av',
-          }
-        );
-        table.append(row);
-      }
-    };
-
-    search.addEventListener('input', () => {
-      this.cityFilter = search.value;
-      paint();
+    return renderAtlasScreen({
+      city: this.city,
+      homeCityId: s.homeCityId,
+      visited: s.visited,
+      money: (n) => this.money(n),
+      dailyCost: dailyCost(this.city, s.difficulty),
+      rating: getProgress(s, this.city.id).rating,
+      distance: s.distance,
     });
-    paint();
-    list.append(el('div', { class: 'row' }, search), table);
-    wrap.append(list);
-    wrap.append(
-      this.backRow('Tillbaka till staden', () => {
-        this.travelFilter = null;
-        this.go('stad');
-      })
-    );
-    return wrap;
-  }
-
-  private renderTravel(): HTMLElement {
-    const s = this.state!;
-    const target = this.travelTarget;
-    const wrap = el('div', { class: 'stack' });
-    if (!target) {
-      wrap.append(this.backRow('Till kartan', () => this.go('karta')));
-      return wrap;
-    }
-
-    const from = this.city;
-    const km = distanceKm(from, target);
-    const tz = Math.abs(target.utc - from.utc);
-
-    const panel = el('section', { class: 'panel' });
-    // Foto av målstaden, så att biljettsidan visar vart resan går.
-    panel.append(photoImg(target, 'travel-photo'));
-    panel.append(
-      el('p', { class: 'kicker' }, `${from.name} → ${target.name}`),
-      el('h1', { class: 'title' }, target.name),
-      el('p', { class: 'lede' }, target.blurb),
-      el(
-        'p',
-        { class: 'muted' },
-        `${km.toLocaleString('sv-SE')} km · ${Math.round(tz)} ${
-          Math.round(tz) === 1 ? 'tidszon' : 'tidszoner'
-        } · ` +
-          `${utcLabel(target.utc)} · boende där ${this.money(
-            dailyCost(target, s.difficulty)
-          )} per dag`
-      )
-    );
-    wrap.append(panel);
-
-    const opts = el('section', { class: 'panel' });
-    const tickets = availableRoutes(from, target, s.difficulty);
-    opts.append(
-      el('div', { class: 'panel-head' },
-        el('h2', {}, 'Hur tar du dig dit?'),
-        el(
-          'span',
-          { class: 'tag' },
-          tickets.length === 1 ? 'Ett färdsätt' : `${tickets.length} färdsätt`
-        )
-      )
-    );
-    const anyAffordable = tickets.some((t) => s.money >= t.price);
-
-    /**
-     * Turisten får en rad som säger vad den skulle ta. Rekommendationen är
-     * den billigaste biljett som inte kostar mer än en extra dag jämfört med
-     * den snabbaste - alltså den som brukar vara vettig - och den finns bara
-     * i det lättare läget. Globetrottern ska väga av själv.
-     */
-    if (s.difficulty === 'turist' && tickets.length > 1) {
-      const quickest = tickets.reduce((a, b) => (b.days < a.days ? b : a));
-      const sensible =
-        tickets.find((t) => t.days <= quickest.days + 1) ?? tickets[0]!;
-      opts.append(
-        el(
-          'p',
-          { class: 'recommend' },
-          `Tips: ${sensible.label.toLowerCase()} brukar vara den rimliga avvägningen här.`
-        )
-      );
-    }
-
-    // Etiketterna räknas ut en gång, så att samma biljett kan bära båda.
-    const cheapest = tickets[0];
-    const quickest =
-      tickets.length > 0
-        ? tickets.reduce((a, b) => (b.days < a.days ? b : a))
-        : undefined;
-
-    for (const option of tickets) {
-      const affordable = s.money >= option.price;
-      const card = el('article', { class: `ticket ticket-${option.mode}` });
-      const badges = el('span', { class: 'ticket-badges' });
-      if (tickets.length > 1 && option === cheapest)
-        badges.append(el('span', { class: 'ticket-badge badge-cheap' }, 'Billigast'));
-      if (tickets.length > 1 && option === quickest && quickest !== cheapest)
-        badges.append(el('span', { class: 'ticket-badge badge-fast' }, 'Snabbast'));
-      card.append(
-        el('div', { class: 'ticket-head' },
-          el('span', { class: 'ticket-mode' },
-            icon(option.mode),
-            el('h3', {}, option.label),
-            badges
-          ),
-          el('span', { class: 'ticket-price' }, this.money(option.price))
-        ),
-        el('p', {}, option.desc),
-        el('p', { class: 'muted' },
-          `${option.days} ${option.days === 1 ? 'dags' : 'dagars'} restid · ` +
-            `boende under resan drar ${this.money(
-              dailyCost(from.costIndex >= target.costIndex ? target : from, s.difficulty) *
-                option.days
-            )}`
-        )
-      );
-      card.append(
-        button(
-          affordable ? `Boka ${option.label.toLowerCase()}` : 'För dyrt just nu',
-          () => this.doTravel(target, option),
-          {
-            class: `btn ${affordable ? 'btn-primary' : 'btn-ghost'}`,
-            disabled: affordable ? undefined : true,
-          }
-        )
-      );
-      opts.append(card);
-    }
-    wrap.append(opts);
-
-    /**
-     * Färdsätten som inte går, med skälet utskrivet. Utan den här rutan ser
-     * det ut som att spelet glömt bort tåget, och spelaren lär sig ingenting
-     * om varför Stockholm–Peking inte har räls.
-     */
-    const blocked = blockedRoutes(from, target);
-    if (blocked.length > 0) {
-      const why = el('section', { class: 'panel blocked' });
-      why.append(el('h2', {}, 'Det här går inte hit'));
-      const list = el('div', { class: 'blocked-list' });
-      for (const b of blocked) {
-        list.append(
-          el('div', { class: 'blocked-row' },
-            el('span', { class: 'blocked-icon' }, icon(b.mode)),
-            el('span', { class: 'blocked-text' },
-              el('strong', {}, b.label),
-              el('span', {}, b.reason)
-            )
-          )
-        );
-      }
-      why.append(list);
-      wrap.append(why);
-    }
-
-    if (!anyAffordable) {
-      const help = el('section', { class: 'panel' });
-      help.append(
-        el('h2', {}, 'Kassan räcker inte'),
-        el(
-          'p',
-          { class: 'muted' },
-          'Långa resor kostar mest. Du kan jobba ihop mer där du står, välja en ' +
-            'närmare destination och ta dig vidare därifrån, sälja souvenirer eller ringa hem efter pengar.'
-        ),
-        el('div', { class: 'row' },
-          button('Ring hem och låna', () => this.go('telefon'), {
-            class: 'btn btn-primary',
-          }),
-          button('Sälj souvenirer', () => this.go('souvenir'), {
-            class: 'btn btn-ghost',
-          }),
-          button('Sök jobb', () => this.go('tidning'), {
-            class: 'btn btn-ghost',
-          })
-        )
-      );
-      wrap.append(help);
-    }
-
-    wrap.append(this.backRow('Välj annan stad', () => this.go('karta')));
-    return wrap;
   }
 
   /**
@@ -2490,8 +2214,6 @@ export class App {
     getProgress(s, from.id).workedJobs = [];
     s.currentCityId = target.id;
     s.visited.push(target.id);
-    this.travelTarget = null;
-    this.mapHighlight = null;
     this.travelFilter = null;
     this.commit();
     if (this.checkBroke()) return;
@@ -2620,7 +2342,6 @@ export class App {
       });
     }
     wrap.append(sell);
-    wrap.append(this.backRow('Tillbaka till staden', () => this.go('stad')));
     return wrap;
   }
 
@@ -2761,7 +2482,6 @@ export class App {
       )
     );
     wrap.append(route);
-    wrap.append(this.backRow('Tillbaka till staden', () => this.go('stad')));
     return wrap;
   }
 

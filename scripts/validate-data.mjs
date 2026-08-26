@@ -36,6 +36,7 @@ try {
     '/src/data/transport.ts'
   );
   const { OPERATORS } = await load('/src/data/operators.ts');
+  const { COUNTRY_FACTS, CITY_POPULATION } = await load('/src/data/facts.ts');
   const { availableRoutes } = await load('/src/game/travel.ts');
 
   const jobById = Object.fromEntries(JOBS.map((j) => [j.id, j]));
@@ -347,6 +348,25 @@ try {
       problems.push(`${c.country} har orimlig tåghastighet: ${ops.rail.speed}`);
   }
 
+  /**
+   * Atlasens fakta. En stad utan folkmängd visar en tom rad, och ett land utan
+   * fakta visar en ursäkt i stället för en uppslagssida - båda ser ut som fel
+   * för den som slår upp landet hen just rest till.
+   */
+  for (const c of CITIES) {
+    if (!CITY_POPULATION[c.id])
+      problems.push(`${c.name} saknar folkmängd i data/facts.ts`);
+    const f = COUNTRY_FACTS[c.country];
+    if (!f) {
+      problems.push(`${c.country} saknar landsfakta i data/facts.ts`);
+      continue;
+    }
+    for (const falt of ['capital', 'language', 'religion', 'population']) {
+      if (!f[falt]?.trim())
+        problems.push(`${c.country} saknar ${falt} i landsfakta`);
+    }
+  }
+
   /** Två länder får inte dela flygbolagskod - flightnumren blir tvetydiga. */
   const koder = new Map();
   for (const [land, ops] of Object.entries(OPERATORS)) {
@@ -421,6 +441,10 @@ try {
     `Trafik: ${Object.keys(OPERATORS).length} länder med trafikbolag, ` +
       `${FERRY_LINES.length} färjelinjer, ` +
       `${FERRY_LINES.reduce((n, l) => n + l.avgangar.length, 0)} dagliga färjeturer`
+  );
+  console.log(
+    `Atlas: ${Object.keys(COUNTRY_FACTS).length} länder med fakta, ` +
+      `${Object.keys(CITY_POPULATION).length} städer med folkmängd`
   );
   console.log(`Frågor: ${total}`);
   console.log(
