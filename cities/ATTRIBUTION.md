@@ -50,3 +50,5 @@ under vilken licens den publicerats.
 - **dakar.jpg** – [Ile-de-goree.jpg](https://commons.wikimedia.org/wiki/File:Ile-de-goree.jpg) av Gregor Rom, CC BY-SA 4.0.
 - **addisabeba.jpg** – [Meskal_Square_(11237676556).jpg](https://commons.wikimedia.org/wiki/File:Meskal_Square_(11237676556).jpg) av David Stanley from Nanaimo, Canada, CC BY 2.0.
 - **melbourne.jpg** – [Flinders_Station_and_trams.jpg](https://commons.wikimedia.org/wiki/File:Flinders_Station_and_trams.jpg) av Created by Philip Mallis in 2021; cropped by HappyWaldo, CC BY-SA 3.0.
+- **vasteras.jpg** – [Anundshög,_Västerås1004.jpg](https://commons.wikimedia.org/wiki/File:Anundsh%C3%B6g,_V%C3%A4ster%C3%A5s1004.jpg) av Christer Johansson, CC BY-SA 2.5.
+- **koping.jpg** – [Köping 2013-08-23 image01.jpg](https://commons.wikimedia.org/wiki/File:K%C3%B6ping_2013-08-23_image01.jpg) av Håkan Skogsjö, CC BY-SA 4.0.
