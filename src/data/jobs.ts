@@ -133,7 +133,7 @@ export const JOBS: Job[] = [
   {
     id: 'kamelforare',
     title: 'Kamelförare',
-    employer: 'Desert Tours',
+    employer: 'Ökenkaravanen',
     category: 'djur',
     wageClass: 1,
     shiftLength: 5,
@@ -273,7 +273,7 @@ export const JOBS: Job[] = [
   {
     id: 'perlvavare',
     title: 'Pärlvävare',
-    employer: 'Craft Collective',
+    employer: 'Hantverkskollektivet',
     category: 'konst',
     wageClass: 1,
     shiftLength: 5,
@@ -384,7 +384,7 @@ export const JOBS: Job[] = [
   {
     id: 'tunnelbanevard',
     title: 'Tunnelbanevärd',
-    employer: 'Metro Authority',
+    employer: 'Tunnelbaneförvaltningen',
     category: 'trafik',
     wageClass: 2,
     shiftLength: 6,
@@ -402,7 +402,7 @@ export const JOBS: Job[] = [
   {
     id: 'tagvard',
     title: 'Tågvärd',
-    employer: 'Continental Rail',
+    employer: 'Kontinentaltåg',
     category: 'geografi',
     wageClass: 2,
     shiftLength: 7,
@@ -708,7 +708,7 @@ export const JOBS: Job[] = [
   {
     id: 'segelbatsmatros',
     title: 'Segelbåtsmatros',
-    employer: 'Harbour Racing Club',
+    employer: 'Hamnens segelsällskap',
     category: 'hav',
     wageClass: 2,
     shiftLength: 6,
@@ -1041,7 +1041,7 @@ export const JOBS: Job[] = [
   {
     id: 'filmstatist',
     title: 'Filmstatist',
-    employer: 'Dream Factory Studios',
+    employer: 'Drömfabriken Studios',
     category: 'film',
     wageClass: 2,
     shiftLength: 6,
@@ -1100,7 +1100,7 @@ export const JOBS: Job[] = [
   {
     id: 'sjukvardsbitrade',
     title: 'Sjukvårdsbiträde',
-    employer: 'City General Hospital',
+    employer: 'Stadssjukhuset',
     category: 'medicin',
     wageClass: 2,
     shiftLength: 6,

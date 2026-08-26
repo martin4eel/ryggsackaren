@@ -99,9 +99,22 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 
 ## Så spelas det
 
-1. **Välj svårighetsgrad.** _Turist_ ger lättare frågor, tre svarsalternativ,
-   billigare boende och mer startkapital. _Globetrotter_ ger svårare frågor,
-   fyra alternativ, högre löner och tuffare ekonomi.
+1. **Välj svårighetsgrad.** Lägena delar mekanik, kartor och progression –
+   det är kraven som skiljer. Allt som skiljer dem ligger samlat i
+   `src/game/difficulty.ts`.
+
+   | | Turist | Globetrotter |
+   | --- | --- | --- |
+   | Svarsalternativ | 3 | 4 |
+   | Frågor | bara de lättare | hela banken |
+   | Samtal till en lokalbo | 5 | 2 |
+   | Arkadmomentens marginal | 20 % mer | 8 % mindre |
+   | Certifikat vid | 65 % | 75 % |
+   | Startkapital | 6 000 | 4 000 |
+   | Boende | 20 % billigare | fullpris, men högre lön |
+
+   _Fråga en lokalbo_ är livlinan i frågorna: den stryker hälften av de
+   felaktiga alternativen, men lämnar alltid minst två kvar.
 2. **Välj startstad.** Staden blir också ditt slutmål, och dess valuta är den
    som alla belopp visas i under resan. Varje stad visas med ett foto av sin
    sevärdhet, som ett vykort högst upp på stadsskärmen.

@@ -1,4 +1,5 @@
 import type { TravelEvent } from '../data/events';
+import { lifelinesFor } from './difficulty';
 import type { Category } from '../data/types';
 
 export type Difficulty = 'turist' | 'globetrotter';
@@ -88,6 +89,8 @@ export interface GameState {
   stamps: string[];
   /** Har snabbguiden i startstaden visats? */
   seenIntro: boolean;
+  /** Kvarvarande samtal till en lokalbo, livlinan i frågorna */
+  lifelines: number;
   /**
    * Händelsen från senaste resan. Den ligger kvar tills spelaren kvitterat
    * den på stadsskärmen, så att den överlever en omladdning mitt i.
@@ -135,6 +138,7 @@ export function createGame(
     bestTrade: 0,
     stamps: [],
     seenIntro: false,
+    lifelines: lifelinesFor(difficulty),
   };
 }
 
@@ -188,6 +192,7 @@ function migrate(
   state.stamps ??= [];
   // En pågående resa har redan passerat introduktionen.
   state.seenIntro ??= true;
+  state.lifelines ??= lifelinesFor(state.difficulty);
   return state;
 }
 

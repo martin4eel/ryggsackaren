@@ -23,9 +23,15 @@ export interface MinigameResult {
   perfect?: boolean;
 }
 
-/** Sådant spelet behöver veta om resan för att kunna skriva ut belopp. */
+/** Sådant momenten behöver veta om resan de spelas på. */
 export interface MinigameContext {
   money: (baseAmount: number) => string;
+  /**
+   * Marginalen svårighetsgraden ger. Över 1 betyder mer tid och bredare
+   * zoner (Turist), under 1 snävare (Globetrotter). Momenten är desamma i
+   * båda lägena; det är kraven som skiljer.
+   */
+  slack: number;
 }
 
 type Done = (result: MinigameResult) => void;
@@ -49,28 +55,28 @@ export function renderMinigame(
 
   switch (game.kind) {
     case 'sortering':
-      startSorting(host, game, done);
+      startSorting(host, game, ctx, done);
       break;
     case 'instrument':
-      startInstruments(host, game, done);
+      startInstruments(host, game, ctx, done);
       break;
     case 'sekvens':
-      startSequence(host, game, done);
+      startSequence(host, game, ctx, done);
       break;
     case 'precision':
-      startPrecision(host, game, done);
+      startPrecision(host, game, ctx, done);
       break;
     case 'vaxel':
       startChange(host, game, ctx, done);
       break;
     case 'traffa':
-      startCatch(host, game, done);
+      startCatch(host, game, ctx, done);
       break;
     case 'balans':
-      startBalance(host, game, done);
+      startBalance(host, game, ctx, done);
       break;
     case 'takt':
-      startRhythm(host, game, done);
+      startRhythm(host, game, ctx, done);
       break;
   }
   return host;
@@ -259,7 +265,12 @@ function makeFeedback(): {
  * `pool`, så det krävs att man vet vad sakerna är: en tigerräka ska till
  * räkorna, inte till nudlarna.
  */
-function startSorting(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startSorting(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
   const ROUNDS = 9;
   const buckets = game.items;
   /** Reserv om ett jobb saknar pool: korgens eget namn, som förr. */
@@ -305,7 +316,7 @@ function startSorting(host: HTMLElement, game: Minigame, onDone: Done): void {
     status.set(`Föremål ${round + 1}/${ROUNDS}`, `${correct} rätt · svit ${streak}`);
 
     // Tiden krymper med tempot, men aldrig under vad som går att hinna läsa.
-    const total = Math.max(1600, 3000 - round * 140);
+    const total = Math.max(1600, 3000 - round * 140) * ctx.slack;
 
     /**
      * Föremålet ska glida över bandet på exakt den tid rundan varar, annars
@@ -373,7 +384,12 @@ function startSorting(host: HTMLElement, game: Minigame, onDone: Done): void {
  * ordning innan tiden går ut. Kön växer allteftersom, så det räcker inte att
  * reagera - man måste hålla ordningen i huvudet.
  */
-function startInstruments(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startInstruments(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
   const ROUNDS = 6;
   const items = game.items;
   let round = 0;
@@ -429,7 +445,7 @@ function startInstruments(host: HTMLElement, game: Minigame, onDone: Done): void
     feedback.say('Utför momenten uppifrån och ner.', 'neutral');
     drawOrder();
 
-    const total = 1500 + length * 1100 - round * 120;
+    const total = (1500 + length * 1100 - round * 120) * ctx.slack;
     timer.run(total, () => fail('Tiden gick ut.'));
 
     clear(panel);
@@ -483,7 +499,12 @@ function startInstruments(host: HTMLElement, game: Minigame, onDone: Done): void
  * ton ur en pentatonisk skala, så sekvensen går att minnas med örat lika
  * gärna som med ögat. Ett feltryck kostar ett försök, inte hela nivån.
  */
-function startSequence(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startSequence(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
   const items = game.items;
   const LEVELS = 5;
   let level = 0;
@@ -529,7 +550,7 @@ function startSequence(host: HTMLElement, game: Minigame, onDone: Done): void {
     feedback.say('Titta och lyssna noga ...', 'neutral');
     for (const i of sequence) {
       playPad(i);
-      await flash(i, 'mg-pad-on', Math.max(300, 540 - level * 40));
+      await flash(i, 'mg-pad-on', Math.max(300, 540 - level * 40) * ctx.slack);
     }
     feedback.say('Din tur. Upprepa ordningen.', 'neutral');
     accepting = true;
@@ -594,7 +615,12 @@ function startSequence(host: HTMLElement, game: Minigame, onDone: Done): void {
  * i den gröna zonen. Mitten av zonen ger full poäng, kanterna halv - det
  * lönar sig alltså att sikta, inte bara att hamna innanför.
  */
-function startPrecision(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startPrecision(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
   const TRIES = 5;
   const label = game.items[0] ?? 'Mätvärde';
   let attempt = 0;
@@ -630,7 +656,7 @@ function startPrecision(host: HTMLElement, game: Minigame, onDone: Done): void {
       return;
     }
     // Zonen krymper men hålls rimlig, och placeras aldrig helt ute i kanten.
-    zoneWidth = Math.max(14, 30 - attempt * 3);
+    zoneWidth = Math.max(14, 30 - attempt * 3) * ctx.slack;
     zoneStart = 8 + Math.random() * (100 - 16 - zoneWidth);
     zone.style.left = `${zoneStart}%`;
     zone.style.width = `${zoneWidth}%`;
@@ -642,7 +668,7 @@ function startPrecision(host: HTMLElement, game: Minigame, onDone: Done): void {
 
     pos = 0;
     dir = 1;
-    const speed = 0.055 + attempt * 0.012;
+    const speed = (0.055 + attempt * 0.012) / ctx.slack;
     running = true;
     cancel = loop((dt) => {
       pos += dir * speed * dt;
@@ -836,7 +862,12 @@ function startChange(
  * ska plockas, det som står i `avoid` ska lämnas i fred - ett feltryck kostar
  * lika mycket som en träff ger, så det lönar sig att läsa innan man trycker.
  */
-function startCatch(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startCatch(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
   const SLOTS = 6;
   const DURATION = 22000;
   const TARGET = 14;
@@ -881,7 +912,7 @@ function startCatch(host: HTMLElement, game: Minigame, onDone: Done): void {
     slot.good = good;
     slot.node.textContent = slot.label;
     slot.node.className = `mg-slot mg-slot-up ${good ? 'mg-slot-good' : 'mg-slot-bad'}`;
-    slot.until = performance.now() + 1500 + Math.random() * 900;
+    slot.until = performance.now() + (1500 + Math.random() * 900) * ctx.slack;
   };
 
   const clearSlot = (slot: Slot) => {
@@ -950,9 +981,14 @@ function startCatch(host: HTMLElement, game: Minigame, onDone: Done): void {
  * tiden som lutningen hållits inom det gröna fältet, så en enstaka vurpa
  * sänker resultatet utan att avsluta momentet.
  */
-function startBalance(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startBalance(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
   const DURATION = 22000;
-  const SAFE = 26; // halva bredden på det gröna fältet, i procent av skalan
+  const SAFE = 26 * ctx.slack; // halva bredden på det gröna fältet
   const label = game.items[0] ?? 'Lasten';
 
   /** -100 till 100, noll är rakt. */
@@ -974,6 +1010,13 @@ function startBalance(host: HTMLElement, game: Minigame, onDone: Done): void {
   const status = makeStatus();
   const feedback = makeFeedback();
   const safeZone = el('span', { class: 'mg-balance-safe' });
+  /**
+   * Det gröna fältet måste ritas ur samma tal som poängen räknas ur, annars
+   * visar spelet en zon och bedömer en annan. Markören ligger på
+   * 50 + tilt / 2 procent, så fältet blir SAFE procent brett kring mitten.
+   */
+  safeZone.style.left = `${50 - SAFE / 2}%`;
+  safeZone.style.width = `${SAFE}%`;
   const marker = el('span', { class: 'mg-balance-marker' });
   const track = el('div', { class: 'mg-balance-track' }, safeZone, marker);
   const carried = el('p', { class: 'mg-balance-label' }, label);
@@ -1108,7 +1151,12 @@ function startBalance(host: HTMLElement, game: Minigame, onDone: Done): void {
  * markören är mitt i fältet. Mitten ger full poäng, kanterna halv och utanför
  * ingenting - och slaget som missas helt räknas som ett tapp.
  */
-function startRhythm(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startRhythm(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
   const BEATS = 12;
   const items = game.items;
 
@@ -1126,6 +1174,16 @@ function startRhythm(host: HTMLElement, game: Minigame, onDone: Done): void {
   const nextLabel = el('p', { class: 'mg-beat-label' });
   const hitZone = el('span', { class: 'mg-beat-zone' });
   const perfectZone = el('span', { class: 'mg-beat-perfect' });
+  /**
+   * Fälten ritas ur samma marginaler som bedömningen använder nedan, så att
+   * det man ser är det man bedöms mot även när svårighetsgraden ändrar dem.
+   */
+  const hitHalf = 16 * ctx.slack;
+  const perfectHalf = 6 * ctx.slack;
+  hitZone.style.left = `${50 - hitHalf}%`;
+  hitZone.style.width = `${hitHalf * 2}%`;
+  perfectZone.style.left = `${50 - perfectHalf}%`;
+  perfectZone.style.width = `${perfectHalf * 2}%`;
   const runner = el('span', { class: 'mg-beat-runner' });
   const lane = el('div', { class: 'mg-beat-lane' }, hitZone, perfectZone, runner);
   const dots = el('div', { class: 'mg-beat-dots' });
@@ -1175,13 +1233,13 @@ function startRhythm(host: HTMLElement, game: Minigame, onDone: Done): void {
     judgedThisBeat = true;
     // Avstånd från slaget, 0 = exakt på, 0.5 = längst ifrån.
     const off = Math.abs(phase - 0.5);
-    if (off <= 0.06) {
+    if (off <= 0.06 * ctx.slack) {
       scored += 1;
       perfects += 1;
       playSound('trumma');
       feedback.say(`Rent på slaget! ${items[beat % items.length]}`, 'topp');
       mark(beat, 'mg-beat-dot-perfect');
-    } else if (off <= 0.16) {
+    } else if (off <= 0.16 * ctx.slack) {
       scored += 0.5;
       playSound('blipp');
       feedback.say(phase < 0.5 ? 'Något tidigt.' : 'Något sent.', 'ok');
@@ -1241,7 +1299,10 @@ function startRhythm(host: HTMLElement, game: Minigame, onDone: Done): void {
       show();
     }
     runner.style.left = `${phase * 100}%`;
-    lane.classList.toggle('mg-beat-lane-hot', Math.abs(phase - 0.5) <= 0.16);
+    lane.classList.toggle(
+      'mg-beat-lane-hot',
+      Math.abs(phase - 0.5) <= 0.16 * ctx.slack
+    );
     return true;
   });
 }

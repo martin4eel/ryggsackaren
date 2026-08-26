@@ -1,5 +1,6 @@
 import { CITY_BY_ID } from '../data/cities';
 import { buildStamps, type Stamp } from '../data/stamps';
+import { optionCount } from './difficulty';
 import { JOB_BY_ID } from '../data/jobs';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City, Job, Question, Souvenir } from '../data/types';
@@ -74,10 +75,15 @@ export function dailyCost(city: City, difficulty: Difficulty): number {
   return Math.round(difficulty === 'turist' ? base * 0.8 : base);
 }
 
-/** Hur många svarsalternativ som visas. */
-export function optionCount(difficulty: Difficulty): number {
-  return difficulty === 'turist' ? 3 : 4;
-}
+// Skillnaderna mellan lägena bor i game/difficulty.ts och re-exporteras här,
+// så att allt spelregelrelaterat fortsatt går att importera från ett ställe.
+export {
+  DIFFICULTY_INFO,
+  arcadeSlack,
+  certificateThreshold,
+  lifelinesFor,
+  optionCount,
+} from './difficulty';
 
 /** Betyg 0-100 översatt till högsta löneklass du får söka. */
 export function allowedWageClass(rating: number): 1 | 2 | 3 {

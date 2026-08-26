@@ -5,6 +5,7 @@ import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City, Job, Souvenir } from '../data/types';
 import {
   COMBO_STEPS,
+  DIFFICULTY_INFO,
   MIN_CITIES_TO_FINISH,
   STAMPS,
   STAMP_BY_ID,
@@ -19,11 +20,14 @@ import {
   finalScore,
   jobQuestions,
   jobRequirementText,
+  arcadeSlack,
+  certificateThreshold,
   comboMultiplier,
   loanAmount,
   newStamps,
   pityBonus,
   rankTitle,
+  shuffle,
   souvenirPrice,
   speedBonus,
   travelOptions,
@@ -75,6 +79,11 @@ interface QuizSession {
   streak: number;
   /** Längsta sviten under passet */
   bestStreak: number;
+  /**
+   * Alternativ som livlinan strukit på den aktuella frågan. Sparas per
+   * fråga och nollas när nästa fråga visas.
+   */
+  struck: number[];
   /** Utfall per arbetsdag, används till stämpelkortet */
   dayResults: boolean[];
   /**
@@ -211,6 +220,8 @@ export class App {
   private stampTimer: number | null = null;
   /** Sökfältet på startskärmens stadslista */
   private cityFilter = '';
+  /** Har spelaren fällt ut hela stadslistan på startskärmen? */
+  private showAllCities = false;
 
   constructor(root: HTMLElement) {
     this.root = root;
@@ -501,8 +512,34 @@ export class App {
       el(
         'p',
         { class: 'lede' },
-        'Välj en startstad, jobba dig fram över kontinenterna och handla souvenirer. ' +
-          'Kom hem igen med full ryggsäck och pengar kvar på fickan.'
+        'Du har en enkelbiljett, för lite pengar och hela världen framför dig. ' +
+          'Jobba dig fram från stad till stad, svara rätt för att få lön, fyll ' +
+          'ryggsäcken med souvenirer och ta dig hem igen innan kassan tar slut.'
+      ),
+      // Loopen i fyra steg. Den som skummar ska ändå fatta vad man gör.
+      el(
+        'ol',
+        { class: 'loop' },
+        el('li', {},
+          el('span', { class: 'loop-num' }, '1'),
+          el('span', { class: 'loop-text' },
+            el('strong', {}, 'Lär dig staden'),
+            el('span', {}, 'Provet på turistbyrån ger ett betyg som öppnar bättre jobb.'))),
+        el('li', {},
+          el('span', { class: 'loop-num' }, '2'),
+          el('span', { class: 'loop-text' },
+            el('strong', {}, 'Ta ett jobb'),
+            el('span', {}, 'Varje rätt svar är en dagslön. Skiftet slutar med ett arkadmoment.'))),
+        el('li', {},
+          el('span', { class: 'loop-num' }, '3'),
+          el('span', { class: 'loop-text' },
+            el('strong', {}, 'Gör en affär'),
+            el('span', {}, 'Köp souvenirer där de tillverkas, sälj dem långt hemifrån.'))),
+        el('li', {},
+          el('span', { class: 'loop-num' }, '4'),
+          el('span', { class: 'loop-text' },
+            el('strong', {}, 'Res vidare'),
+            el('span', {}, `Minst ${MIN_CITIES_TO_FINISH} städer, sedan hem igen. Boendet kostar varje dag.`)))
       )
     );
 
@@ -537,35 +574,45 @@ export class App {
     }
     wrap.append(hero);
 
-    // Svårighetsgrad
+    // Svårighetsgrad. Två stora kort med samma uppbyggnad, så att skillnaden
+    // går att läsa rad för rad i stället för att gissas ur en textmassa.
     const diffPanel = el('section', { class: 'panel' });
-    diffPanel.append(el('h2', {}, 'Svårighetsgrad'));
-    const diffRow = el('div', { class: 'choice-grid' });
-    const diffs: Array<{ id: Difficulty; name: string; desc: string }> = [
-      {
-        id: 'turist',
-        name: 'Turist',
-        desc: 'Lättare frågor, tre svarsalternativ, billigare boende och mer startkapital.',
-      },
-      {
-        id: 'globetrotter',
-        name: 'Globetrotter',
-        desc: 'Svårare frågor, fyra svarsalternativ, högre löner men tuffare ekonomi.',
-      },
-    ];
-    for (const d of diffs) {
-      const selected = this.startPick.difficulty === d.id;
+    diffPanel.append(
+      el('h2', {}, 'Hur van resenär är du?'),
+      el(
+        'p',
+        { class: 'muted' },
+        'Samma spel och samma regler i båda lägena – det är kraven som skiljer. ' +
+          'Valet gäller hela resan.'
+      )
+    );
+    const diffRow = el('div', { class: 'mode-grid' });
+    const modes: Difficulty[] = ['turist', 'globetrotter'];
+    for (const id of modes) {
+      const info = DIFFICULTY_INFO[id];
+      const selected = this.startPick.difficulty === id;
+      const bullets = el('ul', { class: 'mode-bullets' });
+      for (const line of info.bullets) bullets.append(el('li', {}, line));
       diffRow.append(
         button(
-          el('span', { class: 'choice-body' },
-            el('span', { class: 'choice-name' }, d.name),
-            el('span', { class: 'choice-desc' }, d.desc)
+          el('span', { class: 'mode-body' },
+            el('span', { class: 'mode-head' },
+              el('span', { class: 'mode-name' }, info.name),
+              el('span', { class: 'mode-check', 'aria-hidden': 'true' }, selected ? '✓' : '')
+            ),
+            el('span', { class: 'mode-tagline' }, info.tagline),
+            bullets
           ),
           () => {
-            this.startPick.difficulty = d.id;
+            this.startPick.difficulty = id;
+            playSound('valj');
             this.render();
           },
-          { class: `choice ${selected ? 'choice-on' : ''}` }
+          {
+            class: `mode ${selected ? 'mode-on' : ''}`,
+            'aria-pressed': selected ? 'true' : 'false',
+            'data-sound': 'av',
+          }
         )
       );
     }
@@ -626,8 +673,30 @@ export class App {
       this.renderStartCityList(list);
     });
     const list = el('div', { class: 'city-picker' });
+    /**
+     * Fyrtiofem städer i regiongrupper gjorde startskärmen åtta tusen pixlar
+     * hög på telefon. Kartan och sökrutan är de vägar folk faktiskt använder,
+     * så listan ligger hopfälld bakom en knapp och fälls ut av sig själv så
+     * fort man börjar söka.
+     */
+    const toggle = button(
+      '',
+      () => {
+        this.showAllCities = !this.showAllCities;
+        this.renderStartCityList(list);
+        paintToggle();
+      },
+      { class: 'btn btn-ghost city-toggle', 'data-sound': 'av' }
+    );
+    const paintToggle = () => {
+      toggle.textContent = this.showAllCities
+        ? 'Dölj listan'
+        : `Bläddra bland alla ${CITIES.length} städer`;
+      toggle.setAttribute('aria-expanded', this.showAllCities ? 'true' : 'false');
+    };
+    paintToggle();
     this.renderStartCityList(list);
-    cityPanel.append(el('div', { class: 'row' }, search), list);
+    cityPanel.append(el('div', { class: 'row' }, search, toggle), list);
     wrap.append(cityPanel);
 
     const actions = el('div', { class: 'panel actions-panel' });
@@ -682,6 +751,32 @@ export class App {
       return;
     }
 
+    // Utan sökning och utan utfälld lista räcker ett urval som visar spännvidden.
+    if (needle === '' && !this.showAllCities) {
+      const suggested = [
+        'stockholm',
+        'london',
+        'newyork',
+        'bangkok',
+        'kapstaden',
+        'buenosaires',
+      ]
+        .map((id) => CITY_BY_ID[id])
+        .filter((c): c is City => Boolean(c));
+      host.append(el('h3', { class: 'city-group' }, 'Vanliga startstäder'));
+      const row = el('div', { class: 'city-chips' });
+      for (const c of suggested) row.append(this.cityChip(c));
+      host.append(
+        row,
+        el(
+          'p',
+          { class: 'muted city-hint' },
+          'Eller tryck på en punkt på kartan, sök ovan, eller bläddra bland alla.'
+        )
+      );
+      return;
+    }
+
     const order = Object.keys(REGION_LABELS);
     for (const region of order) {
       const inRegion = matches
@@ -690,25 +785,26 @@ export class App {
       if (inRegion.length === 0) continue;
       host.append(el('h3', { class: 'city-group' }, REGION_LABELS[region] ?? region));
       const row = el('div', { class: 'city-chips' });
-      for (const c of inRegion) {
-        const on = c.id === this.startPick.cityId;
-        row.append(
-          button(
-            el('span', { class: 'chip-body' },
-              el('span', { class: 'chip-name' }, c.name),
-              el('span', { class: 'chip-country' }, c.country)
-            ),
-            () => {
-              this.startPick.cityId = c.id;
-              playSound('valj');
-              this.render();
-            },
-            { class: `chip ${on ? 'chip-on' : ''}`, 'data-sound': 'av' }
-          )
-        );
-      }
+      for (const c of inRegion) row.append(this.cityChip(c));
       host.append(row);
     }
+  }
+
+  /** En stadsbricka på startskärmen. */
+  private cityChip(c: City): HTMLElement {
+    const on = c.id === this.startPick.cityId;
+    return button(
+      el('span', { class: 'chip-body' },
+        el('span', { class: 'chip-name' }, c.name),
+        el('span', { class: 'chip-country' }, c.country)
+      ),
+      () => {
+        this.startPick.cityId = c.id;
+        playSound('valj');
+        this.render();
+      },
+      { class: `chip ${on ? 'chip-on' : ''}`, 'data-sound': 'av' }
+    );
   }
 
   // -------------------------------------------------------------------- HUD
@@ -721,7 +817,16 @@ export class App {
     const left = el('div', { class: 'hud-place' });
     left.append(
       el('span', { class: 'hud-city' }, city.name),
-      el('span', { class: 'hud-country' }, city.country)
+      el('span', { class: 'hud-country' }, city.country),
+      // Läget syns hela resan, så att man vet vilka regler som gäller.
+      el(
+        'span',
+        {
+          class: `hud-mode hud-mode-${s.difficulty}`,
+          title: DIFFICULTY_INFO[s.difficulty].tagline,
+        },
+        DIFFICULTY_INFO[s.difficulty].name
+      )
     );
 
     const stats = el('div', { class: 'hud-stats' });
@@ -1018,6 +1123,7 @@ export class App {
       askedAt: performance.now(),
       streak: 0,
       bestStreak: 0,
+      struck: [],
     };
     this.go('turistbyra');
   }
@@ -1121,6 +1227,7 @@ export class App {
       askedAt: performance.now(),
       streak: 0,
       bestStreak: 0,
+      struck: [],
     };
     this.go('jobb');
   }
@@ -1242,8 +1349,10 @@ export class App {
 
     const answered = q.answered;
     const options = el('div', { class: 'options' });
+    const struck = q.struck ?? [];
     current.options.forEach((text, i) => {
       const classes = ['option'];
+      if (!answered && struck.includes(i)) classes.push('option-struck');
       if (answered) {
         if (i === current.correctIndex) classes.push('option-right');
         else if (i === answered.picked) classes.push('option-wrong');
@@ -1260,13 +1369,46 @@ export class App {
         },
         {
           class: classes.join(' '),
-          disabled: answered ? true : undefined,
-          title: `Tangent ${i + 1} eller ${String.fromCharCode(65 + i)}`,
+          disabled: answered || struck.includes(i) ? true : undefined,
+          title: struck.includes(i)
+            ? 'Lokalbon har strukit det här alternativet'
+            : `Tangent ${i + 1} eller ${String.fromCharCode(65 + i)}`,
         }
       );
       options.append(b);
     });
     panel.append(options);
+
+    /**
+     * Livlinan. Den stryker hälften av de felaktiga alternativen och är den
+     * tydligaste skillnaden mellan lägena i stunden: Turisten har fem samtal
+     * på resan, Globetrottern två.
+     */
+    if (!answered) {
+      const remaining = current.options.length - struck.length;
+      const canUse = s.lifelines > 0 && remaining > 2;
+      const row = el('div', { class: 'lifeline-row' });
+      row.append(
+        button(
+          el('span', { class: 'lifeline-body' },
+            icon('lokalbo'),
+            el('span', {}, 'Fråga en lokalbo'),
+            el('span', { class: 'lifeline-count' }, `${s.lifelines} kvar`)
+          ),
+          () => this.useLifeline(),
+          {
+            class: `btn btn-ghost lifeline ${canUse ? '' : 'lifeline-spent'}`,
+            disabled: canUse ? undefined : true,
+            title: canUse
+              ? 'Stryker felaktiga alternativ'
+              : s.lifelines === 0
+                ? 'Du har ringt slut på dina kontakter'
+                : 'Det går inte att stryka fler alternativ på den här frågan',
+          }
+        )
+      );
+      panel.append(row);
+    }
 
     if (answered) {
       const right = answered.picked === current.correctIndex;
@@ -1397,7 +1539,10 @@ export class App {
       panel.append(
         renderMinigame(
           game,
-          { money: (amount) => this.money(amount) },
+          {
+            money: (amount) => this.money(amount),
+            slack: arcadeSlack(this.state!.difficulty),
+          },
           (result) => this.finishMinigame(result)
         )
       );
@@ -1472,12 +1617,45 @@ export class App {
     this.render();
   }
 
+  /**
+   * Stryker hälften av de kvarvarande felaktiga alternativen, avrundat uppåt,
+   * men lämnar alltid minst två kvar att välja mellan. Kostar ett samtal
+   * oavsett hur många alternativ som ströks.
+   */
+  private useLifeline(): void {
+    const s = this.state!;
+    const q = this.quiz;
+    if (!q || q.answered || s.lifelines <= 0) return;
+    const current = q.questions[q.index]!;
+    const struck = q.struck ?? [];
+    const wrong = current.options
+      .map((_, i) => i)
+      .filter((i) => i !== current.correctIndex && !struck.includes(i));
+    if (wrong.length === 0) return;
+
+    const remaining = current.options.length - struck.length;
+    const canStrike = Math.min(Math.ceil(wrong.length / 2), remaining - 2);
+    if (canStrike <= 0) return;
+
+    q.struck = [...struck, ...shuffle(wrong).slice(0, canStrike)];
+    s.lifelines -= 1;
+    playSound('valj');
+    this.commit();
+    this.notify(
+      s.lifelines > 0
+        ? `Lokalbon strök ${canStrike === 1 ? 'ett alternativ' : `${canStrike} alternativ`}. ${s.lifelines} samtal kvar.`
+        : 'Lokalbon strök ett alternativ. Det var ditt sista samtal.'
+    );
+    this.render();
+  }
+
   private advanceQuiz(): void {
     const q = this.quiz!;
     q.answered = undefined;
     if (q.index + 1 < q.questions.length) {
       q.index += 1;
       q.askedAt = performance.now();
+      q.struck = [];
       this.render();
       return;
     }
@@ -1555,8 +1733,9 @@ export class App {
     // väger in, så ett svagt frågeresultat kan räddas av gott handlag.
     const mgScore = q.minigameResult?.score ?? 0;
     const shiftScore = Math.round(score * 0.75 + mgScore * 100 * 0.25);
+    const threshold = certificateThreshold(s.difficulty);
     let gotCert = false;
-    if (shiftScore >= 70) {
+    if (shiftScore >= threshold) {
       const prev = s.certificates[job.category] ?? 0;
       s.certificates[job.category] = prev + 1;
       gotCert = true;
@@ -2030,7 +2209,7 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          'Inga än. Klara minst 70 procent av ett arbetsskift för att få ett certifikat, som i sin tur öppnar bättre betalda jobb i samma ämne.'
+          `Inga än. Klara minst ${certificateThreshold(s.difficulty)} procent av ett arbetsskift för att få ett certifikat, som i sin tur öppnar bättre betalda jobb i samma ämne.`
         )
       );
     } else {
@@ -2218,6 +2397,13 @@ export class App {
 
     const score = s.finalScore ?? finalScore(s);
     const rank = rankTitle(score);
+    // Poängen byggs som ett eget element så att siffran kan räknas upp när
+    // skärmen väl sitter i dokumentet.
+    const scoreStat = stat('Poäng', '0', 'big');
+    const scoreValue = scoreStat.querySelector('.stat-value') as HTMLElement;
+    window.setTimeout(() => {
+      if (scoreValue.isConnected) countUp(scoreValue, score);
+    }, 260);
     const panel = el('section', { class: 'panel hero' });
     panel.append(
       el('p', { class: 'kicker' }, won ? 'Resan är fullbordad' : 'Resan tog slut'),
@@ -2247,7 +2433,7 @@ export class App {
     scores.append(
       el('h2', {}, 'Slutresultat'),
       el('div', { class: 'stat-grid' },
-        stat('Poäng', score.toLocaleString('sv-SE')),
+        scoreStat,
         stat('Kassa', this.money(s.money)),
         stat('Skuld', this.money(s.debt)),
         stat('Ryggsäckens värde', this.money(bag)),
@@ -2305,6 +2491,32 @@ function utcLabel(utc: number): string {
   return minutes === 0
     ? `UTC${sign}${hours}`
     : `UTC${sign}${hours}:${String(minutes).padStart(2, '0')}`;
+}
+
+/** Respekterar systeminställningen för mindre rörelse. */
+function prefersReducedMotion(): boolean {
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+}
+
+/**
+ * Räknar upp ett tal i ett element. Slutpoängen betyder mer när den tickar
+ * fram än när den bara står där. Utfallet är snabbt i början och bromsar in,
+ * och den som bett om mindre rörelse får talet direkt.
+ */
+function countUp(node: HTMLElement, to: number, ms = 1100): void {
+  if (prefersReducedMotion() || to <= 0) {
+    node.textContent = to.toLocaleString('sv-SE');
+    return;
+  }
+  const started = performance.now();
+  const step = (now: number) => {
+    const t = Math.min(1, (now - started) / ms);
+    // Kvadratisk inbromsning: snabbt i början, mjukt i mål.
+    const eased = 1 - (1 - t) * (1 - t);
+    node.textContent = Math.round(to * eased).toLocaleString('sv-SE');
+    if (t < 1) window.requestAnimationFrame(step);
+  };
+  window.requestAnimationFrame(step);
 }
 
 function stat(label: string, value: string, tone?: string): HTMLElement {

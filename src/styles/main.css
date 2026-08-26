@@ -6,10 +6,14 @@
   --paper: #f6efe0;
   --paper-dim: #e6dcc7;
   --ink: #1d2b34;
-  --ink-soft: #5a6b76;
+  /* Mörkad ett snäpp: den gamla tonen låg på 4.06 mot --paper-dim och klarade
+     därmed inte AA för brödtext på de dovare panelerna. */
+  --ink-soft: #526169;
   --sun: #f2a63b;
   --sun-dark: #d4842b;
-  --stamp: #c8452f;
+  /* Mörkad från #c8452f, som låg på 4.22 mot --paper och därför inte räckte
+     för de små versalrubrikerna. Bär fortfarande ljus text lika bra. */
+  --stamp: #bd3f2a;
   --palm: #2f7d63;
   --palm-light: #47a382;
   --line: rgba(29, 43, 52, 0.16);
@@ -1592,12 +1596,13 @@ img.no-photo {
   color: rgba(246, 239, 224, 0.75);
   border: 1px solid rgba(246, 239, 224, 0.3);
   border-radius: 999px;
-  padding: 7px 13px;
+  /* Minst 40 px hög träffyta även på telefon; den låg tidigare under. */
+  padding: 10px 15px;
+  min-height: 40px;
   font-family: var(--font);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  min-height: 36px;
   transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
 }
 
@@ -2267,12 +2272,11 @@ img.no-photo {
   border-color: var(--stamp);
 }
 
+/* Position och bredd sätts från minigames.ts, ur samma tal som bedömningen. */
 .mg-balance-safe {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 37%;
-  width: 26%;
   background: rgba(71, 163, 130, 0.28);
   border-left: 2px solid var(--palm);
   border-right: 2px solid var(--palm);
@@ -2340,8 +2344,6 @@ img.no-photo {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 34%;
-  width: 32%;
   background: rgba(242, 166, 59, 0.22);
 }
 
@@ -2349,8 +2351,6 @@ img.no-photo {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 44%;
-  width: 12%;
   background: rgba(71, 163, 130, 0.4);
   border-left: 2px solid var(--palm);
   border-right: 2px solid var(--palm);
@@ -2403,4 +2403,437 @@ img.no-photo {
   .stamp-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ================================================================= omgång 2
+   Startskärmens spelloop och lägeskort, livlinan, lägesmärket i statusraden,
+   bredare desktoplayout och respekt för reducerad rörelse.
+   ======================================================================== */
+
+/* ------------------------------------------------------- spelloopen i hero */
+
+.loop {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.loop li {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: rgba(29, 43, 52, 0.05);
+  border: 1.5px solid var(--line);
+}
+
+.loop-num {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sun);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.loop-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.loop-text strong {
+  color: var(--ink);
+  font-size: 0.97rem;
+}
+
+/* ------------------------------------------------------------- lägeskorten */
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mode {
+  text-align: left;
+  padding: 0;
+  border-radius: 14px;
+  border: 2.5px solid var(--line);
+  background: var(--paper-dim);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+}
+
+.mode:hover {
+  border-color: var(--sun-dark);
+  background: #fff;
+  transform: translateY(-2px);
+}
+
+.mode-on {
+  border-color: var(--stamp);
+  background: #fff;
+  box-shadow: inset 0 0 0 3px rgba(200, 69, 47, 0.14);
+}
+
+.mode-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 16px 18px 18px;
+}
+
+.mode-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mode-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mode-check {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  color: transparent;
+  font-weight: 800;
+}
+
+.mode-on .mode-check {
+  border-color: var(--stamp);
+  background: var(--stamp);
+  color: var(--paper);
+}
+
+.mode-tagline {
+  font-size: 1rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.mode-bullets {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mode-bullets li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.mode-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sun-dark);
+}
+
+/* -------------------------------------------------- lägesmärke i statusraden */
+
+.hud-mode {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1.5px solid currentColor;
+}
+
+.hud-mode-turist {
+  color: var(--palm-light);
+}
+
+.hud-mode-globetrotter {
+  color: var(--sun);
+}
+
+/* ------------------------------------------------------------------ livlina */
+
+.lifeline-row {
+  margin-top: 10px;
+}
+
+.lifeline {
+  width: 100%;
+  padding: 11px 14px;
+}
+
+.lifeline-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-weight: 700;
+}
+
+.lifeline-body .icon {
+  width: 19px;
+  height: 19px;
+}
+
+.lifeline-count {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(29, 43, 52, 0.12);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.lifeline-spent {
+  opacity: 0.45;
+}
+
+/* Alternativ som lokalbon strukit: kvar men tydligt ur spel. */
+.option-struck {
+  opacity: 0.4;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------- bredare desktoplayout */
+
+@media (min-width: 1120px) {
+  .shell {
+    max-width: 1180px;
+  }
+
+  /* Stadsmenyn har sex poster och blir en onödigt lång kolumn på en bred skärm. */
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Vykortet ska inte äta halva startskärmen. */
+  .start-photo {
+    max-height: 340px;
+    object-fit: cover;
+  }
+}
+
+/* --------------------------------------------------------- reducerad rörelse */
+
+/**
+ * Den som bett systemet om mindre rörelse ska slippa band som glider och
+ * mätare som pulserar. Momenten förblir spelbara: allt som betyder något
+ * finns även i text och färg, animationerna är kvitton och inte information.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .mg-item-moving {
+    animation: none;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* ================================================================= omgång 3
+   Mikrointeraktioner. Varje animation här är ett kvitto på något spelaren
+   just gjort - inget rör sig utan anledning.
+   ======================================================================== */
+
+/* Slutpoängen får extra tyngd medan den räknas upp. */
+.stat-big .stat-value {
+  font-size: clamp(1.9rem, 7vw, 2.9rem);
+  color: var(--stamp);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Rätt svar puffar till en gång; fel svar skakar kort. Båda är korta nog
+   att inte fördröja nästa fråga. */
+.option-right {
+  animation: option-pop 0.34s ease;
+}
+
+.option-wrong {
+  animation: option-shake 0.34s ease;
+}
+
+@keyframes option-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.035);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes option-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  55% {
+    transform: translateX(4px);
+  }
+  80% {
+    transform: translateX(-2px);
+  }
+}
+
+/* Kvittensrutan glider in underifrån i stället för att bara dyka upp. */
+.feedback {
+  animation: feedback-in 0.22s ease;
+}
+
+@keyframes feedback-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Vykortet tonar in när man kommer fram till en ny stad. */
+.city-hero-img {
+  animation: hero-in 0.5s ease;
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Stämpelkortets ruta för dagen som just klarats. */
+.day-ok {
+  animation: stamp-down 0.3s ease;
+}
+
+@keyframes stamp-down {
+  0% {
+    transform: scale(1.5) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.94) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+/* Svarsseriens mätare fyller på sig i stället för att hoppa. */
+.combo-pip {
+  transition: background 0.2s ease;
+}
+
+.combo-on .combo-mult {
+  animation: mult-bump 0.28s ease;
+}
+
+@keyframes mult-bump {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.16);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Panelerna tonar in när en ny skärm ritas. Snabbt, så navigationen känns
+   levande utan att fördröja något. */
+.view > .stack > .panel,
+.view > .stack > section {
+  animation: panel-in 0.24s ease both;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tydliga fokusmarkeringar i hela spelet, inte bara på det som råkar ha dem. */
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Knappen som fäller ut hela stadslistan på startskärmen. */
+.city-toggle {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.city-hint {
+  margin: 10px 0 0;
+  font-size: 0.86rem;
 }
