@@ -53,7 +53,23 @@ export type Sound =
   /** Resan slutade lyckligt */
   | 'seger'
   /** Resan tog slut i förtid */
-  | 'forlust';
+  | 'forlust'
+  /** Gammaldags ringsignal i telefonkiosken */
+  | 'ringsignal'
+  /** Mynt som ramlar ner i telefonautomaten */
+  | 'myntinkast'
+  /** Mamma eller pappa som tjatar i luren */
+  | 'telefonrost'
+  /** Tågvissla vid avgång */
+  | 'tagvissla'
+  /** Bussmotor som drar igång */
+  | 'bussmotor'
+  /** Fartygstuta när färjan lägger ut */
+  | 'skeppstuta'
+  /** Sorl och prat på en marknad */
+  | 'marknad'
+  /** Applåder, vid certifikat */
+  | 'applad';
 
 const STORAGE_KEY = 'ryggsackaren-ljud';
 
@@ -73,6 +89,12 @@ let level: VolumeLevel = readLevel();
 function readLevel(): VolumeLevel {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
+    /**
+     * Inget sparat val betyder fullt ljud. Kontrollen måste stå först:
+     * Number(null) är 0, så utan den föll varje ny spelare rakt ner i
+     * "ljud av" och fick ett helt tyst spel utan att ha valt det.
+     */
+    if (raw === null) return 2;
     // Äldre sparfiler lagrade 'av' respektive 'på'.
     if (raw === 'av') return 0;
     if (raw === 'på') return 2;
@@ -233,6 +255,83 @@ export function playPad(index: number, wrong = false): void {
   tone(freq * 2, c.currentTime, 0.12, { type: 'sine', gain: 0.03 });
 }
 
+/**
+ * En stavelse ur en syntetisk röst.
+ *
+ * Rösten byggs av en sågtandston genom två bandpassfilter som sitter på
+ * vokalernas formantfrekvenser. Det är samma knep som gav Animal Crossing och
+ * Banjo-Kazooie sitt pladder: örat hör en röst utan att ett enda ord uttalas.
+ * Hela härligheten går sedan genom ett smalt bandpass kring 1 700 Hz, vilket
+ * är telefonlinjens frekvensomfång och det som gör att det låter som en lur.
+ */
+interface Formant {
+  f1: number;
+  f2: number;
+}
+
+/** Ungefärliga formantpar för några vokaler. */
+const VOKALER: Formant[] = [
+  { f1: 700, f2: 1200 }, // a
+  { f1: 400, f2: 2000 }, // e
+  { f1: 300, f2: 2300 }, // i
+  { f1: 500, f2: 900 }, // o
+  { f1: 350, f2: 800 }, // u
+];
+
+function stavelse(
+  t0: number,
+  dur: number,
+  pitch: number,
+  vokal: Formant,
+  gain: number
+): void {
+  if (!ctx || !master) return;
+  const osc = ctx.createOscillator();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(pitch, t0);
+  // Liten tonhöjdsrörelse inom stavelsen gör den levande i stället för platt.
+  osc.frequency.linearRampToValueAtTime(pitch * 1.06, t0 + dur * 0.4);
+  osc.frequency.linearRampToValueAtTime(pitch * 0.94, t0 + dur);
+
+  const bygg = (freq: number, q: number) => {
+    const f = ctx!.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.setValueAtTime(freq, t0);
+    f.Q.value = q;
+    return f;
+  };
+  const f1 = bygg(vokal.f1, 6);
+  const f2 = bygg(vokal.f2, 8);
+  // Telefonlurens smala band: allt under 300 och över 3 400 Hz försvinner.
+  const lur = bygg(1700, 0.9);
+
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, t0);
+  g.gain.linearRampToValueAtTime(gain, t0 + 0.02);
+  g.gain.setValueAtTime(gain, t0 + dur * 0.7);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+  osc.connect(f1).connect(f2).connect(lur).connect(g).connect(master);
+  osc.start(t0);
+  osc.stop(t0 + dur + 0.02);
+}
+
+/**
+ * En replik i luren. Antalet stavelser och tonfallet avgör om det låter som
+ * en fråga eller som en utskällning.
+ */
+function replik(t0: number, stavelser: number, bas: number, gain = 0.09): void {
+  let t = t0;
+  for (let i = 0; i < stavelser; i++) {
+    const dur = 0.1 + Math.random() * 0.07;
+    // Tonfallet sjunker mot slutet, som i ett påstående på svenska.
+    const lage = bas * (1 - (i / stavelser) * 0.18 + (Math.random() - 0.5) * 0.06);
+    const vokal = VOKALER[Math.floor(Math.random() * VOKALER.length)]!;
+    stavelse(t, dur, lage, vokal, gain);
+    t += dur + 0.02 + Math.random() * 0.03;
+  }
+}
+
 /** Spelar en effekt. Gör ingenting om ljudet är avstängt. */
 export function playSound(name: Sound): void {
   const c = ensureCtx();
@@ -344,6 +443,64 @@ export function playSound(name: Sound): void {
         t,
         { type: 'triangle', gain: 0.1 }
       );
+      break;
+    case 'ringsignal':
+      // Två signaler av den gamla sorten, med paus emellan.
+      for (const start of [0, 0.9]) {
+        for (let i = 0; i < 12; i++) {
+          const t2 = t + start + i * 0.025;
+          tone(1100, t2, 0.02, { type: 'square', gain: 0.05 });
+          tone(1400, t2 + 0.012, 0.02, { type: 'square', gain: 0.04 });
+        }
+      }
+      break;
+    case 'myntinkast':
+      // Myntet studsar ner genom automaten.
+      [0, 0.07, 0.13, 0.2].forEach((d, i) =>
+        tone(2600 - i * 300, t + d, 0.06, {
+          type: 'triangle',
+          gain: 0.06 - i * 0.012,
+        })
+      );
+      break;
+    case 'telefonrost':
+      // Mamma hinner med en hel harang innan du får ett ord med i laget.
+      replik(t, 7, 260);
+      replik(t + 1.15, 5, 240);
+      break;
+    case 'tagvissla':
+      // Två toner i kvint, som ett riktigt tåghorn.
+      tone(660, t, 0.7, { type: 'sawtooth', gain: 0.05, attack: 0.08 });
+      tone(990, t, 0.7, { type: 'sawtooth', gain: 0.04, attack: 0.08 });
+      noise(0.5, t + 0.5, { gain: 0.04, from: 800, to: 200, q: 0.6 });
+      break;
+    case 'bussmotor':
+      // Dieselmotorn drar igång och går upp i varv.
+      tone(58, t, 1.1, { type: 'sawtooth', gain: 0.08, slide: 96, attack: 0.15 });
+      tone(116, t, 1.1, { type: 'square', gain: 0.03, slide: 192, attack: 0.2 });
+      noise(1.0, t, { gain: 0.03, from: 200, to: 500, q: 0.8 });
+      break;
+    case 'skeppstuta':
+      // Djup fartygstuta som ekar ut över hamnen.
+      tone(110, t, 1.4, { type: 'sawtooth', gain: 0.09, attack: 0.2 });
+      tone(165, t, 1.4, { type: 'sawtooth', gain: 0.05, attack: 0.25 });
+      break;
+    case 'marknad':
+      // Sorl: flera röster i olika tonlägen, dämpade och överlappande.
+      replik(t, 4, 200, 0.025);
+      replik(t + 0.2, 4, 320, 0.02);
+      replik(t + 0.45, 3, 150, 0.022);
+      break;
+    case 'applad':
+      // Klapper av filtrerat brus i avtagande täthet.
+      for (let i = 0; i < 26; i++) {
+        noise(0.05, t + Math.random() * 1.1, {
+          gain: 0.035,
+          from: 1200 + Math.random() * 1800,
+          to: 600,
+          q: 1.4,
+        });
+      }
       break;
     case 'forlust':
       melody(

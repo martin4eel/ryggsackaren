@@ -1307,7 +1307,10 @@ export class App {
         'souvenir',
         'Souvenirbutiken',
         'Köp lokalt och sälj där varan är eftertraktad.',
-        () => this.go('souvenir')
+        () => {
+          playSound('marknad');
+          this.go('souvenir');
+        }
       ),
       menuButton(
         'ryggsack',
@@ -1325,7 +1328,10 @@ export class App {
         'telefon',
         'Telefonkiosken',
         'Ring hem och låna pengar om kassan är tom.',
-        () => this.go('telefon')
+        () => {
+          playSound('ringsignal');
+          this.go('telefon');
+        }
       )
     );
     menu.append(grid);
@@ -1950,6 +1956,7 @@ export class App {
     if (this.checkBroke()) return;
 
     playSound(gotCert ? 'fanfar' : 'kassa');
+    if (gotCert) window.setTimeout(() => playSound('applad'), 700);
     const parts = [
       `${job.title}: ${q.correct}/${total} rätt.`,
       `Lön ${this.money(q.earnings)}.`,
@@ -2347,7 +2354,14 @@ export class App {
     this.mapHighlight = null;
     this.commit();
     if (this.checkBroke()) return;
-    playSound(option.mode === 'flyg' ? 'resa' : 'svisch');
+    // Varje färdsätt låter som sig självt när det lämnar staden.
+    const avgangsljud = {
+      flyg: 'resa',
+      tag: 'tagvissla',
+      buss: 'bussmotor',
+      farja: 'skeppstuta',
+    } as const;
+    playSound(avgangsljud[option.mode]);
     // Filmen visar sträckan; ankomstsignalen kommer när den spelat klart.
     this.travelScene = { from, to: target, mode: option.mode };
     this.notify(
@@ -2889,7 +2903,10 @@ export class App {
           s.debt += amount;
           s.callsHome += 1;
           this.commit();
-          playSound('kassa');
+          // Myntet ner i automaten, sedan haranger innan pengarna kommer.
+          playSound('myntinkast');
+          window.setTimeout(() => playSound('telefonrost'), 320);
+          window.setTimeout(() => playSound('kassa'), 2600);
           this.notify(
             `${this.money(amount)} insatt. "Och glöm inte att skicka vykort!"`
           );

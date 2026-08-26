@@ -188,9 +188,11 @@ webbläsaren och överlever att sparfilen raderas.
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet.
-10. **Ljud.** Ett tjugotal effekter (rätt och fel svar, lön, avresa, ankomst,
+10. **Ljud.** Ett trettiotal effekter (rätt och fel svar, lön, avresa, ankomst,
    metronom, trumslag, stämpel och alla arkadmoment) syntetiseras i
-   webbläsaren, så inga ljudfiler behövs. Högtalarknappen i statusraden
+   webbläsaren, så inga ljudfiler behövs. Varje färdsätt har sitt eget
+   avgångsljud, och i telefonkiosken ringer det innan mamma tar vid – rösten
+   är formantsyntes genom ett telefonfilter, alltså pladder utan ord. Högtalarknappen i statusraden
    stegar mellan avstängt, dämpat och fullt ljud; valet sparas.
 11. **Tangentbord.** Svara med `1`–`4` eller `A`–`D`, gå vidare med `Enter`
    och backa till staden med `Esc`. Balansmomentet styrs med piltangenterna
@@ -233,7 +235,7 @@ _Legendarisk ryggsäckare_.
 - 15 resehändelser som kan slå till på vägen
 - 64 souvenirer med regional prissättning
 - 40 valutor
-- Ett tjugotal syntetiserade ljudeffekter (WebAudio) med volymknapp i
+- Ett trettiotal syntetiserade ljudeffekter (WebAudio) med volymknapp i
   statusraden
 
 ## Struktur
