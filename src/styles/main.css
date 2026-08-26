@@ -1682,6 +1682,7 @@ img.no-photo {
 
 /* ----------------------------------------------------------- sökbar lista */
 
+.field,
 .search {
   flex: 1 1 220px;
   min-width: 0;
@@ -1694,6 +1695,7 @@ img.no-photo {
   font-size: 1rem;
 }
 
+.field:focus-visible,
 .search:focus-visible {
   outline: 3px solid var(--sun);
   outline-offset: 1px;

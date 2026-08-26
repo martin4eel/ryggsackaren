@@ -16,6 +16,12 @@ import { createServer } from 'vite';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const problems = [];
+/**
+ * Varningar stoppar inte bygget. De används för sådant som inte är trasigt
+ * men som borde bli bättre, och som annars glöms bort: just nu frågebankernas
+ * storlek i förhållande till skiftlängden.
+ */
+const warnings = [];
 const server = await createServer({
   configFile: false,
   logLevel: 'error',
@@ -148,6 +154,20 @@ try {
         `jobb ${job.id} på Turist: ${easy} lätta frågor men skiftet är ${job.shiftLength}`
       );
 
+    /**
+     * Marginalen mellan frågebanken och skiftets längd avgör hur mycket ett
+     * skift varierar mellan två besök. Med lika många lätta frågor som
+     * arbetsdagar får en Turist exakt samma frågor varje gång, bara i ny
+     * ordning. Kravet skärps efter hand som banken byggs ut; siffran här är
+     * den nivå hela spelet klarar i dag.
+     */
+    const ONSKAD_MARGINAL = 4;
+    if (easy - job.shiftLength < ONSKAD_MARGINAL)
+      warnings.push(
+        `${job.id}: ${easy} lätta frågor på ett skift om ${job.shiftLength} dagar ` +
+          `(marginal ${easy - job.shiftLength}, önskad ${ONSKAD_MARGINAL})`
+      );
+
     // Arkadmomentet måste vara komplett och spelbart.
     const mg = job.minigame;
     if (!mg) {
@@ -275,6 +295,15 @@ try {
   );
 } finally {
   await server.close();
+}
+
+if (warnings.length > 0) {
+  console.log(
+    `\n${warnings.length} jobb har tunn frågebank i förhållande till skiftet.` +
+      ' Skiften varierar då lite mellan besöken. Stoppar inte bygget.'
+  );
+  for (const w of warnings.slice(0, 5)) console.log(`  - ${w}`);
+  if (warnings.length > 5) console.log(`  ... och ${warnings.length - 5} till`);
 }
 
 if (problems.length > 0) {

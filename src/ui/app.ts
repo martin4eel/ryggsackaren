@@ -630,7 +630,8 @@ export class App {
       )
     );
     const nameInput = el('input', {
-      class: 'search name-input',
+      // Egen klass, inte 'search': det är ett namnfält, inte en sökruta.
+      class: 'field name-input',
       type: 'text',
       maxlength: '24',
       placeholder: 'Ditt namn',

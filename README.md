@@ -213,7 +213,7 @@ _Legendarisk ryggsäckare_.
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
 - 77 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 986 frågor uppdelade i två svårighetsgrader, varav 616 jobbfrågor
+- 1 162 frågor uppdelade i två svårighetsgrader, varav 776 jobbfrågor
 - 8 arkadmoment som avslutar arbetsskiften
 - 15 stämplar att samla i passet
 - 15 resehändelser som kan slå till på vägen
@@ -282,6 +282,12 @@ när frågan visas. `d: 1` betyder att frågan används på båda svårighetsgra
   info: 'Visas som kuriosa efter att spelaren svarat.',
 }
 ```
+
+Valideringen skriver också ut en **varningslista** över jobb vars frågebank är
+tunn i förhållande till skiftets längd. Med lika många lätta frågor som
+arbetsdagar får en Turist exakt samma frågor varje gång, bara i ny ordning.
+Varningarna stoppar inte bygget, men listan är arbetsordern: 57 jobb har ännu
+mindre än fyra frågors marginal.
 
 Kör `npm run validate` efter ändringar. Den kontrollerar bland annat att varje
 stad har minst fem lätta frågor, att varje jobb har egna frågor och nog många
