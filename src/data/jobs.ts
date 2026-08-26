@@ -1544,6 +1544,42 @@ export const JOBS: Job[] = [
     scene:
       'Gräset går till midjan och sikten är tjugo meter. Radion knastrar från stationen var tjugonde minut.',
   },
+  {
+    id: 'formsprutare',
+    title: 'Formsprutare',
+    employer: 'Memo industriplast',
+    category: 'teknik',
+    wageClass: 2,
+    shiftLength: 5,
+    ad: 'Skiftgång vid formsprutorna. Vi lär upp dig, men du måste förstå maskinen du sköter.',
+    minigame: {
+      kind: 'instrument',
+      title: 'Kör en cykel',
+      brief:
+        'Maskinens cykel går i fast ordning. Utför momenten i tur och ordning innan formen hinner svalna.',
+      items: ['Stäng formen', 'Spruta in', 'Eftertryck', 'Kyl', 'Mata ut'],
+    },
+    scene:
+      'Hallen luktar varm plast och maskinerna andas i takt. Varje cykel tar arton sekunder, och det blir tvåtusen om dagen.',
+  },
+  {
+    id: 'verksamhetsutvecklare',
+    title: 'Verksamhetsutvecklare',
+    employer: 'Kvinnojouren',
+    category: 'samhalle',
+    wageClass: 2,
+    shiftLength: 6,
+    ad: 'Vi söker någon som kan planera, söka medel och hålla ihop utbildningarna. Kunskap om jämställdhetsfrågor är ett krav.',
+    minigame: {
+      kind: 'sekvens',
+      title: 'Planera utbildningsdagen',
+      brief:
+        'Programmet ska hålla ihop från morgon till eftermiddag. Lägg punkterna i den ordning de ska gå.',
+      items: ['Inledning', 'Föreläsning', 'Grupparbete', 'Panelsamtal'],
+    },
+    scene:
+      'Kontoret ligger en trappa upp med kaffekokare och whiteboard. Halva personalen är volontärer, och telefonen går varm.',
+  },
 ];
 
 export const JOB_BY_ID: Record<string, Job> = Object.fromEntries(

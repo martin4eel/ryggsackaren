@@ -212,8 +212,8 @@ _Legendarisk ryggsäckare_.
 
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
-- 77 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
-- 1 162 frågor uppdelade i två svårighetsgrader, varav 776 jobbfrågor
+- 79 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
+- 1 191 frågor uppdelade i två svårighetsgrader, varav 805 jobbfrågor
 - 8 arkadmoment som avslutar arbetsskiften
 - 15 stämplar att samla i passet
 - 15 resehändelser som kan slå till på vägen
@@ -233,7 +233,8 @@ public/
 src/
   data/
     types.ts               Typer för städer, jobb, souvenirer och frågor
-    cities.ts              Destinationer med koordinater, valuta och prisnivå
+    cities.ts              Destinationer med koordinater, valuta, prisnivå och
+                           eventuella lokala arbetsgivarnamn
     jobs.ts                Yrken, löneklasser och ämneskategorier
     souvenirs.ts           Handelsvaror med billiga och eftertraktade regioner
     currencies.ts          Växelkurser och formatering av belopp

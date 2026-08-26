@@ -64,6 +64,15 @@ export interface City {
   landmark: string;
   /** Jobb-id:n som finns att söka här */
   jobs: string[];
+  /**
+   * Lokala arbetsgivarnamn som ersätter jobbets standardnamn i just den här
+   * staden. Yrkena delas mellan städer, men arbetsgivarna borde höra hemma
+   * där de ligger: ett museum i Västerås heter inte Nationalmuseet.
+   *
+   * Nyckeln är ett jobb-id ur `jobs`, värdet namnet som visas i annonsen och
+   * på arbetsplatsen.
+   */
+  employers?: Record<string, string>;
   /** Souvenir-id:n som säljs i stadens souvenirbutik */
   souvenirs: string[];
 }
@@ -87,7 +96,8 @@ export type Category =
   | 'rymden'
   | 'trafik'
   | 'bygg'
-  | 'mode';
+  | 'mode'
+  | 'samhalle';
 
 /** Arkadmoment som bryter av frågorna, precis som i originalet. */
 export type MinigameKind =

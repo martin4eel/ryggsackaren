@@ -111,6 +111,14 @@ try {
     if (city.jobs.length < 4)
       problems.push(`stad ${city.id} har bara ${city.jobs.length} jobb`);
 
+    // Lokala arbetsgivarnamn måste peka på jobb staden faktiskt erbjuder.
+    for (const id of Object.keys(city.employers ?? {})) {
+      if (!city.jobs.includes(id))
+        problems.push(
+          `stad ${city.id} har ett lokalt arbetsgivarnamn för ${id}, som inte finns bland stadens jobb`
+        );
+    }
+
     for (const id of city.souvenirs) {
       if (!SOUVENIR_BY_ID[id])
         problems.push(`stad ${city.id} pekar på okänd souvenir ${id}`);

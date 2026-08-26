@@ -891,7 +891,20 @@ export const CITIES: City[] = [
     blurb:
       'Mälarstad med domkyrka från 1200-talet och en industrihistoria som börjar med ASEA. Utanför staden reser sig Sveriges största gravhög från vikingatiden.',
     landmark: 'Anundshög',
-    jobs: ['fikabitrade', 'pantvard', 'tagvard', 'museivard', 'cykelkurir', 'robottekniker'],
+    jobs: [
+      'fikabitrade',
+      'pantvard',
+      'tagvard',
+      'museivard',
+      'cykelkurir',
+      'verksamhetsutvecklare',
+      'robottekniker',
+    ],
+    employers: {
+      museivard: 'Västerås konstmuseum',
+      robottekniker: 'Mälardalens robotteknik',
+      tagvard: 'Mälarbanan',
+    },
     souvenirs: ['dalahast', 'vikingahjalm', 'sillburk'],
   },
   {
@@ -910,7 +923,11 @@ export const CITIES: City[] = [
     blurb:
       'Gammal handelsplats innerst i Mälarens västligaste vik, med hamn och kanal. Här verkade apotekaren Carl Wilhelm Scheele, en av kemins stora namn.',
     landmark: 'Köpings hamn',
-    jobs: ['fikabitrade', 'postsorterare', 'pantvard', 'hamnarbetare', 'farmarbetare'],
+    jobs: ['fikabitrade', 'tidningsbud', 'pantvard', 'hamnarbetare', 'formsprutare'],
+    employers: {
+      hamnarbetare: 'Köpings hamn',
+      tidningsbud: 'Bärgslagsbladet',
+    },
     souvenirs: ['dalahast', 'sillburk', 'ullvantar'],
   },
 ];

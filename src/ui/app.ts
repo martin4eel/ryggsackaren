@@ -130,6 +130,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   trafik: 'Trafik',
   bygg: 'Bygg',
   mode: 'Mode och textil',
+  samhalle: 'Samhälle och jämställdhet',
 };
 
 /**
@@ -204,6 +205,14 @@ function searchKey(text: string): string {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
+}
+
+/**
+ * Arbetsgivarens namn i en viss stad. Yrkena delas mellan städer, så en stad
+ * kan skriva över namnet för att det ska höra hemma där.
+ */
+function employerFor(city: City, job: Job): string {
+  return city.employers?.[job.id] ?? job.employer;
 }
 
 /** Regionnamn som visas i passet och på slutskärmen. */
@@ -1378,7 +1387,7 @@ export class App {
           el('h3', {}, job.title),
           el('span', { class: `tag tag-w${job.wageClass}` }, `Löneklass ${job.wageClass}`)
         ),
-        el('p', { class: 'job-employer' }, job.employer),
+        el('p', { class: 'job-employer' }, employerFor(city, job)),
         el('p', {}, job.ad),
         el(
           'p',
@@ -1475,7 +1484,7 @@ export class App {
       site.append(
         el('div', { class: 'worksite-head' },
           el('div', {},
-            el('p', { class: 'kicker' }, job.employer),
+            el('p', { class: 'kicker' }, employerFor(this.city, job)),
             el('h1', { class: 'worksite-title' }, job.title)
           ),
           el('span', { class: `tag tag-w${job.wageClass}` }, `Löneklass ${job.wageClass}`)
@@ -1717,7 +1726,7 @@ export class App {
     head.append(
       el('div', { class: 'worksite-head' },
         el('div', {},
-          el('p', { class: 'kicker' }, job.employer),
+          el('p', { class: 'kicker' }, employerFor(this.city, job)),
           el('h1', { class: 'worksite-title' }, game.title)
         ),
         el('span', { class: 'tag tag-mg' }, 'Sista passet')
