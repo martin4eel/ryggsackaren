@@ -99,6 +99,11 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 
 ## Så spelas det
 
+Startskärmen förklarar spelloopen i fyra steg första gången någon öppnar
+spelet. Därefter ligger förklaringen bakom knappen _Hur spelar man?_, så att
+den inte tar en halv skärm varje gång. Flaggan sparas för sig själv i
+webbläsaren och överlever att sparfilen raderas.
+
 1. **Vem är du, och var är du född?** Namnet trycks i passet och följer med i
    resedagboken. Födelsestaden är där resan börjar, dit du ska ta dig tillbaka,
    och dess valuta är den du räknar i. Varje stad visas med ett foto av sin

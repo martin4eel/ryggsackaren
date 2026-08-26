@@ -2767,9 +2767,22 @@ img.no-photo {
 
 /* ------------------------------------------------------- spelloopen i hero */
 
+/* Raden med hjälpknappen ligger tätt inpå ingressen. */
+.help-row {
+  margin-top: 14px;
+}
+
+.help-toggle {
+  flex: 0 0 auto;
+}
+
+.loop[hidden] {
+  display: none;
+}
+
 .loop {
   list-style: none;
-  margin: 16px 0 0;
+  margin: 14px 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));

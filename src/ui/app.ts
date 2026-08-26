@@ -210,6 +210,30 @@ function employerFor(city: City, job: Job): string {
   return city.employers?.[job.id] ?? job.employer;
 }
 
+/**
+ * Har spelaren sett spelloopen på startskärmen? Flaggan bor för sig själv och
+ * inte i sparfilen: startskärmen har inget speltillstånd att läsa ur, och
+ * förklaringen ska förbli undanstoppad även efter att en resa raderats.
+ */
+const HJALP_NYCKEL = 'ryggsackaren.hjalp-visad';
+
+function harSettHjalpen(): boolean {
+  try {
+    return localStorage.getItem(HJALP_NYCKEL) === 'ja';
+  } catch {
+    // Privat läge: visa hellre förklaringen en gång för mycket.
+    return false;
+  }
+}
+
+function markeraHjalpSedd(): void {
+  try {
+    localStorage.setItem(HJALP_NYCKEL, 'ja');
+  } catch {
+    // ignoreras
+  }
+}
+
 /** Regionnamn som visas i passet och på slutskärmen. */
 const REGION_LABELS: Record<string, string> = {
   norden: 'Norden',
@@ -252,6 +276,11 @@ export class App {
   private cityFilter = '';
   /** Har spelaren fällt ut hela stadslistan på startskärmen? */
   private showAllCities = false;
+  /**
+   * Är spelförklaringen utfälld? Första gången någon öppnar spelet står den
+   * öppen; därefter ligger den bakom hjälpknappen.
+   */
+  private showHelp = !harSettHjalpen();
   /** Skydd mot att samma resa skrivs till dagboken två gånger */
   private journeySaved = false;
   /** Dagboken som den såg ut när resan just avslutades */
@@ -584,32 +613,53 @@ export class App {
           'Jobba dig fram från stad till stad, svara rätt för att få lön, fyll ' +
           'ryggsäcken med souvenirer och ta dig hem igen innan kassan tar slut.'
       ),
-      // Loopen i fyra steg. Den som skummar ska ändå fatta vad man gör.
-      el(
-        'ol',
-        { class: 'loop' },
-        el('li', {},
-          el('span', { class: 'loop-num' }, '1'),
-          el('span', { class: 'loop-text' },
-            el('strong', {}, 'Lär dig staden'),
-            el('span', {}, 'Provet på turistbyrån ger ett betyg som öppnar bättre jobb.'))),
-        el('li', {},
-          el('span', { class: 'loop-num' }, '2'),
-          el('span', { class: 'loop-text' },
-            el('strong', {}, 'Ta ett jobb'),
-            el('span', {}, 'Varje rätt svar är en dagslön. Skiftet slutar med ett arkadmoment.'))),
-        el('li', {},
-          el('span', { class: 'loop-num' }, '3'),
-          el('span', { class: 'loop-text' },
-            el('strong', {}, 'Gör en affär'),
-            el('span', {}, 'Köp souvenirer där de tillverkas, sälj dem långt hemifrån.'))),
-        el('li', {},
-          el('span', { class: 'loop-num' }, '4'),
-          el('span', { class: 'loop-text' },
-            el('strong', {}, 'Res vidare'),
-            el('span', {}, `Minst ${MIN_CITIES_TO_FINISH} städer, sedan hem igen. Boendet kostar varje dag.`)))
-      )
     );
+
+    /**
+     * Spelförklaringen tar en halv skärm och behövs bara en gång. Den står
+     * öppen första gången någon öppnar spelet och ligger därefter bakom
+     * hjälpknappen. Utfällningen sker på plats, utan att sidan byggs om, så
+     * att ett halvskrivet namn inte tappar fokus.
+     */
+    const loop = el('ol', { class: 'loop' });
+    const steg: Array<[string, string]> = [
+      ['Lär dig staden', 'Provet på turistbyrån ger ett betyg som öppnar bättre jobb.'],
+      ['Ta ett jobb', 'Varje rätt svar är en dagslön. Skiftet slutar med ett arkadmoment.'],
+      ['Gör en affär', 'Köp souvenirer där de tillverkas, sälj dem långt hemifrån.'],
+      [
+        'Res vidare',
+        `Minst ${MIN_CITIES_TO_FINISH} städer, sedan hem igen. Boendet kostar varje dag.`,
+      ],
+    ];
+    steg.forEach(([rubrik, text], i) => {
+      loop.append(
+        el('li', {},
+          el('span', { class: 'loop-num' }, String(i + 1)),
+          el('span', { class: 'loop-text' },
+            el('strong', {}, rubrik),
+            el('span', {}, text)
+          )
+        )
+      );
+    });
+
+    const hjalpKnapp = button(
+      '',
+      () => {
+        this.showHelp = !this.showHelp;
+        malaHjalp();
+      },
+      { class: 'btn btn-ghost help-toggle', 'data-sound': 'av' }
+    );
+    const malaHjalp = () => {
+      loop.hidden = !this.showHelp;
+      hjalpKnapp.textContent = this.showHelp
+        ? 'Dölj förklaringen'
+        : 'Hur spelar man?';
+      hjalpKnapp.setAttribute('aria-expanded', this.showHelp ? 'true' : 'false');
+    };
+    malaHjalp();
+    hero.append(el('div', { class: 'row help-row' }, hjalpKnapp), loop);
 
     const hasSave = Boolean(loadGame());
     if (hasSave) {
@@ -819,6 +869,8 @@ export class App {
           nameInput.classList.add('input-nudge');
           return;
         }
+        // Förklaringen räknas som läst först när någon faktiskt reser iväg.
+        markeraHjalpSedd();
         const city = CITY_BY_ID[this.startPick.cityId]!;
         this.state = createGame(
           city.id,
