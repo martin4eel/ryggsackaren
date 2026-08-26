@@ -41,8 +41,15 @@ import {
   type Route,
 } from '../game/travel';
 import {
+  cityKnowledge,
+  loadHighscores,
+  saveHighscore,
+  type Highscore,
+} from '../game/highscores';
+import {
   clearSave,
   createGame,
+  getCityStats,
   getProgress,
   loadGame,
   saveGame,
@@ -239,6 +246,16 @@ export class App {
   private cityFilter = '';
   /** Har spelaren fällt ut hela stadslistan på startskärmen? */
   private showAllCities = false;
+  /** Skydd mot att samma resa skrivs till dagboken två gånger */
+  private journeySaved = false;
+  /** Dagboken som den såg ut när resan just avslutades */
+  private latestHighscores: Highscore[] = [];
+  /**
+   * Tidsstämpeln på resan som nyss skrevs in. Listan sorteras på poäng, så
+   * den nya raden ligger sällan först - utan det här skulle "Nyss" hamna på
+   * bästa resan i stället för den man just spelat.
+   */
+  private lastJourneyAt: number | undefined;
 
   constructor(root: HTMLElement) {
     this.root = root;
@@ -344,6 +361,8 @@ export class App {
     this.state = null;
     this.quiz = null;
     this.confirmRestart = false;
+    this.journeySaved = false;
+    this.lastJourneyAt = undefined;
     this.travelTarget = null;
     this.mapHighlight = null;
     this.toast = null;
@@ -412,6 +431,7 @@ export class App {
     s.outcome = 'pank';
     s.finalScore = finalScore(s);
     s.screen = 'slut';
+    this.recordJourney();
     saveGame(s);
     playSound('forlust');
     this.render();
@@ -739,6 +759,9 @@ export class App {
     );
     wrap.append(actions);
 
+    const journal = this.renderJournal();
+    if (journal) wrap.append(journal);
+
     wrap.append(
       el(
         'p',
@@ -822,6 +845,107 @@ export class App {
       },
       { class: `chip ${on ? 'chip-on' : ''}`, 'data-sound': 'av' }
     );
+  }
+
+  /**
+   * Resedagboken. Visas på startskärmen så att man ser vad man ska slå, och
+   * på slutskärmen så att den nyss avslutade resan hamnar i sitt sammanhang.
+   * `highlightAt` markerar raden som just lades till.
+   */
+  private renderJournal(highlightAt?: number): HTMLElement | null {
+    const entries = this.latestHighscores.length
+      ? this.latestHighscores
+      : loadHighscores();
+    if (entries.length === 0) return null;
+
+    const panel = el('section', { class: 'panel' });
+    panel.append(
+      el('div', { class: 'panel-head' },
+        el('h2', {}, 'Resedagboken'),
+        el(
+          'span',
+          { class: 'tag' },
+          entries.length === 1 ? 'En resa' : `${entries.length} resor`
+        )
+      ),
+      el(
+        'p',
+        { class: 'muted' },
+        'Dina avslutade resor, bäst först. De sparas i den här webbläsaren.'
+      )
+    );
+
+    const list = el('div', { class: 'journal' });
+    entries.forEach((h, i) => {
+      const isNew = highlightAt !== undefined && h.at === highlightAt;
+      const row = el('article', {
+        class: `journal-row ${isNew ? 'journal-new' : ''}`,
+      });
+      const date = new Date(h.at).toLocaleDateString('sv-SE');
+      row.append(
+        el('span', { class: 'journal-rank' }, `${i + 1}`),
+        el('span', { class: 'journal-body' },
+          el('span', { class: 'journal-title' },
+            h.title,
+            isNew ? el('span', { class: 'journal-flag' }, 'Nyss') : null
+          ),
+          el(
+            'span',
+            { class: 'journal-meta' },
+            `${DIFFICULTY_INFO[h.difficulty].name} · ${h.cities} städer på ${h.days} dagar · ` +
+              `${h.accuracy}% rätt · ${h.stamps} stämplar · ` +
+              `${h.outcome === 'vinst' ? `hem till ${h.homeCityName}` : 'pank på vägen'} · ${date}`
+          ),
+          h.bestCity && h.worstCity
+            ? el(
+                'span',
+                { class: 'journal-cities' },
+                `Bäst koll: ${h.bestCity.name} (${h.bestCity.correct}/${h.bestCity.total})` +
+                  ` · Sämst: ${h.worstCity.name} (${h.worstCity.correct}/${h.worstCity.total})`
+              )
+            : null
+        ),
+        el('span', { class: 'journal-score' }, h.score.toLocaleString('sv-SE'))
+      );
+      list.append(row);
+    });
+    panel.append(list);
+    return panel;
+  }
+
+  /**
+   * Vad du kunde och inte kunde, stad för stad. Kräver ett par besvarade
+   * frågor per stad för att inte utse en vinnare på ett enda lyckoskott.
+   */
+  private renderCityKnowledge(): HTMLElement | null {
+    const s = this.state!;
+    const { best, worst } = cityKnowledge(s, (id) => CITY_BY_ID[id]?.name);
+    if (!best || !worst) return null;
+    const panel = el('section', { class: 'panel' });
+    panel.append(el('h2', {}, 'Vad kunde du bäst?'));
+    const grid = el('div', { class: 'know-grid' });
+    const card = (
+      label: string,
+      city: { name: string; correct: number; total: number },
+      tone: string
+    ) =>
+      el('div', { class: `know know-${tone}` },
+        el('span', { class: 'know-label' }, label),
+        el('span', { class: 'know-city' }, city.name),
+        el(
+          'span',
+          { class: 'know-share' },
+          `${city.correct} av ${city.total} rätt · ${Math.round(
+            (city.correct / city.total) * 100
+          )}%`
+        )
+      );
+    grid.append(
+      card('Bäst koll', best, 'bra'),
+      card('Mest att läsa på', worst, 'svag')
+    );
+    panel.append(grid);
+    return panel;
   }
 
   // -------------------------------------------------------------------- HUD
@@ -1107,6 +1231,7 @@ export class App {
               this.commit();
               s.outcome = 'vinst';
               s.finalScore = finalScore(s);
+              this.recordJourney();
               playSound('seger');
               this.go('slut');
             },
@@ -1602,6 +1727,12 @@ export class App {
     let payout = 0;
     let comboPart = 0;
     let speedPart = 0;
+
+    // Frågan räknas till staden man står i, oavsett om den kom från
+    // turistbyrån eller från ett jobb.
+    const cityStats = getCityStats(s, s.currentCityId);
+    if (right) cityStats.correct += 1;
+    else cityStats.wrong += 1;
 
     if (right) {
       q.correct += 1;
@@ -2306,6 +2437,8 @@ export class App {
       )
     );
     wrap.append(head);
+    const knowledge = this.renderCityKnowledge();
+    if (knowledge) wrap.append(knowledge);
     wrap.append(this.renderStampPanel());
 
     const certs = el('section', { class: 'panel' });
@@ -2496,6 +2629,36 @@ export class App {
 
   // ------------------------------------------------------------------- slut
 
+  /**
+   * Skriver den avslutade resan till resedagboken. Anropas exakt en gång per
+   * resa, från de två ställen där en resa kan ta slut, och skyddar sig mot
+   * att köras om ifall spelaren laddar om på slutskärmen.
+   */
+  private recordJourney(): void {
+    const s = this.state!;
+    if (this.journeySaved) return;
+    this.journeySaved = true;
+    const answered = s.correct + s.wrong;
+    const score = s.finalScore ?? finalScore(s);
+    const knowledge = cityKnowledge(s, (id) => CITY_BY_ID[id]?.name);
+    const at = Date.now();
+    this.lastJourneyAt = at;
+    this.latestHighscores = saveHighscore({
+      at,
+      score,
+      title: rankTitle(score).title,
+      difficulty: s.difficulty,
+      outcome: s.outcome ?? 'pank',
+      days: s.days,
+      cities: new Set(s.visited).size,
+      stamps: s.stamps.length,
+      accuracy: answered ? Math.round((s.correct / answered) * 100) : 0,
+      homeCityName: CITY_BY_ID[s.homeCityId]?.name ?? '?',
+      bestCity: knowledge.best,
+      worstCity: knowledge.worst,
+    });
+  }
+
   private renderEnd(): HTMLElement {
     const s = this.state!;
     const wrap = el('div', { class: 'stack' });
@@ -2565,7 +2728,11 @@ export class App {
       )
     );
     wrap.append(scores);
+    const knowledge = this.renderCityKnowledge();
+    if (knowledge) wrap.append(knowledge);
     wrap.append(this.renderStampPanel());
+    const journal = this.renderJournal(this.lastJourneyAt);
+    if (journal) wrap.append(journal);
 
     const actions = el('section', { class: 'panel actions-panel' });
     actions.append(

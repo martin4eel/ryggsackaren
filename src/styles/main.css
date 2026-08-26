@@ -3003,3 +3003,145 @@ input:focus-visible {
   font-weight: 600;
   color: var(--ink);
 }
+
+/* ============================================================ resedagboken
+   Avslutade resor på start- och slutskärmen, samt vad man kunde bäst.
+   ======================================================================== */
+
+.journal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.journal-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 13px;
+  border-radius: 11px;
+  background: var(--paper-dim);
+  border: 2px solid var(--line);
+}
+
+.journal-new {
+  border-color: var(--stamp);
+  background: #fff;
+}
+
+.journal-rank {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(29, 43, 52, 0.12);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.86rem;
+  color: var(--ink);
+}
+
+.journal-new .journal-rank {
+  background: var(--stamp);
+  color: var(--paper);
+}
+
+.journal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.journal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: 800;
+  color: var(--ink);
+  font-size: 0.97rem;
+}
+
+.journal-flag {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--stamp);
+  color: var(--paper);
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.journal-meta,
+.journal-cities {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.journal-cities {
+  font-weight: 700;
+}
+
+.journal-score {
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--stamp);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------- stadskunskapen */
+
+.know-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.know {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 13px 15px;
+  border-radius: 12px;
+  border-left: 5px solid var(--line);
+  background: var(--paper-dim);
+}
+
+.know-bra {
+  border-left-color: var(--palm);
+}
+
+.know-svag {
+  border-left-color: var(--sun-dark);
+}
+
+.know-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.know-city {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.know-share {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  font-weight: 600;
+}

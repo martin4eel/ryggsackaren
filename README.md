@@ -175,6 +175,14 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
     frågar först, och visar vad som går förlorat, innan resan raderas.
 13. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
     avsluta resan, få poäng och en titel.
+14. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
+    startskärmen, med poäng, titel, dagar, städer och träffsäkerhet. Varje rad
+    visar också vilken stad du hade bäst koll på och vilken som avslöjade dig.
+    Spelet räknar rätt och fel per stad, både på turistbyrån och på jobben.
+
+    Dagboken ligger i webbläsaren, precis som sparfilen. Ingen server och
+    ingen synk mellan enheter – två spelare på var sin telefon har var sin
+    lista och får jämföra genom att visa varandra skärmen.
 
 Går kassan under −1 500 är resan över och ambassaden skickar hem dig.
 
@@ -233,6 +241,7 @@ src/
     travel.ts              Vilka färdsätt som går mellan två städer, och
                            varför de andra inte gör det
     difficulty.ts          Allt som skiljer Turist från Globetrotter
+    highscores.ts          Resedagboken och statistiken över stadskunskap
   ui/
     app.ts                 Skärmar, spelloop och tangentbordsstyrning
     map.ts                 Världskartan: zoom, panorering och etikettplacering

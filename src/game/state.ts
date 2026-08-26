@@ -92,6 +92,12 @@ export interface GameState {
   /** Kvarvarande samtal till en lokalbo, livlinan i frågorna */
   lifelines: number;
   /**
+   * Rätt och fel per stad, räknat på både turistbyråns prov och jobbfrågorna
+   * som besvarats där. Används för att visa vilka städer du hade koll på och
+   * vilka som avslöjade dig.
+   */
+  cityStats: Record<string, { correct: number; wrong: number }>;
+  /**
    * Händelsen från senaste resan. Den ligger kvar tills spelaren kvitterat
    * den på stadsskärmen, så att den överlever en omladdning mitt i.
    */
@@ -139,7 +145,21 @@ export function createGame(
     stamps: [],
     seenIntro: false,
     lifelines: lifelinesFor(difficulty),
+    cityStats: {},
   };
+}
+
+/** Hämtar (eller skapar) frågestatistiken för en stad. */
+export function getCityStats(
+  state: GameState,
+  cityId: string
+): { correct: number; wrong: number } {
+  let stats = state.cityStats[cityId];
+  if (!stats) {
+    stats = { correct: 0, wrong: 0 };
+    state.cityStats[cityId] = stats;
+  }
+  return stats;
 }
 
 export function getProgress(state: GameState, cityId: string): CityProgress {
@@ -193,6 +213,7 @@ function migrate(
   // En pågående resa har redan passerat introduktionen.
   state.seenIntro ??= true;
   state.lifelines ??= lifelinesFor(state.difficulty);
+  state.cityStats ??= {};
   return state;
 }
 
