@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v4';
+const CACHE = 'ryggsackaren-v5';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
