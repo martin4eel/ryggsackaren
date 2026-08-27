@@ -38,6 +38,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **autoriksha.webp** (En trehjulig autoriksha) – [Bajaj_auto-rickshaw_in_Sri_Lanka.jpg](https://commons.wikimedia.org/wiki/File:Bajaj_auto-rickshaw_in_Sri_Lanka.jpg) av calflier001 , cropped by uploader Mr.choppers, CC BY-SA 2.0.
 - **azulejos.webp** (Blåvita azulejos) – [Azulejos_Parque_Eduardo_VII-2.jpg](https://commons.wikimedia.org/wiki/File:Azulejos_Parque_Eduardo_VII-2.jpg) av Alvesgaspar, CC BY 2.5.
 - **bachi.webp** (Ett par tjocka trumpinnar av trä) – [Drumstick,bachi,japanese-drum,katori-city,japan.JPG](https://commons.wikimedia.org/wiki/File:Drumstick,bachi,japanese-drum,katori-city,japan.JPG) av katorisi, CC BY 3.0.
+- **badflagga.webp** (En röd-gul flagga på en strand) – [RedYellowFlag.jpg](https://commons.wikimedia.org/wiki/File:RedYellowFlag.jpg) av cheetah100 from Auckland, New Zealand, CC BY 2.0.
 - **bagageband.webp** (Väskor på ett rullande band i en hall) – [Baggage_reclaim_hahn_airport.jpg](https://commons.wikimedia.org/wiki/File:Baggage_reclaim_hahn_airport.jpg) av Craig, Public domain.
 - **bagagetagg.webp** (En pappersremsa med streckkod på en väska) – [Dca-baggage-tag.jpg](https://commons.wikimedia.org/wiki/File:Dca-baggage-tag.jpg) av Ja3far Alzebi (Join my OF) at English Wikipedia, CC BY 2.5.
 - **baguette.webp** (Baguetter) – [Baguettes,_Paris,_France_-_panoramio.jpg](https://commons.wikimedia.org/wiki/File:Baguettes,_Paris,_France_-_panoramio.jpg) av Nick Thweatt, CC BY-SA 3.0.
@@ -72,10 +73,13 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **blytyper.webp** (Små metallbitar med upphöjda bokstäver) – [Metal_movable_type.jpg](https://commons.wikimedia.org/wiki/File:Metal_movable_type.jpg) av Willi Heidelbach, CC BY 2.5.
 - **bobmarley.webp** (En sjungande man med dreadlocks) – [Bob_Marley_circa_1976_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Bob_Marley_circa_1976_(cropped).jpg) av okänd, se Commons.
 - **boj.webp** (En flytande markering i vattnet) – [Canbuoy11.jpg](https://commons.wikimedia.org/wiki/File:Canbuoy11.jpg) av User:Melongrower, CC BY-SA 3.0.
+- **bollkalle.webp** (Ett barn i sportkläder vid en tennisbana) – [Roland_Garros_20140528_Roland_Garros_ballgirl.jpg](https://commons.wikimedia.org/wiki/File:Roland_Garros_20140528_Roland_Garros_ballgirl.jpg) av Carine06 from UK, CC BY-SA 2.0.
 - **bolsjoj.webp** (En teaterbyggnad med kolonner och en fyrspannsstaty) – [Moscow-Bolshoi-Theare-1.jpg](https://commons.wikimedia.org/wiki/File:Moscow-Bolshoi-Theare-1.jpg) av DmitriyGuryanov, CC BY-SA 3.0.
 - **bommik.webp** (En stång med mikrofon hålls ovanför en inspelning) – [Dreharbeiten Wilsberg Hengstparade.jpg](https://commons.wikimedia.org/wiki/File:Dreharbeiten_Wilsberg_Hengstparade.jpg) av WIKImaniac, CC BY-SA 3.0.
 - **bomull.webp** (En vit fluffig kapsel på en planta) – [CottonPlant.JPG](https://commons.wikimedia.org/wiki/File:CottonPlant.JPG) av okänd, Public domain.
+- **bondi.webp** (En stadsstrand sedd uppifrån) – [Bondi_from_above.jpg](https://commons.wikimedia.org/wiki/File:Bondi_from_above.jpg) av Nick Ang, CC BY-SA 4.0.
 - **bordercollie.webp** (En border collie) – [Border_Collie_600.jpg](https://commons.wikimedia.org/wiki/File:Border_Collie_600.jpg) av okänd, CC BY-SA 3.0.
+- **borg.webp** (En man med grått hår) – [Bjorn_Borg_en_2014.jpg](https://commons.wikimedia.org/wiki/File:Bjorn_Borg_en_2014.jpg) av Michaël Bemelmans, CC BY-SA 4.0.
 - **borsgolv.webp** (Handlare på ett börsgolv) – [NYSE-floor.jpg](https://commons.wikimedia.org/wiki/File:NYSE-floor.jpg) av en:User:Taak, Public domain.
 - **borskrasch1929.webp** (En folkmassa på en gata utanför en stor byggnad) – [Crowd_outside_nyse.jpg](https://commons.wikimedia.org/wiki/File:Crowd_outside_nyse.jpg) av US-gov, Public domain.
 - **bosporenbron.webp** (En lång hängbro över ett sund med stad på båda sidor) – [Bosphorus_Bridge_(1973)_in_Istanbul.jpg](https://commons.wikimedia.org/wiki/File:Bosphorus_Bridge_(1973)_in_Istanbul.jpg) av Huseyinakbas63, CC BY 4.0.
@@ -95,6 +99,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **castells.webp** (Ett castell, ett mänskligt torn) – [Colla_Vella_dels_Xiquets_de_Valls_-_Primer_2de9_amb_folre_i_manilles_descarregat_de_la_història_-_Diada_de_Santa_Úrsula_1994.jpg](https://commons.wikimedia.org/wiki/File:Colla_Vella_dels_Xiquets_de_Valls_-_Primer_2de9_amb_folre_i_manilles_descarregat_de_la_hist%C3%B2ria_-_Diada_de_Santa_%C3%9Arsula_1994.jpg) av Colla Vella dels Xiquets de Valls, CC BY-SA 3.0.
 - **cava.webp** (Ett glas mousserande vin) – [Cava_(9382956111).jpg](https://commons.wikimedia.org/wiki/File:Cava_(9382956111).jpg) av cyclonebill from Copenhagen, Denmark, CC BY-SA 2.0.
 - **centralpark.webp** (En stor park omgiven av höghus, sedd från luften) – [Global_Citizen_Festival_Central_Park_New_York_City_from_NYonAir_(15351915006).jpg](https://commons.wikimedia.org/wiki/File:Global_Citizen_Festival_Central_Park_New_York_City_from_NYonAir_(15351915006).jpg) av Anthony Quintano from Hillsborough, NJ, United States, CC BY 2.0.
+- **centrecourt.webp** (En tennisarena med gräs) – [London_Centre_Court_Wimbledon_(53284151591).jpg](https://commons.wikimedia.org/wiki/File:London_Centre_Court_Wimbledon_(53284151591).jpg) av Arne Müseler from Salzburg, AT, CC BY-SA 2.0.
 - **chai.webp** (Ljusbrunt te med mjölk i en liten skål) – [Chai_In_Sakora.jpg](https://commons.wikimedia.org/wiki/File:Chai_In_Sakora.jpg) av Dadhichbittu007, CC BY-SA 4.0.
 - **chamonix.webp** (En alpdal med by och snöiga berg) – [Chamonix_valley_from_la_Flégère,2010_07.JPG](https://commons.wikimedia.org/wiki/File:Chamonix_valley_from_la_Fl%C3%A9g%C3%A8re,2010_07.JPG) av Ximonic , Simo Räsänen, CC BY-SA 3.0.
 - **champagne.webp** (Ett glas champagne) – [Glass_of_champagne.jpg](https://commons.wikimedia.org/wiki/File:Glass_of_champagne.jpg) av bgvjpe, CC BY 2.0.
@@ -109,17 +114,21 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **container.webp** (En stor metallåda för frakt) – [Container_01_KMJ.jpg](https://commons.wikimedia.org/wiki/File:Container_01_KMJ.jpg) av KMJ at German Wikipedia, CC BY-SA 3.0.
 - **containerfartyg.webp** (Ett stort lastfartyg till sjöss) – [MAERSK_MC_KINNEY_MÖLLER_&_MARSEILLE_MAERSK_(48694054418).jpg](https://commons.wikimedia.org/wiki/File:MAERSK_MC_KINNEY_M%C3%96LLER_%26_MARSEILLE_MAERSK_(48694054418).jpg) av kees torn, CC BY-SA 2.0.
 - **containerkran.webp** (En hög kran vid en kaj) – [PACECO_Container_Crane_2.jpg](https://commons.wikimedia.org/wiki/File:PACECO_Container_Crane_2.jpg) av American Society of Mechanical Engineers, Public domain.
+- **copacabana.webp** (En lång strand med promenad) – [Praia_de_Copacabana_-_Rio_de_Janeiro,_Brasil.jpg](https://commons.wikimedia.org/wiki/File:Praia_de_Copacabana_-_Rio_de_Janeiro,_Brasil.jpg) av [www.flickr.com/photos/26912057@N02/ bisonlux], CC BY 2.0.
 - **craterlake.webp** (En rund sjö i en bergskål) – [Crater_Lake_winter_pano2.jpg](https://commons.wikimedia.org/wiki/File:Crater_Lake_winter_pano2.jpg) av WolfmanSF, CC BY-SA 3.0.
 - **croissant.webp** (En croissant) – [Croissant-Petr_Kratochvil.jpg](https://commons.wikimedia.org/wiki/File:Croissant-Petr_Kratochvil.jpg) av Petr Kratochvil, CC0.
 - **cuica.webp** (En cuíca) – [Cuica.jpg](https://commons.wikimedia.org/wiki/File:Cuica.jpg) av okänd, CC BY-SA 3.0.
 - **cupping.webp** (Skålar med kaffe uppradade på ett bord) – [Fancy_a_cupper.jpg](https://commons.wikimedia.org/wiki/File:Fancy_a_cupper.jpg) av DFID - UK Department for International Development, CC BY 2.0.
+- **cykel.webp** (En svart cykel från sidan) – [Left_side_of_Flying_Pigeon.jpg](https://commons.wikimedia.org/wiki/File:Left_side_of_Flying_Pigeon.jpg) av 齐健 from Peking, People's Republic of China, CC BY 2.0.
 - **cykelbana.webp** (En cyklist på en markerad bana längs gatan) – [Female cyclist on N Dearborn Street bike lane, Chicago, 2025.jpg](https://commons.wikimedia.org/wiki/File:Female_cyclist_on_N_Dearborn_Street_bike_lane,_Chicago,_2025.jpg) av DimiTalen, CC0.
 - **cykelbud.webp** (En cyklist med väska i stadstrafik) – [Bicycle_courier_on_Oxford_Street,_London.jpg](https://commons.wikimedia.org/wiki/File:Bicycle_courier_on_Oxford_Street,_London.jpg) av ProfDEH, CC BY-SA 3.0.
 - **cykeldack.webp** (Ett cykeldäck med mönster) – [Vittoria_Zaffiro_tire.jpg](https://commons.wikimedia.org/wiki/File:Vittoria_Zaffiro_tire.jpg) av Petar Milošević, CC BY-SA 3.0.
 - **cykelhjalm.webp** (En cykelhjälm) – [Bicycle_Helmet_0085.jpg](https://commons.wikimedia.org/wiki/File:Bicycle_Helmet_0085.jpg) av Ashley Pomeroy, CC BY-SA 4.0.
+- **cykelhjalm.webp** (En cykelhjälm) – [Bicycle_Helmet_0085.jpg](https://commons.wikimedia.org/wiki/File:Bicycle_Helmet_0085.jpg) av Ashley Pomeroy, CC BY-SA 4.0.
 - **cykelhjul.webp** (Ett cykelhjul med ekrar) – [Bicycle_wheel.jpg](https://commons.wikimedia.org/wiki/File:Bicycle_wheel.jpg) av Dhodges at English Wikipedia, CC BY-SA 3.0.
 - **cykelkedja.webp** (En kedja på ett kedjekrans på en cykel) – [Bicycle Chain TW 20050802 161550 35095.jpg](https://commons.wikimedia.org/wiki/File:Bicycle_Chain_TW_20050802_161550_35095.jpg) av Tony Webster, CC BY 3.0.
 - **cykellampa.webp** (En strålkastare på en cykel) – [Raleigh rsw mk 2 bicycle headlamp bootiebike com 1000.jpg](https://commons.wikimedia.org/wiki/File:Raleigh_rsw_mk_2_bicycle_headlamp_bootiebike_com_1000.jpg) av Conollyb, CC BY-SA 3.0.
+- **cykellas.webp** (Ett lås på en cykel) – [Antivolvélo6.jpg](https://commons.wikimedia.org/wiki/File:Antivolv%C3%A9lo6.jpg) av Nazbrok, Public domain.
 - **cykelpump.webp** (En golvpump med slang) – [Bike_pump.jpg](https://commons.wikimedia.org/wiki/File:Bike_pump.jpg) av User Ewok Slayer on en.wikipedia, Public domain.
 - **cykelriksha.webp** (En färgglad cykelriksha med passagerarsits) – [Bangladeshi_style_Rickshaw.jpg](https://commons.wikimedia.org/wiki/File:Bangladeshi_style_Rickshaw.jpg) av Liftarn, CC BY-SA 3.0.
 - **dalbhat.webp** (En tallrik med ris, linssoppa och grönsaker) – [Nepali dal-bhat-tarkari.jpg](https://commons.wikimedia.org/wiki/File:Nepali_dal-bhat-tarkari.jpg) av Subhashish Panigrahi, CC BY-SA 4.0.
@@ -189,6 +198,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **forbranningsanlaggning.webp** (En anläggning med hög färgglad skorsten) – [District_heating_plant_spittelau_ssw_crop1.png](https://commons.wikimedia.org/wiki/File:District_heating_plant_spittelau_ssw_crop1.png) av Croped by Gralo from a self-taken image by Contributor, CC BY-SA 3.0.
 - **formspruta.webp** (En stor industrimaskin i en fabrikshall) – [Arburg-swiss plastic 2026.jpg](https://commons.wikimedia.org/wiki/File:Arburg-swiss_plastic_2026.jpg) av Bricetofly, CC0.
 - **forratt.webp** (Små rätter på ett fat) – [Ringier_175_Jahre_Jubiläum_(2499873203)_(2).jpg](https://commons.wikimedia.org/wiki/File:Ringier_175_Jahre_Jubil%C3%A4um_(2499873203)_(2).jpg) av Chris Schaer from Zofingen, Schweiz, CC BY-SA 2.0.
+- **forsberg.webp** (En man i kostym) – [Peter_Forsberg_2016-03-17_001_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Peter_Forsberg_2016-03-17_001_(cropped).jpg) av Magnus Ragnvid / Kanal 5, CC BY 3.0.
 - **forskepp.webp** (Främre delen av ett fartyg som klyver vågorna) – [HMS_Caroline_(43649273285).jpg](https://commons.wikimedia.org/wiki/File:HMS_Caroline_(43649273285).jpg) av Conall from Downpatrick, Northern Ireland, CC BY 2.0.
 - **forstahjalpen.webp** (Väskor med första hjälpen-utrustning) – [British_Red_Cross_First_Aid_Kits.jpg](https://commons.wikimedia.org/wiki/File:British_Red_Cross_First_Aid_Kits.jpg) av Owain Davies, CC BY-SA 3.0.
 - **fortojning.webp** (Ett grovt rep runt en pollare på kajen) – [Mooring_Post,_Eisenhower_Pier_-_geograph.org.uk_-_552845.jpg](https://commons.wikimedia.org/wiki/File:Mooring_Post,_Eisenhower_Pier_-_geograph.org.uk_-_552845.jpg) av Ross, CC BY-SA 2.0.
@@ -214,6 +224,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **glaciarspricka.webp** (En djup spricka i isen på en glaciär) – [Parque_estatal_Chugach,_Alaska,_Estados_Unidos,_2017-08-22,_DD_94.jpg](https://commons.wikimedia.org/wiki/File:Parque_estatal_Chugach,_Alaska,_Estados_Unidos,_2017-08-22,_DD_94.jpg) av Diego Delso, CC BY-SA 4.0.
 - **glaskross.webp** (Krossat färgat glas i en hög) – [Glas_aus_Aufbereitungsanlage_bunt_-_glass_cullet_various_(Alter_Fritz).JPG](https://commons.wikimedia.org/wiki/File:Glas_aus_Aufbereitungsanlage_bunt_-_glass_cullet_various_(Alter_Fritz).JPG) av Alter Fritz, CC BY-SA 3.0.
 - **globe.webp** (En rund vitputsad teaterbyggnad vid Themsen) – [Restaurante_The_Swan,_Londres,_Inglaterra,_2014-08-11,_DD_113.jpg](https://commons.wikimedia.org/wiki/File:Restaurante_The_Swan,_Londres,_Inglaterra,_2014-08-11,_DD_113.jpg) av Diego Delso, CC BY-SA 4.0.
+- **globen.webp** (En stor vit klotformad byggnad) – [Globen_30_år,_febr_2019a.jpg](https://commons.wikimedia.org/wiki/File:Globen_30_%C3%A5r,_febr_2019a.jpg) av Holger.Ellgaard, CC BY-SA 4.0.
 - **gnejs.webp** (En randig grå sten) – [Gneiss.jpg](https://commons.wikimedia.org/wiki/File:Gneiss.jpg) av No machine-readable author provided. Siim assumed (based on copyright claims)., CC BY-SA 3.0.
 - **gnu.webp** (En gnu på savannen) – [Blue_Wildebeest,_Ngorongoro.jpg](https://commons.wikimedia.org/wiki/File:Blue_Wildebeest,_Ngorongoro.jpg) av Muhammad Mahdi Karim, GFDL 1.2.
 - **golfbag.webp** (En golfbag med klubbor) – [Golf bag and clubs.jpg](https://commons.wikimedia.org/wiki/File:Golf_bag_and_clubs.jpg) av Alejandrocuadro, CC0.
@@ -226,6 +237,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **grasal.webp** (Ett djur med rund nos som vilar på en klippa vid havet) – [Focas_grises_(Halichoerus_grypus),_playa_de_Horsey,_Norfolk,_Inglaterra,_2022-11-20,_DD_11.jpg](https://commons.wikimedia.org/wiki/File:Focas_grises_(Halichoerus_grypus),_playa_de_Horsey,_Norfolk,_Inglaterra,_2022-11-20,_DD_11.jpg) av Diego Delso, CC BY-SA 4.0.
 - **gravurna.webp** (Ett lerkärl från en forntida grav) – [RoxtonBronzeAgeCremationUrn.JPG](https://commons.wikimedia.org/wiki/File:RoxtonBronzeAgeCremationUrn.JPG) av Simon Speed, Public domain.
 - **green.webp** (En green med flagga) – [DZ6 2525 Sunny day on the green a yellow flag flutters as golfers line up their next putt.jpg](https://commons.wikimedia.org/wiki/File:DZ6_2525_Sunny_day_on_the_green_a_yellow_flag_flutters_as_golfers_line_up_their_next_putt.jpg) av PattayaPatrol, CC BY-SA 4.0.
+- **gretzky.webp** (En man i kostym vid ett evenemang) – [Andrew_Scheer_with_Wayne_Gretzky_(48055697168)_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Andrew_Scheer_with_Wayne_Gretzky_(48055697168)_(cropped).jpg) av Andre Forget - Andrew Scheer, CC0.
 - **grind.webp** (En åkare glider längs en kant på brädans axlar) – [Felipe_Martins_(4416372568).jpg](https://commons.wikimedia.org/wiki/File:Felipe_Martins_(4416372568).jpg) av Alex Carvalho from Rio de Janeiro, Brasil, CC BY-SA 2.0.
 - **gronte.webp** (Grönt te som blad, pulver och dryck) – [Green_tea_3_appearances.jpg](https://commons.wikimedia.org/wiki/File:Green_tea_3_appearances.jpg) av Alessandro Martini, CC0.
 - **guanaco.webp** (Ett brunt kameldjur på en slätt) – [Guanaco_(Lama_guanicoe)_Leona_Amarga.jpg](https://commons.wikimedia.org/wiki/File:Guanaco_(Lama_guanicoe)_Leona_Amarga.jpg) av Charles J. Sharp, CC BY-SA 4.0.
@@ -250,6 +262,8 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **hjartstartare.webp** (En liten apparat med elektroder i ett fodral) – [AED_machine_medisource.jpg](https://commons.wikimedia.org/wiki/File:AED_machine_medisource.jpg) av Chercher1105, CC0.
 - **hlr.webp** (Bröstkompressioner på en övningsdocka) – [CPR_training-04.jpg](https://commons.wikimedia.org/wiki/File:CPR_training-04.jpg) av Rama, CC BY-SA 2.0 fr.
 - **hoballar.webp** (Runda balar på ett fält) – [Roundbale1.jpg](https://commons.wikimedia.org/wiki/File:Roundbale1.jpg) av Montanabw, CC BY-SA 3.0.
+- **hockeyklubba.webp** (En klubba och en puck på isen) – [Ice hockey stick and puck 20181220.jpg](https://commons.wikimedia.org/wiki/File:Ice_hockey_stick_and_puck_20181220.jpg) av Santeri Viinamäki, CC BY-SA 4.0.
+- **hockeymatch.webp** (Spelare i en ishockeymatch) – [Pittsburgh_Penguins,_Washington_Capitals,_Bryan_Rust_(33744033514).jpg](https://commons.wikimedia.org/wiki/File:Pittsburgh_Penguins,_Washington_Capitals,_Bryan_Rust_(33744033514).jpg) av Keith Allison from Hanover, MD, USA, CC BY-SA 2.0.
 - **howardcarter.webp** (En man i hatt och kostym) – [Howard_carter.jpg](https://commons.wikimedia.org/wiki/File:Howard_carter.jpg) av Chicago Daily News, Inc., photographer, Public domain.
 - **hubble.webp** (Ett rymdteleskop ovanför jorden) – [Hubble_2009_close-up_2.jpg](https://commons.wikimedia.org/wiki/File:Hubble_2009_close-up_2.jpg) av NASA, Public domain.
 - **hummer.webp** (En hummer) – [KreeftbijDenOsse.jpg](https://commons.wikimedia.org/wiki/File:KreeftbijDenOsse.jpg) av Bart Braun, Public domain.
@@ -263,6 +277,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **industrirobot.webp** (En orange robotarm i en fabrik) – [Automation_of_foundry_with_robot.jpg](https://commons.wikimedia.org/wiki/File:Automation_of_foundry_with_robot.jpg) av KUKA Roboter GmbH, Bachmann, Public domain.
 - **ingefara.webp** (Färsk ingefära) – [Fresh ginger rhizome 01.jpg](https://commons.wikimedia.org/wiki/File:Fresh_ginger_rhizome_01.jpg) av Friday musa, CC BY-SA 4.0.
 - **ishink.webp** (En flaska kyls i en ishink full med is) – [Champagne cooler - 2013-12-26 at 19-32-24.jpg](https://commons.wikimedia.org/wiki/File:Champagne_cooler_-_2013-12-26_at_19-32-24.jpg) av Kjetil Ree, CC BY-SA 3.0.
+- **ismaskin.webp** (En maskin som kör över isen i en arena) – [Surfaceuse.jpg](https://commons.wikimedia.org/wiki/File:Surfaceuse.jpg) av Myrabella, CC BY-SA 3.0.
 - **iss.webp** (En rymdstation med solpaneler ovanför jorden) – [ISS-56_International_Space_Station_fly-around_(07).jpg](https://commons.wikimedia.org/wiki/File:ISS-56_International_Space_Station_fly-around_(07).jpg) av NASA/Roscosmos, Public domain.
 - **jacknicklaus.webp** (En äldre man i keps) – [Panther_National_Jack_and_Justin-8452_(3x4_cropped).jpg](https://commons.wikimedia.org/wiki/File:Panther_National_Jack_and_Justin-8452_(3x4_cropped).jpg) av PantherNational, CC BY-SA 4.0.
 - **jacquard.webp** (En vävstol med hålkort på ett museum) – [A Jacquard loom showing information punchcards, National Museum of Scotland.jpg](https://commons.wikimedia.org/wiki/File:A_Jacquard_loom_showing_information_punchcards,_National_Museum_of_Scotland.jpg) av Stephencdickson, CC BY-SA 4.0.
@@ -327,6 +342,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **kork.webp** (En naturkork till en vinflaska) – [Cork p1160013.jpg](https://commons.wikimedia.org/wiki/File:Cork_p1160013.jpg) av David Monniaux, CC BY-SA 3.0.
 - **korkskruv.webp** (En korkskruv och en flaska) – [Bottle and corkscrew December 2014-2a.jpg](https://commons.wikimedia.org/wiki/File:Bottle_and_corkscrew_December_2014-2a.jpg) av Alvesgaspar, CC BY-SA 4.0.
 - **koschenill.webp** (En kaktus med vita fläckar av små insekter) – [Cochineal nopal cactus (624168078).jpg](https://commons.wikimedia.org/wiki/File:Cochineal_nopal_cactus_(624168078).jpg) av Dinesh Valke from Thane, India, CC BY-SA 2.0.
+- **krabba.webp** (En krabba på en strand) – [Cancer_pagurus.jpg](https://commons.wikimedia.org/wiki/File:Cancer_pagurus.jpg) av Hans Hillewaert, CC BY-SA 4.0.
 - **krill.webp** (Ett litet genomskinligt kräftdjur) – [Meganyctiphanes_norvegica2.jpg](https://commons.wikimedia.org/wiki/File:Meganyctiphanes_norvegica2.jpg) av Øystein Paulsen, CC BY-SA 3.0.
 - **kryddbasaren.webp** (Kryddor i högar på en marknad) – [Spice_Bazaar_Istanbul_Feb_2020,_img_2.jpg](https://commons.wikimedia.org/wiki/File:Spice_Bazaar_Istanbul_Feb_2020,_img_2.jpg) av Robot8A, CC BY-SA 4.0.
 - **kryddnejlika.webp** (Torkade kryddnejlikor) – [Cloves.JPG](https://commons.wikimedia.org/wiki/File:Cloves.JPG) av Jorge Barrios, Public domain.
@@ -343,11 +359,13 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **lejon.webp** (Ett lejon) – [020_The_lion_king_Snyggve_in_the_Serengeti_National_Park_Photo_by_Giles_Laurent.jpg](https://commons.wikimedia.org/wiki/File:020_The_lion_king_Snyggve_in_the_Serengeti_National_Park_Photo_by_Giles_Laurent.jpg) av Giles Laurent, CC BY-SA 4.0.
 - **lemur.webp** (Ett djur med lång randig svans) – [Ring-tailed_lemur_(Lemur_catta).jpg](https://commons.wikimedia.org/wiki/File:Ring-tailed_lemur_(Lemur_catta).jpg) av Charles J. Sharp, CC BY-SA 4.0.
 - **leopard.webp** (En leopard) – [African_leopard_male_(cropped).jpg](https://commons.wikimedia.org/wiki/File:African_leopard_male_(cropped).jpg) av Sumeet Moghe, CC BY-SA 4.0.
+- **lidstrom.webp** (En man i kostym vid ett evenemang) – [Nicklas_Lidström_in_2022.jpg](https://commons.wikimedia.org/wiki/File:Nicklas_Lidstr%C3%B6m_in_2022.jpg) av Frankie Fouganthin, CC BY-SA 4.0.
 - **linjedomare.webp** (En assisterande domare med flagga) – [Clemens_Schüttengruber,_Fußballschiedsrichter_(03).jpg](https://commons.wikimedia.org/wiki/File:Clemens_Sch%C3%BCttengruber,_Fu%C3%9Fballschiedsrichter_(03).jpg) av Steindy ( talk ) 23:45, 26 November 2010 (UTC), CC BY-SA 3.0.
 - **linne.webp** (En näsduk av vitt tyg) – [Handkerchief.jpg](https://commons.wikimedia.org/wiki/File:Handkerchief.jpg) av No machine-readable author provided. PKM assumed (based on copyright claims)., Public domain.
 - **livboj.webp** (En röd-vit ring med lina hängande på en vägg) – [Ring_buoy_with_light.jpg](https://commons.wikimedia.org/wiki/File:Ring_buoy_with_light.jpg) av Workman, CC BY-SA 4.0.
 - **livraddarepost.webp** (En person i röd-gul dräkt med räddningsboj på stranden) – [RedYellowFlag.jpg](https://commons.wikimedia.org/wiki/File:RedYellowFlag.jpg) av cheetah100 from Auckland, New Zealand, CC BY 2.0.
 - **livraddartorn.webp** (Ett högt vakttorn på en sandstrand) – [Life_guard_tower,_Klampenborg.jpg](https://commons.wikimedia.org/wiki/File:Life_guard_tower,_Klampenborg.jpg) av seier+seier, CC BY 2.0.
+- **livraddartorn.webp** (Ett färgglatt torn på en strand med flaggor) – [Miami - Lifeguard tower and flags - 0556.jpg](https://commons.wikimedia.org/wiki/File:Miami_-_Lifeguard_tower_and_flags_-_0556.jpg) av Jorge Royan, CC BY-SA 3.0.
 - **londontaxi.webp** (En svart londontaxi) – [2005_LTI_TXII_Silver_Automatic_2.4_Front.jpg](https://commons.wikimedia.org/wiki/File:2005_LTI_TXII_Silver_Automatic_2.4_Front.jpg) av Vauxford, CC BY-SA 4.0.
 - **lopapeysa.webp** (En stickad tröja med mönstrad ok runt halsen) – [Islandpullover_004.jpg](https://commons.wikimedia.org/wiki/File:Islandpullover_004.jpg) av Freimut Bahlo, CC BY-SA 3.0.
 - **lopare.webp** (En löpare i tävlingsdräkt) – [Speedsuit.jpg](https://commons.wikimedia.org/wiki/File:Speedsuit.jpg) av Chris Hunkeler, CC BY-SA 2.0.
@@ -355,11 +373,13 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **lords.webp** (En paviljong vid en stor gräsplan) – [Lords-Cricket-Ground-Pavilion-06-08-2017.jpg](https://commons.wikimedia.org/wiki/File:Lords-Cricket-Ground-Pavilion-06-08-2017.jpg) av Yorkspotter, CC BY-SA 4.0.
 - **lotus.webp** (En lotusblomma) – [Sacred_lotus_Nelumbo_nucifera.jpg](https://commons.wikimedia.org/wiki/File:Sacred_lotus_Nelumbo_nucifera.jpg) av T.Voekler, CC BY-SA 3.0.
 - **louvren.webp** (En glaspyramid framför en palatsbyggnad) – [Louvre_Museum_Wikimedia_Commons.jpg](https://commons.wikimedia.org/wiki/File:Louvre_Museum_Wikimedia_Commons.jpg) av Benh LIEU SONG ( Flickr ), CC BY-SA 3.0.
+- **lundqvist.webp** (En man i kostym med mörkt hår) – [Henrik_Lundqvist_by_Gage_Skidmore.jpg](https://commons.wikimedia.org/wiki/File:Henrik_Lundqvist_by_Gage_Skidmore.jpg) av Gage Skidmore, CC BY-SA 3.0.
 - **magdalenaandersson.webp** (En kvinna som talar) – [Magdalena_Andersson_Gothenburg_2026-04-10_02_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Magdalena_Andersson_Gothenburg_2026-04-10_02_(cropped).jpg) av Axadem, CC BY 4.0.
 - **makadam.webp** (Räls på en bädd av krossad sten) – [Rails.and.ballast.bb.jpg](https://commons.wikimedia.org/wiki/File:Rails.and.ballast.bb.jpg) av okänd, Public domain.
 - **makrill.webp** (En makrill) – [Scomber_scombrus_217326414.jpg](https://commons.wikimedia.org/wiki/File:Scomber_scombrus_217326414.jpg) av Mikael Nyman, CC BY 4.0.
 - **malala.webp** (En ung kvinna med sjal) – [Malala_Yousafzai_2023_portrait_2x3.jpg](https://commons.wikimedia.org/wiki/File:Malala_Yousafzai_2023_portrait_2x3.jpg) av flowcomm, CC BY 2.0.
 - **malbec.webp** (Klasar med mörkblå druvor) – [Malbec_grapes.jpg](https://commons.wikimedia.org/wiki/File:Malbec_grapes.jpg) av Ian L, CC BY 2.0.
+- **malvaktsmask.webp** (En dekorerad ansiktsmask) – [James_Reimer_Goalie_Mask.JPG](https://commons.wikimedia.org/wiki/File:James_Reimer_Goalie_Mask.JPG) av Michael Miller, CC BY-SA 3.0.
 - **manen.webp** (En fullmåne) – [FullMoon2010.jpg](https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg) av Gregory H. Revera, CC BY-SA 3.0.
 - **manet.webp** (En öronmanet i vattnet) – [Aurelia_aurita_(Cnidaria)_Luc_Viatour.jpg](https://commons.wikimedia.org/wiki/File:Aurelia_aurita_(Cnidaria)_Luc_Viatour.jpg) av Luc Viatour, CC BY-SA 3.0.
 - **manhattan.webp** (Skyskrapor i en storstad sedda uppifrån) – [View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_(cropped).jpg](https://commons.wikimedia.org/wiki/File:View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_(cropped).jpg) av Dllu, CC BY-SA 4.0.
@@ -391,6 +411,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **monalisa.webp** (Leonardo da Vincis Mona Lisa) – [Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg](https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg) av Leonardo da Vinci, Public domain.
 - **montblanc.webp** (En snötäckt bergstopp med spetsiga klippor) – [Mont_Blanc_Aiguille.jpg](https://commons.wikimedia.org/wiki/File:Mont_Blanc_Aiguille.jpg) av Hseugut, CC BY-SA 4.0.
 - **mozzarella.webp** (Vita runda ostbollar) – [Mozzarella_di_bufala3.jpg](https://commons.wikimedia.org/wiki/File:Mozzarella_di_bufala3.jpg) av Popo le Chien, CC BY-SA 3.0.
+- **msg.webp** (En rund arena mitt i en storstad) – [Madison_Square_Garden_(MSG)_-_Full_(48124330357).jpg](https://commons.wikimedia.org/wiki/File:Madison_Square_Garden_(MSG)_-_Full_(48124330357).jpg) av Ajay Suresh from New York, NY, USA, CC BY 2.0.
 - **muranoglas.webp** (En dekorerad glasskål) – [Bowl_MET_DP100236.jpg](https://commons.wikimedia.org/wiki/File:Bowl_MET_DP100236.jpg) av Pauly &amp; C. – Compagnia Venezia Murano, CC0.
 - **muskotnot.webp** (Bruna ovala frön och ett pulver av dem) – [Biji_Pala_Bubuk.jpg](https://commons.wikimedia.org/wiki/File:Biji_Pala_Bubuk.jpg) av Herusutimbul, CC BY-SA 4.0.
 - **myntate.webp** (Te i ett glas med gröna blad) – [Tunisian_Tea_with_pine_nuts.jpg](https://commons.wikimedia.org/wiki/File:Tunisian_Tea_with_pine_nuts.jpg) av sky#walker, CC BY-SA 2.0.
@@ -469,6 +490,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **protea.webp** (En kungsprotea) – [Peninsula_Sandstone_Fynbos_-_KingProtea_-_Table_Mountain.JPG](https://commons.wikimedia.org/wiki/File:Peninsula_Sandstone_Fynbos_-_KingProtea_-_Table_Mountain.JPG) av S Molteno, Public domain.
 - **provdocka.webp** (En provdocka i en ateljé) – [Dress_formSerie1893.jpg](https://commons.wikimedia.org/wiki/File:Dress_formSerie1893.jpg) av okänd, Public domain.
 - **pub.webp** (En brittisk pubbyggnad) – [The_Unicorn_(Unicorn_Hotel),_Manchester,_April_2026.jpg](https://commons.wikimedia.org/wiki/File:The_Unicorn_(Unicorn_Hotel),_Manchester,_April_2026.jpg) av Mmberney, CC0.
+- **puck.webp** (En svart rund gummiskiva på is) – [Ice_hockey_puck_-_2.jpg](https://commons.wikimedia.org/wiki/File:Ice_hockey_puck_-_2.jpg) av Matt Boulton derivative work: MrPanyGoff, CC BY-SA 2.0.
 - **pulsoximeter.webp** (En liten mätare fäst på ett finger) – [Wrist-oximeter.jpg](https://commons.wikimedia.org/wiki/File:Wrist-oximeter.jpg) av UusiAjaja, CC0.
 - **pumpernickel.webp** (Skivat pumpernickelbröd) – [Pumpernickel.jpg](https://commons.wikimedia.org/wiki/File:Pumpernickel.jpg) av okänd, CC BY-SA 3.0.
 - **putter.webp** (En putter) – [Putter_with_insert.jpg](https://commons.wikimedia.org/wiki/File:Putter_with_insert.jpg) av okänd, Public domain.
@@ -498,6 +520,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **rodlok.webp** (Lila lökar) – [Red_onions_11.jpg](https://commons.wikimedia.org/wiki/File:Red_onions_11.jpg) av Svklimkin, CC BY-SA 4.0.
 - **rodneymullen.webp** (En man som talar på en scen) – [Rodney_Mullen_PopTech_2013_01_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Rodney_Mullen_PopTech_2013_01_(cropped).jpg) av PopTech, CC BY-SA 2.0.
 - **rodvin.webp** (Ett glas rött vin) – [Red Wine Glass.jpg](https://commons.wikimedia.org/wiki/File:Red_Wine_Glass.jpg) av André Karwath aka Aka, CC BY-SA 3.0.
+- **rolandgarros.webp** (En tennisarena med röd grus) – [Paris_Court_Philippe-Chatrier.jpg](https://commons.wikimedia.org/wiki/File:Paris_Court_Philippe-Chatrier.jpg) av Arne Müseler, CC BY-SA 3.0 de.
 - **rorligbro.webp** (En bro med uppfällda brospann över en flod) – [Wells_Street_Bridge_070512.jpg](https://commons.wikimedia.org/wiki/File:Wells_Street_Bridge_070512.jpg) av User:JeremyA, CC BY-SA 2.5.
 - **roro.webp** (Ett stort fartyg med öppen ramp i hamnen) – [SyltExpress 1373.JPG](https://commons.wikimedia.org/wiki/File:SyltExpress_1373.JPG) av Ein Dahmer, CC BY-SA 3.0.
 - **ros.webp** (En ros) – [Rosa_rubiginosa_1.jpg](https://commons.wikimedia.org/wiki/File:Rosa_rubiginosa_1.jpg) av Stan Shebs, CC BY-SA 3.0.
@@ -514,6 +537,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **sakerhetscykel.webp** (En gammal cykel med två lika stora hjul) – [Rover_safety_bicycle_of_1885_(right).jpg](https://commons.wikimedia.org/wiki/File:Rover_safety_bicycle_of_1885_(right).jpg) av Jonathan Cardy, CC BY-SA 3.0.
 - **sakerhetskontroll.webp** (Bagage skannas i en säkerhetskontroll) – [VTBS-luggage_screening.JPG](https://commons.wikimedia.org/wiki/File:VTBS-luggage_screening.JPG) av User:Mattes, Public domain.
 - **sall.webp** (Runda såll med nät) – [Laboratory_sieves_BMK.jpg](https://commons.wikimedia.org/wiki/File:Laboratory_sieves_BMK.jpg) av User:BMK, CC BY-SA 3.0.
+- **salming.webp** (En äldre man med grått hår) – [Börje Salming 2015-03-05.jpg](https://commons.wikimedia.org/wiki/File:B%C3%B6rje_Salming_2015-03-05.jpg) av Markus Wetterberg / Superstudio, CC BY 3.0.
 - **sanmarzano.webp** (Avlånga röda tomater) – [TomateSanMarzano.jpg](https://commons.wikimedia.org/wiki/File:TomateSanMarzano.jpg) av Goldlocki, CC BY-SA 3.0.
 - **sashimi.webp** (Skivor av rå fisk på ett fat) – [241109_Shigaraki_ware_Koga_Shiga_pref_Japan01s3.jpg](https://commons.wikimedia.org/wiki/File:241109_Shigaraki_ware_Koga_Shiga_pref_Japan01s3.jpg) av 663highland, CC BY-SA 4.0.
 - **satay.webp** (Grillspett med sås) – [Sate_Udang.JPG](https://commons.wikimedia.org/wiki/File:Sate_Udang.JPG) av Gunawan Kartapranata, CC BY-SA 4.0.
@@ -549,6 +573,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **skiffer.webp** (Tunna lager av mörk sten) – [Shale_formation,_Marble_Canyon,_Kootenay_National_Park,_British_Columbia,_2025-07-11.jpg](https://commons.wikimedia.org/wiki/File:Shale_formation,_Marble_Canyon,_Kootenay_National_Park,_British_Columbia,_2025-07-11.jpg) av Chris Woodrich, CC BY-SA 4.0.
 - **skivspelare.webp** (En skivspelare med vinylskiva) – [Technics_SL-1200MK2-2.jpg](https://commons.wikimedia.org/wiki/File:Technics_SL-1200MK2-2.jpg) av derivative work: 32bitmaschine ( talk ) Technics_SL-1200MK2.jpg : Dydric, CC BY-SA 2.5.
 - **skordetroska.webp** (En skördetröska på ett fält) – [Corn_combine_harvest_with_grain_cart-4.jpg](https://commons.wikimedia.org/wiki/File:Corn_combine_harvest_with_grain_cart-4.jpg) av Wikideas1, CC0.
+- **skridsko.webp** (En skridsko) – [Tubeskate.jpg](https://commons.wikimedia.org/wiki/File:Tubeskate.jpg) av Duckhunter6424, Public domain.
 - **skriet.webp** (Munchs Skriet) – [Edvard_Munch,_1893,_The_Scream,_oil,_tempera_and_pastel_on_cardboard,_91_x_73_cm,_National_Gallery_of_Norway.jpg](https://commons.wikimedia.org/wiki/File:Edvard_Munch,_1893,_The_Scream,_oil,_tempera_and_pastel_on_cardboard,_91_x_73_cm,_National_Gallery_of_Norway.jpg) av Edvard Munch, Public domain.
 - **slanda.webp** (Handredskap av trä med garn på) – [Drop_spindles.jpg](https://commons.wikimedia.org/wiki/File:Drop_spindles.jpg) av Pschemp, CC BY-SA 3.0.
 - **slup.webp** (En segelbåt med en mast och två segel) – [C55_Kiel2007.jpg](https://commons.wikimedia.org/wiki/File:C55_Kiel2007.jpg) av VollwertBIT, CC BY-SA 2.5.
@@ -572,6 +597,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **sputnik.webp** (Ett blankt klot med fyra antenner) – [Первый_в_мире_искусственный_спутник_Земли.jpg](https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B9_%D0%B2_%D0%BC%D0%B8%D1%80%D0%B5_%D0%B8%D1%81%D0%BA%D1%83%D1%81%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D1%81%D0%BF%D1%83%D1%82%D0%BD%D0%B8%D0%BA_%D0%97%D0%B5%D0%BC%D0%BB%D0%B8.jpg) av Andrey Butko, CC BY-SA 3.0.
 - **standare.webp** (Närbild på en blommas inre delar) – [Amaryllis_stamens_aka.jpg](https://commons.wikimedia.org/wiki/File:Amaryllis_stamens_aka.jpg) av André Karwath aka Aka, CC BY-SA 2.5.
 - **standrews.webp** (En stenbro över en bäck på en golfbana) – [Swilken_Bridge,_Old_Course_geograph-6310525-by-Gordon-Hatton.jpg](https://commons.wikimedia.org/wiki/File:Swilken_Bridge,_Old_Course_geograph-6310525-by-Gordon-Hatton.jpg) av Gordon Hatton, CC BY-SA 2.0.
+- **stanleycup.webp** (En stor silverpokal) – [Stanley_Cup,_2015.jpg](https://commons.wikimedia.org/wiki/File:Stanley_Cup,_2015.jpg) av Alex Goykhman, CC BY-SA 4.0.
 - **station-buss-1.webp** (En bussterminal med bussar i lägena) – [Chur Busbahnhof ext 2015 wide.jpg](https://commons.wikimedia.org/wiki/File:Chur_Busbahnhof_ext_2015_wide.jpg) av Cayambe, CC BY-SA 4.0.
 - **station-buss-2.webp** (En bussterminal inifrån) – [Interior de la estación de autobuses Plaza de Armas.JPG](https://commons.wikimedia.org/wiki/File:Interior_de_la_estaci%C3%B3n_de_autobuses_Plaza_de_Armas.JPG) av Feranza, CC BY-SA 3.0.
 - **station-buss-3.webp** (Bussar vid en terminal) – [Bus station at Zurich airport (2019).jpg](https://commons.wikimedia.org/wiki/File:Bus_station_at_Zurich_airport_(2019).jpg) av JoachimKohler-HB, CC BY-SA 4.0.
@@ -601,6 +627,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **stout.webp** (Ett glas mörk öl med krämigt skum) – [A_Pint_of_English_Imperial_Stout.png](https://commons.wikimedia.org/wiki/File:A_Pint_of_English_Imperial_Stout.png) av 55belgianbeerfan, CC0.
 - **stpauls.webp** (St Paul's Cathedral i London) – [St_Pauls_aerial_(cropped).jpg](https://commons.wikimedia.org/wiki/File:St_Pauls_aerial_(cropped).jpg) av Mark Fosh, CC BY 2.0.
 - **straffspark.webp** (En spelare lägger en straff mot en målvakt) – [FIFA_Women's_World_Cup_Canada_2015_-_Edmonton_(18821505113).jpg](https://commons.wikimedia.org/wiki/File:FIFA_Women%27s_World_Cup_Canada_2015_-_Edmonton_(18821505113).jpg) av IQRemix from Canada, CC BY-SA 2.0.
+- **strand.webp** (En sandstrand med badande) – [Beach_at_Fort_Lauderdale.jpg](https://commons.wikimedia.org/wiki/File:Beach_at_Fort_Lauderdale.jpg) av Daniel Dudek, CC BY 2.0.
 - **stratigrafi.webp** (Jordlager i en utgrävningsprofil) – [1555_-_Keramikos_archaeological_area,_Athens_-_Stratigraphy_-_Photo_by_Giovanni_Dall'Orto,_Nov_12_2009.jpg](https://commons.wikimedia.org/wiki/File:1555_-_Keramikos_archaeological_area,_Athens_-_Stratigraphy_-_Photo_by_Giovanni_Dall%27Orto,_Nov_12_2009.jpg) av Giovanni Dall'Orto, Attribution.
 - **stravinskij.webp** (En man med glasögon i kostym) – [Igor_Stravinsky_LOC_32392u.jpg](https://commons.wikimedia.org/wiki/File:Igor_Stravinsky_LOC_32392u.jpg) av George Grantham Bain Collection, Public domain.
 - **streckkod.webp** (En streckkod på en förpackning) – [EAN-13 barcode on a gummy candy package.jpg](https://commons.wikimedia.org/wiki/File:EAN-13_barcode_on_a_gummy_candy_package.jpg) av Sokolikmawwer0, CC BY-SA 3.0.
@@ -609,6 +636,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **strumpbyxor.webp** (Ett par tunna nylonstrumpbyxor) – [Pantyhose2.jpg](https://commons.wikimedia.org/wiki/File:Pantyhose2.jpg) av Tranquil Garden, CC BY-SA 3.0.
 - **suezkanal.webp** (En smal vattenväg genom öknen sedd från rymden) – [Iss016e019375.jpg](https://commons.wikimedia.org/wiki/File:Iss016e019375.jpg) av NASA, Public domain.
 - **suezkanalen.webp** (En kanal genom öknen sedd från rymden) – [Iss016e019375.jpg](https://commons.wikimedia.org/wiki/File:Iss016e019375.jpg) av NASA, Public domain.
+- **sundin.webp** (En man i mörk kavaj) – [Mats_Sundin_in_feb_2015.jpg](https://commons.wikimedia.org/wiki/File:Mats_Sundin_in_feb_2015.jpg) av Frankie Fouganthin, CC BY-SA 4.0.
 - **surdeg.webp** (Ett runt bröd med snittad, sprucken skorpa) – [Home_made_sour_dough_bread.jpg](https://commons.wikimedia.org/wiki/File:Home_made_sour_dough_bread.jpg) av Tomascastelazo, CC BY-SA 4.0.
 - **surdo.webp** (Trummisar med stora trummor) – [Olodum-drummers.jpg](https://commons.wikimedia.org/wiki/File:Olodum-drummers.jpg) av The original uploader was Mateuszica at Portuguese Wikipedia ., CC BY-SA 3.0.
 - **sushifat.webp** (Ett fat med olika sorters sushi) – [Sushi_platter.jpg](https://commons.wikimedia.org/wiki/File:Sushi_platter.jpg) av chidorian from Japan, CC BY-SA 2.0.
@@ -622,12 +650,15 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **taiko.webp** (Stora tunnformade trummor i ett ställ) – [Miya_Daiko_drum_-_Taiko_drums.jpg](https://commons.wikimedia.org/wiki/File:Miya_Daiko_drum_-_Taiko_drums.jpg) av Taiko-Kaiser-Drums, CC BY-SA 3.0.
 - **tamborim.webp** (En liten rund trumma med pinne) – [Tamborim.JPG](https://commons.wikimedia.org/wiki/File:Tamborim.JPG) av Alno, CC BY-SA 3.0.
 - **tandem.webp** (En lång cykel med två sadlar) – [Tandem_bike_with_double_electric_batteries.jpg](https://commons.wikimedia.org/wiki/File:Tandem_bike_with_double_electric_batteries.jpg) av FrogsLegs71, CC BY-SA 3.0.
+- **tandemcykel.webp** (En cykel med två sadlar) – [Tandem_bike_with_double_electric_batteries.jpg](https://commons.wikimedia.org/wiki/File:Tandem_bike_with_double_electric_batteries.jpg) av FrogsLegs71, CC BY-SA 3.0.
 - **taskor.webp** (Ett par tåskor) – [PointeShoes.jpg](https://commons.wikimedia.org/wiki/File:PointeShoes.jpg) av Lambtron ( talk ) The original uploader was Lambtron at English Wikipedia ., Public domain.
 - **taxameter.webp** (En mätare med siffror i en bils instrumentpanel) – [Taxameter.jpg](https://commons.wikimedia.org/wiki/File:Taxameter.jpg) av Stefan Kühn, CC BY-SA 3.0.
 - **taxiko.webp** (Bilar som står på rad och väntar vid en terminal) – [Letiště_Ruzyně,_terminál_1,_taxistanoviště.jpg](https://commons.wikimedia.org/wiki/File:Leti%C5%A1t%C4%9B_Ruzyn%C4%9B,_termin%C3%A1l_1,_taxistanovi%C5%A1t%C4%9B.jpg) av ŠJů ( cs:ŠJů ), CC BY-SA 3.0.
 - **tcentralen.webp** (En tunnelbanestation med blåmålat bergtak) – [T-centralen metro station december 2017 01.jpg](https://commons.wikimedia.org/wiki/File:T-centralen_metro_station_december_2017_01.jpg) av Arild Vågen, CC BY-SA 4.0.
 - **teachpendant.webp** (En handhållen styrenhet med skärm och knappar) – [Staubli Teach pendant.jpg](https://commons.wikimedia.org/wiki/File:Staubli_Teach_pendant.jpg) av Red Sunset at English Wikipedia, CC BY-SA 3.0.
 - **tekanna.webp** (En svart tekanna) – [Black_tea_pot_cropped.jpg](https://commons.wikimedia.org/wiki/File:Black_tea_pot_cropped.jpg) av Mendhak, CC BY-SA 2.0.
+- **tennisbana.webp** (Tennisbanor inomhus) – [Universityofbath_indoor_tennis_courts_arp.jpg](https://commons.wikimedia.org/wiki/File:Universityofbath_indoor_tennis_courts_arp.jpg) av Adrian Pingstone ( Arpingstone ), Public domain.
+- **tennisboll.webp** (En gulgrön luden boll) – [Closeup_of_a_tennis_ball_(2).jpg](https://commons.wikimedia.org/wiki/File:Closeup_of_a_tennis_ball_(2).jpg) av Miscellaneous contributor, CC0.
 - **teplantage.webp** (Gröna tebuskar i rader på kullar) – [Darjeeling, India, Tea plantations on hills.jpg](https://commons.wikimedia.org/wiki/File:Darjeeling,_India,_Tea_plantations_on_hills.jpg) av Vyacheslav Argenberg, CC BY 4.0.
 - **teresjkova.webp** (En äldre kvinna med medaljer) – [Valentina_Tereshkova_(2024-02-29)_crop.jpg](https://commons.wikimedia.org/wiki/File:Valentina_Tereshkova_(2024-02-29)_crop.jpg) av This file comes from the website of the President of the Russian Federation and is licensed under the Creative Commons Attribution 4.0 License. In short: you are free to distribute and modify the file as long as you attribute www.kremlin.ru . Note: Works published on site before April 8, 2015 are also licensed under Creative Commons Attribution 3.0 License. The permission letter from the Press Secretary for the President of the Russian Federation is available here ., CC BY 4.0.
 - **tezuka.webp** (En ung man med basker och glasögon) – [Osamu_Tezuka_1951_Scan10008-2.JPG](https://commons.wikimedia.org/wiki/File:Osamu_Tezuka_1951_Scan10008-2.JPG) av Unknown author Unknown author, Public domain.
@@ -646,6 +677,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **transsib.webp** (Ett långt passagerartåg på en station) – [Trans-Siberian train. Moscow-Vladivostok.jpg](https://commons.wikimedia.org/wiki/File:Trans-Siberian_train._Moscow-Vladivostok.jpg) av Marc Heiden - User: (WT-shared) Gorilla Jones at wts wikivoyage, CC BY-SA 3.0.
 - **trasmatta.webp** (En randig matta vävd av tygremsor) – [RagRug.jpg](https://commons.wikimedia.org/wiki/File:RagRug.jpg) av Gabe G. , Mary H., CC BY 3.0.
 - **tratt.webp** (En hund med en plastkrage runt halsen) – [Kelpie_wearing_an_Elizabethan_collar.jpg](https://commons.wikimedia.org/wiki/File:Kelpie_wearing_an_Elizabethan_collar.jpg) av aussiegall from sydney, Australia, CC BY 2.0.
+- **trekronor.webp** (Hockeyspelare i gula tröjor) – [Tre Kronor players IIHF 2012.jpg](https://commons.wikimedia.org/wiki/File:Tre_Kronor_players_IIHF_2012.jpg) av Henrik Palm, CC BY 2.0.
 - **trevi.webp** (Fontana di Trevi i Rom) – [Trevi_Fountain_-_Roma.jpg](https://commons.wikimedia.org/wiki/File:Trevi_Fountain_-_Roma.jpg) av NikonZ7II, CC BY-SA 4.0.
 - **triumfbagen.webp** (Triumfbågen i Paris) – [Arc_de_Triomphe,_Paris_21_October_2010.jpg](https://commons.wikimedia.org/wiki/File:Arc_de_Triomphe,_Paris_21_October_2010.jpg) av Jiuguang Wang, CC BY-SA 2.0.
 - **truck.webp** (Undersidan av en bräda med hjul och metallaxlar) – [Skateboard-truck.jpg](https://commons.wikimedia.org/wiki/File:Skateboard-truck.jpg) av User:Tp, CC BY 1.0.
@@ -701,4 +733,5 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **yenmynt.webp** (Ett tvåfärgat mynt) – [500_yen_bicolor_clad_coin_obverse.jpg](https://commons.wikimedia.org/wiki/File:500_yen_bicolor_clad_coin_obverse.jpg) av Heavy Frisker, CC BY-SA 4.0.
 - **zebra.webp** (En stäppzebra) – [Equus_quagga_burchellii_-_Etosha,_2014.jpg](https://commons.wikimedia.org/wiki/File:Equus_quagga_burchellii_-_Etosha,_2014.jpg) av Yathin S Krishnappa, CC BY-SA 3.0.
 - **zebraovergang.webp** (Ett övergångsställe med vita ränder) – [Abbey_Road_Zebra.jpg](https://commons.wikimedia.org/wiki/File:Abbey_Road_Zebra.jpg) av Misterweiss at English Wikipedia, Public domain.
+- **zetterberg.webp** (En hockeyspelare i röd tröja) – [Henrik_Zetterberg_(03).jpg](https://commons.wikimedia.org/wiki/File:Henrik_Zetterberg_(03).jpg) av Adam Glanzman, CC BY 2.0.
 - **zulu.webp** (Dansare i traditionell dräkt) – [Zulu_Culture,_KwaZulu-Natal,_South_Africa_(20325329170).jpg](https://commons.wikimedia.org/wiki/File:Zulu_Culture,_KwaZulu-Natal,_South_Africa_(20325329170).jpg) av South African Tourism from South Africa, CC BY 2.0.
