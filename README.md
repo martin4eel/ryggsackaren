@@ -245,9 +245,18 @@ webbläsaren och överlever att sparfilen raderas.
    foten dunsar ner från himlen. Replikerna och var ansiktet ska sitta står
    per bild i `src/data/quizImages.ts` (`reaktion` och `ansikte`); bilder
    utan egna repliker får allmänna.
-7. **Tidningen.** Dagens lokala rubrik står överst – *Tunnelbanan stänger
-   Slussen ännu en helg*, *Monsunen väntas två veckor tidigt* – så att
-   tidningen är stadens och inte spelets. Läs platsannonserna och ta ett skift. Varje fråga är en
+7. **Tidningen.** Ett vitt bredsidesark i serif: frakturhuvud, datumrad
+   med resdag, datum och väder, dagens jätterubrik, en artikel i spalter med
+   ett svartvitt arkivfoto av stadens sevärdhet, och notiser *I korthet*.
+   Varje stad har sin egen tidning med eget namn, egen devis och egna
+   artiklar (`src/data/newspapers.ts`), så *Stockholms-Bladet* och Bangkoks
+   blad ser inte likadana ut. Sedan följer platsannonserna, och sist den
+   **personliga sidan**: tre kontaktannonser i veckan ur regionens pool
+   (`src/data/kontaktannonser.ts`). Du kan *svara* – det kostar en dag, och
+   vad som händer lottas bland annonsens utfall: en middag som blev gratis,
+   en änka som visade sig sälja tidsdelat boende, en frågesport där du
+   bromsade på tio – eller *bläddra förbi*, och då kommer annonsen inte
+   tillbaka i den staden. Läs platsannonserna och ta ett skift. Varje fråga är en
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.

@@ -32,6 +32,7 @@ try {
   const { COIN_QUESTIONS } = await load('/src/data/questions/coinQuestions.ts');
   const { CITY_CLIMATE } = await load('/src/data/climate.ts');
   const { CITY_HEADLINES } = await load('/src/data/headlines.ts');
+  const { CITY_PAPERS } = await load('/src/data/newspapers.ts');
   const { CITIES } = await load('/src/data/cities.ts');
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
@@ -426,6 +427,14 @@ try {
     if (!CITY_CLIMATE[c.id]) problems.push(`${c.name} saknar klimat i data/climate.ts`);
     if ((CITY_HEADLINES[c.id]?.length ?? 0) < 2)
       problems.push(`${c.name} har färre än två rubriker i data/headlines.ts`);
+    const t = CITY_PAPERS[c.id];
+    if (!t) problems.push(`${c.name} saknar tidning i data/newspapers.ts`);
+    else {
+      if ((t.artiklar?.length ?? 0) < 3)
+        problems.push(`${c.name}: tidningen har färre än tre artiklar`);
+      if ((t.notiser?.length ?? 0) < 4)
+        problems.push(`${c.name}: tidningen har färre än fyra notiser`);
+    }
   }
 
   /**

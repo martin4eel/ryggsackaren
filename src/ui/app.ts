@@ -73,6 +73,7 @@ import { renderGlobePicker } from './globepicker';
 import { renderStation, type StationHandle } from './station';
 import { renderAtlasScreen } from './atlas';
 import {
+  applyEffect,
   applyImmediate,
   chooseEvent,
   mysterySpotCount,
@@ -88,6 +89,8 @@ import {
 } from '../game/events';
 import { renderEventCard } from './eventcard';
 import { weatherFor } from '../game/weather';
+import { CITY_PAPERS } from '../data/newspapers';
+import { annonserFor, type Kontaktannons } from '../data/kontaktannonser';
 import { CITY_HEADLINES } from '../data/headlines';
 import { ALLMAN_REAKTION, QUIZ_IMAGE_BY_ID, quizImageAlt, quizImageUrl } from '../data/quizImages';
 import { COIN_QUESTIONS } from '../data/questions/coinQuestions';
@@ -439,6 +442,8 @@ export class App {
    */
   private phoneCall: PhoneCall | null = null;
   private phoneTimer: number | null = null;
+  /** Svaret på en kontaktannons man just besvarat, tills tidningen lämnas. */
+  private kontaktSvar: { id: string; text: string; rader: EffectLine[] } | null = null;
   private toastTimer: number | null = null;
   /**
    * Skärmen byggs om från grunden vid varje förändring. Vid skärmbyte ska vyn
@@ -646,6 +651,7 @@ export class App {
   }
 
   private go(screen: GameState['screen']): void {
+    if (screen !== 'tidning') this.kontaktSvar = null;
     // Att öppna ryggsäcken kvitterar notisen på knappen.
     if (screen === 'ryggsack' && this.state) {
       this.state.packSeen = {
@@ -2321,32 +2327,96 @@ export class App {
     const wrap = el('div', { class: 'stack' });
 
     /**
-     * Tidningen ska se ut som en tidning: ett huvud med namn, datum och
-     * väder, dagens rubrik, en notis, och sedan platsannonserna som en
-     * annonssida med spalter och tunna linjer - inte som en lista med kort.
+     * Tidningen är ett vitt bredsidesark: ett huvud i frakturstil, en
+     * datumrad, dagens stora rubrik, en artikel i spalter med ett svartvitt
+     * foto, notiser, platsannonserna och sist den personliga sidan med
+     * kontaktannonser. Varje stad har sin egen tidning med eget namn och egna
+     * artiklar, så att Bangkok inte läser samma blad som Berlin.
      */
-    const rubriker = CITY_HEADLINES[city.id] ?? [];
-    const rubrik = rubriker.length > 0 ? rubriker[s.days % rubriker.length]! : '';
-    const notis = rubriker.length > 1 ? rubriker[(s.days + 1) % rubriker.length]! : '';
+    const tidning = CITY_PAPERS[city.id] ?? {
+      namn: `${city.name} Daily`,
+      devis: 'Oberoende morgontidning',
+      grundad: 1900,
+      artiklar: (CITY_HEADLINES[city.id] ?? []).map((rubrik) => ({ rubrik, text: '' })),
+      notiser: [],
+    };
+    const artiklar = tidning.artiklar;
+    const huvud = artiklar[s.days % Math.max(1, artiklar.length)];
+    const andra = artiklar.length > 1 ? artiklar[(s.days + 1) % artiklar.length] : undefined;
+    const notiser = tidning.notiser
+      .map((n, i) => ({ n, k: pseudoRandom(`${city.id}|notis|${s.days}|${i}`) }))
+      .sort((a, b) => a.k - b.k)
+      .slice(0, 4)
+      .map((x) => x.n);
     const vader = weatherFor(city, s.startDate, s.days);
-    const head = el('section', { class: 'panel paper paper-head' });
-    head.append(
-      el('div', { class: 'masthead' },
-        el('span', { class: 'masthead-namn' }, `${city.name} Daily`),
-        el('span', { class: 'masthead-meta' },
-          `Dag ${s.days} · ${vader.glyph} ${vader.temp}° · ${this.money(5)}`
+    const datum = new Date(s.startDate);
+    datum.setDate(datum.getDate() + s.days);
+    const datumText = datum.toLocaleDateString('sv-SE', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    const nummer = 1 + ((datum.getFullYear() - tidning.grundad) * 300 + s.days * 7 + city.id.length) % 9000;
+
+    const blad = el('section', { class: 'panel tidning', lang: 'sv' });
+    blad.append(
+      el('header', { class: 'tidning-huvud' },
+        el('div', { class: 'tidning-ovan' },
+          el('span', {}, `Grundad ${tidning.grundad}`),
+          el('span', {}, `Nr ${nummer}`),
+          el('span', {}, `Pris ${this.money(5)}`)
+        ),
+        el('h1', { class: 'tidning-namn' }, tidning.namn),
+        el('p', { class: 'tidning-devis' }, tidning.devis),
+        el('div', { class: 'tidning-datumrad' },
+          el('span', {}, `Dag ${s.days} på resan`),
+          el('span', { class: 'tidning-datum' }, datumText.charAt(0).toUpperCase() + datumText.slice(1)),
+          el('span', {}, `${vader.glyph} ${vader.text}`)
         )
-      ),
-      // Dagens lokala rubrik, så att tidningen är stadens och inte spelets.
-      el('p', { class: 'paper-rubrik' }, rubrik),
-      notis
-        ? el('p', { class: 'paper-notis' },
-            el('span', { class: 'paper-notis-etikett' }, 'I korthet'),
-            ` ${notis}.`
-          )
-        : '',
+      )
+    );
+
+    if (huvud) {
+      blad.append(el('h2', { class: 'tidning-rubrik' }, huvud.rubrik));
+      const uppslag = el('div', { class: 'tidning-uppslag' });
+      const foto = el('figure', { class: 'tidning-foto' },
+        el('img', {
+          src: `./cities/${city.id}.jpg`,
+          alt: `Foto från ${city.name}`,
+          loading: 'lazy',
+          decoding: 'async',
+        }),
+        el('figcaption', {}, `${city.landmark}, ${city.name}. Arkivbild.`)
+      );
+      const text = el('div', { class: 'tidning-text' });
+      if (huvud.text) {
+        const meningar = huvud.text.split(/(?<=[.!?])\s+/);
+        text.append(
+          el('p', { class: 'tidning-ingress' }, meningar[0] ?? ''),
+          ...(meningar.length > 1 ? [el('p', {}, meningar.slice(1).join(' '))] : [])
+        );
+      }
+      if (andra) {
+        text.append(
+          el('h3', { class: 'tidning-underrubrik' }, andra.rubrik),
+          el('p', {}, andra.text)
+        );
+      }
+      if (notiser.length > 0) {
+        text.append(
+          el('h4', { class: 'tidning-korthet' }, 'I korthet'),
+          el('ul', { class: 'tidning-notiser' }, ...notiser.map((n) => el('li', {}, n)))
+        );
+      }
+      uppslag.append(foto, text);
+      blad.append(uppslag);
+    }
+
+    // ------------------------------------------------------- platsannonser
+    blad.append(
       el('div', { class: 'paper-avdelning' },
-        el('h1', { class: 'paper-avdelning-namn' }, 'Platsannonser'),
+        el('h2', { class: 'paper-avdelning-namn' }, 'Platsannonser'),
         el(
           'span',
           { class: 'paper-avdelning-meta' },
@@ -2358,9 +2428,8 @@ export class App {
             'Du har inte varit på turistbyrån än. Utan stadsbetyg får du bara de enklaste jobben.')
         : ''
     );
-    wrap.append(head);
 
-    const list = el('section', { class: 'panel paper paper-annonser' });
+    const list = el('div', { class: 'paper-annonser' });
     for (const job of cityJobs(city)) {
       const allowed = canTakeJob(s, job);
       const worked = p.workedJobs.includes(job.id);
@@ -2408,8 +2477,112 @@ export class App {
       }
       list.append(card);
     }
-    wrap.append(list);
+    blad.append(list);
+
+    // ------------------------------------------------------ kontaktannonser
+    /**
+     * Den personliga sidan. Tre annonser i veckan, lottade ur regionens
+     * pool, minus dem man redan svarat på eller bläddrat förbi. Att svara
+     * kostar en dag och ger något - inte alltid det annonsen lovade.
+     */
+    const spent = p.spent ?? [];
+    const vecka = Math.floor(s.days / 7);
+    const pool = annonserFor(city.region).filter(
+      (a) => !spent.includes(`kontakt:${a.id}`) && !spent.includes(`bort:${a.id}`)
+    );
+    const valda = pool
+      .map((a) => ({ a, k: pseudoRandom(`${city.id}|kontakt|${vecka}|${a.id}`) }))
+      .sort((x, y) => x.k - y.k)
+      .slice(0, 3)
+      .map((x) => x.a);
+    const svar = this.kontaktSvar;
+    if (valda.length > 0 || svar) {
+      blad.append(
+        el('div', { class: 'paper-avdelning' },
+          el('h2', { class: 'paper-avdelning-namn' }, 'Personligt'),
+          el('span', { class: 'paper-avdelning-meta' }, 'Att svara kostar en dag')
+        )
+      );
+      const sida = el('div', { class: 'kontakt-sida' });
+      if (svar) {
+        sida.append(
+          el('article', { class: 'kontakt kontakt-svar' },
+            el('p', { class: 'annons-etikett' }, 'Du svarade'),
+            el('p', { class: 'kontakt-text' }, svar.text),
+            svar.rader.length > 0
+              ? el('ul', { class: 'kontakt-rader' },
+                  ...svar.rader.map((r) => el('li', { class: `kontakt-rad kontakt-rad-${r.tone}` }, r.text))
+                )
+              : ''
+          )
+        );
+      }
+      for (const a of valda) {
+        sida.append(
+          el('article', { class: 'kontakt' },
+            el('h3', { class: 'kontakt-rubrik' }, a.rubrik),
+            el('p', { class: 'kontakt-text' }, a.text),
+            el('p', { class: 'kontakt-signatur' }, `— ${a.signatur}`),
+            el('div', { class: 'kontakt-knappar' },
+              button('Svara', () => this.svaraKontakt(a), { class: 'btn btn-primary btn-small' }),
+              button('Bläddra förbi', () => this.ignoreraKontakt(a.id), { class: 'btn btn-ghost btn-small' })
+            )
+          )
+        );
+      }
+      blad.append(sida);
+    }
+
+    wrap.append(blad);
     return wrap;
+  }
+
+  /** Svarar på en kontaktannons: en dag går, och något händer. */
+  private svaraKontakt(a: Kontaktannons): void {
+    const s = this.state!;
+    const city = this.city;
+    const p = getProgress(s, city.id);
+    p.spent ??= [];
+    if (p.spent.includes(`kontakt:${a.id}`)) return;
+    p.spent.push(`kontakt:${a.id}`);
+    this.spendDays(1, city);
+    const summa = a.utfall.reduce((n, u) => n + (u.vikt ?? 1), 0);
+    let lott = Math.random() * summa;
+    let utfall = a.utfall[a.utfall.length - 1]!;
+    for (const u of a.utfall) {
+      lott -= u.vikt ?? 1;
+      if (lott <= 0) {
+        utfall = u;
+        break;
+      }
+    }
+    const rader = applyEffect(
+      s,
+      utfall.effekt,
+      city,
+      dailyCost(city, s.difficulty),
+      (n) => this.money(n)
+    );
+    const bra = rader.some((r) => r.tone === 'bra');
+    const daligt = rader.some((r) => r.tone === 'daligt');
+    playSound(bra && !daligt ? 'kassa' : daligt ? 'fel' : 'sida');
+    this.kontaktSvar = { id: a.id, text: utfall.text, rader };
+    this.commit();
+    if (this.checkBroke()) return;
+    this.scrollToTopNext = false;
+    this.render();
+  }
+
+  /** Bläddrar förbi en annons. Den kommer inte tillbaka i den här staden. */
+  private ignoreraKontakt(id: string): void {
+    const s = this.state!;
+    const p = getProgress(s, s.currentCityId);
+    p.spent ??= [];
+    if (!p.spent.includes(`bort:${id}`)) p.spent.push(`bort:${id}`);
+    playSound('sida');
+    this.commit();
+    this.scrollToTopNext = false;
+    this.render();
   }
 
   private startJob(job: Job): void {

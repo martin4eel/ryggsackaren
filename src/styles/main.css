@@ -6481,3 +6481,364 @@ body.sheet-oppen {
     transform: translate(-50%, 2%);
   }
 }
+
+/* ====================================================================
+   TIDNINGEN SOM BREDSIDA
+   Ett vitt ark i serif: frakturhuvud, datumrad, jätterubrik, spalter med
+   justerad text och ett svartvitt arkivfoto. Under det platsannonserna
+   och den personliga sidan. Färgerna är trycksvärta på papper - inte
+   spelets palett - så att bladet känns som något man plockat upp.
+   ==================================================================== */
+
+.tidning {
+  --tryck: #141414;
+  --tryck-svag: #4a4a4a;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Book Antiqua', 'Times New Roman', Georgia, serif;
+  --fraktur: 'Old English Text MT', 'Canterbury', 'UnifrakturCook', 'Bodoni 72', 'Didot', 'Times New Roman', serif;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02), transparent 40px),
+    #fdfdfb;
+  color: var(--tryck);
+  font-family: var(--serif);
+  padding: 18px 16px 20px;
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.08),
+    0 12px 30px rgba(4, 16, 26, 0.35);
+  border-radius: 4px;
+}
+
+.tidning-huvud {
+  text-align: center;
+}
+
+.tidning-ovan {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tryck-svag);
+  border-bottom: 1px solid var(--tryck);
+  padding-bottom: 4px;
+}
+
+.tidning-namn {
+  margin: 8px 0 0;
+  font-family: var(--fraktur);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 8.5vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  color: var(--tryck);
+}
+
+.tidning-devis {
+  margin: 4px 0 8px;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--tryck-svag);
+}
+
+.tidning-datumrad {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 5px 0;
+  border-top: 3px double var(--tryck);
+  border-bottom: 1px solid var(--tryck);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.tidning-datum {
+  flex: 1;
+  text-align: center;
+}
+
+.tidning-rubrik {
+  margin: 14px 0 10px;
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(1.7rem, 7.5vw, 2.9rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--tryck);
+}
+
+.tidning-uppslag {
+  border-top: 1px solid var(--tryck);
+  border-bottom: 1px solid var(--tryck);
+  padding: 12px 0 10px;
+}
+
+.tidning-foto {
+  margin: 0 0 10px;
+  line-height: 0;
+  break-inside: avoid;
+}
+
+.tidning-foto img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.15) brightness(1.02);
+  border: 1px solid var(--tryck);
+}
+
+.tidning-foto figcaption {
+  margin-top: 4px;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  font-style: italic;
+  color: var(--tryck-svag);
+}
+
+.tidning-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+.tidning-text p {
+  margin: 0 0 8px;
+}
+
+.tidning-ingress {
+  font-weight: 700;
+}
+
+.tidning-ingress::first-letter {
+  float: left;
+  font-size: 2.9em;
+  line-height: 0.82;
+  padding: 3px 5px 0 0;
+  font-weight: 800;
+}
+
+.tidning-underrubrik {
+  margin: 10px 0 4px;
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: left;
+  border-top: 1px solid rgba(0, 0, 0, 0.35);
+  padding-top: 8px;
+}
+
+.tidning-korthet {
+  margin: 10px 0 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(0, 0, 0, 0.35);
+  padding-top: 8px;
+}
+
+.tidning-notiser {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.84rem;
+  text-align: left;
+}
+
+.tidning-notiser li {
+  padding: 3px 0;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.3);
+}
+
+.tidning-notiser li::before {
+  content: '■ ';
+  font-size: 0.6em;
+  vertical-align: 0.2em;
+}
+
+/* Spalter på bred skärm: fotot till vänster, texten flyter i två spalter. */
+@media (min-width: 700px) {
+  .tidning {
+    padding: 26px 30px 28px;
+  }
+
+  .tidning-uppslag {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 22px;
+  }
+
+  .tidning-text {
+    column-count: 2;
+    column-gap: 20px;
+    column-rule: 1px solid rgba(0, 0, 0, 0.3);
+  }
+
+  .tidning-underrubrik,
+  .tidning-korthet {
+    break-after: avoid;
+  }
+}
+
+/* Platsannonserna och sektionerna ärver arkets typografi. */
+.tidning .paper-avdelning {
+  border-color: var(--tryck);
+  margin-top: 18px;
+}
+
+.tidning .paper-avdelning-namn,
+.tidning .paper-avdelning-meta,
+.tidning .annons-etikett,
+.tidning .job-head h3,
+.tidning .job p,
+.tidning .job-employer,
+.tidning .note,
+.tidning .paper-tips {
+  font-family: var(--serif);
+}
+
+.tidning .paper-avdelning-namn {
+  color: var(--tryck);
+  font-weight: 800;
+}
+
+.tidning .paper-avdelning-meta,
+.tidning .job p.muted,
+.tidning .job-employer {
+  color: var(--tryck-svag);
+}
+
+.tidning .job-head h3 {
+  color: var(--tryck);
+  font-weight: 800;
+}
+
+.tidning .job {
+  border-top-color: rgba(0, 0, 0, 0.35);
+  color: var(--tryck);
+}
+
+.tidning .annons-etikett {
+  color: var(--tryck);
+  font-weight: 700;
+}
+
+/* Den personliga sidan: små rutor med tunn ram, som riktiga radannonser. */
+.kontakt-sida {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.kontakt {
+  border: 1px solid var(--tryck);
+  padding: 10px 12px 12px;
+  break-inside: avoid;
+}
+
+.kontakt-rubrik {
+  margin: 0 0 4px;
+  font-family: var(--serif);
+  font-size: 0.98rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--tryck);
+}
+
+.kontakt-text {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--tryck);
+}
+
+.kontakt-signatur {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: right;
+  color: var(--tryck-svag);
+}
+
+.kontakt-knappar {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.kontakt-svar {
+  background: rgba(0, 0, 0, 0.04);
+  border-style: double;
+  border-width: 3px;
+}
+
+.kontakt-rader {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.kontakt-rad {
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border: 1px solid var(--tryck);
+}
+
+.kontakt-rad-bra {
+  background: var(--tryck);
+  color: #fdfdfb;
+}
+
+.kontakt-rad-daligt {
+  border-style: dashed;
+}
+
+@media (min-width: 700px) {
+  .kontakt-sida {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: start;
+  }
+
+  .kontakt-svar {
+    grid-column: 1 / -1;
+  }
+}
+
+.tidning .btn-ghost {
+  color: var(--tryck);
+  border-color: var(--tryck);
+}
+
+/* Jätterubriken slår den allmänna panelrubriken; annonserna står vänster. */
+.tidning > h2.tidning-rubrik {
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 7.5vw, 2.9rem);
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--tryck);
+}
+
+.tidning > h2.paper-avdelning-namn {
+  color: var(--tryck);
+}
+
+.tidning .job,
+.tidning .kontakt {
+  text-align: left;
+  align-items: flex-start;
+}
+
+.tidning .job-head {
+  justify-content: flex-start;
+  width: 100%;
+}
