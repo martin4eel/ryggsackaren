@@ -60,6 +60,8 @@ export interface CityProgress {
   revealed?: string[];
   /** Mystikskyltar som redan gett det de hade att ge. */
   spent?: string[];
+  /** Resdagen då du först kom hit, för raden om återbesök. */
+  firstDay?: number;
 }
 
 export interface GameState {
@@ -146,6 +148,12 @@ export interface GameState {
    */
   packSeen: { souvenirs: number; stamps: number };
   /**
+   * Datumet resan började, som ISO-datum. Årstiden i vädret följer det, så
+   * att en resa som börjar i december har vinter i Norden och sommar i
+   * Sydney.
+   */
+  startDate: string;
+  /**
    * Händelsen som väntar på svar eller på att kvitteras. Den ligger i
    * tillståndet i stället för i gränssnittet, så att ett val man ställts inför
    * inte försvinner för att fliken laddades om.
@@ -179,6 +187,10 @@ export function createGame(
     homeCityId,
     homeCurrency,
     currentCityId: homeCityId,
+    // Hemstaden är den enda stad man vet när man kom till.
+    progress: {
+      [homeCityId]: { rating: 0, visits: 0, workedJobs: [], revealed: [], spent: [], firstDay: 0 },
+    },
     money: difficulty === 'turist' ? 6000 : 4000,
     debt: 0,
     days: 0,
@@ -187,7 +199,6 @@ export function createGame(
     tripsByMode: {},
     kmByMode: {},
     visited: [homeCityId],
-    progress: {},
     backpack: [],
     certificates: {},
     correct: 0,
@@ -209,6 +220,7 @@ export function createGame(
     rykte: 0,
     eventsSeen: [],
     packSeen: { souvenirs: 0, stamps: 0 },
+    startDate: new Date().toISOString().slice(0, 10),
   };
 }
 
@@ -290,6 +302,7 @@ function migrate(
   state.cityStats ??= {};
   state.rykte ??= 0;
   state.eventsSeen ??= [];
+  state.startDate ??= new Date().toISOString().slice(0, 10);
   // En pågående resa har redan sett det som ligger i ryggsäcken.
   state.packSeen ??= {
     souvenirs: state.backpack?.length ?? 0,

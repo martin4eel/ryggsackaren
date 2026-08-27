@@ -5672,3 +5672,155 @@ body.sheet-oppen {
     height: 22px;
   }
 }
+
+
+/* ====================================================================
+   VÄDER OCH TID PÅ DYGNET
+   Fotot tonas efter stadens lokala klockslag och får ett lager av regn,
+   snö eller dis ovanpå. Allt är kosmetiskt: Bangkok i monsunregn en
+   kväll och Bangkok i sol en morgon är två olika bilder av samma stad.
+   ==================================================================== */
+
+.city-hero[data-tid='morgon'] .city-hero-img {
+  filter: brightness(1.02) sepia(0.14) saturate(1.05);
+}
+
+.city-hero[data-tid='kvall'] .city-hero-img {
+  filter: brightness(0.86) sepia(0.28) saturate(1.25) hue-rotate(-8deg);
+}
+
+.city-hero[data-tid='natt'] .city-hero-img {
+  filter: brightness(0.7) saturate(0.75);
+}
+
+.city-hero[data-vader='moln'] .city-hero-img,
+.city-hero[data-vader='regn'] .city-hero-img {
+  filter: brightness(0.82) saturate(0.78);
+}
+
+.city-hero[data-vader='regn'][data-tid='natt'] .city-hero-img,
+.city-hero[data-vader='moln'][data-tid='natt'] .city-hero-img {
+  filter: brightness(0.58) saturate(0.65);
+}
+
+.city-vader-lager {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Nattens blåton, kvällens varma dis. */
+.city-vader-lager.tid-natt {
+  background: linear-gradient(180deg, rgba(12, 32, 66, 0.3), rgba(4, 14, 34, 0.36));
+}
+
+.city-vader-lager.tid-kvall {
+  background: linear-gradient(180deg, rgba(255, 150, 70, 0.14), rgba(90, 30, 60, 0.22));
+}
+
+.city-vader-lager.tid-morgon {
+  background: linear-gradient(180deg, rgba(255, 220, 150, 0.16), transparent 60%);
+}
+
+/* Regnet: snedställda strimmor som faller. */
+.city-vader-lager.vader-regn::before {
+  content: '';
+  position: absolute;
+  inset: -20% 0 0;
+  background: repeating-linear-gradient(
+    102deg,
+    transparent 0 9px,
+    rgba(255, 255, 255, 0.16) 9px 10px
+  );
+  background-size: 60px 60px;
+  animation: regnfall 0.55s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes regnfall {
+  to {
+    background-position: -12px 60px;
+  }
+}
+
+/* Snön: två lager av flingor i olika storlek och fart. */
+.city-vader-lager.vader-sno::before,
+.city-vader-lager.vader-sno::after {
+  content: '';
+  position: absolute;
+  inset: -40px 0 0;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.85) 1px, transparent 1.7px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.6) 0.8px, transparent 1.5px);
+  /* Två lager med olika, icke delbara rutstorlekar, så att flingorna inte
+     ställer upp sig på rad. */
+  background-size: 61px 67px, 41px 37px;
+  background-position: 0 0, 18px 12px;
+  animation: snofall 9s linear infinite;
+}
+
+.city-vader-lager.vader-sno::after {
+  background-size: 89px 79px, 53px 43px;
+  opacity: 0.55;
+  animation-duration: 14s;
+  animation-delay: -5s;
+}
+
+@keyframes snofall {
+  to {
+    background-position: 22px 268px, -14px 185px;
+  }
+}
+
+/* Diset: sandfärgad slöja. */
+.city-vader-lager.vader-dis {
+  background: rgba(228, 206, 170, 0.32);
+}
+
+/* Skylten med väder och klockslag. */
+.city-vader {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  background: rgba(4, 18, 28, 0.62);
+  border: 1px solid rgba(246, 239, 224, 0.22);
+  color: var(--paper);
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(4px);
+}
+
+.city-vader-glyph {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* Dagens rubrik i tidningen. */
+.paper-rubrik {
+  margin: 2px 0 6px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.25;
+  color: var(--ink);
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 8px;
+}
+
+.city-aterbesok {
+  margin: 8px 0 0;
+  font-size: 0.86rem;
+  color: var(--palm);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-vader-lager.vader-regn::before,
+  .city-vader-lager.vader-sno::before,
+  .city-vader-lager.vader-sno::after {
+    animation: none;
+  }
+}

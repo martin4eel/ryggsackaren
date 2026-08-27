@@ -87,6 +87,8 @@ import {
   type EffectLine,
 } from '../game/events';
 import { renderEventCard } from './eventcard';
+import { weatherFor } from '../game/weather';
+import { CITY_HEADLINES } from '../data/headlines';
 import { quizImageAlt, quizImageUrl } from '../data/quizImages';
 import { COIN_QUESTIONS } from '../data/questions/coinQuestions';
 
@@ -1504,9 +1506,20 @@ export class App {
     // Stadsvyn öppnar med ett vykort av staden, likt förlagan. Namn och
     // land ligger ovanpå bilden; saknas fotot faller vyn tillbaka på en
     // enfärgad bricka (klassen no-photo) i stället för en bruten bildikon.
-    const hero = el('section', { class: 'city-hero' });
+    /**
+     * Vädret och tiden på dygnet färgar fotot. Ingenting av det påverkar
+     * spelet; det finns för att Bangkok i monsunregn en kväll och Bangkok i
+     * sol en morgon ska vara två olika bilder av samma stad.
+     */
+    const vader = weatherFor(city, s.startDate, s.days);
+    const hero = el('section', {
+      class: 'city-hero',
+      'data-tid': vader.period,
+      'data-vader': vader.kind,
+    });
     hero.append(
       photoImg(city, 'city-hero-img', hero),
+      el('div', { class: `city-vader-lager vader-${vader.kind} tid-${vader.period}`, 'aria-hidden': 'true' }),
       el('div', { class: 'city-hero-scrim' }),
       el(
         'div',
@@ -1517,7 +1530,11 @@ export class App {
           { class: 'kicker' },
           `${city.country} · ${CURRENCIES[city.currency]?.name ?? city.currency}`
         ),
-        el('h1', { class: 'city-hero-title' }, city.name)
+        el('h1', { class: 'city-hero-title' }, city.name),
+        el('span', { class: 'city-vader', title: 'Väder och lokal tid' },
+          el('span', { class: 'city-vader-glyph', 'aria-hidden': 'true' }, vader.glyph),
+          vader.text
+        )
       ),
     );
 
@@ -1883,6 +1900,13 @@ export class App {
       wrap.append(intro);
     }
 
+    const antalBesok = s.visited.filter((id) => id === city.id).length;
+    const ordningstal = (n: number) =>
+      n === 2 ? 'Andra' : n === 3 ? 'Tredje' : n === 4 ? 'Fjärde' : `${n}:e`;
+    const aterbesok =
+      antalBesok > 1 && p.firstDay !== undefined && p.firstDay < s.days
+        ? `${ordningstal(antalBesok)} besöket i ${city.name}. Första gången var dag ${p.firstDay}.`
+        : '';
     const info = el('section', { class: 'panel city-panel' });
     info.append(
       el('p', { class: 'lede' }, city.blurb),
@@ -1893,6 +1917,8 @@ export class App {
           dailyCost(city, s.difficulty)
         )} per dag. Stadsbetyg: ${p.rating}/100.`
       ),
+      // Ett återbesök ska kännas som ett återbesök, inte som en ny stad.
+      aterbesok ? el('p', { class: 'city-aterbesok' }, aterbesok) : ''
     );
     wrap.append(info);
 
@@ -2105,9 +2131,13 @@ export class App {
     }
     const wrap = el('div', { class: 'stack' });
 
+    const rubriker = CITY_HEADLINES[city.id] ?? [];
+    const rubrik = rubriker.length > 0 ? rubriker[s.days % rubriker.length]! : '';
     const head = el('section', { class: 'panel paper' });
     head.append(
       el('p', { class: 'kicker' }, `${city.name} Daily · dag ${s.days}`),
+      // Dagens lokala rubrik, så att tidningen är stadens och inte spelets.
+      el('p', { class: 'paper-rubrik' }, rubrik),
       el('h1', { class: 'title' }, 'Platsannonser'),
       el(
         'p',
@@ -2959,6 +2989,9 @@ export class App {
     getProgress(s, from.id).workedJobs = [];
     s.currentCityId = target.id;
     s.visited.push(target.id);
+    // Första dagen i staden sparas för raden om återbesök.
+    const pt = getProgress(s, target.id);
+    pt.firstDay ??= s.days;
     this.travelFilter = null;
     this.commit();
     if (this.checkBroke()) return;

@@ -30,6 +30,8 @@ try {
   const { JOB_QUESTIONS } = await load('/src/data/questions/jobQuestions.ts');
   const { CITY_QUESTIONS } = await load('/src/data/questions/cityQuestions.ts');
   const { COIN_QUESTIONS } = await load('/src/data/questions/coinQuestions.ts');
+  const { CITY_CLIMATE } = await load('/src/data/climate.ts');
+  const { CITY_HEADLINES } = await load('/src/data/headlines.ts');
   const { CITIES } = await load('/src/data/cities.ts');
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
@@ -417,6 +419,13 @@ try {
       );
     if (ops.rail && !(ops.rail.speed > 20 && ops.rail.speed < 400))
       problems.push(`${c.country} har orimlig tåghastighet: ${ops.rail.speed}`);
+  }
+
+  /** Väder och tidning: varje stad behöver ett klimat och minst två rubriker. */
+  for (const c of CITIES) {
+    if (!CITY_CLIMATE[c.id]) problems.push(`${c.name} saknar klimat i data/climate.ts`);
+    if ((CITY_HEADLINES[c.id]?.length ?? 0) < 2)
+      problems.push(`${c.name} har färre än två rubriker i data/headlines.ts`);
   }
 
   /**

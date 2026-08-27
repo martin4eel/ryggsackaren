@@ -159,6 +159,15 @@ webbläsaren och överlever att sparfilen raderas.
    ordning skulle man lära sig att första brickan alltid är turistbyrån, och då
    fanns det ingen upptäckt kvar att göra.
 
+   **Vädret och tiden på dygnet** färgar fotot. Klockslaget är stadens lokala
+   tid just nu – spelar du på kvällen hemma är det morgon i Tokyo – och
+   årstiden följer resans startdatum, så en resa som börjar i december har
+   vinter i Stockholm och sommar i Sydney. Regn faller, snö singlar, natten
+   tonar blått och kvällen varmt. Inget av det påverkar spelet; det finns för
+   att Bangkok i monsunregn en kväll och Bangkok i sol en morgon ska vara två
+   olika bilder av samma stad. Kommer du tillbaka till en stad står det också
+   vilket besök i ordningen det är och när du var här första gången.
+
    **Ryggsäcken** ligger inte bland skyltarna utan uppe till höger i
    statusraden, på varje skärm, med antalet souvenirer på sig.
 
@@ -223,7 +232,9 @@ webbläsaren och överlever att sparfilen raderas.
    teckningar. Hela poängen med en bildfråga är att känna igen något man sett
    i verkligheten, och då duger inte en illustration av en marulk – det ska
    vara en marulk.
-7. **Tidningen.** Läs platsannonserna och ta ett skift. Varje fråga är en
+7. **Tidningen.** Dagens lokala rubrik står överst – *Tunnelbanan stänger
+   Slussen ännu en helg*, *Monsunen väntas två veckor tidigt* – så att
+   tidningen är stadens och inte spelets. Läs platsannonserna och ta ett skift. Varje fråga är en
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
@@ -414,6 +425,8 @@ src/
     currencies.ts          Växelkurser och formatering av belopp
     stamps.ts              Passets stämplar och villkoren för dem
     events.ts              Händelserna: texter, val och utfall. Ingen kod.
+    climate.ts             Klimattyp och höjd per stad, för vädret
+    headlines.ts           Två lokala tidningsrubriker per stad
     facts.ts               Atlasens uppslagsdata: huvudstad, språk, religion
                            och folkmängd per land, folkmängd per stad
     operators.ts           Flyg-, tåg- och bussbolag per land, med
@@ -430,6 +443,8 @@ src/
   game/
     state.ts               Speltillstånd, sparning och laddning
     rules.ts               Avstånd, priser, löner, poäng och frågeurval
+    weather.ts             Väder ur klimat, årstid och höjd; lokal tid ur
+                           tidszonen. Kosmetiskt, påverkar inget.
     events.ts              Händelsemotorn: när något händer, vad som väljs ut,
                            och vad ett val leder till
     travel.ts              Vilka färdsätt som går mellan två städer, och
