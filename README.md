@@ -345,7 +345,8 @@ webbläsaren och överlever att sparfilen raderas.
    inte fordonet; ett millimeterstort tåg på en snurrande jord såg aldrig ut
    som ett tåg. Ett tryck hoppar över filmen.
 
-   Ungefär var tredje resa händer dessutom något på vägen. Se _Händelser_
+   Ungefär var femte resa händer dessutom något på vägen, och aldrig två
+   händelser inom tre dagar. Se _Händelser_
    nedan.
 
    | Sträcka | Vad som brukar gå |

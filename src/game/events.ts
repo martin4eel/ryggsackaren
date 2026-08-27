@@ -35,15 +35,23 @@ import { getProgress } from './state';
  * ut på stan är undantaget: där är händelsen hela poängen med att gå ut.
  */
 export const EVENT_CHANCE: Record<EventTrigger, number> = {
-  resa: 0.35,
-  boende: 0.2,
-  arbete: 0.4,
+  resa: 0.22,
+  boende: 0.1,
+  arbete: 0.25,
   sevardhet: 1,
   stad: 1,
-  handel: 0.22,
+  handel: 0.12,
   mote: 1,
-  vantan: 0.25,
+  vantan: 0.12,
 };
+
+/**
+ * Andrum mellan händelser som slår till av sig själva: har något hänt de
+ * senaste dagarna får spelet vara i fred ett tag. Utan det kunde ett skift
+ * ge en händelse på jobbet, en på vandrarhemmet och en på bussen därifrån,
+ * och då är det inte längre händelser utan bakgrundsbrus.
+ */
+export const EVENT_COOLDOWN_DAYS = 3;
 
 /**
  * Hur många mystikskyltar en stad har på stadsbilden.
@@ -142,6 +150,9 @@ export function rollEvent(
   chance = EVENT_CHANCE[trigger]
 ): GameEvent | null {
   if (state.pendingEvent) return null;
+  // Det man själv valt (gatan, sevärdheten, mystikbrickan) går alltid;
+  // slumpen får vänta tills det gått några dagar sedan sist.
+  if (chance < 1 && state.days - (state.lastEventDay ?? -99) < EVENT_COOLDOWN_DAYS) return null;
   if (Math.random() >= chance) return null;
   const ctx = eventContext(state, city);
   const kandidater = eligibleEvents(trigger, ctx, state.eventsSeen);
@@ -149,6 +160,7 @@ export function rollEvent(
   if (!vald) return null;
   state.pendingEvent = { eventId: vald.id };
   state.eventsSeen.push(vald.id);
+  state.lastEventDay = state.days;
   return vald;
 }
 

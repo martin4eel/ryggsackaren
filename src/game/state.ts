@@ -146,6 +146,8 @@ export interface GameState {
    * per resa, så listan är också spärren mot att något upprepas.
    */
   eventsSeen: string[];
+  /** Resdagen då senaste händelsen slog till, för andrummet mellan dem. */
+  lastEventDay?: number;
   /**
    * Hur många souvenirer och stämplar som fanns när ryggsäcken senast
    * öppnades. Skillnaden mot dagens tal är notisen på ryggsäcksknappen, och
