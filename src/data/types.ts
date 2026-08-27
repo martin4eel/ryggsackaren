@@ -126,6 +126,13 @@ export type MinigameKind =
   /** Träffa slaget i takt med metronomen */
   | 'takt';
 
+/**
+ * Ett föremål på sorteringsbandet: en text, eller ett foto med namn. Med
+ * foton blir sorteringen en bildfråga - man ser fisken och ska veta vilket
+ * nät den hör i, i stället för att läsa ordet "torsk".
+ */
+export type PoolItem = string | { bild: string; namn: string };
+
 export interface Minigame {
   kind: MinigameKind;
   /** Rubrik på uppgiften, t.ex. "Sortera fångsten" */
@@ -152,7 +159,7 @@ export interface Minigame {
    * `items`. Utan det här blir sorteringen meningslös, eftersom föremålet
    * annars bara är korgens eget namn.
    */
-  pool?: string[][];
+  pool?: PoolItem[][];
   /** Bara för `traffa`: sådant som inte får träffas. */
   avoid?: string[];
   /**
@@ -203,8 +210,11 @@ export interface Job {
   shiftLength: number;
   /** Annonstext i tidningen */
   ad: string;
-  /** Arkadmomentet som avslutar skiftet */
-  minigame: Minigame;
+  /**
+   * Arkadmomentet som avslutar skiftet. Löneklass 1 har inget: ett
+   * ingångsjobb ska vara fem frågor och lön, inte en obligatorisk lek.
+   */
+  minigame?: Minigame;
   /** Kort miljöbeskrivning som visas på arbetsplatsen */
   scene: string;
 }

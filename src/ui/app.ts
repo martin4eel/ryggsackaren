@@ -2962,7 +2962,7 @@ export class App {
       const next = button(
         last
           ? isJob
-            ? `Avsluta dagen och gå till ${q.job?.minigame.title.toLowerCase() ?? 'sista uppgiften'}`
+            ? `Avsluta dagen och gå till ${q.job?.minigame?.title.toLowerCase() ?? 'sista uppgiften'}`
             : 'Se resultatet'
           : isJob
             ? 'Nästa arbetsdag'
@@ -3021,7 +3021,7 @@ export class App {
    */
   private renderShiftFinale(q: QuizSession, job: Job): HTMLElement {
     const wrap = el('div', { class: 'stack' });
-    const game = job.minigame;
+    const game = job.minigame!;
 
     const head = el('section', { class: 'panel worksite' });
     head.append(
@@ -3173,8 +3173,8 @@ export class App {
       this.render();
       return;
     }
-    // Arbetsdagarna är slut. Jobb avslutas med ett arkadmoment.
-    if (q.kind === 'jobb' && q.job) {
+    // Arbetsdagarna är slut. Jobb med arkadmoment avslutas med det.
+    if (q.kind === 'jobb' && q.job?.minigame) {
       q.phase = 'brief';
       this.render();
       return;
@@ -3276,7 +3276,9 @@ export class App {
     // Certifikat om du klarar tillräckligt av skiftet (se difficulty.ts). Arkadmomentet
     // väger in, så ett svagt frågeresultat kan räddas av gott handlag.
     const mgScore = q.minigameResult?.score ?? 0;
-    const shiftScore = Math.round(score * 0.75 + mgScore * 100 * 0.25);
+    const shiftScore = job.minigame
+      ? Math.round(score * 0.75 + mgScore * 100 * 0.25)
+      : score;
     const threshold = certificateThreshold(s.difficulty);
     let gotCert = false;
     if (shiftScore >= threshold) {
@@ -3299,7 +3301,7 @@ export class App {
     ];
     if (bestStreak >= 4) parts.push(`Bästa svit: ${bestStreak} i rad.`);
     if ((q.bonus ?? 0) > 0)
-      parts.push(`${job.minigame.title} gav ${this.money(q.bonus ?? 0)} i bonus.`);
+      parts.push(`${job.minigame?.title ?? 'Sista passet'} gav ${this.money(q.bonus ?? 0)} i bonus.`);
     if (gotCert)
       parts.push(
         `Certifikat i ${CATEGORY_LABELS[job.category] ?? job.category}!`

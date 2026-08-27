@@ -288,17 +288,18 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
-8. **Sista passet.** Varje skift avslutas med ett av nio arkadmoment:
-   sortera på löpande band, memorera en order och utföra den, upprepa en sekvens ur
-   minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
-   saker och låta resten vara, hålla balansen, slå i takt – eller, i
-   golfshopen och vid restaurangbordet, peka ut rätt foto åt kunden som vet
-   vad hen vill ha men inte vad det heter (*"Jag behöver en träklubba att
-   slå ut med"*, och drivern är av titan; *"Något bubbligt till skålen"*,
-   och det är inte rosén). Det ger upp
-   till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
-   till. Klarar du tillräckligt av skiftet totalt (65 procent som Turist, 75
-   som Globetrotter) får du ett **certifikat**.
+8. **Sista passet.** Ingångsjobben i löneklass 1 är bara frågorna och
+   lönen – fem dagar, inget pliktskyldigt arkadmoment. Jobben i klass 2 och 3
+   avslutas med ett **bildspel byggt på yrkets egna foton**: antingen
+   *bildval* – kunden säger vad hen vill ha och man pekar ut rätt foto av
+   fyra (*"Jag behöver en klubba att putta med"*, *"Något bubbligt till
+   skålen"*) – eller *fotosortering*, där foton rullar förbi på bandet och
+   ska dras till rätt korg (fisk eller skaldjur, Himalaya eller Anderna,
+   sträng eller blås). Namnet visas först när man svarat; att känna igen
+   fotot är uppgiften. Två undantag på egna meriter: skateboardinstruktören
+   håller balansen, och hockeytränaren sorterar spelarnamn till rätt lag.
+   Momentet ger upp till tre dagslöner i bonus, och ett felfritt moment ett
+   halvt dagsverke till.
 
    **Man börjar längst ner.** Yrkena hör till sex huvudkategorier:
    *Vetenskap & historia*, *Konst & kultur*, *Praktiska yrken*, *Äventyr &

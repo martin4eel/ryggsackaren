@@ -222,7 +222,7 @@ try {
    * `avoid` för träffmomentet, eftersom de spelen blir meningslösa utan.
    */
   const MINIGAME_KINDS = {
-    sortering: { needed: 3 },
+    sortering: { needed: 2 },
     instrument: { needed: 3 },
     sekvens: { needed: 3 },
     precision: { needed: 1 },
@@ -287,11 +287,23 @@ try {
           `Marginalen måste vara minst ${MIN_MARGINAL}, är ${easy - job.shiftLength}`
       );
 
-    // Arkadmomentet måste vara komplett och spelbart.
+    /**
+     * Arkadmomentet. Löneklass 1 har inget; klass 2 och 3 ska ha ett moment
+     * som bygger på foton (bildval, eller sortering med foton på bandet),
+     * med några namngivna undantag som är bra på egna meriter.
+     */
     const mg = job.minigame;
+    const UNDANTAG = { skateboardinstruktor: 'balans', hockeytranare: 'sortering' };
     if (!mg) {
-      problems.push(`jobb ${job.id} saknar minispel`);
+      if (job.wageClass >= 2) problems.push(`jobb ${job.id} (klass ${job.wageClass}) saknar minispel`);
     } else {
+      if (job.wageClass === 1)
+        problems.push(`jobb ${job.id} är klass 1 och ska inte ha något minispel`);
+      const fotoSortering =
+        mg.kind === 'sortering' && (mg.pool ?? []).flat().every((x) => typeof x === 'object');
+      const okej = mg.kind === 'bildval' || fotoSortering || UNDANTAG[job.id] === mg.kind;
+      if (job.wageClass >= 2 && !okej)
+        problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
       const spec = MINIGAME_KINDS[mg.kind];
       if (!spec) problems.push(`jobb ${job.id} har okänd minispelstyp ${mg.kind}`);
       if (!mg.title?.trim()) problems.push(`jobb ${job.id}: minispel utan titel`);
@@ -308,8 +320,10 @@ try {
         const katalog = new Set((mg.bildval ?? []).map((b) => b.bild));
         if (katalog.size < 6)
           problems.push(`jobb ${job.id}: bildvalet behöver minst 6 foton i katalogen, har ${katalog.size}`);
+        const finnsBild = (id) =>
+          bildManifest.has(id) || (id.startsWith('stad:') && CITIES.some((c) => c.id === id.slice(5)));
         for (const b of mg.bildval ?? []) {
-          if (!bildManifest.has(b.bild))
+          if (!finnsBild(b.bild))
             problems.push(`jobb ${job.id}: bildvalet pekar på okänd bild ${b.bild}`);
         }
         if (!Array.isArray(mg.kunder) || mg.kunder.length < 8)
@@ -337,7 +351,13 @@ try {
                 `jobb ${job.id}: korgen "${mg.items[i]}" har ${group?.length ?? 0} föremål, behöver 3`
               );
           });
-          const flat = mg.pool.flat();
+          const flat = mg.pool.flat().map((x) => (typeof x === 'string' ? x : x.bild));
+          for (const x of mg.pool.flat()) {
+            if (typeof x === 'object' && !(bildManifest.has(x.bild) || (x.bild.startsWith('stad:') && CITIES.some((c) => c.id === x.bild.slice(5)))))
+              problems.push(`jobb ${job.id}: sorteringen pekar på okänd bild ${x.bild}`);
+            if (typeof x === 'object' && !x.namn?.trim())
+              problems.push(`jobb ${job.id}: fotot ${x.bild} på bandet saknar namn`);
+          }
           if (new Set(flat).size !== flat.length)
             problems.push(`jobb ${job.id}: samma föremål finns i flera korgar`);
         }

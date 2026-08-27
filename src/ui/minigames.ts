@@ -1,4 +1,4 @@
-import type { Minigame } from '../data/types';
+import type { Minigame, PoolItem } from '../data/types';
 import { playCombo, playPad, playSound } from './audio';
 import { button, clear, el } from './dom';
 import { quizImageUrl } from '../data/quizImages';
@@ -319,11 +319,31 @@ function startSorting(
 
   host.append(status.node, beltWrap, timer.node, feedback.node, controls);
 
-  const drawItem = (bucket: number): string => {
+  const drawItem = (bucket: number): PoolItem => {
     const q = queues[bucket]!;
     const i = cursors[bucket]!;
     cursors[bucket] = (i + 1) % q.length;
     return q[i]!;
+  };
+  let aktuell: PoolItem = '';
+  const namnAv = (p: PoolItem) => (typeof p === 'string' ? p : p.namn);
+  /**
+   * Föremålet på bandet: text, eller ett foto utan namn - namnet skrivs
+   * först när man sorterat. Att känna igen fisken är hela uppgiften.
+   */
+  const visa = (p: PoolItem) => {
+    clear(item);
+    item.classList.remove('mg-item-right', 'mg-item-wrong');
+    if (typeof p === 'string') {
+      item.textContent = p;
+      item.classList.remove('mg-item-foto');
+      return;
+    }
+    item.classList.add('mg-item-foto');
+    item.append(
+      el('img', { src: quizImageUrl(p.bild), alt: '', draggable: 'false' }),
+      el('span', { class: 'mg-item-namn' }, '\u00a0')
+    );
   };
 
   const nextRound = () => {
@@ -337,11 +357,14 @@ function startSorting(
     }
     answered = false;
     const wanted = randInt(buckets.length);
-    item.textContent = drawItem(wanted);
+    aktuell = drawItem(wanted);
+    visa(aktuell);
     status.set(`Föremål ${round + 1}/${ROUNDS}`, `${correct} rätt · svit ${streak}`);
 
     // Tiden krymper med tempot, men aldrig under vad som går att hinna läsa.
-    const total = Math.max(1600, 3000 - round * 140) * ctx.slack;
+    // Ett foto tar längre att känna igen än ett ord, och får mer tid.
+    const total =
+      Math.max(1600, 3000 - round * 140) * ctx.slack * (typeof aktuell === 'string' ? 1 : 1.3);
 
     /**
      * Föremålet ska glida över bandet på exakt den tid rundan varar, annars
@@ -349,10 +372,10 @@ function startSorting(
      * fortfarande går att svara. Klassen tas bort och sätts tillbaka efter en
      * påtvingad omritning, så att animationen startar om från början.
      */
-    item.className = 'mg-item';
+    item.classList.remove('mg-item-moving');
     item.style.setProperty('--belt-time', `${total}ms`);
     void item.offsetWidth;
-    item.className = 'mg-item mg-item-moving';
+    item.classList.add('mg-item-moving');
 
     timer.run(total, () => {
       if (!answered) judge(-1, wanted);
@@ -373,6 +396,9 @@ function startSorting(
     if (answered) return;
     answered = true;
     timer.halt();
+    // Nu får fotot sitt namn.
+    const namnRuta = item.querySelector('.mg-item-namn');
+    if (namnRuta) namnRuta.textContent = namnAv(aktuell);
     const right = picked === wanted;
     if (right) {
       correct += 1;
@@ -394,7 +420,8 @@ function startSorting(
         'fel'
       );
     }
-    item.className = `mg-item ${right ? 'mg-item-right' : 'mg-item-wrong'}`;
+    item.classList.remove('mg-item-moving');
+    item.classList.add(right ? 'mg-item-right' : 'mg-item-wrong');
     round += 1;
     after(right ? 460 : 820, nextRound);
   };
