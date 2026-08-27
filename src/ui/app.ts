@@ -340,7 +340,21 @@ export class App {
    * minnet och inte i sparfilen: laddas sidan om mitt i sekvensen är resan
    * redan genomförd i tillståndet, och spelaren hamnar i den nya staden.
    */
-  private travelScene: { from: City; to: City; mode: TransportMode } | null = null;
+  private travelScene: {
+    from: City;
+    to: City;
+    mode: TransportMode;
+    km: number;
+    days: number;
+  } | null = null;
+  /**
+   * Filmens nod. Scenen ritar sig själv med requestAnimationFrame, och en
+   * omritning av skärmen - notisen som stängs efter 3,6 sekunder - fick den
+   * att byggas om från bildruta noll. Nu byggs den en gång per resa.
+   */
+  private filmNode: HTMLElement | null = null;
+  /** Brickan som just vänts upp, för inslaget i ikonraden. */
+  private nyBricka: string | null = null;
   /**
    * Vilken station man gått in i. Resebyrån är uppdelad i busstation,
    * tågstation, flygplats och hamn, som i förlagan, och listan visar då bara
@@ -719,7 +733,8 @@ export class App {
       const scene = this.travelScene;
       const filmskal = el('div', { class: 'shell' });
       const film = el('main', { class: 'view', 'data-screen': 'resefilm' });
-      film.append(this.renderTravelFilm(scene));
+      this.filmNode ??= this.renderTravelFilm(scene);
+      film.append(this.filmNode);
       filmskal.append(film);
       this.root.append(filmskal);
       this.afterRender(null);
@@ -1783,8 +1798,22 @@ export class App {
       const vanster = ((kol + 0.35 + jx * 0.3) / KOLUMNER) * 100;
       // Översta raden ligger under valutaraden, inte bredvid den.
       const topp = ((rad + (rad === 0 ? 0.6 : 0.35) + jy * 0.3) / RADER) * 100;
+      /**
+       * Myntet har två sidor. Framsidan är silver med kompassrosen; baksidan
+       * är det brickan visar sig vara: funktionens egen ikon, en stjärna för
+       * en händelse, ett frågetecken för en fråga. Vändningen slutar med
+       * baksidan upp, och den ligger kvar en stund innan något händer - så
+       * att man hinner se vad man vände upp.
+       */
+      const baksidaIkon: IconName = pl.id === 'fraga' ? 'fraga' : pl.ikon;
       const b = button(
-        el('span', { class: 'coin-body' }, icon('mynt')),
+        el('span', { class: 'coin-3d' },
+          el('span', { class: 'coin-face coin-face-fram' }, icon('mynt')),
+          el('span', { class: `coin-face coin-face-bak ${pl.bricka ? 'coin-face-bricka' : ''}` },
+            icon(baksidaIkon)
+          ),
+          el('span', { class: 'coin-edge', 'aria-hidden': 'true' })
+        ),
         // Mystik- och frågebrickor löser ut sig själva när de vänds. En
         // funktion vänds bara upp och ligger sedan kvar i raden nedanför.
         () => this.vandBricka(pl.id, pl.bricka ? pl.onClick : undefined),
@@ -1814,7 +1843,7 @@ export class App {
           pl.onClick();
         },
         {
-          class: `sign ${pl.klar ? 'sign-klar' : ''}`,
+          class: `sign ${pl.klar ? 'sign-klar' : ''} ${this.nyBricka === pl.id ? 'sign-ny' : ''}`,
           title: pl.beskrivning,
           'aria-label': `${pl.namn}. ${pl.beskrivning}`,
           'data-spot': pl.id,
@@ -1847,6 +1876,8 @@ export class App {
             } kvar att vända på.`;
     }
     hero.append(mynt);
+    // Inslaget spelas en gång; nästa omritning ska inte spela det igen.
+    this.nyBricka = null;
     // Ikonraden ligger under fotot, inte ovanpå det: fotot är stadsbilden och
     // ska synas, och en uppvänd ikon ska vara lätt att hitta igen.
     wrap.append(
@@ -2006,6 +2037,11 @@ export class App {
       `.city-coin[data-spot="${spotId}"]`
     );
     knapp?.classList.add('city-coin-vand');
+    // Inga fler mynt får vändas medan det här ligger och visar sig.
+    this.root
+      .querySelectorAll<HTMLButtonElement>('.city-coin')
+      .forEach((c) => (c.disabled = true));
+    this.nyBricka = spotId;
     window.setTimeout(() => {
       const nu = this.state;
       if (!nu) return;
@@ -2019,7 +2055,7 @@ export class App {
       this.commit();
       this.scrollToTopNext = false;
       this.render();
-    }, 480);
+    }, 1150);
   }
 
   /**
@@ -2131,25 +2167,47 @@ export class App {
     }
     const wrap = el('div', { class: 'stack' });
 
+    /**
+     * Tidningen ska se ut som en tidning: ett huvud med namn, datum och
+     * väder, dagens rubrik, en notis, och sedan platsannonserna som en
+     * annonssida med spalter och tunna linjer - inte som en lista med kort.
+     */
     const rubriker = CITY_HEADLINES[city.id] ?? [];
     const rubrik = rubriker.length > 0 ? rubriker[s.days % rubriker.length]! : '';
-    const head = el('section', { class: 'panel paper' });
+    const notis = rubriker.length > 1 ? rubriker[(s.days + 1) % rubriker.length]! : '';
+    const vader = weatherFor(city, s.startDate, s.days);
+    const head = el('section', { class: 'panel paper paper-head' });
     head.append(
-      el('p', { class: 'kicker' }, `${city.name} Daily · dag ${s.days}`),
+      el('div', { class: 'masthead' },
+        el('span', { class: 'masthead-namn' }, `${city.name} Daily`),
+        el('span', { class: 'masthead-meta' },
+          `Dag ${s.days} · ${vader.glyph} ${vader.temp}° · ${this.money(5)}`
+        )
+      ),
       // Dagens lokala rubrik, så att tidningen är stadens och inte spelets.
       el('p', { class: 'paper-rubrik' }, rubrik),
-      el('h1', { class: 'title' }, 'Platsannonser'),
-      el(
-        'p',
-        { class: 'muted' },
-        p.visits === 0
-          ? 'Du har inte varit på turistbyrån än. Utan stadsbetyg får du bara de enklaste jobben.'
-          : `Ditt stadsbetyg är ${p.rating}/100.`
-      )
+      notis
+        ? el('p', { class: 'paper-notis' },
+            el('span', { class: 'paper-notis-etikett' }, 'I korthet'),
+            ` ${notis}.`
+          )
+        : '',
+      el('div', { class: 'paper-avdelning' },
+        el('h1', { class: 'paper-avdelning-namn' }, 'Platsannonser'),
+        el(
+          'span',
+          { class: 'paper-avdelning-meta' },
+          p.visits === 0 ? 'Inget stadsbetyg än' : `Stadsbetyg ${p.rating}`
+        )
+      ),
+      p.visits === 0
+        ? el('p', { class: 'muted paper-tips' },
+            'Du har inte varit på turistbyrån än. Utan stadsbetyg får du bara de enklaste jobben.')
+        : ''
     );
     wrap.append(head);
 
-    const list = el('section', { class: 'panel' });
+    const list = el('section', { class: 'panel paper paper-annonser' });
     for (const job of cityJobs(city)) {
       const allowed = canTakeJob(s, job);
       const worked = p.workedJobs.includes(job.id);
@@ -2158,6 +2216,7 @@ export class App {
         class: `job ${allowed && !worked ? '' : 'job-locked'}`,
       });
       card.append(
+        el('p', { class: 'annons-etikett' }, 'Sökes'),
         el('div', { class: 'job-head' },
           el('h3', {}, job.title),
           el('span', { class: `tag tag-w${job.wageClass}` }, `Löneklass ${job.wageClass}`)
@@ -2930,31 +2989,63 @@ export class App {
     from: City;
     to: City;
     mode: TransportMode;
+    km: number;
+    days: number;
   }): HTMLElement {
     const wrap = el('div', { class: 'stack' });
-    const panel = el('section', { class: 'panel travel-panel' });
+    const panel = el('section', { class: `panel travel-panel travel-${scene.mode}` });
+    const FARDSATT_VERB: Record<TransportMode, string> = {
+      flyg: 'I luften',
+      tag: 'På rälsen',
+      buss: 'På vägen',
+      farja: 'Till sjöss',
+    };
     panel.append(
-      el(
-        'p',
-        { class: 'kicker' },
-        `${MODE_LABELS[scene.mode]} · ${scene.from.name} → ${scene.to.name}`
-      ),
-      el('h1', { class: 'travel-title' }, 'På väg')
+      el('div', { class: 'travel-head' },
+        el('div', {},
+          el(
+            'p',
+            { class: 'kicker' },
+            `${MODE_LABELS[scene.mode]} · ${scene.from.name} → ${scene.to.name}`
+          ),
+          el('h1', { class: 'travel-title' }, FARDSATT_VERB[scene.mode])
+        ),
+        el('span', { class: 'travel-ikon' }, icon(scene.mode))
+      )
     );
+    // Mätaren och kilometerräknaren följer filmens förlopp.
+    const kvar = el('span', { class: 'travel-km' }, `${scene.km.toLocaleString('sv-SE')} km kvar`);
+    const bar = el('span', { class: 'travel-bar' });
     panel.append(
       renderTravelScene({
         from: scene.from,
         to: scene.to,
+        rotate: scene.mode === 'flyg',
         vehicle: (size) => iconGroup(`${scene.mode}-profil` as IconName, size),
+        onFrame: (t) => {
+          bar.style.width = `${Math.round(t * 100)}%`;
+          const rest = Math.max(0, Math.round(scene.km * (1 - t)));
+          kvar.textContent = t >= 1 ? 'Framme' : `${rest.toLocaleString('sv-SE')} km kvar`;
+        },
         onDone: () => {
           this.travelScene = null;
+          this.filmNode = null;
           this.scrollToTopNext = true;
           this.render();
         },
       })
     );
     panel.append(
-      el('p', { class: 'muted travel-skip' }, 'Tryck för att hoppa över.')
+      el('div', { class: 'travel-remsa' },
+        el('span', { class: 'travel-stad' }, scene.from.name),
+        el('span', { class: 'travel-spar' }, bar),
+        el('span', { class: 'travel-stad travel-stad-mal' }, scene.to.name)
+      ),
+      el('div', { class: 'travel-fakta' },
+        kvar,
+        el('span', {}, `${scene.days} ${scene.days === 1 ? 'dags' : 'dagars'} restid`),
+        el('span', { class: 'travel-skip' }, 'Tryck för att hoppa över')
+      )
     );
     wrap.append(panel);
     return wrap;
@@ -3007,7 +3098,14 @@ export class App {
     // syns först när resefilmen spelat klart.
     this.fireEvent('resa');
     // Filmen visar sträckan; ankomstsignalen kommer när den spelat klart.
-    this.travelScene = { from, to: target, mode: option.mode };
+    this.filmNode = null;
+    this.travelScene = {
+      from,
+      to: target,
+      mode: option.mode,
+      km: stracka,
+      days: option.days,
+    };
     this.notify(
       `${option.label} till ${target.name}. Framme efter ${option.days} ${
         option.days === 1 ? 'dag' : 'dagar'

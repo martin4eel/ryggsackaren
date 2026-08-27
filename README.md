@@ -141,7 +141,11 @@ webbläsaren och överlever att sparfilen raderas.
    **Första gången du kommer till en stad ligger alla brickor nedvända.** De
    ligger utspridda över stadsbilden som silvermynt och vaggar långsamt; du vet
    inte vilken som är flygplatsen och vilken som är något annat förrän du vänt
-   på dem, en och en. Hemstaden är undantaget – där har du bott. Ett uppvänt
+   på dem, en och en. Ett mynt har två sidor: vändningen snurrar det två och
+   ett halvt varv och landar med baksidan upp – funktionens egen ikon på
+   papper, eller en guldbricka med stjärna eller frågetecken – och ligger kvar
+   en stund så att man hinner se vad man vände upp innan ikonen slår in i
+   raden nedanför. Hemstaden är undantaget – där har du bott. Ett uppvänt
    mynt lämnar fotot och lägger sig i **ikonraden under bilden**, där allt är
    lätt att hitta igen.
 
@@ -272,8 +276,10 @@ webbläsaren och överlever att sparfilen raderas.
 
    När biljetten är bokad spelas resan upp på en roterande jordglob: klotet
    zoomar ut från avresestaden, fordonet följer storcirkeln medan jorden
-   vrider sig under det, och till sist zoomar det in mot målet. Ett tryck
-   hoppar över filmen.
+   vrider sig under det, och till sist zoomar det in mot målet. Under klotet
+   löper en mätare mellan avresa och mål med kilometrarna som är kvar. Flyget
+   ses uppifrån och vrids efter kursen; buss, tåg och färja är sidovyer som
+   bara speglas när kursen går åt väster. Ett tryck hoppar över filmen.
 
    Ungefär var tredje resa händer dessutom något på vägen. Se _Händelser_
    nedan.

@@ -38,14 +38,22 @@ export interface TravelSceneOptions {
   to: City;
   /** Bygger fordonet i den storlek scenen ber om, centrerat kring origo. */
   vehicle: (size: number) => SVGElement;
+  /**
+   * Vrids fordonet efter kursen? Ett flygplan sett uppifrån ska peka dit det
+   * flyger. En buss, ett tåg eller en färja sedd från sidan ska inte stå på
+   * nosen när rutten går söderut - de speglas bara när kursen går åt väster.
+   */
+  rotate: boolean;
   duration?: number;
   onDone: () => void;
+  /** Anropas varje bildruta med förloppet 0-1, för en mätare utanför scenen. */
+  onFrame?: (t: number) => void;
 }
 
 const GLOB_STORLEK = 320;
 
 export function renderTravelScene(options: TravelSceneOptions): HTMLElement {
-  const { from, to, vehicle, onDone } = options;
+  const { from, to, vehicle, onDone, rotate, onFrame } = options;
   const reducedMotion =
     window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const duration = reducedMotion ? 0 : (options.duration ?? 4200);
@@ -155,11 +163,27 @@ export function renderTravelScene(options: TravelSceneOptions): HTMLElement {
     const vinkel =
       (Math.atan2(framat.y - S / 2, framat.x - S / 2) * 180) / Math.PI;
     while (fordon.firstChild) fordon.removeChild(fordon.firstChild);
-    fordon.append(vehicle(Math.max(14, r * 0.09)));
+    const storlek = Math.max(18, r * 0.11);
+    // En mjuk skugga under fordonet, så att det ligger på klotet och inte i det.
+    const skugga = svgEl('ellipse', {
+      class: 'globe-vehicle-shadow',
+      cx: 0,
+      cy: storlek * 0.5,
+      rx: storlek * 0.55,
+      ry: storlek * 0.18,
+    });
+    fordon.append(skugga, vehicle(storlek));
+    const atVaster = Math.abs(vinkel) > 90;
+    const orientering = rotate
+      ? `rotate(${vinkel})`
+      : atVaster
+        ? 'scale(-1 1)'
+        : '';
     fordon.setAttribute(
       'transform',
-      `translate(${S / 2} ${S / 2}) rotate(${vinkel})`
+      `translate(${S / 2} ${S / 2}) ${orientering}`
     );
+    onFrame?.(t);
   };
 
   if (duration === 0) {

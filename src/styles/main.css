@@ -5350,14 +5350,41 @@ body.sheet-oppen {
   pointer-events: none;
 }
 
-.coin-body {
+/*
+ * Myntet är ett riktigt tvåsidigt föremål: en framsida, en baksida och en
+ * kant, i ett rum med perspektiv. Vaggningen vrider hela myntet så att man
+ * ser kanten; vändningen snurrar det två och ett halvt varv och landar med
+ * baksidan upp - den sida som säger vad brickan var.
+ */
+.coin-3d {
   position: relative;
-  display: grid;
-  place-items: center;
+  display: block;
   width: 40px;
   height: 40px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform;
+  animation: myntsnurr 3.6s ease-in-out infinite;
+}
+
+.coin-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  /* Välvd silveryta: ljus uppe till vänster, mörkare mot kanten. */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/*
+ * Framsidan ligger strax framför kanten och baksidan strax bakom. Vänds
+ * myntet ett halvt varv byter de plats i djupled, och baksidan hamnar då
+ * framför kanten - inte bakom den, som den gjorde när kanten själv låg bakom
+ * båda och täckte baksidans ikon efter vändningen.
+ */
+.coin-face-fram {
+  transform: translateZ(1.5px);
   background: radial-gradient(
     circle at 32% 26%,
     #ffffff 0%,
@@ -5366,21 +5393,16 @@ body.sheet-oppen {
     #b6bbc0 100%
   );
   box-shadow:
-    /* ljus innerring och räfflad kant */
     inset 0 0 0 1.5px rgba(255, 255, 255, 0.95),
     inset 0 0 0 4px rgba(140, 148, 156, 0.5),
-    /* välvningen: skugga nedtill, ljus upptill */
     inset 0 -5px 7px rgba(60, 72, 84, 0.28),
     inset 0 4px 6px rgba(255, 255, 255, 0.75),
     0 5px 12px rgba(4, 16, 26, 0.45);
   color: #59626d;
-  transform-style: preserve-3d;
-  animation: myntsnurr 3.6s ease-in-out infinite;
 }
 
-/* Glansen: en ljusstrimma som glider över ytan i takt med vaggningen, som
-   ljuset gör över ett riktigt mynt man vrider i handen. */
-.coin-body::before {
+/* Glansen glider över framsidan i takt med vaggningen. */
+.coin-face-fram::before {
   content: '';
   position: absolute;
   inset: 3px;
@@ -5398,10 +5420,31 @@ body.sheet-oppen {
   pointer-events: none;
 }
 
-/* Kanten: en mörkare skiva strax bakom ytan som blir synlig när myntet
-   vrider sig - det är den som ger tjocklek. */
-.coin-body::after {
-  content: '';
+/* Baksidan: papper med brickans egen ikon, som skyltarna i raden. */
+.coin-face-bak {
+  transform: rotateY(180deg) translateZ(1.5px);
+  background: radial-gradient(circle at 35% 30%, #fbf6ea 0%, var(--paper) 55%, #e2d8c2 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.9),
+    inset 0 0 0 4px rgba(212, 132, 43, 0.7),
+    inset 0 -5px 7px rgba(60, 72, 84, 0.2),
+    0 5px 12px rgba(4, 16, 26, 0.45);
+  color: #0d2430;
+}
+
+/* En bricka som löser ut något - händelse eller fråga - får guldkant. */
+.coin-face-bricka {
+  background: radial-gradient(circle at 35% 30%, #ffe6a8 0%, var(--sun) 55%, var(--sun-dark) 100%);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.85),
+    inset 0 0 0 4px rgba(120, 70, 10, 0.5),
+    inset 0 -5px 7px rgba(90, 50, 10, 0.3),
+    0 5px 12px rgba(4, 16, 26, 0.45);
+  color: #4a2a06;
+}
+
+/* Kanten: en skiva strax bakom, som blir synlig när myntet står snett. */
+.coin-edge {
   position: absolute;
   inset: 0;
   border-radius: 50%;
@@ -5413,19 +5456,23 @@ body.sheet-oppen {
     #cfd3d6 75%,
     #8e969e
   );
-  transform: translateZ(-3px);
-  z-index: -1;
+  transform: translateZ(0);
 }
 
-/* Kompassrosen präglad i ytan, inte tryckt ovanpå. */
 .city-coin svg {
   width: 22px;
   height: 22px;
   filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.85));
 }
 
-.city-coin:hover .coin-body,
-.city-coin:focus-visible .coin-body {
+.coin-face-bak svg {
+  width: 24px;
+  height: 24px;
+  filter: none;
+}
+
+.city-coin:hover .coin-face-fram,
+.city-coin:focus-visible .coin-face-fram {
   color: var(--sun-dark);
   box-shadow:
     inset 0 0 0 1.5px rgba(255, 255, 255, 0.95),
@@ -5440,8 +5487,12 @@ body.sheet-oppen {
   outline-offset: 3px;
 }
 
+.city-coin:disabled {
+  cursor: default;
+}
+
 @media (min-width: 700px) {
-  .coin-body {
+  .coin-3d {
     width: 54px;
     height: 54px;
   }
@@ -5450,25 +5501,30 @@ body.sheet-oppen {
     width: 28px;
     height: 28px;
   }
+
+  .coin-face-bak svg {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 /*
  * Varje bricka får sin egen fasförskjutning, annars vaggar hela rutan i takt
  * och det ser ut som en enda sak i stället för som flera mynt.
  */
-.city-coin:nth-child(3n) .coin-body {
+.city-coin:nth-child(3n) .coin-3d {
   animation-delay: -1.4s;
 }
 
-.city-coin:nth-child(3n + 1) .coin-body {
+.city-coin:nth-child(3n + 1) .coin-3d {
   animation-delay: -2.8s;
 }
 
 /*
  * Myntet vaggar i stället för att snurra runt. Ett helt varv gör att brickan
  * står på högkant en stund varje sekund, och då är den både osynlig och svår
- * att träffa med fingret. Knappt sextio grader åt vardera hållet läser ögat
- * ändå som en roterande bricka - särskilt nu när det finns perspektiv.
+ * att träffa med fingret. Med perspektiv läser ögat ±56° som en bricka som
+ * vrider sig i rummet, och kanten skymtar vid ytterlägena.
  */
 @keyframes myntsnurr {
   0%,
@@ -5490,21 +5546,48 @@ body.sheet-oppen {
   }
 }
 
-/* Vändningen: myntet tar fart, ställer sig på högkant och landar. */
-.city-coin-vand .coin-body {
-  animation: myntvand 0.48s cubic-bezier(0.35, 0, 0.3, 1) forwards;
+/*
+ * Vändningen: två och ett halvt varv med ett litet lyft, och landning med
+ * baksidan upp. Sedan ligger myntet kvar och visar vad det var, tills raden
+ * nedanför tar över.
+ */
+.city-coin-vand .coin-3d {
+  animation: myntvand 0.75s cubic-bezier(0.3, 0, 0.25, 1) forwards;
 }
 
-/* Vändningen får däremot snurra hela varv - där är det just det som är poängen. */
 @keyframes myntvand {
   0% {
-    transform: rotateY(0deg) scale(1);
+    transform: rotateY(-20deg) scale(1);
   }
-  55% {
-    transform: rotateY(540deg) scale(1.3);
+  45% {
+    transform: rotateY(520deg) scale(1.35);
   }
   100% {
-    transform: rotateY(1080deg) scale(1);
+    transform: rotateY(900deg) scale(1);
+  }
+}
+
+/* Ikonen som just landat i raden slår in och glöder till. */
+.sign-ny .sign-badge {
+  animation: skyltin 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+  animation-delay: 0.05s;
+}
+
+@keyframes skyltin {
+  0% {
+    transform: scale(0.3) rotate(-25deg);
+    opacity: 0;
+    box-shadow: 0 0 0 0 rgba(242, 166, 59, 0);
+  }
+  60% {
+    transform: scale(1.15) rotate(4deg);
+    opacity: 1;
+    box-shadow: 0 0 0 8px rgba(242, 166, 59, 0.35);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(242, 166, 59, 0);
   }
 }
 
@@ -5603,14 +5686,22 @@ body.sheet-oppen {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .coin-body,
-  .city-coin-vand .coin-body {
+  .coin-3d {
     animation: myntpuls 2.6s ease-in-out infinite;
   }
 
-  .coin-body::before {
+  .city-coin-vand .coin-3d {
+    animation: none;
+    transform: rotateY(180deg);
+  }
+
+  .coin-face-fram::before {
     animation: none;
     background-position: 50% 0;
+  }
+
+  .sign-ny .sign-badge {
+    animation: none;
   }
 
   @keyframes myntpuls {
@@ -5822,5 +5913,258 @@ body.sheet-oppen {
   .city-vader-lager.vader-sno::before,
   .city-vader-lager.vader-sno::after {
     animation: none;
+  }
+}
+
+
+/* ====================================================================
+   RESEFILMEN
+   Klotet är kvar; runt det finns nu ett huvud med färdsättet, en remsa
+   med avresa och mål, en mätare som fylls i takt med rutten och en
+   kilometerräknare. Det är skillnaden mellan en sak som spelas upp och en
+   resa man är med på.
+   ==================================================================== */
+
+.travel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.travel-ikon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--sea);
+  color: var(--paper);
+  box-shadow: 0 4px 12px rgba(4, 16, 26, 0.35);
+}
+
+.travel-ikon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.globe-vehicle {
+  color: var(--paper);
+  filter: drop-shadow(0 2px 4px rgba(4, 16, 26, 0.7));
+}
+
+.globe-vehicle-shadow {
+  fill: rgba(4, 16, 26, 0.35);
+}
+
+.travel-remsa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.travel-stad {
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  color: var(--ink);
+}
+
+.travel-stad-mal {
+  color: var(--sun-dark);
+}
+
+.travel-spar {
+  position: relative;
+  flex: 1 1 auto;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--paper-dim);
+  overflow: hidden;
+}
+
+.travel-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sun-dark), var(--sun));
+  transition: width 0.12s linear;
+}
+
+.travel-fakta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 14px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.travel-km {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ====================================================================
+   TIDNINGEN
+   Ett tidningshuvud, dagens rubrik, en notis, och platsannonserna som en
+   annonssida: tunna linjer, spalter på bred skärm, "Sökes" i marginalen.
+   ==================================================================== */
+
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 6px;
+  border-bottom: 3px double var(--ink);
+}
+
+.masthead-namn {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.masthead-meta {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.paper-head .paper-rubrik {
+  margin-top: 12px;
+  font-size: 1.3rem;
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.paper-notis {
+  margin: 6px 0 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.paper-notis-etikett {
+  font-family: var(--font-display);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stamp);
+}
+
+.paper-avdelning {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 6px 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.paper-avdelning-namn {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.paper-avdelning-meta {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.paper-tips {
+  margin-top: 8px;
+  font-size: 0.84rem;
+}
+
+/* Annonserna: inga kort, bara linjer och luft, som på en riktig annonssida. */
+.paper-annonser .job {
+  background: transparent;
+  border-radius: 0;
+  padding: 12px 0 14px;
+  border-top: 1px dotted rgba(29, 43, 52, 0.35);
+  gap: 5px;
+  break-inside: avoid;
+}
+
+.paper-annonser .job:first-child {
+  border-top: 0;
+  padding-top: 2px;
+}
+
+.paper-annonser .job + .job {
+  margin-top: 0;
+}
+
+.annons-etikett {
+  margin: 0 !important;
+  font-family: var(--font-display);
+  font-size: 0.62rem !important;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--stamp);
+}
+
+.paper-annonser .job-head h3 {
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+
+.paper-annonser .job p {
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.paper-annonser .job-employer {
+  font-size: 0.74rem !important;
+}
+
+.paper-annonser .job .btn {
+  align-self: flex-start;
+  padding: 9px 18px;
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+
+.paper-annonser .job-locked {
+  opacity: 0.55;
+}
+
+@media (min-width: 700px) {
+  .paper-annonser {
+    column-count: 2;
+    column-gap: 28px;
+    column-rule: 1px solid rgba(29, 43, 52, 0.25);
+  }
+
+  /* Spalterna tar över; det gamla rutnätet med knappen till höger stör. */
+  .paper-annonser .job {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .paper-annonser .job > .btn,
+  .paper-annonser .job > .note {
+    grid-column: auto;
+    grid-row: auto;
+    max-width: none;
+    justify-self: start;
   }
 }

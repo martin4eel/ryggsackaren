@@ -28,6 +28,7 @@ export type IconName =
   | 'skylt-karta'
   | 'skylt-stad'
   | 'skylt-mystik'
+  | 'fraga'
   | 'skylt-sevardhet'
   | 'mynt'
   | 'buss-profil'
@@ -258,6 +259,19 @@ const ICONS: Record<IconName, Part[]> = {
       tag: 'path',
       attrs: { d: 'M10.4 9.6h3.2v4.2h-3.2z', class: 'icon-knockout', stroke: 'none' },
     },
+  ],
+  fraga: [
+    // Frågetecken, för myntet som visar sig vara en fråga om staden.
+    {
+      tag: 'path',
+      attrs: {
+        d: 'M8.2 8.6a3.9 3.9 0 1 1 5.6 3.5c-1.2.6-1.8 1.3-1.8 2.6v.6',
+        fill: 'none',
+        stroke: 'currentColor',
+        'stroke-width': '2.4',
+      },
+    },
+    { tag: 'circle', attrs: { cx: '12', cy: '19', r: '1.5', fill: 'currentColor', stroke: 'none' } },
   ],
   'skylt-mystik': [
     // Stjärnan bakom brickan: det man hittar när man vänt på den.
