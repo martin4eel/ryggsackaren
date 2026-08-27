@@ -488,6 +488,13 @@ export class App {
   }
 
   private go(screen: GameState['screen']): void {
+    // Att öppna ryggsäcken kvitterar notisen på knappen.
+    if (screen === 'ryggsack' && this.state) {
+      this.state.packSeen = {
+        souvenirs: this.state.backpack.length,
+        stamps: this.state.stamps.length,
+      };
+    }
     if (!this.state) return;
     // Ett arkadmoment kan ha timers igång. Stäng av dem vid skärmbyte.
     stopAllMinigames();
@@ -1397,21 +1404,36 @@ export class App {
     let packKnapp: HTMLButtonElement | null = null;
     if (s.screen !== 'slut') {
       const packat = s.backpack.length;
-      packKnapp = (
-        button(
-          el('span', { class: 'hud-pack-body' },
-            icon('skylt-ryggsack'),
-            el('span', { class: 'hud-pack-tal' }, String(packat))
-          ),
-          () => this.go('ryggsack'),
-          {
-            class: `hud-pack ${s.screen === 'ryggsack' ? 'hud-pack-har' : ''}`,
-            title: `Ryggsäck och pass: ${packat} ${
-              packat === 1 ? 'souvenir' : 'souvenirer'
-            }, ${s.stamps.length} stämplar`,
-            'aria-label': `Ryggsäck och pass. ${packat} souvenirer, ${s.stamps.length} stämplar.`,
-          }
-        )
+      /**
+       * Notisen är det som är nytt sedan ryggsäcken senast öppnades: köpta
+       * souvenirer och tagna stämplar. Att visa det totala antalet såg ut
+       * som en notis som aldrig gick att kvittera.
+       */
+      const nya =
+        Math.max(0, packat - s.packSeen.souvenirs) +
+        Math.max(0, s.stamps.length - s.packSeen.stamps);
+      const iRyggsacken = s.screen === 'ryggsack';
+      packKnapp = button(
+        el('span', { class: 'hud-pack-body' },
+          icon('skylt-ryggsack'),
+          nya > 0 ? el('span', { class: 'hud-pack-tal' }, String(nya)) : ''
+        ),
+        // Knappen är en växel: i ryggsäcken tar den en tillbaka till staden.
+        () => this.go(iRyggsacken ? 'stad' : 'ryggsack'),
+        {
+          class: `hud-pack ${iRyggsacken ? 'hud-pack-har' : ''}`,
+          title: iRyggsacken
+            ? 'Stäng ryggsäcken'
+            : `Ryggsäck och pass: ${packat} ${
+                packat === 1 ? 'souvenir' : 'souvenirer'
+              }, ${s.stamps.length} stämplar${nya > 0 ? `, ${nya} nytt` : ''}`,
+          'aria-label': iRyggsacken
+            ? 'Stäng ryggsäcken och gå tillbaka till staden'
+            : `Ryggsäck och pass. ${packat} souvenirer, ${s.stamps.length} stämplar${
+                nya > 0 ? `, ${nya} nytt sedan sist` : ''
+              }.`,
+          'aria-pressed': iRyggsacken ? 'true' : 'false',
+        }
       );
     }
 

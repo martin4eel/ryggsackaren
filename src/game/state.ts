@@ -140,6 +140,12 @@ export interface GameState {
    */
   eventsSeen: string[];
   /**
+   * Hur många souvenirer och stämplar som fanns när ryggsäcken senast
+   * öppnades. Skillnaden mot dagens tal är notisen på ryggsäcksknappen, och
+   * den ska nollas av att man tittar - inte ligga kvar som ett fast antal.
+   */
+  packSeen: { souvenirs: number; stamps: number };
+  /**
    * Händelsen som väntar på svar eller på att kvitteras. Den ligger i
    * tillståndet i stället för i gränssnittet, så att ett val man ställts inför
    * inte försvinner för att fliken laddades om.
@@ -202,6 +208,7 @@ export function createGame(
     cityStats: {},
     rykte: 0,
     eventsSeen: [],
+    packSeen: { souvenirs: 0, stamps: 0 },
   };
 }
 
@@ -283,6 +290,11 @@ function migrate(
   state.cityStats ??= {};
   state.rykte ??= 0;
   state.eventsSeen ??= [];
+  // En pågående resa har redan sett det som ligger i ryggsäcken.
+  state.packSeen ??= {
+    souvenirs: state.backpack?.length ?? 0,
+    stamps: state.stamps?.length ?? 0,
+  };
   /**
    * Det gamla resehändelsesystemet sparade hela händelsen i `lastEvent`. Den
    * formen finns inte längre, och en halvkvitterad gammal händelse är inte
