@@ -235,7 +235,7 @@ export const CITIES: City[] = [
     airport: true,
     hub: true,
     blurb:
-      'Afrikas största stad vid Nilens strand. Pyramiderna i Giza restes för omkring 4 500 år sedan och är världens äldsta bevarade underverk.',
+      'en av Afrikas största städer vid Nilens strand. Pyramiderna i Giza restes för omkring 4 500 år sedan och är världens äldsta bevarade underverk.',
     landmark: 'Cheopspyramiden',
     jobs: ['arkeologassistent', 'kamelforare', 'basarforsaljare', 'nilbatskapten', 'vaxlare'],
     souvenirs: ['papyrusrulle', 'kryddpase', 'silverarmband'],

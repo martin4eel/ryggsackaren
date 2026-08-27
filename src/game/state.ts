@@ -10,6 +10,8 @@ export type Screen =
   | 'station'
   /** Atlasen: var i världen du står, och fakta om staden och landet */
   | 'varldskarta'
+  /** Turistbyråns broschyr: fakta om staden, innan provet */
+  | 'broschyr'
   | 'turistbyra'
   | 'tidning'
   | 'jobb'
@@ -27,6 +29,7 @@ const KANDA_SKARMAR = new Set<Screen>([
   'stad',
   'station',
   'varldskarta',
+  'broschyr',
   'turistbyra',
   'tidning',
   'jobb',

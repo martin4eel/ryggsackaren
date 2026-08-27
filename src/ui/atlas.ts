@@ -1,4 +1,5 @@
 import { CITIES, CITY_BY_ID } from '../data/cities';
+import { CITY_FACTS } from '../data/cityFacts';
 import { CURRENCIES } from '../data/currencies';
 import { COUNTRY_FACTS, CITY_POPULATION, populationText } from '../data/facts';
 import type { City } from '../data/types';
@@ -232,6 +233,13 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
       rad('Ditt stadsbetyg', `${rating} av 100`)
     )
   );
+  const fakta = CITY_FACTS[city.id] ?? [];
+  if (fakta.length) {
+    stad.append(
+      el('h3', { class: 'broschyr-rubrik' }, 'Bra att veta'),
+      el('ul', { class: 'broschyr-lista' }, ...fakta.map((t) => el('li', {}, t)))
+    );
+  }
   wrap.append(stad);
 
   // ---- landet

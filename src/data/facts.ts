@@ -60,7 +60,7 @@ export const COUNTRY_FACTS: Record<string, CountryFacts> = {
   },
   Irland: {
     capital: 'Dublin',
-    language: 'Irländska och engelska',
+    language: 'Iriska och engelska',
     religion: 'Katolicism',
     population: '5,2 miljoner',
   },

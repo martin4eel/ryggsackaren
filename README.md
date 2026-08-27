@@ -207,7 +207,15 @@ webbläsaren och överlever att sparfilen raderas.
    Orden skiljer sig åt: *gate* på flygplatsen, *spår* på stationen, *läge* vid
    bussterminalen och *kaj* i hamnen. Det gör också anläggningen – Köping har
    en busstation, Stockholm en bussterminal.
-5. **Turistbyrån.** Svara på frågor om staden, under en remsa av stadens foto
+5. **Turistbyrån.** Först en broschyr: sex till åtta korta stycken om staden
+   (`src/data/cityFacts.ts`) – Stadshusets tre kronor, Stockholmssyndromet,
+   Bellman, semlan som tog livet av en kung. Den är gratis att läsa och står
+   också i atlasen. Provet handlar om sådant som står i den, så det lönar sig
+   att läsa: läs, lär, svara. Varje stad har omkring tjugo frågor med kuriosa
+   efter svaret, i På spåret-anda – landmärken, historia, musik, konst,
+   litteratur, mat.
+
+   Sedan svarar man på frågor om staden, under en remsa av stadens foto
    – som i förlagan, där man aldrig svarade på en fråga utan att se var man
    stod. Arbetsplatserna har på samma sätt stadens foto bakom sig. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att

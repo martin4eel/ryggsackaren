@@ -29,6 +29,7 @@ try {
   const load = (p) => server.ssrLoadModule(p);
   const { JOB_QUESTIONS } = await load('/src/data/questions/jobQuestions.ts');
   const { CITY_QUESTIONS } = await load('/src/data/questions/cityQuestions.ts');
+  const { CITY_FACTS } = await load('/src/data/cityFacts.ts');
   const { COIN_QUESTIONS } = await load('/src/data/questions/coinQuestions.ts');
   const { CITY_CLIMATE } = await load('/src/data/climate.ts');
   const { CITY_HEADLINES } = await load('/src/data/headlines.ts');
@@ -139,7 +140,11 @@ try {
         .filter((w) => !STOPPORD.has(w) && w.length > 2)
     );
 
-  for (const [jobId, pool] of Object.entries(JOB_QUESTIONS)) {
+  const banker = [
+    ...Object.entries(JOB_QUESTIONS).map(([id, pool]) => [`jobb ${id}`, pool]),
+    ...Object.entries(CITY_QUESTIONS).map(([id, pool]) => [`stad ${id}`, pool]),
+  ];
+  for (const [jobId, pool] of banker) {
     for (let i = 0; i < pool.length; i++) {
       for (let j = i + 1; j < pool.length; j++) {
         if (stam(pool[i].a[0]) !== stam(pool[j].a[0])) continue;
@@ -149,7 +154,7 @@ try {
         const andel = gemensamma / Math.max(1, Math.min(A.size, B.size));
         if (andel >= 0.34)
           problems.push(
-            `jobb ${jobId}: två frågor med samma svar "${pool[i].a[0]}" och samma ämne:\n` +
+            `${jobId}: två frågor med samma svar "${pool[i].a[0]}" och samma ämne:\n` +
               `      "${pool[i].q}"\n      "${pool[j].q}"`
           );
       }
@@ -162,6 +167,10 @@ try {
     // Saknas filen hämtas den med: node scripts/fetch-city-photos.mjs
     if (!existsSync(join(ROOT, 'public', 'cities', `${city.id}.jpg`)))
       problems.push(`stad ${city.id} saknar foto public/cities/${city.id}.jpg`);
+
+    const fakta = CITY_FACTS[city.id] ?? [];
+    if (fakta.length < 4)
+      problems.push(`stad ${city.id} har bara ${fakta.length} faktastycken i broschyren, minst 4 behövs`);
 
     const questions = CITY_QUESTIONS[city.id];
     if (!questions) {

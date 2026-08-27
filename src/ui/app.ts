@@ -1,4 +1,5 @@
 import { CITIES, CITY_BY_ID } from '../data/cities';
+import { CITY_FACTS } from '../data/cityFacts';
 import { CURRENCIES, formatMoney } from '../data/currencies';
 import type { EventTone, EventTrigger } from '../data/events';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
@@ -878,6 +879,9 @@ export class App {
       case 'stad':
         main.append(this.renderCity());
         break;
+      case 'broschyr':
+        main.append(this.renderBrochure());
+        break;
       case 'turistbyra':
         main.append(
           this.renderQuiz(this.quiz?.kind === 'mynt' ? this.city.name : 'Turistbyrån')
@@ -1740,7 +1744,10 @@ export class App {
       p.visits === 0
         ? 'Svara på frågor om staden för att få ett betyg som öppnar bättre jobb.'
         : `Gör om provet för att höja ditt betyg (nu ${p.rating}/100).`,
-      () => this.startCityQuiz()
+      () => {
+        playSound('sida');
+        this.go('broschyr');
+      }
     );
     plats('tidning', 'skylt-tidning', 'Tidningen', 'Läs platsannonserna och ta ett arbetsskift.', () => {
       playSound('sida');
@@ -2268,6 +2275,46 @@ export class App {
       this.notify(`En stilla dag vid ${city.landmark}.`);
     }
     this.render();
+  }
+
+  /**
+   * Turistbyråns broschyr. Gratis att läsa, och det är meningen att man ska:
+   * provet handlar om staden, och här står sådant som är bra att veta innan.
+   */
+  private renderBrochure(): HTMLElement {
+    const s = this.state!;
+    const city = this.city;
+    const p = getProgress(s, city.id);
+    const fakta = CITY_FACTS[city.id] ?? [];
+    const wrap = el('div', { class: 'stack broschyr' });
+
+    const panel = el('section', { class: 'panel' });
+    panel.append(
+      el('div', { class: 'panel-head' },
+        el('h2', {}, 'Turistbyrån'),
+        el('span', { class: 'tag' }, city.name)
+      ),
+      el('p', { class: 'lede' }, city.blurb)
+    );
+    if (fakta.length) {
+      panel.append(
+        el('h3', { class: 'broschyr-rubrik' }, `Bra att veta om ${city.name}`),
+        el('ul', { class: 'broschyr-lista' }, ...fakta.map((t) => el('li', {}, t)))
+      );
+    }
+    panel.append(
+      el('p', { class: 'broschyr-not' },
+        p.visits === 0
+          ? 'Provet är fem frågor om staden. Betyget avgör vilka jobb du får söka. Det kostar en dag.'
+          : `Ditt betyg i ${city.name} är ${p.rating} av 100. Ett nytt prov kostar en dag och kan bara höja det.`
+      ),
+      el('div', { class: 'row' },
+        button('Gör provet', () => this.startCityQuiz(), { class: 'btn btn-primary' }),
+        button('Tillbaka', () => this.go('stad'), { class: 'btn btn-ghost' })
+      )
+    );
+    wrap.append(panel);
+    return wrap;
   }
 
   private startCityQuiz(): void {

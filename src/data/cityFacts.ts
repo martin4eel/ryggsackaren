@@ -1,0 +1,522 @@
+/**
+ * Turistbyråns broschyr: några korta stycken om varje stad, som visas innan
+ * provet och i atlasen. Läs, lär, svara - frågorna på turistbyrån får gärna
+ * handla om sådant som står här.
+ *
+ * Fylls per stad; inledningen "Visste du att" utelämnas.
+ */
+export const CITY_FACTS: Record<string, string[]> = {
+  addisabeba: [
+
+    'Addis Abeba betyder ny blomma. Kejsarinnan Taytu valde namnet 1886 för att hon gillade de varma källorna; maken Menelik II ville flytta igen när veden tog slut, tills någon planterade eukalyptus från Australien överallt.',
+    'Den etiopiska kalendern har tretton månader och ligger sju-åtta år efter vår. Dygnet börjar dessutom vid soluppgången, så klockan sex på morgonen är klockan tolv. Turister missar många frukostar.',
+    'Vid Adwa 1896 besegrade Etiopien Italien och blev det enda afrikanska land som aldrig koloniserades. Italien kom tillbaka 1936 och stannade fem år, vilket etiopierna räknar som ockupation, inte koloni.',
+    'Haile Selassie, kejsare från 1930, hette Ras Tafari före kröningen. Det är därifrån rastafarirörelsen på Jamaica fått sitt namn, och sin kejsare.',
+    'Amhariska skrivs med ge\'ez-skrift, där varje tecken är en stavelse. Omkring 250 tecken, och Afrikas äldsta skrift som fortfarande används.',
+    'Kaffeceremonin tar en timme och bjuder på tre koppar ur lerkannan jebena. Att gå efter första koppen är oartigt. Att gå efter tredje går bra, men då är det sent.',
+    'Abebe Bikila vann OS-maraton i Rom 1960 barfota, på gatorna där Italiens armé en gång paraderat. Fyra år senare vann han i Tokyo med skor, sex veckor efter en blindtarmsoperation.',
+    'Mulatu Astatke uppfann Ethio-jazz på 1960-talet genom att korsa etiopiska femtonsskalor med latinjazz. Världen upptäckte det 2005, via en Jim Jarmusch-film. I Addis visste man redan.',
+  ],
+  amman: [
+
+    'Amman hette Philadelphia under antiken, efter den egyptiske kungen Ptolemaios II Filadelfos. I Bibeln heter staden Rabbat Ammon. Nuvarande namn är det äldsta.',
+    'Mitt i centrum ligger en romersk teater från 100-talet för sextusen åskådare, byggd in i kullen mot norr så att publiken slipper solen. Den används fortfarande för konserter.',
+    'Husen är vita därför att stadens byggregler kräver fasad av den lokala kalkstenen. Amman kallas Den vita staden och ser likadan ut på 1920-talsfoton, fast mindre.',
+    'På Citadellet står resterna av ett Herkulestempel. En marmorhand som hittats där tyder på att statyn var tretton meter hög, vilket är mycket hand.',
+    'Mansaf är nationalrätten: lamm i sås på torkad yoghurt, jameed, som ser ut som vita stenar innan den löses upp. Äts med högerhanden, stående, ur ett gemensamt fat.',
+    'Döda havet har 34 procents salthalt, nästan tio gånger havets. Man flyter så bra att det är svårt att simma på mage, och ytan sjunker en meter om året.',
+    'Petra spelade Gralens tempel i Indiana Jones och det sista korståget 1989. Bakom fasaden finns bara ett tomt rum. Wadi Rum spelade Arabien i Lawrence av Arabien 1962 och Mars i The Martian.',
+    'Jordanien blev självständigt 1946 som Transjordanien. Kung Abdullah II, som tillträdde 1999, gjorde en statistroll i Star Trek: Voyager tre år tidigare. Han är enda kungen i Starfleet.',
+  ],
+  amsterdam: [
+
+    'Husen lutar framåt med flit. Med kroken på gaveln hissas soffan upp utan att skrapa fasaden, för trappan är inte ett alternativ.',
+    'På 1630-talet kostade en tulpanlök lika mycket som ett kanalhus. I februari 1637 kostade den som en lök.',
+    'Staden heter dammen i Amstel. Dammen ligger kvar under Damtorget, floden är svårare att hitta.',
+    'Anne Frank gömde sig i två år bakom en bokhylla vid Prinsengracht. Dagboken räddades av sekreteraren Miep Gies, som lade den i en skrivbordslåda.',
+    'Concertgebouw från 1888 har en av världens bästa akustiker. Arkitekten visste inget om akustik.',
+    'New York hette Nya Amsterdam till 1664. Holländarna bytte till sig Surinam och tyckte att de gjort en bra affär.',
+    'Stroopwafeln läggs på kaffekoppen tills sirapen mjuknar. Alla vet det, ingen säger det.',
+    'Rijksmuseum öppnade 1885 och ritades av samme man som Centralstationen. Turister går ofta till fel hus.',
+  ],
+  aten: [
+
+    'Aten blev huvudstad 1834 och hade då några tusen invånare. Kungen var bayrare och tyckte att ruinerna var stämningsfulla.',
+    'Vakterna vid parlamentet har kjolar med 400 veck, ett för varje år under osmanskt styre. Strykningen tar sin tid.',
+    'Sirtakin hittades på för filmen Zorba 1964, eftersom Anthony Quinn hade skadat foten. Nu är den nationaldans.',
+    'Maratonloppet är 42 195 meter för att kungafamiljen i London 1908 ville se målgången från sin loge. Från Marathon till Aten är det fyra mil.',
+    'Kvinnofigurerna som bär upp Erechtheion är kopior. Fem original står i museet nedanför, den sjätte i London, och de fem sägs sakna henne.',
+    'Kullen Lykabettos är högre än Akropolis. Athena tappade den på vägen, enligt myten, vilket är en bra ursäkt.',
+    'Agora betyder samlingsplats. Här tjatade Sokrates på folk tills staden fick nog. Agorafobi kommer av samma ord.',
+    'Retsina smakar kåda för att amforor tätades med harts. Smaken behölls när kärlen byttes ut – grekerna hade vant sig.',
+  ],
+  auckland: [
+
+    'En tredjedel av alla nyzeeländare bor i Auckland, och staden är världens största polynesiska stad. Det maoriska namnet Tamaki Makaurau betyder Tamaki, åtrådd av många.',
+    'Staden ligger på ett näs mellan Tasmanhavet och Stilla havet. Maorierna släpade kanoterna över, ett par kilometer, i stället för att segla runt ön.',
+    'Rangitoto, den perfekta vulkankonen i hamninloppet, är bara 600 år gammal. Folk bodde på grannön och såg den komma upp.',
+    'Waitangifördraget 1840 finns på engelska och maori, och texterna säger olika saker. Det diskuteras fortfarande, varje 6 februari.',
+    'Nya Zeeland gav kvinnor rösträtt 1893, först i världen. Kate Sheppard pryder tiodollarsedeln. Femman har Edmund Hillary, biodlaren från Auckland som stod på Everest 1953.',
+    'Auckland kallas City of Sails och har stått värd för America\'s Cup tre gånger. Sky Tower är 328 meter, och man får hoppa från det.',
+    'Kiwifrukten är kinesisk och hette kinesiskt krusbär tills 1959, då exportörerna döpte om den efter fågeln. Hangi är en jordugn; maten ligger under jord i timmar.',
+    'Fylke ligger på en fårfarm vid Matamata söder om stan. Lorde skrev "Royals" i förorten Takapuna när hon var 16.',
+  ],
+  bangkok: [
+
+    'Bangkok heter egentligen Krung Thep, änglarnas stad. Det fulla namnet har 168 bokstäver och är världens längsta ortnamn. Thailändarna nöjer sig med de två första orden.',
+    'Staden grundades 1782, sedan burmeserna bränt den gamla huvudstaden Ayutthaya. Dynastin som flyttade hit regerar fortfarande.',
+    'Kanalerna gav Bangkok namnet Österns Venedig. Sedan fyllde man igen de flesta och fick i stället Österns bilkö.',
+    'Smaragdbuddhan i Stora palatset är av jade. Kungen byter personligen dess kläder tre gånger om året, efter årstiden.',
+    'Pad thai är en regeringsprodukt: premiärministern lanserade rätten på 1940-talet för att stärka nationalkänslan och spara ris. Samme man döpte om Siam till Thailand.',
+    'Kung Bhumibol regerade i sjuttio år och spelade saxofon med Benny Goodman. Musikalen "Kungen och jag" får däremot inte visas i landet.',
+    'Vid nyårsfesten Songkran i april tvättade man förr Buddhastatyer. Nu tvättar man alla, med sprutpistol.',
+    'Jim Thompson återupplivade den thailändska sidenindustrin, gick ut på en promenad i Malaysia 1967 och kom aldrig tillbaka. Huset står kvar.',
+  ],
+  barcelona: [
+
+    'Sagrada Famílias högsta torn blir 172 meter, en meter lägre än berget Montjuïc. Gaudí ville inte tävla med Gud. Byggtiden gör det.',
+    'Park Güell var tänkt som ett villaområde med sextio tomter. Två såldes. Gaudí köpte den ena, för någon måste.',
+    'Pa amb tomàquet är bröd gnidet med tomat, vitlök och olja. Den som lägger något ovanpå har missförstått Katalonien.',
+    'Columbus står på en kolonn vid hamnen och pekar mot Amerika. Fast han pekar mot Medelhavet, vilket hela hans karriär.',
+    'George Orwell stred i Barcelona 1937 och sköts i halsen. Han skrev Hyllning till Katalonien och sålde under tusen exemplar.',
+    'Montserrat Caballé och Freddie Mercury sjöng "Barcelona" till spelen 1992. Mercury dog året innan, låten spelades ändå.',
+    'Casa Batlló har ett tak som en drakrygg. Sankt Göran, som dödade draken, är Kataloniens skyddshelgon och firas med rosor och böcker.',
+    'Rutnätsstaden Eixample har avskurna hörn på varje kvarter, så att hästvagnar kunde svänga. Nu parkerar man där.',
+  ],
+  berlin: [
+
+    'Tv-tornet vid Alexanderplatz var DDR:s stolthet. När solen träffar kulan bildas ett kors, vilket berlinarna kallade påvens hämnd.',
+    'Under blockaden 1948 försörjdes Västberlin från luften. Piloter som släppte godis i fallskärmar kallades russinbombarna.',
+    'Berlins vapendjur är björnen. Filmfestivalen delar ut guldbjörnar, och staden är full av plastbjörnar som ingen bett om.',
+    'Munken som hela Tyskland kallar Berliner heter Pfannkuchen i Berlin. Det som resten av landet kallar Pfannkuchen är en pannkaka.',
+    'David Bowie skrev Heroes efter att ha sett sin producent kyssa någon vid muren utanför studiofönstret. Producenten var gift med någon annan.',
+    'Checkpoint Charlie är bara bokstaven C. Alpha och Bravo låg vid motorvägen och fick inga turister.',
+    'Vintern 1946 höggs nästan hela Tiergarten ner till ved och blev potatisland. Träden är tillbaka, potatisen är borta.',
+    'Marlene Dietrich sa nej till Hitler och ja till Hollywood, sjöng för amerikanska soldater och begravdes ändå hemma i Berlin 1992.',
+  ],
+  buenosaires: [
+
+    'Caminito i La Boca byggdes av invandrare från Genua och målades med färg som blev över i hamnen. Fotbollsklubben Boca Juniors kallas därför "genueserna".',
+    'Mate dricks ur en kalebass genom ett metallrör. Att säga tack betyder att man inte vill ha mer, vilket förvirrar artiga svenskar.',
+    'Bokhandeln El Ateneo Grand Splendid var teater. Kaféet står på scenen, och i logerna sitter folk och läser utan att köpa.',
+    'Jorge Luis Borges var chef för nationalbiblioteket och nästan blind. Han kallade det Guds ironi och fortsatte diktera.',
+    'Astor Piazzolla förnyade tangon med bandoneon. Traditionalisterna sa att man inte kunde dansa till den. Han höll med.',
+    'Eva Perón ligger på Recoleta-kyrkogården. Hennes kropp var försvunnen i 16 år innan den kom dit, vilket är en egen historia.',
+    'Avenida 9 de Julio har sexton filer och är uppkallad efter självständighetsdagen 1816. Att korsa den till fots tar två gröna gubbar.',
+    'Påven Franciskus föddes här och har medlemskort i fotbollsklubben San Lorenzo. Kortet förnyas årligen.',
+  ],
+  cusco: [
+
+    'Cusco betyder "navel" på quechua. Inkarikets fyra delar strålade ut härifrån, vilket gör hela riket till en mage.',
+    'Enligt en tolkning var inkastaden byggd i form av en puma. Sacsayhuamán var huvudet och zigzagmurarna tänderna.',
+    'Spanjorerna byggde ett kloster ovanpå soltemplet Coricancha. Vid jordbävningen 1950 rasade klostret. Templet stod kvar.',
+    'Cuy är helstekt marsvin och festmat. I katedralen finns en målning av Nattvarden där lärjungarna äter just det.',
+    'Peru har över 3 000 sorters potatis. Sedan inkatiden frystorkas en del till chuño, som håller i åratal och smakar därefter.',
+    'Solfesten Inti Raymi förbjöds 1572 och återuppstod 1944 som teaterföreställning. Den spelas fortfarande, med kejsare i bärstol.',
+    'Hiram Bingham kom till Machu Picchu 1911 och gjorde ruinen världsberömd. En elvaårig pojke från trakten visade honom vägen.',
+    'Túpac Amaru II ledde 1780 ett uppror mot spanjorerna. Två sekler senare fick en rappare i New York hans namn.',
+  ],
+  dakar: [
+
+    'Dakar ligger på halvön Kap Verde, Afrikas västligaste punkt. Öarna med samma namn ligger 60 mil västerut och döptes efter halvön, inte tvärtom.',
+    'Senegals förste president Léopold Sédar Senghor var poet och den förste afrikanen i Franska akademien. Flygplatsen bär hans namn, vilket är fler flygplatser än de flesta poeter får.',
+    'Dakarrallyt startade 1979 i Paris och gick i mål i Dakar fram till 2007. Sedan flyttade det till Sydamerika och därefter Saudiarabien. Namnet stannade kvar.',
+    'Youssou N\'Dour sjöng "7 Seconds" med Neneh Cherry 1994 och gjorde mbalax, dansmusiken byggd på sabartrummor, känd i hela världen. Senare blev han turistminister.',
+    'Lac Retba norr om staden är rosa. Färgen kommer från alger som trivs i det extremt salta vattnet, och saltet skördas för hand av män som smörjer in sig i sheasmör för att inte fräta sönder.',
+    'Afrikanska renässansmonumentet från 2010 är 49 meter högt, högre än Frihetsgudinnan, och byggt av Nordkorea. Många i Dakar tyckte att kvinnans klänning var för kort och notan för lång.',
+    'På Île de Gorée står Maison des Esclaves med Dörren utan återvändo, ut mot Atlanten. Mandela, Obama och påven har alla stått i den öppningen.',
+    'Teranga är ordet för senegalesisk gästfrihet, och fotbollslandslaget heter Terangas lejon. Yassa är kyckling i lök och citron, mafé är jordnötsgrytan, och baobaben är nationalträd med frukt som kallas apbröd.',
+  ],
+  dubai: [
+
+    'Dubai levde på pärlfiske tills japanska odlade pärlor slog ut handeln på 1930-talet. Oljan kom på 1960-talet och står i dag för bara några procent av Dubais ekonomi; Abu Dhabi har nästan all olja.',
+    'Förenade Arabemiraten bildades 1971 av sju emirat, när britterna drog sig ur. Bahrain och Qatar tackade nej till att gå med. Abu Dhabi är huvudstad, hur mycket Dubai än syns.',
+    'Dubai Creek skiljer Deira från Bur Dubai. Viken var den ursprungliga hamnen, och dhower från Iran lastar fortfarande kylskåp vid kajen, granne med guldsouken.',
+    'Palm Jumeirah är en konstgjord ö formad som en palm. Ögruppen The World utanför föreställer en världskarta, men de flesta länderna är fortfarande obebyggd sand.',
+    'Burj Al Arab, hotellet som ser ut som ett segel, kallar sig sjustjärnigt. Beteckningen finns inte. Fem är max, men ingen har lyckats säga det till dem.',
+    'Ski Dubai i Mall of the Emirates håller minus fyra grader året runt, med pistmaskin och pingviner. Utanför är det plus fyrtio.',
+    'Tunnelbanan öppnade 2009 helt förarlös, då världens längsta av sitt slag. En vagn i varje tåg är Guldklass med skinnfåtöljer, och en är reserverad för kvinnor och barn.',
+    'Expo 2020 hölls 2021-2022 och behöll namnet trots pandemin. Det var första världsutställningen i arabvärlden. Burj Khalifa, med 163 våningar, var redan klar sedan 2010 och behövde inte skynda sig.',
+  ],
+  dublin: [
+
+    'Arthur Guinness skrev 1759 ett hyreskontrakt på 9 000 år för bryggeriet vid St. James’s Gate. Han räknade med att det skulle gå bra.',
+    'Påskupproret 1916 utgick från postkontoret GPO på O’Connell Street. Kulhålen i pelarna finns kvar; posten delas fortfarande ut därifrån.',
+    'Nelsonpelaren på O’Connell Street sprängdes 1966. På platsen står nu The Spire, en 120 meter hög stålnål som dublinborna har fler öknamn på än man kan trycka.',
+    'Oscar Wilde ligger halvt på ett stenblock i Merrion Square, mitt emot barndomshemmet. Ena sidan av ansiktet ler, den andra gör det inte.',
+    'Irland vann Eurovision 1992, 1993 och 1994 och fick stå värd tre år i rad. Pausnumret 1994 hette Riverdance och blev större än vinnarlåten.',
+    'Phoenix Park är en av Europas största inhägnade stadsparker. Där bor presidenten, USA:s ambassadör och en hjord dovhjortar, ungefär i den ordningen.',
+    'Hurling spelas på Croke Park med klubba och en boll som kan nå 150 km/h. Sporten är över tusen år gammal och fortfarande amatör.',
+    'U2 bildades 1976 sedan en fjortonåring satt upp en lapp på skolans anslagstavla. Lappen var Larry Mullens; sångaren blev Bono, döpt efter en hörapparatsbutik.',
+  ],
+  goteborg: [
+
+    'Göta älv är bara 93 kilometer lång men för mest vatten av alla svenska älvar. Den tar helt enkelt Vänern med sig ut i Kattegatt.',
+    'Svenska Ostindiska kompaniet seglade från Göteborg till Kanton på 1700-talet och kom hem med te, siden och porslin. En kopia av skeppet Götheborg gjorde om resan 2005–2007, den här gången utan att gå på grund vid hemkomsten.',
+    'Volvos första bil, ÖV4 med smeknamnet Jakob, rullade ut på Hisingen 1927. Enligt legenden var bakaxeln felmonterad, så den första bilen kunde bara backa.',
+    'Håkan Hellström fyllde Ullevi två kvällar i rad 2016, drygt 70 000 personer per kväll. Alla sjöng med, inte alla höll tonen.',
+    'På öarna i södra skärgården är bilar förbjudna. Öborna kör flakmoped, och färjan från Saltholmen ingår i kollektivtrafiken.',
+    'Carl Milles Poseidon på Götaplatsen väckte anstöt 1931, och skulptören fick krympa vissa detaljer innan staden godkände honom.',
+    'Evert Taube växte upp på Vinga, där fadern var fyrmästare. Havet han sjöng om började bokstavligen på trappan.',
+    'Chalmers grundades 1829 för pengar som William Chalmers tjänat på Ostindiska kompaniet. Tekniska högskolan är alltså byggd på te.',
+  ],
+  hanoi: [
+
+    'Hanoi betyder innanför floden, och floden är Röda floden. Den är verkligen röd, av lera från Kina.',
+    'Ho Chi Minh utropade självständigheten på Ba Dinh-torget 1945 med ett citat ur USA:s självständighetsförklaring. Det hjälpte inte. Han ville bli kremerad; han ligger balsamerad i ett mausoleum på samma torg.',
+    'Litteraturtemplet är Vietnams första universitet, grundat 1070. De godkända fick sina namn huggna på stenstelar som bärs av sköldpaddor. Sköldpaddorna har hållit i 900 år.',
+    'Fängelset Hoa Lo döptes av amerikanska krigsfångar till Hanoi Hilton. John McCain bodde där i fem och ett halvt år. Han rekommenderade det inte.',
+    'Vietnameserna kallar Vietnamkriget för amerikanska kriget. Det är en fråga om var man står.',
+    'Äggkaffe, ca phe trung, uppfanns 1946 när mjölken tog slut. Obama åt bun cha för sex dollar här 2016; bordet är nu inglasat.',
+    'Vietnamesiska skrivs med latinska bokstäver och sex toner, tack vare jesuiter på 1600-talet. Vattendockteatern är äldre: den började på översvämmade risfält.',
+    'Staden har miljontals mopeder och inga riktiga övergångsställen. Gå lugnt och rakt, så flyter de runt. Landet ser ut som en bärstång med en riskorg i varje ände; Hanoi är i den norra.',
+  ],
+  havanna: [
+
+    'Under kupolen i El Capitolio ligger en diamant i golvet. Alla avstånd på Kuba mäts därifrån. Den stals 1946 och dök upp på presidentens skrivbord två år senare.',
+    'Fidel Castro tog makten 1959 och talade sedan i 4 timmar och 29 minuter i FN. Det är fortfarande rekord.',
+    'Che Guevara pryder Inrikesministeriets fasad i stål. På grannhuset hänger Camilo Cienfuegos och säger "det går bra, Fidel".',
+    'Kubakrisen 1962 varade i tretton dagar. Den löstes med en hemlig byteshandel om robotar i Turkiet, som ingen fick berätta om.',
+    'Ropa vieja betyder "gamla kläder" och är strimlat nötkött i tomatsås. Ris med svarta bönor heter "morer och kristna". Kubanerna döper mat med fantasi.',
+    'Cha-cha-cha uppfanns i Havanna på 1950-talet. Namnet är ljudet av fötterna som skrapar i golvet, och det gör de fortfarande.',
+    'Världens minsta fågel, bikolibrin, finns bara på Kuba. Den väger två gram och är lätt att missa, vilket den räknar med.',
+    'Key West i Florida ligger 90 miles bort, närmare än Miami. Baseboll kom samma väg och blev nationalsport.',
+  ],
+  helsingfors: [
+
+    'Helsingfors blev huvudstad 1812 när tsar Alexander I flyttade den från Åbo. Närmare S:t Petersburg, längre från Sverige. Det var tanken.',
+    'Senatstorget och domkyrkan ritades av tysken Carl Ludvig Engel, som gjorde staden till ett litet S:t Petersburg i vitt.',
+    'Sveaborg byggdes av Sverige men gavs upp till Ryssland 1808 nästan utan strid. Kommendanten Cronstedt blev landsförrädare på vers hos Runeberg.',
+    'Sommar-OS 1952 skulle ha hållits 1940. Olympiastadions torn är 72,71 meter högt, exakt lika långt som Matti Järvinens världsrekord i spjut.',
+    'När Lordi vunnit Eurovision 2006 samlades 80 000 personer på Salutorget och sjöng Hard Rock Hallelujah i kör. Det räknades som världens största karaoke.',
+    'Marimekkos valmuemönster Unikko ritades 1964 av Maija Isola, efter att grundaren förbjudit blommönster. Det är fortfarande företagets mest sålda.',
+    'Nokia började 1865 som pappersbruk vid ån Nokia och gjorde gummistövlar och kablar innan mobiltelefonerna. Stövlarna görs fortfarande.',
+    'Kippis betyder skål, kiitos betyder tack. Blandar man ihop dem går det ändå bra.',
+  ],
+  istanbul: [
+
+    'Hagia Sofia var världens största katedral i nästan tusen år, tills Sevilla byggde en större på 1520-talet. Kupolen tog fem år att bygga - renoveringen har tagit längre.',
+    'Blå moskén är inte blå utanpå. Namnet kommer från tjugotusen kakelplattor från Iznik på insidan, och de sex minareterna gjorde att sultanen fick skicka en sjunde till Mecka för att inte förarga någon.',
+    'Turkarna dricker mer te per person än något annat folk, ur små tulpanformade glas. Kaffet, som de gjorde världsberömt, är mest till för att spå i sumpen.',
+    'Simit, brödringen med sesam, har sålts från vagnar sedan 1500-talet. Den är fortfarande billigare än en tidning, och betydligt mer aktuell.',
+    'Tünel, den 573 meter långa bergbanan under Beyoğlu, öppnade 1875. Bara London hade en underjordisk bana tidigare. Resan tar en och en halv minut, kön ofta längre.',
+    'Galatatornet byggdes av genuesiska handelsmän 1348. På 1600-talet ska en man ha flugit därifrån över Bosporen med hemgjorda vingar. Sultanen belönade honom med en påse guld och landsförvisning.',
+    'Orientexpressens passagerare fick ett eget hotell vid ändstationen, Pera Palace. Agatha Christie bodde i rum 411, och Atatürk i 101, som nu är museum där klockorna står på 09.05.',
+    'Orhan Pamuk fick Nobelpriset 2006 och byggde sedan ett museum för sin roman Oskuldens museum, med 4 213 cigarettfimpar som huvudpersonen samlat. Romanen har biljett på sista sidan.',
+  ],
+  kairo: [
+
+    'Kairos arabiska namn al-Qahira betyder Den segrande. Fatimiderna grundade staden 969, när planeten Mars, al-Qahir, stod på himlen. Det är förmodligen enda gången Mars fått bestämma ett stadsnamn.',
+    'Cheopspyramiden består av omkring 2,3 miljoner stenblock. Med tjugo års byggtid blir det ett block var tredje minut, dygnet runt, utan semester.',
+    'Al-Azhar grundades 970 och är äldre än Bologna och Oxford. Studenterna satt i ring kring pelarna, en pelare per ämne.',
+    'Naguib Mahfouz fick Nobelpriset 1988 för sina romaner om gamla Kairo. Han satt gärna på kaféet El Fishawi i basaren Khan el-Khalili, som hållit öppet i över 200 år, dygnet runt.',
+    'Sångerskan Umm Kulthum sände en konsert första torsdagen varje månad. Hela arabvärlden stannade. Vid hennes begravning 1975 fyllde miljoner Kairos gator, fler än vid presidentens.',
+    'Suezkanalen invigdes 1869 och Verdi beställdes att skriva Aida till Kairos nya operahus. Han blev klar två år för sent, vilket är snabbt för en opera.',
+    'Koshari, Kairos vardagsrätt, är ris, linser, pasta, kikärter och tomatsås i samma skål. Tre kolhydrater till priset av en.',
+    'Grand Egyptian Museum vid pyramiderna öppnade helt 2025 efter tjugo års bygge. Tutankhamons fem tusen gravföremål visas nu samlade. Han var farao i tio år och museiföremål i hundra.',
+  ],
+  kapstaden: [
+
+    'Kapstaden grundades 1652 av Jan van Riebeeck som grönsaksland för Ostindiska kompaniets skepp. Trädgården är i dag stadspark och staden kallas Moderstaden, som Sydafrikas äldsta.',
+    'Sydostvinden kallas Cape Doctor eftersom den blåser bort smogen. Den lägger också molnet över Taffelberget, vilket kallas duken, och blåser omkull turister.',
+    'Nelson Mandela frigavs 1990 efter 27 år och höll sitt första tal från stadshusets balkong. Fyra år senare var han president. Robben Island tar en halvtimme med färja, i motsatt riktning.',
+    'Bo-Kaap är stadsdelen med färgglada hus där kapmalajerna bott sedan 1700-talet. Husen sägs ha målats när slaveriet avskaffades 1834, efter att alla i ett sekel varit ålagda vitt.',
+    'Christiaan Barnard genomförde världens första hjärttransplantation på Groote Schuur 1967. Patienten levde i 18 dagar, Barnard blev världskändis på en natt.',
+    'Rooibos växer bara i Cederbergen och är ingen tebuske utan en ärtväxt. Protean, nationalblomman, släpper sina frön först i en skogsbrand. Båda klarar sig bra utan hjälp.',
+    'På Boulders Beach bor en koloni glasögonpingviner, också kallade åsnepingviner, eftersom de skriar som åsnor. De delar strand med badgästerna och håller mer på reglerna.',
+    'J.M. Coetzee föddes i Kapstaden och fick Nobelpriset 2003. Han vann Bookerpriset två gånger och hämtade inget av dem. Nobelpriset hämtade han.',
+  ],
+  kathmandu: [
+
+    'I Katmandu bor en levande gudinna, Kumari. Hon väljs som liten flicka och avgår vid puberteten. Sedan får hon pension och gå på marken igen.',
+    'Buddha föddes i Lumbini i södra Nepal, vilket nepaleserna gärna påpekar för indier. Kejsar Ashoka satte upp en pelare på platsen redan 249 f.Kr.',
+    'Swayambhunath kallas Apstemplet, för aporna. De är heliga och vet om det. Trappan har 365 steg.',
+    'Tenzing Norgay och Edmund Hillary nådde toppen av Everest 1953. Vem som satte foten där först kom de överens om att inte säga.',
+    'Nepal ligger 5 timmar och 45 minuter före Greenwich, en kvart före Indien, och skriver år 2083 från april 2026. Det är en självständig nation och vill att klockan visar det.',
+    'Kronprinsen sköt ihjäl nästan hela kungafamiljen 2001. Monarkin avskaffades 2008. Gurkhasoldaterna, som britterna rekryterat sedan 1815, tjänstgör fortfarande.',
+    'Jordbävningen 2015 dödade nära 9 000 och fällde tornet Dharahara. Det står upp igen sedan 2021.',
+    'Momo, degknyten med chutney, kom från Tibet och är stadens snabbmat. Jon Krakauers "Tunn luft" handlar om stormen på Everest 1996, då åtta dog.',
+  ],
+  kopenhamn: [
+
+    'Rundetårn byggdes 1642 som observatorium, och man går upp på en spiralramp utan trappsteg. Peter den store ska ha ridit uppför 1716; tsarinnan tog vagnen.',
+    'Carlsberg fick sitt namn efter grundarens son Carl och kullen i Valby där bryggeriet låg. Far och son grälade sedan om ölet i decennier.',
+    'Britterna bombade Köpenhamn 1807 och seglade hem med hela danska flottan. Danmark valde sedan Napoleons sida, vilket inte heller gick bra.',
+    'Christiansborg rymmer Folketinget, Högsta domstolen och statsministeriet under samma tak. Slottet har brunnit ner två gånger, av andra skäl.',
+    'Aqua från Köpenhamn stämdes av Mattel för Barbie Girl. Domaren avslutade med orden "The parties are advised to chill".',
+    'Sofie Gråbøls stickade tröja i Forbrydelsen blev en världsartikel. Den var färöisk, mordet var köpenhamnskt.',
+    'Arne Jacobsen ritade SAS Royal Hotel 1960 in i minsta detalj, från fasaden till besticken. Stolarna Ägget och Svanen sitter kvar.',
+    'Søren Kierkegaard och H.C. Andersen ligger båda på Assistens kirkegård. De tyckte inte särskilt om varandra i livet.',
+  ],
+  koping: [
+
+    'Köping fick stadsprivilegier 1474 av Sten Sture den äldre. Namnet betyder handelsplats, så staden hade i praktiken varit stad länge.',
+    'Apotekaren Carl Wilhelm Scheele upptäckte volfram, molybden och citronsyra i Köping. Han smakade på allt han hittade, och dog 43 år gammal.',
+    'Scheele föddes i Stralsund i Svenska Pommern, som var svenskt 1648–1815. Han var alltså svensk kemist, fast från Tyskland.',
+    'Volvo har tillverkat växellådor i Köping sedan företaget köpte Köpings Mekaniska Verkstad 1942. Lastbilarna byggs i Göteborg, men växlar gör de på västmanländska.',
+    'Köping ligger vid Galten, Mälarens västligaste fjärd. Härifrån är det båtväg hela vägen till Stockholm, om man har tålamod med slussarna.',
+    'E18 passerar Köping på sin väg från Nordirland till S:t Petersburg. Det är stadens enda gata med anknytning till båda.',
+    'Köpenhamn och Köping delar ordstam: båda handlar om att köpa. Köpenhamn var köpmännens hamn, Köping var helt enkelt platsen där man handlade.',
+  ],
+  lissabon: [
+
+    'Bron över Tejo hette Salazarbron tills revolutionen 1974. Nu heter den 25 april, efter dagen då den fick nytt namn.',
+    'Nejlikerevolutionen fick sitt namn av en blomsterförsäljerska på Rossio som stack nejlikor i gevärspiporna. Soldaterna lät henne.',
+    'Portugiserna sägs ha 365 recept på saltad torsk. Torsken kommer från Norge, recepten från Lissabon.',
+    'Fernando Pessoa skrev under ett sjuttiotal namn, alla med egen biografi. Ett par av dem recenserade varandra.',
+    'Saudade är längtan efter något som kanske aldrig funnits. Ordet går inte att översätta, vilket alla portugiser gärna översätter.',
+    'Cristo Rei på andra sidan floden restes 1959 som tack för att Portugal slapp andra världskriget. Rio hade sin sedan 1931.',
+    'Alfama klarade jordbävningen 1755 bäst, för att kvarteret står på berg. Det är därför gränderna fortfarande är medeltida – och därför kartan inte hjälper.',
+    'Hissen Santa Justa från 1902 räknas som kollektivtrafik. Man kan åka den med busskort, och köa som till en sevärdhet.',
+  ],
+  london: [
+
+    'Londons taxiförare måste klara provet The Knowledge: 25 000 gator utantill. Det tar tre–fyra år. GPS:en får de ha, men den räknas inte.',
+    'Nollmeridianen går genom Greenwich, så all världens tid räknas från en stadsdel i sydöstra London. Fransmännen höll sig till Paris i tjugo år till.',
+    'Den stora branden 1666 började i ett bageri på Pudding Lane. Bagaren nekade till alltihop.',
+    'Finanskvarteret kallas Square Mile och har en egen borgmästare, Lord Mayor. Han väljs varje år och bor i ett hus som heter Mansion House.',
+    'Sherlock Holmes bodde på Baker Street 221B, en adress som inte fanns när böckerna skrevs. Nu finns den, och posten kommer fram.',
+    'Övergångsstället på Abbey Road är kulturminnesmärkt sedan 2010. Turisterna som poserar mitt i gatan är det inte.',
+    'Charles Dickens gick nattpromenader på upp till tre mil genom stadens fattigkvarter. Det syns i böckerna.',
+  ],
+  malmo: [
+
+    'Skåne blev svenskt 1658, när Karl X Gustav gått över isen på Bälten och Danmark tvingades till fred i Roskilde. Malmö har inte riktigt bestämt sig sedan dess.',
+    'Kockumskranen, varvets 138 meter höga jätte, såldes 2002 till ett varv i Sydkorea för en dollar. Fraktkostnaden var betydligt högre.',
+    'Zlatan Ibrahimović växte upp i Rosengård och började i Malmö FF. Statyn av honom utanför stadion fick så mycket stryk att den till slut plockades bort.',
+    'Ribersborgs kallbadhus, Kallis, har stått på pålar i Öresund sedan 1898. Bastu först, dopp sedan, året runt, oavsett vad termometern tycker.',
+    'Malmö har varit värd för Eurovision tre gånger: 1992, 2013 och 2024. Finalen 2013 vanns av Danmark, som hade nära hem.',
+    'Spettekakan gräddas lager på lager på ett roterande spett över öppen eld och är skyddad i EU som skånsk specialitet. Den är i princip ägg och socker i konstnärlig form.',
+    'Pildammsparken anlades till Baltiska utställningen 1914, där Sverige, Danmark, Tyskland och Ryssland ställde ut sida vid sida. Några månader senare var två av dem i krig med varandra.',
+    'Poeten Hjalmar Gullberg föddes i Malmö 1898, satt i Svenska Akademien och var chef för Radioteatern. Sankt Petri kyrka vid Stortorget är hundra år äldre än hela hans bibliografi, gånger fem.',
+  ],
+  marrakech: [
+
+    'Marrakech grundades 1070 av almoraviderna, som kom ridande ur Sahara. Hela landet Marocko fick sitt namn efter staden, vilket är ovanligt: oftast är det tvärtom.',
+    'Staden kallas Den röda, och stadens regler kräver än i dag att fasaderna hålls i den rosaröda lerfärgen. Den som vill måla blått får flytta till Chefchaouen.',
+    'Koutoubiamoskén är uppkallad efter bokhandlarna, kutubiyyin, som en gång hade ett hundratal stånd runt den. Det är rimligen världens enda moské döpt efter en bransch.',
+    'Yves Saint Laurent köpte Jardin Majorelle 1980 för att rädda den från att bli hotell. Den koboltblå färgen på husen heter Majorelleblått efter målaren som anlade trädgården, och som aldrig fick någon egen färg i modevärlden.',
+    'Mintte hälls från hög höjd tills det skummar och kallas berberwhisky. Det innehåller ingen whisky, men ungefär lika mycket socker som en läsk.',
+    'Argan växer nästan bara i sydvästra Marocko. Getterna klättrar upp i träden efter frukten och spottar ut kärnorna, vilket sparar ett arbetsmoment i oljeproduktionen.',
+    'Hitchcock spelade in Mannen som visste för mycket på Jemaa el-Fna 1956, och Crosby, Stills & Nash sjöng om Marrakesh Express 1969. Graham Nash hade åkt tåget själv, med ankor och grisar i vagnen.',
+    'Gnawamusiken, med stora metallkastanjetter och bas­luta, hörs varje kväll på torget. Den kom med slavar från söder om Sahara och är i dag Unesco-skyddat kulturarv, vilket få torgmusiker kan säga.',
+  ],
+  melbourne: [
+
+    'Melbourne hette Batmania en kort tid efter grundaren John Batman 1835. Sedan döptes den om efter en brittisk premiärminister. Serietidningen kom hundra år senare.',
+    'Staden var Australiens huvudstad 1901-1927, tills Canberra byggts klart. Sydney och Melbourne kunde inte enas, så man lade huvudstaden mitt emellan där ingen bodde.',
+    'OS 1956 hölls här, utom ridsporten som hölls i Stockholm eftersom hästarna inte släpptes in i landet. Karantänreglerna gällde även olympier.',
+    'Melbourne Cup första tisdagen i november är helgdag i staden. MCG tar 100 000 åskådare och tomt ser ut som ett hål i marken.',
+    'Vegemite uppfanns här 1922 av bryggerirester. Kaffekulturen kom med italienarna efter kriget; grekerna kom också, i så stort antal att Melbourne räknas bland de största grekiska städerna.',
+    'Ned Kelly hängdes i Melbourne 1880 i sin hemgjorda järnrustning, eller snarare utan den. Rustningen står på biblioteket och Sidney Nolan målade den om och om igen.',
+    'Kylie Minogue är född här och blev känd i "Grannar", inspelad i förorten. Hosier Lane målas om varje vecka; Banksy åkte med av misstag.',
+    'På Phillip Island söder om stan tågar världens minsta pingviner upp ur havet varje kväll. "Utflykt i det okända" utspelas vid Hanging Rock, och nej, det hände inte.',
+  ],
+  mexikocity: [
+
+    'Templo Mayor hittades igen 1978 när elarbetare grävde ner en kabel och stötte på en stenskiva. Ett helt kvarter revs för att gräva fram resten.',
+    'Diego Rivera målade Mexikos historia på väggarna i Nationalpalatset. Han gifte sig med Frida Kahlo två gånger, vilket säger något om båda.',
+    'Trotskij mördades med en isyxa i sitt hem i Coyoacán 1940. Mördaren satt av 20 år och fick sedan medalj i Moskva.',
+    'OS 1968 hölls 2 240 meter över havet. Den tunna luften gav rekord i sprint och längdhopp, och andnöd i allt över 800 meter.',
+    'Vulkanen Popocatépetl, "det rykande berget", syns från staden på klara dagar. Sådana blir allt färre.',
+    'I Xochimilcos kanaler åker man färgglada båtar över aztekernas gamla odlingar. Där lever också axolotlen, som aldrig bestämmer sig för att bli vuxen.',
+    'Mexikos flagga visar en örn med en orm i näbben, sittande på en kaktus. Det var tecknet aztekerna sökte för att veta var staden skulle ligga.',
+    'Såsen mole innehåller chili, kryddor och en aning choklad. Den sägs ha uppstått när nunnor i Puebla fick oväntat besök av biskopen.',
+  ],
+  moskva: [
+
+    'Tsarklockan i Kreml väger 200 ton och är världens största. Den har aldrig ringt: en bit på elva ton sprack loss under en brand 1737 innan någon hann hänga upp den.',
+    'Svansjön hade premiär på Bolsjoj 1877 och floppade. Tjajkovskij dog innan baletten blev en succé, vilket är ett vanligt sätt att lyckas i Ryssland.',
+    'Napoleon intog Moskva 1812 och fann staden tom och brinnande. Han stannade en månad, väntade på en kapitulation som aldrig kom, och gick hem i snön.',
+    'De sju systrarna är sju stalinistiska skyskrapor från efterkrigstiden. Den högsta, Moskvauniversitetet, var Europas högsta byggnad fram till 1990 och lär inrymma över 30 kilometer korridor.',
+    'I Bulgakovs Mästaren och Margarita anländer djävulen till 1930-talets Moskva med en talande svart katt. Manuskriptet fick inte ges ut förrän 26 år efter författarens död.',
+    'Pusjkin föddes i Moskva 1799 och dog 1837 efter en duell. Hans farfars far var afrikan och skänktes som gåva till Peter den store, som gjorde honom till general.',
+    'Pelmeni, degknyten med köttfyllning, fryses traditionellt utomhus på balkongen. Namnet betyder öronbröd. Ryska vintrar gör frysboxar överflödiga.',
+  ],
+  mumbai: [
+
+    'Mumbai byggdes på sju öar som engelsmännen fick i hemgift 1661 och sedan ägnade tvåhundra år åt att fylla ihop. Nu är det en enda ö, och den är full.',
+    'Gateway of India restes för Georg V:s besök 1911 men stod klar först 1924. 1948 marscherade de sista brittiska trupperna ut genom den. Porten fungerade bäst som utgång.',
+    'Taj Mahal Palace-hotellet vid kajen är från 1903 och därmed äldre än porten det poserar bredvid.',
+    'Järnvägsstationen Chhatrapati Shivaji Terminus hette Victoria Terminus tills 1996 och är världsarv. Tre miljoner pendlare om dagen har inte tid att beundra gotiken.',
+    'Vada pav, en friterad potatisbiff i bröd, uppfanns 1966 vid ett stånd utanför Dadar-stationen. Den kallas Mumbais hamburgare och kostar en bråkdel.',
+    'Salman Rushdie föddes i Bombay 1947, samma år som Indien blev självständigt vid midnatt. Därav titeln "Midnattsbarnen".',
+    'På ön Elephanta i hamnen finns grottempel till Shiva huggna ur berget. Elefanten som gav ön sitt namn försökte portugiserna flytta; den gick sönder.',
+    'Delstatens språk är marathi, och stadens namn kommer från gudinnan Mumba. Bollywood talar hindi, men det är film.',
+  ],
+  nairobi: [
+
+    'Nairobi betyder kallt vatten på maasaiernas språk och började 1899 som ett läger för rallarna som byggde järnvägen till Uganda. Banan kallades Lunatic Express, och i Tsavo åt två lejon upp ett stort antal av arbetarna.',
+    'Staden ligger 1 800 meter över havet, 150 kilometer söder om ekvatorn. Nätterna är kyliga, luften tunn, och det är ingen slump att världens bästa långdistanslöpare tränar här.',
+    'Karen Blixen drev en kaffefarm vid Ngongbergen och skrev om det i Den afrikanska farmen. Stadsdelen Karen bär hennes namn, filmen Mitt Afrika bar Meryl Streep, och farmen är i dag museum.',
+    'Wangari Maathai fick Nobels fredspris 2004 som första afrikanska kvinna. Hennes rörelse har planterat över femtio miljoner träd, vilket är ett annat sätt att bygga stad.',
+    'Matatu är de privata minibussarna: hög musik, målade karosser och djärv körning. Namnet lär komma från "tre" på kikuyu, resans pris en gång i tiden. Priset har stigit, stilen består.',
+    'Ugali, fast majsgröt, är basfödan och äts med händerna. Nyama choma, grillat kött, är helgens tillbehör. Hakuna matata betyder inga problem, och används mer av turister än av kenyaner.',
+    'Eliud Kipchoge sprang maraton under två timmar i Wien 2019. Det räknas inte som världsrekord, eftersom han hade farthållare i formation och drycker langade från cykel. Han sprang ändå fortast.',
+  ],
+  newyork: [
+
+    'Manhattan köptes 1626 av holländaren Peter Minuit för varor värda 60 gulden. Priset per kvadratmeter har stigit sedan dess.',
+    'Brooklyn Bridge invigdes 1883. Året efter lät P.T. Barnum 21 elefanter gå över den för att visa att den höll. Den höll.',
+    'Nyårskulan på Times Square har fallit sedan 1907. Torget är uppkallat efter tidningen The New York Times, som flyttade dit 1904.',
+    'Frihetsgudinnan håller en fackla i ena handen och en tavla med datumet 4 juli 1776 i den andra. Vid fötterna ligger brutna kedjor.',
+    'Guggenheim-museet är en vit spiral av Frank Lloyd Wright. Arkitekten dog 1959, ett halvår innan det öppnade.',
+    'Tjajkovskij dirigerade när Carnegie Hall invigdes 1891. Vägen dit är fortfarande densamma: öva.',
+    'En äkta New York-bagel kokas innan den gräddas. Det är hela hemligheten, och alla i staden har en åsikt om vem som gör den bäst.',
+    'Basebollaget Yankees kallas "the Bronx Bombers". Dodgers bombade istället Brooklyn genom att flytta till Los Angeles 1957.',
+  ],
+  oslo: [
+
+    'Oslo hette Kristiania från 1624 till 1924, efter Kristian IV som byggde upp staden efter en brand och döpte den efter sig själv. Sedan ångrade sig norrmännen.',
+    'Henrik Ibsen bodde sina sista år vid Karl Johans gate och promenerade varje dag till Grand Café. Turister kom för att se honom äta lunch. Han var inte road.',
+    'Brunost är karamelliserad vassle. 2013 brann ett lastbilslass i en tunnel i Nordland i fem dagar; osten brinner nämligen ungefär som socker.',
+    'Varje december står en norsk gran på Trafalgar Square i London. Oslo har skickat den sedan 1947 som tack för hjälpen under kriget.',
+    'Unionen med Sverige upplöstes 1905, och Norge valde en dansk prins till kung. Han tog namnet Haakon VII och lärde sig norska efter hand.',
+    'Polarskeppet Fram står på Bygdøy, intill Kon-Tiki. Skeppet bar Amundsen till Antarktis 1911 och kom hem igen, vilket inte alla polarskepp gjorde.',
+    'Skriet stals från Nationalgalleriet 1994, samma dag som OS i Lillehammer invigdes. Tjuvarna lämnade en lapp med tack för det dåliga larmet.',
+    'a-ha kommer från Oslo. Den tecknade videon till Take On Me ritades bild för bild, omkring 3 000 teckningar, vilket var billigare än det såg ut.',
+  ],
+  paris: [
+
+    'Bastiljen stormades den 14 juli 1789. Där satt sju fångar, varav en trodde sig vara Julius Caesar.',
+    'Sacré-Cœur på Montmartre tvättar sig själv: stenen avger ett vitt ämne när det regnar. Resten av staden får sota.',
+    'Croissanten är österrikisk. Bagarna i Paris bytte ut degen mot smördeg och behöll äran.',
+    'Under stadens gator ligger benen från omkring sex miljoner parisare, flyttade dit på 1780-talet när kyrkogårdarna svämmade över.',
+    'Édith Piaf var 147 centimeter lång. Namnet betyder sparv, och det var artistnamn – hon var döpt till Gassion.',
+    'Under operahuset Palais Garnier finns en vattencistern. Där kom fantomens underjordiska sjö ifrån.',
+    'Victor Hugos Ringaren i Notre-Dame skrevs för att rädda katedralen från rivning. Det fungerade.',
+    'Monet skänkte sina stora näckrosor till staten dagen efter vapenstilleståndet 1918. De hänger i Orangeriet, i två ovala salar byggda för dem.',
+  ],
+  peking: [
+
+    'Peking blev huvudstad på 1200-talet under Kublai khan, som Marco Polo tjänade. Farfar Djingis hade bränt ner den. Släkten var inte överens om stadsplanering.',
+    'Förbjudna staden byggdes av Mingdynastin och stod klar 1420. Bertolucci fick filma där 1987; "Den siste kejsaren" vann nio Oscar.',
+    'I Himmelska templet bad kejsaren varje år om god skörd. Bönehallen är byggd utan en enda spik, vilket säger något om skördarna eller snickarna.',
+    'Änkekejsarinnan Cixi byggde en båt av marmor i Sommarpalatset, enligt sägnen för flottans pengar. Marmorbåten står kvar. Flottan sänktes 1895.',
+    'Pekingmänniskan, en halv miljon år gammal, försvann 1941 när fossilen skulle skickas till USA. Ingen har sett henne sedan dess.',
+    'Mao utropade Folkrepubliken från Himmelska fridens port den 1 oktober 1949. Porträttet på porten byts mot ett nymålat varje år, så det åldras inte.',
+    'De gamla gränderna heter hutong och gårdshusen siheyuan. Ai Weiwei, som var med och ritade OS-stadion Fågelboet, bojkottade invigningen.',
+    'Pekinganka äts i pannkaka med purjolök och hoisin. Skinnet är poängen; köttet får följa med.',
+  ],
+  prag: [
+
+    'År 1618 kastades två ståthållare ut genom ett fönster på borgen. De landade i en gödselhög och överlevde. Trettioåriga kriget gjorde det också.',
+    'Ordet robot är tjeckiskt, från en pjäs 1920. Karel Čapek skrev pjäsen, hans bror Josef hittade på ordet. Roboterna tog över i akt tre.',
+    'Tjeckerna dricker mest öl i världen, omkring 130 liter per person och år. På krogen är ölet ofta billigare än vattnet, vilket förklarar en del.',
+    'Smetana skrev Moldau helt döv. Floden hade han hört tidigare.',
+    'John Lennon satte aldrig sin fot i Prag, men har en mur. Frank Zappa var kulturrådgivare åt presidenten och fick ingen.',
+    'Tjeckoslovakien delades 1993 utan folkomröstning. Ingen av sidorna ville, politikerna gjorde det ändå. Det kallas sammetsskilsmässan.',
+    'Knödeln kokas som en limpa och skivas med tråd. Den serveras till allt, och det är inte förhandlingsbart.',
+    'Enligt legenden ligger Golem kvar på synagogans vind i Josefov. Ingen har kontrollerat på flera hundra år.',
+  ],
+  reykjavik: [
+
+    'Reykjavík betyder rökviken. Ingólfur Arnarson såg ångan från de heta källorna på 870-talet och drog fel slutsats, men bra ortnamn.',
+    'Reagan och Gorbatjov möttes i Höfði-huset 1986. De kom inte överens, men de kom närmare, och året efter skrev de under ett nedrustningsavtal.',
+    'Bobby Fischer slog Boris Spasskij i Reykjavík 1972, i det som kallas århundradets match. Han blev isländsk medborgare 2005 och ligger begravd på ön.',
+    'Island ligger där den nordamerikanska och den eurasiska plattan glider isär, ett par centimeter om året. På Tingvalla kan man stå med en fot på varje.',
+    'Konserthuset Harpa påbörjades i högkonjunktur och stod som ett halvfärdigt glasskal när bankerna kraschade 2008. Det blev klart 2011, ungefär som ekonomin.',
+    'Hákarl är haj som fått jäsa i marken i månader. Färsk är den giftig; jäst är den bara en åsiktsfråga.',
+    'Eyjafjallajökull ställde in Europas flyg i april 2010. Nyhetsuppläsarna lärde sig aldrig uttala den.',
+    'Den stora Geysir, som gett namn åt alla gejsrar, har nästan slutat spruta. Grannen Strokkur går igång var tionde minut i stället, som en pålitlig kollega.',
+  ],
+  rio: [
+
+    'Portugiserna tog bukten för en flodmynning den 1 januari 1502 och döpte den till Januarifloden. Bukten heter Guanabara och är ingen flod.',
+    'Cristo Redentor är gjuten i betong och klädd i tusentals små plattor av täljsten. Kvinnorna som limmade skrev önskningar på baksidan.',
+    'Portugals kungahus flydde Napoleon 1808 och flyttade hela hovet till Rio. Staden blev huvudstad i ett europeiskt imperium.',
+    'Bossa novan föddes i Rio på 1950-talet. Flickan från Ipanema hette Helô Pinheiro och gick förbi baren varje dag, ovetande.',
+    'Feijoada är svarta bönor och fläsk, och äts på lördagar. Söndagen går åt till att återhämta sig.',
+    'Copacabanas vågiga strandpromenad ritades av landskapsarkitekten Roberto Burle Marx. Havet bidrog med idén.',
+    'OS 2016 var de första i Sydamerika. Två år tidigare hade Tyskland vunnit fotbolls-VM på Maracanã, vilket ingen här nämner.',
+    'Favelan Rocinha har fler invånare än Uppsala. Utsikten är bättre, allt annat sämre.',
+  ],
+  rom: [
+
+    'Caesar mördades den 15 mars 44 f.Kr. på en plats som i dag är ett kattreservat. Katterna har inte uttalat sig.',
+    'Spanska trappan betalades av en fransman och leder till en fransk kyrka. Spanien hade ambassaden vid foten och tog namnet.',
+    'Carbonaran görs på ägg, sidfläsk och pecorino. Den som ber om grädde får en blick.',
+    'Rom blev huvudstad i Italien 1871. Påven tyckte inte om det och stannade inne i Vatikanen i nästan sextio år.',
+    'Sanningens mun biter av handen på lögnare. Den var troligen ett brunnslock, vilket förklarar det rundade uttrycket.',
+    'Michelangelo tog på sig Peterskyrkans kupol som sjuttioettåring. Han hann inte se den färdig, vilket ingen förvånades av.',
+    'Anita Ekberg från Malmö badade i Fontana di Trevi i La dolce vita. Det var kallt, och Mastroianni hade våtdräkt under kostymen.',
+    'Vespa betyder geting. Audrey Hepburn körde en i Prinsessa på vift 1953 och fick en Oscar, möjligen för körningen.',
+  ],
+  sanfrancisco: [
+
+    'Golden Gate-bron invigdes 1937. Flottan ville måla den svart med gula ränder. Arkitekten tyckte att rostskyddsfärgen var finare, och så blev det.',
+    'Fotbollslaget 49ers är uppkallat efter guldgrävarna som strömmade till 1849. De flesta av dem hittade inget guld heller.',
+    'Bokhandeln City Lights gav ut Ginsbergs "Howl" 1957 och åtalades för det. Beatgenerationen fick ett hem och boken fick reklam.',
+    'Sommaren 1967 samlades hippierörelsen i Haight-Ashbury. Sången om blommor i håret var reklam för en festival i Monterey.',
+    'Lombard Street har åtta skarpa kurvor på ett enda kvarter. De byggdes 1922 för att bilarna skulle klara lutningen på 27 procent.',
+    'Sjölejonen vid Pier 39 flyttade in efter jordbävningen 1989 och bor kvar. Fiskebåtarna som hade bryggorna fick flytta.',
+    'Stadens surdegsbröd bakas enligt bageriet Boudin på en kultur från 1849. Jästsvampen i den bär numera stadens namn.',
+    'Lyckokakan uppfanns troligen i San Francisco kring 1900. I Kina har ingen hört talas om den.',
+  ],
+  seoul: [
+
+    'Alfabetet hangul beställdes av kung Sejong på 1440-talet så att vanligt folk skulle kunna läsa. Bokstäverna är formade efter munnens ställning. Sejong står staty mitt på Gwanghwamun.',
+    'Under Koreakriget 1950-53 bytte Seoul ägare fyra gånger. Kriget slutade med vapenstillestånd, inte fred, och pågår formellt fortfarande.',
+    'Samsung betyder tre stjärnor och började 1938 med torkad fisk och nudlar. Det gick bra sedan.',
+    'Gangnam betyder söder om floden och är stadens dyraste stadsdel. Psy gjorde den till Youtubes första miljardvideo 2012.',
+    'Bäcken Cheonggyecheon låg under en motorväg i fyrtio år. 2005 rev staden vägen och grävde fram bäcken. Trafiken minskade, till trafikplanerarnas förvåning.',
+    'Bibimbap betyder blandat ris, och det knapriga riset i botten på stenskålen är hela poängen. Soju är nationaldrycken; Jinro säljer flest flaskor sprit i världen.',
+    'Bong Joon-hos "Parasit" tog Oscar för bästa film 2020, som första icke-engelskspråkiga. Han Kang tog Nobelpriset 2024. BTS tog Billboardlistan 2020. Det var ett bra decennium.',
+    'Vid N Seoul Tower på Namsan hänger par upp hänglås och kastar nyckeln. Taekwondo har sitt högkvarter i staden; det blev OS-gren i Sydney 2000.',
+  ],
+  singapore: [
+
+    'Singapura betyder lejonstaden. Det har aldrig funnits lejon här; prinsen i sägnen såg troligen en tiger. Statyn Merlion är därför halvt fisk, för säkerhets skull.',
+    'Stamford Raffles grundade handelsstationen 1819. Han har fått ett hotell, en drink och världens största blomma uppkallade efter sig. Blomman luktar lik.',
+    'Singapore föll till Japan 1942 sedan kanonerna riktats mot havet och japanerna kommit på cykel genom djungeln. Churchill kallade det den värsta katastrofen i brittisk historia.',
+    'Tuggummi förbjöds 1992 sedan det fastnat i tunnelbanans dörrar. Nikotintuggummi finns på apotek, mot recept.',
+    'Landet har vuxit med en fjärdedel sedan 1960-talet genom att fylla ut havet. Indonesien slutade sälja sand 2007; Singapore hade börjat ta slut på grannar.',
+    'Hawker centres är hallarna med matstånd. Två stånd fick Michelinstjärna 2016, och hela kulturen är Unescoklassad sedan 2020. Peranakanernas nyonyakök har laksan.',
+    'Marina Bay Sands har en 150 meter lång pool på taket, 57 våningar upp. Formel 1-loppet 2008 var det första som kördes på natten, så att Europa kunde titta.',
+    'Lee Kuan Yew var premiärminister i 31 år och sonen i tjugo. Nationalblomman är en orkidé som en dam korsade fram i sin trädgård 1893.',
+  ],
+  stockholm: [
+
+    'Stadshusets torn är 106 meter högt och kröns av tre kronor. Huset invigdes på midsommarafton 1923, exakt fyrahundra år efter att Gustav Vasa red in i staden.',
+    'Skansen på Djurgården öppnade 1891 och blev förebild för friluftsmuseer världen över. Grundaren Artur Hazelius köpte hela gårdar runt om i landet och flyttade dem till Stockholm, djuren inräknade.',
+    'Begreppet Stockholmssyndromet föddes vid Norrmalmstorg 1973, när fyra bankanställda satt som gisslan i sex dagar och efteråt tog rånarens parti.',
+    'Astrid Lindgren bodde på Dalagatan 46 från 1941 till sin död 2002. Lägenheten är bevarad som hon lämnade den, skrivmaskinen inräknad.',
+    'ABBA har ett eget museum på Djurgården sedan 2013. Där kan man sjunga med i en hologramversion av gruppen, vilket gruppen själv slapp.',
+    'Carl Michael Bellman diktade om Stockholms krogar på 1700-talet. Fredmans epistlar handlar om fylla, kärlek och död, ungefär i den ordningen.',
+    'Prinsesstårtan hette från början grön tårta. Namnet byttes när prinsessorna Margaretha, Märtha och Astrid visade sig gilla den.',
+    'Kung Adolf Fredrik dog 1771 efter en måltid som enligt legenden avslutades med fjorton semlor i varm mjölk. Semlan äts sedan dess med viss respekt.',
+  ],
+  sydney: [
+
+    'James Cook landsteg vid Botany Bay 1770. Aderton år senare kom elva fartyg med 700 fångar, och Sydney var grundat. Den 26 januari är nationaldag; inte alla firar.',
+    'Harbour Bridge invigdes 1932 med sex miljoner nitar. Sedan 1998 får man klättra över bågen, 134 meter upp, i sele och overall.',
+    'Bondi betyder ungefär vatten mot klippor. Livräddarklubben från 1907 var världens första, och stranden har den mest fotograferade simhallen.',
+    'Sydneytrattspindeln kan döda en människa. Sedan motgiftet 1981 har den inte gjort det. Blue Mountains är blå av eukalyptusolja i luften.',
+    'AC/DC bildades här 1973 av två bröder från Glasgow. Samma år fick Sydneybon Patrick White Nobelpriset i litteratur, och Operahuset invigdes. Det var mycket det året.',
+    'Nemo hamnade hos en tandläkare på 42 Wallaby Way, Sydney. Adressen fick brev.',
+    'Grillen heter barbie. "Shrimp on the barbie" är amerikansk reklam från 1984; australier säger prawn och rättar dig.',
+    'Cathy Freeman tände OS-elden 2000 och vann 400 meter tio dagar senare. Hon sprang ärevarvet med två flaggor.',
+  ],
+  tokyo: [
+
+    'Tokyo hette Edo tills kejsar Meiji flyttade hovet hit från Kyoto 1868. Tokyo betyder östra huvudstaden. Kyoto betyder bara huvudstaden och har inte glömt det.',
+    'Hunden Hachiko väntade på sin döde husse vid Shibuya station i nästan tio år. Statyn restes 1934, medan han fortfarande väntade. Han fick se den.',
+    'Fugu, blåsfisken, har ett gift utan motgift. Kockarna utbildas i flera år för licens. Kejsaren får enligt gammal regel inte äta den alls.',
+    'Godzilla kom 1954, samma år som japanska fiskare skadats av ett amerikanskt vätebombsprov. Monstret har rivit Tokyo i över trettio filmer sedan dess.',
+    'OS 1964 var de första i Asien. Shinkansen invigdes nio dagar före öppningen, så att gästerna skulle hinna.',
+    'På nyårsauktionen på fiskmarknaden gick en tonfisk 2019 för 333 miljoner yen. Ramen, stadens vardagsmat, är för övrigt kinesisk från början.',
+    'Karaoke betyder tom orkester och uppfanns 1971 av Daisuke Inoue, som glömde ta patent.',
+    'Haruki Murakami drev en jazzbar i Tokyo innan han började skriva. I kabukiteatern spelas kvinnorollerna av män sedan 1629.',
+  ],
+  vasteras: [
+
+    'Västerås hette Västra Aros, åmynningen i väster. Östra Aros döptes om till Uppsala och fick ärkebiskopen; Västerås fick gurkorna.',
+    'Gurkodlingarna runt staden var så stora kring 1900 att Västerås kallas Gurkstaden. Det finns till och med en egen sort, Västeråsgurkan.',
+    'Vid riksdagen i Västerås 1527 tog Gustav Vasa kyrkans gods till kronan. Reformationen i Sverige började alltså med en ekonomisk kalkyl.',
+    'Kokpunkten var ett ångkraftverk från 1917, länge Sveriges största. I dag är det äventyrsbad, så vattnet är fortfarande varmt.',
+    'Nobelpristagaren Tomas Tranströmer bodde i Västerås i 35 år och arbetade som psykolog. Dikterna skrev han på fritiden.',
+    'Västerås hamn är Sveriges största insjöhamn. Fartygen tar sig in från Östersjön genom Södertälje kanal och delar hamnbolag med Köping.',
+    'Flygplatsen Hässlö var flygflottiljen F1 fram till 1983. Nu delar charterflygen banan med ett flygmuseum.',
+    'Mälardalens universitet blev universitet 2022 efter 45 år som högskola. Campus delas mellan Västerås och Eskilstuna, som får turas om att vara störst.',
+  ],
+};
