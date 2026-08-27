@@ -16,6 +16,7 @@ export type IconName =
   | 'farja'
   | 'flyg'
   | 'flyg-profil'
+  | 'ryggsackare'
   | 'skylt-info'
   | 'skylt-tidning'
   | 'skylt-souvenir'
@@ -103,6 +104,20 @@ const ICONS: Record<IconName, Part[]> = {
   ],
   flyg: [
     { tag: 'path', attrs: { d: 'M17.8 19.2 16 11l3.5-3.5a2.12 2.12 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1 1.6L8 11l-2 2-2.2-.4a.8.8 0 0 0-.8 1.3l2.2 2.2 2.2 2.2a.8.8 0 0 0 1.3-.8L8 16l2-2 3.2 4.2a1 1 0 0 0 1.6-1z' } },
+  ],
+  'ryggsackare': [
+    /**
+     * Resenären själv: en figur i sidovy med ryggsäck, på väg åt höger. Den
+     * ersätter fordonen i resefilmen - det är samma person som reser, vare
+     * sig det är med buss, tåg, färja eller flyg, och en människa är lättare
+     * att känna igen på en snurrande jordglob än ett millimeterstort tåg.
+     */
+    { tag: 'circle', attrs: { cx: '13.2', cy: '4', r: '2.3', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'path', attrs: { d: 'M11.2 6.8h3.6l.8 6.6H10.6z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'rect', attrs: { x: '7.4', y: '7.2', width: '4.2', height: '7', rx: '1.3', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'path', attrs: { d: 'M11.6 13.2 9.2 20.5M14 13.2l2.6 6.8', 'stroke-width': '2.4' } },
+    { tag: 'path', attrs: { d: 'M14.6 8.2 17.6 12', 'stroke-width': '2.2' } },
+    { tag: 'path', attrs: { d: 'M7.8 21h11', 'stroke-width': '1.2', opacity: '0.35' } },
   ],
   'flyg-profil': [
     /**

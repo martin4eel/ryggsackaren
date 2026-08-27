@@ -7157,3 +7157,19 @@ body.sheet-oppen {
     font-size: 1.1rem;
   }
 }
+
+/* Resenären går: en liten studs i takt, så att figuren lever på klotet. */
+.globe-vehicle > g:last-child {
+  animation: ryggsackare-gang 0.55s ease-in-out infinite alternate;
+}
+
+@keyframes ryggsackare-gang {
+  from { transform: translateY(0); }
+  to { transform: translateY(-1.5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .globe-vehicle > g:last-child {
+    animation: none;
+  }
+}

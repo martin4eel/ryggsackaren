@@ -3395,8 +3395,10 @@ export class App {
       renderTravelScene({
         from: scene.from,
         to: scene.to,
-        rotate: scene.mode === 'flyg',
-        vehicle: (size) => iconGroup(`${scene.mode}-profil` as IconName, size),
+        // En människa står upprätt oavsett kurs; hon speglas bara västerut.
+        rotate: false,
+        // Resenären själv, inte fordonet: en figur som går över kartan.
+        vehicle: (size) => iconGroup('ryggsackare', size),
         onFrame: (t) => {
           bar.style.width = `${Math.round(t * 100)}%`;
           const rest = Math.max(0, Math.round(scene.km * (1 - t)));

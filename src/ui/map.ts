@@ -172,7 +172,7 @@ export function renderTravelScene(options: TravelSceneOptions): HTMLElement {
       rx: storlek * 0.55,
       ry: storlek * 0.18,
     });
-    fordon.append(skugga, vehicle(storlek));
+    fordon.append(skugga, vehicle(storlek * 1.7));
     const atVaster = Math.abs(vinkel) > 90;
     const orientering = rotate
       ? `rotate(${vinkel})`

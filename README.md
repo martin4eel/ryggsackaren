@@ -339,9 +339,11 @@ webbläsaren och överlever att sparfilen raderas.
    När biljetten är bokad spelas resan upp på en roterande jordglob: klotet
    zoomar ut från avresestaden, fordonet följer storcirkeln medan jorden
    vrider sig under det, och till sist zoomar det in mot målet. Under klotet
-   löper en mätare mellan avresa och mål med kilometrarna som är kvar. Flyget
-   ses uppifrån och vrids efter kursen; buss, tåg och färja är sidovyer som
-   bara speglas när kursen går åt väster. Ett tryck hoppar över filmen.
+   löper en mätare mellan avresa och mål med kilometrarna som är kvar. Det
+   som rör sig över klotet är resenären själv – en figur med ryggsäck som går
+   över kartan, upprätt oavsett kurs och speglad när det bär åt väster –
+   inte fordonet; ett millimeterstort tåg på en snurrande jord såg aldrig ut
+   som ett tåg. Ett tryck hoppar över filmen.
 
    Ungefär var tredje resa händer dessutom något på vägen. Se _Händelser_
    nedan.
