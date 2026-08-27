@@ -177,9 +177,9 @@ webbläsaren och överlever att sparfilen raderas.
    stjärnor om natten, hettans dallring och gatuljus som speglar sig i våt
    asfalt. Det hörs också: regn, skyfall, vindbyar och åskmuller ligger under
    stadsskärmen och tystnar när man går in någonstans. Snö och dimma är
-   tysta, som de är. Väderljudet har en egen växel: ett tryck på
-   väderskylten stänger av bara vädret och låter allt annat ljud vara kvar;
-   valet sparas. Under skylten står en rad om hur vädret känns just här.
+   tysta, som de är. Väderljudet har en egen knapp, _Väderljud på/av_,
+   bredvid väderskylten i stadsbilden: den stänger av bara vädret och låter
+   allt annat ljud vara kvar; valet sparas. Under skylten står en rad om hur vädret känns just här.
 
    Inget av det påverkar spelet; det finns för att Bangkok i monsunregn en
    kväll och Bangkok i sol en morgon ska vara två olika bilder av samma stad.

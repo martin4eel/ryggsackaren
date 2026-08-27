@@ -2378,7 +2378,12 @@ export class App {
   private renderWeatherPill(vader: Weather): HTMLElement {
     const harLjud = vaderLjud(vader) !== 'tyst';
     const pa = weatherSoundOn();
-    const b = button(
+    // Skylten är information; knappen bredvid är knappen.
+    const skylt = el('span', { class: 'city-vader', title: 'Väder och lokal tid' },
+      el('span', { class: 'city-vader-glyph', 'aria-hidden': 'true' }, vader.glyph),
+      el('span', {}, vader.text)
+    );
+    const knapp = button(
       '',
       () => {
         const nu = toggleWeatherSound();
@@ -2386,22 +2391,20 @@ export class App {
         this.render();
       },
       {
-        class: `city-vader ${pa ? '' : 'city-vader-tyst'}`,
+        class: `city-vader-ljud ${pa ? '' : 'city-vader-ljud-av'}`,
         'data-sound': 'av',
-        title: harLjud
-          ? pa
-            ? 'Väderljud på – tryck för att stänga av bara vädret'
-            : 'Väderljud av – tryck för att slå på'
-          : 'Väder och lokal tid – tryck för att slå av eller på väderljud',
+        'aria-pressed': pa ? 'true' : 'false',
+        title: pa
+          ? 'Stäng av väderljudet (regn, vind, åska). Allt annat ljud är kvar.'
+          : 'Slå på väderljudet (regn, vind, åska).',
       }
     );
-    b.append(
-      el('span', { class: 'city-vader-glyph', 'aria-hidden': 'true' }, vader.glyph),
-      el('span', {}, vader.text),
-      el('span', { class: 'city-vader-ljud', 'aria-hidden': 'true' }, '♪')
+    knapp.append(
+      icon(pa ? 'ljud-pa' : 'ljud-av'),
+      el('span', {}, pa ? 'Väderljud på' : 'Väderljud av')
     );
-    b.setAttribute('aria-label', `${vader.text}. Väderljud ${pa ? 'på' : 'av'}.`);
-    return b;
+    if (!harLjud) knapp.classList.add('city-vader-ljud-tyst');
+    return el('div', { class: 'city-vader-rad-skylt' }, skylt, knapp);
   }
 
   private startCityQuiz(): void {

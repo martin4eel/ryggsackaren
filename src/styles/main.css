@@ -6246,17 +6246,19 @@ body.sheet-oppen {
 }
 
 /* Skylten med väder och klockslag. Den är en knapp: väderljudet av och på. */
+.city-vader-rad-skylt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
 .city-vader {
-  cursor: pointer;
-  font: inherit;
-  pointer-events: auto;
-  position: relative;
-  z-index: 7;
   display: inline-flex;
   align-self: flex-start;
   align-items: center;
   gap: 6px;
-  margin-top: 6px;
   padding: 4px 10px 4px 8px;
   border-radius: 999px;
   background: rgba(4, 18, 28, 0.62);
@@ -6272,17 +6274,47 @@ body.sheet-oppen {
   line-height: 1;
 }
 
+/* Knappen för väderljudet: en högtalare med text, som knappen i statusraden
+   fast bara för vädret. Den ser ut som en knapp för att den är en. */
 .city-vader-ljud {
-  margin-left: 4px;
-  padding-left: 8px;
-  border-left: 1px solid rgba(246, 239, 224, 0.25);
-  font-size: 0.8rem;
+  pointer-events: auto;
+  position: relative;
+  z-index: 7;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 239, 224, 0.45);
+  background: rgba(246, 239, 224, 0.16);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 4px rgba(4, 16, 26, 0.4);
+}
+
+.city-vader-ljud svg {
+  width: 14px;
+  height: 14px;
+}
+
+.city-vader-ljud:hover {
+  background: rgba(246, 239, 224, 0.28);
+}
+
+.city-vader-ljud-av {
+  background: rgba(4, 18, 28, 0.55);
+  border-style: dashed;
   opacity: 0.85;
 }
 
-.city-vader-tyst .city-vader-ljud {
-  opacity: 0.45;
-  text-decoration: line-through;
+/* Vädret är tyst just nu (snö, dimma, stiltje): knappen finns, men dämpat. */
+.city-vader-ljud-tyst {
+  opacity: 0.6;
 }
 
 /* Dagens rubrik i tidningen. */
