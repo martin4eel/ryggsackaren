@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v17';
+const CACHE = 'ryggsackaren-v18';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -225,6 +225,7 @@ self.addEventListener('install', (event) => {
         // Fotona får inte stoppa installationen om något saknas – de hämtas
         // då i stället vid första visningen och cachas löpande.
         cache.addAll(CITY_PHOTOS).catch(() => undefined),
+        cache.addAll(['./reaktion/mun.webp', './reaktion/fot.webp']).catch(() => undefined),
         cache.addAll(QUIZ_IMAGES).catch(() => undefined),
       ])
     )
