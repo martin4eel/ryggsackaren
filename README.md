@@ -99,15 +99,11 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 
 ## Så spelas det
 
-Startskärmen frågar först **vilket läge** – Turist eller Globetrotter – och
-sedan fylls resten i direkt i **passet**: en personuppgiftssida med tom
-fotoruta (*fotografen kom inte*), namnrad med namnteckning, passnummer som
-följer namnet, och myndighetsrader i egen ton (*Utfärdat av: Mamma. Giltigt
-t.o.m.: tills pengarna tar slut. Längd: tillräcklig*). Sidan för
-**födelseort** har sökfält och rullbar lista med alla städer, stadens vykort,
-och längst ner en snurrbar jordglob som visering för den som hellre pekar
-än skriver. Den maskinläsbara raden skriver om sig medan man skriver. Det är
-samma pass som sedan ligger i ryggsäcken.
+Startskärmen är kort: titeln med spelets fyra regler i en rad, valet
+**Turist eller Globetrotter**, och sedan **passet** – en tom fotoruta
+(*fotografen kom inte, se ut som du brukar*), en namnrad och *Född i*, med
+sökfält och rullbar lista över alla städer på sidan bredvid och stadens
+vykort under. Ingenting mer står i vägen för startknappen.
 
 Startskärmen förklarar också spelloopen i fyra steg första gången någon öppnar
 spelet. Därefter ligger förklaringen bakom knappen _Hur spelar man?_, så att
@@ -262,12 +258,14 @@ webbläsaren och överlever att sparfilen raderas.
 
    **Bilderna reagerar på svaret**, i Monty Python-anda. Rätt svar ger en
    liten studs och ett *Bra jobbat!*. Fel svar klistrar ett **fotoutklipp**
-   av en mun med tungan ute över motivets ansikte – Mona Lisa räcker ut
-   tungan – motivet säger något syrligt i en pratbubbla, det pruttar, och
-   **den stora foten** dunsar ner från himlen. Foten och munnen är riktiga
-   fotografier från Wikimedia Commons, friklippta som i Terry Gilliams
-   animationer, aldrig ritade (`public/reaktion/`, med krediter i
-   `ATTRIBUTION.md`). Replikerna och var ansiktet sitter står per bild i
+   över motivets ansikte – en mun med tungan ute eller ett av två
+   läppstiftsavtryck, lottat per bild så att Mona Lisa alltid räcker ut
+   tungan – motivet säger något syrligt i en pratbubbla, det pruttar, och en
+   **tumme ner** slår in från kanten som en domares, en av tre händer (en
+   med rött nagellack). Alla
+   utklipp är riktiga fotografier från Wikimedia Commons, friklippta som i
+   Terry Gilliams animationer, aldrig ritade (`public/reaktion/`, med
+   krediter i `ATTRIBUTION.md`). Replikerna och var ansiktet sitter står per bild i
    `src/data/quizImages.ts` (`reaktion` och `ansikte`); bilder utan egna
    repliker får allmänna.
 7. **Tidningen.** Ett vitt bredsidesark i serif: frakturhuvud, datumrad

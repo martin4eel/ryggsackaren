@@ -6368,22 +6368,42 @@ body.sheet-oppen {
 }
 
 /* Den stora foten. Ett riktigt foto, kommer uppifrån, landar och står kvar. */
-.py-fot {
+/* Tummen ner: kommer in uppifrån höger och slår ner med en liten studs,
+   som en domare som just bestämt sig. */
+.py-tumme {
   position: absolute;
-  left: 74%;
-  top: 0;
-  width: 26%;
-  max-width: 120px;
-  min-width: 60px;
-  transform: translate(-50%, -110%);
-  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.55));
-  animation: fotdunk 0.5s cubic-bezier(0.6, 0, 0.9, 0.4) 0.5s forwards;
+  left: 76%;
+  top: 4%;
+  width: 30%;
+  max-width: 130px;
+  min-width: 64px;
+  transform: translate(-50%, -140%) rotate(25deg);
+  transform-origin: 50% 20%;
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.5));
+  animation: tummedom 0.55s cubic-bezier(0.5, 0, 0.7, 0.3) 0.45s forwards;
   z-index: 3;
 }
 
-.option-body-bild .py-fot {
-  width: 36%;
-  left: 72%;
+.option-body-bild .py-tumme {
+  width: 40%;
+  left: 74%;
+}
+
+@keyframes tummedom {
+  0% { transform: translate(-50%, -140%) rotate(25deg); }
+  70% { transform: translate(-50%, 0%) rotate(-6deg); }
+  85% { transform: translate(-50%, -6%) rotate(2deg); }
+  100% { transform: translate(-50%, 0%) rotate(-2deg); }
+}
+
+/* Läppstiftsavtrycket smackas dit. */
+.py-mun-lappar {
+  animation: lappsmack 0.32s cubic-bezier(0.2, 1.5, 0.5, 1) both;
+}
+
+@keyframes lappsmack {
+  from { transform: translate(-50%, -20%) rotate(var(--lut, 0deg)) scale(1.8); opacity: 0; }
+  to { transform: translate(-50%, -20%) rotate(var(--lut, 0deg)) scale(1); opacity: 1; }
 }
 
 @keyframes munin {
@@ -6431,12 +6451,6 @@ body.sheet-oppen {
   100% { transform: scaleY(1); }
 }
 
-@keyframes fotdunk {
-  0% { transform: translate(-50%, -110%) rotate(-6deg); }
-  70% { transform: translate(-50%, 4%) rotate(0); }
-  85% { transform: translate(-50%, -2%) rotate(0); }
-  100% { transform: translate(-50%, 2%) rotate(0); }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .quiz-bild-ratt > img,
@@ -6447,7 +6461,7 @@ body.sheet-oppen {
     animation: none;
   }
 
-  .py-fot {
+  .py-tumme {
     animation: none;
     transform: translate(-50%, 2%);
   }
@@ -7018,8 +7032,8 @@ body.sheet-oppen {
   font-size: 0.86rem;
 }
 
-.startpass-fodd .city-card {
-  margin-top: 10px;
+.startpass-sida .city-card {
+  margin-top: 14px;
 }
 
 .startpass-visering {
@@ -7050,4 +7064,96 @@ body.sheet-oppen {
 
 .startpass-namn {
   justify-content: flex-start;
+}
+
+/* Reglerna på startskärmen: fyra steg i en kompakt rad. */
+.loop-kompakt {
+  margin-top: 12px;
+  display: grid;
+  gap: 6px;
+}
+
+.loop-kompakt li {
+  padding: 8px 10px;
+}
+
+.loop-kompakt .loop-text strong {
+  display: inline;
+  margin-right: 6px;
+}
+
+.loop-kompakt .loop-text span {
+  display: inline;
+  font-size: 0.88rem;
+}
+
+@media (min-width: 700px) {
+  .loop-kompakt {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.startpass-topp {
+  grid-template-columns: 88px 1fr;
+}
+
+.startpass-namn .pdata-label + .pdata-value {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-align: left;
+}
+
+/* Lägena sida vid sida även på telefonen: valet ska gå på ett ögonkast. */
+.mode-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.mode-grid .mode {
+  min-width: 0;
+  width: 100%;
+}
+
+.mode-grid:not(.mode-grid-open) .mode {
+  padding: 12px 12px 10px;
+}
+
+.mode-grid:not(.mode-grid-open) .mode-name {
+  font-size: 1.15rem;
+}
+
+.mode-grid:not(.mode-grid-open) .mode-tagline {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.mode-grid:not(.mode-grid-open) .mode {
+  position: relative;
+}
+
+.mode-grid:not(.mode-grid-open) .mode-head {
+  padding-right: 26px;
+}
+
+.mode-grid:not(.mode-grid-open) .mode-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.mode-grid:not(.mode-grid-open) .mode-name {
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+/* På smala telefoner får orden inte plats bredvid varandra: stapla, men kompakt. */
+@media (max-width: 479px) {
+  .mode-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .mode-grid:not(.mode-grid-open) .mode-name {
+    font-size: 1.1rem;
+  }
 }

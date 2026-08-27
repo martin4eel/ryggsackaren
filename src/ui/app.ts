@@ -74,7 +74,6 @@ import {
 } from './minigames';
 import type { Stamp } from '../data/stamps';
 import { renderTravelScene } from './map';
-import { renderGlobePicker } from './globepicker';
 import { renderStation, type StationHandle } from './station';
 import { renderAtlasScreen } from './atlas';
 import {
@@ -269,15 +268,6 @@ const EVENT_LJUD: Record<EventTone, Sound> = {
 
 const HJALP_NYCKEL = 'ryggsackaren.hjalp-visad';
 
-function harSettHjalpen(): boolean {
-  try {
-    return localStorage.getItem(HJALP_NYCKEL) === 'ja';
-  } catch {
-    // Privat läge: visa hellre förklaringen en gång för mycket.
-    return false;
-  }
-}
-
 function markeraHjalpSedd(): void {
   try {
     localStorage.setItem(HJALP_NYCKEL, 'ja');
@@ -363,6 +353,19 @@ const PAPPA_BETALAR = [
  * så kommer den stora foten ner från himlen - också den ett riktigt foto,
  * friklippt, som i Gilliams animationer. Inget är ritat.
  */
+/**
+ * Utklippen som klistras på bilden när man svarat fel, i Terry Gilliams
+ * anda: en mun över motivets ansikte och en hand som dömer. Varianterna
+ * lottas per bild så att samma motiv alltid får samma mun - och så att det
+ * inte är samma tumme varje gång.
+ */
+const MUNNAR = [
+  { fil: 'mun', klass: 'py-mun-tunga' },
+  { fil: 'lappar', klass: 'py-mun-lappar' },
+  { fil: 'lappar-2', klass: 'py-mun-lappar' },
+] as const;
+const TUMMAR = ['tumme-1', 'tumme-2', 'tumme-3'] as const;
+
 function reaktionsLager(bildId: string, ratt: boolean): HTMLElement {
   const info = QUIZ_IMAGE_BY_ID[bildId];
   const ansikte = info?.ansikte ?? { x: 50, y: 45, b: 32 };
@@ -373,16 +376,29 @@ function reaktionsLager(bildId: string, ratt: boolean): HTMLElement {
     'aria-hidden': 'true',
   });
   if (!ratt) {
+    const mun = MUNNAR[Math.floor(pseudoRandom(`mun|${bildId}`) * MUNNAR.length)]!;
+    const tumme = TUMMAR[Math.floor(Math.random() * TUMMAR.length)]!;
     lager.append(
       el('img', {
-        class: 'py-mun',
-        src: './reaktion/mun.webp',
+        class: `py-mun ${mun.klass}`,
+        src: `./reaktion/${mun.fil}.webp`,
         alt: '',
         // Munnen sitter i nedre delen av ansiktet, lite på sned som ett
         // urklipp som klistrats dit i hast.
         style: `left:${ansikte.x}%;top:${ansikte.y + ansikte.b * 0.12}%;width:${ansikte.b * 0.55}%;--lut:${((ansikte.x * 7) % 11) - 5}deg`,
       })
     );
+    lager.append(
+      el('span', {
+        class: 'py-bubbla',
+        style: `left:${Math.min(70, Math.max(30, ansikte.x))}%;top:${Math.max(3, ansikte.y - ansikte.b * 0.95).toFixed(0)}%`,
+      }, rad)
+    );
+    // Tummen ner kommer in från sidan och slår ner, som en domares.
+    lager.append(
+      el('img', { class: 'py-tumme', src: `./reaktion/${tumme}.webp`, alt: '' })
+    );
+    return lager;
   }
   lager.append(
     el('span', {
@@ -390,11 +406,6 @@ function reaktionsLager(bildId: string, ratt: boolean): HTMLElement {
       style: `left:${Math.min(70, Math.max(30, ansikte.x))}%;top:${Math.max(3, ansikte.y - ansikte.b * 0.95).toFixed(0)}%`,
     }, rad)
   );
-  if (!ratt) {
-    lager.append(
-      el('img', { class: 'py-fot', src: './reaktion/fot.webp', alt: '' })
-    );
-  }
   return lager;
 }
 
@@ -452,7 +463,6 @@ export class App {
    * Är spelförklaringen utfälld? Första gången någon öppnar spelet står den
    * öppen; därefter ligger den bakom hjälpknappen.
    */
-  private showHelp = !harSettHjalpen();
   /** Lägenas punktlistor på startskärmen är hopfällda tills man ber om dem. */
   private showModeDetails = false;
   /** Stämplarna som återstår visas som brickor; beskrivningarna fälls ut. */
@@ -982,9 +992,26 @@ export class App {
         'p',
         { class: 'lede' },
         'Du har en enkelbiljett, för lite pengar och hela världen framför dig. ' +
-          'Fyll i passet nedan, så börjar resan.'
+          'Fyll i passet, så börjar resan.'
       ),
     );
+    // Reglerna i fyra korta steg, alltid synliga: man ska inte behöva leta.
+    const regler = el('ol', { class: 'loop loop-kompakt' });
+    const steg: Array<[string, string]> = [
+      ['Lär dig staden', 'Turistbyråns prov ger betyg.'],
+      ['Ta ett jobb', 'Rätt svar är lön. Skiftet ger poäng i sitt yrkesområde.'],
+      ['Gör en affär', 'Köp souvenirer billigt, sälj dem långt bort.'],
+      ['Res vidare', `Minst ${MIN_CITIES_TO_FINISH} städer, sedan hem. Boendet kostar varje dag.`],
+    ];
+    steg.forEach(([rubrik, text], i) => {
+      regler.append(
+        el('li', {},
+          el('span', { class: 'loop-num' }, String(i + 1)),
+          el('span', { class: 'loop-text' }, el('strong', {}, rubrik), el('span', {}, text))
+        )
+      );
+    });
+    hero.append(regler);
 
     /**
      * Spelförklaringen tar en halv skärm och behövs bara en gång. Den står
@@ -1105,13 +1132,6 @@ export class App {
       el('div', { class: 'passport-head' },
         el('span', {}, 'Ryggsäckarpass · Passport'),
         el('span', {}, 'Sid. 1')
-      ),
-      el('div', { class: 'pdata-emblem' },
-        el('span', { class: 'pdata-emblem-mark' }, '⊕'),
-        el('span', { class: 'pdata-emblem-text' },
-          el('strong', {}, 'Ryggsäckaren'),
-          el('span', {}, 'Utfärdat för världens skull')
-        )
       )
     );
 
@@ -1133,45 +1153,21 @@ export class App {
       autocomplete: 'off',
       spellcheck: 'false',
     }) as HTMLInputElement;
-
-    const rad = (etikett: string, varde: string | HTMLElement, cls = '') =>
-      el('div', { class: `pdata-row ${cls}` },
-        el('span', { class: 'pdata-label' }, etikett),
-        typeof varde === 'string' ? el('span', { class: 'pdata-value' }, varde) : varde
-      );
-
-    const passnummer = el('span', { class: 'pdata-value pdata-mono' });
-    const typValue = el('span', { class: 'pdata-value' });
     const foddValue = el('span', { class: 'pdata-value' });
-    const grid = el('div', { class: 'pdata-grid startpass-grid' });
-    grid.append(
-      rad('Passnummer', passnummer),
-      rad('Nationalitet', 'Ryggsäckare'),
-      rad('Resenärstyp', typValue),
-      rad('Utfärdat av', 'Mamma'),
-      rad('Giltigt t.o.m.', 'Tills pengarna tar slut'),
-      rad('Längd', 'Tillräcklig'),
-      rad('Kännetecken', 'Ryggsäck. Lätt solbränna.'),
-      rad('Ögonfärg', 'Egna'),
-      rad('Yrke', 'Se tidningen på plats'),
-      rad('Född i', foddValue)
-    );
 
     sida.append(
       el('div', { class: 'startpass-topp' },
         foto,
         el('div', { class: 'startpass-namn' },
-          el('span', { class: 'pdata-label' }, 'Innehavare · Efternamn, förnamn'),
+          el('span', { class: 'pdata-label' }, 'Namn'),
           nameInput,
-          el('span', { class: 'pdata-signatur' }, 'Innehavarens namnteckning: ',
-            el('span', { class: 'pdata-signatur-linje' })
-          )
+          el('span', { class: 'pdata-label' }, 'Född i'),
+          foddValue
         )
-      ),
-      grid
+      )
     );
 
-    // ---- född i: sökfältet och listan, sedan globen som visering
+    // ---- född i: sökfältet och listan
     const search = el('input', {
       class: 'field search',
       type: 'search',
@@ -1210,34 +1206,19 @@ export class App {
       );
     };
 
-    const mrz1 = el('span');
-    const mrz2 = el('span');
     const paintPass = () => {
       const c = CITY_BY_ID[this.startPick.cityId]!;
-      const namn = this.startPick.name.trim() || 'RESENÄREN';
-      // Passnumret följer namnet, så att samma person alltid får samma nummer.
-      const nr = Math.floor(pseudoRandom(`pass|${namn.toLowerCase()}`) * 90_000_000) + 10_000_000;
-      passnummer.textContent = `RY ${String(nr).replace(/(\d{4})(\d{4})/, '$1 $2')}`;
-      typValue.textContent = DIFFICULTY_INFO[this.startPick.difficulty].name;
       foddValue.textContent = `${c.name}, ${c.country}`;
-      mrz1.textContent = mrzLine1(namn, c.name);
-      mrz2.textContent = mrzLine2(0, this.startPick.difficulty, c.name);
     };
 
     const valjStad = (c: City) => {
       this.startPick.cityId = c.id;
       playSound('valj');
-      globe.select(c);
       paintCityCard();
       paintList();
       paintPass();
       uppdateraStart();
     };
-
-    const globe = renderGlobePicker({
-      selectedId: this.startPick.cityId,
-      onSelect: valjStad,
-    });
 
     const paintList = () => {
       clear(list);
@@ -1278,7 +1259,7 @@ export class App {
       );
       listRakna.textContent =
         matches.length === CITIES.length
-          ? `${CITIES.length} städer att välja mellan. Rulla i listan eller sök.`
+          ? `${CITIES.length} städer. Rulla i listan eller sök.`
           : `${matches.length} ${matches.length === 1 ? 'träff' : 'träffar'}.`;
       grupp('Sverige', svenska);
       for (const region of Object.keys(REGION_LABELS)) {
@@ -1297,7 +1278,6 @@ export class App {
     });
     nameInput.addEventListener('input', () => {
       this.startPick.name = nameInput.value;
-      paintPass();
       uppdateraStart();
     });
 
@@ -1312,84 +1292,14 @@ export class App {
         el('span', {}, 'Födelseort · Place of birth'),
         el('span', {}, 'Sid. 2')
       ),
-      el(
-        'p',
-        { class: 'muted startpass-not' },
-        'Din födelsestad står i passet, är där resan börjar och dit du ska ta dig tillbaka. Dess valuta blir den du räknar i. Skriv eller rulla i listan.'
-      ),
       el('div', { class: 'row' }, search),
       listRakna,
-      listRam,
-      cityCard,
-      el('div', { class: 'startpass-visering' },
-        el('div', { class: 'passport-head' },
-          el('span', {}, 'Visering · Hela världen'),
-          el('span', {}, 'Giltig för en resa')
-        ),
-        el('div', { class: 'birth-globe birth-globe-liten' },
-          globe.node,
-          el('p', { class: 'map-hint' }, 'Snurra jorden och tryck på en prick, om du hellre pekar än skriver.')
-        )
-      ),
-      el('div', { class: 'pdata-mrz' }, mrz1, mrz2)
+      listRam
     );
+    // Vykortet på passets första sida, under namnet: så ser man vart man hör.
+    sida.append(cityCard);
 
-    /**
-     * Anvisningarna till innehavaren: samma fyra steg som förr, men som en
-     * sida i passet, i myndighetens ton. Första gången utfälld, sedan bakom
-     * knappen - den ska inte ta en halv skärm varje gång.
-     */
-    const anvisningar = el('div', { class: 'passport-page startpass-sida startpass-anvisningar' });
-    const loop = el('ol', { class: 'loop' });
-    const steg: Array<[string, string]> = [
-      ['Lär dig staden', 'Provet på turistbyrån ger ett betyg som öppnar toppjobben.'],
-      ['Ta ett jobb', 'Varje rätt svar är en dagslön. Skiftet slutar med ett arkadmoment, och ger en poäng i yrkets huvudkategori.'],
-      ['Gör en affär', 'Köp souvenirer där de tillverkas, sälj dem långt hemifrån.'],
-      [
-        'Res vidare',
-        `Minst ${MIN_CITIES_TO_FINISH} städer, sedan hem igen. Boendet kostar varje dag.`,
-      ],
-    ];
-    steg.forEach(([rubrik, text], i) => {
-      loop.append(
-        el('li', {},
-          el('span', { class: 'loop-num' }, String(i + 1)),
-          el('span', { class: 'loop-text' },
-            el('strong', {}, rubrik),
-            el('span', {}, text)
-          )
-        )
-      );
-    });
-    const hjalpKnapp = button(
-      '',
-      () => {
-        this.showHelp = !this.showHelp;
-        malaHjalp();
-      },
-      { class: 'btn btn-ghost btn-small help-toggle', 'data-sound': 'av' }
-    );
-    const malaHjalp = () => {
-      loop.hidden = !this.showHelp;
-      hjalpKnapp.textContent = this.showHelp ? 'Dölj anvisningarna' : 'Hur spelar man?';
-      hjalpKnapp.setAttribute('aria-expanded', this.showHelp ? 'true' : 'false');
-    };
-    malaHjalp();
-    anvisningar.append(
-      el('div', { class: 'passport-head' },
-        el('span', {}, 'Anvisningar till innehavaren'),
-        el('span', {}, 'Sid. 3')
-      ),
-      el(
-        'p',
-        { class: 'muted startpass-not' },
-        'Innehavaren uppmanas att arbeta, resa och komma hem. Passet gäller inte som betalningsmedel, hur gärna innehavaren än vill.'
-      ),
-      el('div', { class: 'row' }, hjalpKnapp),
-      loop
-    );
-
-    pass.append(el('div', { class: 'passport-spread startpass-spread' }, sida, fodd, anvisningar));
+    pass.append(el('div', { class: 'passport-spread startpass-spread' }, sida, fodd));
     wrap.append(pass);
 
     const actions = el('div', { class: 'panel actions-panel' });
