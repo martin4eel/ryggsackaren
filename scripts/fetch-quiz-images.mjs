@@ -4,7 +4,8 @@
  * Arbetsordern står i src/data/quizImages.ts, så att spelets bildlista och
  * hämtningen aldrig kan glida isär. För varje post hämtas antingen en
  * Wikipedia-artikels ledningsbild eller en namngiven Commons-fil, och sparas
- * som public/quiz/<id>.jpg. Upphovsman och licens skrivs till
+ * som public/quiz/<id>.webp (hämtas som jpg, konverteras av
+ * compress-quiz-images.py). Upphovsman och licens skrivs till
  * public/quiz/ATTRIBUTION.md.
  *
  * Kör manuellt när en bild läggs till:  node scripts/fetch-quiz-images.mjs
@@ -104,11 +105,19 @@ async function fileCredits(fileName) {
 }
 
 async function download(url, dest) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA } });
-  if (!res.ok || !res.body) {
+  for (let forsok = 0; ; forsok++) {
+    const res = await fetch(url, { headers: { 'User-Agent': UA } });
+    if (res.ok && res.body) {
+      await pipeline(res.body, createWriteStream(dest));
+      return;
+    }
+    // Samma 429 som API:t ger när man hämtar för tätt. Vänta och försök igen.
+    if (res.status === 429 && forsok < 6) {
+      await paus(4000 * (forsok + 1));
+      continue;
+    }
     throw new Error(`${res.status} ${res.statusText} vid hämtning`);
   }
-  await pipeline(res.body, createWriteStream(dest));
 }
 
 mkdirSync(OUT_DIR, { recursive: true });
@@ -119,24 +128,37 @@ let hamtade = 0;
 
 for (const bild of QUIZ_IMAGES) {
   const dest = join(OUT_DIR, `${bild.id}.jpg`);
+  const klar = join(OUT_DIR, `${bild.id}.webp`);
   try {
     const { thumbUrl, fileName } = bild.file
       ? await commonsFile(bild.file, bild.bred ? 1400 : 900)
       : await pageImage(bild.article);
     const credit = await fileCredits(fileName);
     credits.push({ id: bild.id, alt: bild.alt, fileName, ...credit });
-    if (existsSync(dest) && !FORCE) {
+    if ((existsSync(klar) || existsSync(dest)) && !FORCE) {
       console.log(`= ${bild.id}: finns redan`);
       continue;
     }
     await download(thumbUrl, dest);
     hamtade++;
+    // Andrum mellan bilderna, så att vi inte blir strypta i onödan.
+    await paus(600);
     console.log(`✓ ${bild.id}: ${bild.file ?? bild.article} -> ${fileName}`);
   } catch (err) {
     failed++;
     console.error(`✗ ${bild.id}: ${err.message}`);
   }
 }
+
+/**
+ * Manifestet är service workerns lista över vad som ska cachas för offline-
+ * spel. Det skrivs härifrån så att listan aldrig kan glida isär från
+ * quizImages.ts, och så att ingen behöver underhålla den för hand.
+ */
+writeFileSync(
+  join(OUT_DIR, 'manifest.json'),
+  JSON.stringify(QUIZ_IMAGES.map((b) => b.id)) + '\n'
+);
 
 if (credits.length > 0) {
   const lines = [
@@ -149,7 +171,7 @@ if (credits.length > 0) {
   ];
   for (const c of credits.sort((a, b) => a.id.localeCompare(b.id, 'sv'))) {
     lines.push(
-      `- **${c.id}.jpg** (${c.alt}) – [${c.fileName}](${c.page}) av ${c.artist}, ${c.license}.`
+      `- **${c.id}.webp** (${c.alt}) – [${c.fileName}](${c.page}) av ${c.artist}, ${c.license}.`
     );
   }
   lines.push('');

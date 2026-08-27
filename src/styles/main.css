@@ -5769,469 +5769,8 @@ body.sheet-oppen {
 
 /* ====================================================================
    VÄDER OCH TID PÅ DYGNET
-   Fotot tonas efter stadens lokala klockslag och får väder ovanpå, byggt
-   av flera rörliga skikt: moln som driver, regn i två djup, blixtar, tre
-   lager snö, dimbankar, solstrålar, stjärnor, hettans dallring och våta
-   gator om natten. Allt är kosmetiskt: Bangkok i monsunregn en kväll och
-   Bangkok i sol en morgon är två olika bilder av samma stad.
+   Bara en skylt: vad det är för väder och hur mycket klockan är lokalt.
    ==================================================================== */
-
-.city-hero[data-tid='morgon'] .city-hero-img {
-  filter: brightness(1.02) sepia(0.16) saturate(1.05);
-}
-
-.city-hero[data-tid='skymning'] .city-hero-img {
-  filter: brightness(0.92) sepia(0.3) saturate(1.3) hue-rotate(-12deg) contrast(1.05);
-}
-
-.city-hero[data-tid='kvall'] .city-hero-img {
-  filter: brightness(0.8) sepia(0.22) saturate(1.15) hue-rotate(-6deg);
-}
-
-.city-hero[data-tid='natt'] .city-hero-img {
-  filter: brightness(0.62) saturate(0.7) contrast(1.08);
-}
-
-.city-hero[data-vader='moln'] .city-hero-img,
-.city-hero[data-vader='regn'] .city-hero-img,
-.city-hero[data-vader='storm'] .city-hero-img {
-  filter: brightness(0.8) saturate(0.72) contrast(0.96);
-}
-
-.city-hero[data-vader='skyfall'] .city-hero-img,
-.city-hero[data-vader='aska'] .city-hero-img {
-  filter: brightness(0.62) saturate(0.6) contrast(0.94);
-}
-
-.city-hero[data-vader='sno'] .city-hero-img,
-.city-hero[data-vader='snostorm'] .city-hero-img {
-  filter: brightness(0.9) saturate(0.55) contrast(0.92);
-}
-
-.city-hero[data-vader='dimma'] .city-hero-img {
-  filter: brightness(0.9) saturate(0.4) contrast(0.7);
-}
-
-.city-hero[data-vader='dis'] .city-hero-img {
-  filter: brightness(0.95) sepia(0.45) saturate(0.8) contrast(0.8);
-}
-
-.city-hero[data-vader='hetta'] .city-hero-img {
-  filter: brightness(1.06) sepia(0.2) saturate(1.2) contrast(1.05) url(#vader-hetta);
-}
-
-.city-hero[data-tid='natt'][data-vader='regn'] .city-hero-img,
-.city-hero[data-tid='natt'][data-vader='moln'] .city-hero-img,
-.city-hero[data-tid='natt'][data-vader='storm'] .city-hero-img {
-  filter: brightness(0.5) saturate(0.6);
-}
-
-.city-hero[data-tid='natt'][data-vader='skyfall'] .city-hero-img,
-.city-hero[data-tid='natt'][data-vader='aska'] .city-hero-img {
-  filter: brightness(0.4) saturate(0.55);
-}
-
-.city-vader-lager,
-.city-vader-lager > div,
-.city-vader-lager > div > span {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.city-vader-lager {
-  overflow: hidden;
-}
-
-.vl-filter {
-  position: absolute;
-  width: 0;
-  height: 0;
-}
-
-/* ---- himlen: dygnets ton */
-.tid-natt .vl-himmel {
-  background: linear-gradient(180deg, rgba(10, 28, 62, 0.34), rgba(4, 12, 32, 0.4));
-}
-
-.tid-kvall .vl-himmel {
-  background: linear-gradient(180deg, rgba(255, 140, 60, 0.12), rgba(80, 30, 70, 0.26));
-}
-
-.tid-skymning .vl-himmel {
-  background:
-    radial-gradient(ellipse 70% 45% at 30% 100%, rgba(255, 170, 60, 0.28), transparent 70%),
-    linear-gradient(180deg, rgba(90, 60, 130, 0.18), rgba(255, 120, 60, 0.12) 60%, rgba(60, 20, 50, 0.22));
-}
-
-.tid-morgon .vl-himmel {
-  background:
-    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(255, 230, 170, 0.3), transparent 70%),
-    linear-gradient(180deg, rgba(255, 220, 150, 0.14), transparent 60%);
-}
-
-/* ---- moln: tre mjuka skuggor som driver över bilden i olika fart */
-.vl-moln span {
-  inset: -30% -60%;
-  background-repeat: no-repeat;
-  opacity: 0.55;
-  animation: molndrift linear infinite;
-}
-
-.vl-moln-1 {
-  background-image:
-    radial-gradient(ellipse 34% 22% at 20% 30%, rgba(20, 30, 40, 0.45), transparent 70%),
-    radial-gradient(ellipse 28% 18% at 65% 20%, rgba(20, 30, 40, 0.4), transparent 70%);
-  animation-duration: 48s;
-}
-
-.vl-moln-2 {
-  background-image:
-    radial-gradient(ellipse 30% 20% at 45% 40%, rgba(255, 255, 255, 0.16), transparent 70%),
-    radial-gradient(ellipse 22% 14% at 85% 35%, rgba(255, 255, 255, 0.12), transparent 70%);
-  animation-duration: 70s;
-  animation-delay: -30s;
-}
-
-.vl-moln-3 {
-  background-image: radial-gradient(ellipse 40% 26% at 30% 15%, rgba(10, 20, 30, 0.35), transparent 70%);
-  animation-duration: 95s;
-  animation-delay: -50s;
-  opacity: 0.4;
-}
-
-.vader-skyfall .vl-moln span,
-.vader-aska .vl-moln span,
-.vader-storm .vl-moln span,
-.vader-snostorm .vl-moln span {
-  opacity: 0.8;
-  animation-duration: 22s;
-}
-
-.vind-2 .vl-moln span { animation-duration: 30s; }
-.vind-3 .vl-moln span { animation-duration: 16s; }
-
-@keyframes molndrift {
-  from { transform: translateX(-12%); }
-  to { transform: translateX(12%); }
-}
-
-/* ---- sol: strålar som vrider sig långsamt, och ett bländande sken i hörnet */
-.vl-sol-1 {
-  inset: -60% -20% -20% -60%;
-  background: conic-gradient(
-    from 0deg at 15% 10%,
-    rgba(255, 245, 200, 0) 0deg,
-    rgba(255, 245, 200, 0.32) 6deg,
-    rgba(255, 245, 200, 0) 13deg,
-    rgba(255, 245, 200, 0) 22deg,
-    rgba(255, 245, 200, 0.22) 29deg,
-    rgba(255, 245, 200, 0) 38deg,
-    rgba(255, 245, 200, 0) 52deg,
-    rgba(255, 245, 200, 0.28) 60deg,
-    rgba(255, 245, 200, 0) 70deg,
-    rgba(255, 245, 200, 0) 82deg,
-    rgba(255, 245, 200, 0.16) 88deg,
-    rgba(255, 245, 200, 0) 96deg,
-    rgba(255, 245, 200, 0) 360deg
-  );
-  mix-blend-mode: screen;
-  transform-origin: 15% 10%;
-  animation: solstralar 40s linear infinite alternate;
-}
-
-.vl-sol-2 {
-  background:
-    radial-gradient(circle at 12% 8%, rgba(255, 250, 220, 0.9), rgba(255, 240, 190, 0.35) 14%, transparent 36%),
-    radial-gradient(circle at 12% 8%, transparent 40%, rgba(255, 210, 120, 0.1) 60%, transparent 78%);
-  mix-blend-mode: screen;
-  animation: solblom 6s ease-in-out infinite alternate;
-}
-
-.tid-skymning .vl-sol-1,
-.tid-skymning .vl-sol-2 {
-  transform-origin: 28% 96%;
-  filter: hue-rotate(-20deg) saturate(1.5);
-}
-
-.tid-skymning .vl-sol-2 {
-  background:
-    radial-gradient(circle at 28% 96%, rgba(255, 200, 120, 0.8), rgba(255, 150, 80, 0.3) 14%, transparent 34%);
-}
-
-.vader-hetta .vl-sol-2 {
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 230, 0.7), rgba(255, 240, 200, 0.2) 18%, transparent 42%),
-    linear-gradient(180deg, transparent 55%, rgba(255, 200, 120, 0.18));
-}
-
-@keyframes solstralar {
-  from { transform: rotate(-4deg); }
-  to { transform: rotate(4deg); }
-}
-
-@keyframes solblom {
-  from { opacity: 0.7; }
-  to { opacity: 1; }
-}
-
-/* ---- stjärnor: två lager som blinkar i otakt, bara i klart nattväder */
-.vl-stjarnor span {
-  inset: 0 0 45%;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 0.6px, transparent 1.4px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.6) 0.5px, transparent 1.2px);
-  background-size: 97px 83px, 61px 71px;
-  background-position: 7px 3px, 31px 19px;
-  animation: stjarnblink 3.2s ease-in-out infinite alternate;
-  mask-image: linear-gradient(180deg, #000 60%, transparent);
-  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
-}
-
-.vl-stjarnor-2 {
-  background-size: 131px 113px, 79px 89px;
-  background-position: 53px 41px, 11px 5px;
-  animation-duration: 4.7s;
-  animation-delay: -2s;
-}
-
-@keyframes stjarnblink {
-  from { opacity: 0.35; }
-  to { opacity: 1; }
-}
-
-/* ---- regn: strimmor i två djup, snedare ju mer det blåser; skyfall får ett tredje */
-.vl-regn span {
-  inset: -30% -20% 0;
-  background: repeating-linear-gradient(
-    var(--regnvinkel, 100deg),
-    transparent 0 11px,
-    rgba(255, 255, 255, 0.14) 11px 12px
-  );
-  background-size: 70px 90px;
-  animation: regnfall 0.5s linear infinite;
-  opacity: 0.55;
-}
-
-.vl-regn-2 {
-  background-size: 110px 140px;
-  opacity: 0.35;
-  animation-duration: 0.8s;
-  filter: blur(0.6px);
-}
-
-.vl-regn-3 {
-  background: repeating-linear-gradient(
-    var(--regnvinkel, 100deg),
-    transparent 0 5px,
-    rgba(255, 255, 255, 0.22) 5px 6.5px
-  );
-  background-size: 50px 70px;
-  opacity: 0.55;
-  animation-duration: 0.32s;
-}
-
-.vind-0 .vl-regn { --regnvinkel: 92deg; }
-.vind-1 .vl-regn { --regnvinkel: 100deg; }
-.vind-2 .vl-regn { --regnvinkel: 112deg; }
-.vind-3 .vl-regn { --regnvinkel: 126deg; }
-
-.vind-2 .vl-regn span { animation-duration: 0.38s; }
-.vind-3 .vl-regn span { animation-duration: 0.28s; }
-
-@keyframes regnfall {
-  to { background-position: -14px 90px; }
-}
-
-/* Stänk vid marken när det öser: en ljus rand som pulserar. */
-.vader-skyfall .vl-regn::after,
-.vader-aska .vl-regn::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0;
-  height: 14%;
-  background: linear-gradient(180deg, transparent, rgba(220, 235, 255, 0.22));
-  animation: stank 0.7s steps(3) infinite;
-}
-
-@keyframes stank {
-  from { opacity: 0.5; }
-  to { opacity: 1; }
-}
-
-/* ---- blixt: hela bilden lyser upp i två korta stötar, oregelbundet */
-.vl-blixt span {
-  background: rgba(240, 245, 255, 0);
-  mix-blend-mode: screen;
-}
-
-.vl-blixt-1 {
-  animation: blixt 11s linear infinite;
-}
-
-.vl-blixt-2 {
-  animation: blixt 17s linear infinite;
-  animation-delay: -6s;
-  background-image: radial-gradient(ellipse 40% 60% at 70% 0%, rgba(255, 255, 255, 0.8), transparent 60%);
-}
-
-@keyframes blixt {
-  0%, 61% { background-color: rgba(240, 245, 255, 0); opacity: 0; }
-  62% { background-color: rgba(240, 245, 255, 0.75); opacity: 1; }
-  63% { background-color: rgba(240, 245, 255, 0.1); opacity: 1; }
-  64.5% { background-color: rgba(240, 245, 255, 0.55); opacity: 1; }
-  67% { background-color: rgba(240, 245, 255, 0); opacity: 0; }
-  100% { background-color: rgba(240, 245, 255, 0); opacity: 0; }
-}
-
-/* ---- snö: tre lager i olika storlek och fart, som vaggar i sidled */
-.vl-sno span {
-  inset: -60px -10% 0;
-  background-image:
-    radial-gradient(circle, rgba(255, 255, 255, 0.9) 1.2px, transparent 2px),
-    radial-gradient(circle, rgba(255, 255, 255, 0.6) 0.8px, transparent 1.6px);
-  background-size: 61px 67px, 41px 37px;
-  background-position: 0 0, 18px 12px;
-  animation: snofall 11s linear infinite, snovagg 5s ease-in-out infinite alternate;
-}
-
-.vl-sno-2 {
-  background-size: 89px 79px, 53px 43px;
-  opacity: 0.6;
-  animation-duration: 16s, 7s;
-  animation-delay: -5s, -2s;
-}
-
-.vl-sno-3 {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.95) 2px, transparent 3.2px);
-  background-size: 149px 131px;
-  opacity: 0.8;
-  filter: blur(0.8px);
-  animation-duration: 7s, 4s;
-  animation-delay: -3s, -1s;
-}
-
-.vader-snostorm .vl-sno span {
-  animation: snostorm 2.2s linear infinite;
-}
-
-.vader-snostorm .vl-sno-2 { animation-duration: 3s; }
-.vader-snostorm .vl-sno-3 { animation-duration: 1.4s; }
-
-/* Ett tunt lager som lagt sig nedtill. */
-.vl-sno::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0;
-  height: 18%;
-  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.28));
-}
-
-.vader-snostorm .vl-sno::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(230, 236, 245, 0.28);
-}
-
-@keyframes snofall {
-  to { background-position: 22px 268px, -14px 185px; }
-}
-
-@keyframes snovagg {
-  from { transform: translateX(-10px); }
-  to { transform: translateX(10px); }
-}
-
-@keyframes snostorm {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: -220px 200px, -160px 140px; }
-}
-
-/* ---- dimma och dis: bankar som driver långsamt åt olika håll */
-.vl-dimma span {
-  inset: -20% -60%;
-  background-repeat: no-repeat;
-  animation: dimdrift linear infinite alternate;
-}
-
-.vl-dimma-1 {
-  background-image: radial-gradient(ellipse 45% 30% at 35% 60%, rgba(235, 238, 240, 0.7), transparent 70%);
-  animation-duration: 26s;
-}
-
-.vl-dimma-2 {
-  background-image: radial-gradient(ellipse 50% 28% at 70% 40%, rgba(225, 230, 235, 0.6), transparent 70%);
-  animation-duration: 37s;
-  animation-direction: alternate-reverse;
-}
-
-.vl-dimma-3 {
-  inset: 0;
-  background: linear-gradient(180deg, rgba(220, 226, 232, 0.25), rgba(215, 222, 230, 0.55) 70%, rgba(210, 218, 228, 0.7));
-}
-
-.vader-dis .vl-dimma-1 {
-  background-image: radial-gradient(ellipse 50% 30% at 40% 50%, rgba(230, 200, 140, 0.55), transparent 70%);
-}
-
-.vader-dis .vl-dimma-2 {
-  background-image: radial-gradient(ellipse 50% 28% at 70% 40%, rgba(235, 210, 150, 0.45), transparent 70%);
-}
-
-.vader-dis .vl-dimma-3 {
-  background: linear-gradient(180deg, rgba(228, 206, 160, 0.3), rgba(220, 195, 150, 0.4));
-}
-
-@keyframes dimdrift {
-  from { transform: translateX(-8%); }
-  to { transform: translateX(8%); }
-}
-
-/* ---- vind: damm, löv och skräp som far förbi vågrätt */
-.vl-vind span {
-  inset: 0 -20%;
-  background-image:
-    radial-gradient(ellipse 5px 1.5px, rgba(255, 245, 220, 0.5), transparent 70%),
-    radial-gradient(ellipse 3px 1px, rgba(230, 220, 200, 0.4), transparent 70%);
-  background-size: 173px 97px, 113px 71px;
-  animation: vindfart 1.6s linear infinite;
-  opacity: 0.7;
-}
-
-.vl-vind-2 {
-  background-size: 229px 131px, 149px 83px;
-  animation-duration: 2.4s;
-  animation-delay: -1s;
-  opacity: 0.45;
-}
-
-.vader-snostorm .vl-vind span {
-  background-image: radial-gradient(ellipse 7px 1.5px, rgba(255, 255, 255, 0.8), transparent 70%);
-}
-
-@keyframes vindfart {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: -346px 8px, -226px -6px; }
-}
-
-/* ---- våt gata om natten: gatuljus som speglar sig i asfalten */
-.vl-vat {
-  inset: auto 0 0;
-  height: 40%;
-  background:
-    radial-gradient(ellipse 12% 60% at 22% 100%, rgba(255, 200, 110, 0.35), transparent 70%),
-    radial-gradient(ellipse 10% 70% at 58% 100%, rgba(255, 230, 160, 0.3), transparent 70%),
-    radial-gradient(ellipse 14% 55% at 85% 100%, rgba(180, 220, 255, 0.3), transparent 70%),
-    linear-gradient(180deg, transparent, rgba(200, 220, 255, 0.12));
-  mix-blend-mode: screen;
-  animation: vatglans 2.8s ease-in-out infinite alternate;
-}
-
-@keyframes vatglans {
-  from { opacity: 0.7; }
-  to { opacity: 1; }
-}
 
 /* Raden under skylten: hur vädret känns just här. */
 .city-vader-rad {
@@ -6246,19 +5785,12 @@ body.sheet-oppen {
 }
 
 /* Skylten med väder och klockslag. Den är en knapp: väderljudet av och på. */
-.city-vader-rad-skylt {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-top: 6px;
-}
-
 .city-vader {
   display: inline-flex;
   align-self: flex-start;
   align-items: center;
   gap: 6px;
+  margin-top: 6px;
   padding: 4px 10px 4px 8px;
   border-radius: 999px;
   background: rgba(4, 18, 28, 0.62);
@@ -6272,49 +5804,6 @@ body.sheet-oppen {
 .city-vader-glyph {
   font-size: 0.9rem;
   line-height: 1;
-}
-
-/* Knappen för väderljudet: en högtalare med text, som knappen i statusraden
-   fast bara för vädret. Den ser ut som en knapp för att den är en. */
-.city-vader-ljud {
-  pointer-events: auto;
-  position: relative;
-  z-index: 7;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 10px 4px 7px;
-  border-radius: 999px;
-  border: 1px solid rgba(246, 239, 224, 0.45);
-  background: rgba(246, 239, 224, 0.16);
-  color: var(--paper);
-  font: inherit;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 1px 4px rgba(4, 16, 26, 0.4);
-}
-
-.city-vader-ljud svg {
-  width: 14px;
-  height: 14px;
-}
-
-.city-vader-ljud:hover {
-  background: rgba(246, 239, 224, 0.28);
-}
-
-.city-vader-ljud-av {
-  background: rgba(4, 18, 28, 0.55);
-  border-style: dashed;
-  opacity: 0.85;
-}
-
-/* Vädret är tyst just nu (snö, dimma, stiltje): knappen finns, men dämpat. */
-.city-vader-ljud-tyst {
-  opacity: 0.6;
 }
 
 /* Dagens rubrik i tidningen. */
@@ -6572,6 +6061,28 @@ body.sheet-oppen {
 
 .paper-annonser .job-locked {
   opacity: 0.55;
+}
+
+/* Ett skift man redan gjort: annonsen är överkryssad med två streck i
+   bläck, som när man stryker en annons i tidningen med kulspetspennan. */
+.paper-annonser .job-klar {
+  position: relative;
+  opacity: 0.6;
+}
+
+.paper-annonser .job-klar::after {
+  content: '';
+  position: absolute;
+  inset: 6px 0 8px;
+  pointer-events: none;
+  background:
+    linear-gradient(to top right, transparent calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% + 1.5px), transparent calc(50% + 1.5px)),
+    linear-gradient(to top left, transparent calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% + 1.5px), transparent calc(50% + 1.5px));
+}
+
+.paper-annonser .job-klar .job-head h3 {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
 }
 
 @media (min-width: 700px) {

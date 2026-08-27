@@ -164,29 +164,16 @@ webbläsaren och överlever att sparfilen raderas.
    ordning skulle man lära sig att första brickan alltid är turistbyrån, och då
    fanns det ingen upptäckt kvar att göra.
 
-   **Vädret och tiden på dygnet** färgar fotot. Klockslaget är stadens lokala
-   tid just nu – spelar du på kvällen hemma är det morgon i Tokyo – och
-   årstiden följer resans startdatum, så en resa som börjar i december har
-   vinter i Stockholm och sommar i Sydney. Vädret har tio ansikten: sol,
-   hetta, moln, regn, skyfall, åska, snö, snöstorm, dis och dimma, plus
-   storm, och varje klimat har sina – dimman hör till London, diset till
-   Kairo, åskan till Bangkok i regntid. Vart och ett är byggt av flera rörliga
-   skikt (`src/game/weather.ts`, `vaderLager` i `src/ui/app.ts`): moln som
-   driver, regn i två djup som faller snedare ju mer det blåser, blixtar som
-   lyser upp hela bilden, tre lager snö som vaggar, dimbankar, solstrålar,
-   stjärnor om natten, hettans dallring och gatuljus som speglar sig i våt
-   asfalt. Det hörs också: regn, skyfall, vindbyar och åskmuller ligger under
-   stadsskärmen och tystnar när man går in någonstans. Snö och dimma är
-   tysta, som de är. Väderljudet har en egen knapp, _Väderljud på/av_,
-   bredvid väderskylten i stadsbilden: den stänger av bara vädret och låter
-   allt annat ljud vara kvar; valet sparas. Under skylten står en rad om hur vädret känns just här.
-
-   Inget av det påverkar spelet; det finns för att Bangkok i monsunregn en
-   kväll och Bangkok i sol en morgon ska vara två olika bilder av samma stad.
+   **Vädret och tiden på dygnet** står på en skylt i stadsbilden. Klockslaget
+   är stadens lokala tid just nu – spelar du på kvällen hemma är det morgon i
+   Tokyo – och årstiden följer resans startdatum, så en resa som börjar i
+   december har vinter i Stockholm och sommar i Sydney. Vädret lottas per
+   klimat och årstid (`src/game/weather.ts`): dimman hör till London, diset
+   till Kairo, åskan till Bangkok i regntid. Under skylten står en rad om hur
+   vädret känns just här. Inget av det påverkar spelet, och inget av det
+   ritas eller låter – det står bara där, som på en anslagstavla.
    Kommer du tillbaka till en stad står det också vilket besök i ordningen det
-   är och när du var här första gången. Vill du titta på ett visst väder:
-   sätt `localStorage['ryggsackaren-vader']` till t.ex. `aska|natt|3`
-   (väder|dygnsdel|vind 0–3) i webbläsarens konsol och ladda om.
+   är och när du var här första gången.
 
    **Ryggsäcken** ligger inte bland skyltarna utan uppe till höger i
    statusraden, på varje skärm, med antalet souvenirer på sig.
@@ -260,6 +247,13 @@ webbläsaren och överlever att sparfilen raderas.
    teckningar. Hela poängen med en bildfråga är att känna igen något man sett
    i verkligheten, och då duger inte en illustration av en marulk – det ska
    vara en marulk.
+
+   **Varje yrkesfråga har en bild.** Alla 1 300 jobbfrågor visar ett foto:
+   personen som ska namnges, klubban som ska kännas igen, fordonet, rätten,
+   instrumentet, platsen. Där bilden bär frågan är den skriven som en
+   bildfråga (*"Vem är mannen på bilden?"*), annars sätter fotot bara
+   scenen. Närmare sjuhundra foton ligger i `public/quiz/` som WebP i
+   högst 560 pixlars bredd, omkring trettio kilobyte styck.
 
    **Bilderna reagerar på svaret**, i Monty Python-anda. Rätt svar ger en
    liten studs och ett *Bra jobbat!*. Fel svar klistrar ett **fotoutklipp**
@@ -485,9 +479,9 @@ ryggsäckare_.
 
 ```
 public/
-  quiz/                    Ett foto per frågebild + ATTRIBUTION.md
+  quiz/                    Ett WebP-foto per frågebild, manifest.json + ATTRIBUTION.md
   manifest.webmanifest     Gör spelet installerbart på hemskärmen
-  sw.js                    Service worker för offline-spel (cachar även fotona)
+  sw.js                    Service worker för offline-spel (cachar fotona i bakgrunden)
   icon*.png, icon.svg      App- och favicon-ikoner
   cities/                  Ett foto per stad (Wikimedia Commons) + ATTRIBUTION.md
 src/
@@ -580,8 +574,11 @@ Nya foton läggs i `src/data/quizImages.ts` och hämtas med
 `public/quiz/ATTRIBUTION.md`. Ledningsbilden till en Wikipedia-artikel om en
 krydda är ofta en botanisk plansch från 1800-talet, så växterna pekar på
 namngivna Commons-filer i stället – en tecknad ingefära duger inte i en fråga
-som går ut på att känna igen ingefära. Kom ihåg att lägga till bilden i
-`public/sw.js`; valideringen kräver det. `d: 1` betyder att frågan används på båda svårighetsgraderna,
+som går ut på att känna igen ingefära. Hämtskriptet skriver också
+`public/quiz/manifest.json`, som service workern cachar bilderna ur i
+bakgrunden efter aktiveringen – inte vid installationen, som skulle ta minuter
+på mobilnät. Fotona hämtas som JPEG och görs om till WebP i högst 560 pixlar av
+`scripts/compress-quiz-images.py`. `d: 1` betyder att frågan används på båda svårighetsgraderna,
 `d: 2` att den bara dyker upp på Globetrotter.
 
 ```ts
@@ -623,8 +620,9 @@ går att ta sig ifrån skulle låsa fast en spelare utan att något syns.
 **Frågeformerna** kontrolleras var för sig: en reglagefråga ska ha exakt ett
 svar i `a`, ett svar som ligger inom skalan, en steglängd och en tolerans som
 inte täcker en fjärdedel av skalan. En bildfråga ska ha lika många bilder som
-alternativ. Varje bild-id som en fråga hänvisar till måste finnas i manifestet,
-ha en fil i `public/quiz/` och stå i service workerns lista.
+alternativ. Varje bild-id som en fråga hänvisar till måste finnas i
+`src/data/quizImages.ts`, ha en fil i `public/quiz/` och stå i
+`public/quiz/manifest.json` (som hämtskriptet skriver).
 
 **Händelserna** kontrolleras också: att inga två delar id, att varje händelse
 hör till minst ett tillfälle och har antingen val eller en effekt (aldrig

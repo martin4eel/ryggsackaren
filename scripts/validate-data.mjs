@@ -373,20 +373,23 @@ try {
     if (!b.alt?.trim()) problems.push(`bilden ${b.id} saknar alt-text`);
     if (!b.article && !b.file)
       problems.push(`bilden ${b.id} saknar både artikel och Commons-fil`);
-    if (!existsSync(join(ROOT, 'public', 'quiz', `${b.id}.jpg`)))
+    if (!existsSync(join(ROOT, 'public', 'quiz', `${b.id}.webp`)))
       problems.push(
         `bilden ${b.id} saknar fil i public/quiz/ – kör node scripts/fetch-quiz-images.mjs`
       );
   }
   /**
-   * Service workern förcachar bilderna för offline-spel. En bild som saknas
-   * där ger en bruten bildikon mitt i ett skift för den som sitter på ett
-   * flyg, och det märks aldrig under utveckling.
+   * Service workern cachar bilderna ur quiz/manifest.json, som hämtskriptet
+   * skriver. Saknas en bild där får den som sitter på ett flyg en bruten
+   * bildikon mitt i ett skift, och det märks aldrig under utveckling.
    */
-  const swKalla = readFileSync(join(ROOT, 'public', 'sw.js'), 'utf8');
+  const manifestFil = join(ROOT, 'public', 'quiz', 'manifest.json');
+  const manifest = new Set(
+    existsSync(manifestFil) ? JSON.parse(readFileSync(manifestFil, 'utf8')) : []
+  );
   for (const b of QUIZ_IMAGES) {
-    if (!new RegExp(`'${b.id}',`).test(swKalla))
-      problems.push(`bilden ${b.id} saknas i fotolistan i public/sw.js`);
+    if (!manifest.has(b.id))
+      problems.push(`bilden ${b.id} saknas i public/quiz/manifest.json – kör node scripts/fetch-quiz-images.mjs`);
   }
 
   for (const post of bildIdn) {

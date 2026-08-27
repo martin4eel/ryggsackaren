@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Komprimerar frågebilderna i public/quiz/ på plats.
+"""Komprimerar frågebilderna i public/quiz/ och gör dem till WebP.
+
+Hämtskriptet lägger ner en <id>.jpg; här skalas den ner, sparas som
+<id>.webp och jpg-filen tas bort. WebP ger ungefär fyrtio procent mindre
+filer än JPEG vid samma kvalitet, och med sjuhundra bilder är det skillnaden
+mellan tio och tjugo megabyte i spelarens cache.
 
 Bilderna visas som mest i ett par hundra pixlars bredd - i en fyrfältsruta på
 en telefon är de smalare än så. De hämtas i 900 pixlar och skalas här ner till
@@ -18,10 +23,10 @@ try:
 except ImportError:
     sys.exit("PIL (Pillow) saknas – hoppar över komprimering.")
 
-MAX_WIDTH = 640
-MAX_PIXELS = 420_000
-SKIP_BYTES = 70 * 1024
-QUALITY = 72
+MAX_WIDTH = 560
+MAX_PIXELS = 320_000
+SKIP_BYTES = 0
+QUALITY = 70
 
 # Stationsvinjetterna ligger i samma mapp men visas i full skärmbredd, och
 # behöver därför fler pixlar än en bild i en fyrfältsruta.
@@ -55,18 +60,16 @@ for name in sorted(os.listdir(quiz_dir)):
             max_width / img.width,
             (max_pixels / (img.width * img.height)) ** 0.5,
         )
-        if scale >= 1.0 and before <= skip_bytes:
-            total_after += before
-            print(f"= {name}: {before // 1024} kB (redan liten, orörd)")
-            continue
         if scale < 1.0:
             img = img.resize(
                 (round(img.width * scale), round(img.height * scale)),
                 Image.LANCZOS,
             )
-        img.save(path, "JPEG", quality=QUALITY, optimize=True, progressive=True)
+        out = path[:-4] + ".webp"
+        img.save(out, "WEBP", quality=QUALITY, method=6)
+    os.remove(path)
 
-    after = os.path.getsize(path)
+    after = os.path.getsize(out)
     total_after += after
     print(f"✓ {name}: {before // 1024} kB -> {after // 1024} kB")
 
