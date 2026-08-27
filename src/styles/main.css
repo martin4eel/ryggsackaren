@@ -2690,6 +2690,12 @@ img.no-photo {
   box-shadow: 0 0 0 3px rgba(242, 166, 59, 0.25);
 }
 
+.mg-chip-dold {
+  color: transparent;
+  text-shadow: 0 0 0 var(--ink-soft);
+  letter-spacing: 0.1em;
+}
+
 .mg-chip-done {
   border-color: var(--palm);
   background: rgba(71, 163, 130, 0.18);

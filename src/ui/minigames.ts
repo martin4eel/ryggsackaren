@@ -36,6 +36,27 @@ export interface MinigameContext {
 
 type Done = (result: MinigameResult) => void;
 
+/**
+ * Touchskärmar levererar `click` först när fingret lyfts, ofta 50-100 ms
+ * efter att det satts ner. I de moment där tiden bedöms i tiondelar är det
+ * hela skillnaden mellan rent och nästan. Knapparna som ska vara snabba
+ * lyssnar därför på pointerdown, och klicket som följer ignoreras.
+ */
+function snabbKnapp(label: string, onPress: () => void, attrs: Record<string, string>): HTMLElement {
+  const b = button(label, () => {}, attrs);
+  b.addEventListener('pointerdown', (event) => {
+    event.preventDefault();
+    onPress();
+  });
+  return b;
+}
+
+/**
+ * Ungefärlig fördröjning från finger till händelse, i millisekunder, som
+ * taktmomentet räknar bort. Ett rent slag på skärmen ska räknas som rent.
+ */
+const INPUT_LAG_MS = 45;
+
 /** Startar rätt spel och lämnar tillbaka elementet det spelas i. */
 export function renderMinigame(
   game: Minigame,
@@ -408,15 +429,27 @@ function startInstruments(
   const panel = el('div', { class: 'mg-panel' });
   host.append(status.node, order, timer.node, feedback.node, panel);
 
+  /** Om ordern visas i klartext (under genomgången) eller är dold. */
+  let visible = true;
+
+  /**
+   * Ordern visas bara under genomgången. Sedan döljs den, och man utför den
+   * ur minnet - annars är momentet att läsa en lista och trycka på knappar.
+   * De utförda stegen bockas av så att man ser var man är.
+   */
   const drawOrder = () => {
     clear(order);
     queue.forEach((idx, i) => {
+      const done = i < at;
+      const now = i === at;
       const chip = el(
         'span',
         {
-          class: `mg-chip ${i < at ? 'mg-chip-done' : i === at ? 'mg-chip-now' : ''}`,
+          class: `mg-chip ${done ? 'mg-chip-done' : now ? 'mg-chip-now' : ''} ${
+            visible ? '' : 'mg-chip-dold'
+          }`,
         },
-        `${i + 1}. ${items[idx]}`
+        visible || done ? `${i + 1}. ${items[idx]}` : `${i + 1}. ?`
       );
       order.append(chip);
     });
@@ -436,26 +469,36 @@ function startInstruments(
       return;
     }
     // Två moment i början, upp till fyra på slutet.
-    const length = Math.min(items.length, 2 + Math.floor(round / 2));
+    // Två moment i början, upp till fem på slutet.
+    const length = Math.min(5, 2 + Math.floor(round / 2));
     queue = Array.from({ length }, () => randInt(items.length));
     stepsTotal += length;
     at = 0;
-    running = true;
+    running = false;
+    visible = true;
     status.set(`Order ${round + 1}/${ROUNDS}`, `${cleared} klarade`);
-    feedback.say('Utför momenten uppifrån och ner.', 'neutral');
+    feedback.say('Memorera ordern.', 'neutral');
     drawOrder();
-
-    const total = (1500 + length * 1100 - round * 120) * ctx.slack;
-    timer.run(total, () => fail('Tiden gick ut.'));
-
     clear(panel);
-    items.forEach((name, i) => {
-      panel.append(
-        button(name, () => press(i), {
-          class: 'mg-knob',
-          'data-sound': 'av',
-        })
-      );
+
+    // Genomgången: en stund per steg, sedan försvinner texten.
+    const study = (900 + length * 650) * ctx.slack;
+    after(study, () => {
+      if (round >= ROUNDS) return;
+      visible = false;
+      running = true;
+      drawOrder();
+      feedback.say('Utför momenten ur minnet, uppifrån och ner.', 'neutral');
+      const total = (1500 + length * 1100 - round * 120) * ctx.slack;
+      timer.run(total, () => fail('Tiden gick ut.'));
+      items.forEach((name, i) => {
+        panel.append(
+          button(name, () => press(i), {
+            class: 'mg-knob',
+            'data-sound': 'av',
+          })
+        );
+      });
     });
   };
 
@@ -465,8 +508,10 @@ function startInstruments(
     timer.halt();
     playSound('fel');
     feedback.say(`${why} Rätt var ${items[queue[at]!]}.`, 'fel');
+    visible = true;
+    drawOrder();
     round += 1;
-    after(900, nextRound);
+    after(1300, nextRound);
   };
 
   const press = (i: number) => {
@@ -615,6 +660,10 @@ function startSequence(
  * i den gröna zonen. Mitten av zonen ger full poäng, kanterna halv - det
  * lönar sig alltså att sikta, inte bara att hamna innanför.
  */
+/** Prickens läge och bredd som andel av zonen. */
+const BULL_FROM = 0.25;
+const BULL_SHARE = 0.5;
+
 function startPrecision(
   host: HTMLElement,
   game: Minigame,
@@ -656,19 +705,24 @@ function startPrecision(
       return;
     }
     // Zonen krymper men hålls rimlig, och placeras aldrig helt ute i kanten.
-    zoneWidth = Math.max(14, 30 - attempt * 3) * ctx.slack;
+    zoneWidth = Math.max(18, 30 - attempt * 2.5) * ctx.slack;
     zoneStart = 8 + Math.random() * (100 - 16 - zoneWidth);
     zone.style.left = `${zoneStart}%`;
     zone.style.width = `${zoneWidth}%`;
-    bull.style.left = `${zoneStart + zoneWidth * 0.35}%`;
-    bull.style.width = `${zoneWidth * 0.3}%`;
+    /**
+     * Pricken är halva zonen. Med en smalare prick och den fart markören
+     * har mot slutet blev "mitt i" ett fönster på fyrtio millisekunder -
+     * ett lotteri på en touchskärm, som dessutom levererar trycket sent.
+     */
+    bull.style.left = `${zoneStart + zoneWidth * BULL_FROM}%`;
+    bull.style.width = `${zoneWidth * BULL_SHARE}%`;
     status.set(`Försök ${attempt + 1}/${TRIES}`, `${bulls} mitt i prick`);
     feedback.say(`${label}: stoppa markören i det gröna fältet.`, 'neutral');
     gauge.classList.remove('mg-gauge-right', 'mg-gauge-wrong');
 
     pos = 0;
     dir = 1;
-    const speed = (0.055 + attempt * 0.012) / ctx.slack;
+    const speed = (0.05 + attempt * 0.008) / ctx.slack;
     running = true;
     cancel = loop((dt) => {
       pos += dir * speed * dt;
@@ -686,7 +740,7 @@ function startPrecision(
 
     clear(actions);
     actions.append(
-      button('Stoppa', judge, {
+      snabbKnapp('Stoppa', judge, {
         class: 'btn btn-primary mg-stop',
         'data-sound': 'av',
       })
@@ -700,8 +754,8 @@ function startPrecision(
     cancel = null;
 
     const inZone = pos >= zoneStart && pos <= zoneStart + zoneWidth;
-    const bullStart = zoneStart + zoneWidth * 0.35;
-    const inBull = pos >= bullStart && pos <= bullStart + zoneWidth * 0.3;
+    const bullStart = zoneStart + zoneWidth * BULL_FROM;
+    const inBull = pos >= bullStart && pos <= bullStart + zoneWidth * BULL_SHARE;
     const unit = game.unit ? ` ${game.unit}` : '';
 
     if (inBull) {
@@ -1085,7 +1139,7 @@ function startBalance(
           : `Du höll balansen ${Math.round(share * 100)} procent av tiden, med ${wobbles} ${
               wobbles === 1 ? 'vurpa' : 'vurpor'
             }.`,
-      perfect: wobbles === 0 && share > 0.97,
+      perfect: wobbles === 0 && share >= 0.9,
     });
   };
 
@@ -1101,9 +1155,12 @@ function startBalance(
      * går på ren rutin ens för den som håller ögonen på markören.
      */
     if (Math.random() < dt / 620) {
-      const gust = Math.random() < 0.12 ? 2.1 : 1;
+      const gust = Math.random() < 0.12 ? 1.8 : 1;
       drift =
-        (Math.random() * 2 - 1) * (0.03 + (totalMs / DURATION) * 0.055) * gust;
+        (Math.random() * 2 - 1) * (0.03 + (totalMs / DURATION) * 0.045) * gust;
+      // Vinden får aldrig vara starkare än styrningen (0,19 nedan), annars
+      // står man och håller emot utan att det hjälper.
+      drift = Math.max(-0.13, Math.min(0.13, drift));
     }
     /**
      * Lutningen förstärker sig själv: ju snedare, desto snabbare tippar det.
@@ -1112,7 +1169,7 @@ function startBalance(
      * Markören följer knappen man håller inne, så höger flyttar åt höger.
      */
     const gravity = tilt * 0.0006;
-    tilt += (drift + gravity + push * 0.14) * dt;
+    tilt += (drift + gravity + push * 0.19) * dt;
     tilt = Math.max(-100, Math.min(100, tilt));
 
     const inside = Math.abs(tilt) <= SAFE;
@@ -1178,8 +1235,8 @@ function startRhythm(
    * Fälten ritas ur samma marginaler som bedömningen använder nedan, så att
    * det man ser är det man bedöms mot även när svårighetsgraden ändrar dem.
    */
-  const hitHalf = 16 * ctx.slack;
-  const perfectHalf = 6 * ctx.slack;
+  const hitHalf = 22 * ctx.slack;
+  const perfectHalf = 11 * ctx.slack;
   hitZone.style.left = `${50 - hitHalf}%`;
   hitZone.style.width = `${hitHalf * 2}%`;
   perfectZone.style.left = `${50 - perfectHalf}%`;
@@ -1187,7 +1244,7 @@ function startRhythm(
   const runner = el('span', { class: 'mg-beat-runner' });
   const lane = el('div', { class: 'mg-beat-lane' }, hitZone, perfectZone, runner);
   const dots = el('div', { class: 'mg-beat-dots' });
-  const hitBtn = button('Slå an', () => strike(), {
+  const hitBtn = snabbKnapp('Slå an', () => strike(), {
     class: 'btn btn-primary mg-strike',
     'data-sound': 'av',
   });
@@ -1231,15 +1288,18 @@ function startRhythm(
   const strike = () => {
     if (!running || judgedThisBeat) return;
     judgedThisBeat = true;
-    // Avstånd från slaget, 0 = exakt på, 0.5 = längst ifrån.
-    const off = Math.abs(phase - 0.5);
-    if (off <= 0.06 * ctx.slack) {
+    // Avstånd från slaget, 0 = exakt på, 0.5 = längst ifrån. Fördröjningen
+    // från finger till händelse räknas bort, så ett slag som var rent på
+    // skärmen räknas som rent även om det kom fram sent.
+    const lag = INPUT_LAG_MS / period;
+    const off = Math.abs(phase - lag - 0.5);
+    if (off <= 0.11 * ctx.slack) {
       scored += 1;
       perfects += 1;
       playSound('trumma');
       feedback.say(`Rent på slaget! ${items[beat % items.length]}`, 'topp');
       mark(beat, 'mg-beat-dot-perfect');
-    } else if (off <= 0.16 * ctx.slack) {
+    } else if (off <= 0.22 * ctx.slack) {
       scored += 0.5;
       playSound('blipp');
       feedback.say(phase < 0.5 ? 'Något tidigt.' : 'Något sent.', 'ok');
@@ -1293,7 +1353,7 @@ function startRhythm(
         return false;
       }
       judgedThisBeat = false;
-      period = Math.max(700, period - 22);
+      period = Math.max(800, period - 18);
       nextLabel.textContent = items[beat % items.length] ?? '';
       playSound(beat % 4 === 0 ? 'tock' : 'tick');
       show();
@@ -1301,7 +1361,7 @@ function startRhythm(
     runner.style.left = `${phase * 100}%`;
     lane.classList.toggle(
       'mg-beat-lane-hot',
-      Math.abs(phase - 0.5) <= 0.16 * ctx.slack
+      Math.abs(phase - 0.5) <= 0.22 * ctx.slack
     );
     return true;
   });

@@ -320,7 +320,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Håll ordning i salen',
       brief:
-        'Tryck på rätt åtgärd när något händer i salen.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Be om tystnad', 'Stoppa blixten', 'Visa vägen', 'Larma vakten'],
     },
     scene:
@@ -375,7 +375,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Kör vagnen',
       brief:
-        'Tryck på rätt reglage när trafiken kräver det.',
+        'Memorera ordern, och utför sedan reglagen i rätt följd ur minnet.',
       items: ['Bromsa', 'Ring signal', 'Öppna dörrar', 'Stäng dörrar'],
     },
     scene:
@@ -393,7 +393,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Håll flödet igång',
       brief:
-        'Tryck på rätt åtgärd när resenärerna behöver hjälp.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Visa vägen', 'Varna för kanten', 'Öppna spärren', 'Larma trafikledning'],
     },
     scene:
@@ -434,7 +434,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Kör genom staden',
       brief:
-        'Tryck på rätt reglage när trafiken kräver det.',
+        'Memorera ordern, och utför sedan reglagen i rätt följd ur minnet.',
       items: ['Blinkers', 'Tuta', 'Bromsa', 'Starta taxameter'],
     },
     scene:
@@ -662,7 +662,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Förtöj färjan',
       brief:
-        'Tryck på rätt moment i förtöjningen.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Kasta lina', 'Lägg ut fender', 'Öppna landgång', 'Slå på motorn'],
     },
     scene:
@@ -680,7 +680,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Klara bryggan',
       brief:
-        'Tryck på rätt moment innan båten går igen.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Fender ut', 'Landgång', 'Vissla av', 'Kasta lina'],
     },
     scene:
@@ -800,7 +800,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Kontrollera utrustningen',
       brief:
-        'Tryck på rätt kontroll i säkerhetsrutinen.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Kolla luft', 'Justera väst', 'Tryckutjämna', 'Signalera ok'],
     },
     scene:
@@ -1050,7 +1050,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Följ regin',
       brief:
-        'Tryck på rätt handling när regissören ropar.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Gå in i bild', 'Stanna still', 'Vänd dig om', 'Gå ur bild'],
     },
     scene:
@@ -1068,7 +1068,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Led träningen',
       brief:
-        'Tryck på rätt övning när passet kräver det.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Uppvärmning', 'Passningsövning', 'Avslut', 'Nedvarvning'],
     },
     scene:
@@ -1233,7 +1233,7 @@ export const JOBS: Job[] = [
       kind: 'instrument',
       title: 'Förbered uppskjutning',
       brief:
-        'Tryck på rätt system i nedräkningen.',
+        'Memorera ordern, och utför sedan momenten i rätt följd ur minnet.',
       items: ['Bränsletryck', 'Telemetri', 'Navigation', 'Tändning'],
     },
     scene:

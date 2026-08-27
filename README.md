@@ -292,7 +292,7 @@ webbläsaren och överlever att sparfilen raderas.
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
 8. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
-   sortera på löpande band, utföra order i rätt följd, upprepa en sekvens ur
+   sortera på löpande band, memorera en order och utföra den, upprepa en sekvens ur
    minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
    saker och låta resten vara, hålla balansen eller slå i takt. Det ger upp
    till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
