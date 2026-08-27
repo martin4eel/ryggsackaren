@@ -1042,6 +1042,151 @@ export function stopStation(byte = false): void {
   }, 600);
 }
 
+/**
+ * Vädrets ljud på stadsskärmen.
+ *
+ * Regn är brus i diskanten som vaggar med vinden; skyfall lägger ett muller
+ * under. Åska är skyfall plus en dov smäll med några sekunders mellanrum,
+ * aldrig på samma ställe två gånger. Vind är brus i mellanregistret som
+ * kommer i byar. Snö är tyst, som snö är, om det inte stormar.
+ */
+export type WeatherSound =
+  | 'regn'
+  | 'skyfall'
+  | 'aska'
+  | 'storm'
+  | 'snostorm'
+  | 'vind'
+  | 'tyst';
+
+let aktivtVader: { kind: WeatherSound; lager: Lager; ut: GainNode; timer: number } | null = null;
+
+function mullret(): void {
+  const c = ctx;
+  if (!c || !master) return;
+  const t = c.currentTime + 0.05;
+  // Först en kort, hård knall (nära) eller inte (långt borta), sedan mullret
+  // som rullar bort under ett par sekunder.
+  const nara = Math.random() < 0.35;
+  if (nara) noise(0.18, t, { type: 'lowpass', from: 900, to: 200, q: 0.5, gain: 0.16 });
+  noise(1.6 + Math.random() * 1.8, t + (nara ? 0.12 : 0), {
+    type: 'lowpass',
+    from: 260,
+    to: 55,
+    q: 0.4,
+    gain: nara ? 0.14 : 0.09,
+  });
+  // En andra våg, svagare: ekot mellan husen.
+  noise(1.2 + Math.random(), t + 1.1 + Math.random() * 0.6, {
+    type: 'lowpass',
+    from: 180,
+    to: 50,
+    q: 0.4,
+    gain: 0.05,
+  });
+}
+
+function vindby(): void {
+  const c = ctx;
+  if (!c || !master) return;
+  noise(1.4 + Math.random() * 1.6, c.currentTime + 0.05, {
+    type: 'bandpass',
+    from: 300 + Math.random() * 200,
+    to: 900 + Math.random() * 500,
+    q: 0.8,
+    gain: 0.05,
+  });
+}
+
+export function startWeather(kind: WeatherSound): void {
+  if (aktivtVader?.kind === kind) return;
+  stopWeather();
+  if (kind === 'tyst') return;
+  const c = ensureCtx();
+  if (!c || !master) return;
+
+  const ut = c.createGain();
+  ut.gain.value = 1;
+  ut.connect(master);
+  const lager: Lager = { noder: [ut], kallor: [], oscar: [] };
+
+  const regn = kind === 'regn' || kind === 'skyfall' || kind === 'aska';
+  const blast = kind === 'storm' || kind === 'snostorm' || kind === 'vind';
+  if (regn) {
+    // Dropparna: högpassat brus som vaggar svagt. Skyfall är tätare och har
+    // ett muller från takplåt och rännstenar under sig.
+    const tungt = kind !== 'regn';
+    matta(c, ut, lager, {
+      typ: 'highpass',
+      frekvens: tungt ? 1800 : 2600,
+      q: 0.5,
+      gain: tungt ? 0.06 : 0.032,
+      svaj: { hz: 0.16, djup: 500 },
+    });
+    matta(c, ut, lager, {
+      typ: 'bandpass',
+      frekvens: tungt ? 700 : 1100,
+      q: 0.6,
+      gain: tungt ? 0.03 : 0.012,
+      svaj: { hz: 0.09, djup: 200 },
+    });
+    if (tungt) matta(c, ut, lager, { typ: 'lowpass', frekvens: 220, gain: 0.03 });
+  }
+  if (blast || kind === 'aska') {
+    matta(c, ut, lager, {
+      typ: 'bandpass',
+      frekvens: kind === 'snostorm' ? 520 : 380,
+      q: 0.5,
+      gain: kind === 'vind' ? 0.03 : 0.055,
+      svaj: { hz: 0.21, djup: kind === 'vind' ? 160 : 320 },
+    });
+  }
+
+  const schemalagg = (forsta = false): number =>
+    window.setTimeout(
+      () => {
+        if (!aktivtVader || aktivtVader.kind !== kind) return;
+        if (kind === 'aska') mullret();
+        else if (blast) vindby();
+        aktivtVader.timer = schemalagg();
+      },
+      forsta ? 1500 + Math.random() * 2500 : kind === 'aska' ? 6000 + Math.random() * 14000 : 3000 + Math.random() * 6000
+    );
+
+  aktivtVader = { kind, lager, ut, timer: 0 };
+  if (kind === 'aska' || blast) aktivtVader.timer = schemalagg(true);
+}
+
+export function stopWeather(): void {
+  const v = aktivtVader;
+  if (!v) return;
+  aktivtVader = null;
+  window.clearTimeout(v.timer);
+  const c = ctx;
+  if (!c) return;
+  const t = c.currentTime;
+  v.ut.gain.cancelScheduledValues(t);
+  v.ut.gain.setValueAtTime(v.ut.gain.value, t);
+  v.ut.gain.linearRampToValueAtTime(0, t + 0.6);
+  window.setTimeout(() => {
+    for (const osc of v.lager.oscar) {
+      try {
+        osc.stop();
+      } catch {
+        // redan stoppad
+      }
+    }
+    for (const k of v.lager.kallor) {
+      try {
+        k.stop();
+      } catch {
+        // redan stoppad
+      }
+    }
+    for (const n of v.lager.noder) n.disconnect();
+  }, 800);
+}
+
 /** Enstaka ljud som hör till tavlan snarare än till hallen. */
 export function playStation(kind: StationKind, what: 'tavla' | 'utrop'): void {
   const c = ensureCtx();

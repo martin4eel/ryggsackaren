@@ -167,11 +167,24 @@ webbläsaren och överlever att sparfilen raderas.
    **Vädret och tiden på dygnet** färgar fotot. Klockslaget är stadens lokala
    tid just nu – spelar du på kvällen hemma är det morgon i Tokyo – och
    årstiden följer resans startdatum, så en resa som börjar i december har
-   vinter i Stockholm och sommar i Sydney. Regn faller, snö singlar, natten
-   tonar blått och kvällen varmt. Inget av det påverkar spelet; det finns för
-   att Bangkok i monsunregn en kväll och Bangkok i sol en morgon ska vara två
-   olika bilder av samma stad. Kommer du tillbaka till en stad står det också
-   vilket besök i ordningen det är och när du var här första gången.
+   vinter i Stockholm och sommar i Sydney. Vädret har tio ansikten: sol,
+   hetta, moln, regn, skyfall, åska, snö, snöstorm, dis och dimma, plus
+   storm, och varje klimat har sina – dimman hör till London, diset till
+   Kairo, åskan till Bangkok i regntid. Vart och ett är byggt av flera rörliga
+   skikt (`src/game/weather.ts`, `vaderLager` i `src/ui/app.ts`): moln som
+   driver, regn i två djup som faller snedare ju mer det blåser, blixtar som
+   lyser upp hela bilden, tre lager snö som vaggar, dimbankar, solstrålar,
+   stjärnor om natten, hettans dallring och gatuljus som speglar sig i våt
+   asfalt. Det hörs också: regn, skyfall, vindbyar och åskmuller ligger under
+   stadsskärmen och tystnar när man går in någonstans. Snö och dimma är
+   tysta, som de är. Under skylten står en rad om hur vädret känns just här.
+
+   Inget av det påverkar spelet; det finns för att Bangkok i monsunregn en
+   kväll och Bangkok i sol en morgon ska vara två olika bilder av samma stad.
+   Kommer du tillbaka till en stad står det också vilket besök i ordningen det
+   är och när du var här första gången. Vill du titta på ett visst väder:
+   sätt `localStorage['ryggsackaren-vader']` till t.ex. `aska|natt|3`
+   (väder|dygnsdel|vind 0–3) i webbläsarens konsol och ladda om.
 
    **Ryggsäcken** ligger inte bland skyltarna utan uppe till höger i
    statusraden, på varje skärm, med antalet souvenirer på sig.

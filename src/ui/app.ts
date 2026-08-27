@@ -92,7 +92,8 @@ import {
   type EffectLine,
 } from '../game/events';
 import { renderEventCard } from './eventcard';
-import { weatherFor } from '../game/weather';
+import { weatherFor, type Weather } from '../game/weather';
+import { startWeather, stopWeather, type WeatherSound } from './audio';
 import { CITY_PAPERS } from '../data/newspapers';
 import { annonserFor, type Kontaktannons } from '../data/kontaktannonser';
 import { CITY_HEADLINES } from '../data/headlines';
@@ -413,6 +414,53 @@ const REGION_LABELS: Record<string, string> = {
   oceanien: 'Oceanien',
 };
 
+/** Vilket ljud vädret ger. Snö och dimma är tysta; det är poängen med dem. */
+function vaderLjud(v: Weather): WeatherSound {
+  if (v.kind === 'regn' || v.kind === 'skyfall' || v.kind === 'aska') return v.kind;
+  if (v.kind === 'storm' || v.kind === 'snostorm') return v.kind;
+  if (v.wind >= 2) return 'vind';
+  return 'tyst';
+}
+
+/**
+ * Väderlagren ovanpå fotot. Varje sorts väder är byggt av flera rörliga
+ * skikt - moln som driver, regn i två djup, blixtar, tre lager snö - så att
+ * det ser ut som väder och inte som en ikon över en bild.
+ */
+function vaderLager(v: Weather): HTMLElement {
+  const lager = el('div', {
+    class: `city-vader-lager vader-${v.kind} tid-${v.period} vind-${v.wind}`,
+    'aria-hidden': 'true',
+  });
+  const dag = v.period === 'dag' || v.period === 'morgon' || v.period === 'skymning';
+  const natt = v.period === 'natt';
+  const skikt = (klass: string, antal = 1) => {
+    const d = el('div', { class: klass });
+    for (let i = 0; i < antal; i++) d.append(el('span', { class: `${klass}-${i + 1}` }));
+    lager.append(d);
+  };
+  lager.append(el('div', { class: 'vl-himmel' }));
+  const molnigt = ['moln', 'regn', 'skyfall', 'aska', 'storm', 'sno', 'snostorm'].includes(v.kind);
+  if (molnigt) skikt('vl-moln', 3);
+  if ((v.kind === 'sol' || v.kind === 'hetta') && dag) skikt('vl-sol', 2);
+  if ((v.kind === 'sol' || v.kind === 'hetta' || v.kind === 'dis') && natt) skikt('vl-stjarnor', 2);
+  if (v.kind === 'regn' || v.kind === 'skyfall' || v.kind === 'aska') skikt('vl-regn', v.kind === 'regn' ? 2 : 3);
+  if (v.kind === 'aska') skikt('vl-blixt', 2);
+  if (v.kind === 'sno' || v.kind === 'snostorm') skikt('vl-sno', 3);
+  if (v.kind === 'dimma' || v.kind === 'dis') skikt('vl-dimma', 3);
+  if (v.wind >= 2 || v.kind === 'storm' || v.kind === 'snostorm') skikt('vl-vind', 2);
+  if (v.wet && (natt || v.period === 'kvall')) skikt('vl-vat');
+  if (v.kind === 'hetta') {
+    // Hettans dallring: ett SVG-filter som förskjuter fotot en aning i
+    // vågor som rör sig. Filtret ligger här, i bilden, så att det finns.
+    lager.insertAdjacentHTML(
+      'beforeend',
+      '<svg class="vl-filter" width="0" height="0" aria-hidden="true"><filter id="vader-hetta"><feTurbulence type="fractalNoise" baseFrequency="0.01 0.06" numOctaves="2" seed="4"><animate attributeName="baseFrequency" dur="7s" values="0.010 0.060;0.014 0.075;0.010 0.060" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter></svg>'
+    );
+  }
+  return lager;
+}
+
 export class App {
   private root: HTMLElement;
   private state: GameState | null = null;
@@ -646,6 +694,8 @@ export class App {
     if (!this.state) return;
     // Ett arkadmoment kan ha timers igång. Stäng av dem vid skärmbyte.
     stopAllMinigames();
+    // Regnet hörs bara på gatan.
+    if (screen !== 'stad') stopWeather();
     const changed = this.state.screen !== screen;
     this.state.screen = screen;
     saveGame(this.state);
@@ -1663,14 +1713,16 @@ export class App {
      * sol en morgon ska vara två olika bilder av samma stad.
      */
     const vader = weatherFor(city, s.startDate, s.days);
+    startWeather(vaderLjud(vader));
     const hero = el('section', {
       class: 'city-hero',
       'data-tid': vader.period,
       'data-vader': vader.kind,
+      'data-vind': String(vader.wind),
     });
     hero.append(
       photoImg(city, 'city-hero-img', hero),
-      el('div', { class: `city-vader-lager vader-${vader.kind} tid-${vader.period}`, 'aria-hidden': 'true' }),
+      vaderLager(vader),
       el('div', { class: 'city-hero-scrim' }),
       el(
         'div',
@@ -1685,7 +1737,8 @@ export class App {
         el('span', { class: 'city-vader', title: 'Väder och lokal tid' },
           el('span', { class: 'city-vader-glyph', 'aria-hidden': 'true' }, vader.glyph),
           vader.text
-        )
+        ),
+        el('p', { class: 'city-vader-rad' }, vader.line)
       ),
     );
 
