@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v19';
+const CACHE = 'ryggsackaren-v20';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -65,178 +65,33 @@ const CITY_PHOTOS = [
 ].map((id) => `./cities/${id}.jpg`);
 
 /**
- * Frågebilderna. De är små - några tiotal kilobyte styck - och en fråga som
- * visar en bruten bildikon för att man råkar sitta på ett flyg är sämre än
- * några megabyte i cachen. Listan matchar src/data/quizImages.ts, vilket
- * valideringen kontrollerar.
+ * Frågebilderna är många - flera hundra - och listas i quiz/manifest.json,
+ * som hämtskriptet skriver. De hämtas inte vid installationen, som skulle
+ * ta minuter på mobilnät, utan i bakgrunden efter aktiveringen, i lugn
+ * takt, tills allt ligger i cachen. En fråga vars bild inte hunnit dit
+ * hämtar den från nätet som vanligt.
  */
-const QUIZ_IMAGES = [
-  'agave',
-  'ananas',
-  'atoll',
-  'autoriksha',
-  'azulejos',
-  'baguette',
-  'bibimbap',
-  'blackfisk',
-  'blastang',
-  'bordercollie',
-  'boudhanath',
-  'buffel',
-  'calzone',
-  'castells',
-  'chili',
-  'croissant',
-  'cuica',
-  'david',
-  'delfin',
-  'doner',
-  'dromedar',
-  'durian',
-  'ejder',
-  'elefant',
-  'emmentaler',
-  'felucka',
-  'feskekorka',
-  'flamingo',
-  'flodhast',
-  'fugu',
-  'fuji',
-  'gejser',
-  'gepard',
-  'giraff',
-  'gnu',
-  'granatapple',
-  'hagiasofia',
-  'hallgrimskirkja',
-  'hanbok',
-  'havsabborre',
-  'havsorn',
-  'havsskoldpadda',
-  'hummer',
-  'hyena',
-  'ikebana',
-  'impression',
-  'ingefara',
-  'kanel',
-  'kanguru',
-  'kardemumma',
-  'kaskelot',
-  'kebnekaise',
-  'kiwi',
-  'kiwifrukt',
-  'knolval',
-  'koniskhatt',
-  'kora',
-  'kryddnejlika',
-  'lama',
-  'lavendel',
-  'lejon',
-  'leopard',
-  'londontaxi',
-  'lotus',
-  'makrill',
-  'manet',
-  'marulk',
-  'matcha',
-  'merino',
-  'merlion',
-  'monalisa',
-  'nackrosor',
-  'nattvakten',
-  'noshorning',
-  'okapi',
-  'orkide',
-  'ostron',
-  'padthai',
-  'panda',
-  'pantheon',
-  'parlorhange',
-  'pasteldenata',
-  'pelikan',
-  'petra',
-  'pingvin',
-  'pragklockan',
-  'prinsesstarta',
-  'protea',
-  'pumpernickel',
-  'ramen',
-  'ros',
-  'saffran',
-  'semla',
-  'sfinxen',
-  'shibuya',
-  'sjostjarna',
-  'skapelsenavadam',
-  'skordetroska',
-  'skriet',
-  'sockertoppen',
-  'solros',
-  'spinnaker',
-  'station-buss-1',
-  'station-buss-2',
-  'station-buss-3',
-  'station-buss-4',
-  'station-farja-1',
-  'station-farja-2',
-  'station-farja-3',
-  'station-farja-4',
-  'station-flyg-1',
-  'station-flyg-2',
-  'station-flyg-3',
-  'station-flyg-4',
-  'station-tag-1',
-  'station-tag-2',
-  'station-tag-3',
-  'station-tag-4',
-  'stjarnenatt',
-  'storavagen',
-  'stpauls',
-  'svartpeppar',
-  'taffelberget',
-  'tagine',
-  'taskor',
-  'torsk',
-  'trevi',
-  'triumfbagen',
-  'tulpan',
-  'turningtorso',
-  'usjanka',
-  'vanilj',
-  'vasilijkatedralen',
-  'venusfodelse',
-  'vespa',
-  'vikunja',
-  'vitlok',
-  'watpho',
-  'zebra',
-  'putter',
-  'driver',
-  'jarnklubba',
-  'hybridklubba',
-  'wedge',
-  'golfboll',
-  'peg',
-  'headcover',
-  'golfbag',
-  'golfbil',
-  'range',
-  'bunker',
-  'green',
-  'golfhandske',
-  'rodvin',
-  'vitvin',
-  'rosevin',
-  'champagne',
-  'dekanter',
-  'korkskruv',
-  'ishink',
-  'kork',
-  'vindruvor',
-  'ekfat',
-  'portvin',
-  'vinkallare',
-].map((id) => `./quiz/${id}.jpg`);
+async function varmUppFragebilder(cache) {
+  try {
+    const res = await fetch('./quiz/manifest.json', { cache: 'no-cache' });
+    if (!res.ok) return;
+    const ids = await res.json();
+    const urls = ids.map((id) => `./quiz/${id}.webp`);
+    const saknas = [];
+    for (const url of urls) {
+      if (!(await cache.match(url))) saknas.push(url);
+    }
+    // Några i taget, med paus, så att spelet självt får bandbredden.
+    for (let i = 0; i < saknas.length; i += 4) {
+      await Promise.all(
+        saknas.slice(i, i + 4).map((url) => cache.add(url).catch(() => undefined))
+      );
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  } catch {
+    // Offline eller avbrutet: nästa aktivering försöker igen.
+  }
+}
 
 
 self.addEventListener('install', (event) => {
@@ -252,7 +107,6 @@ self.addEventListener('install', (event) => {
         // då i stället vid första visningen och cachas löpande.
         cache.addAll(CITY_PHOTOS).catch(() => undefined),
         cache.addAll(['./reaktion/mun.webp', './reaktion/fot.webp']).catch(() => undefined),
-        cache.addAll(QUIZ_IMAGES).catch(() => undefined),
       ])
     )
   );
@@ -267,6 +121,9 @@ self.addEventListener('activate', (event) => {
         names.filter((n) => n !== CACHE).map((n) => caches.delete(n))
       );
       await self.clients.claim();
+      // Frågebilderna i bakgrunden, utan att hålla aktiveringen.
+      const cache = await caches.open(CACHE);
+      varmUppFragebilder(cache);
     })()
   );
 });
