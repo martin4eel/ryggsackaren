@@ -145,9 +145,10 @@ webbläsaren och överlever att sparfilen raderas.
    ett halvt varv och landar med baksidan upp – funktionens egen ikon på
    papper, eller en guldbricka med stjärna eller frågetecken – och ligger kvar
    en stund så att man hinner se vad man vände upp innan ikonen slår in i
-   raden nedanför. Hemstaden är undantaget – där har du bott. Ett uppvänt
-   mynt lämnar fotot och lägger sig i **ikonraden under bilden**, där allt är
-   lätt att hitta igen.
+   raden nedanför. Det gäller även hemstaden, så att en ny resa alltid börjar
+   med en ren stadsbild. Ett uppvänt mynt lämnar fotot och lägger sig i
+   **ikonraden under bilden**, där allt är lätt att hitta igen; de andra
+   mynten ligger kvar där de låg, vart och ett i sin egen takt.
 
    Några av brickorna är inte funktioner alls. En av dem är en **fråga om
    staden** med stadens eget foto till, och resten är **mystikbrickor** som
@@ -236,6 +237,14 @@ webbläsaren och överlever att sparfilen raderas.
    teckningar. Hela poängen med en bildfråga är att känna igen något man sett
    i verkligheten, och då duger inte en illustration av en marulk – det ska
    vara en marulk.
+
+   **Bilderna reagerar på svaret**, i Monty Python-anda. Svarar du rätt får
+   motivet utklippta ögon och ett brett leende, gungar till och säger något i
+   en pratbubbla – Mona Lisa ler på riktigt, Skriet skriker av glädje. Svarar
+   du fel blir det en grimas med tungan ute, ett pruttljud, och den stora
+   foten dunsar ner från himlen. Replikerna och var ansiktet ska sitta står
+   per bild i `src/data/quizImages.ts` (`reaktion` och `ansikte`); bilder
+   utan egna repliker får allmänna.
 7. **Tidningen.** Dagens lokala rubrik står överst – *Tunnelbanan stänger
    Slussen ännu en helg*, *Monsunen väntas två veckor tidigt* – så att
    tidningen är stadens och inte spelets. Läs platsannonserna och ta ett skift. Varje fråga är en
@@ -295,8 +304,15 @@ webbläsaren och överlever att sparfilen raderas.
    Tid är också en resurs eftersom boendet kostar varje dag, så det billigaste
    är sällan självklart bäst. Långa flyg från en stad utan interkontinental
    flygplats går via en hub och kostar en dag extra.
-11. **Telefonkiosken.** Ringer du hem får du pengar, men skulden växer och dras
-   av från slutpoängen. Varje samtal ger dessutom mindre än det förra.
+11. **Telefonkiosken.** Du måste ringa innan något händer: myntet ner i
+   automaten, signaler i luren, och sedan svarar någon – eller ingen. Mamma
+   svarar med en ljus mumlande röst och oroar sig, pappa med en mörk och
+   suckar, och båda lånar ut pengar. Ibland är det upptaget, ibland svarar
+   ingen, och ibland har du slagit fel och får en pizzeria i Neapel. Då är det
+   bara att ringa igen. Första gången svarar alltid mamma – hon har väntat.
+   Lånen läggs på skulden, som dras av från slutpoängen, och varje samtal ger
+   mindre än det förra. Rösterna är syntetiska (`rostmamma`, `rostpappa` i
+   `src/ui/audio.ts`) och replikerna står överst i `src/ui/app.ts`.
 12. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
 
    Den första är personuppgiftssidan: hemstad, resenärstyp, dag på resan,

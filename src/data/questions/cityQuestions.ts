@@ -74,7 +74,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vad heter Malmös vridna höghus vid havet?',
+      q: 'Vad heter höghuset på bilden?', bild: 'turningtorso',
       a: ['Turning Torso', 'Turning Tower', 'Öresundstornet', 'Kockumskranen'],
       d: 1,
     },
@@ -117,7 +117,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vad heter Göteborgs berömda fiskhall i tegel?',
+      q: 'Vad heter fiskhallen på bilden?', bild: 'feskekorka',
       a: ['Feskekörka', 'Fiskhuset', 'Saluhallen Briggen', 'Havets hus'],
       d: 1,
       info: 'Byggnaden från 1874 fick sitt namn av sin kyrkliknande form.',
@@ -191,7 +191,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vad heter Reykjavíks landmärkeskyrka med sin trappstegsfasad?',
+      q: 'Vad heter kyrkan på bilden?', bild: 'hallgrimskirkja',
       a: ['Hallgrímskirkja', 'Nidarosdomen', 'Uppsala domkyrka', 'Roskilde domkirke'],
       d: 2,
     },
@@ -242,7 +242,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       info: 'Bron öppnas fortfarande cirka 800 gånger per år.',
     },
     {
-      q: 'Vilken katedral med sin stora kupol ritades av Christopher Wren?',
+      q: 'Vad heter katedralen på bilden, ritad av Christopher Wren?', bild: 'stpauls',
       a: ['St Paul\u2019s Cathedral', 'Westminster Abbey', 'Canterbury Cathedral', 'York Minster'],
       d: 2,
     },
@@ -296,7 +296,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilken triumfbåge står vid slutet av Champs-Élysées?',
+      q: 'Vad heter monumentet på bilden?', bild: 'triumfbagen',
       a: ['Triumfbågen', 'Brandenburger Tor', 'Titusbågen', 'Porta Nigra'],
       d: 1,
     },
@@ -389,7 +389,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vad heter den berömda fontänen där man kastar mynt över axeln?',
+      q: 'Vad heter fontänen på bilden?', bild: 'trevi',
       a: ['Fontana di Trevi', 'Fontana dei Quattro Fiumi', 'Fontana delle Api', 'Fontana Paola'],
       d: 2,
     },
@@ -400,7 +400,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       info: 'Enligt myten av tvillingarna Romulus och Remus.',
     },
     {
-      q: 'Vilken romersk byggnad har världens största oarmerade betongkupol?',
+      q: 'Vad heter byggnaden på bilden?', bild: 'pantheon',
       a: ['Pantheon', 'Colosseum', 'Peterskyrkan', 'Castel Sant\u2019Angelo'],
       d: 2,
     },
@@ -423,7 +423,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilken byggnad var först kyrka, sedan moské och sedan museum?',
+      q: 'Byggnaden på bilden har varit kyrka, moské och museum. Vad heter den?', bild: 'hagiasofia',
       a: ['Hagia Sofia', 'Blå moskén', 'Topkapipalatset', 'Galatatornet'],
       d: 1,
       info: 'Byggd på 500-talet under kejsar Justinianus.',
@@ -457,7 +457,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilken katedral med färgglada lökkupoler står på Röda torget?',
+      q: 'Vad heter katedralen på bilden, med sina lökkupoler?', bild: 'vasilijkatedralen',
       a: ['Vasilijkatedralen', 'Kristus Frälsarens katedral', 'Isakskatedralen', 'Uspenskijkatedralen'],
       d: 1,
     },
@@ -508,7 +508,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilken vinterhuvudbonad av päls förknippas med Ryssland?',
+      q: 'Vad kallas pälsmössan på bilden?', bild: 'usjanka',
       a: ['Usjanka', 'Fez', 'Sombrero', 'Basker'],
       d: 1,
     },
@@ -526,7 +526,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilken staty med lejonkropp och människohuvud vaktar Gizaplatån?',
+      q: 'Vad heter statyn på bilden, som vaktar Gizaplatån?', bild: 'sfinxen',
       a: ['Sfinxen', 'Anubis', 'Kolossalstatyn av Ramses', 'Memnonkolosserna'],
       d: 1,
     },
@@ -594,7 +594,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 2,
     },
     {
-      q: 'Vilken maträtt lagas i ett koniskt lerkärl med samma namn?',
+      q: 'Vad kallas rätten på bilden, som lagas i ett kärl med samma namn?', bild: 'tagine',
       a: ['Tagine', 'Paella', 'Tandoori', 'Fondue'],
       d: 1,
     },
@@ -655,7 +655,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
   kapstaden: [
     { q: 'Hur högt är Taffelbergets platå över havet?', a: ['1 085 m'], reglage: { min: 200, max: 2500, steg: 5, svar: 1085, tolerans: 100, enhet: 'm', lagst: '200', hogst: '2 500' }, d: 2 },
     {
-      q: 'Vilket platt berg reser sig över Kapstaden?',
+      q: 'Vad heter det platta berget på bilden?', bild: 'taffelberget',
       a: ['Taffelberget', 'Kilimanjaro', 'Mount Cook', 'Sockertoppen'],
       d: 1,
     },
@@ -771,7 +771,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vad heter tempelanläggningen med den liggande Buddhan i Bangkok?',
+      q: 'Vad heter templet på bilden?', bild: 'watpho',
       a: ['Wat Pho', 'Wat Arun', 'Angkor Wat', 'Borobudur'],
       d: 2,
     },
@@ -810,7 +810,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       info: 'Cirka 6 300 km, Asiens längsta flod.',
     },
     {
-      q: 'Vilket djur är en nationalsymbol för Kina?',
+      q: 'Djuret på bilden är en nationalsymbol. För vilket land?', bild: 'panda',
       a: ['Jättepandan', 'Tigern', 'Elefanten', 'Kranen'],
       d: 1,
     },
@@ -838,7 +838,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilket berg är Japans högsta och syns från Tokyo på klara dagar?',
+      q: 'Vad heter berget på bilden, Japans högsta?', bild: 'fuji',
       a: ['Fuji', 'Everest', 'Aso', 'Hakusan'],
       d: 1,
       info: '3 776 meter hög vulkan.',
@@ -849,7 +849,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 2,
     },
     {
-      q: 'Vilken korsning i Tokyo är känd för sina folkmassor?',
+      q: 'Vilken korsning i Tokyo syns på bilden?', bild: 'shibuya',
       a: ['Shibuya', 'Ginza', 'Akihabara', 'Roppongi'],
       d: 1,
     },
@@ -893,7 +893,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilket djur bär sin unge i en pung och är en australisk symbol?',
+      q: 'Vad heter djuret på bilden?', bild: 'kanguru',
       a: ['Kängurun', 'Lamadjuret', 'Bisonoxen', 'Tapiren'],
       d: 1,
     },
@@ -930,7 +930,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilken flightlös fågel är Nya Zeelands symbol?',
+      q: 'Vad heter fågeln på bilden?', bild: 'kiwi',
       a: ['Kiwi', 'Struts', 'Emu', 'Pingvin'],
       d: 1,
     },
@@ -1110,7 +1110,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vilket berg vid Rios hamninlopp nås med linbana?',
+      q: 'Vad heter berget på bilden, som nås med linbana?', bild: 'sockertoppen',
       a: ['Sockertoppen', 'Taffelberget', 'Fuji', 'Mont Blanc'],
       d: 1,
     },
@@ -1187,7 +1187,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilket hav ligger Barcelona vid?', a: ['Medelhavet', 'Atlanten', 'Biscayabukten', 'Adriatiska havet'], d: 1 },
     { q: 'Vad heter Barcelonas berömda gågata mellan Plaça Catalunya och hamnen?', a: ['La Rambla', 'Gran Vía', 'Paseo del Prado', 'Via Laietana'], d: 1 },
     { q: 'Vilket år arrangerade Barcelona olympiska sommarspel?', a: ['1992', '1984', '1996', '1980'], d: 2 },
-    { q: 'Vad kallas de mänskliga torn som byggs vid katalanska fester?', a: ['Castells', 'Falles', 'Sardanes', 'Correfocs'], d: 2 },
+    { q: 'Vad kallas de mänskliga tornen på bilden?', bild: 'castells', a: ['Castells', 'Falles', 'Sardanes', 'Correfocs'], d: 2 },
   ],
   lissabon: [
     { q: 'I vilket land ligger Lissabon?', a: ['Portugal', 'Spanien', 'Brasilien', 'Marocko'], d: 1 },
@@ -1195,9 +1195,9 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken vemodig musikstil hör hemma i Lissabons kvarter?', a: ['Fado', 'Flamenco', 'Tango', 'Bolero'], d: 1 },
     { q: 'Vilken spårvagnslinje är Lissabons mest kända?', a: ['Linje 28', 'Linje 3', 'Linje 12', 'Linje 44'], d: 1 },
     { q: 'Vilken naturkatastrof ödelade Lissabon 1755?', a: ['En jordbävning', 'Ett vulkanutbrott', 'En orkan', 'En översvämning'], d: 1 },
-    { q: 'Vilken bakelse med vaniljkräm kommer från stadsdelen Belém?', a: ['Pastel de nata', 'Churros', 'Cannoli', 'Beignet'], d: 1 },
+    { q: 'Vad heter bakelsen på bilden, från stadsdelen Belém?', bild: 'pasteldenata', a: ['Pastel de nata', 'Churros', 'Cannoli', 'Beignet'], d: 1 },
     { q: 'Vilken sjöfarare seglade från Lissabon till Indien 1498?', a: ['Vasco da Gama', 'Ferdinand Magellan', 'Christofer Columbus', 'Bartolomeu Dias'], d: 2 },
-    { q: 'Vad kallas det målade kakel som klär Lissabons fasader?', a: ['Azulejos', 'Terrazzo', 'Majolika', 'Tesserae'], d: 2 },
+    { q: 'Vad kallas kaklet på bilden?', bild: 'azulejos', a: ['Azulejos', 'Terrazzo', 'Majolika', 'Tesserae'], d: 2 },
   ],
   aten: [
     { q: 'Hur högt över havet ligger Akropolisklippan?', a: ['156 m'], reglage: { min: 0, max: 500, steg: 2, svar: 156, tolerans: 20, enhet: 'm', lagst: '0', hogst: '500' }, d: 2 },
@@ -1215,7 +1215,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'I vilket land ligger Prag?', a: ['Tjeckien', 'Slovakien', 'Polen', 'Ungern'], d: 1 },
     { q: 'Vilken flod rinner genom Prag?', a: ['Vltava', 'Donau', 'Oder', 'Elbe'], d: 1 },
     { q: 'Vad heter Prags mest kända bro, kantad av statyer?', a: ['Karlsbron', 'Kedjebron', 'Ponte Vecchio', 'Rialtobron'], d: 1 },
-    { q: 'Vad slags klocka på Gamla stans torg i Prag spelar upp ett skådespel varje timme?', a: ['En astronomisk klocka', 'En kyrkklocka', 'Ett solur', 'En vattenklocka'], d: 1 },
+    { q: 'Vad slags klocka är det på bilden?', bild: 'pragklockan', a: ['En astronomisk klocka', 'En kyrkklocka', 'Ett solur', 'En vattenklocka'], d: 1 },
     { q: 'Vad heter Tjeckiens valuta?', a: ['Tjeckiska kronor', 'Euro', 'Zloty', 'Forint'], d: 1 },
     { q: 'Vilken författare från Prag skrev Förvandlingen?', a: ['Franz Kafka', 'Milan Kundera', 'Jaroslav Hašek', 'Václav Havel'], d: 1 },
     { q: 'Vilken ölsort bryggdes först i den tjeckiska staden Plzeň?', a: ['Pilsner', 'Porter', 'Weissbier', 'Stout'], d: 2 },
@@ -1244,7 +1244,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
   ],
   amman: [
     { q: 'I vilket land ligger Amman?', a: ['Jordanien', 'Syrien', 'Libanon', 'Irak'], d: 1 },
-    { q: 'Vilken forntida stad i Jordanien är uthuggen i rosa sandsten?', a: ['Petra', 'Palmyra', 'Persepolis', 'Baalbek'], d: 1 },
+    { q: 'Vad heter den forntida staden på bilden?', bild: 'petra', a: ['Petra', 'Palmyra', 'Persepolis', 'Baalbek'], d: 1 },
     { q: 'Vilken saltsjö gränsar Jordanien till i väster?', a: ['Döda havet', 'Kaspiska havet', 'Aralsjön', 'Genesarets sjö'], d: 1, info: 'Ytan ligger drygt 430 meter under havsnivån, jordens lägsta landpunkt.' },
     { q: 'Vilket språk talas i Jordanien?', a: ['Arabiska', 'Hebreiska', 'Persiska', 'Turkiska'], d: 1 },
     { q: 'Vilken flod har gett Jordanien sitt namn?', a: ['Jordan', 'Eufrat', 'Tigris', 'Orontes'], d: 1 },
@@ -1260,13 +1260,13 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad heter Sydkoreas valuta?', a: ['Won', 'Yen', 'Yuan', 'Baht'], d: 1 },
     { q: 'Vilket palats i Seoul var Joseondynastins huvudpalats?', a: ['Gyeongbokgung', 'Förbjudna staden', 'Shurislottet', 'Potala'], d: 1 },
     { q: 'Vad kallas den demilitariserade zonen mellan Nord- och Sydkorea?', a: ['DMZ', 'Gröna linjen', 'Kontrollzonen', 'Trettioåttonde parallellen'], d: 2 },
-    { q: 'Vad heter den koreanska folkdräkten med kort jacka och vid kjol?', a: ['Hanbok', 'Kimono', 'Sari', 'Cheongsam'], d: 2 },
+    { q: 'Vad heter dräkten på bilden?', bild: 'hanbok', a: ['Hanbok', 'Kimono', 'Sari', 'Cheongsam'], d: 2 },
   ],
   singapore: [
     { q: 'Singapore är en stad, men vad mer?', a: ['Ett eget land', 'En delstat i Malaysia', 'En provins i Indonesien', 'En brittisk koloni'], d: 1 },
     { q: 'Vid vilket sund ligger Singapore?', a: ['Malackasundet', 'Bosporen', 'Gibraltar sund', 'Bass sund'], d: 1 },
     { q: 'Hur många officiella språk har Singapore?', a: ['Fyra', 'Två', 'Ett', 'Sex'], d: 1, info: 'Engelska, malajiska, mandarin och tamil.' },
-    { q: 'Vilken staty med lejonhuvud och fiskkropp är Singapores symbol?', a: ['Merlion', 'Sfinxen', 'Draken Wawel', 'Manneken Pis'], d: 1 },
+    { q: 'Vad heter statyn på bilden, halvt lejon och halvt fisk?', bild: 'merlion', a: ['Merlion', 'Sfinxen', 'Draken Wawel', 'Manneken Pis'], d: 1 },
     { q: 'Vad heter Singapores valuta?', a: ['Singaporianska dollar', 'Ringgit', 'Rupiah', 'Baht'], d: 1 },
     { q: 'Från vilket land blev Singapore självständigt 1965?', a: ['Malaysia', 'Indonesien', 'Storbritannien', 'Kina'], d: 1 },
     { q: 'Vilken frukt är förbjuden i Singapores tunnelbana på grund av lukten?', a: ['Durian', 'Mango', 'Jackfrukt', 'Papaya'], d: 2 },
@@ -1277,7 +1277,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken nudelsoppa äts till frukost i hela Vietnam?', a: ['Pho', 'Ramen', 'Laksa', 'Tom yum'], d: 1 },
     { q: 'Vad heter Vietnams valuta?', a: ['Dong', 'Baht', 'Kip', 'Riel'], d: 1 },
     { q: 'Vilken vik med tusentals kalkstensklippor ligger nordost om Hanoi?', a: ['Halongbukten', 'Phang Nga', 'Manilabukten', 'Malackabukten'], d: 1 },
-    { q: 'Vilken flätad hatt är en vietnamesisk symbol?', a: ['Den koniska hatten', 'Turbanen', 'Fezen', 'Sombreron'], d: 1 },
+    { q: 'Vad kallas hatten på bilden?', bild: 'koniskhatt', a: ['Den koniska hatten', 'Turbanen', 'Fezen', 'Sombreron'], d: 1 },
     { q: 'Vilken gröda odlas mest på fälten runt Hanoi?', a: ['Ris', 'Vete', 'Majs', 'Potatis'], d: 1 },
     { q: 'Hur många gränder hade Hanois gamla stadsdel traditionellt, en per skrå?', a: ['36', '12', '60', '100'], d: 2 },
     { q: 'Vilket land koloniserade Vietnam fram till 1954?', a: ['Frankrike', 'Storbritannien', 'Nederländerna', 'Portugal'], d: 2 },
@@ -1291,7 +1291,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas de lokala bärare och guider som följer med bergsexpeditioner?', a: ['Sherpor', 'Nomader', 'Kulier', 'Karavanförare'], d: 1 },
     { q: 'Vilken form har Nepals flagga, som enda land i världen?', a: ['Två trianglar ovanpå varandra', 'En kvadrat', 'En cirkel', 'En femhörning'], d: 1 },
     { q: 'Vilken religion har flest utövare i Nepal?', a: ['Hinduism', 'Buddhism', 'Islam', 'Kristendom'], d: 2 },
-    { q: 'Vad heter den stora vita stupan i Katmandu med målade ögon på tornet?', a: ['Boudhanath', 'Borobudur', 'Shwedagon', 'Angkor Wat'], d: 2 },
+    { q: 'Vad heter stupan på bilden?', bild: 'boudhanath', a: ['Boudhanath', 'Borobudur', 'Shwedagon', 'Angkor Wat'], d: 2 },
   ],
   buenosaires: [
     { q: 'I vilket land ligger Buenos Aires?', a: ['Argentina', 'Chile', 'Uruguay', 'Paraguay'], d: 1 },
@@ -1330,7 +1330,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad heter ön utanför Dakar som är upptagen på Unescos världsarvslista?', a: ['Gorée', 'Zanzibar', 'Madeira', 'Sao Tomé'], d: 1 },
     { q: 'Vilket språk talas mest i vardagen i Senegal vid sidan av franskan?', a: ['Wolof', 'Swahili', 'Zulu', 'Amhariska'], d: 1 },
     { q: 'Vilken valuta används i Senegal?', a: ['CFA-franc', 'Rand', 'Naira', 'Cedi'], d: 1 },
-    { q: 'Vilket 21-strängat instrument spelas av griots i Västafrika?', a: ['Kora', 'Sitar', 'Oud', 'Balalajka'], d: 2 },
+    { q: 'Vad heter instrumentet på bilden, som spelas av griots i Västafrika?', bild: 'kora', a: ['Kora', 'Sitar', 'Oud', 'Balalajka'], d: 2 },
     { q: 'Vad heter rätten med fisk och ris som räknas som Senegals nationalrätt?', a: ['Thieboudienne', 'Jollofris', 'Injera', 'Couscous'], d: 2 },
   ],
   addisabeba: [

@@ -27,15 +27,32 @@ export interface QuizImage {
   file?: string;
   /** Bred vinjett: komprimeringen sparar fler pixlar. */
   bred?: boolean;
+  /**
+   * Var på bilden ansiktet sitter, i procent av bredd och höjd, och hur brett
+   * det är. Dit klistras den utklippta munnen och ögonen när motivet reagerar
+   * på svaret. Saknas det hamnar ansiktet mitt på bilden.
+   */
+  ansikte?: { x: number; y: number; b: number };
+  /**
+   * Vad motivet säger när man svarat. Rätt svar ger jubel, fel svar ger en
+   * grimas och en syrlig replik. Saknas det används en allmän replik.
+   */
+  reaktion?: { ratt: string[]; fel: string[] };
 }
+
+/** Allmänna repliker för bilder utan egna. */
+export const ALLMAN_REAKTION: { ratt: string[]; fel: string[] } = {
+  ratt: ['Jo! Precis!', 'Äntligen någon som vet!', 'Hurra!', 'Där satt den!', 'Ja, ja, JA!'],
+  fel: ['Näe.', 'Va?!', 'Hallå, jag står ju här!', 'Pinsamt.', 'Jag såg det komma.'],
+};
 
 export const QUIZ_IMAGES: QuizImage[] = [
   // ------------------------------------------------------------------- hav
-  { id: 'marulk', alt: 'En marulk på havsbotten', article: 'Lophius piscatorius' },
+  { id: 'marulk', alt: 'En marulk på havsbotten', article: 'Lophius piscatorius', reaktion: { ratt: ['Jag är inte söt, men jag är rätt.'], fel: ['Marulk. MAR-ULK. Så svårt är det inte.'] } },
   { id: 'torsk', alt: 'En atlanttorsk', article: 'Atlantic cod' },
   { id: 'makrill', alt: 'En makrill', article: 'Atlantic mackerel' },
   { id: 'havsabborre', alt: 'En havsabborre', article: 'European bass' },
-  { id: 'hummer', alt: 'En hummer', article: 'Homarus gammarus' },
+  { id: 'hummer', alt: 'En hummer', article: 'Homarus gammarus', reaktion: { ratt: ['Klapp klapp!'], fel: ['Nu blir jag röd. Röd av ilska.'] } },
   { id: 'ostron', alt: 'Öppnade ostron på is', article: 'Oyster' },
   { id: 'manet', alt: 'En öronmanet i vattnet', article: 'Aurelia aurita' },
   {
@@ -46,24 +63,24 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'knolval', alt: 'En knölval som bryter ytan', article: 'Humpback whale' },
   { id: 'delfin', alt: 'En flasknosdelfin', article: 'Common bottlenose dolphin' },
   { id: 'havsskoldpadda', alt: 'En grön havsskoldpadda', article: 'Green sea turtle' },
-  { id: 'blackfisk', alt: 'En bläckfisk bland stenar', article: 'Common octopus' },
+  { id: 'blackfisk', alt: 'En bläckfisk bland stenar', article: 'Common octopus', reaktion: { ratt: ['Alla åtta armar upp!'], fel: ['Jag kramar dig inte längre.'] } },
 
   // ------------------------------------------------------------------ djur
-  { id: 'elefant', alt: 'En afrikansk savannelefant', article: 'African bush elephant' },
-  { id: 'lejon', alt: 'Ett lejon', article: 'Lion' },
+  { id: 'elefant', alt: 'En afrikansk savannelefant', article: 'African bush elephant', reaktion: { ratt: ['Jag glömmer aldrig ett rätt svar.'], fel: ['Jag glömmer aldrig. Aldrig.'] } },
+  { id: 'lejon', alt: 'Ett lejon', article: 'Lion', reaktion: { ratt: ['RÅÅÅR! Fast glatt.'], fel: ['Så pinsamt att jag ryter.'] } },
   { id: 'leopard', alt: 'En leopard', article: 'Leopard' },
   { id: 'noshorning', alt: 'En noshörning', article: 'Black rhinoceros' },
   { id: 'buffel', alt: 'En afrikansk buffel', article: 'African buffalo' },
-  { id: 'giraff', alt: 'En giraff', article: 'Giraffe' },
-  { id: 'zebra', alt: 'En stäppzebra', article: 'Plains zebra' },
-  { id: 'flodhast', alt: 'En flodhäst i vattnet', article: 'Hippopotamus' },
+  { id: 'giraff', alt: 'En giraff', article: 'Giraffe', reaktion: { ratt: ['Högsta betyg!'], fel: ['Jag ser ner på dig. Från högt upp.'] } },
+  { id: 'zebra', alt: 'En stäppzebra', article: 'Plains zebra', reaktion: { ratt: ['Svart på vitt: rätt!'], fel: ['Svart på vitt: fel.'] } },
+  { id: 'flodhast', alt: 'En flodhäst i vattnet', article: 'Hippopotamus', reaktion: { ratt: ['Jag skrattar så jag plaskar!'], fel: ['Jag gäspar åt dig.'] } },
   { id: 'gnu', alt: 'En gnu på savannen', article: 'Blue wildebeest' },
-  { id: 'gepard', alt: 'En gepard', article: 'Cheetah' },
+  { id: 'gepard', alt: 'En gepard', article: 'Cheetah', reaktion: { ratt: ['Snabbt och rätt!'], fel: ['Fel. Och jag var ändå snabbare.'] } },
 
   // ----------------------------------------------------------------- fåglar
-  { id: 'flamingo', alt: 'Flamingor i grunt vatten', article: 'Greater flamingo' },
+  { id: 'flamingo', alt: 'Flamingor i grunt vatten', article: 'Greater flamingo', reaktion: { ratt: ['Jag står på ett ben av glädje!'], fel: ['Jag rodnar. Fast det syns inte.'] } },
   { id: 'pelikan', alt: 'En pelikan', article: 'Great white pelican' },
-  { id: 'pingvin', alt: 'En pingvin på en klippa', article: 'African penguin' },
+  { id: 'pingvin', alt: 'En pingvin på en klippa', article: 'African penguin', reaktion: { ratt: ['Fracken passar till segern.'], fel: ['Jag vänder ryggen till.'] } },
   { id: 'havsorn', alt: 'En havsörn', article: 'White-tailed eagle' },
 
   // --------------------------------------------------------------- blommor
@@ -83,30 +100,107 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'vitlok', alt: 'Vitlöksklyftor', file: 'Garlic bulbs and cloves.jpg' },
   { id: 'vanilj', alt: 'Vaniljstänger', file: 'Bourbon vanilla beans - extra noire - +20cm.JPG' },
   { id: 'svartpeppar', alt: 'Svartpepparkorn', file: 'Black Peppercorns.jpg' },
-  { id: 'durian', alt: 'En durianfrukt', article: 'Durian' },
+  { id: 'durian', alt: 'En durianfrukt', article: 'Durian', reaktion: { ratt: ['Jag luktar seger!'], fel: ['Jag luktar i alla fall inte fel.'] } },
   { id: 'granatapple', alt: 'Ett granatäpple', article: 'Pomegranate' },
-  { id: 'ananas', alt: 'En ananas', article: 'Pineapple' },
+  { id: 'ananas', alt: 'En ananas', article: 'Pineapple', reaktion: { ratt: ['Kronan passar!'], fel: ['Taggigt svar.'] } },
   { id: 'kiwifrukt', alt: 'En kiwifrukt i halvor', file: 'Kiwifruit halved.jpg' },
 
   // ----------------------------------------------------------------- konst
   {
     id: 'monalisa',
     alt: 'Leonardo da Vincis Mona Lisa',
-    file: 'Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg',
+    file: 'Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg',   ansikte: { x: 50, y: 30, b: 24 }, reaktion: { ratt: ['Nu ler jag på riktigt.'], fel: ['Leonardo hade gråtit.'] },
   },
-  { id: 'stjarnenatt', alt: 'Van Goghs Stjärnenatt', article: 'The Starry Night' },
-  { id: 'skriet', alt: 'Munchs Skriet', article: 'The Scream' },
+  { id: 'stjarnenatt', alt: 'Van Goghs Stjärnenatt', article: 'The Starry Night', ansikte: { x: 88, y: 18, b: 18 }, reaktion: { ratt: ['Stjärnorna snurrar av lycka!'], fel: ['Van Gogh hade skurit av det andra örat.'] } },
+  { id: 'skriet', alt: 'Munchs Skriet', article: 'The Scream', ansikte: { x: 55, y: 58, b: 26 }, reaktion: { ratt: ['AAAAH! Av glädje, alltså!'], fel: ['AAAAAAAAH!'] } },
   {
     id: 'parlorhange',
     alt: 'Vermeers Flickan med pärlörhänget',
-    article: 'Girl with a Pearl Earring',
+    article: 'Girl with a Pearl Earring',   ansikte: { x: 52, y: 40, b: 30 }, reaktion: { ratt: ['Örhänget glittrar av stolthet.'], fel: ['Jag vänder mig bort. Igen.'] },
   },
   {
     id: 'storavagen',
     alt: 'Hokusais Den stora vågen utanför Kanagawa',
-    article: 'The Great Wave off Kanagawa',
+    article: 'The Great Wave off Kanagawa',   ansikte: { x: 28, y: 38, b: 30 }, reaktion: { ratt: ['En våg av applåder!'], fel: ['Jag sköljer bort det där svaret.'] },
   },
-  { id: 'venusfodelse', alt: 'Botticellis Venus födelse', article: 'The Birth of Venus' },
+  { id: 'venusfodelse', alt: 'Botticellis Venus födelse', article: 'The Birth of Venus', ansikte: { x: 50, y: 28, b: 20 }, reaktion: { ratt: ['Snäckan öppnar sig av glädje!'], fel: ['Jag kliver tillbaka i snäckan.'] } },
+
+
+  // ---------------------------------------------- mat, djur, platser, ting
+  // Bilder till frågor som tidigare bara var text: motivet ska kännas igen.
+  { id: 'dromedar', alt: 'En dromedar i öknen', article: 'Dromedary' },
+  { id: 'lama', alt: 'En lama i Anderna', article: 'Llama' },
+  { id: 'vikunja', alt: 'En vikunja på högplatån', article: 'Vicuña' },
+  { id: 'bordercollie', alt: 'En border collie', article: 'Border Collie' },
+  { id: 'merino', alt: 'Ett merinofår', article: 'Merino' },
+  { id: 'skordetroska', alt: 'En skördetröska på ett fält', article: 'Combine harvester' },
+  { id: 'vespa', alt: 'En klassisk Vespa', article: 'Vespa' },
+  { id: 'baguette', alt: 'Baguetter', article: 'Baguette' },
+  { id: 'pumpernickel', alt: 'Skivat pumpernickelbröd', article: 'Pumpernickel' },
+  { id: 'croissant', alt: 'En croissant', article: 'Croissant' },
+  { id: 'prinsesstarta', alt: 'En prinsesstårta med grön marsipan', article: 'Princess cake' },
+  { id: 'semla', alt: 'En semla med grädde och mandelmassa', article: 'Semla' },
+  { id: 'padthai', alt: 'En tallrik pad thai', article: 'Pad thai' },
+  { id: 'ramen', alt: 'En skål ramen', article: 'Ramen' },
+  { id: 'bibimbap', alt: 'En skål bibimbap', article: 'Bibimbap' },
+  { id: 'doner', alt: 'Kött på lodrätt dönerspett', article: 'Doner kebab' },
+  { id: 'calzone', alt: 'En calzone', article: 'Calzone' },
+  { id: 'fugu', alt: 'En blåsfisk', article: 'Fugu' },
+  { id: 'kryddnejlika', alt: 'Torkade kryddnejlikor', file: 'Cloves.JPG' },
+  { id: 'matcha', alt: 'Matchapulver i en skål', article: 'Matcha' },
+  { id: 'ros', alt: 'En ros', article: 'Rose' },
+  { id: 'ikebana', alt: 'Ett ikebanaarrangemang', file: 'Ikebana Japanese flower arrangement 1, Ikebana- いけばな (465912296).jpg' },
+  { id: 'nattvakten', alt: 'Rembrandts Nattvakten', article: 'The Night Watch' },
+  { id: 'david', alt: 'Michelangelos David', article: 'David (Michelangelo)' },
+  { id: 'nackrosor', alt: 'Monets Näckrosor', article: 'Water Lilies (Monet series)' },
+  { id: 'skapelsenavadam', alt: 'Michelangelos Skapelsen av Adam', article: 'The Creation of Adam' },
+  { id: 'impression', alt: 'Monets Impression, soluppgång', article: 'Impression, Sunrise' },
+  { id: 'londontaxi', alt: 'En svart londontaxi', article: 'Hackney carriage' },
+  { id: 'autoriksha', alt: 'En trehjulig autoriksha', article: 'Auto rickshaw' },
+  { id: 'felucka', alt: 'En felucka på Nilen', article: 'Felucca' },
+  { id: 'spinnaker', alt: 'En segelbåt med spinnaker', article: 'Spinnaker' },
+  { id: 'ejder', alt: 'En ejderhane på vattnet', article: 'Common eider' },
+  { id: 'blastang', alt: 'Blåstång på en klippa', article: 'Fucus vesiculosus' },
+  { id: 'hyena', alt: 'En fläckig hyena', article: 'Spotted hyena' },
+  { id: 'okapi', alt: 'En okapi', article: 'Okapi' },
+  { id: 'kaskelot', alt: 'En kaskelot med kalv', article: 'Sperm whale' },
+  { id: 'atoll', alt: 'En atoll sedd från luften', article: 'Atoll' },
+  { id: 'gejser', alt: 'En gejser som sprutar', article: 'Geyser' },
+  { id: 'kebnekaise', alt: 'Kebnekaise', article: 'Kebnekaise' },
+  { id: 'taskor', alt: 'Ett par tåskor', article: 'Pointe shoe' },
+  { id: 'cuica', alt: 'En cuíca', article: 'Cuíca' },
+  { id: 'emmentaler', alt: 'En bit emmentaler', article: 'Emmental cheese' },
+  { id: 'agave', alt: 'En blå agave', article: 'Agave tequilana' },
+  { id: 'kora', alt: 'En koraspelare', file: 'Joueur de kora à Toubab Dialaw.jpg' },
+  { id: 'koniskhatt', alt: 'En konisk vietnamesisk hatt', article: 'Asian conical hat' },
+  { id: 'usjanka', alt: 'En usjanka', article: 'Ushanka' },
+  { id: 'hanbok', alt: 'En kvinna i hanbok', article: 'Hanbok' },
+  { id: 'merlion', alt: 'Merlionstatyn i Singapore', article: 'Merlion' },
+  { id: 'boudhanath', alt: 'Boudhanathstupan i Katmandu', article: 'Boudhanath' },
+  { id: 'petra', alt: 'Skattkammaren i Petra', article: 'Petra' },
+  { id: 'hallgrimskirkja', alt: 'Hallgrímskirkja i Reykjavík', article: 'Hallgrímskirkja' },
+  { id: 'stpauls', alt: 'St Paul\'s Cathedral i London', article: 'St Paul\'s Cathedral' },
+  { id: 'triumfbagen', alt: 'Triumfbågen i Paris', article: 'Arc de Triomphe' },
+  { id: 'trevi', alt: 'Fontana di Trevi i Rom', article: 'Trevi Fountain' },
+  { id: 'pantheon', alt: 'Pantheon i Rom', article: 'Pantheon, Rome' },
+  { id: 'hagiasofia', alt: 'Hagia Sofia i Istanbul', article: 'Hagia Sophia' },
+  { id: 'vasilijkatedralen', alt: 'Vasilijkatedralen i Moskva', article: 'Saint Basil\'s Cathedral' },
+  { id: 'sfinxen', alt: 'Sfinxen i Giza', article: 'Great Sphinx of Giza' },
+  { id: 'tagine', alt: 'En tagine', article: 'Tajine' },
+  { id: 'taffelberget', alt: 'Taffelberget över Kapstaden', article: 'Table Mountain' },
+  { id: 'watpho', alt: 'Den liggande Buddhan i Wat Pho', article: 'Wat Pho' },
+  { id: 'panda', alt: 'En jättepanda', article: 'Giant panda' },
+  { id: 'fuji', alt: 'Berget Fuji', article: 'Mount Fuji' },
+  { id: 'shibuya', alt: 'Korsningen i Shibuya', article: 'Shibuya Crossing' },
+  { id: 'kanguru', alt: 'En känguru', article: 'Kangaroo' },
+  { id: 'kiwi', alt: 'En kivi', article: 'Kiwi (bird)' },
+  { id: 'sockertoppen', alt: 'Sockertoppen i Rio de Janeiro', article: 'Sugarloaf Mountain' },
+  { id: 'pragklockan', alt: 'Den astronomiska klockan i Prag', article: 'Prague astronomical clock' },
+  { id: 'castells', alt: 'Ett castell, ett mänskligt torn', article: 'Castell' },
+  { id: 'pasteldenata', alt: 'Pastéis de nata', article: 'Pastel de nata' },
+  { id: 'azulejos', alt: 'Blåvita azulejos', article: 'Azulejo' },
+  { id: 'turningtorso', alt: 'Turning Torso i Malmö', article: 'Turning Torso' },
+  { id: 'feskekorka', alt: 'Feskekörka i Göteborg', article: 'Feskekôrka' },
 
   /**
    * Stationsmiljöerna. Fyra foton per färdsätt, valda per stad så att inte

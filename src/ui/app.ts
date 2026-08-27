@@ -60,7 +60,7 @@ import {
   volumeLevel,
   type Sound,
 } from './audio';
-import { button, clear, el } from './dom';
+import { button, clear, el, svgEl } from './dom';
 import { icon, iconGroup, type IconName } from './icons';
 import {
   renderMinigame,
@@ -89,7 +89,7 @@ import {
 import { renderEventCard } from './eventcard';
 import { weatherFor } from '../game/weather';
 import { CITY_HEADLINES } from '../data/headlines';
-import { quizImageAlt, quizImageUrl } from '../data/quizImages';
+import { ALLMAN_REAKTION, QUIZ_IMAGE_BY_ID, quizImageAlt, quizImageUrl } from '../data/quizImages';
 import { COIN_QUESTIONS } from '../data/questions/coinQuestions';
 
 interface QuizSession {
@@ -278,6 +278,142 @@ function markeraHjalpSedd(): void {
   }
 }
 
+/**
+ * Vem som svarar när man ringer hem. Mamma och pappa lånar ut pengar; de
+ * andra utfallen kostar bara ett mynt och en stunds väntan.
+ */
+type Svarare = 'mamma' | 'pappa' | 'ingen' | 'upptaget' | 'fel';
+
+interface PhoneCall {
+  phase: 'ringer' | 'svar';
+  svarare: Svarare;
+  /** Vad som sägs, eller vad som hände. */
+  rad: string;
+}
+
+/** Repliker i luren. `{stad}` byts mot staden man ringer från. */
+const MAMMA_SVARAR = [
+  'Älskling! Äntligen! Äter du ordentligt? Har du mössa? Det är säkert kallt i {stad}.',
+  'Jag visste att det var du. Jag kände det i vänster knä. Hur är det med magen?',
+  'Pappa står bredvid och skakar på huvudet. Jag låtsas att jag inte ser honom. Hur mycket behöver du?',
+  'Gud vad du låter smal. Kan man höra det? Jag hör det. Har du tvättat något sedan du åkte?',
+  'Moster Gun frågade om dig i söndags. Jag sa att du är i {stad} och lever på luft. Hon blev orolig.',
+  'Vi har gjort om ditt rum till gym. Nej, jag skojar. Det är förråd. Vad har hänt?',
+  'Grannen sa att man kan bli kidnappad i {stad}. Är du kidnappad? Blinka två gånger.',
+];
+const PAPPA_SVARAR = [
+  'Hrm. Pappa här. Vad har hänt nu då?',
+  'Vet du vad klockan är här? Nej, det gör du väl inte. Du vet ju inte var {stad} ligger heller.',
+  'Jag har lagt in det i ett kalkylblad. Cell B7. Den är röd.',
+  'Din mor säger att jag ska vara snäll. ... Hur mycket?',
+  'Jag lyssnar. Jag säger inget, men jag lyssnar. Det är skillnad.',
+  'När jag var i din ålder tog jag ett jobb. Vilket som helst. Hrm. Nå?',
+  'Jag hade just somnat i fåtöljen. Tack för det. Vad kostar det den här gången?',
+];
+const INGEN_SVARAR = [
+  'Det ringer och ringer. De sitter väl i trädgården och låtsas att de inte hör.',
+  'Telefonsvararen: "Hej, det är familjen. Vi är inte hemma. Eller så är vi det. Prova igen."',
+  'Ingen svarar. Det är torsdag, så mamma är på vattengympa och pappa har glömt var telefonen ligger.',
+  'Efter åtta signaler lyfter någon luren och lägger på. Det var nog pappa.',
+];
+const UPPTAGET = [
+  'Upptaget. Mamma pratar med moster Gun. Det kan ta en timme. Eller två.',
+  'Upptaget. Pappa ringer banken för att fråga om det går att spärra barn.',
+  'Upptaget. Någon där hemma står och pratar om dig, känns det som.',
+];
+const FEL_NUMMER = [
+  'En pizzeria i Neapel svarar. De undrar om du vill ha extra ost. Du lägger på, hungrig.',
+  'En mansröst säger "Vatikanens växel, vart får jag koppla?". Du lägger på och ber om ursäkt.',
+  'En dam svarar på ett språk du inte kan. Hon låter arg. Du lägger på och hoppas att hon saknar nummerpresentatör.',
+  'Fel nummer. Någon i {stad} svarar "Hallå?" precis som hemma, men det är inte hemma.',
+  'Du har slagit numret till Fröken Ur. Klockan är för mycket. Du lägger på.',
+  'En kvinna svarar "Turistbyrån!". Du står ju precis bredvid den.',
+];
+const MAMMA_LANAR = [
+  '"Jag skickar med en gång. Och glöm inte att skicka vykort!"',
+  '"Det är inte lån, det är förskott på julklappen. På alla julklappar."',
+  '"Säg inget till pappa. Han sitter bredvid. Han hör allt. Hej pappa."',
+];
+const PAPPA_LANAR = [
+  '"Hrm." Pengarna kommer ändå. Han suckar så att luren blir fuktig.',
+  '"Det här skrivs upp. Cell B8." Det låter som att han faktiskt skriver.',
+  '"Sista gången." Det är fjärde gången han säger det.',
+];
+const MAMMA_BETALAR = [
+  '"Nämen, vad snäll du är. Behåll det, vetja. Nej? Okej då."',
+  '"Pappa! Barnet betalar tillbaka! ... Han hörde inte. Han står och tittar på grillen."',
+];
+const PAPPA_BETALAR = [
+  '"Jaså." En lång tystnad. Sedan: "Bra." Det är det finaste han sagt på ett år.',
+  '"Jag stryker en rad i kalkylbladet." Han låter nästan rörd.',
+];
+
+/**
+ * Motivet på bilden reagerar på svaret, i Monty Python-anda: utklippta ögon
+ * och en mun klistras på ansiktet, en pratbubbla säger något, och vid fel
+ * svar kommer den stora foten ner från himlen.
+ */
+function reaktionsLager(bildId: string, ratt: boolean): HTMLElement {
+  const info = QUIZ_IMAGE_BY_ID[bildId];
+  const ansikte = info?.ansikte ?? { x: 50, y: 45, b: 32 };
+  const rep = info?.reaktion ?? ALLMAN_REAKTION;
+  const rad = slumpa(ratt ? rep.ratt : rep.fel);
+  const lager = el('span', {
+    class: `py ${ratt ? 'py-ratt' : 'py-fel'}`,
+    'aria-hidden': 'true',
+  });
+  const face = el('span', {
+    class: 'py-ansikte',
+    style: `left:${ansikte.x}%;top:${ansikte.y}%;width:${ansikte.b}%`,
+  });
+  const oga = (cx: number) =>
+    svgEl('g', {},
+      svgEl('ellipse', { cx, cy: 22, rx: 11, ry: ratt ? 13 : 9, class: 'py-ogonvita' }),
+      svgEl('circle', { cx: ratt ? cx : cx + (cx < 50 ? 5 : -5), cy: ratt ? 24 : 20, r: 5, class: 'py-pupill' }),
+      ratt ? '' : svgEl('path', { d: cx < 50 ? 'M12 4 L36 12' : 'M88 4 L64 12', class: 'py-bryn' })
+    );
+  const mun = ratt
+    ? svgEl('g', {},
+        svgEl('path', { d: 'M18 52 Q50 96 82 52 Z', class: 'py-mun' }),
+        svgEl('path', { d: 'M24 54 Q50 64 76 54 L74 60 Q50 70 26 60 Z', class: 'py-tander' })
+      )
+    : svgEl('g', {},
+        svgEl('path', { d: 'M22 76 Q50 40 78 76 Q50 66 22 76 Z', class: 'py-mun' }),
+        svgEl('path', { d: 'M40 70 Q50 84 60 70 Z', class: 'py-tunga' })
+      );
+  const svg = svgEl('svg', { viewBox: '0 0 100 100', class: 'py-svg' }, oga(30), oga(70), mun);
+  face.append(svg);
+  lager.append(face);
+  lager.append(
+    el('span', {
+      class: 'py-bubbla',
+      style: `left:${Math.min(70, Math.max(30, ansikte.x))}%;top:${Math.max(3, ansikte.y - ansikte.b * 0.95).toFixed(0)}%`,
+    }, rad)
+  );
+  if (!ratt) {
+    // Den stora foten, en utklippt siluett som dunsar ner uppifrån.
+    lager.append(
+      el('span', { class: 'py-fot' },
+        svgEl('svg', { viewBox: '0 0 100 160', class: 'py-fot-svg' },
+          svgEl('path', {
+            class: 'py-fot-form',
+            d: 'M30 0 L70 0 L74 40 Q92 70 86 110 Q80 140 56 150 Q30 156 16 134 Q4 110 12 82 Q18 60 26 42 Z',
+          }),
+          ...[
+            [22, 140, 9], [37, 150, 8], [52, 154, 8], [66, 150, 7], [79, 140, 7],
+          ].map(([cx, cy, r]) => svgEl('circle', { cx, cy, r, class: 'py-ta' })),
+          svgEl('path', { d: 'M40 30 Q50 70 44 110', class: 'py-fot-linje' })
+        )
+      )
+    );
+  }
+  return lager;
+}
+
+function slumpa<T>(lista: T[]): T {
+  return lista[Math.floor(Math.random() * lista.length)]!;
+}
+
 /** Regionnamn som visas i passet och på slutskärmen. */
 const REGION_LABELS: Record<string, string> = {
   norden: 'Norden',
@@ -297,6 +433,12 @@ export class App {
   private toast: string | null = null;
   /** Visas när spelaren tryckt på Börja om och ska bekräfta */
   private confirmRestart = false;
+  /**
+   * Pågående samtal i telefonkiosken. Null tills man lyft luren; sedan
+   * ringer det, och sedan svarar någon - eller ingen.
+   */
+  private phoneCall: PhoneCall | null = null;
+  private phoneTimer: number | null = null;
   private toastTimer: number | null = null;
   /**
    * Skärmen byggs om från grunden vid varje förändring. Vid skärmbyte ska vyn
@@ -533,6 +675,7 @@ export class App {
     this.state = null;
     this.quiz = null;
     this.confirmRestart = false;
+    this.laggPa();
     this.travelScene = null;
     this.journeySaved = false;
     this.lastJourneyAt = undefined;
@@ -1747,7 +1890,7 @@ export class App {
     const revealed = p.revealed ?? [];
     /** Hemstaden känner man till. Där ligger funktionerna uppvända från start. */
     const arVand = (pl: Plats) =>
-      revealed.includes(pl.id) || (!pl.bricka && city.id === s.homeCityId);
+      revealed.includes(pl.id);
 
     const DOLD_TIPS = 'Nedvänd bricka. Tryck för att se vad som finns här.';
     const nedvanda = platser.filter((pl) => !arVand(pl));
@@ -1784,8 +1927,13 @@ export class App {
       .sort((a, b) => a.k - b.k)
       .map((x) => x.ruta);
 
-    nedvanda.forEach((pl, i) => {
-      const ruta = valdaRutor[i % valdaRutor.length]!;
+    nedvanda.forEach((pl) => {
+      /**
+       * Rutan väljs efter platsens index i HELA listan, inte bland de ovända.
+       * Räknar man bland de ovända flyttar sig alla mynt bakom det man just
+       * vände, och det ser ut som om myntet byttes ut mot ett annat.
+       */
+      const ruta = valdaRutor[platser.indexOf(pl) % valdaRutor.length]!;
       const rad = Math.floor(ruta / KOLUMNER);
       const kol = ruta % KOLUMNER;
       const jx = pseudoRandom(`${city.id}|${pl.id}|x`);
@@ -1819,7 +1967,12 @@ export class App {
         () => this.vandBricka(pl.id, pl.bricka ? pl.onClick : undefined),
         {
           class: 'city-coin',
-          style: `left:${vanster.toFixed(1)}%;top:${topp.toFixed(1)}%`,
+          style:
+            `left:${vanster.toFixed(1)}%;top:${topp.toFixed(1)}%;` +
+            // Varje mynt vaggar i egen fas och eget tempo, annars rör sig
+            // hela rutan i takt och det ser ut som ett enda mynt.
+            `--fas:${(-pseudoRandom(`${city.id}|${pl.id}|fas`) * 3.6).toFixed(2)}s;` +
+            `--takt:${(3.2 + pseudoRandom(`${city.id}|${pl.id}|takt`) * 1.2).toFixed(2)}s`,
           title: DOLD_TIPS,
           'aria-label': DOLD_TIPS,
           'data-spot': pl.id,
@@ -2445,6 +2598,13 @@ export class App {
       }) as HTMLImageElement;
       img.addEventListener('error', () => bildruta.remove());
       bildruta.append(img);
+      if (answered) {
+        const ratt = q0.reglage
+          ? Math.abs((answered.reglage ?? Number.NaN) - q0.reglage.svar) <= q0.reglage.tolerans
+          : answered.picked === current.correctIndex;
+        bildruta.classList.add(ratt ? 'quiz-bild-ratt' : 'quiz-bild-fel');
+        bildruta.append(reaktionsLager(q0.bild, ratt));
+      }
       panel.append(bildruta);
     }
 
@@ -2524,7 +2684,11 @@ export class App {
                 loading: 'eager',
                 decoding: 'async',
               }),
-              answered ? el('span', { class: 'option-facit' }, text) : ''
+              answered ? el('span', { class: 'option-facit' }, text) : '',
+              // Rätt bild jublar; en felvald bild grimaserar och får foten.
+              answered && (i === current.correctIndex || i === answered.picked)
+                ? reaktionsLager(bildId, i === current.correctIndex)
+                : ''
             )
           : el('span', { class: 'option-body' },
               el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
@@ -2781,6 +2945,14 @@ export class App {
 
     if (right && q.streak >= 3) playCombo(q.streak);
     else playSound(right ? 'ratt' : 'fel');
+    // Bilden reagerar: jubel, eller prutt och den stora foten.
+    if (current.question.bild || current.images) {
+      if (right) window.setTimeout(() => playSound('jubel'), 220);
+      else {
+        window.setTimeout(() => playSound('prutt'), 150);
+        window.setTimeout(() => playSound('fotdunk'), 620);
+      }
+    }
     q.dayResults[q.index] = right;
     q.answered = {
       picked,
@@ -3640,71 +3812,192 @@ export class App {
 
   // -------------------------------------------------------------- telefonen
 
+  /** Lägger på: stoppar väntande signaler och glömmer samtalet. */
+  private laggPa(): void {
+    if (this.phoneTimer !== null) {
+      window.clearTimeout(this.phoneTimer);
+      this.phoneTimer = null;
+    }
+    this.phoneCall = null;
+  }
+
+  /**
+   * Slår numret hem. Det ringer några signaler, och sedan svarar mamma,
+   * pappa, någon helt annan - eller ingen alls. Första gången svarar alltid
+   * mamma: hon har väntat vid telefonen sedan du åkte.
+   */
+  private ringHem(): void {
+    const s = this.state!;
+    if (this.phoneCall?.phase === 'ringer') return;
+    playSound('myntinkast');
+    this.phoneCall = { phase: 'ringer', svarare: 'ingen', rad: '' };
+    this.render();
+
+    const lott = Math.random();
+    const svarare: Svarare =
+      s.callsHome === 0
+        ? 'mamma'
+        : lott < 0.38
+          ? 'mamma'
+          : lott < 0.68
+            ? 'pappa'
+            : lott < 0.8
+              ? 'ingen'
+              : lott < 0.88
+                ? 'upptaget'
+                : 'fel';
+    const signaler =
+      svarare === 'upptaget' ? 0 : svarare === 'ingen' ? 4 : svarare === 'mamma' ? 2 : 3;
+    if (svarare === 'upptaget') playSound('upptaget');
+    for (let i = 0; i < signaler; i++) {
+      window.setTimeout(() => {
+        if (this.phoneCall?.phase === 'ringer') playSound('telefonsignal');
+      }, 350 + i * 1900);
+    }
+    const vantan = svarare === 'upptaget' ? 2200 : 350 + signaler * 1900 - 700;
+    this.phoneTimer = window.setTimeout(() => {
+      this.phoneTimer = null;
+      if (!this.state || this.phoneCall?.phase !== 'ringer') return;
+      const stad = this.city.name;
+      const lista =
+        svarare === 'mamma'
+          ? MAMMA_SVARAR
+          : svarare === 'pappa'
+            ? PAPPA_SVARAR
+            : svarare === 'ingen'
+              ? INGEN_SVARAR
+              : svarare === 'upptaget'
+                ? UPPTAGET
+                : FEL_NUMMER;
+      const rad = slumpa(lista).split('{stad}').join(stad);
+      if (svarare === 'mamma') playSound('rostmamma');
+      else if (svarare === 'pappa') playSound('rostpappa');
+      else if (svarare === 'fel') playSound('rostframmande');
+      this.phoneCall = { phase: 'svar', svarare, rad };
+      this.scrollToTopNext = false;
+      this.render();
+    }, vantan);
+  }
+
   private renderPhone(): HTMLElement {
     const s = this.state!;
     const wrap = el('div', { class: 'stack' });
     const amount = loanAmount(s);
+    const samtal = this.phoneCall;
 
-    const panel = el('section', { class: 'panel' });
-    panel.append(
-      el('h1', { class: 'title' }, 'Telefonkiosken'),
-      el(
-        'p',
-        { class: 'lede' },
-        s.callsHome === 0
-          ? 'Mamma svarar efter andra signalen. Hon har väntat på att du skulle ringa.'
-          : `Du har ringt hem ${s.callsHome} gånger. Pappa suckar när han hör din röst.`
-      ),
-      el(
-        'p',
-        { class: 'muted' },
-        `Nästa lån ger ${this.money(amount)} och läggs på skulden. Nuvarande skuld: ${this.money(
-          s.debt
-        )}. Skulden dras av från slutpoängen.`
-      )
-    );
-    panel.append(
-      button(
-        `Låna ${this.money(amount)}`,
-        () => {
-          s.money += amount;
-          s.debt += amount;
-          s.callsHome += 1;
-          this.commit();
-          // Myntet ner i automaten, sedan haranger innan pengarna kommer.
-          playSound('myntinkast');
-          window.setTimeout(() => playSound('telefonrost'), 320);
-          window.setTimeout(() => playSound('kassa'), 2600);
-          this.notify(
-            `${this.money(amount)} insatt. "Och glöm inte att skicka vykort!"`
-          );
-          this.go('stad');
-        },
-        { class: 'btn btn-primary btn-big' }
-      )
-    );
-    if (s.debt > 0 && s.money >= 500) {
-      const payment = Math.min(s.debt, Math.floor(s.money / 2));
+    const panel = el('section', { class: 'panel phone' });
+    panel.append(el('h1', { class: 'title' }, 'Telefonkiosken'));
+
+    /** Luren: hänger stilla, skakar när det ringer, lyfts när någon svarat. */
+    const lur = el('div', {
+      class: `phone-lur ${samtal?.phase === 'ringer' ? 'phone-lur-ringer' : ''} ${
+        samtal?.phase === 'svar' ? 'phone-lur-upp' : ''
+      }`,
+      'aria-hidden': 'true',
+    }, icon('skylt-telefon'));
+    panel.append(lur);
+
+    if (!samtal) {
       panel.append(
-        button(
-          `Betala tillbaka ${this.money(payment)}`,
-          () => {
-            s.money -= payment;
-            s.debt -= payment;
-            this.commit();
-            this.notify(
-              s.debt === 0
-                ? 'Skulden är betald. Pappa blir tyst en lång stund.'
-                : 'Skulden minskad. Pappa blir imponerad.'
-            );
-            this.go('stad');
-          },
-          { class: 'btn btn-ghost' }
-        )
+        el(
+          'p',
+          { class: 'lede' },
+          s.callsHome === 0
+            ? 'En gammal myntautomat. Det luktar tuggummi och hemlängtan. Du kan ringa hem och låna pengar - om någon svarar.'
+            : `Du har ringt hem ${s.callsHome} gånger. Numret sitter i fingrarna.`
+        ),
+        el(
+          'p',
+          { class: 'muted' },
+          `Nästa lån ger ${this.money(amount)} och läggs på skulden. Nuvarande skuld: ${this.money(
+            s.debt
+          )}. Skulden dras av från slutpoängen.`
+        ),
+        button('Ring hem', () => this.ringHem(), { class: 'btn btn-primary btn-big' })
       );
+    } else if (samtal.phase === 'ringer') {
+      panel.append(
+        el('p', { class: 'lede phone-ringer' },
+          'Det ringer',
+          el('span', { class: 'phone-prickar', 'aria-hidden': 'true' },
+            el('i', {}, '.'), el('i', {}, '.'), el('i', {}, '.')
+          )
+        ),
+        el('p', { class: 'muted' }, 'Du står och trummar med fingrarna på automaten.')
+      );
+    } else {
+      const foralder = samtal.svarare === 'mamma' || samtal.svarare === 'pappa';
+      const vem =
+        samtal.svarare === 'mamma'
+          ? 'Mamma svarar'
+          : samtal.svarare === 'pappa'
+            ? 'Pappa svarar'
+            : samtal.svarare === 'ingen'
+              ? 'Ingen svarar'
+              : samtal.svarare === 'upptaget'
+                ? 'Upptaget'
+                : 'Fel nummer';
+      panel.append(
+        el('p', { class: `phone-vem phone-vem-${samtal.svarare}` }, vem),
+        el('p', { class: `lede ${foralder ? 'phone-replik' : ''}` }, samtal.rad)
+      );
+      if (foralder) {
+        const pappa = samtal.svarare === 'pappa';
+        panel.append(
+          el('p', { class: 'muted' },
+            `Ett lån ger ${this.money(amount)} och läggs på skulden (nu ${this.money(s.debt)}).`
+          ),
+          button(
+            pappa ? `Be pappa om ${this.money(amount)}` : `Be mamma om ${this.money(amount)}`,
+            () => {
+              s.money += amount;
+              s.debt += amount;
+              s.callsHome += 1;
+              this.commit();
+              playSound(pappa ? 'rostpappa' : 'rostmamma');
+              window.setTimeout(() => playSound('kassa'), 2400);
+              this.notify(
+                `${this.money(amount)} insatt. ${slumpa(pappa ? PAPPA_LANAR : MAMMA_LANAR)}`
+              );
+              this.laggPa();
+              this.go('stad');
+            },
+            { class: 'btn btn-primary btn-big' }
+          )
+        );
+        if (s.debt > 0 && s.money >= 500) {
+          const payment = Math.min(s.debt, Math.floor(s.money / 2));
+          panel.append(
+            button(
+              `Betala tillbaka ${this.money(payment)}`,
+              () => {
+                s.money -= payment;
+                s.debt -= payment;
+                this.commit();
+                this.notify(
+                  (s.debt === 0 ? 'Skulden är betald. ' : 'Skulden minskad. ') +
+                    slumpa(pappa ? PAPPA_BETALAR : MAMMA_BETALAR)
+                );
+                this.laggPa();
+                this.go('stad');
+              },
+              { class: 'btn btn-ghost' }
+            )
+          );
+        }
+      } else {
+        panel.append(
+          button('Ring igen', () => this.ringHem(), { class: 'btn btn-primary btn-big' })
+        );
+      }
     }
     wrap.append(panel);
-    wrap.append(this.backRow('Lägg på', () => this.go('stad')));
+    wrap.append(
+      this.backRow('Lägg på', () => {
+        this.laggPa();
+        this.go('stad');
+      })
+    );
     return wrap;
   }
 

@@ -35,10 +35,22 @@ const server = await createServer({
 });
 const { QUIZ_IMAGES } = await server.ssrLoadModule('/src/data/quizImages.ts');
 
+const paus = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Wikimedia svarar 429 om man frågar för tätt. Då väntar vi och försöker
+ * igen, med längre paus för varje gång, i stället för att ge upp bilden.
+ */
 async function api(url) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA } });
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} för ${url}`);
-  return res.json();
+  for (let forsok = 0; ; forsok++) {
+    const res = await fetch(url, { headers: { 'User-Agent': UA } });
+    if (res.ok) return res.json();
+    if (res.status === 429 && forsok < 5) {
+      await paus(3000 * (forsok + 1));
+      continue;
+    }
+    throw new Error(`${res.status} ${res.statusText} för ${url}`);
+  }
 }
 
 /** Ledningsbilden för en Wikipedia-artikel, i 900 pixlars bredd. */

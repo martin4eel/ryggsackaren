@@ -60,6 +60,22 @@ export type Sound =
   | 'myntinkast'
   /** Mamma eller pappa som tjatar i luren */
   | 'telefonrost'
+  /** Ringsignalen i luren medan man väntar på svar */
+  | 'telefonsignal'
+  /** Upptagetton */
+  | 'upptaget'
+  /** Mamma svarar: ljus, snabb, orolig */
+  | 'rostmamma'
+  /** Pappa svarar: mörk, långsam, suckande */
+  | 'rostpappa'
+  /** Någon annan svarar, på ett språk du inte kan */
+  | 'rostframmande'
+  /** Den stora foten: dunsen när den landar */
+  | 'fotdunk'
+  /** Pruttljudet som hör till foten */
+  | 'prutt'
+  /** Motivet på bilden jublar */
+  | 'jubel'
   /** Tågvissla vid avgång */
   | 'tagvissla'
   /** Bussmotor som drar igång */
@@ -500,6 +516,56 @@ export function playSound(name: Sound): void {
       // Mamma hinner med en hel harang innan du får ett ord med i laget.
       replik(t, 7, 260);
       replik(t + 1.15, 5, 240);
+      break;
+    case 'telefonsignal':
+      // Svensk ringsignal i luren: 425 Hz, en sekund på, en tystnad.
+      tone(425, t, 0.9, { type: 'sine', gain: 0.07, attack: 0.02 });
+      tone(425 * 1.004, t, 0.9, { type: 'sine', gain: 0.03, attack: 0.02 });
+      break;
+    case 'upptaget':
+      // Upptagetton: korta 425 Hz-pip i jämn takt.
+      [0, 0.5, 1.0, 1.5].forEach((d) =>
+        tone(425, t + d, 0.25, { type: 'sine', gain: 0.07, attack: 0.01 })
+      );
+      break;
+    case 'rostmamma':
+      /**
+       * Mamma: ljust läge, snabb takt och lång harang - orolig och glad på
+       * samma gång. Andra repliken går upp på slutet, som en fråga.
+       */
+      replik(t, 9, 290, 0.09, 0.85);
+      replik(t + 1.25, 6, 310, 0.09, 0.9);
+      replik(t + 2.2, 4, 330, 0.085, 0.95);
+      break;
+    case 'rostpappa':
+      /**
+       * Pappa: djupt läge, långsamma stavelser, en suck emellan. Tempot över
+       * ett gör stavelserna längre och mer mumlande.
+       */
+      replik(t, 3, 118, 0.1, 1.6);
+      noise(0.45, t + 0.9, { gain: 0.03, from: 700, to: 300, q: 0.8 });
+      replik(t + 1.5, 6, 112, 0.1, 1.5);
+      break;
+    case 'rostframmande':
+      // Någon annan, snabbt och ivrigt. Alldeles för många stavelser.
+      replik(t, 12, 230, 0.085, 0.7);
+      replik(t + 1.4, 8, 250, 0.08, 0.65);
+      break;
+    case 'fotdunk':
+      // Den stora foten landar: en dov duns med stenar som rasslar.
+      tone(70, t, 0.3, { type: 'sine', gain: 0.22, slide: 30, attack: 0.005 });
+      noise(0.2, t, { gain: 0.09, from: 900, to: 150, q: 0.7 });
+      break;
+    case 'prutt':
+      // Det klassiska pruttljudet: en sågtand som flaxar nedåt i tonhöjd.
+      tone(150, t, 0.42, { type: 'sawtooth', gain: 0.09, slide: 55, attack: 0.01 });
+      tone(76, t, 0.42, { type: 'square', gain: 0.04, slide: 28, attack: 0.01 });
+      noise(0.4, t, { gain: 0.03, from: 500, to: 200, q: 0.5 });
+      break;
+    case 'jubel':
+      // Ett litet hurra ur motivets mun: två glada stavelser som går uppåt.
+      stavelse(t, 0.14, 330, VOKALER[3]!, 0.09);
+      stavelse(t + 0.16, 0.22, 420, VOKALER[0]!, 0.1);
       break;
     case 'tagvissla':
       // Två toner i kvint, som ett riktigt tåghorn.
