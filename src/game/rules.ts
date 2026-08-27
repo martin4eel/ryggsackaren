@@ -30,7 +30,7 @@ export function distanceKm(a: City, b: City): number {
 
 /** Kostnad per natt för vandrarhem och mat i en stad. */
 export function dailyCost(city: City, difficulty: Difficulty): number {
-  const base = 210 * city.costIndex;
+  const base = 250 * city.costIndex;
   return Math.round(difficulty === 'turist' ? base * 0.8 : base);
 }
 
@@ -43,31 +43,44 @@ export {
   optionCount,
 } from './difficulty';
 
-/** Betyg 0-100 översatt till högsta löneklass du får söka. */
-export function allowedWageClass(rating: number): 1 | 2 | 3 {
-  if (rating >= 85) return 3;
-  if (rating >= 50) return 2;
-  return 1;
+/**
+ * Certifikat räknade mot ett visst jobb. Ett certifikat i samma ämne är
+ * värt två: den som jobbat som kock två gånger får söka kökschefsjobbet
+ * före den som samlat tre olika.
+ */
+export function certificateWeight(state: GameState, job: Job): number {
+  let total = 0;
+  for (const [category, n] of Object.entries(state.certificates)) {
+    total += (n ?? 0) * (category === job.category ? 2 : 1);
+  }
+  return total;
+}
+
+/** Vad ett jobb kräver, i certifikat (viktade) och stadsbetyg. */
+export function jobRequirement(job: Job): { certs: number; rating: number } {
+  if (job.wageClass === 1) return { certs: 0, rating: 0 };
+  if (job.wageClass === 2) return { certs: 1, rating: 50 };
+  return { certs: 3, rating: 75 };
 }
 
 /**
- * Ett jobb kan låsas upp antingen av bra betyg på turistbyrån eller av
- * certifikat du samlat i samma kategori tidigare på resan.
+ * Man börjar längst ner. Löneklass 1 är öppen för alla; högre klasser kräver
+ * certifikat från tidigare skift, och därtill ett stadsbetyg som visar att
+ * man kan något om platsen. Ett högt betyg ensamt räcker inte - det går inte
+ * att plugga sig förbi golvet, bara att jobba sig upp.
  */
 export function canTakeJob(state: GameState, job: Job): boolean {
+  const need = jobRequirement(job);
+  if (need.certs === 0) return true;
   const rating = getProgress(state, state.currentCityId).rating;
-  if (job.wageClass <= allowedWageClass(rating)) return true;
-  const certs = state.certificates[job.category] ?? 0;
-  if (job.wageClass === 2 && certs >= 1) return true;
-  if (job.wageClass === 3 && certs >= 2) return true;
-  return false;
+  return certificateWeight(state, job) >= need.certs && rating >= need.rating;
 }
 
 export function jobRequirementText(job: Job): string {
   if (job.wageClass === 1) return 'Inga krav';
   if (job.wageClass === 2)
-    return 'Kräver minst 50 i stadsbetyg eller 1 certifikat i ämnet';
-  return 'Kräver minst 85 i stadsbetyg eller 2 certifikat i ämnet';
+    return 'Kräver ett certifikat och minst 50 i stadsbetyg';
+  return 'Kräver tre certifikat (ett i ämnet räknas dubbelt) och minst 75 i stadsbetyg';
 }
 
 /** Lön per rätt svar i basenheter. */
@@ -76,9 +89,9 @@ export function wagePerCorrect(
   city: City,
   difficulty: Difficulty
 ): number {
-  const classFactor = job.wageClass === 1 ? 1 : job.wageClass === 2 ? 1.7 : 2.6;
-  const base = 190 * classFactor * (0.75 + city.costIndex * 0.45);
-  return Math.round(difficulty === 'turist' ? base : base * 1.25);
+  const classFactor = job.wageClass === 1 ? 1 : job.wageClass === 2 ? 1.6 : 2.3;
+  const base = 160 * classFactor * (0.75 + city.costIndex * 0.45);
+  return Math.round(difficulty === 'turist' ? base : base * 1.15);
 }
 
 /**
@@ -260,10 +273,20 @@ export function citySouvenirs(city: City): Souvenir[] {
     .filter((s): s is Souvenir => Boolean(s));
 }
 
-/** Lån hemifrån: större belopp men växande skuld. */
+/** Lån hemifrån: mindre för varje samtal. */
 export function loanAmount(state: GameState): number {
-  const base = 2500;
-  return Math.round(base * Math.max(0.4, 1 - state.callsHome * 0.15));
+  const base = 2000;
+  return Math.round(base * Math.max(0.3, 1 - state.callsHome * 0.25));
+}
+
+/**
+ * Räntan på ett lån hemifrån. Föräldrarna lånar inte ut gratis: skulden som
+ * läggs på är en femtedel större än det som sätts in, så att ett samtal dag
+ * ett är en kostnad och inte ett självklart drag.
+ */
+export const LOAN_INTEREST = 0.2;
+export function loanDebt(amount: number): number {
+  return Math.round(amount * (1 + LOAN_INTEREST));
 }
 
 /** Värdet av ryggsäcken om den säljs hemma. */
@@ -315,18 +338,28 @@ export function rankTitle(score: number): { title: string; desc: string } {
   return { title: 'Hemvändare', desc: 'Resan blev kort, men den blev av.' };
 }
 
-/** Slutpoäng: pengar, souvenirvärde, kunskap och effektivitet. */
+/** Kassan räknas bara upp till hit. Resten är bara pengar. */
+export const SCORE_CASH_CAP = 25000;
+
+/**
+ * Slutpoäng: resande först, pengar sedan.
+ *
+ * Kassan har ett tak och certifikat räknas per ämne, så att fyrtio skift i
+ * samma stad inte slår en resa jorden runt. Det som ger mest är städer,
+ * världsdelar, stämplar och tempo - alltså att faktiskt vara ryggsäckare.
+ */
 export function finalScore(state: GameState): number {
-  const cash = state.money - state.debt;
+  const cash = Math.min(SCORE_CASH_CAP, state.money - state.debt);
   const bag = backpackHomeValue(state);
   const answered = state.correct + state.wrong;
   const accuracy = answered > 0 ? state.correct / answered : 0;
-  const certs = Object.values(state.certificates).reduce(
-    (a, b) => a + (b ?? 0),
-    0
-  );
+  // Första certifikatet i ett ämne är värt mest; bredd slår upprepning.
+  let certPoints = 0;
+  for (const n of Object.values(state.certificates)) {
+    if ((n ?? 0) > 0) certPoints += 900 + ((n ?? 1) - 1) * 250;
+  }
   const uniqueCities = new Set(state.visited).size;
-  const cityPoints = uniqueCities * 1200;
+  const cityPoints = uniqueCities * 1500;
   // Olika världsdelar är värda mer än flera städer i samma hörn av världen.
   const regions = new Set(
     state.visited.map((id) => CITY_BY_ID[id]?.region).filter(Boolean)
@@ -339,23 +372,24 @@ export function finalScore(state: GameState): number {
    */
   const rykte = Math.max(-6, Math.min(12, state.rykte ?? 0)) * 700;
   /**
-   * Effektivitetsbonus istället för ren snabbhet: den som ser många städer
-   * på få dagar belönas, men en grundlig resa nollas inte ut.
+   * Tempobonus: dagar per stad. Åtta dagar per stad ger drygt hälften, den
+   * som stannar tjugo dagar i varje stad får ingenting, och en resa på
+   * 30 städer på 60 dagar får full pott.
    */
-  const efficiency =
-    state.days > 0 ? Math.min(15000, (uniqueCities / state.days) * 260000) : 0;
+  const daysPerCity = uniqueCities > 0 ? state.days / uniqueCities : 99;
+  const pace = Math.max(0, Math.min(12000, 12000 - (daysPerCity - 2) * 600));
   return Math.max(
     0,
     Math.round(
       cash * 0.6 +
         bag * 0.9 +
         cityPoints +
-        regions * 1400 +
+        regions * 2000 +
         stampPoints +
         rykte +
-        certs * 700 +
+        certPoints +
         accuracy * 6000 +
-        efficiency
+        pace
     )
   );
 }

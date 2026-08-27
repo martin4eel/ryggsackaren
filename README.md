@@ -281,8 +281,19 @@ webbläsaren och överlever att sparfilen raderas.
    minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
    saker och låta resten vara, hålla balansen eller slå i takt. Det ger upp
    till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
-   till. Klarar du 70 procent av skiftet totalt får du ett **certifikat**,
-   som öppnar bättre betalda jobb i samma ämne i alla städer.
+   till. Klarar du tillräckligt av skiftet totalt (65 procent som Turist, 75
+   som Globetrotter) får du ett **certifikat**.
+
+   **Man börjar längst ner.** Löneklass 1 är öppen för alla. Löneklass 2
+   kräver ett certifikat och minst 50 i stadsbetyg, löneklass 3 tre
+   certifikat och minst 75 i betyg – och ett certifikat i jobbets eget ämne
+   räknas dubbelt. Ett högt stadsbetyg räcker alltså aldrig ensamt; det går
+   inte att plugga sig förbi golvet, bara att jobba sig upp. Reglerna ligger
+   i `canTakeJob` i `src/game/rules.ts`.
+
+   Ekonomin är tajt: boendet dras varje dag, också arbetsdagarna, och ett
+   klass 1-skift med hälften rätt går back. Det är meningen. Först med
+   certifikat och ett klass 2-jobb blir det pengar över till en biljett.
 9. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
 10. **Kartan.** En egen skylt på gatan, och en atlas snarare än ett reglage.
@@ -330,7 +341,8 @@ webbläsaren och överlever att sparfilen raderas.
    suckar, och båda lånar ut pengar. Ibland är det upptaget, ibland svarar
    ingen, och ibland har du slagit fel och får en pizzeria i Neapel. Då är det
    bara att ringa igen. Första gången svarar alltid mamma – hon har väntat.
-   Lånen läggs på skulden, som dras av från slutpoängen, och varje samtal ger
+   Lånen läggs på skulden med tjugo procents ränta – föräldrarna lånar inte
+   ut gratis – och skulden dras av från slutpoängen. Varje samtal ger
    mindre än det förra. Rösterna är syntetiska (`rostmamma`, `rostpappa` i
    `src/ui/audio.ts`) och replikerna står överst i `src/ui/app.ts`.
 12. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
@@ -421,11 +433,13 @@ statusraden, eller _Radera sparfil_ på startskärmen.
 
 ### Poäng
 
-Slutpoängen väger samman kassa, ryggsäckens värde hemma, antal besökta städer,
-hur många av världens åtta regioner du hunnit till, stämplarna i passet,
-certifikat, träffsäkerhet på frågorna, ditt anseende och hur effektivt du reste
-(städer per dag). Skulden dras av. Poängen ger också en titel, från _Hemvändare_ till
-_Legendarisk ryggsäckare_.
+Slutpoängen väger samman antal besökta städer, hur många av världens åtta
+regioner du hunnit till, stämplarna i passet, certifikat (räknade per ämne –
+bredd slår upprepning), träffsäkerhet på frågorna, ditt anseende, tempot
+(dagar per stad) och till sist kassan och ryggsäckens värde hemma. Kassan
+räknas bara upp till 25 000: resande ger poäng, pengar ger biljetter. Skulden
+dras av. Poängen ger också en titel, från _Hemvändare_ till _Legendarisk
+ryggsäckare_.
 
 ## Innehåll
 

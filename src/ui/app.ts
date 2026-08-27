@@ -22,10 +22,13 @@ import {
   jobQuestions,
   prepareQuestion,
   jobRequirementText,
+  jobRequirement,
+  certificateWeight,
   arcadeSlack,
   certificateThreshold,
   comboMultiplier,
   loanAmount,
+  loanDebt,
   newStamps,
   pityBonus,
   pseudoRandom,
@@ -2494,7 +2497,13 @@ export class App {
           )
         );
       } else if (!allowed) {
-        card.append(el('p', { class: 'note' }, jobRequirementText(job)));
+        const need = jobRequirement(job);
+        const har = certificateWeight(s, job);
+        card.append(
+          el('p', { class: 'note' },
+            `${jobRequirementText(job)}. Du har ${har} av ${need.certs} certifikat och ${p.rating} i betyg.`
+          )
+        );
       } else {
         card.append(
           button('Sök jobbet', () => this.startJob(job), {
@@ -2619,6 +2628,8 @@ export class App {
       this.notify('Ingen arbetsledare på plats i dag.');
       return;
     }
+    // Felsviten från turistbyrån följer inte med in på jobbet.
+    s.wrongStreak = 0;
     this.quiz = {
       kind: 'jobb',
       questions,
@@ -3271,7 +3282,7 @@ export class App {
     if (q.correct === total) s.perfectShifts += 1;
     this.spendDays(job.shiftLength, city);
 
-    // Certifikat om du klarar minst 70 procent av skiftet. Arkadmomentet
+    // Certifikat om du klarar tillräckligt av skiftet (se difficulty.ts). Arkadmomentet
     // väger in, så ett svagt frågeresultat kan räddas av gott handlag.
     const mgScore = q.minigameResult?.score ?? 0;
     const shiftScore = Math.round(score * 0.75 + mgScore * 100 * 0.25);
@@ -3447,9 +3458,9 @@ export class App {
      * Ungefär var tredje resa händer något. Händelsen läggs i tillståndet i
      * stället för att visas direkt, så att den överlever en omladdning.
      */
-    // Jobben i staden du lämnar blir sökbara igen nästa gång du kommer hit,
-    // annars kan en återvändande resenär inte tjäna något alls.
-    getProgress(s, from.id).workedJobs = [];
+    // Jobben i staden du lämnar återställs inte här: annonserna byts ut var
+    // sjunde dag (se renderNewspaper), och den som pendlar fram och tillbaka
+    // över en dag ska inte hitta samma annonser igen på andra sidan.
     s.currentCityId = target.id;
     s.visited.push(target.id);
     // Första dagen i staden sparas för raden om återbesök.
@@ -4151,13 +4162,13 @@ export class App {
         const pappa = samtal.svarare === 'pappa';
         panel.append(
           el('p', { class: 'muted' },
-            `Ett lån ger ${this.money(amount)} och läggs på skulden (nu ${this.money(s.debt)}).`
+            `Ett lån ger ${this.money(amount)}, men skulden växer med ${this.money(loanDebt(amount))} - föräldrarna tar ränta (nu ${this.money(s.debt)}).`
           ),
           button(
             pappa ? `Be pappa om ${this.money(amount)}` : `Be mamma om ${this.money(amount)}`,
             () => {
               s.money += amount;
-              s.debt += amount;
+              s.debt += loanDebt(amount);
               s.callsHome += 1;
               this.commit();
               playSound(pappa ? 'rostpappa' : 'rostmamma');
