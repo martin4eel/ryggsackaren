@@ -16,17 +16,22 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **bordercollie.jpg** (En border collie) – [Border_Collie_600.jpg](https://commons.wikimedia.org/wiki/File:Border_Collie_600.jpg) av okänd, CC BY-SA 3.0.
 - **boudhanath.jpg** (Boudhanathstupan i Katmandu) – [Boudhanath_stupa_,_Kathmandu,_Nepal.jpg](https://commons.wikimedia.org/wiki/File:Boudhanath_stupa_,_Kathmandu,_Nepal.jpg) av Sumitbhatt222, CC BY-SA 4.0.
 - **buffel.jpg** (En afrikansk buffel) – [African_buffalo_(Syncerus_caffer_caffer)_male_with_cattle_egret.jpg](https://commons.wikimedia.org/wiki/File:African_buffalo_(Syncerus_caffer_caffer)_male_with_cattle_egret.jpg) av Charles J. Sharp, CC BY-SA 4.0.
+- **bunker.jpg** (En bunker på en golfbana) – [Sand trap 8012.jpg](https://commons.wikimedia.org/wiki/File:Sand_trap_8012.jpg) av Chris Light, CC BY-SA 4.0.
 - **calzone.jpg** (En calzone) – [Wikimania_2016_Deryck_day_0_-_07_calzone.jpg](https://commons.wikimedia.org/wiki/File:Wikimania_2016_Deryck_day_0_-_07_calzone.jpg) av Deryck Chan, CC BY-SA 4.0.
 - **castells.jpg** (Ett castell, ett mänskligt torn) – [Colla_Vella_dels_Xiquets_de_Valls_-_Primer_2de9_amb_folre_i_manilles_descarregat_de_la_història_-_Diada_de_Santa_Úrsula_1994.jpg](https://commons.wikimedia.org/wiki/File:Colla_Vella_dels_Xiquets_de_Valls_-_Primer_2de9_amb_folre_i_manilles_descarregat_de_la_hist%C3%B2ria_-_Diada_de_Santa_%C3%9Arsula_1994.jpg) av Colla Vella dels Xiquets de Valls, CC BY-SA 3.0.
+- **champagne.jpg** (Ett glas champagne) – [Glass_of_champagne.jpg](https://commons.wikimedia.org/wiki/File:Glass_of_champagne.jpg) av bgvjpe, CC BY 2.0.
 - **chili.jpg** (Chilifrukter) – [Madame_Jeanette_and_other_chillies.jpg](https://commons.wikimedia.org/wiki/File:Madame_Jeanette_and_other_chillies.jpg) av Takeaway, CC BY-SA 4.0.
 - **croissant.jpg** (En croissant) – [Croissant-Petr_Kratochvil.jpg](https://commons.wikimedia.org/wiki/File:Croissant-Petr_Kratochvil.jpg) av Petr Kratochvil, CC0.
 - **cuica.jpg** (En cuíca) – [Cuica.jpg](https://commons.wikimedia.org/wiki/File:Cuica.jpg) av okänd, CC BY-SA 3.0.
 - **david.jpg** (Michelangelos David) – ['David'_by_Michelangelo_Fir_JBU004.jpg](https://commons.wikimedia.org/wiki/File:%27David%27_by_Michelangelo_Fir_JBU004.jpg) av Jörg Bittner Unna, CC BY 3.0.
+- **dekanter.jpg** (Vin hälls upp i en dekanter) – [Pouring wine into decanter.jpg](https://commons.wikimedia.org/wiki/File:Pouring_wine_into_decanter.jpg) av atl10trader, CC BY 2.0.
 - **delfin.jpg** (En flasknosdelfin) – [Tursiops_truncatus_01-cropped.jpg](https://commons.wikimedia.org/wiki/File:Tursiops_truncatus_01-cropped.jpg) av NASA, Public domain.
 - **doner.jpg** (Kött på lodrätt dönerspett) – [Döner_kebab_slicing.jpg](https://commons.wikimedia.org/wiki/File:D%C3%B6ner_kebab_slicing.jpg) av okänd, CC BY-SA 3.0.
+- **driver.jpg** (Drivers, gamla och nya) – [Golf_drivers_old_and_new.jpg](https://commons.wikimedia.org/wiki/File:Golf_drivers_old_and_new.jpg) av ReignMan ( talk ), Public domain.
 - **dromedar.jpg** (En dromedar i öknen) – [Camelus_dromedarius_in_Nuweiba.jpg](https://commons.wikimedia.org/wiki/File:Camelus_dromedarius_in_Nuweiba.jpg) av Florian Prischl, CC BY-SA 3.0.
 - **durian.jpg** (En durianfrukt) – [Durian_in_black.jpg](https://commons.wikimedia.org/wiki/File:Durian_in_black.jpg) av مانفی, CC BY-SA 4.0.
 - **ejder.jpg** (En ejderhane på vattnet) – [Пухівка_на_Кінбурнській_косі.jpg](https://commons.wikimedia.org/wiki/File:%D0%9F%D1%83%D1%85%D1%96%D0%B2%D0%BA%D0%B0_%D0%BD%D0%B0_%D0%9A%D1%96%D0%BD%D0%B1%D1%83%D1%80%D0%BD%D1%81%D1%8C%D0%BA%D1%96%D0%B9_%D0%BA%D0%BE%D1%81%D1%96.jpg) av Ryzhkov Sergey, CC BY-SA 4.0.
+- **ekfat.jpg** (Ekfat i en vinkällare) – [Oak barrels used for aging of wine in a cellar at Grover Zampa Vineyard, Doddaballapura, Karnataka, India.jpg](https://commons.wikimedia.org/wiki/File:Oak_barrels_used_for_aging_of_wine_in_a_cellar_at_Grover_Zampa_Vineyard,_Doddaballapura,_Karnataka,_India.jpg) av Subhashish Panigrahi, CC BY-SA 4.0.
 - **elefant.jpg** (En afrikansk savannelefant) – [178_Male_African_bush_elephant_in_Etosha_National_Park_Photo_by_Giles_Laurent.jpg](https://commons.wikimedia.org/wiki/File:178_Male_African_bush_elephant_in_Etosha_National_Park_Photo_by_Giles_Laurent.jpg) av Giles Laurent, CC BY-SA 4.0.
 - **emmentaler.jpg** (En bit emmentaler) – [Emmentaler_Premier_Cru.jpg](https://commons.wikimedia.org/wiki/File:Emmentaler_Premier_Cru.jpg) av Manuel2, CC BY-SA 2.0 de.
 - **felucka.jpg** (En felucka på Nilen) – [Felucca_R02.jpg](https://commons.wikimedia.org/wiki/File:Felucca_R02.jpg) av Marc Ryckaert ( MJJR ), CC BY 3.0.
@@ -39,18 +44,27 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **gepard.jpg** (En gepard) – [Male_cheetah_facing_left_in_South_Africa.jpg](https://commons.wikimedia.org/wiki/File:Male_cheetah_facing_left_in_South_Africa.jpg) av AfricanConservation, CC BY-SA 4.0.
 - **giraff.jpg** (En giraff) – [Giraffe_Mikumi_National_Park.jpg](https://commons.wikimedia.org/wiki/File:Giraffe_Mikumi_National_Park.jpg) av Muhammad Mahdi Karim Facebook The making of this document was supported by Wikimedia CH . ( Submit your project! ) For all the files concerned, please see the category Supported by Wikimedia CH . العربية ∙ বাংলা ∙ čeština ∙ Deutsch ∙ English ∙ Esperanto ∙ español ∙ français ∙ galego ∙ हिन्दी ∙ magyar ∙ italiano ∙ 日本語 ∙ македонски ∙ Nederlands ∙ português do Brasil ∙ rumantsch ∙ русский ∙ sicilianu ∙ slovenščina ∙ தமிழ் ∙ українська ∙ 中文 ∙ +/−, GFDL 1.2.
 - **gnu.jpg** (En gnu på savannen) – [Blue_Wildebeest,_Ngorongoro.jpg](https://commons.wikimedia.org/wiki/File:Blue_Wildebeest,_Ngorongoro.jpg) av Muhammad Mahdi Karim, GFDL 1.2.
+- **golfbag.jpg** (En golfbag med klubbor) – [Golf bag and clubs.jpg](https://commons.wikimedia.org/wiki/File:Golf_bag_and_clubs.jpg) av Alejandrocuadro, CC0.
+- **golfbil.jpg** (En golfbil) – [Yamaha_Drive_2_golf_car.jpg](https://commons.wikimedia.org/wiki/File:Yamaha_Drive_2_golf_car.jpg) av Eveningbeach, CC0.
+- **golfboll.jpg** (En golfboll) – [Golfball.jpg](https://commons.wikimedia.org/wiki/File:Golfball.jpg) av Lotus Head from Johannesburg, Gauteng, South Africa, CC BY-SA 3.0.
+- **golfhandske.jpg** (En golfhandske) – [Golf glove.jpg](https://commons.wikimedia.org/wiki/File:Golf_glove.jpg) av Dan Perry, CC BY 2.0.
 - **granatapple.jpg** (Ett granatäpple) – [Pomegranate_Juice_(2019).jpg](https://commons.wikimedia.org/wiki/File:Pomegranate_Juice_(2019).jpg) av Augustus Binu : flickr, CC BY-SA 3.0.
+- **green.jpg** (En green med flagga) – [DZ6 2525 Sunny day on the green a yellow flag flutters as golfers line up their next putt.jpg](https://commons.wikimedia.org/wiki/File:DZ6_2525_Sunny_day_on_the_green_a_yellow_flag_flutters_as_golfers_line_up_their_next_putt.jpg) av PattayaPatrol, CC BY-SA 4.0.
 - **hagiasofia.jpg** (Hagia Sofia i Istanbul) – [Hagia_Sophia_(228968325).jpeg](https://commons.wikimedia.org/wiki/File:Hagia_Sophia_(228968325).jpeg) av Adli Wahid, CC BY-SA 3.0.
 - **hallgrimskirkja.jpg** (Hallgrímskirkja i Reykjavík) – [Hallgrimskirkja_mai_2026.jpg](https://commons.wikimedia.org/wiki/File:Hallgrimskirkja_mai_2026.jpg) av Steinninn, CC BY 4.0.
 - **hanbok.jpg** (En kvinna i hanbok) – [Hanbok_Day_2016_29_(30467033136).jpg](https://commons.wikimedia.org/wiki/File:Hanbok_Day_2016_29_(30467033136).jpg) av Republic of Korea from Seoul, Republic of Korea, CC BY-SA 2.0.
 - **havsabborre.jpg** (En havsabborre) – [Sealife,_Bray,_Ireland._(6985874908).jpg](https://commons.wikimedia.org/wiki/File:Sealife,_Bray,_Ireland._(6985874908).jpg) av Miguel Mendez from Malahide, Ireland, CC BY 2.0.
 - **havsorn.jpg** (En havsörn) – [NZ7_5265_(52812350718).jpg](https://commons.wikimedia.org/wiki/File:NZ7_5265_(52812350718).jpg) av Bengt Nyman from Vaxholm, Sweden, CC BY-SA 2.0.
 - **havsskoldpadda.jpg** (En grön havsskoldpadda) – [Green_sea_turtle_(Chelonia_mydas)_Moorea.jpg](https://commons.wikimedia.org/wiki/File:Green_sea_turtle_(Chelonia_mydas)_Moorea.jpg) av Charles J. Sharp, CC BY-SA 4.0.
+- **headcover.jpg** (Headcovers på klubbor i en bag) – [Golf Club Head Covers.jpg](https://commons.wikimedia.org/wiki/File:Golf_Club_Head_Covers.jpg) av X-15a2, CC BY-SA 3.0.
 - **hummer.jpg** (En hummer) – [KreeftbijDenOsse.jpg](https://commons.wikimedia.org/wiki/File:KreeftbijDenOsse.jpg) av Bart Braun, Public domain.
+- **hybridklubba.jpg** (En hybridklubba) – [Golf_club,_Ping_G10_24º_hybrid.jpg](https://commons.wikimedia.org/wiki/File:Golf_club,_Ping_G10_24%C2%BA_hybrid.jpg) av Fpedraza, CC BY-SA 3.0.
 - **hyena.jpg** (En fläckig hyena) – [Spotted_hyena_(Crocuta_crocuta).jpg](https://commons.wikimedia.org/wiki/File:Spotted_hyena_(Crocuta_crocuta).jpg) av Charles J. Sharp, CC BY-SA 4.0.
 - **ikebana.jpg** (Ett ikebanaarrangemang) – [Ikebana Japanese flower arrangement 1, Ikebana- いけばな (465912296).jpg](https://commons.wikimedia.org/wiki/File:Ikebana_Japanese_flower_arrangement_1,_Ikebana-_%E3%81%84%E3%81%91%E3%81%B0%E3%81%AA_(465912296).jpg) av Nullumayulife, CC BY 2.0.
 - **impression.jpg** (Monets Impression, soluppgång) – [Monet_-_Impression,_Sunrise.jpg](https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg) av Claude Monet, Public domain.
 - **ingefara.jpg** (Färsk ingefära) – [Fresh ginger rhizome 01.jpg](https://commons.wikimedia.org/wiki/File:Fresh_ginger_rhizome_01.jpg) av Friday musa, CC BY-SA 4.0.
+- **ishink.jpg** (En vinflaska kyls i en ishink) – [Chilling Dauvissat wine an ice bath.jpg](https://commons.wikimedia.org/wiki/File:Chilling_Dauvissat_wine_an_ice_bath.jpg) av e_calamar, CC BY 2.0.
+- **jarnklubba.jpg** (En järnåtta) – [Golf club, Callaway X-20 8 iron.jpg](https://commons.wikimedia.org/wiki/File:Golf_club,_Callaway_X-20_8_iron.jpg) av Fpedraza, CC BY-SA 3.0.
 - **kanel.jpg** (Kanelstänger) – [Cinnamomum_verum_spices.jpg](https://commons.wikimedia.org/wiki/File:Cinnamomum_verum_spices.jpg) av Simon A. Eugster, CC BY-SA 3.0.
 - **kanguru.jpg** (En känguru) – [Forester_kangaroo_(Macropus_giganteus_tasmaniensis)_juvenile_hopping_Esk_Valley.jpg](https://commons.wikimedia.org/wiki/File:Forester_kangaroo_(Macropus_giganteus_tasmaniensis)_juvenile_hopping_Esk_Valley.jpg) av Charles J. Sharp, CC BY-SA 4.0.
 - **kardemumma.jpg** (Kardemummakapslar) – [02017_0119_Kardamom,_Winter_in_den_Beskiden.jpg](https://commons.wikimedia.org/wiki/File:02017_0119_Kardamom,_Winter_in_den_Beskiden.jpg) av Silar, CC BY-SA 4.0.
@@ -61,6 +75,8 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **knolval.jpg** (En knölval som bryter ytan) – [Humpback_whale_breaching_off_Cabo_San_Lucas.jpg](https://commons.wikimedia.org/wiki/File:Humpback_whale_breaching_off_Cabo_San_Lucas.jpg) av Juan Cruzado Cortés, CC BY 4.0.
 - **koniskhatt.jpg** (En konisk vietnamesisk hatt) – [Paddy_Field_Farmer_A.JPG](https://commons.wikimedia.org/wiki/File:Paddy_Field_Farmer_A.JPG) av ESCapade, CC BY-SA 3.0.
 - **kora.jpg** (En koraspelare) – [Joueur de kora à Toubab Dialaw.jpg](https://commons.wikimedia.org/wiki/File:Joueur_de_kora_%C3%A0_Toubab_Dialaw.jpg) av M.GADJ!, CC BY-SA 4.0.
+- **kork.jpg** (Naturkorkar till vinflaskor) – [Rolhas de Cortiça Natural - Cork stopper for a wine bottle.jpg](https://commons.wikimedia.org/wiki/File:Rolhas_de_Corti%C3%A7a_Natural_-_Cork_stopper_for_a_wine_bottle.jpg) av Hudson C. S. de Souza, CC BY-SA 4.0.
+- **korkskruv.jpg** (En korkskruv och en flaska) – [Bottle and corkscrew December 2014-2a.jpg](https://commons.wikimedia.org/wiki/File:Bottle_and_corkscrew_December_2014-2a.jpg) av Alvesgaspar, CC BY-SA 4.0.
 - **kryddnejlika.jpg** (Torkade kryddnejlikor) – [Cloves.JPG](https://commons.wikimedia.org/wiki/File:Cloves.JPG) av Jorge Barrios, Public domain.
 - **lama.jpg** (En lama i Anderna) – [Llamas,_Vernagt-Stausee,_Italy.jpg](https://commons.wikimedia.org/wiki/File:Llamas,_Vernagt-Stausee,_Italy.jpg) av Andrija12345678, CC BY-SA 4.0.
 - **lavendel.jpg** (Ett lavendelfält i blom) – [Lavender field in Valensole.jpg](https://commons.wikimedia.org/wiki/File:Lavender_field_in_Valensole.jpg) av Einaz80, CC BY-SA 4.0.
@@ -86,15 +102,21 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **pantheon.jpg** (Pantheon i Rom) – [Pantheon_(Rome)_-_Right_side_and_front.jpg](https://commons.wikimedia.org/wiki/File:Pantheon_(Rome)_-_Right_side_and_front.jpg) av NikonZ7II, CC BY-SA 4.0.
 - **parlorhange.jpg** (Vermeers Flickan med pärlörhänget) – [1665_Girl_with_a_Pearl_Earring.jpg](https://commons.wikimedia.org/wiki/File:1665_Girl_with_a_Pearl_Earring.jpg) av Johannes Vermeer, Public domain.
 - **pasteldenata.jpg** (Pastéis de nata) – [Pasteis_de_Belem.jpg](https://commons.wikimedia.org/wiki/File:Pasteis_de_Belem.jpg) av Mon Œil, CC BY 2.0.
+- **peg.jpg** (En golfboll på en peg i gräset) – [Golf ball with white tee in grass.jpg](https://commons.wikimedia.org/wiki/File:Golf_ball_with_white_tee_in_grass.jpg) av Santeri Viinamäki, CC BY-SA 4.0.
 - **pelikan.jpg** (En pelikan) – [Great_white_pelican_(Pelecanus_onocrotalus).jpg](https://commons.wikimedia.org/wiki/File:Great_white_pelican_(Pelecanus_onocrotalus).jpg) av Charles J. Sharp, CC BY-SA 4.0.
 - **petra.jpg** (Skattkammaren i Petra) – [Al_Deir_Petra.JPG](https://commons.wikimedia.org/wiki/File:Al_Deir_Petra.JPG) av Azurfrog, CC BY-SA 3.0.
 - **pingvin.jpg** (En pingvin på en klippa) – [Wikimania_2018,_Cape_Town_(_1050602),_crop.jpg](https://commons.wikimedia.org/wiki/File:Wikimania_2018,_Cape_Town_(_1050602),_crop.jpg) av Matti Blume, CC BY-SA 4.0.
+- **portvin.jpg** (Ett glas portvin) – [Port wine.jpg](https://commons.wikimedia.org/wiki/File:Port_wine.jpg) av Jon Sullivan, Public domain.
 - **pragklockan.jpg** (Den astronomiska klockan i Prag) – [Astronomical_Clock_(8341899828).jpg](https://commons.wikimedia.org/wiki/File:Astronomical_Clock_(8341899828).jpg) av Steve Collis from Melbourne, Australia, CC BY 2.0.
 - **prinsesstarta.jpg** (En prinsesstårta med grön marsipan) – [Princess_Cake_2025-Oct-02_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Princess_Cake_2025-Oct-02_(cropped).jpg) av MarcellusW, CC0.
 - **protea.jpg** (En kungsprotea) – [Peninsula_Sandstone_Fynbos_-_KingProtea_-_Table_Mountain.JPG](https://commons.wikimedia.org/wiki/File:Peninsula_Sandstone_Fynbos_-_KingProtea_-_Table_Mountain.JPG) av S Molteno, Public domain.
 - **pumpernickel.jpg** (Skivat pumpernickelbröd) – [Pumpernickel.jpg](https://commons.wikimedia.org/wiki/File:Pumpernickel.jpg) av okänd, CC BY-SA 3.0.
+- **putter.jpg** (En putter) – [Putter_with_insert.jpg](https://commons.wikimedia.org/wiki/File:Putter_with_insert.jpg) av okänd, Public domain.
 - **ramen.jpg** (En skål ramen) – [Shoyu_Ramen（Tokyo_Ramen）_-_01.jpg](https://commons.wikimedia.org/wiki/File:Shoyu_Ramen%EF%BC%88Tokyo_Ramen%EF%BC%89_-_01.jpg) av Quercus acuta, CC BY-SA 4.0.
+- **range.jpg** (En driving range) – [Riverwalk_Golf_Club_Driving_range.jpg](https://commons.wikimedia.org/wiki/File:Riverwalk_Golf_Club_Driving_range.jpg) av Bernard Gagnon, CC BY-SA 3.0.
+- **rodvin.jpg** (Ett glas rött vin) – [Red Wine Glass.jpg](https://commons.wikimedia.org/wiki/File:Red_Wine_Glass.jpg) av André Karwath aka Aka, CC BY-SA 3.0.
 - **ros.jpg** (En ros) – [Rosa_rubiginosa_1.jpg](https://commons.wikimedia.org/wiki/File:Rosa_rubiginosa_1.jpg) av Stan Shebs, CC BY-SA 3.0.
+- **rosevin.jpg** (Ett glas rosévin) – [Rosé wine - July 2023 - Sarah Stierch 01-cropped.jpg](https://commons.wikimedia.org/wiki/File:Ros%C3%A9_wine_-_July_2023_-_Sarah_Stierch_01-cropped.jpg) av User:Missvain, CC BY 4.0.
 - **saffran.jpg** (Saffranstrådar) – [Saffron_-_premium_spice.jpg](https://commons.wikimedia.org/wiki/File:Saffron_-_premium_spice.jpg) av Shaharbano, CC BY 4.0.
 - **semla.jpg** (En semla med grädde och mandelmassa) – [SemlaFlickr.jpg](https://commons.wikimedia.org/wiki/File:SemlaFlickr.jpg) av Frugan, CC BY 2.0.
 - **sfinxen.jpg** (Sfinxen i Giza) – [Sphinx_with_the_third_pyramid.jpg](https://commons.wikimedia.org/wiki/File:Sphinx_with_the_third_pyramid.jpg) av Hesham Ebaid, CC0.
@@ -140,6 +162,10 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **venusfodelse.jpg** (Botticellis Venus födelse) – [Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg](https://commons.wikimedia.org/wiki/File:Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg) av Sandro Botticelli, Public domain.
 - **vespa.jpg** (En klassisk Vespa) – [PerthVespa.jpg](https://commons.wikimedia.org/wiki/File:PerthVespa.jpg) av No machine-readable author provided. Kylet assumed (based on copyright claims)., CC BY 2.5.
 - **vikunja.jpg** (En vikunja på högplatån) – [Vicuna_(89163948)_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Vicuna_(89163948)_(cropped).jpg) av Thomas Quine, CC BY 2.0.
+- **vindruvor.jpg** (Klasar med gröna och blå vindruvor) – [BUNCH WINE GRAPES green and purple (48986220673).jpg](https://commons.wikimedia.org/wiki/File:BUNCH_WINE_GRAPES_green_and_purple_(48986220673).jpg) av Alabama Extension, CC0.
+- **vinkallare.jpg** (Ett vinställ med liggande flaskor i en källare) – [DZ6 0556 A sleek wine rack showcasing rows of assorted wine bottles stored horizontally labels and foil caps visible under soft cellar lighting.jpg](https://commons.wikimedia.org/wiki/File:DZ6_0556_A_sleek_wine_rack_showcasing_rows_of_assorted_wine_bottles_stored_horizontally_labels_and_foil_caps_visible_under_soft_cellar_lighting.jpg) av PattayaPatrol, CC BY-SA 4.0.
 - **vitlok.jpg** (Vitlöksklyftor) – [Garlic bulbs and cloves.jpg](https://commons.wikimedia.org/wiki/File:Garlic_bulbs_and_cloves.jpg) av Ivar Leidus, CC BY-SA 4.0.
+- **vitvin.jpg** (Ett glas vitt vin) – [White Wine Glas.jpg](https://commons.wikimedia.org/wiki/File:White_Wine_Glas.jpg) av André Karwath aka Aka, CC BY-SA 2.5.
 - **watpho.jpg** (Den liggande Buddhan i Wat Pho) – [พระพุทธไสยาสวัดพระเชตุพน.jpg](https://commons.wikimedia.org/wiki/File:%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%9E%E0%B8%B8%E0%B8%97%E0%B8%98%E0%B9%84%E0%B8%AA%E0%B8%A2%E0%B8%B2%E0%B8%AA%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%8A%E0%B8%95%E0%B8%B8%E0%B8%9E%E0%B8%99.jpg) av Mastertongapollo, CC BY-SA 4.0.
+- **wedge.jpg** (En wedge vid bollen i bunkern) – [Sand trap ball and wedge.jpg](https://commons.wikimedia.org/wiki/File:Sand_trap_ball_and_wedge.jpg) av 27707, CC0.
 - **zebra.jpg** (En stäppzebra) – [Equus_quagga_burchellii_-_Etosha,_2014.jpg](https://commons.wikimedia.org/wiki/File:Equus_quagga_burchellii_-_Etosha,_2014.jpg) av Yathin S Krishnappa, CC BY-SA 3.0.
