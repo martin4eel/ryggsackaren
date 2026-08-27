@@ -4023,11 +4023,18 @@ export class App {
     ]!;
     const form = seed2 > 0.62 ? 'form-kantig' : 'form-rund';
     const dag = s.stampDays[stamp.id];
+    /**
+     * Mästarstämplarna är större, trycks i guld och får tränga sig på de
+     * andra - som en riktig stämpel som slås över det som redan står där.
+     * Sigillet är rött lack och rundt, alltid.
+     */
+    const special =
+      stamp.tier === 'guld' ? 'pstamp-guld form-rund' : stamp.tier === 'sigill' ? 'pstamp-sigill form-rund' : '';
 
     const node = el(
       'div',
       {
-        class: `pstamp ${ink} ${form}`,
+        class: `pstamp ${special ? special : `${ink} ${form}`}`,
         style: `--vrid:${rotation}deg; --lyft:${lyft}px`,
         // Skärmläsare får hela innebörden; det visuella är dekor.
         role: 'img',
@@ -4037,8 +4044,10 @@ export class App {
         title: stamp.desc,
       },
       el('span', { class: 'pstamp-ring' },
+        stamp.tier ? el('span', { class: 'pstamp-krans', 'aria-hidden': 'true' }, '❧') : '',
+        stamp.tier === 'guld' ? el('span', { class: 'pstamp-over' }, 'MÄSTARE') : '',
         el('span', { class: 'pstamp-glyph' }, stamp.glyph),
-        el('span', { class: 'pstamp-name' }, stamp.name),
+        el('span', { class: 'pstamp-name' }, stamp.tier === 'guld' ? stamp.name.replace('Mästare: ', '') : stamp.name),
         el(
           'span',
           { class: 'pstamp-day' },

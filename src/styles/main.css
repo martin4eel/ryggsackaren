@@ -2408,6 +2408,107 @@ img.no-photo {
   opacity: 0.75;
 }
 
+/* ------------------------------------------------ mästarstämplar och sigill
+   Större än de andra, i guldfolie med skimmer och en lagerkrans nedtill, och
+   med negativ marginal så att de trycks över grannarna - man ska se dem som
+   det senaste avtrycket i passet, inte som en bricka bland andra. */
+.pstamp-guld,
+.pstamp-sigill {
+  margin: -6px -14px;
+  position: relative;
+  z-index: 2;
+}
+
+.pstamp-guld .pstamp-ring {
+  --bläck: #8a6a12;
+  width: 128px;
+  height: 128px;
+  padding: 10px;
+  color: #8a6a12;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.55), transparent 45%),
+    linear-gradient(135deg, #f6e6a6 0%, #d9b545 30%, #f1dc8c 50%, #b8902a 72%, #e9cf6e 100%);
+  border: 3px solid #a67c1a;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 250, 220, 0.85),
+    inset 0 0 0 4px #a67c1a,
+    0 1px 3px rgba(60, 40, 0, 0.35);
+  opacity: 0.94;
+  text-shadow: 0 1px 0 rgba(255, 250, 220, 0.6);
+}
+
+.pstamp-guld .pstamp-glyph {
+  font-size: 1.6rem;
+}
+
+.pstamp-guld .pstamp-name {
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+}
+
+.pstamp-over {
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-indent: 0.32em;
+  opacity: 0.85;
+}
+
+.pstamp-krans {
+  position: absolute;
+  bottom: 9px;
+  left: 0;
+  right: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.pstamp-krans::before {
+  content: '❧';
+  display: inline-block;
+  transform: scaleX(-1);
+  margin-right: 14px;
+}
+
+.pstamp-guld .pstamp-ring,
+.pstamp-sigill .pstamp-ring {
+  position: relative;
+}
+
+/* Sigillet: rött lack, tjockt och blankt, med ett djupt tryck i mitten. */
+.pstamp-sigill .pstamp-ring {
+  --bläck: #fde9d9;
+  width: 138px;
+  height: 138px;
+  color: #fde9d9;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.35), transparent 40%),
+    radial-gradient(circle at 50% 50%, #9c1f1a 0%, #7d1512 60%, #5a0d0c 100%);
+  border: 4px solid #5a0d0c;
+  border-radius: 46% 54% 50% 50% / 52% 48% 52% 48%;
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 220, 200, 0.35),
+    inset 0 6px 12px rgba(0, 0, 0, 0.35),
+    0 3px 6px rgba(60, 0, 0, 0.45);
+  opacity: 0.97;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.pstamp-sigill .pstamp-glyph {
+  font-size: 2rem;
+}
+
+.pstamp-sigill .pstamp-name {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+}
+
+.pstamp-sigill .pstamp-krans {
+  opacity: 0.55;
+}
+
 .ink-rod {
   --bläck: #b8372a;
 }

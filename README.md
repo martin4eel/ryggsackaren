@@ -373,10 +373,14 @@ webbläsaren och överlever att sparfilen raderas.
    någon.
 
    På sidorna därefter sitter stämplarna tryckta i bläck, snett och lite
-   huller om buller, med resdagen i kanten. Nitton finns att jaga: fyra
+   huller om buller, med resdagen i kanten. Tjugosex finns att jaga: fyra
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
-   stämpel är värd poäng på slutet.
+   stämpel är värd poäng på slutet. Sex av dem är **mästarstämplar**: en per
+   huvudkategori när man nått tre poäng och löneklass 3 står öppen. De är
+   större, trycks i guldfolie med lagerkrans och slås över grannarna, som ett
+   riktigt avtryck ovanpå det som redan står där. Den som når dit i alla sex
+   får dessutom ett rött lacksigill, *Allkonstnär*.
 13. **Ljud.** Varje station har dessutom en egen ljudbild som ligger och går så
    länge man står kvar: sorl i en hög hall, rullväskor och avlägsna jetmotorer
    på flygplatsen; bromsar, dörrsignaler och hjul över rälsskarvar på
@@ -468,7 +472,7 @@ ryggsäckare_.
 - 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften
-- 19 stämplar att samla i passet
+- 26 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
 - 113 händelser med 137 val och 185 möjliga utfall, spridda över åtta
   tillfällen, var och en högst en gång per resa
 - 9–15 nedvända brickor per stad, varav 1–4 döljer en händelse eller en fråga

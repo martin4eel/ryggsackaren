@@ -15,8 +15,22 @@ export interface Stamp {
   desc: string;
   /** Kort tecken som ritas i stämpeln */
   glyph: string;
+  /**
+   * Mästarstämplarna för löneklass 3 är större och trycks i guld; sigillet
+   * för alla sex är rött lack. Vanliga stämplar saknar fältet.
+   */
+  tier?: 'guld' | 'sigill';
   test: (state: GameState) => boolean;
 }
+
+const MASTARE: Array<{ id: string; huvud: string; name: string; desc: string; glyph: string }> = [
+  { id: 'mastare-vetenskap', huvud: 'vetenskap', name: 'Mästare: Vetenskap & historia', desc: 'Nå tre poäng i Vetenskap & historia - löneklass 3 är öppen.', glyph: '⚗' },
+  { id: 'mastare-konst', huvud: 'konst', name: 'Mästare: Konst & kultur', desc: 'Nå tre poäng i Konst & kultur - löneklass 3 är öppen.', glyph: '♫' },
+  { id: 'mastare-praktiskt', huvud: 'praktiskt', name: 'Mästare: Praktiska yrken', desc: 'Nå tre poäng i Praktiska yrken - löneklass 3 är öppen.', glyph: '⚒' },
+  { id: 'mastare-aventyr', huvud: 'aventyr', name: 'Mästare: Äventyr & natur', desc: 'Nå tre poäng i Äventyr & natur - löneklass 3 är öppen.', glyph: '⛰' },
+  { id: 'mastare-sport', huvud: 'sport', name: 'Mästare: Sport & fritid', desc: 'Nå tre poäng i Sport & fritid - löneklass 3 är öppen.', glyph: '⚽' },
+  { id: 'mastare-mat', huvud: 'mat', name: 'Mästare: Mat & dryck', desc: 'Nå tre poäng i Mat & dryck - löneklass 3 är öppen.', glyph: '♨' },
+];
 
 const regionsVisited = (state: GameState, cityRegion: (id: string) => string | undefined) =>
   new Set(state.visited.map(cityRegion).filter(Boolean));
@@ -167,6 +181,26 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       desc: 'Sjunk till ett anseende på minus fyra. Någon minns det.',
       glyph: '☠',
       test: (s) => (s.rykte ?? 0) <= -4,
+    },
+    /**
+     * Mästarstämplarna: en per huvudkategori när tre poäng nåtts, i guld.
+     * Och sigillet för den som nått dit i alla sex.
+     */
+    ...MASTARE.map((m) => ({
+      id: m.id,
+      name: m.name,
+      desc: m.desc,
+      glyph: m.glyph,
+      tier: 'guld' as const,
+      test: (s: GameState) => ((s.points as Record<string, number | undefined>)?.[m.huvud] ?? 0) >= 3,
+    })),
+    {
+      id: 'allkonstnar',
+      name: 'Allkonstnär',
+      desc: 'Nå tre poäng i alla sex huvudkategorierna. Det finns inget jobb du inte får söka.',
+      glyph: '★',
+      tier: 'sigill',
+      test: (s) => MASTARE.every((m) => ((s.points as Record<string, number | undefined>)?.[m.huvud] ?? 0) >= 3),
     },
   ];
 }
