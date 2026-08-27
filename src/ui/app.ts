@@ -3846,15 +3846,21 @@ export class App {
               : lott < 0.88
                 ? 'upptaget'
                 : 'fel';
-    const signaler =
-      svarare === 'upptaget' ? 0 : svarare === 'ingen' ? 4 : svarare === 'mamma' ? 2 : 3;
+    /**
+     * Det ringer i tre sekunder, oavsett vem som svarar: två signaler med
+     * en sekunds mellanrum. Upptagettonen går i stället direkt, för då
+     * ringer det ju inte.
+     */
+    const RINGTID = 3000;
     if (svarare === 'upptaget') playSound('upptaget');
-    for (let i = 0; i < signaler; i++) {
-      window.setTimeout(() => {
-        if (this.phoneCall?.phase === 'ringer') playSound('telefonsignal');
-      }, 350 + i * 1900);
+    else {
+      [300, 1600].forEach((d) =>
+        window.setTimeout(() => {
+          if (this.phoneCall?.phase === 'ringer') playSound('telefonsignal');
+        }, d)
+      );
     }
-    const vantan = svarare === 'upptaget' ? 2200 : 350 + signaler * 1900 - 700;
+    const vantan = svarare === 'upptaget' ? 2200 : RINGTID;
     this.phoneTimer = window.setTimeout(() => {
       this.phoneTimer = null;
       if (!this.state || this.phoneCall?.phase !== 'ringer') return;
