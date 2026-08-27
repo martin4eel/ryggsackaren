@@ -35,6 +35,8 @@ try {
   const { CITY_HEADLINES } = await load('/src/data/headlines.ts');
   const { CITY_PAPERS } = await load('/src/data/newspapers.ts');
   const { CITIES } = await load('/src/data/cities.ts');
+  const { QUIZ_IMAGES } = await load('/src/data/quizImages.ts');
+  const bildManifest = new Set(QUIZ_IMAGES.map((b) => b.id));
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
   const { LAND_ADJACENCY, FERRY_LINKS, FERRY_LINES } = await load(
@@ -228,6 +230,7 @@ try {
     traffa: { needed: 2 },
     balans: { needed: 1 },
     takt: { needed: 2 },
+    bildval: { needed: 1 },
   };
 
   for (const job of JOBS) {
@@ -282,6 +285,25 @@ try {
         );
       if (new Set(mg.items ?? []).size !== (mg.items ?? []).length)
         problems.push(`jobb ${job.id}: minispelet har dubbletter bland posterna`);
+
+      if (mg.kind === 'bildval') {
+        const katalog = new Set((mg.bildval ?? []).map((b) => b.bild));
+        if (katalog.size < 6)
+          problems.push(`jobb ${job.id}: bildvalet behöver minst 6 foton i katalogen, har ${katalog.size}`);
+        for (const b of mg.bildval ?? []) {
+          if (!bildManifest.has(b.bild))
+            problems.push(`jobb ${job.id}: bildvalet pekar på okänd bild ${b.bild}`);
+        }
+        if (!Array.isArray(mg.kunder) || mg.kunder.length < 8)
+          problems.push(`jobb ${job.id}: bildvalet behöver minst 8 kunder, har ${mg.kunder?.length ?? 0}`);
+        for (const k of mg.kunder ?? []) {
+          if (!katalog.has(k.svar))
+            problems.push(`jobb ${job.id}: kunden "${k.text}" vill ha ${k.svar}, som inte finns i katalogen`);
+          for (const n of k.nastan ?? [])
+            if (!katalog.has(n))
+              problems.push(`jobb ${job.id}: lockbetet ${n} finns inte i katalogen`);
+        }
+      }
 
       if (mg.kind === 'sortering') {
         // Utan pool visas korgens eget namn som föremål och spelet blir
@@ -347,8 +369,6 @@ try {
    * bruten bildikon mitt i ett arbetsskift, och en bild i manifestet utan fil
    * på disken gör samma sak. Båda ska stoppa bygget.
    */
-  const { QUIZ_IMAGES } = await load('/src/data/quizImages.ts');
-  const bildManifest = new Set(QUIZ_IMAGES.map((b) => b.id));
   for (const b of QUIZ_IMAGES) {
     if (!b.alt?.trim()) problems.push(`bilden ${b.id} saknar alt-text`);
     if (!b.article && !b.file)

@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v18';
+const CACHE = 'ryggsackaren-v19';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -210,6 +210,32 @@ const QUIZ_IMAGES = [
   'vitlok',
   'watpho',
   'zebra',
+  'putter',
+  'driver',
+  'jarnklubba',
+  'hybridklubba',
+  'wedge',
+  'golfboll',
+  'peg',
+  'headcover',
+  'golfbag',
+  'golfbil',
+  'range',
+  'bunker',
+  'green',
+  'golfhandske',
+  'rodvin',
+  'vitvin',
+  'rosevin',
+  'champagne',
+  'dekanter',
+  'korkskruv',
+  'ishink',
+  'kork',
+  'vindruvor',
+  'ekfat',
+  'portvin',
+  'vinkallare',
 ].map((id) => `./quiz/${id}.jpg`);
 
 

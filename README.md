@@ -291,10 +291,14 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
-8. **Sista passet.** Varje skift avslutas med ett av åtta arkadmoment:
+8. **Sista passet.** Varje skift avslutas med ett av nio arkadmoment:
    sortera på löpande band, memorera en order och utföra den, upprepa en sekvens ur
    minnet, stoppa en mätare i rätt zon, räkna växel i huvudet, plocka rätt
-   saker och låta resten vara, hålla balansen eller slå i takt. Det ger upp
+   saker och låta resten vara, hålla balansen, slå i takt – eller, i
+   golfshopen och vid restaurangbordet, peka ut rätt foto åt kunden som vet
+   vad hen vill ha men inte vad det heter (*"Jag behöver en träklubba att
+   slå ut med"*, och drivern är av titan; *"Något bubbligt till skålen"*,
+   och det är inte rosén). Det ger upp
    till tre dagslöner i bonus, och ett felfritt moment ett halvt dagsverke
    till. Klarar du tillräckligt av skiftet totalt (65 procent som Turist, 75
    som Globetrotter) får du ett **certifikat**.
@@ -460,7 +464,7 @@ ryggsäckare_.
 
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
-- 80 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
+- 82 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
 - 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften

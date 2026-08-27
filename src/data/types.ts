@@ -119,6 +119,8 @@ export type MinigameKind =
   | 'vaxel'
   /** Träffa det som ska plockas och låt resten vara */
   | 'traffa'
+  /** Kunden säger vad hen behöver; peka ut rätt foto av fyra */
+  | 'bildval'
   /** Håll något i balans medan det driver åt sidan */
   | 'balans'
   /** Träffa slaget i takt med metronomen */
@@ -153,6 +155,23 @@ export interface Minigame {
   pool?: string[][];
   /** Bara för `traffa`: sådant som inte får träffas. */
   avoid?: string[];
+  /**
+   * Bara för `bildval`: katalogen av foton (id ur data/quizImages.ts) med
+   * namn, och kunderna som kommer in. Varje kund pekar på ett foto som är
+   * rätt, och gärna på några som är frestande fel - det är där det blir
+   * klurigt.
+   */
+  bildval?: { bild: string; namn: string }[];
+  kunder?: {
+    /** Vad kunden säger */
+    text: string;
+    /** Bild-id som är rätt */
+    svar: string;
+    /** Bild-id som ska vara med som lockbeten, om de finns i katalogen */
+    nastan?: string[];
+    /** Vad kunden säger när man pekar fel */
+    fel?: string;
+  }[];
 }
 
 export interface Job {

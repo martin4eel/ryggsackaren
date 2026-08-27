@@ -7200,3 +7200,31 @@ body.sheet-oppen {
   line-height: 1.5;
   opacity: 0.8;
 }
+
+/* ------------------------------------------------------------ bildvalet */
+
+.mg-kund {
+  margin: 4px 0 12px;
+  padding: 12px 14px;
+  border-radius: 14px 14px 14px 4px;
+  background: var(--paper-dim);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.minigame .mg-bildval {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.mg-bildval .option-foto {
+  aspect-ratio: 4 / 3;
+}
+
+.mg-bildval-knapp .option-facit {
+  min-height: 1.35em;
+}

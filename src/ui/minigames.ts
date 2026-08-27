@@ -1,6 +1,7 @@
 import type { Minigame } from '../data/types';
 import { playCombo, playPad, playSound } from './audio';
 import { button, clear, el } from './dom';
+import { quizImageUrl } from '../data/quizImages';
 
 /**
  * Arkadmomenten som avslutar ett arbetsskift. Alla åtta är byggda för att
@@ -98,6 +99,9 @@ export function renderMinigame(
       break;
     case 'takt':
       startRhythm(host, game, ctx, done);
+      break;
+    case 'bildval':
+      startPictureChoice(host, game, ctx, done);
       break;
   }
   return host;
@@ -1365,4 +1369,110 @@ function startRhythm(
     );
     return true;
   });
+}
+
+// ----------------------------------------------------------------- bildval
+
+/**
+ * Kunden i shopen säger vad hen behöver, men inte vad det heter, och man
+ * pekar ut rätt foto av fyra. Lockbetena väljs ur kundens `nastan` först,
+ * så att puttern får sällskap av en wedge och inte av en golfbil. Namnen
+ * skrivs ut först när man pekat - att veta vilket foto som är vilket är
+ * hela uppgiften.
+ */
+function startPictureChoice(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
+  const ROUNDS = 8;
+  const katalog = game.bildval ?? [];
+  const namn = new Map(katalog.map((b) => [b.bild, b.namn]));
+  const kunder = shuffled(game.kunder ?? []).slice(0, ROUNDS);
+  let round = 0;
+  let right = 0;
+  let running = false;
+
+  const status = makeStatus();
+  const bubble = el('p', { class: 'mg-kund' });
+  const grid = el('div', { class: 'options-bilder mg-bildval' });
+  const timer = makeTimer();
+  const feedback = makeFeedback();
+  host.append(status.node, bubble, grid, timer.node, feedback.node);
+
+  const finish = () => {
+    onDone({
+      score: right / kunder.length,
+      summary: `Du hittade rätt åt ${right} av ${kunder.length} kunder.`,
+      perfect: right === kunder.length,
+    });
+  };
+
+  const next = () => {
+    if (round >= kunder.length) {
+      finish();
+      return;
+    }
+    const kund = kunder[round]!;
+    const lockbeten = shuffled(kund.nastan ?? []).filter((id) => namn.has(id) && id !== kund.svar);
+    const ovriga = shuffled(katalog.map((b) => b.bild)).filter(
+      (id) => id !== kund.svar && !lockbeten.includes(id)
+    );
+    const val = shuffled([kund.svar, ...[...lockbeten, ...ovriga].slice(0, 3)]);
+
+    status.set(`Kund ${round + 1}/${kunder.length}`, `${right} nöjda`);
+    bubble.textContent = `”${kund.text}”`;
+    feedback.say('Peka på rätt foto.', 'neutral');
+    clear(grid);
+    val.forEach((id, i) => {
+      const b = button('', () => pick(id, b), { class: 'option option-bild mg-bildval-knapp', 'data-sound': 'av' });
+      b.append(
+        el('span', { class: 'option-body option-body-bild' },
+          el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
+          el('img', { class: 'option-foto', src: quizImageUrl(id), alt: `Alternativ ${String.fromCharCode(65 + i)}`, draggable: 'false' })
+        ),
+        el('span', { class: 'option-facit' }, '\u00a0')
+      );
+      grid.append(b);
+    });
+    running = true;
+    timer.run((6500 - round * 250) * ctx.slack, () => pick(null, null));
+  };
+
+  const pick = (id: string | null, knapp: HTMLElement | null) => {
+    if (!running) return;
+    running = false;
+    timer.halt();
+    const kund = kunder[round]!;
+    const ok = id === kund.svar;
+    // Visa namnen nu, och markera rätt och fel.
+    for (const b of Array.from(grid.children) as HTMLElement[]) {
+      const src = b.querySelector('img')?.getAttribute('src') ?? '';
+      const bid = katalog.find((k) => src.endsWith(`/${k.bild}.jpg`))?.bild ?? '';
+      const facit = b.querySelector('.option-facit');
+      if (facit) facit.textContent = namn.get(bid) ?? '';
+      if (bid === kund.svar) b.classList.add('option-right');
+      else if (b === knapp) b.classList.add('option-wrong');
+      else b.classList.add('option-dim');
+    }
+    if (ok) {
+      right += 1;
+      playCombo(right);
+      feedback.say(`Just det, ${namn.get(kund.svar)?.toLowerCase()}. Kunden nickar.`, 'topp');
+    } else {
+      playSound('fel');
+      feedback.say(
+        id === null
+          ? `Kunden tröttnade och gick. Det var ${namn.get(kund.svar)?.toLowerCase()}.`
+          : kund.fel ?? `Nej – kunden ville ha ${namn.get(kund.svar)?.toLowerCase()}.`,
+        'fel'
+      );
+    }
+    status.set(`Kund ${round + 1}/${kunder.length}`, `${right} nöjda`);
+    round += 1;
+    after(ok ? 900 : 1500, next);
+  };
+
+  next();
 }
