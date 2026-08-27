@@ -297,12 +297,18 @@ webbläsaren och överlever att sparfilen raderas.
    till. Klarar du tillräckligt av skiftet totalt (65 procent som Turist, 75
    som Globetrotter) får du ett **certifikat**.
 
-   **Man börjar längst ner.** Löneklass 1 är öppen för alla. Löneklass 2
-   kräver ett certifikat och minst 50 i stadsbetyg, löneklass 3 tre
-   certifikat och minst 75 i betyg – och ett certifikat i jobbets eget ämne
-   räknas dubbelt. Ett högt stadsbetyg räcker alltså aldrig ensamt; det går
-   inte att plugga sig förbi golvet, bara att jobba sig upp. Reglerna ligger
-   i `canTakeJob` i `src/game/rules.ts`.
+   **Man börjar längst ner.** Yrkena hör till sex huvudkategorier:
+   *Vetenskap & historia*, *Konst & kultur*, *Praktiska yrken*, *Äventyr &
+   natur*, *Sport & fritid* och *Mat & dryck* (`huvud` i `src/data/jobs.ts`).
+   Löneklass 1 är öppen för alla. Varje genomfört skift ger **en poäng i
+   jobbets huvudkategori**, oavsett hur det gick; en poäng öppnar löneklass 2
+   i samma kategori, tre poäng löneklass 3 – som därtill kräver 75 i
+   stadsbetyg. Den som diskat på ett fik kan alltså söka kockjobbet men inte
+   museivärdsjobbet; dit går vägen via vävstolen. Poängen står under
+   _Erfarenhet_ i ryggsäcken, och tidningen skriver ut hur många man har
+   kvar. Reglerna ligger i `canTakeJob` i `src/game/rules.ts`. Certifikaten
+   (65/75 procent av ett skift) finns kvar som utmärkelser: poäng på slutet
+   och en stämpel, men de låser inte upp något längre.
 
    Ekonomin är tajt: boendet dras varje dag, också arbetsdagarna, och ett
    klass 1-skift med hälften rätt går back. Det är meningen. Först med
@@ -458,7 +464,7 @@ ryggsäckare_.
 
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
   fotografi
-- 82 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
+- 86 yrken i tre löneklasser, vart och ett med egen frågeuppsättning
 - 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften

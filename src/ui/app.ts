@@ -1,3 +1,4 @@
+import { HUVUDKATEGORIER, HUVUD_LABELS } from '../data/jobs';
 import { CITIES, CITY_BY_ID } from '../data/cities';
 import { CITY_FACTS } from '../data/cityFacts';
 import { CURRENCIES, formatMoney } from '../data/currencies';
@@ -23,7 +24,7 @@ import {
   prepareQuestion,
   jobRequirementText,
   jobRequirement,
-  certificateWeight,
+  pointsIn,
   arcadeSlack,
   certificateThreshold,
   comboMultiplier,
@@ -2479,7 +2480,7 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          `Ämne: ${CATEGORY_LABELS[job.category] ?? job.category} · ${
+          `${HUVUD_LABELS[job.huvud]} · ${CATEGORY_LABELS[job.category] ?? job.category} · ${
             job.shiftLength
           } arbetsdagar · ${this.money(wage)} per rätt svar`
         )
@@ -2499,10 +2500,11 @@ export class App {
         );
       } else if (!allowed) {
         const need = jobRequirement(job);
-        const har = certificateWeight(s, job);
+        const har = pointsIn(s, job.huvud);
         card.append(
           el('p', { class: 'note' },
-            `${jobRequirementText(job)}. Du har ${har} av ${need.certs} certifikat och ${p.rating} i betyg.`
+            `${jobRequirementText(job)}. Du har ${har} av ${need.points} poäng` +
+              (need.rating ? ` och ${p.rating} i betyg.` : '.')
           )
         );
       } else {
@@ -3281,6 +3283,9 @@ export class App {
     s.earned += q.earnings;
     s.shiftsWorked += 1;
     if (q.correct === total) s.perfectShifts += 1;
+    // Ett genomfört skift är en poäng i huvudkategorin, oavsett hur det gick.
+    s.points ??= {};
+    s.points[job.huvud] = (s.points[job.huvud] ?? 0) + 1;
     this.spendDays(job.shiftLength, city);
 
     // Certifikat om du klarar tillräckligt av skiftet (se difficulty.ts). Arkadmomentet
@@ -3305,6 +3310,7 @@ export class App {
       `${job.title}: ${q.correct}/${total} rätt.`,
       `Lön ${this.money(q.earnings)}.`,
       `${job.shiftLength} dagar gick åt.`,
+      `+1 poäng i ${HUVUD_LABELS[job.huvud]} (nu ${s.points[job.huvud]}).`,
     ];
     if (bestStreak >= 4) parts.push(`Bästa svit: ${bestStreak} i rad.`);
     if ((q.bonus ?? 0) > 0)
@@ -3685,6 +3691,27 @@ export class App {
     if (knowledge) wrap.append(knowledge);
     wrap.append(this.renderStampPanel());
 
+    // Poängen per huvudkategori: stegen man klättrar på.
+    const erf = el('section', { class: 'panel' });
+    erf.append(
+      el('h2', {}, 'Erfarenhet'),
+      el('p', { class: 'muted' },
+        'Ett genomfört skift ger en poäng i sin huvudkategori. En poäng öppnar löneklass 2, tre poäng löneklass 3.'
+      )
+    );
+    const erfList = el('div', { class: 'cert-grid' });
+    for (const h of HUVUDKATEGORIER) {
+      const n = s.points?.[h] ?? 0;
+      erfList.append(
+        el('div', { class: `cert ${n === 0 ? 'cert-tom' : ''}` },
+          el('span', { class: 'cert-name' }, HUVUD_LABELS[h]),
+          el('span', { class: 'cert-count' }, n >= 3 ? `${n} p · klass 3` : n >= 1 ? `${n} p · klass 2` : '0 p')
+        )
+      );
+    }
+    erf.append(erfList);
+    wrap.append(erf);
+
     const certs = el('section', { class: 'panel' });
     certs.append(el('h2', {}, 'Certifikat'));
     const entries = Object.entries(s.certificates).filter(
@@ -3695,7 +3722,7 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          `Inga än. Klara minst ${certificateThreshold(s.difficulty)} procent av ett arbetsskift för att få ett certifikat, som i sin tur öppnar bättre betalda jobb i samma ämne.`
+          `Inga än. Klara minst ${certificateThreshold(s.difficulty)} procent av ett arbetsskift för att få ett certifikat. De ger poäng på slutet och en stämpel i passet.`
         )
       );
     } else {

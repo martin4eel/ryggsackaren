@@ -233,7 +233,25 @@ try {
     bildval: { needed: 1 },
   };
 
+  /**
+   * Huvudkategorierna: varje jobb hör till en, varje kategori måste ha minst
+   * ett jobb i löneklass 1 (annars går det inte att börja där), och de bör
+   * finnas i tillräckligt många städer för att stegen ska gå att klättra.
+   */
+  const HUVUD = ['vetenskap', 'konst', 'praktiskt', 'aventyr', 'sport', 'mat'];
+  for (const h of HUVUD) {
+    const klass1 = JOBS.filter((j) => j.huvud === h && j.wageClass === 1);
+    const stader = new Set(CITIES.filter((c) => c.jobs.some((id) => klass1.some((j) => j.id === id))).map((c) => c.id));
+    if (klass1.length === 0) problems.push(`huvudkategori ${h} saknar jobb i löneklass 1`);
+    else if (stader.size < 3)
+      problems.push(`huvudkategori ${h} har klass 1-jobb i bara ${stader.size} städer, minst 3 behövs`);
+    if (!JOBS.some((j) => j.huvud === h && j.wageClass === 3))
+      problems.push(`huvudkategori ${h} saknar jobb i löneklass 3`);
+  }
+
   for (const job of JOBS) {
+    if (!HUVUD.includes(job.huvud))
+      problems.push(`jobb ${job.id} har okänd huvudkategori ${job.huvud}`);
     // Varje jobb måste ha sin egen frågeuppsättning, aldrig delad med andra.
     const pool = JOB_QUESTIONS[job.id];
     if (!pool) {

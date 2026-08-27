@@ -1,9 +1,9 @@
 import { CITY_BY_ID } from '../data/cities';
 import { buildStamps, type Stamp } from '../data/stamps';
 import { optionCount } from './difficulty';
-import { JOB_BY_ID } from '../data/jobs';
+import { HUVUD_LABELS, JOB_BY_ID } from '../data/jobs';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
-import type { City, Job, Question, Souvenir } from '../data/types';
+import type { City, Huvudkategori, Job, Question, Souvenir } from '../data/types';
 import { JOB_QUESTIONS } from '../data/questions/jobQuestions';
 import { CITY_QUESTIONS } from '../data/questions/cityQuestions';
 import type { Difficulty, GameState } from './state';
@@ -43,44 +43,37 @@ export {
   optionCount,
 } from './difficulty';
 
-/**
- * Certifikat räknade mot ett visst jobb. Ett certifikat i samma ämne är
- * värt två: den som jobbat som kock två gånger får söka kökschefsjobbet
- * före den som samlat tre olika.
- */
-export function certificateWeight(state: GameState, job: Job): number {
-  let total = 0;
-  for (const [category, n] of Object.entries(state.certificates)) {
-    total += (n ?? 0) * (category === job.category ? 2 : 1);
-  }
-  return total;
+/** Poängen i ett jobbs huvudkategori. Ett per genomfört skift i den. */
+export function pointsIn(state: GameState, huvud: Huvudkategori): number {
+  return state.points?.[huvud] ?? 0;
 }
 
-/** Vad ett jobb kräver, i certifikat (viktade) och stadsbetyg. */
-export function jobRequirement(job: Job): { certs: number; rating: number } {
-  if (job.wageClass === 1) return { certs: 0, rating: 0 };
-  if (job.wageClass === 2) return { certs: 1, rating: 50 };
-  return { certs: 3, rating: 75 };
+/** Vad ett jobb kräver: poäng i huvudkategorin, och för toppjobben stadsbetyg. */
+export function jobRequirement(job: Job): { points: number; rating: number } {
+  if (job.wageClass === 1) return { points: 0, rating: 0 };
+  if (job.wageClass === 2) return { points: 1, rating: 0 };
+  return { points: 3, rating: 75 };
 }
 
 /**
- * Man börjar längst ner. Löneklass 1 är öppen för alla; högre klasser kräver
- * certifikat från tidigare skift, och därtill ett stadsbetyg som visar att
- * man kan något om platsen. Ett högt betyg ensamt räcker inte - det går inte
- * att plugga sig förbi golvet, bara att jobba sig upp.
+ * Man börjar längst ner. Löneklass 1 är öppen för alla. Varje genomfört
+ * skift ger en poäng i jobbets huvudkategori - Mat & dryck, Konst & kultur
+ * och så vidare - och det är de poängen som öppnar löneklass 2 och 3 i
+ * samma kategori. Toppjobben kräver därtill att man kan något om staden.
  */
 export function canTakeJob(state: GameState, job: Job): boolean {
   const need = jobRequirement(job);
-  if (need.certs === 0) return true;
-  const rating = getProgress(state, state.currentCityId).rating;
-  return certificateWeight(state, job) >= need.certs && rating >= need.rating;
+  if (need.points === 0) return true;
+  if (pointsIn(state, job.huvud) < need.points) return false;
+  if (need.rating === 0) return true;
+  return getProgress(state, state.currentCityId).rating >= need.rating;
 }
 
 export function jobRequirementText(job: Job): string {
+  const namn = HUVUD_LABELS[job.huvud];
   if (job.wageClass === 1) return 'Inga krav';
-  if (job.wageClass === 2)
-    return 'Kräver ett certifikat och minst 50 i stadsbetyg';
-  return 'Kräver tre certifikat (ett i ämnet räknas dubbelt) och minst 75 i stadsbetyg';
+  if (job.wageClass === 2) return `Kräver en poäng i ${namn}`;
+  return `Kräver tre poäng i ${namn} och minst 75 i stadsbetyg`;
 }
 
 /** Lön per rätt svar i basenheter. */

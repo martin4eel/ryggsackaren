@@ -1,5 +1,5 @@
 import type { TransportMode } from '../data/transport';
-import type { Category } from '../data/types';
+import type { Huvudkategori, Category } from '../data/types';
 
 export type Difficulty = 'turist' | 'globetrotter';
 
@@ -99,6 +99,8 @@ export interface GameState {
   backpack: BackpackItem[];
   /** Certifikat per kategori, ett per godkänt skift */
   certificates: Partial<Record<Category, number>>;
+  /** Poäng per huvudkategori: ett per genomfört skift. Öppnar löneklass 2 och 3. */
+  points: Partial<Record<Huvudkategori, number>>;
   /** Antal rätta och felaktiga svar totalt */
   correct: number;
   wrong: number;
@@ -204,6 +206,7 @@ export function createGame(
     visited: [homeCityId],
     backpack: [],
     certificates: {},
+    points: {},
     correct: 0,
     wrong: 0,
     callsHome: 0,
@@ -303,6 +306,7 @@ function migrate(
    */
   if (!KANDA_SKARMAR.has(state.screen)) state.screen = 'stad';
   state.cityStats ??= {};
+  state.points ??= {};
   state.rykte ??= 0;
   state.eventsSeen ??= [];
   state.startDate ??= new Date().toISOString().slice(0, 10);

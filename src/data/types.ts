@@ -174,6 +174,20 @@ export interface Minigame {
   }[];
 }
 
+/**
+ * De sex huvudkategorierna. Löneklass 1 är öppen för alla; varje genomfört
+ * skift ger en poäng i jobbets huvudkategori, och poängen är det som öppnar
+ * löneklass 2 och 3 i samma kategori. Man börjar längst ner och jobbar sig
+ * uppåt, ett område i taget.
+ */
+export type Huvudkategori =
+  | 'vetenskap'
+  | 'konst'
+  | 'praktiskt'
+  | 'aventyr'
+  | 'sport'
+  | 'mat';
+
 export interface Job {
   id: string;
   /** Yrkestitel, t.ex. "Flygvärdinna" */
@@ -181,7 +195,9 @@ export interface Job {
   /** Arbetsgivare i annonsen */
   employer: string;
   category: Category;
-  /** Löneklass 1-3. Högre klass kräver bättre stadspoäng eller certifikat. */
+  /** Huvudkategorin som poängen räknas i. */
+  huvud: Huvudkategori;
+  /** Löneklass 1-3. Högre klass kräver poäng i huvudkategorin. */
   wageClass: 1 | 2 | 3;
   /** Antal arbetsdagar (frågor) ett skift innehåller */
   shiftLength: number;
