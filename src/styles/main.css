@@ -6872,3 +6872,182 @@ body.sheet-oppen {
 .mg-bildval-knapp .option-facit {
   min-height: 1.35em;
 }
+
+/* ------------------------------------------------------------ startpasset
+   Startskärmens namn- och födelseortsval är passets personuppgiftssida.
+   Samma papper, samma rader, samma maskinläsbara rad - fast ifyllbart. */
+
+.startpass {
+  padding: 10px;
+}
+
+.startpass-spread {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 760px) {
+  .startpass-spread {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .startpass-anvisningar {
+    grid-column: 1 / -1;
+  }
+}
+
+.startpass-topp {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 14px;
+  align-items: start;
+  margin: 12px 0 6px;
+}
+
+/* Fotorutan: tom, med den vanliga förklaringen. */
+.pass-foto {
+  position: relative;
+  aspect-ratio: 35 / 45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px;
+  border: 1.5px dashed rgba(29, 43, 52, 0.45);
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(45deg, rgba(29, 43, 52, 0.04) 0 6px, transparent 6px 12px),
+    rgba(251, 246, 234, 0.6);
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.pass-foto-ord {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+}
+
+.pass-foto-not {
+  font-size: 0.5rem;
+  line-height: 1.3;
+}
+
+.pass-foto-stamp {
+  position: absolute;
+  right: -10px;
+  bottom: 8px;
+  padding: 2px 6px;
+  border: 2px solid rgba(47, 107, 79, 0.75);
+  border-radius: 3px;
+  color: rgba(47, 107, 79, 0.85);
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  transform: rotate(-12deg);
+  background: rgba(251, 246, 234, 0.85);
+}
+
+.startpass-namn {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+/* Namnraden ser ut som en tryckt passrad men går att skriva i. */
+.pdata-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 2px solid rgba(29, 43, 52, 0.35);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.pdata-input::placeholder {
+  color: rgba(29, 43, 52, 0.35);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.pdata-input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--sun-dark);
+  box-shadow: 0 2px 0 var(--sun-dark);
+}
+
+.pdata-signatur {
+  font-size: 0.58rem;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.pdata-signatur-linje {
+  flex: 1;
+  height: 14px;
+  border-bottom: 1px solid rgba(29, 43, 52, 0.4);
+  /* En slarvig namnteckning i bläck. */
+  background: no-repeat left bottom / 70px 12px
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 12'><path d='M2 9c6-8 9-6 12-1s5 0 9-3 4 5 8 3 6-6 9-2 4 2 10-2 8 3 12 1' fill='none' stroke='%232c5f8a' stroke-width='1.2' stroke-linecap='round'/></svg>");
+}
+
+.pdata-mono {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.startpass-grid {
+  margin-top: 4px;
+}
+
+.startpass-not {
+  margin: 8px 0 10px;
+  font-size: 0.86rem;
+}
+
+.startpass-fodd .city-card {
+  margin-top: 10px;
+}
+
+.startpass-visering {
+  margin-top: 12px;
+  padding-top: 4px;
+  border-top: 1.5px dashed rgba(29, 43, 52, 0.25);
+}
+
+.birth-globe-liten .globe-picker {
+  max-width: 260px;
+  margin: 8px auto 0;
+}
+
+.startpass-anvisningar .loop {
+  margin-top: 8px;
+}
+
+/* Namnraden får inte växa med kolumnen eller spilla ut: den är en rad. */
+.startpass-namn .pdata-input {
+  flex: 0 0 auto;
+  height: auto;
+  min-height: 0;
+  padding: 6px 2px;
+  font-size: clamp(0.95rem, 4.4vw, 1.2rem);
+  letter-spacing: 0.03em;
+  text-overflow: ellipsis;
+}
+
+.startpass-namn {
+  justify-content: flex-start;
+}

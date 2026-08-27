@@ -99,10 +99,15 @@ webbläsare, så ni kan tävla om vem som får flest poäng på samma antal daga
 
 ## Så spelas det
 
-Startskärmen frågar i tur och ordning: **vilket läge**, **vem du är** och
-**var du är född**. Födelsestaden väljs på en snurrbar och zoombar jordglob
-eller i en sökbar lista, och den valda staden visas med foto, sevärdhet,
-valuta och prisnivå.
+Startskärmen frågar först **vilket läge** – Turist eller Globetrotter – och
+sedan fylls resten i direkt i **passet**: en personuppgiftssida med tom
+fotoruta (*fotografen kom inte*), namnrad med namnteckning, passnummer som
+följer namnet, och myndighetsrader i egen ton (*Utfärdat av: Mamma. Giltigt
+t.o.m.: tills pengarna tar slut. Längd: tillräcklig*). Sidan för
+**födelseort** har sökfält och rullbar lista med alla städer, stadens vykort,
+och längst ner en snurrbar jordglob som visering för den som hellre pekar
+än skriver. Den maskinläsbara raden skriver om sig medan man skriver. Det är
+samma pass som sedan ligger i ryggsäcken.
 
 Startskärmen förklarar också spelloopen i fyra steg första gången någon öppnar
 spelet. Därefter ligger förklaringen bakom knappen _Hur spelar man?_, så att

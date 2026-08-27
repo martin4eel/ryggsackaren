@@ -982,8 +982,7 @@ export class App {
         'p',
         { class: 'lede' },
         'Du har en enkelbiljett, för lite pengar och hela världen framför dig. ' +
-          'Jobba dig fram från stad till stad, svara rätt för att få lön, fyll ' +
-          'ryggsäcken med souvenirer och ta dig hem igen innan kassan tar slut.'
+          'Fyll i passet nedan, så börjar resan.'
       ),
     );
 
@@ -993,46 +992,6 @@ export class App {
      * hjälpknappen. Utfällningen sker på plats, utan att sidan byggs om, så
      * att ett halvskrivet namn inte tappar fokus.
      */
-    const loop = el('ol', { class: 'loop' });
-    const steg: Array<[string, string]> = [
-      ['Lär dig staden', 'Provet på turistbyrån ger ett betyg som öppnar bättre jobb.'],
-      ['Ta ett jobb', 'Varje rätt svar är en dagslön. Skiftet slutar med ett arkadmoment.'],
-      ['Gör en affär', 'Köp souvenirer där de tillverkas, sälj dem långt hemifrån.'],
-      [
-        'Res vidare',
-        `Minst ${MIN_CITIES_TO_FINISH} städer, sedan hem igen. Boendet kostar varje dag.`,
-      ],
-    ];
-    steg.forEach(([rubrik, text], i) => {
-      loop.append(
-        el('li', {},
-          el('span', { class: 'loop-num' }, String(i + 1)),
-          el('span', { class: 'loop-text' },
-            el('strong', {}, rubrik),
-            el('span', {}, text)
-          )
-        )
-      );
-    });
-
-    const hjalpKnapp = button(
-      '',
-      () => {
-        this.showHelp = !this.showHelp;
-        malaHjalp();
-      },
-      { class: 'btn btn-ghost help-toggle', 'data-sound': 'av' }
-    );
-    const malaHjalp = () => {
-      loop.hidden = !this.showHelp;
-      hjalpKnapp.textContent = this.showHelp
-        ? 'Dölj förklaringen'
-        : 'Hur spelar man?';
-      hjalpKnapp.setAttribute('aria-expanded', this.showHelp ? 'true' : 'false');
-    };
-    malaHjalp();
-    hero.append(el('div', { class: 'row help-row' }, hjalpKnapp), loop);
-
     const hasSave = Boolean(loadGame());
     if (hasSave) {
       const resumeRow = el('div', { class: 'row' });
@@ -1074,27 +1033,10 @@ export class App {
      * luft gjorde startskärmen en och en halv skärm längre på en telefon än
      * den behövde vara, för två fält.
      */
+    // ---- resenärstyp, överst: valet färgar allt som står i passet
     const diffPanel = el('section', { class: 'panel' });
-    diffPanel.append(el('h2', {}, 'Vem är du?'));
-    // Startknappen speglar om namnet är ifyllt. Den byggs längre ned, så
-    // callbackerna går via en indirektion i stället för att fånga den direkt.
-    let uppdateraStart: () => void = () => {};
-    const nameInput = el('input', {
-      class: 'field name-input',
-      type: 'text',
-      maxlength: '24',
-      placeholder: 'Ditt namn',
-      'aria-label': 'Ditt namn',
-      value: this.startPick.name,
-      autocomplete: 'off',
-    }) as HTMLInputElement;
-    nameInput.addEventListener('input', () => {
-      this.startPick.name = nameInput.value;
-      uppdateraStart();
-    });
-    diffPanel.append(el('div', { class: 'row' }, nameInput));
     diffPanel.append(
-      el('h3', { class: 'start-sub' }, 'Hur van resenär är du?'),
+      el('h2', {}, 'Hur van resenär är du?'),
       el(
         'p',
         { class: 'muted' },
@@ -1134,8 +1076,6 @@ export class App {
       );
     }
     diffPanel.append(diffRow);
-    // Punktlistorna ligger hopfällda. Den som redan vet vad Turist betyder
-    // ska inte behöva rulla förbi åtta punkter för att komma till globen.
     const modeToggle = button(
       this.showModeDetails ? 'Dölj skillnaderna' : 'Vad skiljer lägena?',
       () => {
@@ -1155,29 +1095,107 @@ export class App {
     wrap.append(diffPanel);
 
     /**
-     * Födelsestaden. Globen, ett kort om den valda staden och en rullbar
-     * lista står bredvid varandra, så att man ser vilken stad man pekat ut
-     * utan att behöva scrolla tillbaka upp.
+     * Passet. Namn och födelseort fylls i direkt i passets personuppgiftssida,
+     * med fotoruta, myndighetsrader och en maskinläsbar rad som skriver om
+     * sig medan man skriver. Det är samma pass som sedan ligger i ryggsäcken.
      */
-    const cityPanel = el('section', { class: 'panel' });
-    cityPanel.append(
-      el('h2', {}, 'Var är du född?'),
-      el(
-        'p',
-        { class: 'muted' },
-        'Din födelsestad står i passet, är där resan börjar och dit du ska ta dig ' +
-          'tillbaka. Dess valuta blir den du räknar i.'
+    const pass = el('section', { class: 'passport startpass' });
+    const sida = el('div', { class: 'passport-page passport-data startpass-sida' });
+    sida.append(
+      el('div', { class: 'passport-head' },
+        el('span', {}, 'Ryggsäckarpass · Passport'),
+        el('span', {}, 'Sid. 1')
+      ),
+      el('div', { class: 'pdata-emblem' },
+        el('span', { class: 'pdata-emblem-mark' }, '⊕'),
+        el('span', { class: 'pdata-emblem-text' },
+          el('strong', {}, 'Ryggsäckaren'),
+          el('span', {}, 'Utfärdat för världens skull')
+        )
       )
     );
 
-    // Kortet om den valda staden byggs om på plats när valet ändras.
+    // Fotorutan. Fotografen kom inte.
+    const foto = el('div', { class: 'pass-foto', 'aria-hidden': 'true' },
+      el('span', { class: 'pass-foto-ord' }, 'FOTO'),
+      el('span', { class: 'pass-foto-not' }, 'Fotografen kom inte. Se ut som du brukar.'),
+      el('span', { class: 'pass-foto-stamp' }, 'GODKÄND')
+    );
+
+    let uppdateraStart: () => void = () => {};
+    const nameInput = el('input', {
+      class: 'field name-input pdata-input',
+      type: 'text',
+      maxlength: '24',
+      placeholder: 'SKRIV DITT NAMN',
+      'aria-label': 'Ditt namn',
+      value: this.startPick.name,
+      autocomplete: 'off',
+      spellcheck: 'false',
+    }) as HTMLInputElement;
+
+    const rad = (etikett: string, varde: string | HTMLElement, cls = '') =>
+      el('div', { class: `pdata-row ${cls}` },
+        el('span', { class: 'pdata-label' }, etikett),
+        typeof varde === 'string' ? el('span', { class: 'pdata-value' }, varde) : varde
+      );
+
+    const passnummer = el('span', { class: 'pdata-value pdata-mono' });
+    const typValue = el('span', { class: 'pdata-value' });
+    const foddValue = el('span', { class: 'pdata-value' });
+    const grid = el('div', { class: 'pdata-grid startpass-grid' });
+    grid.append(
+      rad('Passnummer', passnummer),
+      rad('Nationalitet', 'Ryggsäckare'),
+      rad('Resenärstyp', typValue),
+      rad('Utfärdat av', 'Mamma'),
+      rad('Giltigt t.o.m.', 'Tills pengarna tar slut'),
+      rad('Längd', 'Tillräcklig'),
+      rad('Kännetecken', 'Ryggsäck. Lätt solbränna.'),
+      rad('Ögonfärg', 'Egna'),
+      rad('Yrke', 'Se tidningen på plats'),
+      rad('Född i', foddValue)
+    );
+
+    sida.append(
+      el('div', { class: 'startpass-topp' },
+        foto,
+        el('div', { class: 'startpass-namn' },
+          el('span', { class: 'pdata-label' }, 'Innehavare · Efternamn, förnamn'),
+          nameInput,
+          el('span', { class: 'pdata-signatur' }, 'Innehavarens namnteckning: ',
+            el('span', { class: 'pdata-signatur-linje' })
+          )
+        )
+      ),
+      grid
+    );
+
+    // ---- född i: sökfältet och listan, sedan globen som visering
+    const search = el('input', {
+      class: 'field search',
+      type: 'search',
+      placeholder: 'Sök stad eller land',
+      'aria-label': 'Sök födelsestad',
+      value: this.cityFilter,
+    }) as HTMLInputElement;
+    const list = el('div', { class: 'city-list' });
+    const listRam = el('div', { class: 'city-list-ram' }, list);
+    const listRakna = el('p', { class: 'city-list-antal' });
+    const uppdateraSkugga = () => {
+      const kvar = list.scrollHeight - list.scrollTop - list.clientHeight;
+      listRam.dataset['slut'] = kvar <= 4 ? 'ja' : 'nej';
+      listRam.dataset['rullbar'] = list.scrollHeight > list.clientHeight + 4 ? 'ja' : 'nej';
+    };
+    list.addEventListener('scroll', uppdateraSkugga);
+
     const cityCard = el('div', { class: 'city-card' });
     const paintCityCard = () => {
       clear(cityCard);
       const c = CITY_BY_ID[this.startPick.cityId]!;
-      const foto = photoImg(c, 'city-card-photo', cityCard);
+      const bild = photoImg(c, 'city-card-photo', cityCard);
       cityCard.append(
-        foto,
+        bild,
         el('div', { class: 'city-card-body' },
           el('p', { class: 'kicker' }, c.country),
           el('h3', { class: 'city-card-name' }, c.name),
@@ -1192,40 +1210,34 @@ export class App {
       );
     };
 
+    const mrz1 = el('span');
+    const mrz2 = el('span');
+    const paintPass = () => {
+      const c = CITY_BY_ID[this.startPick.cityId]!;
+      const namn = this.startPick.name.trim() || 'RESENÄREN';
+      // Passnumret följer namnet, så att samma person alltid får samma nummer.
+      const nr = Math.floor(pseudoRandom(`pass|${namn.toLowerCase()}`) * 90_000_000) + 10_000_000;
+      passnummer.textContent = `RY ${String(nr).replace(/(\d{4})(\d{4})/, '$1 $2')}`;
+      typValue.textContent = DIFFICULTY_INFO[this.startPick.difficulty].name;
+      foddValue.textContent = `${c.name}, ${c.country}`;
+      mrz1.textContent = mrzLine1(namn, c.name);
+      mrz2.textContent = mrzLine2(0, this.startPick.difficulty, c.name);
+    };
+
+    const valjStad = (c: City) => {
+      this.startPick.cityId = c.id;
+      playSound('valj');
+      globe.select(c);
+      paintCityCard();
+      paintList();
+      paintPass();
+      uppdateraStart();
+    };
+
     const globe = renderGlobePicker({
       selectedId: this.startPick.cityId,
-      onSelect: (c) => {
-        this.startPick.cityId = c.id;
-        playSound('valj');
-        globe.select(c);
-        paintCityCard();
-        paintList();
-        uppdateraStart();
-      },
+      onSelect: valjStad,
     });
-
-    const search = el('input', {
-      class: 'field search',
-      type: 'search',
-      placeholder: 'Sök stad eller land',
-      'aria-label': 'Sök födelsestad',
-      value: this.cityFilter,
-    }) as HTMLInputElement;
-    const list = el('div', { class: 'city-list' });
-    /**
-     * Listan rymmer fyrtiosju städer i en ruta på trehundra bildpunkter, och
-     * att den gick att rulla i syntes inte. Nu ligger den i en ram med en
-     * uttoning i underkanten som försvinner när man nått botten, och en rad
-     * ovanför som säger hur många städer som finns.
-     */
-    const listRam = el('div', { class: 'city-list-ram' }, list);
-    const listRakna = el('p', { class: 'city-list-antal' });
-    const uppdateraSkugga = () => {
-      const kvar = list.scrollHeight - list.scrollTop - list.clientHeight;
-      listRam.dataset['slut'] = kvar <= 4 ? 'ja' : 'nej';
-      listRam.dataset['rullbar'] = list.scrollHeight > list.clientHeight + 4 ? 'ja' : 'nej';
-    };
-    list.addEventListener('scroll', uppdateraSkugga);
 
     const paintList = () => {
       clear(list);
@@ -1240,7 +1252,6 @@ export class App {
         list.append(el('p', { class: 'muted' }, 'Ingen stad matchar sökningen.'));
         return;
       }
-      // Svenska städer först: nästan alla som spelar är födda i någon av dem.
       const svenska = matches.filter((c) => c.country === 'Sverige');
       const ovriga = matches.filter((c) => c.country !== 'Sverige');
       const grupp = (rubrik: string, stader: City[]) => {
@@ -1254,14 +1265,7 @@ export class App {
                 el('span', { class: 'city-row-name' }, c.name),
                 el('span', { class: 'city-row-country' }, c.country)
               ),
-              () => {
-                this.startPick.cityId = c.id;
-                playSound('valj');
-                globe.select(c);
-                paintCityCard();
-                paintList();
-                uppdateraStart();
-              },
+              () => valjStad(c),
               { class: `city-row-btn ${on ? 'city-row-on' : ''}`, 'data-sound': 'av' }
             )
           );
@@ -1291,31 +1295,102 @@ export class App {
       this.cityFilter = search.value;
       paintList();
     });
+    nameInput.addEventListener('input', () => {
+      this.startPick.name = nameInput.value;
+      paintPass();
+      uppdateraStart();
+    });
 
     paintCityCard();
     paintList();
-    // Höjden är inte känd förrän listan sitter i dokumentet.
+    paintPass();
     requestAnimationFrame(uppdateraSkugga);
 
-    cityPanel.append(
-      el('div', { class: 'birth-grid' },
-        el('div', { class: 'birth-globe' },
-          globe.node,
-          el(
-            'p',
-            { class: 'map-hint' },
-            'Dra för att snurra jorden, zooma med knapparna, tryck på en prick.'
-          )
+    const fodd = el('div', { class: 'passport-page startpass-sida startpass-fodd' });
+    fodd.append(
+      el('div', { class: 'passport-head' },
+        el('span', {}, 'Födelseort · Place of birth'),
+        el('span', {}, 'Sid. 2')
+      ),
+      el(
+        'p',
+        { class: 'muted startpass-not' },
+        'Din födelsestad står i passet, är där resan börjar och dit du ska ta dig tillbaka. Dess valuta blir den du räknar i. Skriv eller rulla i listan.'
+      ),
+      el('div', { class: 'row' }, search),
+      listRakna,
+      listRam,
+      cityCard,
+      el('div', { class: 'startpass-visering' },
+        el('div', { class: 'passport-head' },
+          el('span', {}, 'Visering · Hela världen'),
+          el('span', {}, 'Giltig för en resa')
         ),
-        el('div', { class: 'birth-list' },
-          el('div', { class: 'row' }, search),
-          listRakna,
-          listRam
+        el('div', { class: 'birth-globe birth-globe-liten' },
+          globe.node,
+          el('p', { class: 'map-hint' }, 'Snurra jorden och tryck på en prick, om du hellre pekar än skriver.')
         )
       ),
-      cityCard
+      el('div', { class: 'pdata-mrz' }, mrz1, mrz2)
     );
-    wrap.append(cityPanel);
+
+    /**
+     * Anvisningarna till innehavaren: samma fyra steg som förr, men som en
+     * sida i passet, i myndighetens ton. Första gången utfälld, sedan bakom
+     * knappen - den ska inte ta en halv skärm varje gång.
+     */
+    const anvisningar = el('div', { class: 'passport-page startpass-sida startpass-anvisningar' });
+    const loop = el('ol', { class: 'loop' });
+    const steg: Array<[string, string]> = [
+      ['Lär dig staden', 'Provet på turistbyrån ger ett betyg som öppnar toppjobben.'],
+      ['Ta ett jobb', 'Varje rätt svar är en dagslön. Skiftet slutar med ett arkadmoment, och ger en poäng i yrkets huvudkategori.'],
+      ['Gör en affär', 'Köp souvenirer där de tillverkas, sälj dem långt hemifrån.'],
+      [
+        'Res vidare',
+        `Minst ${MIN_CITIES_TO_FINISH} städer, sedan hem igen. Boendet kostar varje dag.`,
+      ],
+    ];
+    steg.forEach(([rubrik, text], i) => {
+      loop.append(
+        el('li', {},
+          el('span', { class: 'loop-num' }, String(i + 1)),
+          el('span', { class: 'loop-text' },
+            el('strong', {}, rubrik),
+            el('span', {}, text)
+          )
+        )
+      );
+    });
+    const hjalpKnapp = button(
+      '',
+      () => {
+        this.showHelp = !this.showHelp;
+        malaHjalp();
+      },
+      { class: 'btn btn-ghost btn-small help-toggle', 'data-sound': 'av' }
+    );
+    const malaHjalp = () => {
+      loop.hidden = !this.showHelp;
+      hjalpKnapp.textContent = this.showHelp ? 'Dölj anvisningarna' : 'Hur spelar man?';
+      hjalpKnapp.setAttribute('aria-expanded', this.showHelp ? 'true' : 'false');
+    };
+    malaHjalp();
+    anvisningar.append(
+      el('div', { class: 'passport-head' },
+        el('span', {}, 'Anvisningar till innehavaren'),
+        el('span', {}, 'Sid. 3')
+      ),
+      el(
+        'p',
+        { class: 'muted startpass-not' },
+        'Innehavaren uppmanas att arbeta, resa och komma hem. Passet gäller inte som betalningsmedel, hur gärna innehavaren än vill.'
+      ),
+      el('div', { class: 'row' }, hjalpKnapp),
+      loop
+    );
+
+    pass.append(el('div', { class: 'passport-spread startpass-spread' }, sida, fodd, anvisningar));
+    wrap.append(pass);
 
     const actions = el('div', { class: 'panel actions-panel' });
     const startBtn = button(
