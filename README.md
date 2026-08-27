@@ -139,7 +139,7 @@ webbläsaren och överlever att sparfilen raderas.
    Köping får man ta tåget innan man kan flyga.
 
    **Första gången du kommer till en stad ligger alla brickor nedvända.** De
-   ligger utspridda över stadsbilden som vita mynt och vaggar långsamt; du vet
+   ligger utspridda över stadsbilden som silvermynt och vaggar långsamt; du vet
    inte vilken som är flygplatsen och vilken som är något annat förrän du vänt
    på dem, en och en. Hemstaden är undantaget – där har du bott. Ett uppvänt
    mynt lämnar fotot och lägger sig i **ikonraden under bilden**, där allt är
@@ -193,7 +193,9 @@ webbläsaren och överlever att sparfilen raderas.
    Orden skiljer sig åt: *gate* på flygplatsen, *spår* på stationen, *läge* vid
    bussterminalen och *kaj* i hamnen. Det gör också anläggningen – Köping har
    en busstation, Stockholm en bussterminal.
-5. **Turistbyrån.** Svara på frågor om staden. Resultatet blir ett stadsbetyg
+5. **Turistbyrån.** Svara på frågor om staden, under en remsa av stadens foto
+   – som i förlagan, där man aldrig svarade på en fråga utan att se var man
+   stod. Arbetsplatserna har på samma sätt stadens foto bakom sig. Resultatet blir ett stadsbetyg
    (0–100) som avgör vilka jobb du får söka. Du kan göra om provet för att
    höja betyget, men varje besök kostar en dag.
 6. **Frågornas former.** De flesta frågor är fyra alternativ att välja mellan,

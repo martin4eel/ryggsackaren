@@ -1699,7 +1699,9 @@ export class App {
     const rutor: number[] = [];
     for (let r = 0; r < RADER; r++) {
       for (let k = 0; k < KOLUMNER; k++) {
-        if (r === 0 && k < 2) continue;
+        // Stadsnamnet och valutaraden tar fyra av fem rutor i översta raden;
+        // "Argentina · argentinska pesos" når åttio procent av bredden.
+        if (r === 0 && k < 4) continue;
         rutor.push(r * KOLUMNER + k);
       }
     }
@@ -1723,7 +1725,8 @@ export class App {
        * trycka på.
        */
       const vanster = ((kol + 0.35 + jx * 0.3) / KOLUMNER) * 100;
-      const topp = ((rad + 0.35 + jy * 0.3) / RADER) * 100;
+      // Översta raden ligger under valutaraden, inte bredvid den.
+      const topp = ((rad + (rad === 0 ? 0.6 : 0.35) + jy * 0.3) / RADER) * 100;
       const b = button(
         el('span', { class: 'coin-body' }, icon('mynt')),
         // Mystik- och frågebrickor löser ut sig själva när de vänds. En
@@ -2183,7 +2186,12 @@ export class App {
     if (isJob && q.job) {
       const job = q.job;
       const wage = wagePerCorrect(job, this.city, s.difficulty);
-      const site = el('section', { class: 'panel worksite' });
+      // Stadens foto ligger bakom arbetsplatsen. Ett skift i Bangkok ska se
+      // annorlunda ut än ett i Reykjavík, också när frågorna är desamma.
+      const site = el('section', {
+        class: 'panel worksite',
+        style: `--foto:url("./cities/${this.city.id}.jpg")`,
+      });
       site.append(
         el('div', { class: 'worksite-head' },
           el('div', {},
@@ -2248,6 +2256,27 @@ export class App {
     }
 
     const panel = el('section', { class: `panel quiz ${isJob ? 'quiz-job' : ''}` });
+    /**
+     * Turistbyrån ligger i staden, och det ska synas. En remsa av stadens foto
+     * över frågorna ger provet en plats - som i förlagan, där man aldrig
+     * svarade på en fråga utan att se var man stod.
+     */
+    if (q.kind === 'turistbyra') {
+      panel.append(
+        el('figure', { class: 'quiz-plats' },
+          el('img', {
+            src: `./cities/${this.city.id}.jpg`,
+            alt: '',
+            loading: 'eager',
+            decoding: 'async',
+          }),
+          el('figcaption', {},
+            el('span', { class: 'quiz-plats-kicker' }, 'Turistbyrån'),
+            el('strong', {}, this.city.name)
+          )
+        )
+      );
+    }
     panel.append(
       el('p', { class: 'kicker' },
         isJob
@@ -2274,7 +2303,11 @@ export class App {
      * en uppslagsbok - det är den som ska hinna sjunka in innan man läser vad
      * som efterfrågas.
      */
-    if (q0.bild) {
+    // Remsan visar redan stadens foto; samma bild en gång till under
+    // frågan vore bara upprepning.
+    const bildRedanIRemsan =
+      q.kind === 'turistbyra' && q0.bild === `stad:${this.city.id}`;
+    if (q0.bild && !bildRedanIRemsan) {
       const bildruta = el('figure', { class: 'quiz-bild' });
       const img = el('img', {
         src: quizImageUrl(q0.bild),
