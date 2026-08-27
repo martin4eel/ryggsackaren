@@ -142,14 +142,24 @@ export function cycleVolume(): VolumeLevel {
   } catch {
     // ignoreras
   }
-  const c = ensureCtx();
-  if (c && master) master.gain.setValueAtTime(LEVEL_GAIN[level], c.currentTime);
   /**
-   * Slog spelaren på ljudet medan hen stod på en station fanns ingen
-   * ljudkontext att bygga mattan i när stationen öppnades. Den startas därför
-   * om här, annars förblir stationen tyst tills man gått ut och in igen.
+   * Huvudvolymen sätts på kontexten som redan finns, inte via ensureCtx():
+   * den returnerar null när ljudet är av, och då nollades aldrig volymen.
+   * Mattor som redan gick - stationen, regnet - fortsatte i gamla nivån.
    */
-  if (level > 0 && onskadStation && !aktivStation) startStation(onskadStation);
+  if (ctx && master) master.gain.setValueAtTime(LEVEL_GAIN[level], ctx.currentTime);
+  if (level === 0) {
+    stopStation(true);
+    stopWeather(true);
+  } else {
+    /**
+     * Slog spelaren på ljudet medan hen stod på en station fanns ingen
+     * ljudkontext att bygga mattan i när stationen öppnades. Den startas
+     * därför om här, annars förblir stationen tyst tills man gått ut och in.
+     */
+    if (onskadStation && !aktivStation) startStation(onskadStation);
+    if (onskatVader && !aktivtVader) startWeather(onskatVader);
+  }
   return level;
 }
 
@@ -1061,6 +1071,40 @@ export type WeatherSound =
 
 let aktivtVader: { kind: WeatherSound; lager: Lager; ut: GainNode; timer: number } | null = null;
 
+/** Vädret där spelaren står, även när ljudet råkar vara avstängt. */
+let onskatVader: WeatherSound | null = null;
+
+const VADER_KEY = 'ryggsackaren-vaderljud';
+
+/**
+ * Väderljudet har en egen växel, skild från huvudvolymen. Regn i en timme
+ * är stämning för en och tjat för en annan, och den som vill ha kvar
+ * knapparnas klick och lönens klirr ska inte behöva välja bort dem också.
+ */
+let vaderPa: boolean = (() => {
+  try {
+    return localStorage.getItem(VADER_KEY) !== 'av';
+  } catch {
+    return true;
+  }
+})();
+
+export function weatherSoundOn(): boolean {
+  return vaderPa;
+}
+
+export function toggleWeatherSound(): boolean {
+  vaderPa = !vaderPa;
+  try {
+    localStorage.setItem(VADER_KEY, vaderPa ? 'på' : 'av');
+  } catch {
+    // ignoreras
+  }
+  if (!vaderPa) stopWeather(true);
+  else if (onskatVader) startWeather(onskatVader);
+  return vaderPa;
+}
+
 function mullret(): void {
   const c = ctx;
   if (!c || !master) return;
@@ -1099,9 +1143,10 @@ function vindby(): void {
 }
 
 export function startWeather(kind: WeatherSound): void {
+  onskatVader = kind;
   if (aktivtVader?.kind === kind) return;
-  stopWeather();
-  if (kind === 'tyst') return;
+  stopWeather(true);
+  if (kind === 'tyst' || !vaderPa) return;
   const c = ensureCtx();
   if (!c || !master) return;
 
@@ -1157,7 +1202,9 @@ export function startWeather(kind: WeatherSound): void {
   if (kind === 'aska' || blast) aktivtVader.timer = schemalagg(true);
 }
 
-export function stopWeather(): void {
+/** Tystar vädret. `byte` betyder att spelaren står kvar och bara bytt läge. */
+export function stopWeather(byte = false): void {
+  if (!byte) onskatVader = null;
   const v = aktivtVader;
   if (!v) return;
   aktivtVader = null;

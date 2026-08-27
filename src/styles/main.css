@@ -3833,6 +3833,10 @@ input:focus-visible {
 
 /* Stadens namn högst upp i bilden, med egen övertoning för läsbarhet. */
 .city-hero-text-top {
+  /* Ovanpå mynten, så att väderskylten går att trycka på; resten av ytan
+     släpper igenom trycken till brickorna under. */
+  z-index: 6;
+  pointer-events: none;
   top: 0;
   bottom: auto;
   left: 0;
@@ -6235,8 +6239,13 @@ body.sheet-oppen {
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 
-/* Skylten med väder och klockslag. */
+/* Skylten med väder och klockslag. Den är en knapp: väderljudet av och på. */
 .city-vader {
+  cursor: pointer;
+  font: inherit;
+  pointer-events: auto;
+  position: relative;
+  z-index: 7;
   display: inline-flex;
   align-self: flex-start;
   align-items: center;
@@ -6255,6 +6264,19 @@ body.sheet-oppen {
 .city-vader-glyph {
   font-size: 0.9rem;
   line-height: 1;
+}
+
+.city-vader-ljud {
+  margin-left: 4px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(246, 239, 224, 0.25);
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.city-vader-tyst .city-vader-ljud {
+  opacity: 0.45;
+  text-decoration: line-through;
 }
 
 /* Dagens rubrik i tidningen. */

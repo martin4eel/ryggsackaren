@@ -93,7 +93,7 @@ import {
 } from '../game/events';
 import { renderEventCard } from './eventcard';
 import { weatherFor, type Weather } from '../game/weather';
-import { startWeather, stopWeather, type WeatherSound } from './audio';
+import { startWeather, stopWeather, toggleWeatherSound, weatherSoundOn, type WeatherSound } from './audio';
 import { CITY_PAPERS } from '../data/newspapers';
 import { annonserFor, type Kontaktannons } from '../data/kontaktannonser';
 import { CITY_HEADLINES } from '../data/headlines';
@@ -1734,10 +1734,7 @@ export class App {
           `${city.country} · ${CURRENCIES[city.currency]?.name ?? city.currency}`
         ),
         el('h1', { class: 'city-hero-title' }, city.name),
-        el('span', { class: 'city-vader', title: 'Väder och lokal tid' },
-          el('span', { class: 'city-vader-glyph', 'aria-hidden': 'true' }, vader.glyph),
-          vader.text
-        ),
+        this.renderWeatherPill(vader),
         el('p', { class: 'city-vader-rad' }, vader.line)
       ),
     );
@@ -2371,6 +2368,40 @@ export class App {
     );
     wrap.append(panel);
     return wrap;
+  }
+
+  /**
+   * Väderskylten. Ett tryck slår av eller på väderljudet, för sig - regnet
+   * kan vara stämning för en och tjat för en annan, och den som stänger av
+   * det ska få ha kvar allt annat ljud.
+   */
+  private renderWeatherPill(vader: Weather): HTMLElement {
+    const harLjud = vaderLjud(vader) !== 'tyst';
+    const pa = weatherSoundOn();
+    const b = button(
+      '',
+      () => {
+        const nu = toggleWeatherSound();
+        this.notify(nu ? 'Väderljudet är på.' : 'Väderljudet är av. Allt annat hörs som vanligt.');
+        this.render();
+      },
+      {
+        class: `city-vader ${pa ? '' : 'city-vader-tyst'}`,
+        'data-sound': 'av',
+        title: harLjud
+          ? pa
+            ? 'Väderljud på – tryck för att stänga av bara vädret'
+            : 'Väderljud av – tryck för att slå på'
+          : 'Väder och lokal tid – tryck för att slå av eller på väderljud',
+      }
+    );
+    b.append(
+      el('span', { class: 'city-vader-glyph', 'aria-hidden': 'true' }, vader.glyph),
+      el('span', {}, vader.text),
+      el('span', { class: 'city-vader-ljud', 'aria-hidden': 'true' }, '♪')
+    );
+    b.setAttribute('aria-label', `${vader.text}. Väderljud ${pa ? 'på' : 'av'}.`);
+    return b;
   }
 
   private startCityQuiz(): void {
