@@ -319,6 +319,10 @@ export class App {
    * öppen; därefter ligger den bakom hjälpknappen.
    */
   private showHelp = !harSettHjalpen();
+  /** Lägenas punktlistor på startskärmen är hopfällda tills man ber om dem. */
+  private showModeDetails = false;
+  /** Stämplarna som återstår visas som brickor; beskrivningarna fälls ut. */
+  private showStampDetails = false;
   /** Skydd mot att samma resa skrivs till dagboken två gånger */
   private journeySaved = false;
   /** Dagboken som den såg ut när resan just avslutades */
@@ -904,17 +908,41 @@ export class App {
      * är, och sist var man är född. Svårighetsgraden färgar allt annat, så den
      * ska väljas innan man börjar fundera på städer.
      */
+    /**
+     * Namn och läge delar panel. Två paneler med var sin rubrik, brödtext och
+     * luft gjorde startskärmen en och en halv skärm längre på en telefon än
+     * den behövde vara, för två fält.
+     */
     const diffPanel = el('section', { class: 'panel' });
+    diffPanel.append(el('h2', {}, 'Vem är du?'));
+    // Startknappen speglar om namnet är ifyllt. Den byggs längre ned, så
+    // callbackerna går via en indirektion i stället för att fånga den direkt.
+    let uppdateraStart: () => void = () => {};
+    const nameInput = el('input', {
+      class: 'field name-input',
+      type: 'text',
+      maxlength: '24',
+      placeholder: 'Ditt namn',
+      'aria-label': 'Ditt namn',
+      value: this.startPick.name,
+      autocomplete: 'off',
+    }) as HTMLInputElement;
+    nameInput.addEventListener('input', () => {
+      this.startPick.name = nameInput.value;
+      uppdateraStart();
+    });
+    diffPanel.append(el('div', { class: 'row' }, nameInput));
     diffPanel.append(
-      el('h2', {}, 'Hur van resenär är du?'),
+      el('h3', { class: 'start-sub' }, 'Hur van resenär är du?'),
       el(
         'p',
         { class: 'muted' },
-        'Samma spel och samma regler i båda lägena – det är kraven som skiljer. ' +
-          'Valet gäller hela resan.'
+        'Samma spel och samma regler – det är kraven som skiljer. Valet gäller hela resan.'
       )
     );
-    const diffRow = el('div', { class: 'mode-grid' });
+    const diffRow = el('div', {
+      class: `mode-grid ${this.showModeDetails ? 'mode-grid-open' : ''}`,
+    });
     const modes: Difficulty[] = ['turist', 'globetrotter'];
     for (const id of modes) {
       const info = DIFFICULTY_INFO[id];
@@ -945,36 +973,25 @@ export class App {
       );
     }
     diffPanel.append(diffRow);
-    wrap.append(diffPanel);
-
-    // Namnet trycks i passet och följer med i resedagboken.
-    const namePanel = el('section', { class: 'panel' });
-    namePanel.append(
-      el('h2', {}, 'Vem är du?'),
-      el(
-        'p',
-        { class: 'muted' },
-        'Namnet trycks i ditt pass och följer med i resedagboken.'
-      )
+    // Punktlistorna ligger hopfällda. Den som redan vet vad Turist betyder
+    // ska inte behöva rulla förbi åtta punkter för att komma till globen.
+    const modeToggle = button(
+      this.showModeDetails ? 'Dölj skillnaderna' : 'Vad skiljer lägena?',
+      () => {
+        this.showModeDetails = !this.showModeDetails;
+        diffRow.classList.toggle('mode-grid-open', this.showModeDetails);
+        modeToggle.textContent = this.showModeDetails
+          ? 'Dölj skillnaderna'
+          : 'Vad skiljer lägena?';
+        modeToggle.setAttribute('aria-expanded', this.showModeDetails ? 'true' : 'false');
+      },
+      {
+        class: 'btn btn-ghost btn-small mode-toggle',
+        'aria-expanded': this.showModeDetails ? 'true' : 'false',
+      }
     );
-    // Startknappen speglar om namnet är ifyllt. Den byggs längre ned, så
-    // callbackerna går via en indirektion i stället för att fånga den direkt.
-    let uppdateraStart: () => void = () => {};
-    const nameInput = el('input', {
-      class: 'field name-input',
-      type: 'text',
-      maxlength: '24',
-      placeholder: 'Ditt namn',
-      'aria-label': 'Ditt namn',
-      value: this.startPick.name,
-      autocomplete: 'off',
-    }) as HTMLInputElement;
-    nameInput.addEventListener('input', () => {
-      this.startPick.name = nameInput.value;
-      uppdateraStart();
-    });
-    namePanel.append(el('div', { class: 'row' }, nameInput));
-    wrap.append(namePanel);
+    diffPanel.append(modeToggle);
+    wrap.append(diffPanel);
 
     /**
      * Födelsestaden. Globen, ett kort om den valda staden och en rullbar
@@ -3279,18 +3296,42 @@ export class App {
     book.append(spread);
     panel.append(book);
 
+    /**
+     * Stämplarna som återstår, som små brickor med bara namnet. Nitton rutor
+     * med beskrivning var gjorde passet dubbelt så långt som själva passet.
+     * Beskrivningarna fälls ut av den som vill veta vad som krävs.
+     */
     const rest = STAMPS.filter((x) => !s.stamps.includes(x.id));
     if (rest.length > 0) {
-      const todo = el('div', { class: 'stamp-todo' });
+      const todo = el('div', {
+        class: `stamp-todo ${this.showStampDetails ? 'stamp-todo-open' : ''}`,
+      });
+      const toggle = button(
+        this.showStampDetails ? 'Dölj kraven' : 'Vad krävs?',
+        () => {
+          this.showStampDetails = !this.showStampDetails;
+          todo.classList.toggle('stamp-todo-open', this.showStampDetails);
+          toggle.textContent = this.showStampDetails ? 'Dölj kraven' : 'Vad krävs?';
+          toggle.setAttribute('aria-expanded', this.showStampDetails ? 'true' : 'false');
+        },
+        {
+          class: 'btn btn-ghost btn-small',
+          'aria-expanded': this.showStampDetails ? 'true' : 'false',
+        }
+      );
       todo.append(
-        el('h3', { class: 'stamp-todo-head' }, `Kvar att stämpla (${rest.length})`)
+        el('div', { class: 'stamp-todo-headrow' },
+          el('h3', { class: 'stamp-todo-head' }, `Kvar att stämpla (${rest.length})`),
+          toggle
+        )
       );
       const list = el('ul', { class: 'stamp-todo-list' });
       for (const stamp of rest) {
         list.append(
-          el('li', {},
+          el('li', { title: stamp.desc },
+            el('span', { class: 'stamp-todo-glyph', 'aria-hidden': 'true' }, stamp.glyph),
             el('strong', {}, stamp.name),
-            el('span', {}, stamp.desc)
+            el('span', { class: 'stamp-todo-desc' }, stamp.desc)
           )
         );
       }

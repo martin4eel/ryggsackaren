@@ -1758,10 +1758,16 @@ img.no-photo {
   opacity: 0;
 }
 
+@media (min-width: 700px) {
+  .city-list {
+    max-height: 340px;
+  }
+}
+
 /* Rullbar stadslista, så att fyrtiosju städer inte gör panelen oändlig. */
 .city-list {
   margin-top: 6px;
-  max-height: 340px;
+  max-height: 260px;
   scrollbar-width: thin;
   scrollbar-color: var(--sun-dark) transparent;
   overflow-y: auto;
@@ -2433,29 +2439,107 @@ img.no-photo {
   color: var(--ink-soft);
 }
 
+.stamp-todo-headrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.stamp-todo-headrow .stamp-todo-head {
+  margin: 0;
+}
+
+/* Hopfällt: en bricka per stämpel med tecken och namn, radbrutna som ord. */
 .stamp-todo-list {
   margin: 0;
   padding: 0;
   list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
 .stamp-todo-list li {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 8px 11px;
-  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
   border: 1.5px dashed var(--line);
   font-size: 0.8rem;
   color: var(--ink-soft);
 }
 
+.stamp-todo-glyph {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+}
+
 .stamp-todo-list strong {
   color: var(--ink);
-  font-size: 0.88rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.stamp-todo-desc {
+  display: none;
+}
+
+/* Utfällt: samma rutnät som förut, med beskrivningen under namnet. */
+.stamp-todo-open .stamp-todo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+.stamp-todo-open .stamp-todo-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  row-gap: 1px;
+  padding: 8px 11px;
+  border-radius: 9px;
+}
+
+.stamp-todo-open .stamp-todo-glyph {
+  grid-row: 1 / span 2;
+  align-self: start;
+  margin-top: 2px;
+}
+
+.stamp-todo-open .stamp-todo-desc {
+  display: block;
+}
+
+/* Startskärmen: underrubrik inne i panelen, och lägenas punktlistor
+   hopfällda tills någon frågar. */
+.start-sub {
+  margin: 16px 0 0;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.mode-grid:not(.mode-grid-open) .mode-bullets {
+  display: none;
+}
+
+.mode-toggle {
+  margin-top: 8px;
+}
+
+.btn-small {
+  padding: 7px 14px;
+  font-size: 0.82rem;
 }
 
 /* Stämpeln i kvittensrutan behåller sitt gamla runda utseende. */
