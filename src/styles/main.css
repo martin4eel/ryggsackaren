@@ -5623,3 +5623,52 @@ body.sheet-oppen {
     }
   }
 }
+
+
+/*
+ * Smala telefoner (iPhone SE och 320-360 px). Statusraden fick inte plats:
+ * "Till staden" och "Börja om" bröts på två rader och ryggsäcken klipptes i
+ * högerkanten. Här får bakåtknappen bara sin pil, de andra knapparna krymper
+ * och ingen av dem tillåts radbrytas.
+ */
+@media (max-width: 380px) {
+  .hud {
+    padding: 10px 10px;
+    gap: 8px 10px;
+  }
+
+  .hud-actions {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
+  .hud-back {
+    padding: 7px 11px;
+    white-space: nowrap;
+  }
+
+  /* Pilen räcker; etiketten ligger kvar som aria-label. */
+  .hud-back-body > span:last-child {
+    display: none;
+  }
+
+  .hud-back-pil {
+    font-size: 1.15rem;
+  }
+
+  .hud-restart {
+    padding: 7px 11px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .hud-pack {
+    width: 42px;
+    height: 42px;
+  }
+
+  .hud-pack svg {
+    width: 22px;
+    height: 22px;
+  }
+}
