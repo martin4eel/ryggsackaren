@@ -238,13 +238,16 @@ webbläsaren och överlever att sparfilen raderas.
    i verkligheten, och då duger inte en illustration av en marulk – det ska
    vara en marulk.
 
-   **Bilderna reagerar på svaret**, i Monty Python-anda. Svarar du rätt får
-   motivet utklippta ögon och ett brett leende, gungar till och säger något i
-   en pratbubbla – Mona Lisa ler på riktigt, Skriet skriker av glädje. Svarar
-   du fel blir det en grimas med tungan ute, ett pruttljud, och den stora
-   foten dunsar ner från himlen. Replikerna och var ansiktet ska sitta står
-   per bild i `src/data/quizImages.ts` (`reaktion` och `ansikte`); bilder
-   utan egna repliker får allmänna.
+   **Bilderna reagerar på svaret**, i Monty Python-anda. Rätt svar ger en
+   liten studs och ett *Bra jobbat!*. Fel svar klistrar ett **fotoutklipp**
+   av en mun med tungan ute över motivets ansikte – Mona Lisa räcker ut
+   tungan – motivet säger något syrligt i en pratbubbla, det pruttar, och
+   **den stora foten** dunsar ner från himlen. Foten och munnen är riktiga
+   fotografier från Wikimedia Commons, friklippta som i Terry Gilliams
+   animationer, aldrig ritade (`public/reaktion/`, med krediter i
+   `ATTRIBUTION.md`). Replikerna och var ansiktet sitter står per bild i
+   `src/data/quizImages.ts` (`reaktion` och `ansikte`); bilder utan egna
+   repliker får allmänna.
 7. **Tidningen.** Ett vitt bredsidesark i serif: frakturhuvud, datumrad
    med resdag, datum och väder, dagens jätterubrik, en artikel i spalter med
    ett svartvitt arkivfoto av stadens sevärdhet, och notiser *I korthet*.

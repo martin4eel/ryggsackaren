@@ -34,25 +34,24 @@ export interface QuizImage {
    */
   ansikte?: { x: number; y: number; b: number };
   /**
-   * Vad motivet säger när man svarat. Rätt svar ger jubel, fel svar ger en
-   * grimas och en syrlig replik. Saknas det används en allmän replik.
+   * Vad motivet säger när man svarat fel, medan det grimaserar. Rätt svar
+   * ger bara ett "Bra jobbat!". Saknas det används en allmän replik.
    */
-  reaktion?: { ratt: string[]; fel: string[] };
+  reaktion?: { fel: string[] };
 }
 
 /** Allmänna repliker för bilder utan egna. */
-export const ALLMAN_REAKTION: { ratt: string[]; fel: string[] } = {
-  ratt: ['Jo! Precis!', 'Äntligen någon som vet!', 'Hurra!', 'Där satt den!', 'Ja, ja, JA!'],
+export const ALLMAN_REAKTION: { fel: string[] } = {
   fel: ['Näe.', 'Va?!', 'Hallå, jag står ju här!', 'Pinsamt.', 'Jag såg det komma.'],
 };
 
 export const QUIZ_IMAGES: QuizImage[] = [
   // ------------------------------------------------------------------- hav
-  { id: 'marulk', alt: 'En marulk på havsbotten', article: 'Lophius piscatorius', reaktion: { ratt: ['Jag är inte söt, men jag är rätt.'], fel: ['Marulk. MAR-ULK. Så svårt är det inte.'] } },
+  { id: 'marulk', alt: 'En marulk på havsbotten', article: 'Lophius piscatorius', reaktion: { fel: ['Marulk. MAR-ULK. Så svårt är det inte.'] } },
   { id: 'torsk', alt: 'En atlanttorsk', article: 'Atlantic cod' },
   { id: 'makrill', alt: 'En makrill', article: 'Atlantic mackerel' },
   { id: 'havsabborre', alt: 'En havsabborre', article: 'European bass' },
-  { id: 'hummer', alt: 'En hummer', article: 'Homarus gammarus', reaktion: { ratt: ['Klapp klapp!'], fel: ['Nu blir jag röd. Röd av ilska.'] } },
+  { id: 'hummer', alt: 'En hummer', article: 'Homarus gammarus', reaktion: { fel: ['Nu blir jag röd. Röd av ilska.'] } },
   { id: 'ostron', alt: 'Öppnade ostron på is', article: 'Oyster' },
   { id: 'manet', alt: 'En öronmanet i vattnet', article: 'Aurelia aurita' },
   {
@@ -63,24 +62,24 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'knolval', alt: 'En knölval som bryter ytan', article: 'Humpback whale' },
   { id: 'delfin', alt: 'En flasknosdelfin', article: 'Common bottlenose dolphin' },
   { id: 'havsskoldpadda', alt: 'En grön havsskoldpadda', article: 'Green sea turtle' },
-  { id: 'blackfisk', alt: 'En bläckfisk bland stenar', article: 'Common octopus', reaktion: { ratt: ['Alla åtta armar upp!'], fel: ['Jag kramar dig inte längre.'] } },
+  { id: 'blackfisk', alt: 'En bläckfisk bland stenar', article: 'Common octopus', reaktion: { fel: ['Jag kramar dig inte längre.'] } },
 
   // ------------------------------------------------------------------ djur
-  { id: 'elefant', alt: 'En afrikansk savannelefant', article: 'African bush elephant', reaktion: { ratt: ['Jag glömmer aldrig ett rätt svar.'], fel: ['Jag glömmer aldrig. Aldrig.'] } },
-  { id: 'lejon', alt: 'Ett lejon', article: 'Lion', reaktion: { ratt: ['RÅÅÅR! Fast glatt.'], fel: ['Så pinsamt att jag ryter.'] } },
+  { id: 'elefant', alt: 'En afrikansk savannelefant', article: 'African bush elephant', reaktion: { fel: ['Jag glömmer aldrig. Aldrig.'] } },
+  { id: 'lejon', alt: 'Ett lejon', article: 'Lion', reaktion: { fel: ['Så pinsamt att jag ryter.'] } },
   { id: 'leopard', alt: 'En leopard', article: 'Leopard' },
   { id: 'noshorning', alt: 'En noshörning', article: 'Black rhinoceros' },
   { id: 'buffel', alt: 'En afrikansk buffel', article: 'African buffalo' },
-  { id: 'giraff', alt: 'En giraff', article: 'Giraffe', reaktion: { ratt: ['Högsta betyg!'], fel: ['Jag ser ner på dig. Från högt upp.'] } },
-  { id: 'zebra', alt: 'En stäppzebra', article: 'Plains zebra', reaktion: { ratt: ['Svart på vitt: rätt!'], fel: ['Svart på vitt: fel.'] } },
-  { id: 'flodhast', alt: 'En flodhäst i vattnet', article: 'Hippopotamus', reaktion: { ratt: ['Jag skrattar så jag plaskar!'], fel: ['Jag gäspar åt dig.'] } },
+  { id: 'giraff', alt: 'En giraff', article: 'Giraffe', reaktion: { fel: ['Jag ser ner på dig. Från högt upp.'] } },
+  { id: 'zebra', alt: 'En stäppzebra', article: 'Plains zebra', reaktion: { fel: ['Svart på vitt: fel.'] } },
+  { id: 'flodhast', alt: 'En flodhäst i vattnet', article: 'Hippopotamus', reaktion: { fel: ['Jag gäspar åt dig.'] } },
   { id: 'gnu', alt: 'En gnu på savannen', article: 'Blue wildebeest' },
-  { id: 'gepard', alt: 'En gepard', article: 'Cheetah', reaktion: { ratt: ['Snabbt och rätt!'], fel: ['Fel. Och jag var ändå snabbare.'] } },
+  { id: 'gepard', alt: 'En gepard', article: 'Cheetah', reaktion: { fel: ['Fel. Och jag var ändå snabbare.'] } },
 
   // ----------------------------------------------------------------- fåglar
-  { id: 'flamingo', alt: 'Flamingor i grunt vatten', article: 'Greater flamingo', reaktion: { ratt: ['Jag står på ett ben av glädje!'], fel: ['Jag rodnar. Fast det syns inte.'] } },
+  { id: 'flamingo', alt: 'Flamingor i grunt vatten', article: 'Greater flamingo', reaktion: { fel: ['Jag rodnar. Fast det syns inte.'] } },
   { id: 'pelikan', alt: 'En pelikan', article: 'Great white pelican' },
-  { id: 'pingvin', alt: 'En pingvin på en klippa', article: 'African penguin', reaktion: { ratt: ['Fracken passar till segern.'], fel: ['Jag vänder ryggen till.'] } },
+  { id: 'pingvin', alt: 'En pingvin på en klippa', article: 'African penguin', reaktion: { fel: ['Jag vänder ryggen till.'] } },
   { id: 'havsorn', alt: 'En havsörn', article: 'White-tailed eagle' },
 
   // --------------------------------------------------------------- blommor
@@ -100,30 +99,30 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'vitlok', alt: 'Vitlöksklyftor', file: 'Garlic bulbs and cloves.jpg' },
   { id: 'vanilj', alt: 'Vaniljstänger', file: 'Bourbon vanilla beans - extra noire - +20cm.JPG' },
   { id: 'svartpeppar', alt: 'Svartpepparkorn', file: 'Black Peppercorns.jpg' },
-  { id: 'durian', alt: 'En durianfrukt', article: 'Durian', reaktion: { ratt: ['Jag luktar seger!'], fel: ['Jag luktar i alla fall inte fel.'] } },
+  { id: 'durian', alt: 'En durianfrukt', article: 'Durian', reaktion: { fel: ['Jag luktar i alla fall inte fel.'] } },
   { id: 'granatapple', alt: 'Ett granatäpple', article: 'Pomegranate' },
-  { id: 'ananas', alt: 'En ananas', article: 'Pineapple', reaktion: { ratt: ['Kronan passar!'], fel: ['Taggigt svar.'] } },
+  { id: 'ananas', alt: 'En ananas', article: 'Pineapple', reaktion: { fel: ['Taggigt svar.'] } },
   { id: 'kiwifrukt', alt: 'En kiwifrukt i halvor', file: 'Kiwifruit halved.jpg' },
 
   // ----------------------------------------------------------------- konst
   {
     id: 'monalisa',
     alt: 'Leonardo da Vincis Mona Lisa',
-    file: 'Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg',   ansikte: { x: 50, y: 30, b: 24 }, reaktion: { ratt: ['Nu ler jag på riktigt.'], fel: ['Leonardo hade gråtit.'] },
+    file: 'Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg',   ansikte: { x: 50, y: 30, b: 24 }, reaktion: { fel: ['Leonardo hade gråtit.'] },
   },
-  { id: 'stjarnenatt', alt: 'Van Goghs Stjärnenatt', article: 'The Starry Night', ansikte: { x: 88, y: 18, b: 18 }, reaktion: { ratt: ['Stjärnorna snurrar av lycka!'], fel: ['Van Gogh hade skurit av det andra örat.'] } },
-  { id: 'skriet', alt: 'Munchs Skriet', article: 'The Scream', ansikte: { x: 55, y: 58, b: 26 }, reaktion: { ratt: ['AAAAH! Av glädje, alltså!'], fel: ['AAAAAAAAH!'] } },
+  { id: 'stjarnenatt', alt: 'Van Goghs Stjärnenatt', article: 'The Starry Night', ansikte: { x: 88, y: 18, b: 18 }, reaktion: { fel: ['Van Gogh hade skurit av det andra örat.'] } },
+  { id: 'skriet', alt: 'Munchs Skriet', article: 'The Scream', ansikte: { x: 55, y: 58, b: 26 }, reaktion: { fel: ['AAAAAAAAH!'] } },
   {
     id: 'parlorhange',
     alt: 'Vermeers Flickan med pärlörhänget',
-    article: 'Girl with a Pearl Earring',   ansikte: { x: 52, y: 40, b: 30 }, reaktion: { ratt: ['Örhänget glittrar av stolthet.'], fel: ['Jag vänder mig bort. Igen.'] },
+    article: 'Girl with a Pearl Earring',   ansikte: { x: 52, y: 40, b: 30 }, reaktion: { fel: ['Jag vänder mig bort. Igen.'] },
   },
   {
     id: 'storavagen',
     alt: 'Hokusais Den stora vågen utanför Kanagawa',
-    article: 'The Great Wave off Kanagawa',   ansikte: { x: 28, y: 38, b: 30 }, reaktion: { ratt: ['En våg av applåder!'], fel: ['Jag sköljer bort det där svaret.'] },
+    article: 'The Great Wave off Kanagawa',   ansikte: { x: 28, y: 38, b: 30 }, reaktion: { fel: ['Jag sköljer bort det där svaret.'] },
   },
-  { id: 'venusfodelse', alt: 'Botticellis Venus födelse', article: 'The Birth of Venus', ansikte: { x: 50, y: 28, b: 20 }, reaktion: { ratt: ['Snäckan öppnar sig av glädje!'], fel: ['Jag kliver tillbaka i snäckan.'] } },
+  { id: 'venusfodelse', alt: 'Botticellis Venus födelse', article: 'The Birth of Venus', ansikte: { x: 50, y: 28, b: 20 }, reaktion: { fel: ['Jag kliver tillbaka i snäckan.'] } },
 
 
   // ---------------------------------------------- mat, djur, platser, ting

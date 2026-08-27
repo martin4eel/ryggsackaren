@@ -60,7 +60,7 @@ import {
   volumeLevel,
   type Sound,
 } from './audio';
-import { button, clear, el, svgEl } from './dom';
+import { button, clear, el } from './dom';
 import { icon, iconGroup, type IconName } from './icons';
 import {
   renderMinigame,
@@ -352,41 +352,33 @@ const PAPPA_BETALAR = [
 ];
 
 /**
- * Motivet på bilden reagerar på svaret, i Monty Python-anda: utklippta ögon
- * och en mun klistras på ansiktet, en pratbubbla säger något, och vid fel
- * svar kommer den stora foten ner från himlen.
+ * Motivet på bilden reagerar på svaret, i Monty Python-anda. Rätt svar ger
+ * ett "Bra jobbat!" och en liten studs. Fel svar klistrar ett fotoutklipp av
+ * en mun med tungan ute över motivets ansikte, en replik i pratbubbla, och
+ * så kommer den stora foten ner från himlen - också den ett riktigt foto,
+ * friklippt, som i Gilliams animationer. Inget är ritat.
  */
 function reaktionsLager(bildId: string, ratt: boolean): HTMLElement {
   const info = QUIZ_IMAGE_BY_ID[bildId];
   const ansikte = info?.ansikte ?? { x: 50, y: 45, b: 32 };
   const rep = info?.reaktion ?? ALLMAN_REAKTION;
-  const rad = slumpa(ratt ? rep.ratt : rep.fel);
+  const rad = ratt ? 'Bra jobbat!' : slumpa(rep.fel);
   const lager = el('span', {
     class: `py ${ratt ? 'py-ratt' : 'py-fel'}`,
     'aria-hidden': 'true',
   });
-  const face = el('span', {
-    class: 'py-ansikte',
-    style: `left:${ansikte.x}%;top:${ansikte.y}%;width:${ansikte.b}%`,
-  });
-  const oga = (cx: number) =>
-    svgEl('g', {},
-      svgEl('ellipse', { cx, cy: 22, rx: 11, ry: ratt ? 13 : 9, class: 'py-ogonvita' }),
-      svgEl('circle', { cx: ratt ? cx : cx + (cx < 50 ? 5 : -5), cy: ratt ? 24 : 20, r: 5, class: 'py-pupill' }),
-      ratt ? '' : svgEl('path', { d: cx < 50 ? 'M12 4 L36 12' : 'M88 4 L64 12', class: 'py-bryn' })
+  if (!ratt) {
+    lager.append(
+      el('img', {
+        class: 'py-mun',
+        src: './reaktion/mun.webp',
+        alt: '',
+        // Munnen sitter i nedre delen av ansiktet, lite på sned som ett
+        // urklipp som klistrats dit i hast.
+        style: `left:${ansikte.x}%;top:${ansikte.y + ansikte.b * 0.12}%;width:${ansikte.b * 0.55}%;--lut:${((ansikte.x * 7) % 11) - 5}deg`,
+      })
     );
-  const mun = ratt
-    ? svgEl('g', {},
-        svgEl('path', { d: 'M18 52 Q50 96 82 52 Z', class: 'py-mun' }),
-        svgEl('path', { d: 'M24 54 Q50 64 76 54 L74 60 Q50 70 26 60 Z', class: 'py-tander' })
-      )
-    : svgEl('g', {},
-        svgEl('path', { d: 'M22 76 Q50 40 78 76 Q50 66 22 76 Z', class: 'py-mun' }),
-        svgEl('path', { d: 'M40 70 Q50 84 60 70 Z', class: 'py-tunga' })
-      );
-  const svg = svgEl('svg', { viewBox: '0 0 100 100', class: 'py-svg' }, oga(30), oga(70), mun);
-  face.append(svg);
-  lager.append(face);
+  }
   lager.append(
     el('span', {
       class: 'py-bubbla',
@@ -394,20 +386,8 @@ function reaktionsLager(bildId: string, ratt: boolean): HTMLElement {
     }, rad)
   );
   if (!ratt) {
-    // Den stora foten, en utklippt siluett som dunsar ner uppifrån.
     lager.append(
-      el('span', { class: 'py-fot' },
-        svgEl('svg', { viewBox: '0 0 100 160', class: 'py-fot-svg' },
-          svgEl('path', {
-            class: 'py-fot-form',
-            d: 'M30 0 L70 0 L74 40 Q92 70 86 110 Q80 140 56 150 Q30 156 16 134 Q4 110 12 82 Q18 60 26 42 Z',
-          }),
-          ...[
-            [22, 140, 9], [37, 150, 8], [52, 154, 8], [66, 150, 7], [79, 140, 7],
-          ].map(([cx, cy, r]) => svgEl('circle', { cx, cy, r, class: 'py-ta' })),
-          svgEl('path', { d: 'M40 30 Q50 70 44 110', class: 'py-fot-linje' })
-        )
-      )
+      el('img', { class: 'py-fot', src: './reaktion/fot.webp', alt: '' })
     );
   }
   return lager;

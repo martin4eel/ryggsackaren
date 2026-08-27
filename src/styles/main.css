@@ -6251,12 +6251,12 @@ body.sheet-oppen {
   position: relative;
 }
 
-.quiz-bild-ratt img {
+.quiz-bild-ratt > img {
   animation: bildjubel 0.7s ease-in-out 2;
   transform-origin: 50% 100%;
 }
 
-.quiz-bild-fel img {
+.quiz-bild-fel > img {
   animation: bildskak 0.5s ease-in-out;
 }
 
@@ -6274,60 +6274,13 @@ body.sheet-oppen {
   z-index: 2;
 }
 
-.py-ansikte {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  aspect-ratio: 1;
-  transform-origin: 50% 50%;
-  animation: ansiktin 0.3s cubic-bezier(0.3, 1.6, 0.5, 1) both;
-}
-
-.py-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.45));
-}
-
-.py-ogonvita {
-  fill: #fff;
-  stroke: #1a1410;
-  stroke-width: 2.5;
-}
-
-.py-pupill {
-  fill: #1a1410;
-}
-
-.py-bryn {
-  stroke: #1a1410;
-  stroke-width: 5;
-  stroke-linecap: round;
-  fill: none;
-}
-
+/* Munnen: ett fotoutklipp, klistrat på sned över motivets mun. */
 .py-mun {
-  fill: #c8202a;
-  stroke: #1a1410;
-  stroke-width: 2.5;
-  stroke-linejoin: round;
-}
-
-.py-tander {
-  fill: #fff;
-}
-
-.py-tunga {
-  fill: #ff7f9a;
-}
-
-/* Rätt svar: ansiktet gungar glatt; fel svar: det ryser. */
-.py-ratt .py-ansikte {
-  animation: ansiktin 0.3s cubic-bezier(0.3, 1.6, 0.5, 1) both, ansiktgung 0.6s ease-in-out 0.3s 3;
-}
-
-.py-fel .py-ansikte {
-  animation: ansiktin 0.3s cubic-bezier(0.3, 1.6, 0.5, 1) both, ansiktrys 0.12s linear 0.3s 6;
+  position: absolute;
+  transform: translate(-50%, -20%) rotate(var(--lut, 0deg));
+  transform-origin: 50% 20%;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.45));
+  animation: munin 0.28s cubic-bezier(0.3, 1.6, 0.5, 1) both, munrys 0.12s linear 0.3s 6;
 }
 
 .py-bubbla {
@@ -6367,60 +6320,33 @@ body.sheet-oppen {
   padding: 4px 7px;
 }
 
-/* Den stora foten. Kommer uppifrån, landar, och står kvar. */
+/* Den stora foten. Ett riktigt foto, kommer uppifrån, landar och står kvar. */
 .py-fot {
   position: absolute;
-  left: 76%;
+  left: 74%;
   top: 0;
-  width: 24%;
-  max-width: 110px;
-  min-width: 56px;
-  aspect-ratio: 100 / 160;
+  width: 26%;
+  max-width: 120px;
+  min-width: 60px;
   transform: translate(-50%, -110%);
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.55));
   animation: fotdunk 0.5s cubic-bezier(0.6, 0, 0.9, 0.4) 0.5s forwards;
   z-index: 3;
 }
 
-.py-fot-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.5));
-}
-
-.py-fot-form,
-.py-ta {
-  fill: #e9b58d;
-  stroke: #1a1410;
-  stroke-width: 3;
-  stroke-linejoin: round;
-}
-
-.py-fot-linje {
-  fill: none;
-  stroke: #b8825c;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-}
-
 .option-body-bild .py-fot {
-  width: 34%;
-  left: 74%;
+  width: 36%;
+  left: 72%;
 }
 
-@keyframes ansiktin {
-  from { transform: translate(-50%, -50%) scale(0); }
-  to { transform: translate(-50%, -50%) scale(1); }
+@keyframes munin {
+  from { transform: translate(-50%, -20%) rotate(var(--lut, 0deg)) scale(0); }
+  to { transform: translate(-50%, -20%) rotate(var(--lut, 0deg)) scale(1); }
 }
 
-@keyframes ansiktgung {
-  0%, 100% { transform: translate(-50%, -50%) rotate(-8deg); }
-  50% { transform: translate(-50%, -50%) rotate(8deg); }
-}
-
-@keyframes ansiktrys {
-  0%, 100% { transform: translate(-50%, -50%) translateX(0); }
-  50% { transform: translate(-50%, -50%) translateX(-4px); }
+@keyframes munrys {
+  0%, 100% { transform: translate(-50%, -20%) rotate(var(--lut, 0deg)); }
+  50% { transform: translate(-52%, -20%) rotate(calc(var(--lut, 0deg) - 3deg)); }
 }
 
 @keyframes bubblin {
@@ -6466,12 +6392,10 @@ body.sheet-oppen {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .quiz-bild-ratt img,
-  .quiz-bild-fel img,
+  .quiz-bild-ratt > img,
+  .quiz-bild-fel > img,
   .quiz-bild-fel,
-  .py-ansikte,
-  .py-ratt .py-ansikte,
-  .py-fel .py-ansikte,
+  .py-mun,
   .py-bubbla {
     animation: none;
   }
