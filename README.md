@@ -336,16 +336,13 @@ webbläsaren och överlever att sparfilen raderas.
    certifikat och ett klass 2-jobb blir det pengar över till en biljett.
 9. **Souvenirbutiken.** Köp där varan tillverkas och sälj där den är
    eftertraktad. Priserna varierar med region, prisnivå och dag.
-10. **Kartan.** En egen skylt på gatan, och en atlas snarare än ett reglage.
-   Hela världen på en gång, utan zoom och utan panorering: rutten du rest
-   dragen som en linje mellan städerna i besöksordning, en pulserande ring där
-   du står, ring runt hemstaden och prickar för allt du ännu inte sett.
-
-   Under kartan står det man annars skulle ha slagit upp: folkmängd,
-   koordinater, tidszon, sevärdhet och prisnivå för staden, och huvudstad,
-   folkmängd, språk, religion och valuta för landet. Står du i huvudstaden
-   syns det på en stämpel. Att Australiens huvudstad varken är Sydney eller
-   Melbourne är den sortens sak spelet gärna får lära ut mellan skiften.
+10. **Kartan.** En egen skylt på gatan, och en riktig karta: ett vikt papper
+   som vecklas ut när man öppnar det, med vikmärken, gradnät, kompassros och
+   en kartusch i hörnet. Rutten är dragen med röd kulspets i besöksordning,
+   startstaden är inringad med ett handskrivet *Start* och där man står
+   sitter en nål med *Här*. Inga faktarutor – stadens och landets fakta står
+   på turistbyrån, där de hör hemma. På telefonen är kartan bredare än
+   skärmen och rullas i sidled; den öppnas med nålen i mitten.
 
    Vilka färdsätt som finns beror på geografin, inte på en fast mall: buss och
    tåg kräver landförbindelse, färja kräver en linje och flyget når allt över

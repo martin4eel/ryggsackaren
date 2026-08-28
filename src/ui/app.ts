@@ -3666,10 +3666,8 @@ export class App {
       city: this.city,
       homeCityId: s.homeCityId,
       visited: s.visited,
-      money: (n) => this.money(n),
-      dailyCost: dailyCost(this.city, s.difficulty),
-      rating: getProgress(s, this.city.id).rating,
       distance: s.distance,
+      days: s.days,
     });
   }
 

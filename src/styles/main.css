@@ -4716,143 +4716,212 @@ body.sheet-oppen {
    att träffa här, så det finns inget att missa heller.
    ==================================================================== */
 
-.atlas-ram {
+/* ====================================================================
+   KARTAN - ett vikt papper
+   Vecklas ut när man öppnar den, med vikmärken, gradnät, kompassros och
+   en kartusch. Rutten är dragen med röd kulspets, starten inringad, och
+   där man står sitter en nål. Inga faktarutor: kartan är en karta.
+   ==================================================================== */
+
+.karta-blad {
   position: relative;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(120, 90, 40, 0.14), transparent 50%),
+    repeating-linear-gradient(0deg, rgba(90, 70, 40, 0.025) 0 1px, transparent 1px 3px),
+    #ead9b6;
+  box-shadow:
+    inset 0 0 0 1px rgba(90, 70, 40, 0.25),
+    inset 0 0 60px rgba(120, 90, 40, 0.18),
+    0 14px 30px rgba(4, 16, 26, 0.45);
+  transform-origin: 50% 0%;
+  animation: karta-ut 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   overflow: hidden;
-  background: #0a2a3e;
-  border: 1px solid rgba(29, 43, 52, 0.25);
 }
 
-/* Mjuk vinjett i kanterna, så att kartan ligger i rutan i stället för att
-   sluta tvärt mot den. */
-.atlas-ram::after {
-  content: '';
+@keyframes karta-ut {
+  0% { transform: perspective(900px) rotateX(-75deg) scaleX(0.34); opacity: 0.4; }
+  55% { transform: perspective(900px) rotateX(8deg) scaleX(1); opacity: 1; }
+  100% { transform: perspective(900px) rotateX(0deg) scaleX(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .karta-blad { animation: none; }
+}
+
+.karta-veck {
   position: absolute;
-  inset: 0;
+  z-index: 2;
   pointer-events: none;
-  box-shadow: inset 0 0 40px rgba(4, 16, 26, 0.45);
-  border-radius: inherit;
 }
 
-.atlas-map {
+.karta-veck-lod {
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  margin-left: -7px;
+  background: linear-gradient(90deg, transparent, rgba(90, 70, 40, 0.16) 45%, rgba(255, 255, 255, 0.35) 55%, transparent);
+}
+
+.karta-veck-vag {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 12px;
+  margin-top: -6px;
+  background: linear-gradient(180deg, transparent, rgba(90, 70, 40, 0.14) 45%, rgba(255, 255, 255, 0.3) 55%, transparent);
+}
+
+.karta-rullyta {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.karta-rullyta::-webkit-scrollbar { display: none; }
+
+.karta-svg {
   display: block;
   width: 100%;
   height: auto;
 }
 
-/* Landmassan utan kontur. En streckbredd på en halv bildpunkt kantutjämnas
-   till en ludd runt varje ö, och kartan såg smutsig ut i kanterna. */
-.atlas-land {
-  fill: #35876c;
+/* På telefonen är kartan bredare än rutan och rullas i sidled. */
+@media (max-width: 640px) {
+  .karta-svg { width: 190%; min-width: 700px; }
 }
 
-/* Reserutan, dragen genom städerna i besöksordning. */
-.atlas-rutt {
+.karta-hav { fill: #e6d6b3; }
+
+.karta-gradnat line {
+  stroke: rgba(90, 70, 40, 0.22);
+  stroke-width: 0.6;
+}
+
+.karta-gradnat .karta-ekvator {
+  stroke: rgba(90, 70, 40, 0.4);
+  stroke-width: 0.9;
+  stroke-dasharray: 4 3;
+}
+
+/* Landmassan i gammalt kartgrönt med en tunn konturlinje. */
+.karta-land {
+  fill: #bdb98a;
+  stroke: rgba(70, 60, 30, 0.55);
+  stroke-width: 0.5;
+  stroke-linejoin: round;
+}
+
+.karta-rutt {
   fill: none;
-  stroke: var(--sun);
-  stroke-width: 2.4;
+  stroke: #c1272d;
+  stroke-width: 1.9;
   stroke-linejoin: round;
   stroke-linecap: round;
-  stroke-dasharray: 7 6;
   opacity: 0.9;
-  animation: ruttvandring 2.4s linear infinite;
 }
 
-@keyframes ruttvandring {
-  to {
-    stroke-dashoffset: -26;
-  }
-}
-
-.atlas-prick {
-  fill: rgba(246, 239, 224, 0.34);
-}
-
-.atlas-bevist {
-  fill: var(--paper);
-}
-
-.atlas-har {
-  fill: var(--stamp);
-  stroke: var(--paper);
-  stroke-width: 1.8;
-}
-
-.atlas-hemring {
+.karta-rutt-skugga {
   fill: none;
-  stroke: var(--sun);
-  stroke-width: 1.8;
+  stroke: #c1272d;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  opacity: 0.18;
 }
 
-.atlas-puls {
+.karta-stad {
+  fill: rgba(70, 60, 30, 0.45);
+}
+
+.karta-stad-bevist {
+  fill: #1f2f6b;
+}
+
+.karta-ring {
   fill: none;
-  stroke: var(--stamp);
-  stroke-width: 2;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: atlaspuls 2.2s ease-out infinite;
+  stroke: #c1272d;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  opacity: 0.9;
 }
 
-@keyframes atlaspuls {
-  0% {
-    transform: scale(0.5);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
+.karta-anteckning {
+  font-family: 'Bradley Hand', 'Segoe Script', 'Snell Roundhand', 'Comic Sans MS', cursive;
+  font-size: 11px;
+  fill: #c1272d;
 }
 
-.atlas-dunamn {
-  fill: var(--paper);
-  font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 0.04em;
-  text-anchor: middle;
-  paint-order: stroke;
-  stroke: rgba(7, 26, 41, 0.85);
-  stroke-width: 4;
-  stroke-linejoin: round;
+.karta-anteckning-har {
+  font-size: 12px;
+  font-weight: 700;
 }
 
-.atlas-teckenforklaring {
+.karta-anteckning-vanster { text-anchor: end; }
+
+.karta-nal-skaft { stroke: #3a3a3a; stroke-width: 1.2; }
+.karta-nal-huvud { fill: #d8232a; stroke: #7a1015; stroke-width: 0.8; }
+.karta-nal-glans { fill: rgba(255, 255, 255, 0.7); }
+.karta-nal-skugga { fill: rgba(0, 0, 0, 0.25); }
+
+.karta-kompass circle { fill: none; stroke: rgba(70, 60, 30, 0.6); stroke-width: 0.8; }
+.karta-kompass-ns { fill: #c1272d; opacity: 0.85; }
+.karta-kompass-ov { fill: rgba(70, 60, 30, 0.7); }
+.karta-kompass-text { font-family: var(--font-display); font-size: 11px; font-weight: 800; fill: #3a3020; text-anchor: middle; }
+
+.karta-kartusch {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 3;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 16px;
-  font-size: 0.76rem;
-  color: var(--ink-soft);
+  flex-direction: column;
+  gap: 1px;
+  padding: 8px 12px;
+  border: 1.5px solid rgba(70, 60, 30, 0.7);
+  outline: 1px solid rgba(70, 60, 30, 0.35);
+  outline-offset: 2px;
+  background: rgba(234, 217, 182, 0.92);
+  color: #3a3020;
+  font-family: var(--font-display);
+  pointer-events: none;
 }
 
-.atlas-nyckel {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.karta-kartusch-titel {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
-.atlas-nyckel::before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(29, 43, 52, 0.3);
+.karta-kartusch-rad {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
 }
 
-.atlas-nyckel-har::before {
-  background: var(--stamp);
+.karta-legend {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 7px 10px;
+  border: 1px solid rgba(70, 60, 30, 0.5);
+  background: rgba(234, 217, 182, 0.92);
+  color: #3a3020;
+  font-size: 0.68rem;
+  pointer-events: none;
 }
 
-.atlas-nyckel-bevist::before {
-  background: var(--ink);
-}
+.karta-legend-rad { display: inline-flex; align-items: center; gap: 4px; }
+.karta-legend-ring { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #c1272d; }
+.karta-legend-nal { width: 8px; height: 8px; border-radius: 50%; background: #d8232a; }
+.karta-legend-streck { width: 14px; height: 0; border-top: 2px solid #c1272d; }
 
-.atlas-nyckel-hem::before {
-  background: transparent;
-  border: 2px solid var(--sun-dark);
-}
-
-/* Faktalistorna om staden och landet. */
 .fakta {
   display: flex;
   flex-direction: column;
@@ -7301,4 +7370,27 @@ body.sheet-oppen {
 /* Gör plats för anteckningen: rubrikraden får inte gå in under den. */
 .paper-annonser .job:has(.job-anteckning) .job-head {
   padding-right: 34%;
+}
+
+/* På telefonen: kartuschen och teckenförklaringen får inte skymma kartan. */
+@media (max-width: 640px) {
+  .karta-kartusch {
+    top: 12px;
+    left: 12px;
+    padding: 5px 8px;
+    background: rgba(234, 217, 182, 0.8);
+  }
+
+  .karta-kartusch-titel { font-size: 0.68rem; letter-spacing: 0.16em; }
+  .karta-kartusch-rad { font-size: 0.58rem; }
+  .karta-kartusch-rad:nth-child(2) { display: none; }
+
+  .karta-legend {
+    right: 12px;
+    bottom: 12px;
+    padding: 4px 7px;
+    gap: 1px;
+    font-size: 0.58rem;
+    background: rgba(234, 217, 182, 0.8);
+  }
 }

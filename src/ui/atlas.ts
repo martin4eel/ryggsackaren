@@ -1,35 +1,26 @@
 import { CITIES, CITY_BY_ID } from '../data/cities';
-import { CITY_FACTS } from '../data/cityFacts';
-import { CURRENCIES } from '../data/currencies';
-import { COUNTRY_FACTS, CITY_POPULATION, populationText } from '../data/facts';
 import type { City } from '../data/types';
 import { LAND_PATH, MAP_HEIGHT, MAP_WIDTH } from '../data/worldMap';
 import { el, svgEl } from './dom';
 
 /**
- * Atlasen.
+ * Kartan.
  *
- * Kartan var förut ett väljarreglage på resebyrån: man zoomade, panorerade och
- * prickade en stad för att få se biljettpriser. Biljetterna köps på
- * stationerna nu, och då blev det som återstod en karta utan uppgift.
- *
- * Här har den i stället fått vara karta. Ingen zoom, ingen panorering, inget
- * att träffa - bara hela världen på en gång, med rutten du rest inritad och
- * ett kryss där du står. Under den ligger det man annars skulle ha slagit upp
- * i en atlas: folkmängd, språk, religion, valuta och huvudstad.
+ * En riktig karta: ett vikt papper som vecklas ut när man öppnar den, med
+ * vikmärken, gradnät, kompassros och en kartusch i hörnet. Rutten är dragen
+ * med röd kulspets i besöksordning, startstaden inringad med ett "Start" i
+ * marginalen och där man står sitter en nål. Ingenting annat - stadens och
+ * landets fakta står på turistbyrån, där de hör hemma. Kartan är en karta.
  */
 
 export interface AtlasOptions {
   city: City;
   homeCityId: string;
   visited: string[];
-  money: (amount: number) => string;
-  /** Vad boendet kostar per dygn här */
-  dailyCost: number;
-  /** Stadsbetyget från turistbyrån */
-  rating: number;
   /** Tillryggalagd sträcka på hela resan */
   distance: number;
+  /** Resdag, för anteckningen i kartuschen */
+  days: number;
 }
 
 /** Kartan beskärs i norr och söder; ingen destination ligger utanför. */
@@ -43,236 +34,185 @@ function project(city: City): { x: number; y: number } {
   };
 }
 
-/** Tidszonen skriven som på en klocka på väggen. */
-function utcLabel(utc: number): string {
-  const tecken = utc < 0 ? '−' : '+';
-  const abs = Math.abs(utc);
-  const tim = Math.floor(abs);
-  const min = Math.round((abs - tim) * 60);
-  return `UTC${tecken}${tim}${min ? `:${String(min).padStart(2, '0')}` : ''}`;
-}
-
-/** Koordinater i grader och minuter, som i en riktig atlas. */
-function coordLabel(city: City): string {
-  const grad = (v: number, pos: string, neg: string) => {
-    const hall = v >= 0 ? pos : neg;
-    const abs = Math.abs(v);
-    const heltal = Math.floor(abs);
-    const min = Math.round((abs - heltal) * 60);
-    return `${heltal}°${String(min).padStart(2, '0')}′ ${hall}`;
-  };
-  return `${grad(city.lat, 'N', 'S')}, ${grad(city.lon, 'Ö', 'V')}`;
-}
-
-function prisniva(costIndex: number): string {
-  if (costIndex >= 1.35) return 'dyrt';
-  if (costIndex >= 1.1) return 'ganska dyrt';
-  if (costIndex >= 0.85) return 'medel';
-  if (costIndex >= 0.6) return 'billigt';
-  return 'mycket billigt';
+/** Ett litet slumptal ur en sträng, för att skaka pennstrecken jämnt. */
+function skak(seed: string, i: number): number {
+  let h = 2166136261;
+  const t = `${seed}|${i}`;
+  for (let k = 0; k < t.length; k++) {
+    h ^= t.charCodeAt(k);
+    h = Math.imul(h, 16777619);
+  }
+  return ((h >>> 0) % 1000) / 1000 - 0.5;
 }
 
 /**
- * Världskartan, ritad en gång och sedan stilla. Rutten mellan de besökta
- * städerna dras som en linje i ordning, så att resan syns som en resa och inte
- * som en samling prickar.
+ * En rutt dragen för hand: mellan två städer går strecket i en svag båge
+ * med små darrningar, som en linje dragen med kulspetspenna på ett papper
+ * som ligger på ett knä.
  */
+function pennlinje(punkter: Array<{ x: number; y: number }>): string {
+  let d = '';
+  for (let i = 0; i < punkter.length - 1; i++) {
+    const a = punkter[i]!;
+    const b = punkter[i + 1]!;
+    const mx = (a.x + b.x) / 2 + skak('rutt', i) * 24;
+    const my = (a.y + b.y) / 2 + skak('rutt-y', i) * 24;
+    d += `${i === 0 ? `M${a.x.toFixed(1)} ${a.y.toFixed(1)} ` : ''}Q${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)} `;
+  }
+  return d.trim();
+}
+
 function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
   const svg = svgEl('svg', {
-    class: 'atlas-map',
+    class: 'karta-svg',
     viewBox: `0 ${VIEW_TOP} ${MAP_WIDTH} ${VIEW_BOTTOM - VIEW_TOP}`,
     role: 'img',
-    'aria-label': `Världskarta med ${city.name} utmärkt`,
+    'aria-label': `Världskarta med resan inritad. Du står i ${city.name}.`,
   });
 
-  /**
-   * Havet ligger underst. Gradienten är svag med flit: en karta ska läsas, inte
-   * beundras, och en kraftig ton drar blicken till bakgrunden.
-   */
-  const grad = svgEl('linearGradient', {
-    id: 'atlas-havston',
-    x1: '0',
-    y1: '0',
-    x2: '0',
-    y2: '1',
-  });
-  grad.append(
-    svgEl('stop', { offset: '0', 'stop-color': '#0e3750' }),
-    svgEl('stop', { offset: '1', 'stop-color': '#0a2a3e' })
-  );
-  svg.append(svgEl('defs', {}, grad));
+  // Havet: papperets färg med en svag ton, som gammalt tryck.
   svg.append(
-    svgEl('rect', {
-      x: 0,
-      y: VIEW_TOP,
-      width: MAP_WIDTH,
-      height: VIEW_BOTTOM - VIEW_TOP,
-      fill: 'url(#atlas-havston)',
-    })
+    svgEl('rect', { x: 0, y: VIEW_TOP, width: MAP_WIDTH, height: VIEW_BOTTOM - VIEW_TOP, class: 'karta-hav' })
   );
 
-  /**
-   * Ingen gradnät. Kartan hade förut ekvatorn, vändkretsarna och polcirkeln
-   * inritade, och de linjerna låg tvärs över Afrika och Grönland utan att
-   * betyda något för spelaren - det såg ut som repor i bilden. Det som är kvar
-   * är land, hav, rutt och städer.
-   */
-  svg.append(svgEl('path', { d: LAND_PATH, class: 'atlas-land' }));
+  // Gradnätet: var trettionde grad, tunt.
+  const nat = svgEl('g', { class: 'karta-gradnat' });
+  for (let lon = -150; lon <= 150; lon += 30) {
+    const x = ((lon + 180) / 360) * MAP_WIDTH;
+    nat.append(svgEl('line', { x1: x, y1: VIEW_TOP, x2: x, y2: VIEW_BOTTOM }));
+  }
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const y = ((90 - lat) / 180) * MAP_HEIGHT;
+    nat.append(svgEl('line', { x1: 0, y1: y, x2: MAP_WIDTH, y2: y, class: lat === 0 ? 'karta-ekvator' : '' }));
+  }
+  svg.append(nat);
 
-  /**
-   * Reserutan. Städerna ritas i besöksordning, dubbletter och alla, eftersom
-   * en resa som går tillbaka till en stad faktiskt är en sträcka till.
-   */
+  svg.append(svgEl('path', { d: LAND_PATH, class: 'karta-land' }));
+
+  // Rutten, i kulspets.
   const punkter = visited
     .map((id) => CITY_BY_ID[id])
     .filter((c): c is City => Boolean(c))
     .map(project);
   if (punkter.length > 1) {
-    const d = punkter
-      .map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
-      .join(' ');
-    svg.append(svgEl('path', { d, class: 'atlas-rutt' }));
+    const d = pennlinje(punkter);
+    svg.append(svgEl('path', { d, class: 'karta-rutt-skugga' }), svgEl('path', { d, class: 'karta-rutt' }));
   }
 
+  // Städerna: små punkter, besökta som bläckprickar.
   const bevist = new Set(visited);
   for (const c of CITIES) {
     const { x, y } = project(c);
     const harVarit = bevist.has(c.id);
-    const arHar = c.id === city.id;
-    const arHem = c.id === homeCityId;
-    if (arHem && !arHar) {
-      svg.append(svgEl('circle', { cx: x, cy: y, r: 6, class: 'atlas-hemring' }));
-    }
     svg.append(
       svgEl('circle', {
         cx: x,
         cy: y,
-        r: arHar ? 5 : harVarit ? 3.4 : 2.4,
-        class: `atlas-prick ${
-          arHar ? 'atlas-har' : harVarit ? 'atlas-bevist' : ''
-        }`,
+        r: harVarit ? 3.2 : 1.8,
+        class: `karta-stad ${harVarit ? 'karta-stad-bevist' : ''}`,
       })
     );
   }
 
-  // Där du står: en pulserande ring och stadens namn, alltid utskrivet.
+  // Startstaden: inringad med pennan, "Start" bredvid.
+  const hem = CITY_BY_ID[homeCityId];
+  if (hem) {
+    const p = project(hem);
+    const r = 11;
+    // En ring dragen för hand: inte helt sluten, lite oval.
+    svg.append(
+      svgEl('path', {
+        d: `M${(p.x + r).toFixed(1)} ${p.y.toFixed(1)} a${r} ${r * 0.85} -8 1 1 ${(-r * 0.2).toFixed(1)} ${(-r * 0.75).toFixed(1)}`,
+        class: 'karta-ring',
+      }),
+      svgEl('text', { x: p.x + r + 4, y: p.y + 4, class: 'karta-anteckning' }, 'Start')
+    );
+  }
+
+  // Där man står: en nål med huvud, och "Här" i marginalen.
   const nu = project(city);
+  const nal = svgEl('g', { class: 'karta-nal', transform: `translate(${nu.x.toFixed(1)} ${nu.y.toFixed(1)})` });
+  nal.append(
+    svgEl('ellipse', { cx: 1.5, cy: 1.5, rx: 3.5, ry: 1.6, class: 'karta-nal-skugga' }),
+    svgEl('line', { x1: 0, y1: 0, x2: 0, y2: -14, class: 'karta-nal-skaft' }),
+    svgEl('circle', { cx: 0, cy: -16, r: 4.6, class: 'karta-nal-huvud' }),
+    svgEl('circle', { cx: -1.4, cy: -17.4, r: 1.3, class: 'karta-nal-glans' })
+  );
+  svg.append(nal);
+  const vanster = nu.x > MAP_WIDTH * 0.8;
   svg.append(
-    svgEl('circle', { cx: nu.x, cy: nu.y, r: 9, class: 'atlas-puls' }),
     svgEl(
       'text',
       {
-        x: nu.x,
-        // Namnet läggs under pricken utom längst upp på kartan, där det
-        // annars skulle hamna utanför beskärningen.
-        y: nu.y < VIEW_TOP + 40 ? nu.y + 20 : nu.y - 13,
-        class: 'atlas-dunamn',
+        x: vanster ? nu.x - 9 : nu.x + 9,
+        y: nu.y - 20,
+        class: `karta-anteckning karta-anteckning-har ${vanster ? 'karta-anteckning-vanster' : ''}`,
       },
-      city.name
+      `Här: ${city.name}`
     )
   );
+
+  // Kompassros nere till vänster.
+  const kx = 52;
+  const ky = VIEW_BOTTOM - 52;
+  const ros = svgEl('g', { class: 'karta-kompass', transform: `translate(${kx} ${ky})` });
+  ros.append(
+    svgEl('circle', { cx: 0, cy: 0, r: 22 }),
+    svgEl('circle', { cx: 0, cy: 0, r: 15 }),
+    svgEl('path', { d: 'M0 -26 L5 0 L0 26 L-5 0 Z', class: 'karta-kompass-ns' }),
+    svgEl('path', { d: 'M-26 0 L0 5 L26 0 L0 -5 Z', class: 'karta-kompass-ov' }),
+    svgEl('text', { x: 0, y: -30, class: 'karta-kompass-text' }, 'N')
+  );
+  svg.append(ros);
 
   return svg;
 }
 
 export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
-  const { city, homeCityId, visited, money, dailyCost, rating, distance } = opts;
+  const { city, homeCityId, visited, distance, days } = opts;
   const wrap = el('div', { class: 'stack atlas' });
-  const land = COUNTRY_FACTS[city.country];
-  const valuta = CURRENCIES[city.currency];
-  const folk = CITY_POPULATION[city.id];
   const unika = new Set(visited).size;
   const hem = CITY_BY_ID[homeCityId];
 
-  // ---- kartan
-  const kartpanel = el('section', { class: 'panel atlas-panel' });
-  kartpanel.append(
-    el('div', { class: 'panel-head' },
-      el('h1', { class: 'title' }, 'Var i världen'),
-      el('span', { class: 'tag' }, `${unika} av ${CITIES.length} städer`)
-    ),
-    el('div', { class: 'atlas-ram' }, karta(city, homeCityId, visited)),
-    el('div', { class: 'atlas-teckenforklaring' },
-      el('span', { class: 'atlas-nyckel atlas-nyckel-har' }, 'Du är här'),
-      el('span', { class: 'atlas-nyckel atlas-nyckel-bevist' }, 'Besökt'),
-      el('span', { class: 'atlas-nyckel atlas-nyckel-hem' },
-        `Hemstad: ${hem?.name ?? '—'}`)
-    ),
-    el(
-      'p',
-      { class: 'muted' },
-      unika > 1
-        ? `Linjen är din väg hittills: ${visited
-            .map((id) => CITY_BY_ID[id]?.name ?? id)
-            .join(' → ')}. Sammanlagt ${distance.toLocaleString('sv-SE')} km.`
-        : 'Resan har inte börjat än. Ta dig till en station så ritas rutten in här.'
-    )
+  const blad = el('section', { class: 'karta-blad' });
+  // Vikmärkena: två lodräta och ett vågrätt veck, som en karta i sex delar.
+  blad.append(
+    el('div', { class: 'karta-veck karta-veck-lod', style: 'left:33.3%' }),
+    el('div', { class: 'karta-veck karta-veck-lod', style: 'left:66.6%' }),
+    el('div', { class: 'karta-veck karta-veck-vag' })
   );
-  wrap.append(kartpanel);
+  const rullyta = el('div', { class: 'karta-rullyta' }, karta(city, homeCityId, visited));
+  blad.append(rullyta);
 
-  // ---- staden
-  const rad = (etikett: string, varde: string) =>
-    el('div', { class: 'fakta-rad' },
-      el('span', { class: 'fakta-etikett' }, etikett),
-      el('span', { class: 'fakta-varde' }, varde)
-    );
-
-  const stad = el('section', { class: 'panel' });
-  stad.append(
-    el('div', { class: 'panel-head' },
-      el('h2', {}, city.name),
-      el('span', { class: 'tag' }, city.country)
-    ),
-    el('p', { class: 'lede' }, city.blurb),
-    el('div', { class: 'fakta' },
-      folk ? rad('Folkmängd', populationText(folk)) : '',
-      rad('Läge', coordLabel(city)),
-      rad('Tidszon', utcLabel(city.utc)),
-      rad('Sevärdhet', city.landmark),
-      rad('Prisnivå', `${prisniva(city.costIndex)} · boende ${money(dailyCost)} per dygn`),
-      rad('Ditt stadsbetyg', `${rating} av 100`)
-    )
-  );
-  const fakta = CITY_FACTS[city.id] ?? [];
-  if (fakta.length) {
-    stad.append(
-      el('h3', { class: 'broschyr-rubrik' }, 'Bra att veta'),
-      el('ul', { class: 'broschyr-lista' }, ...fakta.map((t) => el('li', {}, t)))
-    );
-  }
-  wrap.append(stad);
-
-  // ---- landet
-  const landpanel = el('section', { class: 'panel' });
-  landpanel.append(
-    el('div', { class: 'panel-head' },
-      el('h2', {}, city.country),
-      land?.capital === city.name
-        ? el('span', { class: 'tag tag-huvudstad' }, 'Huvudstad')
-        : ''
-    )
-  );
-  if (land) {
-    landpanel.append(
-      el('div', { class: 'fakta' },
-        rad('Huvudstad', land.capital),
-        rad('Folkmängd', land.population),
-        rad('Språk', land.language),
-        rad('Religion', land.religion),
-        rad(
-          'Valuta',
-          valuta
-            ? `${valuta.name} (${valuta.code})`
-            : city.currency
-        )
+  // Kartuschen: titel och resans siffror, som tryckt i ett hörn.
+  blad.append(
+    el('div', { class: 'karta-kartusch' },
+      el('span', { class: 'karta-kartusch-titel' }, 'Världskarta'),
+      el('span', { class: 'karta-kartusch-rad' }, 'Upptäckarens resa'),
+      el('span', { class: 'karta-kartusch-rad' },
+        `Dag ${days} · ${unika} av ${CITIES.length} städer · ${distance.toLocaleString('sv-SE')} km`
       )
-    );
-  } else {
-    landpanel.append(
-      el('p', { class: 'muted' }, 'Det finns ingen landsfakta inlagd för det här landet än.')
-    );
-  }
-  wrap.append(landpanel);
+    )
+  );
+  // Teckenförklaring, liten, i motsatt hörn.
+  blad.append(
+    el('div', { class: 'karta-legend' },
+      el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-ring' }), ` Start: ${hem?.name ?? '—'}`),
+      el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-nal' }), ` Här: ${city.name}`),
+      el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-streck' }), ' Resväg')
+    )
+  );
+  wrap.append(blad);
+
+  // På en smal skärm är kartan bredare än rutan: rulla fram till nålen.
+  requestAnimationFrame(() => {
+    const svg = rullyta.querySelector('svg');
+    if (!svg) return;
+    const bredd = svg.getBoundingClientRect().width;
+    if (rullyta.scrollWidth <= rullyta.clientWidth + 4) return;
+    const nu = project(city);
+    rullyta.scrollLeft = Math.max(0, (nu.x / MAP_WIDTH) * bredd - rullyta.clientWidth / 2);
+  });
 
   return wrap;
 }
