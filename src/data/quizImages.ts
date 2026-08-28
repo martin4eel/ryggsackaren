@@ -1404,7 +1404,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'logo-capitals', alt: 'En logga med stjärnor och en klubba i rött och blått', file: 'Washington Capitals.svg' },
   { id: 'logo-lightning', alt: 'En blå blixt i en cirkel', file: 'Tampa Bay Lightning 2011.svg' },
   // ------------------------------------------------------------ lokförare
-  { id: 'rclok', alt: 'Ett svart ellok med strömavtagare uppfälld mot kontaktledningen', file: 'SJ Rc6.jpg' },
+  { id: 'rclok', alt: 'Ett svart ellok med strömavtagare uppfälld mot kontaktledningen', file: 'SJ Rc6.jpg', altFraga: 'Ett svart ellok vid en perrong, med bygeln på taket uppfälld' },
   { id: 'x2000', alt: 'Ett grått snabbtåg i ett snöigt landskap', file: 'SJ X2 in snow Jonsered 2007-01.jpg' },
   { id: 'malmtag', alt: 'Ett långt godståg med två lok genom ett vintrigt fjällandskap', file: 'IORE beim Torneträsk.jpg' },
   { id: 'tgv', alt: 'Ett snabbtåg på en stenviadukt över en flod', file: 'SNCF TGV Duplex Viaduc de Cize - Bolozon.jpg' },
