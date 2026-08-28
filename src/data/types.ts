@@ -311,6 +311,8 @@ export interface Question {
   /** Frivillig kuriosa som visas efter svaret */
   /** Frågan tas alltid med i skiftet i stället för att lottas */
   alltid?: boolean;
+  /** Egen rubrik vid rätt svar, i stället för "Rätt svar!" */
+  ratt?: string;
   info?: string;
   /**
    * Bild som visas ovanför frågan. Id ur data/quizImages.ts, eller

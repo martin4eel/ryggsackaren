@@ -3407,9 +3407,11 @@ export class App {
         class: `feedback ${right ? 'feedback-right' : nara ? 'feedback-near' : 'feedback-wrong'}`,
       });
       const headline = right
-        ? q.streak >= 4
-          ? `Rätt igen! ${q.streak} i rad.`
-          : 'Rätt svar!'
+        ? q0.ratt
+          ? `Rätt svar! ${q0.ratt}`
+          : q.streak >= 4
+            ? `Rätt igen! ${q.streak} i rad.`
+            : 'Rätt svar!'
         : nara
           ? 'Nästan rätt!'
           : 'Fel.';
