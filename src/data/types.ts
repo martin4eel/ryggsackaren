@@ -107,6 +107,8 @@ export type Category =
 
 /** Arkadmoment som bryter av frågorna, precis som i originalet. */
 export type MinigameKind =
+  /** Peka ut rätt sak på ett foto, en fråga i taget, i lugn takt */
+  | 'peka'
   /** Sortera föremål som rullar förbi på ett band till rätt korg */
   | 'sortering'
   /** Utför arbetsledarens order i rätt ordning innan tiden går ut */
@@ -168,7 +170,20 @@ export interface Minigame {
    * rätt, och gärna på några som är frestande fel - det är där det blir
    * klurigt.
    */
+  /**
+   * Bara för `peka`: fotot man pekar på (id i public/quiz/), facitbilden
+   * som visas när alla frågor är besvarade, träffytorna i procent av bildens
+   * bredd och höjd (radien i procent av bredden) och frågorna i ordning.
+   */
+  peka?: {
+    bild: string;
+    facitBild: string;
+    punkter: { id: string; namn: string; x: number; y: number; r: number; forklaring: string }[];
+    fragor: { text: string; svar: string }[];
+  };
   bildval?: { bild: string; namn: string }[];
+  /** Sekunder per kund i bildvalet; utelämnas för standardtempot (14 s) */
+  tid?: number;
   kunder?: {
     /** Vad kunden säger */
     text: string;

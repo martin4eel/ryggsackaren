@@ -233,6 +233,7 @@ try {
     balans: { needed: 1 },
     takt: { needed: 2 },
     bildval: { needed: 1 },
+    peka: { needed: 1 },
   };
 
   /**
@@ -303,7 +304,7 @@ try {
         problems.push(`jobb ${job.id} är klass 1 och ska inte ha något minispel`);
       const fotoSortering =
         mg.kind === 'sortering' && (mg.pool ?? []).flat().every((x) => typeof x === 'object');
-      const okej = mg.kind === 'bildval' || fotoSortering || UNDANTAG[job.id] === mg.kind;
+      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || fotoSortering || UNDANTAG[job.id] === mg.kind;
       if (job.wageClass >= 2 && !okej)
         problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
       const spec = MINIGAME_KINDS[mg.kind];

@@ -7639,3 +7639,57 @@ body.sheet-oppen {
 .reglage-staende .reglage-ratt::after { display: none; }
 
 .sparet-runda { min-width: 2.2em; padding: 0 6px; }
+
+
+/* ------------------------------------------------------------ peka-spelet */
+
+.mg-peka-yta {
+  position: relative;
+  margin: 8px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  touch-action: manipulation;
+  cursor: crosshair;
+  background: var(--paper-dim);
+}
+
+.mg-peka-bild {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.mg-peka-mark {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  animation: peka-in 0.25s ease-out both;
+}
+
+.mg-peka-ratt { background: var(--ok, #2e7d4f); }
+.mg-peka-fel { background: #b3261e; }
+
+@keyframes peka-in {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.mg-peka-forklaring {
+  margin: 4px 0 8px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.mg-peka-vidare { width: 100%; }

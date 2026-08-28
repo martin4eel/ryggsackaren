@@ -357,15 +357,31 @@ export const JOBS: Job[] = [
     shiftLength: 7,
     ad: 'Långa sträckor, många gränser. Du måste kunna kartan utan att titta.',
     minigame: {
-      kind: 'sortering',
-      title: 'Resenärerna pekar',
-      brief: 'Passagerarna fotar allt och frågar vad det är. Dra varje foto till rätt svar – tåget, stationen eller utsikten.',
-      items: ['Ombord', 'På stationen', 'Utanför fönstret'],
-      pool: [
-        [{ bild: 'transsib', namn: 'Transsibiriska tåget' }, { bild: 'restaurangvagn', namn: 'Restaurangvagnen' }, { bild: 'eurostar', namn: 'Eurostar' }, { bild: 'ice', namn: 'ICE-tåget' }],
-        [{ bild: 'station-tag-1', namn: 'Vänthallen' }, { bild: 'station-tag-3', namn: 'Perrongen' }, { bild: 'station-tag-4', namn: 'Stationshallen' }, { bild: 'perrongspar', namn: 'Spåret vid perrongen' }],
-        [{ bild: 'montblanc', namn: 'Mont Blanc' }, { bild: 'kebnekaise', namn: 'Kebnekaise' }, { bild: 'volga', namn: 'Volga' }, { bild: 'donau', namn: 'Donau' }, { bild: 'andorralavella', namn: 'Andorra la Vella' }],
-      ],
+      kind: 'peka',
+      title: 'Tågprovet: vad är vad i hytten?',
+      brief:
+        'Föraren har gått på rast och lämnat dig i hytten med en fråga i taget. Peka på fotot där reglaget sitter. Ingen klocka - men fel är fel, och du får veta varför.',
+      items: ['Förarhytten'],
+      peka: {
+        bild: 'tagprov',
+        facitBild: 'tagprov-svar',
+        punkter: [
+          { id: 'korreglage', namn: 'Körreglaget', x: 64.6, y: 56.2, r: 6, forklaring: 'Det stora reglaget på höger sida styr tågets dragkraft och acceleration.' },
+          { id: 'bromsreglage', namn: 'Bromsreglaget', x: 33.2, y: 55.7, r: 5.5, forklaring: 'Reglaget på vänster sida bromsar tåget och reglerar bromsningen.' },
+          { id: 'forardisplay', namn: 'Förardisplayen', x: 70, y: 44, r: 7.5, forklaring: 'Den stora mörka skärmen framför föraren visar status och information om tågets system.' },
+          { id: 'dorrkontroller', namn: 'Dörrkontrollerna', x: 9.5, y: 60, r: 6, forklaring: 'Knapparna på vänster sida av panelen öppnar, stänger och kontrollerar tågdörrarna.' },
+          { id: 'tagskydd', namn: 'Tågskyddssystemet', x: 15.5, y: 52, r: 5, forklaring: 'Den mindre displayen med knappsats hjälper föraren att övervaka körningen och följa säkerhetssystemets krav.' },
+          { id: 'pantograf', namn: 'Strömförsörjningskontrollerna', x: 93, y: 59, r: 7.5, forklaring: 'Reglagen och indikeringarna på höger sida hanterar och övervakar tågets elektriska kraftförsörjning, till exempel strömavtagaren.' },
+        ],
+        fragor: [
+          { text: 'Var är bromsen?', svar: 'bromsreglage' },
+          { text: 'Tåget ska iväg. Var ger du dragkraft?', svar: 'korreglage' },
+          { text: 'Öppna dörrarna. Var sitter kontrollerna?', svar: 'dorrkontroller' },
+          { text: 'Var ser föraren tågets status och systeminformation?', svar: 'forardisplay' },
+          { text: 'Var övervakas att föraren följer säkerhetssystemets krav?', svar: 'tagskydd' },
+          { text: 'Strömavtagaren ska upp. Var hanteras kraftförsörjningen?', svar: 'pantograf' },
+        ],
+      },
     },
     scene:
       'Vagnarna gungar genom natten. Gränskontrollen väntar om två timmar.',

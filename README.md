@@ -335,6 +335,11 @@ webbläsaren och överlever att sparfilen raderas.
    fotot är uppgiften. Två undantag på egna meriter: skateboardinstruktören
    håller balansen, och hockeytränaren pekar ut rätt klubbmärke – SHL och NHL
    om vartannat, de loggor som finns fritt på Commons.
+   Tågvärden får ett tredje slags pass, *peka*: ett foto av en förarhytt och
+   en fråga i taget – *Var är bromsen?* – som besvaras genom att peka på
+   fotot, utan klocka och med en rund felmarginal runt varje reglage. Rätt
+   eller fel sägs direkt med förklaring, och till sist visas samma foto med
+   alla reglage utmärkta (`Tågprov.jpg`/`Tågprov svar.png`, Martins egna).
    Momentet ger upp till tre dagslöner i bonus, och ett felfritt moment ett
    halvt dagsverke till. Tempot är lugnt med flit – 14 sekunder per kund,
    6–7 sekunder per foto på bandet – för det är frågorna som är spelet;

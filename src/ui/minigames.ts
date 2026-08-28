@@ -103,6 +103,9 @@ export function renderMinigame(
     case 'bildval':
       startPictureChoice(host, game, ctx, done);
       break;
+    case 'peka':
+      startPointAt(host, game, done);
+      break;
   }
   return host;
 }
@@ -1468,8 +1471,9 @@ function startPictureChoice(
       grid.append(b);
     });
     running = true;
-    // Gott om tid: man ska hinna titta på fyra foton i lugn och ro.
-    timer.run(14000 * ctx.slack, () => pick(null, null));
+    // Gott om tid: man ska hinna titta på fyra foton i lugn och ro. Spel
+    // som vill vara ännu lugnare sätter sin egen tid.
+    timer.run((game.tid ?? 14) * 1000 * ctx.slack, () => pick(null, null));
   };
 
   const pick = (id: string | null, knapp: HTMLElement | null) => {
@@ -1512,4 +1516,132 @@ function startPictureChoice(
   };
 
   next();
+}
+
+
+// ------------------------------------------------------------------- peka
+
+/**
+ * Ett foto och en fråga i taget: "Var är bromsen?" Spelaren pekar på fotot,
+ * och närmaste träffyta inom sin radie räknas - marginalen är medveten, det
+ * är kunskapen som prövas, inte fingerfärdigheten. Ingen klocka. Efter varje
+ * svar sägs rätt eller fel och vad det rätta är; efter sista frågan visas
+ * facitbilden med allt utmärkt.
+ */
+function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
+  const spec = game.peka!;
+  const fragor = spec.fragor;
+  let index = 0;
+  let right = 0;
+  let vantar = false;
+
+  const status = makeStatus();
+  const fraga = el('p', { class: 'mg-kund mg-peka-fraga' });
+  const bild = el('img', { class: 'mg-peka-bild', src: quizImageUrl(spec.bild), alt: 'Foto att peka på', draggable: 'false' });
+  const yta = el('div', { class: 'mg-peka-yta' }, bild);
+  const feedback = makeFeedback();
+  const forklaring = el('p', { class: 'mg-peka-forklaring' });
+  const vidare = button('Nästa fråga', () => nasta(), { class: 'btn btn-primary mg-peka-vidare' });
+  vidare.hidden = true;
+  host.append(status.node, fraga, yta, feedback.node, forklaring, vidare);
+
+  const punkt = (id: string) => spec.punkter.find((p) => p.id === id)!;
+
+  const markera = (x: number, y: number, klass: string, text?: string) => {
+    const m = el('span', { class: `mg-peka-mark ${klass}`, style: `left:${x}%; top:${y}%` }, text ?? '');
+    yta.append(m);
+    return m;
+  };
+
+  const visa = () => {
+    const f = fragor[index]!;
+    status.set(`Fråga ${index + 1}/${fragor.length}`, `${right} rätt`);
+    fraga.textContent = f.text;
+    feedback.say('Peka på fotot.', 'neutral');
+    forklaring.textContent = '';
+    for (const m of Array.from(yta.querySelectorAll('.mg-peka-mark'))) m.remove();
+    vidare.hidden = true;
+    vantar = false;
+  };
+
+  const nasta = () => {
+    index += 1;
+    if (index >= fragor.length) {
+      slut();
+      return;
+    }
+    visa();
+  };
+
+  const slut = () => {
+    fraga.textContent = 'Så här sitter det. Titta en stund innan du kvitterar.';
+    status.set('Klart', `${right} av ${fragor.length} rätt`);
+    for (const m of Array.from(yta.querySelectorAll('.mg-peka-mark'))) m.remove();
+    bild.src = quizImageUrl(spec.facitBild);
+    bild.alt = 'Samma foto med alla reglage utmärkta och förklarade';
+    feedback.say(right === fragor.length ? 'Alla rätt. Du kan hytten.' : `${right} av ${fragor.length}. Facit på bilden.`, right === fragor.length ? 'topp' : 'neutral');
+    forklaring.textContent = '';
+    // Texten på facitbilden är liten på en telefon: en länk till fullstorlek.
+    forklaring.append(
+      el('a', { href: quizImageUrl(spec.facitBild), target: '_blank', rel: 'noopener', class: 'mg-peka-lank' }, 'Öppna facit i full storlek')
+    );
+    vidare.hidden = true;
+    const klar = button('Tillbaka till skiftet', () => {
+      onDone({
+        score: right / fragor.length,
+        summary: `Du pekade rätt på ${right} av ${fragor.length} reglage.`,
+        perfect: right === fragor.length,
+      });
+    }, { class: 'btn btn-primary mg-peka-vidare' });
+    host.append(klar);
+  };
+
+  const tryck = (event: PointerEvent) => {
+    if (vantar) return;
+    const rect = bild.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    if (x < 0 || x > 100 || y < 0 || y > 100) return;
+    vantar = true;
+    const f = fragor[index]!;
+    const ratt = punkt(f.svar);
+    // Närmaste träffyta som fingret hamnat inom; radien mäts i bildbredd,
+    // så avståndet i höjdled räknas om till samma skala.
+    const kvot = rect.width / rect.height;
+    let traff: (typeof spec.punkter)[number] | null = null;
+    let basta = Infinity;
+    for (const p of spec.punkter) {
+      const dx = x - p.x;
+      const dy = (y - p.y) / kvot;
+      const d = Math.hypot(dx, dy);
+      if (d <= p.r && d < basta) {
+        basta = d;
+        traff = p;
+      }
+    }
+    const ok = traff?.id === ratt.id;
+    if (ok) {
+      right += 1;
+      playSound('ratt');
+      markera(ratt.x, ratt.y, 'mg-peka-ratt', '✓');
+      feedback.say(`Rätt. ${ratt.namn}.`, 'ok');
+      forklaring.textContent = ratt.forklaring;
+    } else {
+      playSound('fel');
+      markera(x, y, 'mg-peka-fel', '✕');
+      markera(ratt.x, ratt.y, 'mg-peka-ratt', '✓');
+      feedback.say(traff ? `Fel. Det där är ${traff.namn.toLowerCase()}.` : 'Fel. Där sitter inget reglage.', 'fel');
+      forklaring.textContent = `${ratt.namn}: ${ratt.forklaring}`;
+    }
+    status.set(`Fråga ${index + 1}/${fragor.length}`, `${right} rätt`);
+    vidare.textContent = index + 1 < fragor.length ? 'Nästa fråga' : 'Visa facit';
+    vidare.hidden = false;
+  };
+  yta.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    tryck(e);
+  });
+
+  visa();
 }
