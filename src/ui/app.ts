@@ -285,6 +285,24 @@ const EVENT_LJUD: Record<EventTone, Sound> = {
 };
 
 const HJALP_NYCKEL = 'ryggsackaren.hjalp-visad';
+const INTRO_NYCKEL = 'ryggsackaren.intro-dold';
+
+function introDold(): boolean {
+  try {
+    return localStorage.getItem(INTRO_NYCKEL) === 'ja';
+  } catch {
+    return false;
+  }
+}
+
+function sparaIntroDold(dold: boolean): void {
+  try {
+    if (dold) localStorage.setItem(INTRO_NYCKEL, 'ja');
+    else localStorage.removeItem(INTRO_NYCKEL);
+  } catch {
+    // ignoreras
+  }
+}
 
 function markeraHjalpSedd(): void {
   try {
@@ -1043,14 +1061,25 @@ export class App {
       audioButton('hud-icon-btn hero-audio'),
       el('p', { class: 'kicker' }, 'Jorden runt på frågor och jobb'),
       el('h1', { class: 'title' }, 'Upptäckaren'),
+    );
+    /**
+     * Förklaringen - ledet och de fyra stegen - går att fälla ihop när man
+     * läst den. Valet sparas, så den som spelat förut möts av passet direkt
+     * och kan fälla ut texten igen med samma knapp.
+     */
+    const forklaring = el('div', { class: 'forklaring' });
+    // En enda rad i rutnätet, så att hopfällningen kan animeras till noll.
+    const inre = el('div', { class: 'forklaring-inre' });
+    forklaring.append(inre);
+    inre.append(
       el(
         'p',
         { class: 'lede' },
         'Du har en enkelbiljett, för lite pengar och hela världen framför dig. ' +
           'Fyll i passet, så börjar resan.'
-      ),
+      )
     );
-    // Reglerna i fyra korta steg, alltid synliga: man ska inte behöva leta.
+    // Reglerna i fyra korta steg.
     const regler = el('ol', { class: 'loop loop-kompakt' });
     const steg: Array<[string, string]> = [
       ['Lär dig staden', 'Turistbyråns prov ger betyg.'],
@@ -1066,7 +1095,18 @@ export class App {
         )
       );
     });
-    hero.append(regler);
+    inre.append(regler);
+    let dold = introDold();
+    const vik = button('', () => {
+      dold = !dold;
+      sparaIntroDold(dold);
+      hero.classList.toggle('forklaring-dold', dold);
+      vik.textContent = dold ? 'Så fungerar det' : 'Dölj förklaringen';
+      vik.setAttribute('aria-expanded', String(!dold));
+    }, { class: 'btn btn-ghost btn-small forklaring-vik', 'aria-expanded': String(!dold) });
+    vik.textContent = dold ? 'Så fungerar det' : 'Dölj förklaringen';
+    if (dold) hero.classList.add('forklaring-dold');
+    hero.append(forklaring, vik);
 
     /**
      * Spelförklaringen tar en halv skärm och behövs bara en gång. Den står

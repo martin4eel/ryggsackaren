@@ -7517,3 +7517,32 @@ body.sheet-oppen {
 .rapport-lista li + li { margin-top: 4px; }
 
 .rapport .btn { width: 100%; }
+
+
+/* ------------------------------------------- förklaringen på startskärmen */
+
+.forklaring {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.forklaring-inre { min-height: 0; overflow: hidden; }
+
+.hero.forklaring-dold .forklaring {
+  grid-template-rows: 0fr;
+}
+
+.hero.forklaring-dold .forklaring-inre > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.forklaring-vik {
+  align-self: start;
+  margin-top: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forklaring { transition: none; }
+}
