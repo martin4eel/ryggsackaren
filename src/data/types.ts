@@ -307,6 +307,8 @@ export interface Question {
   /** Svårighet: 1 = lätt (Turist), 2 = svår (Globetrotter) */
   d: 1 | 2;
   /** Frivillig kuriosa som visas efter svaret */
+  /** Frågan tas alltid med i skiftet i stället för att lottas */
+  alltid?: boolean;
   info?: string;
   /**
    * Bild som visas ovanför frågan. Id ur data/quizImages.ts, eller

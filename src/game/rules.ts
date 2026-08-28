@@ -261,9 +261,10 @@ export function jobQuestions(
   const eligible =
     difficulty === 'turist' ? pool.filter((q) => q.d === 1) : pool;
   const source = eligible.length >= job.shiftLength ? eligible : pool;
-  return shuffle(source)
-    .slice(0, job.shiftLength)
-    .map((q) => prepareQuestion(q, difficulty));
+  // Frågor märkta `alltid` följer alltid med; resten lottas.
+  const fasta = source.filter((q) => q.alltid).slice(0, job.shiftLength);
+  const lottade = shuffle(source.filter((q) => !fasta.includes(q))).slice(0, job.shiftLength - fasta.length);
+  return shuffle([...fasta, ...lottade]).map((q) => prepareQuestion(q, difficulty));
 }
 
 /** Jobb som annonseras i staden idag. */

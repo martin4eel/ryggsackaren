@@ -278,6 +278,10 @@ webbläsaren och överlever att sparfilen raderas.
 
    **Svaret kvitteras rakt på sak.** Rätt svar: en rad. Fel svar: *Fel.
    Rätt svar: …* och kuriosan som förklarar saken, personen eller platsen.
+   En fråga kan märkas `alltid: true` och följer då med i varje skift i
+   stället för att lottas – Gunsdotter-frågan hos den politiska rådgivaren
+   är en sådan.
+
    Alt-texten på ett frågefoto avslöjar aldrig svaret: bilder vars namn står
    i den vanliga texten ("Turning Torso i Malmö") har en `altFraga` som bara
    beskriver motivet, och validatorn stoppar bygget om en fråga saknar det.
