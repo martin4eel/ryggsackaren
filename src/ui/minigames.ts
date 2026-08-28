@@ -1491,7 +1491,11 @@ function startPictureChoice(
     if (ok) {
       right += 1;
       playCombo(right);
-      feedback.say(`Just det, ${namn.get(kund.svar)?.toLowerCase()}. Kunden nickar.`, 'topp');
+      // Vanliga ord gemenas mitt i meningen; egennamn (Djurgårdens IF, HV71)
+      // behåller sina versaler.
+      const n = namn.get(kund.svar) ?? '';
+      const egennamn = /[A-ZÅÄÖ0-9]/.test(n.slice(1)) || /\s[A-ZÅÄÖ]/.test(n);
+      feedback.say(`Just det, ${egennamn ? n : n.toLowerCase()}. Kunden nickar.`, 'topp');
     } else {
       playSound('fel');
       feedback.say(
