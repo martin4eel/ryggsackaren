@@ -2,6 +2,7 @@ import { CITIES, CITY_BY_ID } from '../data/cities';
 import type { City } from '../data/types';
 import { LAND_PATH, MAP_HEIGHT, MAP_WIDTH } from '../data/worldMap';
 import { el, svgEl } from './dom';
+export type { Gissning as KartGissning };
 
 /**
  * Kartan.
@@ -21,6 +22,22 @@ export interface AtlasOptions {
   distance: number;
   /** Resdag, för anteckningen i kartuschen */
   days: number;
+  /**
+   * Var är jag? - fem nålar utan namn, gissa staden. Tillståndet ägs av
+   * appen, så att en omritning (en avisering som försvinner, en stämpel)
+   * inte nollar omgången mitt i.
+   */
+  gissning?: Gissning | null;
+  onGissaStart?: () => void;
+  onGissa?: (cityId: string) => void;
+  onGissaVidare?: () => void;
+}
+
+export interface Gissning {
+  cities: string[];
+  round: number;
+  ratt: number;
+  outcome?: { correct: boolean; guessed: string };
 }
 
 /** Kartan beskärs i norr och söder; ingen destination ligger utanför. */
@@ -62,12 +79,14 @@ function pennlinje(punkter: Array<{ x: number; y: number }>): string {
   return d.trim();
 }
 
-function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
+function karta(city: City, homeCityId: string, visited: string[], gissning = false): SVGElement {
   const svg = svgEl('svg', {
     class: 'karta-svg',
     viewBox: `0 ${VIEW_TOP} ${MAP_WIDTH} ${VIEW_BOTTOM - VIEW_TOP}`,
     role: 'img',
-    'aria-label': `Världskarta med resan inritad. Du står i ${city.name}.`,
+    'aria-label': gissning
+      ? 'Världskarta med en nål utan namn. Gissa staden.'
+      : `Världskarta med resan inritad. Du står i ${city.name}.`,
   });
 
   // Havet: papperets färg med en svag ton, som gammalt tryck.
@@ -116,7 +135,7 @@ function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
 
   // Startstaden: inringad med pennan, "Start" bredvid.
   const hem = CITY_BY_ID[homeCityId];
-  if (hem) {
+  if (hem && !gissning) {
     const p = project(hem);
     const r = 11;
     // En ring dragen för hand: inte helt sluten, lite oval.
@@ -140,7 +159,7 @@ function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
   );
   svg.append(nal);
   const vanster = nu.x > MAP_WIDTH * 0.8;
-  svg.append(
+  if (!gissning) svg.append(
     svgEl(
       'text',
       {
@@ -169,7 +188,7 @@ function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
 }
 
 export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
-  const { city, homeCityId, visited, distance, days } = opts;
+  const { city, homeCityId, visited, distance, days, gissning, onGissaStart, onGissa, onGissaVidare } = opts;
   const wrap = el('div', { class: 'stack atlas' });
   const unika = new Set(visited).size;
   const hem = CITY_BY_ID[homeCityId];
@@ -181,8 +200,12 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
     el('div', { class: 'karta-veck karta-veck-lod', style: 'left:66.6%' }),
     el('div', { class: 'karta-veck karta-veck-vag' })
   );
-  const rullyta = el('div', { class: 'karta-rullyta' }, karta(city, homeCityId, visited));
+  const mal = gissning ? CITY_BY_ID[gissning.cities[gissning.round]!] ?? city : city;
+  const rullyta = el('div', { class: 'karta-rullyta' },
+    karta(mal, homeCityId, visited, Boolean(gissning && !gissning.outcome))
+  );
   blad.append(rullyta);
+  if (gissning) blad.classList.add('karta-gissar');
 
   // Kartuschen: titel och resans siffror, som tryckt i ett hörn.
   blad.append(
@@ -202,6 +225,48 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
       el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-streck' }), ' Resväg')
     )
   );
+  if (onGissaStart && !gissning) {
+    const knapp = el('button', { type: 'button', class: 'btn btn-small karta-knapp' }, 'Var är jag?');
+    knapp.addEventListener('click', onGissaStart);
+    blad.append(knapp);
+  }
+
+  if (gissning && onGissa && onGissaVidare) {
+    const ruta = el('div', { class: 'karta-gissa' });
+    if (gissning.outcome) {
+      const o = gissning.outcome;
+      const gissat = CITY_BY_ID[o.guessed]?.name ?? o.guessed;
+      ruta.append(
+        el('p', { class: `karta-gissa-svar ${o.correct ? 'karta-gissa-ratt' : 'karta-gissa-fel'}` },
+          o.correct ? `Rätt! ${mal.name}, ${mal.country}.` : `Nej, inte ${gissat} – det var ${mal.name}, ${mal.country}.`
+        )
+      );
+      const b = el('button', { type: 'button', class: 'btn btn-primary' },
+        gissning.round + 1 < gissning.cities.length ? 'Nästa nål' : 'Klart');
+      b.addEventListener('click', onGissaVidare);
+      ruta.append(b);
+    } else {
+      const sok = el('input', { class: 'field search', type: 'search', placeholder: 'Vilken stad sitter nålen i?', 'aria-label': 'Gissa stad', autocomplete: 'off' }) as HTMLInputElement;
+      const traffar = el('div', { class: 'sparet-traffar' });
+      sok.addEventListener('input', () => {
+        traffar.replaceChildren();
+        const q = sok.value.trim().toLowerCase();
+        if (q.length < 2) return;
+        for (const c of CITIES.filter((c) => c.name.toLowerCase().includes(q) || c.country.toLowerCase().includes(q)).slice(0, 5)) {
+          const b = el('button', { type: 'button', class: 'btn btn-ghost sparet-traff' }, `${c.name}, ${c.country}`);
+          b.addEventListener('click', () => onGissa(c.id));
+          traffar.append(b);
+        }
+      });
+      ruta.append(
+        el('p', { class: 'karta-gissa-rubrik' }, `Var är jag? ${gissning.round + 1} av ${gissning.cities.length} · ${gissning.ratt} rätt`),
+        sok,
+        traffar
+      );
+      window.setTimeout(() => sok.focus(), 50);
+    }
+    blad.append(ruta);
+  }
   wrap.append(blad);
 
   // På en smal skärm är kartan bredare än rutan: rulla fram till nålen.
@@ -210,7 +275,7 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
     if (!svg) return;
     const bredd = svg.getBoundingClientRect().width;
     if (rullyta.scrollWidth <= rullyta.clientWidth + 4) return;
-    const nu = project(city);
+    const nu = project(mal);
     rullyta.scrollLeft = Math.max(0, (nu.x / MAP_WIDTH) * bredd - rullyta.clientWidth / 2);
   });
 

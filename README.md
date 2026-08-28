@@ -287,7 +287,10 @@ webbläsaren och överlever att sparfilen raderas.
    tillbaka i den staden. Läs platsannonserna och ta ett skift. Varje fråga är en
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Ett gjort skift
    stryks i tidningen med rött bläck och kommer inte tillbaka – samma yrke
-   får man söka i en annan stad, hos en annan arbetsgivare. Frågorna är unika
+   får man söka i en annan stad, hos en annan arbetsgivare – och
+   arbetsgivarna är lokala: Kafé Haga i Göteborg, Boulangerie Rue Cler i
+   Paris, Felucca Nile Cruises i Kairo (`employers` per stad i
+   `src/data/cities.ts`). Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
    - **Vart är vi på väg?** I varje stads tidning söker tv-frågesporten
@@ -342,7 +345,10 @@ webbläsaren och överlever att sparfilen raderas.
    startstaden är inringad med ett handskrivet *Start* och där man står
    sitter en nål med *Här*. Inga faktarutor – stadens och landets fakta står
    på turistbyrån, där de hör hemma. På telefonen är kartan bredare än
-   skärmen och rullas i sidled; den öppnas med nålen i mitten.
+   skärmen och rullas i sidled; den öppnas med nålen i mitten. Knappen
+   *Var är jag?* sätter fem nålar utan namn, en i taget: gissa staden. Tre
+   betygspoäng per rätt i staden man står i, och stämpeln *Kartläsare* för
+   fem av fem.
 
    Vilka färdsätt som finns beror på geografin, inte på en fast mall: buss och
    tåg kräver landförbindelse, färja kräver en linje och flyget når allt över
@@ -394,7 +400,7 @@ webbläsaren och överlever att sparfilen raderas.
    någon.
 
    På sidorna därefter sitter stämplarna tryckta i bläck, snett och lite
-   huller om buller, med resdagen i kanten. Tjugoåtta finns att jaga: fyra
+   huller om buller, med resdagen i kanten. Tjugonio finns att jaga: fyra
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet. Sex av dem är **mästarstämplar**: en per
@@ -493,7 +499,7 @@ upptäckare_.
 - 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften
-- 28 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
+- 29 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
 - 113 händelser med 137 val och 185 möjliga utfall, spridda över åtta
   tillfällen, var och en högst en gång per resa
 - 9–15 nedvända brickor per stad, varav 1–4 döljer en händelse eller en fråga
