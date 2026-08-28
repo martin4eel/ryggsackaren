@@ -1553,6 +1553,20 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'mycel', alt: 'Vitt mycel som trådar sig genom jord och löv', file: 'Міцелій.jpg', altFraga: 'Vita trådar i mörk jord' },
   { id: 'gunsdotter', alt: 'Margareta Gunsdotter, riksdagsledamot', file: 'Margareta Larsson.jpg', altFraga: 'En kvinna i porträtt' },
   { id: 'kardinalmarke', alt: 'Ett gult och svart sjömärke med två koner i toppen i vattnet', file: 'West Cardinal Buoy - geograph.org.uk - 7582131.jpg', altFraga: 'Ett gult och svart sjömärke med två koner i toppen' },
+  // ------------------------------------------------------------ politiker
+  { id: 'reinfeldt', alt: 'Fredrik Reinfeldt, porträtt', file: 'Fredrik-reinfeldt-alliance-cropped.jpg', altFraga: 'En flintskallig man med mygga vid kinden' },
+  { id: 'goranpersson', alt: 'Göran Persson, porträtt', file: 'Goran Persson 2006.jpg', altFraga: 'En man i glasögon, mörk kavaj och röd slips' },
+  { id: 'lofven', alt: 'Stefan Löfven, porträtt', file: 'Stefan Löfven efter slutdebatten i SVT 2014 (cropped).jpg', altFraga: 'En leende man i mörk kostym och röd slips' },
+  { id: 'kristersson', alt: 'Ulf Kristersson, porträtt', file: 'Ulf Kristersson June 2025 (cropped).jpg', altFraga: 'En leende man i runda glasögon och randig slips' },
+  { id: 'ebbabusch', alt: 'Ebba Busch, porträtt', file: 'Ebba Busch pressbild lejonbacken oktober 2022.jpg', altFraga: 'En leende kvinna med blont hår i vinröd klänning' },
+  { id: 'annieloof', alt: 'Annie Lööf, porträtt', file: 'Annie Lööf 2019 (cropped).jpg', altFraga: 'En kvinna med rött hår mot grön bakgrund' },
+  { id: 'monasahlin', alt: 'Mona Sahlin, porträtt', file: 'Mona Sahlin in 2015.jpg', altFraga: 'En kvinna med kort mörkt hår och lugg' },
+  { id: 'schyman', alt: 'Gudrun Schyman talar', file: 'Gudrun Schyman 2015.jpg', altFraga: 'En kvinna i glasögon och ljus kavaj som talar i mygga' },
+  { id: 'akesson', alt: 'Jimmie Åkesson talar', file: 'Jimmie Åkesson Almedalen 2018 (28390760747) Cropped.jpg', altFraga: 'En man med skägg och runda glasögon i blå kavaj' },
+  { id: 'merkel', alt: 'Angela Merkel, porträtt', file: 'Angela Merkel 2019 (cropped).jpg', altFraga: 'En kvinna i röd kavaj och halsband' },
+  { id: 'obama', alt: 'Barack Obama, officiellt porträtt', file: 'Official portrait of Barack Obama (cropped).jpg', altFraga: 'En man i mörk kostym framför en flagga' },
+  { id: 'thatcher', alt: 'Margaret Thatcher, svartvitt porträtt', file: 'Margaret Thatcher (1983).jpg', altFraga: 'En kvinna med pärlörhänge och scarf, svartvitt foto' },
+  { id: 'skyltcykelbana', alt: 'En rund blå vägskylt med en vit cykel', file: 'Sweden road sign D4.svg', altFraga: 'En rund blå vägskylt med en vit symbol' },
 ];
 
 export const QUIZ_IMAGE_BY_ID: Record<string, QuizImage> = Object.fromEntries(
