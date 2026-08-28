@@ -1436,7 +1436,13 @@ export function quizImageAlt(id: string, cityName?: string): string {
 export function quizImageAltIFraga(id: string, alternativ: string[], cityName?: string): string {
   if (id.startsWith('stadsbild:')) return cityName ? `Stadsbild från ${cityName}` : 'Stadsbild';
   if (id.startsWith('stad:')) return cityName ? `Foto från ${cityName}` : 'Stadsfoto';
-  const bild = QUIZ_IMAGE_BY_ID[id];
+  const bild = QUIZ_IMAGE_BY_ID[id  // ------------------------------------------------------------ lokförare
+  { id: 'rclok', alt: 'Ett svart ellok med strömavtagare uppfälld mot kontaktledningen', file: 'SJ Rc6.jpg' },
+  { id: 'x2000', alt: 'Ett grått snabbtåg i ett snöigt landskap', file: 'SJ X2 in snow Jonsered 2007-01.jpg' },
+  { id: 'malmtag', alt: 'Ett långt godståg med två lok genom ett vintrigt fjällandskap', file: 'IORE beim Torneträsk.jpg' },
+  { id: 'tgv', alt: 'Ett snabbtåg på en stenviadukt över en flod', file: 'SNCF TGV Duplex Viaduc de Cize - Bolozon.jpg' },
+  { id: 'forarhytt', alt: 'En förarhytt med skärmar, reglage och spåret genom rutan', file: 'Driving Cab Vectron DualMode.JPG' },
+];
   if (!bild) return '';
   if (bild.altFraga) return bild.altFraga;
   return altLacker(bild.alt, alternativ) ? 'Foto som hör till frågan' : bild.alt;
