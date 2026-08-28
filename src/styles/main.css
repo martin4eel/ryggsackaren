@@ -4850,13 +4850,18 @@ body.sheet-oppen {
 
 .karta-anteckning {
   font-family: 'Bradley Hand', 'Segoe Script', 'Snell Roundhand', 'Comic Sans MS', cursive;
-  font-size: 11px;
+  font-size: 15px;
+  font-weight: 700;
   fill: #c1272d;
+  /* Ljus kant runt bokstäverna, så att namnet läses över land och hav. */
+  paint-order: stroke fill;
+  stroke: rgba(234, 217, 182, 0.9);
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
 
 .karta-anteckning-har {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 17px;
 }
 
 .karta-anteckning-vanster { text-anchor: end; }
@@ -5281,15 +5286,17 @@ body.sheet-oppen {
 .quiz-bild img {
   display: block;
   width: 100%;
-  max-height: 260px;
-  object-fit: cover;
+  max-height: 340px;
+  /* Aldrig beskuret: det är hela motivet man ska känna igen, inte ett band
+     ur mitten av det. Smala band vid sidorna får pappret fylla. */
+  object-fit: contain;
+  background: var(--paper-dim);
 }
 
-/* Stående foton visas hela, mot pappret, i stället för att beskäras. */
-.quiz-bild-staende img {
-  object-fit: contain;
-  max-height: 340px;
-  background: var(--paper-dim);
+@media (min-width: 700px) {
+  .quiz-bild img {
+    max-height: 420px;
+  }
 }
 
 /* Bildval: stående foton i rutorna får inte tappa huvudet heller. */
@@ -7407,40 +7414,3 @@ body.sheet-oppen {
   }
 }
 
-/* Var är jag? på kartan. */
-.karta-knapp {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 4;
-}
-
-.karta-gissar .karta-kartusch,
-.karta-gissar .karta-legend {
-  display: none;
-}
-
-.karta-gissa {
-  position: relative;
-  z-index: 3;
-  margin: 10px 4px 2px;
-  padding: 10px 12px;
-  border: 1px solid rgba(70, 60, 30, 0.5);
-  background: rgba(234, 217, 182, 0.95);
-  color: #3a3020;
-}
-
-.karta-gissa-rubrik {
-  margin: 0 0 8px;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 0.9rem;
-}
-
-.karta-gissa-svar {
-  margin: 0 0 10px;
-  font-weight: 700;
-}
-
-.karta-gissa-ratt { color: #1f5a46; }
-.karta-gissa-fel { color: #c1272d; }

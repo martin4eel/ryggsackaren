@@ -404,11 +404,15 @@ export function playSound(name: Sound): void {
       tone(660, t, 0.08, { type: 'triangle', gain: 0.08 });
       break;
     case 'ratt':
-      tone(659, t, 0.09, { gain: 0.12 });
-      tone(880, t + 0.09, 0.16, { gain: 0.12 });
+      // En varm liten klocka: två toner uppåt, mjuk attack, kort efterklang.
+      tone(784, t, 0.14, { type: 'triangle', gain: 0.1, attack: 0.01 });
+      tone(1175, t + 0.1, 0.26, { type: 'triangle', gain: 0.1, attack: 0.01 });
+      tone(2350, t + 0.1, 0.18, { type: 'sine', gain: 0.03 });
       break;
     case 'fel':
-      tone(160, t, 0.22, { type: 'sawtooth', gain: 0.08, slide: 110 });
+      // Ett dovt "bonk": två toner nedåt, rundat, inte surrande.
+      tone(233, t, 0.16, { type: 'triangle', gain: 0.1, attack: 0.005 });
+      tone(165, t + 0.13, 0.28, { type: 'triangle', gain: 0.09, slide: 140 });
       break;
     case 'kassa':
       [880, 1175, 1568].forEach((f, i) =>

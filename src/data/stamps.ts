@@ -190,13 +190,6 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       test: (s) => (s.sparetTio ?? 0) >= 1,
     },
     {
-      id: 'kartlasare',
-      name: 'Kartläsare',
-      desc: 'Fem nålar av fem rätt i Var är jag? på kartan.',
-      glyph: '⌖',
-      test: (s) => (s.kartlasare ?? 0) >= 5,
-    },
-    {
       id: 'sparhund',
       name: 'Spårhund',
       desc: 'Ta minst 40 av 50 poäng i en omgång av Vart är vi på väg?',

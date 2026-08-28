@@ -131,8 +131,7 @@ export interface GameState {
   /** Bästa resultat i Vart är vi på väg? (max 50), och antal bromsningar på tio. */
   sparetBest?: number;
   sparetTio?: number;
-  /** Bästa omgång av Var är jag? på kartan (antal rätt av fem) */
-  kartlasare?: number;
+
   /** Antal rätta och felaktiga svar totalt */
   correct: number;
   wrong: number;

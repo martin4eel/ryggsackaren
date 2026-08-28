@@ -342,13 +342,11 @@ webbläsaren och överlever att sparfilen raderas.
 10. **Kartan.** En egen skylt på gatan, och en riktig karta: ett vikt papper
    som vecklas ut när man öppnar det, med vikmärken, gradnät, kompassros och
    en kartusch i hörnet. Rutten är dragen med röd kulspets i besöksordning,
-   startstaden är inringad med ett handskrivet *Start* och där man står
-   sitter en nål med *Här*. Inga faktarutor – stadens och landets fakta står
+   startstaden är inringad med sitt namn i handskrift och där man står
+   sitter en nål med *Här: …* – står man där man började skrivs namnet en
+   gång. Inga faktarutor – stadens och landets fakta står
    på turistbyrån, där de hör hemma. På telefonen är kartan bredare än
-   skärmen och rullas i sidled; den öppnas med nålen i mitten. Knappen
-   *Var är jag?* sätter fem nålar utan namn, en i taget: gissa staden. Tre
-   betygspoäng per rätt i staden man står i, och stämpeln *Kartläsare* för
-   fem av fem.
+   skärmen och rullas i sidled; den öppnas med nålen i mitten.
 
    Vilka färdsätt som finns beror på geografin, inte på en fast mall: buss och
    tåg kräver landförbindelse, färja kräver en linje och flyget når allt över
@@ -400,7 +398,7 @@ webbläsaren och överlever att sparfilen raderas.
    någon.
 
    På sidorna därefter sitter stämplarna tryckta i bläck, snett och lite
-   huller om buller, med resdagen i kanten. Tjugonio finns att jaga: fyra
+   huller om buller, med resdagen i kanten. Tjugoåtta finns att jaga: fyra
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet. Sex av dem är **mästarstämplar**: en per
@@ -417,7 +415,9 @@ webbläsaren och överlever att sparfilen raderas.
    precis som på riktigt. Både tidpunkt, tonhöjd och längd lottas, så samma
    ljud kommer aldrig två gånger likadant. Ingen musik.
 
-   Därtill ett trettiotal effekter (rätt och fel svar, lön, avresa, ankomst,
+   Rätt svar är en varm liten klocka i två toner uppåt, fel ett dovt bonk
+   nedåt – korta och igenkännbara, som en signatur.
+   Därtill ett trettiotal effekter (lön, avresa, ankomst,
    metronom, trumslag, stämpel och alla arkadmoment) syntetiseras i
    webbläsaren, så inga ljudfiler behövs. Varje färdsätt har sitt eget
    avgångsljud, och i telefonkiosken babblar det redan i luren
@@ -465,7 +465,9 @@ webbläsaren och överlever att sparfilen raderas.
 18. **Börja om.** Knappen _Börja om_ i statusraden finns på varje skärm. Den
     frågar först, och visar vad som går förlorat, innan resan raderas.
 19. **Kom hem.** Besök minst fem städer och återvänd till startstaden för att
-    avsluta resan, få poäng och en titel.
+    avsluta resan, få poäng och en titel. Slutskärmen är ett bokslut: siffrorna,
+    hela rutten inritad på papperskartan, vilken stad du kunde bäst och sämst,
+    passet med stämplarna.
 20. **Resedagboken.** De tio bästa avslutade resorna sparas och visas på
     startskärmen, med poäng, titel, dagar, städer och träffsäkerhet. Varje rad
     visar också vilken stad du hade bäst koll på och vilken som avslöjade dig.
@@ -499,7 +501,7 @@ upptäckare_.
 - 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften
-- 29 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
+- 28 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
 - 113 händelser med 137 val och 185 möjliga utfall, spridda över åtta
   tillfällen, var och en högst en gång per resa
 - 9–15 nedvända brickor per stad, varav 1–4 döljer en händelse eller en fråga

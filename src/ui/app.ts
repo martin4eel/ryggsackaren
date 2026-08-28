@@ -76,7 +76,7 @@ import {
 import type { Stamp } from '../data/stamps';
 import { renderTravelScene } from './map';
 import { renderStation, type StationHandle } from './station';
-import { renderAtlasScreen, type KartGissning } from './atlas';
+import { renderAtlasScreen } from './atlas';
 import {
   applyEffect,
   applyImmediate,
@@ -491,8 +491,6 @@ export class App {
    */
   private eventEffects: EffectLine[] | null = null;
 
-  /** Pågående omgång av Var är jag? på kartan. Lever i gränssnittet. */
-  private kartGissning: KartGissning | null = null;
 
   /**
    * Stationsskärmen äger egna timers, en ljudmatta och en tavla som lever
@@ -639,8 +637,6 @@ export class App {
     if (!this.state) return;
     // Ett arkadmoment kan ha timers igång. Stäng av dem vid skärmbyte.
     stopAllMinigames();
-    // En påbörjad Var är jag? hör till kartan; lämnar man den är den slut.
-    if (screen !== 'varldskarta') this.kartGissning = null;
     const changed = this.state.screen !== screen;
     this.state.screen = screen;
     saveGame(this.state);
@@ -3094,13 +3090,6 @@ export class App {
         decoding: 'async',
       }) as HTMLImageElement;
       img.addEventListener('error', () => bildruta.remove());
-      // Stående foton (statyer, porträtt) ska visas hela, inte beskäras
-      // till ett band med huvudet utanför.
-      const markeraStaende = () => {
-        if (img.naturalHeight > img.naturalWidth * 1.05) bildruta.classList.add('quiz-bild-staende');
-      };
-      if (img.complete && img.naturalWidth) markeraStaende();
-      else img.addEventListener('load', markeraStaende, { once: true });
       bildruta.append(img);
       if (answered) {
         const ratt = q0.reglage
@@ -3680,41 +3669,6 @@ export class App {
       visited: s.visited,
       distance: s.distance,
       days: s.days,
-      gissning: this.kartGissning,
-      onGissaStart: () => {
-        const pool = shuffle(CITIES.filter((c) => c.id !== s.currentCityId)).slice(0, 5);
-        this.kartGissning = { cities: pool.map((c) => c.id), round: 0, ratt: 0 };
-        playSound('valj');
-        this.render();
-      },
-      onGissa: (cityId) => {
-        const g = this.kartGissning;
-        if (!g || g.outcome) return;
-        const correct = cityId === g.cities[g.round];
-        if (correct) g.ratt += 1;
-        g.outcome = { correct, guessed: cityId };
-        playSound(correct ? 'ratt' : 'fel');
-        this.render();
-      },
-      onGissaVidare: () => {
-        const g = this.kartGissning;
-        if (!g) return;
-        if (g.round + 1 < g.cities.length) {
-          g.round += 1;
-          delete g.outcome;
-          this.render();
-          return;
-        }
-        // Tre betygspoäng per rätt nål i staden man står i: den som kan sin
-        // karta får lättare till toppjobben.
-        const p = getProgress(s, this.city.id);
-        p.rating = Math.min(100, p.rating + g.ratt * 3);
-        s.kartlasare = Math.max(s.kartlasare ?? 0, g.ratt);
-        this.kartGissning = null;
-        this.commit();
-        this.notify(`Var är jag?: ${g.ratt} av ${g.cities.length} rätt. Stadsbetyget i ${this.city.name} är nu ${p.rating}.`);
-        this.render();
-      },
     });
   }
 
@@ -4715,6 +4669,16 @@ export class App {
       )
     );
     wrap.append(scores);
+
+    // Bokslutet på kartan: hela rutten på papperet, som den blev.
+    const kartblad = renderAtlasScreen({
+      city: this.city,
+      homeCityId: s.homeCityId,
+      visited: s.visited,
+      distance: s.distance,
+      days: s.days,
+    });
+    wrap.append(kartblad);
     const knowledge = this.renderCityKnowledge();
     if (knowledge) wrap.append(knowledge);
     wrap.append(this.renderStampPanel());
