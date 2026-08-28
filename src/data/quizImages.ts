@@ -1551,6 +1551,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'svampkorg', alt: 'En flätad korg full av soppar och kantareller i gräset', file: 'Edible fungi in basket 2024 G2.jpg', altFraga: 'En korg full av svamp i gräset' },
   { id: 'penicillium', alt: 'Blågröna mögelkolonier av Penicillium i en petriskål', file: 'Penicillia on Petri dish.jpg', altFraga: 'Runda blågröna fläckar i en glasskål' },
   { id: 'mycel', alt: 'Vitt mycel som trådar sig genom jord och löv', file: 'Міцелій.jpg', altFraga: 'Vita trådar i mörk jord' },
+  { id: 'gunsdotter', alt: 'Margareta Gunsdotter, riksdagsledamot', file: 'Margareta Larsson.jpg', altFraga: 'En kvinna i porträtt' },
 ];
 
 export const QUIZ_IMAGE_BY_ID: Record<string, QuizImage> = Object.fromEntries(
