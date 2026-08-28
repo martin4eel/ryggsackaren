@@ -1126,7 +1126,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'karenblixen', alt: 'En äldre kvinna med lagerkrans, svartvitt foto', file: 'Karen-Blixen-1952.jpg' },
   { id: 'ugali', alt: 'En vit fast gröt på en tallrik med grönsaker', article: 'Ugali' },
   { id: 'kenyatta', alt: 'En äldre man med skägg och mössa', article: 'Jomo Kenyatta' },
-  { id: 'kipchoge', alt: 'En löpare i tävlingskläder', article: 'Eliud Kipchoge' },
+  { id: 'kipchoge', alt: 'En löpare i blått linne, porträtt', file: 'Eliud Kipchoge (KEN) 2015.jpg' },
   { id: 'merylstreep', alt: 'En kvinna med blont hår i elegant klänning', article: 'Meryl Streep' },
   { id: 'nairobijarnvagsmuseum', alt: 'Ett gammalt ånglok på ett museum', article: 'Nairobi Railway Museum' },
   { id: 'matatu', alt: 'En färgglatt målad minibuss på en gata', file: 'A colorful matatu in Nairobi, Kenya, during rush hour.jpg' },
