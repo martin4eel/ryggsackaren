@@ -335,7 +335,7 @@ webbläsaren och överlever att sparfilen raderas.
    fotot är uppgiften. Två undantag på egna meriter: skateboardinstruktören
    håller balansen, och hockeytränaren pekar ut rätt klubbmärke – SHL och NHL
    om vartannat, de loggor som finns fritt på Commons.
-   Tågvärden får ett tredje slags pass, *peka*: ett foto av en förarhytt och
+   Lokföraren får ett tredje slags pass, *peka*: ett foto av en förarhytt och
    en fråga i taget – *Var är bromsen?* – som besvaras genom att peka på
    fotot, utan klocka och med en rund felmarginal runt varje reglage. Rätt
    eller fel sägs direkt med förklaring, och till sist visas samma foto med

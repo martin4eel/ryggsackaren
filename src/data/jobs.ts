@@ -349,13 +349,13 @@ export const JOBS: Job[] = [
   },
   {
     id: 'tagvard',
-    title: 'Tågvärd',
+    title: 'Lokförare',
     employer: 'Kontinentaltåg',
     category: 'geografi',
     huvud: 'praktiskt',
     wageClass: 2,
     shiftLength: 7,
-    ad: 'Långa sträckor, många gränser. Du måste kunna kartan utan att titta.',
+    ad: 'Långa sträckor, tung räls, en hytt. Du måste kunna tåget, banan och signalerna.',
     minigame: {
       kind: 'peka',
       title: 'Tågprovet: vad är vad i hytten?',
@@ -384,7 +384,7 @@ export const JOBS: Job[] = [
       },
     },
     scene:
-      'Vagnarna gungar genom natten. Gränskontrollen väntar om två timmar.',
+      'Hytten är tyst så när som på ATC-pipet. Nästa signal om fyra kilometer, och den är gul.',
   },
   {
     id: 'taxichauffor',
