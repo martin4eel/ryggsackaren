@@ -144,7 +144,10 @@ webbläsaren och överlever att sparfilen raderas.
    Köping har flygplats. Reykjavík har därför bara en flygplats, och från
    Köping får man ta tåget innan man kan flyga.
 
-   **Första gången du kommer till en stad ligger alla brickor nedvända.** De
+   **Första gången du kommer till en stad ligger alla brickor nedvända.**
+   Knappen *Vänd resten* vänder alla vanliga skyltar på en gång när man sett
+   de första – frågebrickan och mystikbrickorna lämnas nedvända, de är
+   överraskningar man väljer själv. De
    ligger utspridda över stadsbilden som silvermynt och vaggar långsamt; du vet
    inte vilken som är flygplatsen och vilken som är något annat förrän du vänt
    på dem, en och en. Ett mynt har två sidor: vändningen snurrar det två och
@@ -261,18 +264,11 @@ webbläsaren och överlever att sparfilen raderas.
    scenen. Närmare sjuhundra foton ligger i `public/quiz/` som WebP i
    högst 560 pixlars bredd, omkring trettio kilobyte styck.
 
-   **Bilderna reagerar på svaret**, i Monty Python-anda. Rätt svar ger en
-   liten studs och ett *Bra jobbat!*. Fel svar klistrar ett **fotoutklipp**
-   över motivets ansikte – en mun med tungan ute eller ett av två
-   läppstiftsavtryck, lottat per bild så att Mona Lisa alltid räcker ut
-   tungan – motivet säger något syrligt i en pratbubbla, det pruttar, och en
-   **tumme ner** slår in från kanten som en domares, en av tre händer (en
-   med rött nagellack). Alla
-   utklipp är riktiga fotografier från Wikimedia Commons, friklippta som i
-   Terry Gilliams animationer, aldrig ritade (`public/reaktion/`, med
-   krediter i `ATTRIBUTION.md`). Replikerna och var ansiktet sitter står per bild i
-   `src/data/quizImages.ts` (`reaktion` och `ansikte`); bilder utan egna
-   repliker får allmänna.
+   **Svaret kvitteras rakt på sak.** Rätt svar: en rad. Fel svar: *Fel.
+   Rätt svar: …* och, när frågan har en, kuriosan som förklarar saken,
+   personen eller platsen. Inga utklipp, ingen fot – det som ska fastna är
+   faktan.
+
 7. **Tidningen.** Ett vitt bredsidesark i serif: frakturhuvud, datumrad
    med resdag, datum och väder, dagens jätterubrik, en artikel i spalter med
    ett svartvitt arkivfoto av stadens sevärdhet, och notiser *I korthet*.
@@ -288,6 +284,14 @@ webbläsaren och överlever att sparfilen raderas.
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
+   - **Vart är vi på väg?** I varje stads tidning söker tv-frågesporten
+     tävlande, en gång per stad och mot en dag. Fem resmål, fem ledtrådar var
+     ur städernas broschyrer med stadens och landets namn maskade: bromsa på
+     första ledtråden för tio poäng, sedan åtta, sex, fyra, två – och gissar
+     du fel är resmålet förlorat, precis som i programmet. Arvodet är sextio
+     kronor per poäng, och två stämplar väntar: *Bromsade på tio* och
+     *Spårhund* (40 av 50). Det här är spelets På spåret-träning på riktigt:
+     ledtråd → plats, under fallande poäng.
    - **Svarsserie.** Rätt svar på raken höjer lönemultiplikatorn upp till
      ×2. Ett felsvar nollställer den.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
@@ -385,7 +389,7 @@ webbläsaren och överlever att sparfilen raderas.
    någon.
 
    På sidorna därefter sitter stämplarna tryckta i bläck, snett och lite
-   huller om buller, med resdagen i kanten. Tjugosex finns att jaga: fyra
+   huller om buller, med resdagen i kanten. Tjugoåtta finns att jaga: fyra
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet. Sex av dem är **mästarstämplar**: en per
@@ -484,7 +488,7 @@ ryggsäckare_.
 - 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften
-- 26 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
+- 28 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
 - 113 händelser med 137 val och 185 möjliga utfall, spridda över åtta
   tillfällen, var och en högst en gång per resa
 - 9–15 nedvända brickor per stad, varav 1–4 döljer en händelse eller en fråga

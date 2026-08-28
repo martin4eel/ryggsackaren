@@ -174,7 +174,10 @@ function lineCode(from: City, to: City, mode: TransportMode, slot: number): stri
   const seed = `${from.id}|${to.id}|${mode}|${slot}`;
   if (mode === 'flyg') {
     const code = operatorsFor(from.country).air.code;
-    return `${code} ${pick(seed, 100, 989)}`;
+    // Numret följer destinationen, så att två flyg på samma tavla aldrig
+    // delar nummer - det såg ut som ett fel.
+    const idx = Math.max(0, CITIES.findIndex((c) => c.id === to.id));
+    return `${code} ${100 + idx * 18 + (slot % 18)}`;
   }
   if (mode === 'farja') {
     const line = ferryLine(from, to);

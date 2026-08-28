@@ -80,7 +80,7 @@ export function renderEventCard(opts: EventCardOptions): HTMLElement {
     });
     kort.append(val);
     kort.append(
-      el('p', { class: 'event-tangent' }, 'Välj med A, B eller C, eller tryck på alternativet.')
+      el('p', { class: 'event-tangent' }, `Välj med ${event.choices?.length === 2 ? 'A eller B' : 'A, B eller C'}, eller tryck på alternativet.`)
     );
     return kort;
   }

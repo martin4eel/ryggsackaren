@@ -381,7 +381,7 @@ export function finalScore(state: GameState): number {
         stampPoints +
         rykte +
         certPoints +
-        accuracy * 6000 +
+        accuracy * 10000 +
         pace
     )
   );

@@ -46,7 +46,7 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       name: 'Första lönen',
       desc: 'Genomför ett helt arbetsskift.',
       glyph: '✱',
-      test: (s) => s.shiftsWorked >= 1,
+      test: (s) => s.shiftsWorked >= 1 && s.earned > 0,
     },
     {
       id: 'certifierad',
@@ -181,6 +181,20 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       desc: 'Sjunk till ett anseende på minus fyra. Någon minns det.',
       glyph: '☠',
       test: (s) => (s.rykte ?? 0) <= -4,
+    },
+    {
+      id: 'bromsade-pa-tio',
+      name: 'Bromsade på tio',
+      desc: 'Gissa rätt stad på första ledtråden i Vart är vi på väg?',
+      glyph: '⑩',
+      test: (s) => (s.sparetTio ?? 0) >= 1,
+    },
+    {
+      id: 'sparhund',
+      name: 'Spårhund',
+      desc: 'Ta minst 40 av 50 poäng i en omgång av Vart är vi på väg?',
+      glyph: '☊',
+      test: (s) => (s.sparetBest ?? 0) >= 40,
     },
     /**
      * Mästarstämplarna: en per huvudkategori när tre poäng nåtts, i guld.

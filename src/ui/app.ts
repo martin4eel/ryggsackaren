@@ -33,6 +33,7 @@ import {
   newStamps,
   pityBonus,
   pseudoRandom,
+  shuffle,
   rankTitle,
   souvenirPrice,
   speedBonus,
@@ -96,7 +97,7 @@ import { weatherFor, type Weather } from '../game/weather';
 import { CITY_PAPERS } from '../data/newspapers';
 import { annonserFor, type Kontaktannons } from '../data/kontaktannonser';
 import { CITY_HEADLINES } from '../data/headlines';
-import { ALLMAN_REAKTION, QUIZ_IMAGE_BY_ID, quizImageAlt, quizImageUrl } from '../data/quizImages';
+import { quizImageAlt, quizImageUrl } from '../data/quizImages';
 import { COIN_QUESTIONS } from '../data/questions/coinQuestions';
 
 interface QuizSession {
@@ -361,62 +362,6 @@ const PAPPA_BETALAR = [
  * så kommer den stora foten ner från himlen - också den ett riktigt foto,
  * friklippt, som i Gilliams animationer. Inget är ritat.
  */
-/**
- * Utklippen som klistras på bilden när man svarat fel, i Terry Gilliams
- * anda: en mun över motivets ansikte och en hand som dömer. Varianterna
- * lottas per bild så att samma motiv alltid får samma mun - och så att det
- * inte är samma tumme varje gång.
- */
-const MUNNAR = [
-  { fil: 'mun', klass: 'py-mun-tunga' },
-  { fil: 'lappar', klass: 'py-mun-lappar' },
-  { fil: 'lappar-2', klass: 'py-mun-lappar' },
-] as const;
-const TUMMAR = ['tumme-1', 'tumme-2', 'tumme-3'] as const;
-
-function reaktionsLager(bildId: string, ratt: boolean): HTMLElement {
-  const info = QUIZ_IMAGE_BY_ID[bildId];
-  const ansikte = info?.ansikte ?? { x: 50, y: 45, b: 32 };
-  const rep = info?.reaktion ?? ALLMAN_REAKTION;
-  const rad = ratt ? 'Bra jobbat!' : slumpa(rep.fel);
-  const lager = el('span', {
-    class: `py ${ratt ? 'py-ratt' : 'py-fel'}`,
-    'aria-hidden': 'true',
-  });
-  if (!ratt) {
-    const mun = MUNNAR[Math.floor(pseudoRandom(`mun|${bildId}`) * MUNNAR.length)]!;
-    const tumme = TUMMAR[Math.floor(Math.random() * TUMMAR.length)]!;
-    lager.append(
-      el('img', {
-        class: `py-mun ${mun.klass}`,
-        src: `./reaktion/${mun.fil}.webp`,
-        alt: '',
-        // Munnen sitter i nedre delen av ansiktet, lite på sned som ett
-        // urklipp som klistrats dit i hast.
-        style: `left:${ansikte.x}%;top:${ansikte.y + ansikte.b * 0.12}%;width:${ansikte.b * 0.55}%;--lut:${((ansikte.x * 7) % 11) - 5}deg`,
-      })
-    );
-    lager.append(
-      el('span', {
-        class: 'py-bubbla',
-        style: `left:${Math.min(70, Math.max(30, ansikte.x))}%;top:${Math.max(3, ansikte.y - ansikte.b * 0.95).toFixed(0)}%`,
-      }, rad)
-    );
-    // Tummen ner kommer in från sidan och slår ner, som en domares.
-    lager.append(
-      el('img', { class: 'py-tumme', src: `./reaktion/${tumme}.webp`, alt: '' })
-    );
-    return lager;
-  }
-  lager.append(
-    el('span', {
-      class: 'py-bubbla',
-      style: `left:${Math.min(70, Math.max(30, ansikte.x))}%;top:${Math.max(3, ansikte.y - ansikte.b * 0.95).toFixed(0)}%`,
-    }, rad)
-  );
-  return lager;
-}
-
 function slumpa<T>(lista: T[]): T {
   return lista[Math.floor(Math.random() * lista.length)]!;
 }
@@ -432,6 +377,28 @@ const REGION_LABELS: Record<string, string> = {
   asien: 'Asien',
   oceanien: 'Oceanien',
 };
+
+/**
+ * Ledtrådarna får inte avslöja staden. Stadens namn, landets namn och de
+ * vanligaste avledningarna byts mot "staden" och "landet"; en broschyrrad
+ * som "Stockholms tunnelbana" blir "stadens tunnelbana".
+ */
+function maskeraStad(text: string, city: City): string {
+  const fly = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const namn = [city.name, city.name.replace(/\s/g, ''), ...city.name.split(/\s+/).filter((d) => d.length > 3)];
+  let ut = text;
+  for (const n of namn) {
+    ut = ut.replace(new RegExp(`${fly(n)}s\\b`, 'g'), 'stadens');
+    ut = ut.replace(new RegExp(`\\b${fly(n)}\\b`, 'g'), 'staden');
+  }
+  ut = ut.replace(new RegExp(`${fly(city.country)}s\\b`, 'g'), 'landets');
+  ut = ut.replace(new RegExp(`\\b${fly(city.country)}\\b`, 'g'), 'landet');
+  // Nationalitetsord för de vanligaste länderna.
+  const adj: Record<string, string> = { Sverige: 'svensk', Frankrike: 'fransk', Italien: 'italiensk', Spanien: 'spansk', Japan: 'japansk', USA: 'amerikansk', Storbritannien: 'brittisk', Tyskland: 'tysk', Egypten: 'egyptisk', Turkiet: 'turkisk', Ryssland: 'rysk', Kina: 'kinesisk', Indien: 'indisk', Thailand: 'thailändsk', Australien: 'australisk', Brasilien: 'brasiliansk', Mexiko: 'mexikansk', Peru: 'peruansk', Danmark: 'dansk', Norge: 'norsk', Finland: 'finsk', Nederländerna: 'holländsk', Grekland: 'grekisk', Portugal: 'portugisisk', Irland: 'irländsk', Island: 'isländsk', Marocko: 'marockansk', Kenya: 'kenyansk', Sydafrika: 'sydafrikansk', Nepal: 'nepalesisk', Vietnam: 'vietnamesisk', Argentina: 'argentinsk', Kuba: 'kubansk', Senegal: 'senegalesisk', Etiopien: 'etiopisk', Singapore: 'singaporiansk', Sydkorea: 'koreansk', Jordanien: 'jordansk', Tjeckien: 'tjeckisk', 'Nya Zeeland': 'nyzeeländsk' };
+  const a = adj[city.country];
+  if (a) ut = ut.replace(new RegExp(`\\b${a}(a|t|e|)\\b`, 'gi'), 'inhemsk$1');
+  return ut;
+}
 
 export class App {
   private root: HTMLElement;
@@ -903,6 +870,9 @@ export class App {
         break;
       case 'broschyr':
         main.append(this.renderBrochure());
+        break;
+      case 'sparet':
+        main.append(this.renderSparet());
         break;
       case 'turistbyra':
         main.append(
@@ -2014,6 +1984,31 @@ export class App {
     hero.append(mynt);
     // Inslaget spelas en gång; nästa omritning ska inte spela det igen.
     this.nyBricka = null;
+
+    /**
+     * Vänd resten på en gång. Upptäckten sitter i de första brickorna; att
+     * trycka tretton gånger med en och en halv sekunds väntan var död tid.
+     * Frågebrickan och mystikbrickorna lämnas nedvända - de är överraskningar
+     * man ska välja själv.
+     */
+    const vanliga = nedvanda.filter((pl) => pl.id !== 'fraga' && !pl.id.startsWith('mystik-'));
+    const vandAlla =
+      vanliga.length >= 2
+        ? button(
+            `Vänd resten (${vanliga.length})`,
+            () => {
+              const nu = this.state!;
+              const prog = getProgress(nu, nu.currentCityId);
+              prog.revealed ??= [];
+              for (const pl of vanliga) if (!prog.revealed.includes(pl.id)) prog.revealed.push(pl.id);
+              playSound('mynt');
+              this.commit();
+              this.scrollToTopNext = false;
+              this.render();
+            },
+            { class: 'btn btn-ghost btn-small vand-alla', 'data-sound': 'av' }
+          )
+        : '';
     // Ikonraden ligger under fotot, inte ovanpå det: fotot är stadsbilden och
     // ska synas, och en uppvänd ikon ska vara lätt att hitta igen.
     wrap.append(
@@ -2021,6 +2016,7 @@ export class App {
       signs,
       el('div', { class: 'hero-foot' },
         hint,
+        vandAlla,
         el(
           'a',
           {
@@ -2315,6 +2311,183 @@ export class App {
     );
   }
 
+  // ---------------------------------------------- vart är vi på väg?
+
+  private startSparet(): void {
+    const s0 = this.state!;
+    const city = this.city;
+    const p = getProgress(s0, city.id);
+    p.spent ??= [];
+    if (p.spent.includes('sparet')) return;
+    p.spent.push('sparet');
+    playSound('sida');
+    this.spendDays(1, city);
+    this.commit();
+    if (this.checkBroke()) return;
+    const s = this.state!;
+    // Fem städer med minst fem broschyrstycken, aldrig den man står i.
+    const kandidater = CITIES.filter((c) => c.id !== s.currentCityId && (CITY_FACTS[c.id]?.length ?? 0) >= 5);
+    const valda = shuffle(kandidater).slice(0, 5);
+    s.sparet = {
+      cities: valda.map((c) => c.id),
+      clues: valda.map((c) => shuffle(CITY_FACTS[c.id]!).slice(0, 5).map((t) => maskeraStad(t, c))),
+      round: 0,
+      shown: 1,
+      scores: [],
+    };
+    this.commit();
+    this.go('sparet');
+  }
+
+  private sparetNastaLedtrad(): void {
+    const sp = this.state?.sparet;
+    if (!sp || sp.outcome) return;
+    if (sp.shown < 5) {
+      sp.shown += 1;
+      playSound('valj');
+    }
+    this.commit();
+    this.render();
+  }
+
+  private sparetGissa(cityId: string): void {
+    const s = this.state!;
+    const sp = s.sparet;
+    if (!sp || sp.outcome) return;
+    const ratt = cityId === sp.cities[sp.round];
+    const points = ratt ? [10, 8, 6, 4, 2][sp.shown - 1]! : 0;
+    sp.outcome = { correct: ratt, guessed: cityId, points };
+    sp.scores.push(points);
+    if (ratt && sp.shown === 1) s.sparetTio = (s.sparetTio ?? 0) + 1;
+    playSound(ratt ? (points >= 8 ? 'fanfar' : 'ratt') : 'fel');
+    this.commit();
+    this.render();
+  }
+
+  private sparetVidare(): void {
+    const s = this.state!;
+    const sp = s.sparet;
+    if (!sp) return;
+    if (sp.round + 1 < sp.cities.length) {
+      sp.round += 1;
+      sp.shown = 1;
+      delete sp.outcome;
+      this.commit();
+      this.render();
+      return;
+    }
+    // Omgången är slut: arvode efter poäng.
+    const total = sp.scores.reduce((a, b) => a + b, 0);
+    const arvode = total * 60;
+    s.money += arvode;
+    s.earned += arvode;
+    s.sparetBest = Math.max(s.sparetBest ?? 0, total);
+    delete s.sparet;
+    this.commit();
+    this.notify(`Vart är vi på väg?: ${total} av 50 poäng. Arvodet blev ${this.money(arvode)}.`);
+    this.go('stad');
+  }
+
+  private renderSparet(): HTMLElement {
+    const s = this.state!;
+    const sp = s.sparet;
+    const wrap = el('div', { class: 'stack sparet' });
+    if (!sp) {
+      wrap.append(el('section', { class: 'panel' }, el('p', {}, 'Ingen inspelning pågår.')));
+      return wrap;
+    }
+    const total = sp.scores.reduce((a, b) => a + b, 0);
+    const mal = CITY_BY_ID[sp.cities[sp.round]!]!;
+    const head = el('section', { class: 'panel sparet-head' });
+    head.append(
+      el('div', { class: 'sparet-topp' },
+        el('div', {},
+          el('p', { class: 'kicker' }, 'Tv-frågesport · inspelning'),
+          el('h1', { class: 'title' }, 'Vart är vi på väg?')
+        ),
+        el('div', { class: 'sparet-poang' },
+          el('span', { class: 'sparet-poang-tal' }, String(total)),
+          el('span', { class: 'sparet-poang-etikett' }, 'poäng')
+        )
+      ),
+      el('div', { class: 'sparet-rundor' },
+        ...sp.cities.map((_, i) =>
+          el('span', {
+            class: `sparet-runda ${i < sp.round ? 'sparet-runda-klar' : i === sp.round ? 'sparet-runda-nu' : ''}`,
+          }, i < sp.round ? String(sp.scores[i]) : String(i + 1))
+        )
+      )
+    );
+    wrap.append(head);
+
+    const panel = el('section', { class: 'panel' });
+    panel.append(
+      el('p', { class: 'muted' }, `Resmål ${sp.round + 1} av ${sp.cities.length}. Ledtråd ${sp.shown} av 5 – värd ${[10, 8, 6, 4, 2][sp.shown - 1]} poäng.`)
+    );
+    const lista = el('ol', { class: 'sparet-ledtradar' });
+    for (let i = 0; i < sp.shown; i++) {
+      lista.append(
+        el('li', { class: i === sp.shown - 1 && !sp.outcome ? 'sparet-ledtrad-ny' : '' },
+          el('span', { class: 'sparet-varde' }, String([10, 8, 6, 4, 2][i])),
+          el('span', {}, sp.clues[sp.round]![i]!)
+        )
+      );
+    }
+    panel.append(lista);
+
+    if (sp.outcome) {
+      const o = sp.outcome;
+      const gissat = o.guessed ? CITY_BY_ID[o.guessed]?.name : '';
+      panel.append(
+        el('div', { class: `feedback ${o.correct ? 'feedback-right' : 'feedback-wrong'}` },
+          el('strong', {}, o.correct ? `Rätt! ${o.points} poäng.` : 'Fel.'),
+          el('span', {}, o.correct ? ` Det var ${mal.name}, ${mal.country}.` : ` Det var inte ${gissat}. Vi var på väg till ${mal.name}, ${mal.country}.`)
+        ),
+        el('figure', { class: 'sparet-facit' },
+          photoImg(mal, 'sparet-facit-foto'),
+          el('figcaption', {}, `${mal.name} – ${mal.blurb}`)
+        ),
+        button(sp.round + 1 < sp.cities.length ? 'Nästa resmål' : 'Avsluta inspelningen', () => this.sparetVidare(), { class: 'btn btn-primary btn-big' })
+      );
+      wrap.append(panel);
+      return wrap;
+    }
+
+    // Bromsa: sök och välj stad. Eller vänta på nästa ledtråd.
+    const search = el('input', {
+      class: 'field search',
+      type: 'search',
+      placeholder: 'Bromsa – skriv staden',
+      'aria-label': 'Gissa stad',
+      autocomplete: 'off',
+    }) as HTMLInputElement;
+    const traffar = el('div', { class: 'sparet-traffar' });
+    const mala = () => {
+      clear(traffar);
+      const needle = searchKey(search.value.trim());
+      if (needle.length < 2) return;
+      const m = CITIES.filter((c) => searchKey(c.name).includes(needle) || searchKey(c.country).includes(needle)).slice(0, 6);
+      for (const c of m) {
+        traffar.append(
+          button(`${c.name}, ${c.country}`, () => this.sparetGissa(c.id), { class: 'btn btn-ghost sparet-traff' })
+        );
+      }
+    };
+    search.addEventListener('input', mala);
+    panel.append(
+      el('div', { class: 'row' }, search),
+      traffar,
+      el('div', { class: 'row sparet-knappar' },
+        sp.shown < 5
+          ? button(`Nästa ledtråd (${[10, 8, 6, 4, 2][sp.shown]} p)`, () => this.sparetNastaLedtrad(), { class: 'btn btn-ghost' })
+          : el('p', { class: 'muted' }, 'Sista ledtråden. Bromsa, eller gissa vilt.')
+      )
+    );
+    wrap.append(panel);
+    window.setTimeout(() => search.focus(), 50);
+    return wrap;
+  }
+
   private startCityQuiz(): void {
     const s = this.state!;
     const questions = cityQuizQuestions(s.currentCityId, s.difficulty, 5);
@@ -2510,6 +2683,36 @@ export class App {
       list.append(card);
     }
     blad.append(list);
+
+    // ---------------------------------------------- vart är vi på väg?
+    /**
+     * Tv-frågesporten söker tävlande. En gång per stad, kostar en dag, och
+     * ger pengar efter poäng. Det är det här som tränar det På spåret kräver:
+     * en stad ur ledtrådar, med fallande poäng ju längre man väntar.
+     */
+    const sparetKlar = (p.spent ?? []).includes('sparet');
+    blad.append(
+      el('div', { class: 'paper-avdelning' },
+        el('h2', { class: 'paper-avdelning-namn' }, 'Tävlande sökes'),
+        el('span', { class: 'paper-avdelning-meta' }, sparetKlar ? 'Inspelat i den här staden' : 'Inspelning i dag – kostar en dag')
+      ),
+      el('article', { class: `kontakt sparet-annons ${sparetKlar ? 'kontakt-klar' : ''}` },
+        el('p', { class: 'annons-etikett' }, 'Tv-frågesport'),
+        el('h3', { class: 'kontakt-rubrik' }, 'Vart är vi på väg?'),
+        el('p', { class: 'kontakt-text' },
+          'Fem städer, fem ledtrådar var. Bromsa när du vet: tio poäng på första ledtråden, åtta på andra, sedan sex, fyra, två. Gissar du fel är rundan förlorad. Arvode efter poäng, och lokal-tv har lovat att inte klippa bort de pinsamma delarna.'
+        ),
+        s.sparet
+          ? el('div', { class: 'kontakt-knappar' },
+              button('Fortsätt inspelningen', () => this.go('sparet'), { class: 'btn btn-primary' })
+            )
+          : sparetKlar
+            ? el('p', { class: 'muted' }, `Du ställde upp här${s.sparetBest !== undefined ? ` – bästa omgång ${s.sparetBest} av 50 poäng` : ''}.`)
+            : el('div', { class: 'kontakt-knappar' },
+                button('Ställ upp', () => this.startSparet(), { class: 'btn btn-primary' })
+              )
+      )
+    );
 
     // ------------------------------------------------------ kontaktannonser
     /**
@@ -2810,7 +3013,6 @@ export class App {
           ? Math.abs((answered.reglage ?? Number.NaN) - q0.reglage.svar) <= q0.reglage.tolerans
           : answered.picked === current.correctIndex;
         bildruta.classList.add(ratt ? 'quiz-bild-ratt' : 'quiz-bild-fel');
-        bildruta.append(reaktionsLager(q0.bild, ratt));
       }
       panel.append(bildruta);
     }
@@ -2891,11 +3093,7 @@ export class App {
                 loading: 'eager',
                 decoding: 'async',
               }),
-              answered ? el('span', { class: 'option-facit' }, text) : '',
-              // Rätt bild jublar; en felvald bild grimaserar och får foten.
-              answered && (i === current.correctIndex || i === answered.picked)
-                ? reaktionsLager(bildId, i === current.correctIndex)
-                : ''
+              answered ? el('span', { class: 'option-facit' }, text) : ''
             )
           : el('span', { class: 'option-body' },
               el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
@@ -2938,7 +3136,7 @@ export class App {
         ? q.streak >= 4
           ? `Rätt igen! ${q.streak} i rad.`
           : 'Rätt svar!'
-        : 'Fel svar.';
+        : 'Fel.';
       feedback.append(
         el('strong', {}, headline),
         el(
@@ -2949,8 +3147,8 @@ export class App {
               ? ` Dagen är avklarad och du tjänade ${this.money(answered.payout)}.`
               : ' Ett steg närmare ett bra stadsbetyg.'
             : isJob
-              ? ` Rätt var: ${facit}. Dagen gav ingen lön.`
-              : ` Rätt var: ${facit}.`
+              ? ` Rätt svar: ${facit}. Dagen gav ingen lön.`
+              : ` Rätt svar: ${facit}.`
         )
       );
       // Bonusarna redovisas var för sig, annars ser lönen bara ut att hoppa.
@@ -2970,7 +3168,9 @@ export class App {
       const next = button(
         last
           ? isJob
-            ? `Avsluta dagen och gå till ${q.job?.minigame?.title.toLowerCase() ?? 'sista uppgiften'}`
+            ? q.job?.minigame
+              ? `Avsluta dagen – vidare till ${q.job.minigame.title}`
+              : 'Avsluta dagen och kvittera lönen'
             : 'Se resultatet'
           : isJob
             ? 'Nästa arbetsdag'
@@ -3029,19 +3229,38 @@ export class App {
    */
   private renderShiftFinale(q: QuizSession, job: Job): HTMLElement {
     const wrap = el('div', { class: 'stack' });
-    const game = job.minigame!;
+    const game = job.minigame;
 
     const head = el('section', { class: 'panel worksite' });
     head.append(
       el('div', { class: 'worksite-head' },
         el('div', {},
           el('p', { class: 'kicker' }, employerFor(this.city, job)),
-          el('h1', { class: 'worksite-title' }, game.title)
+          el('h1', { class: 'worksite-title' }, game?.title ?? 'Skiftet är slut')
         ),
-        el('span', { class: 'tag tag-mg' }, 'Sista passet')
+        el('span', { class: 'tag tag-mg' }, game ? 'Sista passet' : 'Lönedags')
       )
     );
     wrap.append(head);
+
+    if (!game) {
+      // Inget arkadmoment: bara kvittot.
+      const total = q.questions.length;
+      const panel = el('section', { class: 'panel' });
+      panel.append(
+        el('h2', {}, q.correct === total ? 'Felfritt skift!' : q.correct >= total / 2 ? 'Skiftet är avklarat.' : 'Det där var en tung vecka.'),
+        el('p', { class: 'lede' }, `${q.correct} av ${total} arbetsdagar gav lön.`),
+        el('div', { class: 'stat-grid' },
+          stat('Frågor rätt', `${q.correct}/${total}`),
+          stat('Total lön', this.money(q.earnings))
+        ),
+        button('Kvittera ut lönen', () => this.finishQuiz(), {
+          class: 'btn btn-primary btn-big',
+        })
+      );
+      wrap.append(panel);
+      return wrap;
+    }
 
     if (q.phase === 'brief') {
       const panel = el('section', { class: 'panel' });
@@ -3152,14 +3371,6 @@ export class App {
 
     if (right && q.streak >= 3) playCombo(q.streak);
     else playSound(right ? 'ratt' : 'fel');
-    // Bilden reagerar: jubel, eller prutt och den stora foten.
-    if (current.question.bild || current.images) {
-      if (right) window.setTimeout(() => playSound('jubel'), 220);
-      else {
-        window.setTimeout(() => playSound('prutt'), 150);
-        window.setTimeout(() => playSound('fotdunk'), 620);
-      }
-    }
     q.dayResults[q.index] = right;
     q.answered = {
       picked,
@@ -3182,8 +3393,10 @@ export class App {
       return;
     }
     // Arbetsdagarna är slut. Jobb med arkadmoment avslutas med det.
-    if (q.kind === 'jobb' && q.job?.minigame) {
-      q.phase = 'brief';
+    if (q.kind === 'jobb' && q.job) {
+      // Med arkadmoment: genomgången först. Utan: rakt till kvittot, så att
+      // ett klass 1-skift också får sin lönerad och inte bara en notis.
+      q.phase = q.job.minigame ? 'brief' : 'klart';
       this.render();
       return;
     }
@@ -3405,6 +3618,9 @@ export class App {
       renderTravelScene({
         from: scene.from,
         to: scene.to,
+        // Kortare film för korta sträckor: Västerås–Köping ska inte ta lika
+        // lång tid som Stockholm–Sydney.
+        duration: Math.max(2200, Math.min(5600, 1800 + scene.km * 0.45)),
         // En människa står upprätt oavsett kurs; hon speglas bara västerut.
         rotate: false,
         // Resenären själv, inte fordonet: en figur som går över kartan.
@@ -3467,6 +3683,8 @@ export class App {
     // över en dag ska inte hitta samma annonser igen på andra sidan.
     s.currentCityId = target.id;
     s.visited.push(target.id);
+    // Snabbguiden hör till första staden. Efter första resan är man med.
+    s.seenIntro = true;
     // Första dagen i staden sparas för raden om återbesök.
     const pt = getProgress(s, target.id);
     pt.firstDay ??= s.days;
@@ -3547,10 +3765,10 @@ export class App {
           'p',
           { class: 'muted' },
           cheap
-            ? 'Tillverkas här – lägsta priset du kommer att se.'
+            ? `Tillverkas i den här delen av världen. Eftertraktad i ${souvenir.hotIn.map((r) => REGION_LABELS[r] ?? r).join(' och ')} – där betalar de bäst.`
             : hot
               ? 'Eftertraktad här – dyr att köpa, men lönsam att sälja.'
-              : 'Normalt pris i den här delen av världen.'
+              : `Normalt pris här. Billigast i ${souvenir.cheapIn.map((r) => REGION_LABELS[r] ?? r).join(' och ')}, dyrast i ${souvenir.hotIn.map((r) => REGION_LABELS[r] ?? r).join(' och ')}.`
         ),
         el(
           'p',
@@ -3702,7 +3920,10 @@ export class App {
       erfList.append(
         el('div', { class: `cert ${n === 0 ? 'cert-tom' : ''}` },
           el('span', { class: 'cert-name' }, HUVUD_LABELS[h]),
-          el('span', { class: 'cert-count' }, n >= 3 ? `${n} p · klass 3` : n >= 1 ? `${n} p · klass 2` : '0 p')
+          el('span', { class: 'cert-count' },
+            `${'●'.repeat(Math.min(3, n))}${'○'.repeat(Math.max(0, 3 - n))} ` +
+              (n >= 3 ? 'klass 3 öppen' : n >= 1 ? 'klass 2 öppen' : 'klass 1')
+          )
         )
       );
     }
@@ -3954,7 +4175,7 @@ export class App {
       rad('Städer', `${new Set(s.visited).size} av ${CITIES.length}`),
       rad('Stämplar', `${s.stamps.length} av ${STAMPS.length}`),
       rad('Anseende', ryktesord(s.rykte)),
-      rad('Flugna km', s.distance.toLocaleString('sv-SE'))
+      rad('Resta km', s.distance.toLocaleString('sv-SE'))
     );
     page.append(grid);
 
@@ -4338,7 +4559,7 @@ export class App {
         stat('Städer', `${new Set(s.visited).size}`),
         stat('Dagar', `${s.days}`),
         stat('Träffsäkerhet', `${accuracy}%`),
-        stat('Flugna km', s.distance.toLocaleString('sv-SE')),
+        stat('Resta km', s.distance.toLocaleString('sv-SE')),
         stat(
           'Certifikat',
           `${Object.values(s.certificates).reduce((a, b) => a + (b ?? 0), 0)}`

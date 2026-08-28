@@ -18,6 +18,8 @@ export type Screen =
   | 'souvenir'
   | 'ryggsack'
   | 'telefon'
+  /** Vart är vi på väg? - stadsgissning på ledtrådar */
+  | 'sparet'
   | 'slut';
 
 /**
@@ -36,8 +38,28 @@ const KANDA_SKARMAR = new Set<Screen>([
   'souvenir',
   'ryggsack',
   'telefon',
+  'sparet',
   'slut',
 ]);
+
+/**
+ * En omgång Vart är vi på väg?: fem städer, fem ledtrådar var, poäng
+ * 10-8-6-4-2 efter hur tidigt man bromsar. Ett felaktigt svar ger noll för
+ * den staden - precis som i programmet.
+ */
+export interface SparetSession {
+  /** Städerna i omgången, i ordning */
+  cities: string[];
+  /** Ledtrådarna per stad, redan maskade och i visningsordning */
+  clues: string[][];
+  round: number;
+  /** Hur många ledtrådar som visats i den här rundan (1-5) */
+  shown: number;
+  /** Poäng per avklarad runda */
+  scores: number[];
+  /** Senaste rundans utfall, tills man går vidare */
+  outcome?: { correct: boolean; guessed?: string; points: number };
+}
 
 export interface BackpackItem {
   souvenirId: string;
@@ -101,6 +123,11 @@ export interface GameState {
   certificates: Partial<Record<Category, number>>;
   /** Poäng per huvudkategori: ett per genomfört skift. Öppnar löneklass 2 och 3. */
   points: Partial<Record<Huvudkategori, number>>;
+  /** Pågående omgång av Vart är vi på väg?, om någon. */
+  sparet?: SparetSession;
+  /** Bästa resultat i Vart är vi på väg? (max 50), och antal bromsningar på tio. */
+  sparetBest?: number;
+  sparetTio?: number;
   /** Antal rätta och felaktiga svar totalt */
   correct: number;
   wrong: number;
