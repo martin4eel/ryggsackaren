@@ -2662,7 +2662,7 @@ export const JOBS: Job[] = [
     employer: 'Utrikesdepartementet',
     category: 'samhalle',
     huvud: 'vetenskap',
-    wageClass: 3,
+    wageClass: 2,
     shiftLength: 7,
     ad: 'Vad gör egentligen en diplomat? Kom och ta reda på det. Vi söker en handläggare till ambassaden som kan tala, tiga och lyssna, i den ordningen.',
     minigame: {
@@ -2709,7 +2709,7 @@ export const JOBS: Job[] = [
     employer: 'Statsrådsberedningen',
     category: 'samhalle',
     huvud: 'vetenskap',
-    wageClass: 2,
+    wageClass: 3,
     shiftLength: 7,
     ad: 'Vad händer bakom kulisserna i politiken? Vi söker en rådgivare som kan läsa en opinionsmätning, skriva ett tal på en natt och aldrig synas i bild.',
     minigame: {
