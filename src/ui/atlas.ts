@@ -217,14 +217,16 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
   wrap.append(blad);
 
   // På en smal skärm är kartan bredare än rutan: rulla fram till nålen.
-  requestAnimationFrame(() => {
-    const svg = rullyta.querySelector('svg');
-    if (!svg) return;
-    const bredd = svg.getBoundingClientRect().width;
+  // Bredden tas ur rullytan, inte ur svg:ns bounding box: utvikningen
+  // animeras med scaleX, och mitt i den är boxen bara en tredjedel så bred.
+  // Det var därför slutskärmens karta blev stående på Amerika.
+  const rullaTillNalen = () => {
     if (rullyta.scrollWidth <= rullyta.clientWidth + 4) return;
     const nu = project(mal);
-    rullyta.scrollLeft = Math.max(0, (nu.x / MAP_WIDTH) * bredd - rullyta.clientWidth / 2);
-  });
+    rullyta.scrollLeft = Math.max(0, (nu.x / MAP_WIDTH) * rullyta.scrollWidth - rullyta.clientWidth / 2);
+  };
+  requestAnimationFrame(rullaTillNalen);
+  window.setTimeout(rullaTillNalen, 800);
 
   return wrap;
 }

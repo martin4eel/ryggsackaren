@@ -1457,7 +1457,7 @@ function startPictureChoice(
     val.forEach((id, i) => {
       // pointerdown, inte click: på en telefon kommer klicket först när
       // fingret lyfts, och det hann bli "för sent" fast man tryckt i tid.
-      const b = snabbKnapp('', () => pick(id, b), { class: 'option option-bild mg-bildval-knapp', 'data-sound': 'av' });
+      const b = snabbKnapp('', () => pick(id, b), { class: 'option option-bild mg-bildval-knapp', 'data-sound': 'av', 'data-bild': id });
       b.append(
         el('span', { class: 'option-body option-body-bild' },
           el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
@@ -1480,8 +1480,9 @@ function startPictureChoice(
     const ok = id === kund.svar;
     // Visa namnen nu, och markera rätt och fel.
     for (const b of Array.from(grid.children) as HTMLElement[]) {
-      const src = b.querySelector('img')?.getAttribute('src') ?? '';
-      const bid = katalog.find((k) => src.endsWith(`/${k.bild}.jpg`))?.bild ?? '';
+      // Bild-id:t sitter på knappen; att gissa det ur bildens sökväg gick
+      // sönder när fotona blev webp och facit slutade visas.
+      const bid = b.dataset.bild ?? '';
       const facit = b.querySelector('.option-facit');
       if (facit) facit.textContent = namn.get(bid) ?? '';
       if (bid === kund.svar) b.classList.add('option-right');

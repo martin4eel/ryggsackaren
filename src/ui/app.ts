@@ -505,6 +505,8 @@ export class App {
   private stampToast: Stamp | null = null;
   /** Rapporten efter ett avklarat skift, tills spelaren stänger den */
   private skiftRapport: { titel: string; rubrik: string; rader: string[] } | null = null;
+  /** Körs när rapporten stängs: händelsen som väntade på skiftets slut */
+  private efterRapport: (() => void) | null = null;
   /** Stämpel som väntar på att skiftet ska ta slut innan den visas */
   private pendingStamp: Stamp | null = null;
   private stampTimer: number | null = null;
@@ -1005,7 +1007,13 @@ export class App {
             el('p', { class: 'kicker' }, r.rubrik),
             el('h2', { class: 'rapport-titel' }, r.titel),
             el('ul', { class: 'rapport-lista' }, ...r.rader.map((t) => el('li', {}, t))),
-            button('Stäng rapporten', () => { this.skiftRapport = null; this.render(); }, { class: 'btn btn-primary btn-big' })
+            button('Stäng rapporten', () => {
+              this.skiftRapport = null;
+              const sedan = this.efterRapport;
+              this.efterRapport = null;
+              sedan?.();
+              this.render();
+            }, { class: 'btn btn-primary btn-big' })
           )
         )
       );
@@ -2504,9 +2512,15 @@ export class App {
           ? 'Provet är fem frågor om staden, minst tre av dem om sådant som står här. Betyget avgör vilka jobb du får söka. Det kostar en dag.'
           : `Ditt betyg i ${city.name} är ${p.rating} av 100. Ett nytt prov kostar en dag och kan bara höja det.`
       ),
+      // Efter första provet är det "Gör om" som är undantaget och "Fortsätt"
+      // som är vägen framåt; innan dess tvärtom.
       el('div', { class: 'row' },
-        button('Gör provet', () => this.startCityQuiz(), { class: 'btn btn-primary' }),
-        button('Tillbaka', () => this.go('stad'), { class: 'btn btn-ghost' })
+        p.visits === 0
+          ? button('Gör provet', () => this.startCityQuiz(), { class: 'btn btn-primary' })
+          : button('Fortsätt', () => this.go('stad'), { class: 'btn btn-primary' }),
+        p.visits === 0
+          ? button('Tillbaka', () => this.go('stad'), { class: 'btn btn-ghost' })
+          : button('Gör om provet', () => this.startCityQuiz(), { class: 'btn btn-ghost' })
       )
     );
     wrap.append(panel);
@@ -3804,10 +3818,13 @@ export class App {
     /**
      * Skiftet är över. Något kan ha hänt på jobbet; annars kan något ha hänt
      * på vandrarhemmet under de nätter skiftet varade. Bara ett av dem, så att
-     * ett skift aldrig slutar med två kort på rad.
+     * ett skift aldrig slutar med två kort på rad - och inget av dem förrän
+     * spelaren stängt rapporten, annars lägger sig kortet över den.
      */
-    this.fireEvent('arbete');
-    this.fireEvent('boende');
+    this.efterRapport = () => {
+      this.fireEvent('arbete');
+      this.fireEvent('boende');
+    };
     this.go('stad');
   }
 
