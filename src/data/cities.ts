@@ -24,6 +24,7 @@ export const CITIES: City[] = [
       'Sveriges huvudstad, byggd på fjorton öar där Mälaren möter Östersjön. Gamla stans gränder är från medeltiden och skärgården börjar direkt utanför kajen.',
     landmark: 'Vasamuseet',
     employers: {
+      hockeytranare: 'Hovet Ishall',
       mykolog: 'Naturhistoriska riksmuseet',
       filmproducent: 'SF Studios',
       musikproducent: 'Cheiron-studion',
@@ -34,11 +35,10 @@ export const CITIES: City[] = [
       sjukvardsbitrade: 'Södersjukhuset',
       borsmaklare: 'Stureplan Kapital',
       pantvard: 'Pant Skanstull',
-      golfinstruktor: 'Djursholms Golfklubb',
       sommelier: 'Restaurang Gamla Stan',
       cykeluthyrare: 'Cykel Djurgården',
     },
-    jobs: ['hotellstadare', 'tunnelbanevard', 'skargardsguide', 'sjukvardsbitrade', 'borsmaklare', 'pantvard', 'golfinstruktor', 'sommelier', 'cykeluthyrare', 'diplomat', 'musikproducent', 'filmproducent', 'mykolog'],
+    jobs: ['hotellstadare', 'tunnelbanevard', 'skargardsguide', 'sjukvardsbitrade', 'borsmaklare', 'pantvard', 'hockeytranare', 'sommelier', 'cykeluthyrare', 'diplomat', 'musikproducent', 'filmproducent', 'mykolog'],
     souvenirs: ['dalahast', 'sillburk', 'vikingahjalm'],
   },
   {
