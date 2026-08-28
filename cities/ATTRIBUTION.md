@@ -52,3 +52,50 @@ under vilken licens den publicerats.
 - **melbourne.jpg** – [Flinders_Station_and_trams.jpg](https://commons.wikimedia.org/wiki/File:Flinders_Station_and_trams.jpg) av Created by Philip Mallis in 2021; cropped by HappyWaldo, CC BY-SA 3.0.
 - **vasteras.jpg** – [Anundshög,_Västerås1004.jpg](https://commons.wikimedia.org/wiki/File:Anundsh%C3%B6g,_V%C3%A4ster%C3%A5s1004.jpg) av Christer Johansson, CC BY-SA 2.5.
 - **koping.jpg** – [Köping 2013-08-23 image01.jpg](https://commons.wikimedia.org/wiki/File:K%C3%B6ping_2013-08-23_image01.jpg) av Håkan Skogsjö, CC BY-SA 4.0.
+- **stockholm-stad.jpg** – [Stockholm aerial 6.jpg](https://commons.wikimedia.org/wiki/File:Stockholm_aerial_6.jpg) av kallerna, CC BY-SA 4.0.
+- **malmo-stad.jpg** – [Malmö from above (17164888637).jpg](https://commons.wikimedia.org/wiki/File:Malm%C3%B6_from_above_(17164888637).jpg) av Maria Eklind, CC BY-SA 2.0.
+- **goteborg-stad.jpg** – [Gothenburg skyline (3883926931).jpg](https://commons.wikimedia.org/wiki/File:Gothenburg_skyline_(3883926931).jpg) av allen watkin from London, UK, CC BY-SA 2.0.
+- **vasteras-stad.jpg** – [Västeras.jpg](https://commons.wikimedia.org/wiki/File:V%C3%A4steras.jpg) av Jens Bludau, CC BY-SA 3.0.
+- **koping-stad.jpg** – [Köping 2013-08-24 image02.jpg](https://commons.wikimedia.org/wiki/File:K%C3%B6ping_2013-08-24_image02.jpg) av Håkan Skogsjö, CC BY-SA 4.0.
+- **reykjavik-stad.jpg** – [Reykjavik, Iceland aerial cityscape (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Reykjavik,_Iceland_aerial_cityscape_(Unsplash).jpg) av Andrew Smales bn2b, CC0.
+- **london-stad.jpg** – [River Thames viewed from the Tower Bridge in London.jpg](https://commons.wikimedia.org/wiki/File:River_Thames_viewed_from_the_Tower_Bridge_in_London.jpg) av APK, CC BY 4.0.
+- **paris-stad.jpg** – [Paris aerial view.jpg](https://commons.wikimedia.org/wiki/File:Paris_aerial_view.jpg) av pxhere, CC0.
+- **amsterdam-stad.jpg** – [Amsterdam Skyline View.jpg](https://commons.wikimedia.org/wiki/File:Amsterdam_Skyline_View.jpg) av pxhere photo, CC0.
+- **rom-stad.jpg** – [Rome Skyline (8012016319).jpg](https://commons.wikimedia.org/wiki/File:Rome_Skyline_(8012016319).jpg) av Bert Kaufmann from Roermond, Netherlands, CC BY-SA 2.0.
+- **istanbul-stad.jpg** – [View of Istanbul from Galata Tower.jpg](https://commons.wikimedia.org/wiki/File:View_of_Istanbul_from_Galata_Tower.jpg) av RndmCrs, CC0.
+- **moskva-stad.jpg** – [View to Moscow river from Bolshoy Moskvoretsky Bridge.jpg](https://commons.wikimedia.org/wiki/File:View_to_Moscow_river_from_Bolshoy_Moskvoretsky_Bridge.jpg) av This photo was taken by Anton Zelenov . Please credit this with : Photo : Anton Zelenov in the immediate vicinity of the image. If you use one of my photos, please email me (account needed) or leave me a short message on my discussion page . It would be greatly appreciated. Do not copy this image illegally by ignoring the terms of the license below, as it is not in the public domain. If you would like special permission to use, license, or purchase the image please contact me to negotiate terms., CC BY 3.0.
+- **kairo-stad.jpg** – [Cairo skyline, Panoramic view, Egypt.jpg](https://commons.wikimedia.org/wiki/File:Cairo_skyline,_Panoramic_view,_Egypt.jpg) av Vyacheslav Argenberg, CC BY 4.0.
+- **marrakech-stad.jpg** – [Marrakech skyline view.jpg](https://commons.wikimedia.org/wiki/File:Marrakech_skyline_view.jpg) av hichamaarkoubi, CC0.
+- **nairobi-stad.jpg** – [Aerial view of the Nairobi skyline from the KICC rooftop at golden hour.jpg](https://commons.wikimedia.org/wiki/File:Aerial_view_of_the_Nairobi_skyline_from_the_KICC_rooftop_at_golden_hour.jpg) av Lebu Ayiga, CC BY-SA 4.0.
+- **kapstaden-stad.jpg** – [Aerial View of Cape Town (iau2305a).jpg](https://commons.wikimedia.org/wiki/File:Aerial_View_of_Cape_Town_(iau2305a).jpg) av Marlin Clark/Unsplash, CC BY 4.0.
+- **mumbai-stad.jpg** – [Panoramic view of Mumbai (54345507779).jpg](https://commons.wikimedia.org/wiki/File:Panoramic_view_of_Mumbai_(54345507779).jpg) av Mustang Joe, CC0.
+- **bangkok-stad.jpg** – [Bangkok Skyline from Wat Saket.jpg](https://commons.wikimedia.org/wiki/File:Bangkok_Skyline_from_Wat_Saket.jpg) av Slyronit, CC BY-SA 4.0.
+- **peking-stad.jpg** – [Skyline of Beijing CBD from the southeast (20210907074131).jpg](https://commons.wikimedia.org/wiki/File:Skyline_of_Beijing_CBD_from_the_southeast_(20210907074131).jpg) av N509FZ, CC BY-SA 4.0.
+- **tokyo-stad.jpg** – [Shiba-koen, aerial view on Tokyo Tower at dusk (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Shiba-koen,_aerial_view_on_Tokyo_Tower_at_dusk_(Unsplash).jpg) av Kazuend, CC0.
+- **sydney-stad.jpg** – [Aerial view of Sydney Harbour Bridge.jpg](https://commons.wikimedia.org/wiki/File:Aerial_view_of_Sydney_Harbour_Bridge.jpg) av Globalroamer, CC BY-SA 3.0.
+- **auckland-stad.jpg** – [Auckland Skyline as seen from Devonport 20100128 3.jpg](https://commons.wikimedia.org/wiki/File:Auckland_Skyline_as_seen_from_Devonport_20100128_3.jpg) av DXR, CC BY-SA 4.0.
+- **newyork-stad.jpg** – [Manhattan - Aerial view looking south.jpg](https://commons.wikimedia.org/wiki/File:Manhattan_-_Aerial_view_looking_south.jpg) av woo from irvine, ca, USA, CC BY 2.0.
+- **mexikocity-stad.jpg** – [Paseo de la Reforma Skyline Mexico City.jpg](https://commons.wikimedia.org/wiki/File:Paseo_de_la_Reforma_Skyline_Mexico_City.jpg) av https://secure.flickr.com/photos/photos_clinker/, CC BY-SA 2.0.
+- **cusco-stad.jpg** – [Cusco skyline - October 2025.jpg](https://commons.wikimedia.org/wiki/File:Cusco_skyline_-_October_2025.jpg) av WMrapids, CC0.
+- **rio-stad.jpg** – [Rio-panorama-Botafogo-Sugarloaf.jpg](https://commons.wikimedia.org/wiki/File:Rio-panorama-Botafogo-Sugarloaf.jpg) av Acediscovery, CC BY 4.0.
+- **kopenhamn-stad.jpg** – [Aerial views of Copenhagen 02.jpg](https://commons.wikimedia.org/wiki/File:Aerial_views_of_Copenhagen_02.jpg) av Paasikivi, CC BY-SA 4.0.
+- **oslo-stad.jpg** – [Air oslo s.jpg](https://commons.wikimedia.org/wiki/File:Air_oslo_s.jpg) av GAD, CC BY-SA 4.0.
+- **helsingfors-stad.jpg** – [Southern Helsinki panorama 2011-06-24 2.jpg](https://commons.wikimedia.org/wiki/File:Southern_Helsinki_panorama_2011-06-24_2.jpg) av KFP, CC BY-SA 3.0.
+- **berlin-stad.jpg** – [Berlin Panorama Mitte.jpg](https://commons.wikimedia.org/wiki/File:Berlin_Panorama_Mitte.jpg) av Nordenfan, CC BY-SA 4.0.
+- **barcelona-stad.jpg** – [Barcelona - view from Tibidabo toward Sagrada Famila.jpg](https://commons.wikimedia.org/wiki/File:Barcelona_-_view_from_Tibidabo_toward_Sagrada_Famila.jpg) av Joe Mabel, CC BY-SA 4.0.
+- **lissabon-stad.jpg** – [Alfama Rooftops and Tagus River View, Lisbon (54733828355).jpg](https://commons.wikimedia.org/wiki/File:Alfama_Rooftops_and_Tagus_River_View,_Lisbon_(54733828355).jpg) av Dale Cruse - 10M views from San Francisco, CA, USA, CC BY 4.0.
+- **aten-stad.jpg** – [Attica 06-13 Athens 40 View from Lycabettus.jpg](https://commons.wikimedia.org/wiki/File:Attica_06-13_Athens_40_View_from_Lycabettus.jpg) av A.Savin, CC BY-SA 3.0.
+- **prag-stad.jpg** – [Lascar View of Prague's skyline from the Petřínská rozhledna (4501601667).jpg](https://commons.wikimedia.org/wiki/File:Lascar_View_of_Prague%27s_skyline_from_the_Pet%C5%99%C3%ADnsk%C3%A1_rozhledna_(4501601667).jpg) av Jorge Láscar from Australia, CC BY 2.0.
+- **dublin-stad.jpg** – [Aerial photograph of Dublin 11 October 2015.jpg](https://commons.wikimedia.org/wiki/File:Aerial_photograph_of_Dublin_11_October_2015.jpg) av Dronepicr, CC BY 3.0.
+- **dubai-stad.jpg** – [Dubai Skyline from Zabeel Park.jpg](https://commons.wikimedia.org/wiki/File:Dubai_Skyline_from_Zabeel_Park.jpg) av Challiyil Eswaramangalath Pavithran Vipin, CC BY-SA 2.0.
+- **amman-stad.jpg** – [Amman view from citadel 0350 panorama.jpg](https://commons.wikimedia.org/wiki/File:Amman_view_from_citadel_0350_panorama.jpg) av Dosseman, CC BY-SA 4.0.
+- **seoul-stad.jpg** – [Han River Seoul skyline Pixabay 1214950.jpg](https://commons.wikimedia.org/wiki/File:Han_River_Seoul_skyline_Pixabay_1214950.jpg) av USAGI_POST, CC0.
+- **singapore-stad.jpg** – [1 singapore city skyline dusk panorama 2011.jpg](https://commons.wikimedia.org/wiki/File:1_singapore_city_skyline_dusk_panorama_2011.jpg) av chenisyuan, CC BY-SA 4.0.
+- **hanoi-stad.jpg** – [Hanoi Skyline - NKS.jpg](https://commons.wikimedia.org/wiki/File:Hanoi_Skyline_-_NKS.jpg) av NKSTTSSHNVN, CC BY-SA 4.0.
+- **kathmandu-stad.jpg** – [View of Kathmandu from Swayambhunath 2, Nepal.jpg](https://commons.wikimedia.org/wiki/File:View_of_Kathmandu_from_Swayambhunath_2,_Nepal.jpg) av Vyacheslav Argenberg, CC BY 4.0.
+- **buenosaires-stad.jpg** – [Aerial view of Buenos Aires, 2009-03-28.jpg](https://commons.wikimedia.org/wiki/File:Aerial_view_of_Buenos_Aires,_2009-03-28.jpg) av Martin Terber, CC BY 2.0.
+- **havanna-stad.jpg** – [Havana. view from FOCSA. - panoramio.jpg](https://commons.wikimedia.org/wiki/File:Havana._view_from_FOCSA._-_panoramio.jpg) av Alexander Berezhnoy, CC BY 3.0.
+- **sanfrancisco-stad.jpg** – [Aerial view of downtown San Francisco from the north dllu.jpg](https://commons.wikimedia.org/wiki/File:Aerial_view_of_downtown_San_Francisco_from_the_north_dllu.jpg) av Daniel L. Lu (user:dllu), CC BY-SA 4.0.
+- **dakar-stad.jpg** – [Dakar, Senegal - Left Half (5662420768).jpg](https://commons.wikimedia.org/wiki/File:Dakar,_Senegal_-_Left_Half_(5662420768).jpg) av Jeff Attaway from Abuja, Nigeria, CC BY 2.0.
+- **addisabeba-stad.jpg** – [Addis Ababa (16314616596).jpg](https://commons.wikimedia.org/wiki/File:Addis_Ababa_(16314616596).jpg) av Laika ac from UK, CC BY-SA 2.0.
+- **melbourne-stad.jpg** – [Melbourne Docklands Panorama old and new (40125070352).jpg](https://commons.wikimedia.org/wiki/File:Melbourne_Docklands_Panorama_old_and_new_(40125070352).jpg) av Rob Deutscher from Melbourne, Australia, CC BY 2.0.
