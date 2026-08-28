@@ -480,6 +480,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **guldtackor.webp** (Guldtackor) – [Gold_bullion_2.jpg](https://commons.wikimedia.org/wiki/File:Gold_bullion_2.jpg) av Szaaman, Public domain.
 - **gultaxi.webp** (Gula bilar på en gata i en storstad) – [Taxicabs_of_New_York_City.jpg](https://commons.wikimedia.org/wiki/File:Taxicabs_of_New_York_City.jpg) av Z22, CC BY-SA 3.0.
 - **gum.webp** (En lång ljus byggnad med tre bokstäver på fasaden) – [GUM,_Moscow,_Russia.jpg](https://commons.wikimedia.org/wiki/File:GUM,_Moscow,_Russia.jpg) av Josef F. Stuefer, CC BY 2.0.
+- **gunsdotter.webp** (Margareta Gunsdotter, riksdagsledamot) – [Margareta Larsson.jpg](https://commons.wikimedia.org/wiki/File:Margareta_Larsson.jpg) av Esquilo, CC BY-SA 3.0.
 - **gurka.webp** (Gröna avlånga grönsaker) – [ARS_cucumber.jpg](https://commons.wikimedia.org/wiki/File:ARS_cucumber.jpg) av Stephen Ausmus, USDA ARS, Public domain.
 - **gurkmeja.webp** (Ett gult kryddpulver) – [Grounded turmeric.jpg](https://commons.wikimedia.org/wiki/File:Grounded_turmeric.jpg) av Barbara-Ingeborg, CC BY-SA 4.0.
 - **gustavadolfstorg.webp** (En bronsstaty av en man som pekar mot marken, på ett torg) – [Göteborg.jpg](https://commons.wikimedia.org/wiki/File:G%C3%B6teborg.jpg) av Axt, Public domain.
