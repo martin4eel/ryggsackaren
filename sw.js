@@ -1,5 +1,5 @@
 /**
- * Service worker för Ryggsäckaren.
+ * Service worker för Upptäckaren.
  *
  * Strategi: network-first för sidnavigering, så att spelarna alltid får den
  * senaste versionen när de har täckning, men med cache som reserv så att
@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v23';
+const CACHE = 'upptackaren-v24';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
