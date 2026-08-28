@@ -505,6 +505,8 @@ export class App {
   private stampToast: Stamp | null = null;
   /** Rapporten efter ett avklarat skift, tills spelaren stänger den */
   private skiftRapport: { titel: string; rubrik: string; rader: string[] } | null = null;
+  /** Sista passets DOM-nod, som ska överleva omritningar medan det spelas */
+  private spelNod: HTMLElement | null = null;
   /** Körs när rapporten stängs: händelsen som väntade på skiftets slut */
   private efterRapport: (() => void) | null = null;
   /** Stämpel som väntar på att skiftet ska ta slut innan den visas */
@@ -711,6 +713,7 @@ export class App {
     if (!this.state) return;
     // Ett arkadmoment kan ha timers igång. Stäng av dem vid skärmbyte.
     stopAllMinigames();
+    this.spelNod = null;
     const changed = this.state.screen !== screen;
     if (changed && screen === 'jobb') {
       // En notis eller stämpel från staden ska inte ligga över frågefotot.
@@ -3559,17 +3562,24 @@ export class App {
     }
 
     if (q.phase === 'spelar') {
-      const panel = el('section', { class: 'panel' });
-      panel.append(
-        renderMinigame(
+      /**
+       * Sista passet byggs en gång och överlever omritningar. Allt som ritar
+       * om skärmen mitt i passet - en notis som tickar ut, en stämpel som
+       * landar - skulle annars starta spelet från början, med nya timers
+       * ovanpå de gamla. Noden hålls kvar tills passet är klart.
+       */
+      if (!this.spelNod) {
+        this.spelNod = renderMinigame(
           game,
           {
             money: (amount) => this.money(amount),
             slack: arcadeSlack(this.state!.difficulty),
           },
           (result) => this.finishMinigame(result)
-        )
-      );
+        );
+      }
+      const panel = el('section', { class: 'panel' });
+      panel.append(this.spelNod);
       wrap.append(panel);
       return wrap;
     }
@@ -3708,6 +3718,7 @@ export class App {
   /** Startar skiftets arkadmoment. */
   private startMinigame(): void {
     const q = this.quiz!;
+    this.spelNod = null;
     q.phase = 'spelar';
     this.render();
   }
@@ -3717,6 +3728,7 @@ export class App {
     const s = this.state!;
     const q = this.quiz!;
     if (q.phase === 'klart') return;
+    this.spelNod = null;
     const job = q.job!;
     // Bonusen motsvarar upp till tre dagslöner, efter hur bra momentet gick,
     // och ett felfritt moment ger ett halvt extra dagsverke ovanpå.
