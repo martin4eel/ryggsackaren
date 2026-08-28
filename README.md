@@ -347,8 +347,7 @@ webbläsaren och överlever att sparfilen raderas.
    rätt som fel – hur man känner igen svampen och vad giftet gör. Alla
    fjorton är svenska arter.
 
-   Sju yrken kom till 2026-08-28: diplomat och politisk rådgivare (kategori
-   *Politik och diplomati*, med generalsekreterare respektive
+   Sju yrken kom till 2026-08-28: diplomat och politisk rådgivare (ämne *Samhälle*, med generalsekreterare respektive
    parlamentsbyggnader som sista pass), musik- och filmproducent
    (studioprylar och filmgrejer), pilot, lots och mykolog. Nya jobb läggs in
    ur JSON med `scripts/merge-nyajobb.mjs`.

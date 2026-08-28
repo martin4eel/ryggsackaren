@@ -103,7 +103,6 @@ export type Category =
   | 'trafik'
   | 'bygg'
   | 'mode'
-  | 'politik'
   | 'samhalle';
 
 /** Arkadmoment som bryter av frågorna, precis som i originalet. */
