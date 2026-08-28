@@ -55,7 +55,7 @@ under vilken licens den publicerats.
 - **stockholm-stad.jpg** – [Stockholm aerial 6.jpg](https://commons.wikimedia.org/wiki/File:Stockholm_aerial_6.jpg) av kallerna, CC BY-SA 4.0.
 - **malmo-stad.jpg** – [Malmö from above (17164888637).jpg](https://commons.wikimedia.org/wiki/File:Malm%C3%B6_from_above_(17164888637).jpg) av Maria Eklind, CC BY-SA 2.0.
 - **goteborg-stad.jpg** – [Gothenburg skyline (3883926931).jpg](https://commons.wikimedia.org/wiki/File:Gothenburg_skyline_(3883926931).jpg) av allen watkin from London, UK, CC BY-SA 2.0.
-- **vasteras-stad.jpg** – [Västeras.jpg](https://commons.wikimedia.org/wiki/File:V%C3%A4steras.jpg) av Jens Bludau, CC BY-SA 3.0.
+- **vasteras-stad.jpg** – [Öster Mälarstrand, Västerås.jpg](https://commons.wikimedia.org/wiki/File:%C3%96ster_M%C3%A4larstrand,_V%C3%A4ster%C3%A5s.jpg) av Brorsson, CC BY-SA 3.0.
 - **koping-stad.jpg** – [Köping 2013-08-24 image02.jpg](https://commons.wikimedia.org/wiki/File:K%C3%B6ping_2013-08-24_image02.jpg) av Håkan Skogsjö, CC BY-SA 4.0.
 - **reykjavik-stad.jpg** – [Reykjavik, Iceland aerial cityscape (Unsplash).jpg](https://commons.wikimedia.org/wiki/File:Reykjavik,_Iceland_aerial_cityscape_(Unsplash).jpg) av Andrew Smales bn2b, CC0.
 - **london-stad.jpg** – [River Thames viewed from the Tower Bridge in London.jpg](https://commons.wikimedia.org/wiki/File:River_Thames_viewed_from_the_Tower_Bridge_in_London.jpg) av APK, CC BY 4.0.
