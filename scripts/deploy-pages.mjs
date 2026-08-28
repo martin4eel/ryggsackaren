@@ -61,6 +61,10 @@ try {
   // Kopiera in bygget. -a bevarar tidsstämplar, punktfiler tas med.
   run('sh', ['-c', `cp -a "${process.cwd()}/${DIST}/." "${work}/"`]);
 
+  // Egen domän: public/CNAME följer med bygget till dist/ och därmed hit.
+  // Utan den nollställer varje publicering domäninställningen på GitHub.
+  if (!existsSync(join(work, 'CNAME'))) throw new Error('CNAME saknas i bygget - public/CNAME borta?');
+
   // .nojekyll krävs för att GitHub Pages inte ska filtrera bort filer och
   // mappar som börjar med understreck.
   writeFileSync(join(work, '.nojekyll'), '');

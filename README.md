@@ -30,7 +30,7 @@ helst utan konfiguration.
 
 ## Spelet ligger uppe här
 
-<https://martin4eel.github.io/ryggsackaren/>
+<https://upptackaren.se/> (GitHub Pages-adressen <https://martin4eel.github.io/ryggsackaren/> pekar dit)
 
 ### Publicera en uppdatering
 
@@ -49,6 +49,10 @@ nya versionen ligger ute efter ungefär en minut.
 
 Pages är inställt på _Deploy from a branch_, branch `gh-pages`, mapp `/`
 (root). Det behöver bara göras en gång och är redan gjort.
+
+Den egna domänen ligger i `public/CNAME` (`upptackaren.se`). Filen följer med
+bygget till `gh-pages` vid varje publicering – utan den nollställer GitHub
+domäninställningen varje gång. Deploy-skriptet vägrar publicera om den saknas.
 
 Vill du hellre ha automatisk publicering vid varje push kan du lägga tillbaka
 ett GitHub Actions-arbetsflöde, men det kräver en token med `workflow`-scope.
