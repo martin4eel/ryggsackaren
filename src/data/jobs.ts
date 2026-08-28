@@ -2885,7 +2885,7 @@ export const JOBS: Job[] = [
     employer: 'Sjöfartsverket',
     category: 'hav',
     huvud: 'aventyr',
-    wageClass: 3,
+    wageClass: 2,
     shiftLength: 6,
     ad: 'Du klättrar ombord i mörker och sjögång och tar in 300 meter stål genom en farled du kan i sömnen. Lotsbåten väntar.',
     minigame: {
@@ -2922,7 +2922,7 @@ export const JOBS: Job[] = [
     employer: 'Svampkonsulenterna',
     category: 'natur',
     huvud: 'aventyr',
-    wageClass: 2,
+    wageClass: 1,
     shiftLength: 6,
     ad: 'Korg, kniv och lupp. Du måste kunna skilja det som mättar från det som dödar, och veta varför.',
     minigame: {

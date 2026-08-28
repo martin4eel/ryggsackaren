@@ -297,11 +297,11 @@ try {
      * med några namngivna undantag som är bra på egna meriter.
      */
     const mg = job.minigame;
-    const UNDANTAG = { skateboardinstruktor: 'balans' };
+    const UNDANTAG = { skateboardinstruktor: 'balans', mykolog: 'avgor' };
     if (!mg) {
       if (job.wageClass >= 2) problems.push(`jobb ${job.id} (klass ${job.wageClass}) saknar minispel`);
     } else {
-      if (job.wageClass === 1)
+      if (job.wageClass === 1 && UNDANTAG[job.id] !== mg.kind)
         problems.push(`jobb ${job.id} är klass 1 och ska inte ha något minispel`);
       const fotoSortering =
         mg.kind === 'sortering' && (mg.pool ?? []).flat().every((x) => typeof x === 'object');
