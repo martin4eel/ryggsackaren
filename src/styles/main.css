@@ -7546,3 +7546,28 @@ body.sheet-oppen {
 @media (prefers-reduced-motion: reduce) {
   .forklaring { transition: none; }
 }
+
+
+/* ------------------------------------------- huvudkategorin i annonserna */
+
+.huvud-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--huvud, #555);
+  vertical-align: 1px;
+}
+
+.huvud-vetenskap { --huvud: #1f5f9e; }
+.huvud-konst { --huvud: #8a2f6b; }
+.huvud-praktiskt { --huvud: #6b5a2e; }
+.huvud-aventyr { --huvud: #2f7a4b; }
+.huvud-sport { --huvud: #c2561b; }
+.huvud-mat { --huvud: #a8262b; }
+
+.job-meta { margin-top: 6px; }

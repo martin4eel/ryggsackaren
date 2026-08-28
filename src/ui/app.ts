@@ -5,7 +5,7 @@ import { SPARET_LEDTRADAR } from '../data/sparetLedtradar';
 import { CURRENCIES, formatMoney } from '../data/currencies';
 import type { EventTone, EventTrigger } from '../data/events';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
-import type { City, Job, Souvenir } from '../data/types';
+import type { City, Huvudkategori, Job, Souvenir } from '../data/types';
 import {
   COMBO_STEPS,
   DIFFICULTY_INFO,
@@ -23,7 +23,6 @@ import {
   finalScore,
   jobQuestions,
   prepareQuestion,
-  jobRequirementText,
   jobRequirement,
   pointsIn,
   arcadeSlack,
@@ -466,6 +465,11 @@ function lista(regioner: string[]): string {
   const namn = regioner.map((r) => REGION_LABELS[r] ?? r);
   if (namn.length <= 1) return namn.join('');
   return `${namn.slice(0, -1).join(', ')} och ${namn[namn.length - 1]}`;
+}
+
+/** Huvudkategorin som en liten färgad etikett, samma färg överallt. */
+function huvudBadge(h: Huvudkategori): HTMLElement {
+  return el('strong', { class: `huvud-badge huvud-${h}` }, HUVUD_LABELS[h]);
 }
 
 export class App {
@@ -2875,10 +2879,11 @@ export class App {
         el('p', {}, job.ad),
         el(
           'p',
-          { class: 'muted' },
-          `${HUVUD_LABELS[job.huvud]} · ${CATEGORY_LABELS[job.category] ?? job.category} · ${
-            job.shiftLength
-          } arbetsdagar · ${this.money(wage)} per rätt svar`
+          { class: 'muted job-meta' },
+          // Huvudkategorin är det som styr poängstegen, så den ska synas:
+          // fet, i sin egen färg, före resten av raden.
+          huvudBadge(job.huvud),
+          ` ${CATEGORY_LABELS[job.category] ?? job.category} · ${job.shiftLength} arbetsdagar · ${this.money(wage)} per rätt svar`
         )
       );
 
@@ -2891,8 +2896,10 @@ export class App {
         const har = pointsIn(s, job.huvud);
         card.append(
           el('p', { class: 'note' },
-            `${jobRequirementText(job)}. Du har ${har} av ${need.points} poäng` +
-              (need.rating ? ` och ${p.rating} i betyg.` : '.')
+            `Kräver ${need.points === 1 ? 'en' : 'tre'} poäng i `,
+            huvudBadge(job.huvud),
+            need.rating ? ` och minst ${need.rating} i stadsbetyg.` : '.',
+            ` Du har ${har} av ${need.points}` + (need.rating ? ` och ${p.rating} i betyg.` : '.')
           )
         );
       } else {
