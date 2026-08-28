@@ -2669,6 +2669,7 @@ export const JOBS: Job[] = [
       kind: 'bildval',
       title: 'Vem står på trappan?',
       brief: 'Ambassadens gäster ska hälsas med namn. Protokollchefen vet vad de gjort, inte hur de ser ut. Peka ut rätt porträtt av fyra.',
+      roll: { en: 'Gäst', flera: 'gäster', klara: 'hälsade' },
       items: ['Bilder'],
       bildval: [
         { bild: 'daghammarskjold', namn: 'Dag Hammarskjöld' },
@@ -2716,6 +2717,7 @@ export const JOBS: Job[] = [
       kind: 'bildval',
       title: 'Rätt hus på resplanen',
       brief: 'Delegationen ska besöka tretton parlament och praktikanten har blandat ihop bilderna. Kollegorna vet vad som hänt i huset, inte hur det ser ut. Peka ut rätt byggnad av fyra.',
+      roll: { en: 'Hus', flera: 'hus', klara: 'rätt' },
       items: ['Bilder'],
       bildval: [
         { bild: 'riksdagshuset', namn: 'Riksdagshuset, Stockholm' },
@@ -2763,6 +2765,7 @@ export const JOBS: Job[] = [
       kind: 'bildval',
       title: 'Artisten vill ha något',
       brief: 'Artisten står i studion och beskriver vad hon behöver, utan att veta vad det heter. Peka ut rätt foto av fyra innan inspirationen går.',
+      roll: { en: 'Önskemål', flera: 'önskemål', klara: 'uppfyllda' },
       items: ['Bilder'],
       bildval: [
         { bild: 'kondensatormik', namn: 'Studiomikrofon' },
@@ -2808,6 +2811,7 @@ export const JOBS: Job[] = [
       kind: 'bildval',
       title: 'Inspelningsledaren ringer',
       brief: 'Inspelningsledaren ringer från plats och beskriver vad som saknas. Peka ut rätt foto av fyra innan dagsljuset tar slut.',
+      roll: { en: 'Samtal', flera: 'samtal', klara: 'lösta' },
       items: ['Bilder'],
       bildval: [
         { bild: 'klappa', namn: 'Klappan' },

@@ -3550,8 +3550,8 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          'Går det bra får du en bonus på upp till tre dagslöner. Momentet går ' +
-            'lika bra att styra med finger som med mus.'
+          'Går det bra får du en bonus på upp till tre dagslöner.' +
+            (game.kind === 'avgor' || game.kind === 'peka' ? ' Ingen klocka - ta den tid du behöver.' : ' Momentet går lika bra att styra med finger som med mus.')
         ),
         button('Sätt igång', () => this.startMinigame(), {
           class: 'btn btn-primary btn-big',

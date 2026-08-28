@@ -7731,3 +7731,15 @@ body.sheet-oppen {
 .mg-avgor-knapp:disabled { opacity: 0.45; }
 .mg-avgor-knapp.mg-avgor-ratt { opacity: 1; box-shadow: 0 0 0 3px #fff, 0 0 0 6px currentColor; }
 .mg-avgor-knapp.mg-avgor-fel { opacity: 0.7; text-decoration: line-through; }
+
+
+/* Facitbilden i pek-spelet: dubbel bredd och sidledsrullning på smal skärm. */
+.mg-peka-facit {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  cursor: default;
+}
+
+@media (max-width: 640px) {
+  .mg-peka-facit .mg-peka-bild { width: 220%; max-width: none; }
+}

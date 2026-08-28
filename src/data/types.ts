@@ -194,6 +194,8 @@ export interface Minigame {
     /** Hur många poster som visas per skift (slumpade); alla om utelämnat */
     antal?: number;
   };
+  /** Bara för `bildval`: vad "kunden" kallas i statusraden, t.ex. 'Gäst'/'gäster' */
+  roll?: { en: string; flera: string; klara: string };
   bildval?: { bild: string; namn: string }[];
   /** Sekunder per kund i bildvalet; utelämnas för standardtempot (14 s) */
   tid?: number;

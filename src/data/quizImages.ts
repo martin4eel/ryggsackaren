@@ -696,7 +696,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'dramaten', alt: 'En vit teaterbyggnad med guldfigurer på taket', article: 'Royal Dramatic Theatre' },
   { id: 'strindberg', alt: 'En man med bakåtstruket hår och mustasch', article: 'August Strindberg' },
   { id: 'akihabara', alt: 'En gata med färgglada skyltar i Tokyo', article: 'Akihabara' },
-  { id: 'storyboard', alt: 'Tecknade rutor uppsatta i rader på en vägg', file: 'Assassination Classroom storyboards on the wall 20180101.jpg' },
+  { id: 'storyboard', alt: 'En handritad storyboardsida med fyra rutor och anteckningar', file: 'Storyboard page.jpg' },
   { id: 'miyazaki', alt: 'En äldre man med vitt skägg och glasögon', article: 'Hayao Miyazaki' },
   { id: 'tezuka', alt: 'En ung man med basker och glasögon', article: 'Osamu Tezuka' },
   { id: 'teplantage', alt: 'Gröna tebuskar i rader på kullar', file: 'Darjeeling, India, Tea plantations on hills.jpg', bred: true },

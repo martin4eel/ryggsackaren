@@ -1425,6 +1425,7 @@ function startPictureChoice(
   const katalog = game.bildval ?? [];
   const namn = new Map(katalog.map((b) => [b.bild, b.namn]));
   const kunder = shuffled(game.kunder ?? []).slice(0, ROUNDS);
+  const roll = game.roll ?? { en: 'Kund', flera: 'kunder', klara: 'nöjda' };
   let round = 0;
   let right = 0;
   let running = false;
@@ -1439,7 +1440,7 @@ function startPictureChoice(
   const finish = () => {
     onDone({
       score: right / kunder.length,
-      summary: `Du hittade rätt åt ${right} av ${kunder.length} kunder.`,
+      summary: `Du hittade rätt åt ${right} av ${kunder.length} ${roll.flera}.`,
       perfect: right === kunder.length,
     });
   };
@@ -1456,7 +1457,7 @@ function startPictureChoice(
     );
     const val = shuffled([kund.svar, ...[...lockbeten, ...ovriga].slice(0, 3)]);
 
-    status.set(`Kund ${round + 1}/${kunder.length}`, `${right} nöjda`);
+    status.set(`${roll.en} ${round + 1}/${kunder.length}`, `${right} ${roll.klara}`);
     bubble.textContent = `”${kund.text}”`;
     feedback.say('Peka på rätt foto.', 'neutral');
     clear(grid);
@@ -1513,7 +1514,7 @@ function startPictureChoice(
         'fel'
       );
     }
-    status.set(`Kund ${round + 1}/${kunder.length}`, `${right} nöjda`);
+    status.set(`${roll.en} ${round + 1}/${kunder.length}`, `${right} ${roll.klara}`);
     round += 1;
     after(ok ? 900 : 1500, next);
   };
@@ -1580,6 +1581,9 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
     fraga.textContent = 'Så här sitter det. Titta en stund innan du kvitterar.';
     status.set('Klart', `${right} av ${fragor.length} rätt`);
     for (const m of Array.from(yta.querySelectorAll('.mg-peka-mark'))) m.remove();
+    // Facit ska gå att läsa på en telefon: bilden blir dubbelt så bred som
+    // rutan och rullas i sidled, som kartan.
+    yta.classList.add('mg-peka-facit');
     bild.src = quizImageUrl(spec.facitBild);
     bild.alt = 'Samma foto med alla reglage utmärkta och förklarade';
     feedback.say(right === fragor.length ? 'Alla rätt. Du kan hytten.' : `${right} av ${fragor.length}. Facit på bilden.`, right === fragor.length ? 'topp' : 'neutral');
@@ -1634,7 +1638,7 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
       playSound('fel');
       markera(x, y, 'mg-peka-fel', '✕');
       markera(ratt.x, ratt.y, 'mg-peka-ratt', '✓');
-      feedback.say(traff ? `Fel. Det där är ${traff.namn.toLowerCase()}.` : 'Fel. Där sitter inget reglage.', 'fel');
+      feedback.say(traff ? `Fel. Det där är ${traff.namn.toLowerCase()}.` : 'Fel. Där sitter inget av det vi letar efter.', 'fel');
       forklaring.textContent = `${ratt.namn}: ${ratt.forklaring}`;
     }
     status.set(`Fråga ${index + 1}/${fragor.length}`, `${right} rätt`);
