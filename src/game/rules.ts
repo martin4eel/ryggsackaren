@@ -31,7 +31,9 @@ export function distanceKm(a: City, b: City): number {
 
 /** Kostnad per natt för vandrarhem och mat i en stad. */
 export function dailyCost(city: City, difficulty: Difficulty): number {
-  const base = 250 * city.costIndex;
+  // Sänkt från 250 (2026-08-28): ett klass 1-skift med hyfsat resultat ska
+  // gå plus även i en dyr stad.
+  const base = 180 * city.costIndex;
   return Math.round(difficulty === 'turist' ? base * 0.8 : base);
 }
 
