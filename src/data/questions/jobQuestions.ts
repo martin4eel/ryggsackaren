@@ -1468,7 +1468,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken sorts vin är det i glaset på bilden?', bild: 'rodvin', a: ['Rött vin', 'Rosé', 'Portvin', 'Vitt vin'], d: 1, info: 'Färgen kommer från skalen, som får ligga kvar i musten.' },
     { q: 'Vinet behöver luft och hälls upp i kärlet på bilden. Vad heter det?', bild: 'dekanter', a: ['Dekanter', 'Ishink', 'Korkskruv', 'Kork'], d: 1, info: 'Att dekantera skiljer också vinet från fällningen i gamla flaskor.' },
     { q: 'Vilken druva, som på bilden, är Bourgognes stora röda?', bild: 'pinotnoir', a: ['Pinot noir', 'Cabernet sauvignon', 'Merlot', 'Syrah'], d: 1, info: 'Den vita motsvarigheten är chardonnay.' },
-    { q: 'Från vilket land kommer portvin?', bild: 'portvin', a: ['Portugal', 'Spanien', 'Italien', 'Frankrike'], d: 1, info: 'Från Dourodalen, skeppat via Porto - därav namnet.' },
+    { q: 'Från vilket land kommer portvin?', bild: 'vindruvor', a: ['Portugal', 'Spanien', 'Italien', 'Frankrike'], d: 1, info: 'Från Dourodalen, skeppat via Porto - därav namnet.' },
     { q: 'Vad kallas den söta, starkvinsliknande drycken på bilden, från Jerez i Spanien?', bild: 'sherry', a: ['Sherry', 'Madeira', 'Marsala', 'Vermouth'], d: 1, info: 'Engelsmännen döpte den efter staden; på spanska heter den jerez.' },
     { q: 'Vinet på bilden lagras i något som ger ton av vanilj och rostat trä. Vad?', bild: 'ekfat', a: ['Ekfat', 'Ståltank', 'Betongägg', 'Glasflaska'], d: 1, info: 'Ny fransk ek ger mest smak; gamla fat är nästan neutrala.' },
     { q: 'Vilken druva gör Rioja rött?', bild: 'vindruvor', a: ['Tempranillo', 'Garnacha', 'Sangiovese', 'Malbec'], d: 1, info: 'Namnet betyder ungefär "den tidiga", eftersom den mognar tidigt.' },

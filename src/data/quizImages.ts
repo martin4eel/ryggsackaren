@@ -228,7 +228,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'driver', alt: 'Drivers, gamla och nya', article: 'Wood (golf)', reaktion: { fel: ['Kallas trä. Är av titan. Fråga inte.'] } },
   { id: 'jarnklubba', alt: 'En järnåtta', file: 'Golf club, Callaway X-20 8 iron.jpg' },
   { id: 'hybridklubba', alt: 'En hybridklubba', article: 'Hybrid (golf)', reaktion: { fel: ['Halvt trä, halvt järn, helt missförstådd.'] } },
-  { id: 'wedge', alt: 'En wedge vid bollen i bunkern', file: 'Sand trap ball and wedge.jpg' },
+  { id: 'wedge', alt: 'En wedge', file: 'Cleveland CG14 wedges.jpg' },
   { id: 'golfboll', alt: 'En golfboll', article: 'Golf ball', reaktion: { fel: ['Trehundratrettiosex gropar och du ser mig inte.'] } },
   { id: 'peg', alt: 'En golfboll på en peg i gräset', file: 'Golf ball with white tee in grass.jpg' },
   { id: 'headcover', alt: 'Headcovers på klubbor i en bag', file: 'Golf Club Head Covers.jpg', reaktion: { fel: ['Jag är en mössa för en klubba. Ja, det finns.'] } },
@@ -240,7 +240,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'golfhandske', alt: 'En golfhandske', file: 'Golf glove.jpg' },
   // ------------------------------------------------------------------- vin
   { id: 'rodvin', alt: 'Ett glas rött vin', file: 'Red Wine Glass.jpg', reaktion: { fel: ['Rött. RÖTT. Titta på mig.'] } },
-  { id: 'vitvin', alt: 'Ett glas vitt vin bredvid en flaska', file: 'Glass of White Wine shot with a bottle of white wine - Evan Swigart.jpg' },
+  { id: 'vitvin', alt: 'Ett glas vitt vin', file: 'White Wine Glas.jpg' },
   { id: 'rosevin', alt: 'Ett glas rosévin', file: 'Rosé wine - July 2023 - Sarah Stierch 01-cropped.jpg', reaktion: { fel: ['Jag är inte ett utspätt rödvin. Jag är rosé.'] } },
   { id: 'champagne', alt: 'Ett glas champagne', article: 'Champagne', reaktion: { fel: ['Bubblorna gick ur mig av det där.'] } },
   { id: 'dekanter', alt: 'En dekanter fylld med rött vin', file: 'New Decanter.jpg' },
@@ -249,7 +249,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'kork', alt: 'En naturkork till en vinflaska', file: 'Cork p1160013.jpg' },
   { id: 'vindruvor', alt: 'Klasar med gröna och blå vindruvor', file: 'BUNCH WINE GRAPES green and purple (48986220673).jpg' },
   { id: 'ekfat', alt: 'Ekfat i en vinkällare', file: 'Oak barrels used for aging of wine in a cellar at Grover Zampa Vineyard, Doddaballapura, Karnataka, India.jpg', bred: true },
-  { id: 'portvin', alt: 'Ett glas portvin', file: 'Port wine 777.jpg' },
+  { id: 'portvin', alt: 'Flaskor med portvin i en butik i Lissabon', file: 'Bottles of tawny Port wine in Lisbon.jpg' },
   { id: 'vinkallare', alt: 'Ett vinställ med liggande flaskor i en källare', file: 'DZ6 0556 A sleek wine rack showcasing rows of assorted wine bottles stored horizontally labels and foil caps visible under soft cellar lighting.jpg', bred: true },
   // ------------------------------------------------ bilder till yrkesfrågorna
   { id: 'tutankhamonmask', alt: 'En gyllene dödsmask med blå ränder', article: 'Mask of Tutankhamun' },
