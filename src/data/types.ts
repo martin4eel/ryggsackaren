@@ -103,12 +103,15 @@ export type Category =
   | 'trafik'
   | 'bygg'
   | 'mode'
+  | 'politik'
   | 'samhalle';
 
 /** Arkadmoment som bryter av frågorna, precis som i originalet. */
 export type MinigameKind =
   /** Peka ut rätt sak på ett foto, en fråga i taget, i lugn takt */
   | 'peka'
+  /** Avgör en sak i taget mellan två alternativ, utan klocka, med fakta efteråt */
+  | 'avgor'
   /** Sortera föremål som rullar förbi på ett band till rätt korg */
   | 'sortering'
   /** Utför arbetsledarens order i rätt ordning innan tiden går ut */
@@ -180,6 +183,17 @@ export interface Minigame {
     facitBild: string;
     punkter: { id: string; namn: string; x: number; y: number; r: number; forklaring: string }[];
     fragor: { text: string; svar: string }[];
+  };
+  /**
+   * Bara för `avgor`: de två alternativen (id och etikett) och posterna som
+   * visas en i taget, var och en med rätt alternativ och en faktarad som
+   * visas efter svaret - rätt eller fel, man ska lära sig svampen.
+   */
+  avgor?: {
+    val: { id: string; namn: string }[];
+    poster: { bild: string; namn: string; svar: string; info: string }[];
+    /** Hur många poster som visas per skift (slumpade); alla om utelämnat */
+    antal?: number;
   };
   bildval?: { bild: string; namn: string }[];
   /** Sekunder per kund i bildvalet; utelämnas för standardtempot (14 s) */

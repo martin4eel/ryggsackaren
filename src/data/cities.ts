@@ -24,6 +24,13 @@ export const CITIES: City[] = [
       'Sveriges huvudstad, byggd på fjorton öar där Mälaren möter Östersjön. Gamla stans gränder är från medeltiden och skärgården börjar direkt utanför kajen.',
     landmark: 'Vasamuseet',
     employers: {
+      mykolog: 'Naturhistoriska riksmuseet',
+      lots: 'Sjöfartsverket Stockholms lotsområde',
+      pilot: 'Arlanda flygplats',
+      filmproducent: 'SF Studios',
+      musikproducent: 'Cheiron-studion',
+      politiskradgivare: 'Statsrådsberedningen',
+      diplomat: 'Utrikesdepartementet',
       hotellstadare: 'Hotell Hornsgatan',
       tunnelbanevard: 'SL Trafik',
       museivard: 'Vasamuseet',
@@ -43,7 +50,7 @@ export const CITIES: City[] = [
       'skargardsguide',
       'sjukvardsbitrade',
       'borsmaklare',
-      'pantvard', 'golfinstruktor', 'sommelier', 'cykeluthyrare', 'hockeytranare'],
+      'pantvard', 'golfinstruktor', 'sommelier', 'cykeluthyrare', 'hockeytranare', 'diplomat', 'politiskradgivare', 'musikproducent', 'filmproducent', 'pilot', 'lots', 'mykolog'],
     souvenirs: ['dalahast', 'sillburk', 'vikingahjalm'],
   },
   {
@@ -64,6 +71,7 @@ export const CITIES: City[] = [
       'Sveriges sydligaste storstad, med Öresundsbron till Köpenhamn och kontinenten inom räckhåll. Kranarna i gamla varvsområdet har bytts mot ett vridet höghus.',
     landmark: 'Turning Torso',
     employers: {
+      lots: 'Sjöfartsverket Malmö lotsområde',
       cykelkurir: 'Cykelbud Möllan',
       hamnarbetare: 'Malmö Hamn',
       farjematros: 'Öresundsfärjan',
@@ -75,8 +83,7 @@ export const CITIES: City[] = [
       'hamnarbetare',
       'farjematros',
       'bagare',
-      'farmarbetare',
-    ],
+      'farmarbetare', 'lots'],
     souvenirs: ['sillburk', 'ullvantar', 'dalahast'],
   },
   {
@@ -97,6 +104,10 @@ export const CITIES: City[] = [
       'Sveriges västra port, grundad 1621 av Gustav II Adolf. Här börjar många ryggsäcksresor med en sista fika på Avenyn innan färjan eller flyget går.',
     landmark: 'Feskekörka',
     employers: {
+      mykolog: 'Göteborgs botaniska trädgård',
+      lots: 'Sjöfartsverket Göteborgs lotsområde',
+      filmproducent: 'Film i Väst',
+      musikproducent: 'Svenska Grammofonstudion',
       hamnarbetare: 'Göteborgs Hamn',
       sparvagnsforare: 'Spårvägen Göteborg',
       fikabitrade: 'Kafé Haga',
@@ -106,7 +117,7 @@ export const CITIES: City[] = [
       badplatsvard: 'Saltholmens Badplats',
       hockeytranare: 'Frölundaborgs Ishall',
     },
-    jobs: ['hamnarbetare', 'sparvagnsforare', 'fikabitrade', 'skargardsguide', 'postsorterare', 'golfinstruktor', 'badplatsvard', 'hockeytranare'],
+    jobs: ['hamnarbetare', 'sparvagnsforare', 'fikabitrade', 'skargardsguide', 'postsorterare', 'golfinstruktor', 'badplatsvard', 'hockeytranare', 'musikproducent', 'filmproducent', 'lots', 'mykolog'],
     souvenirs: ['dalahast', 'sillburk', 'ullvantar'],
   },
   {
@@ -154,6 +165,10 @@ export const CITIES: City[] = [
       'Metropol vid Themsen med tvåtusenårig historia, röda dubbeldäckare och fler museer än du hinner se på en resa.',
     landmark: 'Tower Bridge',
     employers: {
+      pilot: 'Heathrow',
+      filmproducent: 'Pinewood Studios',
+      musikproducent: 'Abbey Road Studios',
+      politiskradgivare: '10 Downing Street',
       pubvard: 'The Camden Arms',
       museivard: 'Bloomsbury Museum',
       tunnelbanevard: 'Underground Trafik',
@@ -162,7 +177,7 @@ export const CITIES: City[] = [
       bartender: 'Soho Cocktail Bar',
       bollkalle: 'Wimbledon Tennis Courts',
     },
-    jobs: ['pubvard', 'museivard', 'tunnelbanevard', 'tidningsbud', 'teaterinspicient', 'bartender', 'bollkalle'],
+    jobs: ['pubvard', 'museivard', 'tunnelbanevard', 'tidningsbud', 'teaterinspicient', 'bartender', 'bollkalle', 'politiskradgivare', 'musikproducent', 'filmproducent', 'pilot'],
     souvenirs: ['tehandduk', 'vinylskiva', 'fotbollstroja'],
   },
   {
@@ -183,6 +198,7 @@ export const CITIES: City[] = [
       'Ljusets stad med boulevarder, bagerier och Louvren. Eiffeltornet restes till världsutställningen 1889.',
     landmark: 'Eiffeltornet',
     employers: {
+      politiskradgivare: 'Élysée-palatset',
       bagare: 'Boulangerie Rue Cler',
       konstguide: 'Galerie Montmartre',
       modeassistent: 'Maison Saint-Honoré',
@@ -192,7 +208,7 @@ export const CITIES: City[] = [
       sommelier: 'Cave Rue Mouffetard',
       bollkalle: 'Roland Tennis Club',
     },
-    jobs: ['bagare', 'konstguide', 'modeassistent', 'kock', 'cykelkurir', 'servitor', 'sommelier', 'bollkalle'],
+    jobs: ['bagare', 'konstguide', 'modeassistent', 'kock', 'cykelkurir', 'servitor', 'sommelier', 'bollkalle', 'politiskradgivare'],
     souvenirs: ['parfymflaska', 'konsttryck', 'ostkniv'],
   },
   {
@@ -242,6 +258,7 @@ export const CITIES: City[] = [
       'Den eviga staden på sju kullar. Colosseum stod klart år 80 e.Kr. och rymde uppemot 50 000 åskådare.',
     landmark: 'Colosseum',
     employers: {
+      filmproducent: 'Cinecittà',
       arkeologassistent: 'Scavi Foro Romano',
       pizzabagare: 'Pizzeria Trastevere',
       vespabud: 'Vespa Express Roma',
@@ -249,7 +266,7 @@ export const CITIES: City[] = [
       servitor: 'Trattoria Campo de\' Fiori',
       sommelier: 'Enoteca Monti',
     },
-    jobs: ['arkeologassistent', 'pizzabagare', 'vespabud', 'konstguide', 'servitor', 'sommelier'],
+    jobs: ['arkeologassistent', 'pizzabagare', 'vespabud', 'konstguide', 'servitor', 'sommelier', 'filmproducent'],
     souvenirs: ['olivoljeflaska', 'laderbalte', 'konsttryck'],
   },
   {
@@ -380,6 +397,7 @@ export const CITIES: City[] = [
       'Östafrikas nav, den enda storstad i världen med en nationalpark inom stadsgränsen. Perfekt utgångspunkt för safari.',
     landmark: 'Nairobi National Park',
     employers: {
+      diplomat: 'Sveriges ambassad i Nairobi',
       safariguide: 'Nairobi Safari Lodge',
       veterinarassistent: 'Karen Wildlife Vets',
       tehandlare: 'Kiambu Tea House',
@@ -387,7 +405,7 @@ export const CITIES: City[] = [
       perlvavare: 'Maasai Beadwork Co-op',
       parkvaktare: 'Nairobi National Park',
     },
-    jobs: ['safariguide', 'veterinarassistent', 'tehandlare', 'flygplatsvard', 'perlvavare', 'parkvaktare'],
+    jobs: ['safariguide', 'veterinarassistent', 'tehandlare', 'flygplatsvard', 'perlvavare', 'parkvaktare', 'diplomat'],
     souvenirs: ['trasnideri', 'kaffepase', 'perlhalsband'],
   },
   {
@@ -437,6 +455,7 @@ export const CITIES: City[] = [
       'Indiens finans- och filmhuvudstad, hem för Bollywood. Byggd på sju öar som slagits samman till en halvö.',
     landmark: 'Gateway of India',
     employers: {
+      filmproducent: 'Film City Goregaon',
       gatukoksbitrade: 'Chowpatty Chaat Corner',
       filmstatist: 'Film City Goregaon',
       tehandlare: 'Colaba Chai House',
@@ -445,7 +464,7 @@ export const CITIES: City[] = [
       sjukvardsbitrade: 'Bandra Hospital',
       cykeltaxiforare: 'Dadar Rickshaw Service',
     },
-    jobs: ['gatukoksbitrade', 'filmstatist', 'tehandlare', 'tagvard', 'kryddhandlare', 'sjukvardsbitrade', 'cykeltaxiforare'],
+    jobs: ['gatukoksbitrade', 'filmstatist', 'tehandlare', 'tagvard', 'kryddhandlare', 'sjukvardsbitrade', 'cykeltaxiforare', 'filmproducent'],
     souvenirs: ['silkessjal', 'kryddpase', 'silverarmband'],
   },
   {
@@ -493,6 +512,7 @@ export const CITIES: City[] = [
       'Kinas huvudstad med Förbjudna staden i mitten och Kinesiska muren några timmar bort. Himmelska fridens port vetter mot ett av världens största torg.',
     landmark: 'Förbjudna staden',
     employers: {
+      diplomat: 'Sveriges ambassad i Peking',
       butiksvard: 'Hutong Butik 24',
       tehandlare: 'Maliandao Tehus',
       kalligrafiassistent: 'Studio Liulichang',
@@ -500,7 +520,7 @@ export const CITIES: City[] = [
       kock: 'Wangfujing Ankrestaurang',
       taikotrummis: 'Trumensemblen Gulou',
     },
-    jobs: ['butiksvard', 'tehandlare', 'kalligrafiassistent', 'tagvard', 'kock', 'taikotrummis'],
+    jobs: ['butiksvard', 'tehandlare', 'kalligrafiassistent', 'tagvard', 'kock', 'taikotrummis', 'diplomat'],
     souvenirs: ['sidenfjader', 'teburk', 'buddhastatyett'],
   },
   {
@@ -521,6 +541,7 @@ export const CITIES: City[] = [
       'Världens folkrikaste storstadsområde. Shinkansen-tågen går på sekunden och Shibuya-korsningen fylls av tusentals fotgängare per grönt ljus.',
     landmark: 'Tokyo Skytree',
     employers: {
+      pilot: 'Haneda',
       sushikock: 'Sushi Tsukiji',
       robottekniker: 'Akihabara Robotics',
       tagvard: 'Yamanote Line',
@@ -528,7 +549,7 @@ export const CITIES: City[] = [
       tecknare: 'Studio Nakano',
       taikotrummis: 'Taiko Asakusa',
     },
-    jobs: ['sushikock', 'robottekniker', 'tagvard', 'butiksvard', 'tecknare', 'taikotrummis'],
+    jobs: ['sushikock', 'robottekniker', 'tagvard', 'butiksvard', 'tecknare', 'taikotrummis', 'pilot'],
     souvenirs: ['origamiset', 'keramikskal', 'sidenfjader'],
   },
   {
@@ -549,6 +570,7 @@ export const CITIES: City[] = [
       'Australiens äldsta och största stad, byggd runt en av världens vackraste naturhamnar. Operahuset invigdes 1973.',
     landmark: 'Operahuset',
     employers: {
+      lots: 'Port Authority of NSW',
       livraddare: 'Bondi Beach Patrol',
       dykguide: 'Manly Reef Divers',
       farmarbetare: 'Blue Mountains Station',
@@ -558,7 +580,7 @@ export const CITIES: City[] = [
       golfinstruktor: 'Moore Park Golf',
       badplatsvard: 'Coogee Beach Patrol',
     },
-    jobs: ['livraddare', 'dykguide', 'farmarbetare', 'segelbatsmatros', 'olympiavard', 'ostronplockare', 'golfinstruktor', 'badplatsvard'],
+    jobs: ['livraddare', 'dykguide', 'farmarbetare', 'segelbatsmatros', 'olympiavard', 'ostronplockare', 'golfinstruktor', 'badplatsvard', 'lots'],
     souvenirs: ['bumerang', 'opalsmycke', 'korkhatt'],
   },
   {
@@ -606,6 +628,9 @@ export const CITIES: City[] = [
       'Staden som aldrig sover. Frihetsgudinnan var en gåva från Frankrike 1886 och Central Park är större än många europeiska stadskärnor.',
     landmark: 'Frihetsgudinnan',
     employers: {
+      pilot: 'JFK',
+      musikproducent: 'Electric Lady Studios',
+      diplomat: 'Sveriges FN-representation',
       tidningsbud: 'Brooklyn Morning Post',
       taxichauffor: 'Manhattan Yellow Cab',
       jazzmusiker: 'Harlem Jazz Cellar',
@@ -616,7 +641,7 @@ export const CITIES: City[] = [
       bollkalle: 'Flushing Tennis Courts',
       hockeytranare: 'Madison Ice Rink',
     },
-    jobs: ['tidningsbud', 'taxichauffor', 'jazzmusiker', 'borsmaklare', 'museivard', 'sjukvardsbitrade', 'bartender', 'bollkalle', 'hockeytranare'],
+    jobs: ['tidningsbud', 'taxichauffor', 'jazzmusiker', 'borsmaklare', 'museivard', 'sjukvardsbitrade', 'bartender', 'bollkalle', 'hockeytranare', 'diplomat', 'musikproducent', 'pilot'],
     souvenirs: ['vinylskiva', 'basebollkeps', 'konsttryck'],
   },
   {
@@ -720,6 +745,8 @@ export const CITIES: City[] = [
       'Cyklarnas huvudstad, där färgade köpmanshus speglar sig i Nyhavns kanal. Tivoli har öppnat sina grindar varje sommar sedan 1843.',
     landmark: 'Nyhavn',
     employers: {
+      mykolog: 'Statens Naturhistoriske Museum',
+      politiskradgivare: 'Statsministeriet',
       cykelkurir: 'Cykelbud Nørrebro',
       postsorterare: 'Posten Vesterbro',
       bagare: 'Bageri Frederiksberg',
@@ -728,7 +755,7 @@ export const CITIES: City[] = [
       servitor: 'Café Nyhavn',
       cykeluthyrare: 'Cykler Christianshavn',
     },
-    jobs: ['cykelkurir', 'postsorterare', 'bagare', 'farjematros', 'museivard', 'servitor', 'cykeluthyrare'],
+    jobs: ['cykelkurir', 'postsorterare', 'bagare', 'farjematros', 'museivard', 'servitor', 'cykeluthyrare', 'politiskradgivare', 'mykolog'],
     souvenirs: ['legobygge', 'sillburk', 'ostkniv'],
   },
   {
@@ -749,13 +776,15 @@ export const CITIES: City[] = [
       'Innerst i en fjord som skär nittio kilometer in i landet. Operahusets tak går att promenera upp för, rakt ur vattnet.',
     landmark: 'Operahuset',
     employers: {
+      mykolog: 'Naturhistorisk museum, Tøyen',
+      politiskradgivare: 'Statsministerens kontor',
       hotellstadare: 'Hotell Grünerløkka',
       pantvard: 'Pant Majorstuen',
       segelbatsmatros: 'Oslofjordens Seilforening',
       skargardsguide: 'Oslofjordbåtene',
       museivard: 'Bygdøy Museum',
     },
-    jobs: ['hotellstadare', 'pantvard', 'segelbatsmatros', 'skargardsguide', 'museivard'],
+    jobs: ['hotellstadare', 'pantvard', 'segelbatsmatros', 'skargardsguide', 'museivard', 'politiskradgivare', 'mykolog'],
     souvenirs: ['ullvantar', 'trolldocka', 'ulltroja'],
   },
   {
@@ -776,6 +805,8 @@ export const CITIES: City[] = [
       'Vit domkyrka över en hamn full av färjor, och en fästning på sex öar utanför. Här dricks mest kaffe per person i hela världen.',
     landmark: 'Sveaborg',
     employers: {
+      mykolog: 'Luomus, Naturhistoriska centralmuseet',
+      lots: 'Finnpilot',
       fikabitrade: 'Kafé Esplanaden',
       tidningsbud: 'Helsingfors Morgonblad',
       farjematros: 'Sveaborgsfärjan',
@@ -783,7 +814,7 @@ export const CITIES: City[] = [
       blomsterhandlare: 'Blomster Salutorget',
       hockeytranare: 'Nordenskiöldsgatans Ishall',
     },
-    jobs: ['fikabitrade', 'tidningsbud', 'farjematros', 'sparvagnsforare', 'blomsterhandlare', 'hockeytranare'],
+    jobs: ['fikabitrade', 'tidningsbud', 'farjematros', 'sparvagnsforare', 'blomsterhandlare', 'hockeytranare', 'lots', 'mykolog'],
     souvenirs: ['muurikka', 'ullvantar', 'kaffepase'],
   },
   {
@@ -804,6 +835,10 @@ export const CITIES: City[] = [
       'En stad som varit delad, sammanfogad och ombyggd. Klubbarna öppnar när andra städer stänger och museiön har fem museer på rad.',
     landmark: 'Brandenburger Tor',
     employers: {
+      filmproducent: 'Studio Babelsberg',
+      musikproducent: 'Hansa Tonstudio',
+      politiskradgivare: 'Bundeskanzleramt',
+      diplomat: 'Sveriges ambassad i Berlin',
       gatukoksbitrade: 'Currywurst Kreuzberg',
       klubbdj: 'Klubb Kellerloch',
       tunnelbanevard: 'U-Bahn Berlin',
@@ -812,7 +847,7 @@ export const CITIES: City[] = [
       konstguide: 'Galerie Mitte',
       cykeluthyrare: 'Radverleih Prenzlauer Berg',
     },
-    jobs: ['gatukoksbitrade', 'klubbdj', 'tunnelbanevard', 'museivard', 'cykelmekaniker', 'konstguide', 'cykeluthyrare'],
+    jobs: ['gatukoksbitrade', 'klubbdj', 'tunnelbanevard', 'museivard', 'cykelmekaniker', 'konstguide', 'cykeluthyrare', 'diplomat', 'politiskradgivare', 'musikproducent', 'filmproducent'],
     souvenirs: ['murbit', 'vinylskiva', 'brygghusglas'],
   },
   {
@@ -973,6 +1008,8 @@ export const CITIES: City[] = [
       'En fiskeby som på femtio år blev världens mellanlandning. Guldsouken ligger tio minuter med träbåt från skyskraporna.',
     landmark: 'Burj Khalifa',
     employers: {
+      pilot: 'Emirates',
+      diplomat: 'Sveriges generalkonsulat i Dubai',
       flygplatsvard: 'Dubai Intl Terminal 3',
       hotellstadare: 'Hotel Jumeirah Beach',
       vaxlare: 'Deira Gold Souk Exchange',
@@ -980,7 +1017,7 @@ export const CITIES: City[] = [
       robottekniker: 'Robotics Silicon Oasis',
       dykguide: 'Palm Reef Divers',
     },
-    jobs: ['flygplatsvard', 'hotellstadare', 'vaxlare', 'taxichauffor', 'robottekniker', 'dykguide'],
+    jobs: ['flygplatsvard', 'hotellstadare', 'vaxlare', 'taxichauffor', 'robottekniker', 'dykguide', 'diplomat', 'pilot'],
     souvenirs: ['dadelask', 'rokelseset', 'silkessjal'],
   },
   {
@@ -1028,6 +1065,7 @@ export const CITIES: City[] = [
       'Palats med svängda tak i skuggan av glasfasader, och en bäck som grävts fram under en riven motorväg. Marknaderna stänger aldrig riktigt.',
     landmark: 'Gyeongbokgung',
     employers: {
+      musikproducent: 'HYBE-studion',
       gatukoksbitrade: 'Gwangjang Street Food',
       tunnelbanevard: 'Seoul Metro',
       kalligrafiassistent: 'Studio Insadong',
@@ -1035,7 +1073,7 @@ export const CITIES: City[] = [
       robottekniker: 'Gangnam Robotics',
       tecknare: 'Webtoon Studio Mapo',
     },
-    jobs: ['gatukoksbitrade', 'tunnelbanevard', 'kalligrafiassistent', 'klubbdj', 'robottekniker', 'tecknare'],
+    jobs: ['gatukoksbitrade', 'tunnelbanevard', 'kalligrafiassistent', 'klubbdj', 'robottekniker', 'tecknare', 'musikproducent'],
     souvenirs: ['hanbokband', 'silkessjal', 'teburk'],
   },
   {
@@ -1056,6 +1094,8 @@ export const CITIES: City[] = [
       'En ö-stat på Malackasundets mynning där fyra språk är officiella. Konstgjorda superträd lyser upp parken varje kväll.',
     landmark: 'Gardens by the Bay',
     employers: {
+      lots: 'PSA Marine',
+      pilot: 'Changi Airport',
       hamnarbetare: 'Port of Singapore',
       gatukoksbitrade: 'Maxwell Hawker Centre',
       blomsterhandlare: 'Orchid Gardens Florist',
@@ -1063,7 +1103,7 @@ export const CITIES: City[] = [
       borsmaklare: 'Raffles Place Capital',
       kock: 'Restaurant Clarke Quay',
     },
-    jobs: ['hamnarbetare', 'gatukoksbitrade', 'blomsterhandlare', 'flygplatsvard', 'borsmaklare', 'kock'],
+    jobs: ['hamnarbetare', 'gatukoksbitrade', 'blomsterhandlare', 'flygplatsvard', 'borsmaklare', 'kock', 'pilot', 'lots'],
     souvenirs: ['teburk', 'kryddpase', 'jadesmycke'],
   },
   {
@@ -1308,6 +1348,7 @@ export const CITIES: City[] = [
       'Mälarstad med domkyrka från 1200-talet och en industrihistoria som börjar med ASEA. Utanför staden reser sig Sveriges största gravhög från vikingatiden.',
     landmark: 'Anundshög',
     employers: {
+      mykolog: 'Länsstyrelsen i Västmanland',
       fikabitrade: 'Kafé Stora Gatan',
       pantvard: 'Pant Erikslund',
       tagvard: 'Mälarbanan',
@@ -1327,7 +1368,7 @@ export const CITIES: City[] = [
       'museivard',
       'cykelkurir',
       'verksamhetsutvecklare',
-      'robottekniker', 'golfinstruktor', 'sommelier', 'cykeluthyrare', 'hockeytranare'],
+      'robottekniker', 'golfinstruktor', 'sommelier', 'cykeluthyrare', 'hockeytranare', 'mykolog'],
     souvenirs: ['dalahast', 'vikingahjalm', 'sillburk'],
   },
   {

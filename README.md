@@ -340,6 +340,18 @@ webbläsaren och överlever att sparfilen raderas.
    fotot, utan klocka och med en rund felmarginal runt varje reglage. Rätt
    eller fel sägs direkt med förklaring, och till sist visas samma foto med
    alla reglage utmärkta (`Tågprov.jpg`/`Tågprov svar.png`, Martins egna).
+   Piloten (Boeing 737-cockpit) och lotsen (bryggan på MV Monte Alegre) har
+   samma slags prov; deras facitbilder ritas av `scripts/facitbild.py` ur
+   träffytorna i `jobs.ts`. Mykologen har ett fjärde slag, *avgör*: ett
+   svampfoto i taget, ätlig eller giftig, ingen klocka, och efter svaret –
+   rätt som fel – hur man känner igen svampen och vad giftet gör. Alla
+   fjorton är svenska arter.
+
+   Sju yrken kom till 2026-08-28: diplomat och politisk rådgivare (kategori
+   *Politik och diplomati*, med generalsekreterare respektive
+   parlamentsbyggnader som sista pass), musik- och filmproducent
+   (studioprylar och filmgrejer), pilot, lots och mykolog. Nya jobb läggs in
+   ur JSON med `scripts/merge-nyajobb.mjs`.
    Momentet ger upp till tre dagslöner i bonus, och ett felfritt moment ett
    halvt dagsverke till. Tempot är lugnt med flit – 14 sekunder per kund,
    6–7 sekunder per foto på bandet – för det är frågorna som är spelet;

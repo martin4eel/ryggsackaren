@@ -7693,3 +7693,41 @@ body.sheet-oppen {
 }
 
 .mg-peka-vidare { width: 100%; }
+
+
+/* ------------------------------------------------------------ avgör-spelet */
+
+.mg-avgor-yta {
+  margin: 8px 0 4px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--paper-dim);
+}
+
+.mg-avgor-bild {
+  display: block;
+  width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+}
+
+.mg-avgor-namn {
+  margin: 0 0 6px;
+  min-height: 1.4em;
+  font-family: var(--display);
+  font-size: 1.2rem;
+}
+
+.mg-avgor-val {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.mg-avgor-knapp { width: 100%; }
+.mg-avgor-atlig { background: #2e7d4f; color: #fff; }
+.mg-avgor-giftig { background: #b3261e; color: #fff; }
+.mg-avgor-knapp:disabled { opacity: 0.45; }
+.mg-avgor-knapp.mg-avgor-ratt { opacity: 1; box-shadow: 0 0 0 3px #fff, 0 0 0 6px currentColor; }
+.mg-avgor-knapp.mg-avgor-fel { opacity: 0.7; text-decoration: line-through; }

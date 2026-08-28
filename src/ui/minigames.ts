@@ -106,6 +106,9 @@ export function renderMinigame(
     case 'peka':
       startPointAt(host, game, done);
       break;
+    case 'avgor':
+      startDecide(host, game, done);
+      break;
   }
   return host;
 }
@@ -1642,6 +1645,94 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
     e.preventDefault();
     tryck(e);
   });
+
+  visa();
+}
+
+
+// ------------------------------------------------------------------ avgör
+
+/**
+ * En post i taget - ett svampfoto - och två knappar: ätlig eller giftig.
+ * Ingen klocka. Efter svaret sägs rätt eller fel, och sedan faktaraden om
+ * just den svampen, som ska läsas i lugn och ro innan man går vidare.
+ */
+function startDecide(host: HTMLElement, game: Minigame, onDone: Done): void {
+  const spec = game.avgor!;
+  const poster = shuffled(spec.poster).slice(0, spec.antal ?? spec.poster.length);
+  let index = 0;
+  let right = 0;
+  let vantar = false;
+
+  const status = makeStatus();
+  const fraga = el('p', { class: 'mg-kund mg-avgor-fraga' });
+  const bild = el('img', { class: 'mg-avgor-bild', alt: '', draggable: 'false' });
+  const yta = el('div', { class: 'mg-avgor-yta' }, bild);
+  const namnRad = el('p', { class: 'mg-avgor-namn' });
+  const val = el('div', { class: 'mg-avgor-val' });
+  const feedback = makeFeedback();
+  const info = el('p', { class: 'mg-peka-forklaring' });
+  const vidare = button('Nästa svamp', () => nasta(), { class: 'btn btn-primary mg-peka-vidare' });
+  vidare.hidden = true;
+  host.append(status.node, fraga, yta, namnRad, val, feedback.node, info, vidare);
+
+  const knappar = spec.val.map((v) => {
+    const b = snabbKnapp(v.namn, () => svara(v.id), { class: `btn btn-big mg-avgor-knapp mg-avgor-${v.id}`, 'data-sound': 'av' });
+    val.append(b);
+    return b;
+  });
+
+  const visa = () => {
+    const post = poster[index]!;
+    status.set(`Svamp ${index + 1}/${poster.length}`, `${right} rätt`);
+    fraga.textContent = `Ätlig eller giftig?`;
+    bild.src = quizImageUrl(post.bild);
+    bild.alt = 'En svamp i sin miljö';
+    namnRad.textContent = '';
+    feedback.say('Titta noga. Ingen brådska.', 'neutral');
+    info.textContent = '';
+    for (const b of knappar) {
+      b.classList.remove('mg-avgor-ratt', 'mg-avgor-fel');
+      (b as HTMLButtonElement).disabled = false;
+    }
+    vidare.hidden = true;
+    vantar = false;
+  };
+
+  const svara = (id: string) => {
+    if (vantar) return;
+    vantar = true;
+    const post = poster[index]!;
+    const ok = id === post.svar;
+    if (ok) right += 1;
+    playSound(ok ? 'ratt' : 'fel');
+    for (const [i, b] of knappar.entries()) {
+      (b as HTMLButtonElement).disabled = true;
+      const v = spec.val[i]!;
+      if (v.id === post.svar) b.classList.add('mg-avgor-ratt');
+      else if (v.id === id) b.classList.add('mg-avgor-fel');
+    }
+    const rattNamn = spec.val.find((v) => v.id === post.svar)?.namn ?? post.svar;
+    namnRad.textContent = post.namn;
+    feedback.say(ok ? `Rätt. ${post.namn} är ${rattNamn.toLowerCase()}.` : `Fel. ${post.namn} är ${rattNamn.toLowerCase()}.`, ok ? 'ok' : 'fel');
+    info.textContent = post.info;
+    status.set(`Svamp ${index + 1}/${poster.length}`, `${right} rätt`);
+    vidare.textContent = index + 1 < poster.length ? 'Nästa svamp' : 'Klart';
+    vidare.hidden = false;
+  };
+
+  const nasta = () => {
+    index += 1;
+    if (index >= poster.length) {
+      onDone({
+        score: right / poster.length,
+        summary: `Du avgjorde rätt om ${right} av ${poster.length} svampar.`,
+        perfect: right === poster.length,
+      });
+      return;
+    }
+    visa();
+  };
 
   visa();
 }

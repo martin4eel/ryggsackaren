@@ -173,6 +173,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   bygg: 'Bygg',
   mode: 'Mode och textil',
   samhalle: 'Samhälle och jämställdhet',
+  politik: 'Politik och diplomati',
 };
 
 /**
