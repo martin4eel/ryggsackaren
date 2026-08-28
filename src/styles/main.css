@@ -7571,3 +7571,29 @@ body.sheet-oppen {
 .huvud-mat { --huvud: #a8262b; }
 
 .job-meta { margin-top: 6px; }
+
+
+/* ---------------------------------------- turistbyrån vinkar: börja här */
+
+.sign-lockar .sign-badge {
+  animation: skyltvink 3.2s ease-in-out infinite;
+  box-shadow: 0 0 0 2px rgba(242, 166, 59, 0.55);
+}
+
+@keyframes skyltvink {
+  0%, 70%, 100% { transform: rotate(0) translateY(0); }
+  74% { transform: rotate(-8deg) translateY(-2px); }
+  78% { transform: rotate(8deg) translateY(-3px); }
+  82% { transform: rotate(-6deg) translateY(-2px); }
+  86% { transform: rotate(4deg) translateY(-1px); }
+  90% { transform: rotate(0) translateY(0); }
+}
+
+.sign-lockar .sign-name {
+  color: var(--accent, #f2a63b);
+  font-weight: 800;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sign-lockar .sign-badge { animation: none; }
+}

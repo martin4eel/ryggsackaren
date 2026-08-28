@@ -1770,7 +1770,9 @@ export class App {
     const hint = el(
       'p',
       { class: 'sign-hint' },
-      'Tryck på en skylt för att gå dit.'
+      p.visits === 0 && (p.revealed ?? []).includes('turistbyra')
+        ? 'Börja på turistbyrån: läs broschyren och gör provet.'
+        : 'Tryck på en skylt för att gå dit.'
     );
     /** Uppvända ikoner, i en rad under bilden där de är lätta att hitta. */
     const signs = el('div', { class: 'signs' });
@@ -2067,7 +2069,11 @@ export class App {
           pl.onClick();
         },
         {
-          class: `sign ${pl.klar ? 'sign-klar' : ''} ${this.nyBricka === pl.id ? 'sign-ny' : ''}`,
+          // Turistbyrån är det man ska börja med: skylten vinkar tills provet
+          // är gjort, så att ingen behöver gissa var man startar.
+          class: `sign ${pl.klar ? 'sign-klar' : ''} ${this.nyBricka === pl.id ? 'sign-ny' : ''} ${
+            pl.id === 'turistbyra' && p.visits === 0 && !pl.klar ? 'sign-lockar' : ''
+          }`,
           title: pl.beskrivning,
           'aria-label': `${pl.namn}. ${pl.beskrivning}`,
           'data-spot': pl.id,
@@ -2083,7 +2089,9 @@ export class App {
             ? `${nedvanda.length} ${
                 nedvanda.length === 1 ? 'bricka' : 'brickor'
               } kvar att vända på.`
-            : 'Tryck på en skylt för att gå dit.';
+            : p.visits === 0 && revealed.includes('turistbyra')
+              ? 'Börja på turistbyrån: läs broschyren och gör provet.'
+              : 'Tryck på en skylt för att gå dit.';
       };
       b.addEventListener('pointerenter', visa);
       b.addEventListener('focus', visa);
