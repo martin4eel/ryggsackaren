@@ -35,7 +35,7 @@ try {
   const { CITY_HEADLINES } = await load('/src/data/headlines.ts');
   const { CITY_PAPERS } = await load('/src/data/newspapers.ts');
   const { CITIES } = await load('/src/data/cities.ts');
-  const { QUIZ_IMAGES } = await load('/src/data/quizImages.ts');
+  const { QUIZ_IMAGES, altLacker } = await load('/src/data/quizImages.ts');
   const bildManifest = new Set(QUIZ_IMAGES.map((b) => b.id));
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
@@ -417,6 +417,32 @@ try {
       problems.push(
         `bilden ${b.id} saknar fil i public/quiz/ – kör node scripts/fetch-quiz-images.mjs`
       );
+  }
+  /**
+   * Alt-texten får inte ge bort svaret för den som lyssnar på frågan. En bild
+   * vars vanliga alt-text innehåller ett svarsalternativ behöver en
+   * `altFraga` - en beskrivning utan namn. Koden faller annars tillbaka på
+   * "Foto som hör till frågan", vilket är säkert men fattigt.
+   */
+  const bildById = new Map(QUIZ_IMAGES.map((b) => [b.id, b]));
+  const altKoll = (nyckel, q) => {
+    if (!q.bild || q.bild.startsWith('stad')) return;
+    const b = bildById.get(q.bild);
+    if (!b || b.altFraga) return;
+    if (altLacker(b.alt, q.a))
+      problems.push(`bilden ${q.bild} (${nyckel}) har alt-text som avslöjar svaret - lägg till altFraga`);
+    if (b.altFraga && altLacker(b.altFraga, q.a))
+      problems.push(`bilden ${q.bild} (${nyckel}): altFraga avslöjar svaret`);
+  };
+  for (const [k, qs] of Object.entries(CITY_QUESTIONS)) qs.forEach((q) => altKoll(`stad:${k}`, q));
+  for (const [k, qs] of Object.entries(JOB_QUESTIONS)) qs.forEach((q) => altKoll(`jobb:${k}`, q));
+  for (const [k, q] of Object.entries(COIN_QUESTIONS)) altKoll(`mynt:${k}`, q);
+  for (const b of QUIZ_IMAGES) {
+    if (b.altFraga) {
+      for (const [k, qs] of Object.entries({ ...CITY_QUESTIONS, ...JOB_QUESTIONS })) {
+        for (const q of qs) if (q.bild === b.id && altLacker(b.altFraga, q.a)) problems.push(`bilden ${b.id} (${k}): altFraga avslöjar svaret`);
+      }
+    }
   }
   /**
    * Service workern cachar bilderna ur quiz/manifest.json, som hämtskriptet

@@ -278,6 +278,9 @@ webbläsaren och överlever att sparfilen raderas.
 
    **Svaret kvitteras rakt på sak.** Rätt svar: en rad. Fel svar: *Fel.
    Rätt svar: …* och kuriosan som förklarar saken, personen eller platsen.
+   Alt-texten på ett frågefoto avslöjar aldrig svaret: bilder vars namn står
+   i den vanliga texten ("Turning Torso i Malmö") har en `altFraga` som bara
+   beskriver motivet, och validatorn stoppar bygget om en fråga saknar det.
    Nästan alla frågor har en – 1 270 av 1 366 jobbfrågor – så att ett fel
    svar på jobbet lär något, inte bara kostar en dagslön. Inga utklipp,
    ingen fot – det som ska fastna är faktan. Stämplar som förtjänas mitt i

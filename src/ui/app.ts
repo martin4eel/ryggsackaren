@@ -97,7 +97,7 @@ import { weatherFor, type Weather } from '../game/weather';
 import { CITY_PAPERS } from '../data/newspapers';
 import { annonserFor, type Kontaktannons } from '../data/kontaktannonser';
 import { CITY_HEADLINES } from '../data/headlines';
-import { quizImageAlt, quizImageUrl } from '../data/quizImages';
+import { quizImageAltIFraga, quizImageUrl } from '../data/quizImages';
 import { COIN_QUESTIONS } from '../data/questions/coinQuestions';
 
 interface QuizSession {
@@ -3260,7 +3260,7 @@ export class App {
       const bildruta = el('figure', { class: 'quiz-bild' });
       const img = el('img', {
         src: quizImageUrl(q0.bild),
-        alt: quizImageAlt(q0.bild, this.city.name),
+        alt: quizImageAltIFraga(q0.bild, q0.a, this.city.name),
         loading: 'eager',
         decoding: 'async',
       }) as HTMLImageElement;
