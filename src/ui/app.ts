@@ -712,6 +712,11 @@ export class App {
     // Ett arkadmoment kan ha timers igång. Stäng av dem vid skärmbyte.
     stopAllMinigames();
     const changed = this.state.screen !== screen;
+    if (changed && screen === 'jobb') {
+      // En notis eller stämpel från staden ska inte ligga över frågefotot.
+      this.toast = null;
+      this.stampToast = null;
+    }
     this.state.screen = screen;
     saveGame(this.state);
     if (changed && this.pendingStamp && !this.quiz) this.commit();
@@ -2649,7 +2654,7 @@ export class App {
         ...sp.cities.map((_, i) =>
           el('span', {
             class: `sparet-runda ${i < sp.round ? 'sparet-runda-klar' : i === sp.round ? 'sparet-runda-nu' : ''}`,
-          }, i < sp.round ? String(sp.scores[i]) : String(i + 1))
+          }, i < sp.round ? `${sp.scores[i]} p` : String(i + 1))
         )
       )
     );
@@ -2719,7 +2724,9 @@ export class App {
       )
     );
     wrap.append(panel);
-    window.setTimeout(() => search.focus(), 50);
+    // Bara när rundan börjar: annars hoppar mobiltangentbordet upp vid varje
+    // ny ledtråd.
+    if (sp.shown === 1 && !sp.outcome) window.setTimeout(() => search.focus(), 50);
     return wrap;
   }
 
@@ -3308,7 +3315,19 @@ export class App {
         el('span', {}, r.hogst ?? skriv(r.max)),
         el('span', {}, r.lagst ?? skriv(r.min))
       );
-      skala.append(visning, el('div', { class: 'reglage-bana' }, input, spann));
+      const bana = el('div', { class: 'reglage-bana' }, input, spann);
+      if (answered) {
+        // Rätt värde markeras på skalan, så att man ser hur långt ifrån man var.
+        const andel = ((r.svar - r.min) / (r.max - r.min)) * 100;
+        bana.append(
+          el('span', {
+            class: 'reglage-ratt',
+            style: r.liggande ? `left: ${andel.toFixed(1)}%` : `bottom: ${andel.toFixed(1)}%`,
+            title: `Rätt svar: ${skriv(r.svar)}`,
+          }, skriv(r.svar))
+        );
+      }
+      skala.append(visning, bana);
       panel.append(skala);
       if (!answered) {
         panel.append(
@@ -3445,7 +3464,7 @@ export class App {
       this.focusAfterRender = next;
     }
 
-    if (!isJob) {
+    if (!isJob && q.kind !== 'mynt') {
       panel.append(
         el('p', { class: 'muted' },
           `Rätt så här långt: ${q.correct} av ${q.index + (answered ? 1 : 0)}` +

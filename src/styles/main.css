@@ -7597,3 +7597,45 @@ body.sheet-oppen {
 @media (prefers-reduced-motion: reduce) {
   .sign-lockar .sign-badge { animation: none; }
 }
+
+
+/* ---------------------------------------------- rätt värde på reglaget */
+
+.reglage-bana { position: relative; }
+
+.reglage-ratt {
+  position: absolute;
+  transform: translateX(-50%);
+  top: -1.55em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--ok, #2e7d4f);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.reglage-ratt::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--ok, #2e7d4f);
+}
+
+.reglage-staende .reglage-ratt {
+  transform: translateY(50%);
+  top: auto;
+  left: calc(100% + 6px);
+}
+
+.reglage-staende .reglage-ratt::after { display: none; }
+
+.sparet-runda { min-width: 2.2em; padding: 0 6px; }

@@ -16,7 +16,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Här planterades eukalyptus från Australien i massor på 1890-talet, för att kejsaren annars hade flyttat huvudstaden igen när veden tog slut.' },
     { niva: 8, text: 'Kalendern här har tretton månader och ligger sju-åtta år efter vår. Dygnet börjar vid soluppgången, så klockan sex är egentligen klockan tolv.' },
     { niva: 6, text: 'Kaffeceremonin tar en timme och bjuder på tre koppar ur en lerkanna. Att gå efter första koppen är oartigt. Vi stannar.' },
-    { niva: 4, text: 'En kejsare som kröntes här 1930 hade dessförinnan ett namn som en rörelse på Jamaica sedan lånade. Landet är det enda i Afrika som aldrig koloniserades.' },
+    { niva: 4, text: 'En kejsare som kröntes här 1930 hade dessförinnan ett namn som en rörelse på Jamaica sedan lånade. Landet är ett av två länder i Afrika som aldrig koloniserades.' },
     { niva: 2, text: 'Huvudstaden vars namn betyder ny blomma, hem för Afrikanska unionen och en maratonlöpare som vann OS-guld i Rom 1960 barfota.' },
   ],
   amman: [
@@ -30,7 +30,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Konserthuset från 1888 har en av världens bästa akustiker. Arkitekten visste inget om akustik.' },
     { niva: 8, text: 'Husen lutar framåt med flit: soffan hissas upp med kroken på gaveln, för trappan är inte ett alternativ.' },
     { niva: 6, text: 'På 1630-talet kostade en tulpanlök lika mycket som ett kanalhus här. I februari 1637 kostade den som en lök.' },
-    { niva: 4, text: 'En flicka skrev dagbok bakom en bokhylla här i två år. New York bar stadens namn till 1664, då man bytte till sig Surinam och var nöjd.' },
+    { niva: 4, text: 'En flicka skrev dagbok bakom en bokhylla här i två år. New York bar stadens namn till 1664. Tre år senare bytte man till sig Surinam och var nöjd.' },
     { niva: 2, text: 'Kanalstaden vars namn betyder dammen i en flod, med rött kvarter, cyklar överallt och ett museum med Nattvakten.' },
   ],
   aten: [
@@ -72,7 +72,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Bokhandeln som var teater: kaféet står på scenen och i logerna sitter folk och läser utan att köpa.' },
     { niva: 8, text: 'En nästan blind författare var chef för nationalbiblioteket här. Han kallade det Guds ironi och fortsatte diktera.' },
     { niva: 6, text: 'Den bittra drycken sugs ur en kalebass genom ett metallrör. Att säga tack betyder att man inte vill ha mer, vilket förvirrar artiga svenskar.' },
-    { niva: 4, text: 'En påve föddes här och har medlemskort i en lokal fotbollsklubb. Den andra stora klubben kallas genueserna efter invandrarna i hamnkvarteret.' },
+    { niva: 4, text: 'En påve föddes här och hade medlemskort i en lokal fotbollsklubb. Den andra stora klubben kallas genueserna efter invandrarna i hamnkvarteret.' },
     { niva: 2, text: 'Tangons huvudstad, med en sextonfilig aveny uppkallad efter självständighetsdagen och en presidenthustru som ligger på Recoleta-kyrkogården.' },
   ],
   cusco: [
@@ -108,10 +108,10 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 8, text: 'Älven som mynnar här är bara 93 kilometer lång men för mest vatten av alla landets älvar. Den tar helt enkelt en storsjö med sig ut i havet.' },
     { niva: 6, text: 'Enligt legenden var bakaxeln felmonterad på stadens första bil 1927, så den kunde bara backa. Företaget har ändå gått framåt sedan dess.' },
     { niva: 4, text: 'På öarna i södra skärgården är bilar förbjudna och färjan ingår i kollektivtrafiken. En skulptör fick 1931 krympa vissa detaljer på havsguden vid paradgatans krön.' },
-    { niva: 2, text: 'Vi anländer till landets näst största stad på västkusten, där en lokal trubadur fyllt nationalarenan två kvällar i rad och spårvagnarna är blå.' },
+    { niva: 2, text: 'Vi anländer till landets näst största stad på västkusten, där en lokal trubadur fyllt stadens storarena två kvällar i rad och spårvagnarna är blå.' },
   ],
   hanoi: [
-    { niva: 10, text: 'Här grundades landets första universitet 1070. De godkända fick namnen huggna i stenstelar burna av sköldpaddor, som hållit i 900 år.' },
+    { niva: 10, text: 'Här grundades landets första universitet 1070. De godkända fick namnen huggna i stenstelar burna av sköldpaddor, som hållit i över 500 år.' },
     { niva: 8, text: 'Äggkaffe uppfanns här 1946 när mjölken tog slut. Vattendockteatern är äldre och började på översvämmade risfält.' },
     { niva: 6, text: 'Stadens namn betyder innanför floden, och floden är verkligen röd av lera från det stora grannlandet i norr.' },
     { niva: 4, text: 'Ett fängelse här fick av amerikanska krigsfångar ett hotellnamn, och en blivande presidentkandidat bodde där i fem och ett halvt år. Han rekommenderade det inte.' },
@@ -154,14 +154,14 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
   ],
   kathmandu: [
     { niva: 10, text: 'Här bor en levande gudinna som väljs som liten flicka och avgår vid puberteten. Sedan får hon pension och lov att gå på marken igen.' },
-    { niva: 8, text: 'Tidszonen ligger 5 timmar och 45 minuter före Greenwich, en kvart före grannen, och kalendern skriver år 2083. Nationen vill att klockan visar självständigheten.' },
+    { niva: 8, text: 'Tidszonen ligger 5 timmar och 45 minuter före Greenwich, en kvart före grannen, och kalendern skriver år 2083. Kvarten är där för att markera att man inte är grannen.' },
     { niva: 6, text: 'Kronprinsen sköt ihjäl nästan hela kungafamiljen 2001 och monarkin avskaffades 2008. Soldaterna som britterna rekryterat sedan 1815 tjänstgör fortfarande.' },
     { niva: 4, text: 'Degknyten med chutney från Tibet är snabbmaten, och heliga apor styr trappan med 365 steg till templet på kullen. En jordbävning 2015 fällde stadens torn, som står igen sedan 2021.' },
     { niva: 2, text: 'Härifrån startar expeditionerna mot världens högsta berg, vars topp nåddes 1953 av en sherpa och en nyzeeländare som aldrig avslöjade vem som klev upp först.' },
   ],
   kopenhamn: [
     { niva: 10, text: 'Ett torn från 1642 bestigs via en spiralramp utan trappsteg. En rysk tsar ska ha ridit uppför 1716; tsarinnan tog vagnen.' },
-    { niva: 8, text: 'En popgrupp härifrån stämdes av en leksaksjätte för en låt om en plastdocka. Domaren avslutade med orden \'the parties are advised to chill\'.' },
+    { niva: 8, text: 'En popgrupp härifrån stämdes av en leksaksjätte för en låt om en plastdocka. Domaren avslutade med orden ”the parties are advised to chill”.' },
     { niva: 6, text: 'Britterna bombade staden 1807 och seglade hem med hela flottan. Landet valde sedan Napoleons sida, vilket inte heller gick bra.' },
     { niva: 4, text: 'Ett bryggeri fick namn efter grundarens son och kullen det låg på. En arkitekt ritade ett hotell 1960 in i minsta bestick; stolarna Ägget och Svanen sitter kvar.' },
     { niva: 2, text: 'Sagoförfattaren och filosofen ligger på samma kyrkogård fast de ogillade varandra. En liten sjöjungfru sitter på sin sten i hamnen, och bron leder till Malmö.' },
@@ -181,8 +181,8 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 2, text: 'Kristusstatyn på andra sidan floden restes 1959 som tack för att landet slapp kriget; Rio hade sin sedan 1931. Vi lyssnar på fado och tar gula spårvagn 28 upp i backarna.' },
   ],
   london: [
-    { niva: 10, text: 'Här måste taxiförarna kunna 25 000 gator utantill innan de får köra. Provet tar tre–fyra år, och GPS:en räknas inte.' },
-    { niva: 8, text: 'Den stora branden 1666 började i ett bageri på en gata uppkallad efter pudding. Bagaren nekade till alltihop.' },
+    { niva: 10, text: 'Den stora branden 1666 började i ett bageri på en gata uppkallad efter pudding. Bagaren nekade till alltihop.' },
+    { niva: 8, text: 'Här måste taxiförarna kunna 25 000 gator utantill innan de får köra. Provet tar tre–fyra år, och GPS:en räknas inte.' },
     { niva: 6, text: 'Finanskvarteret kallas kvadratmilen och har en egen borgmästare som väljs varje år. Han bor i ett hus som helt enkelt heter Herrgårdshuset.' },
     { niva: 4, text: 'Här går nollmeridianen genom en stadsdel i sydöst, så all världens tid räknas härifrån. Grannlandet i söder höll sig till sin egen huvudstad i tjugo år till.' },
     { niva: 2, text: 'Här är bussarna röda, taxibilarna svarta och parlamentets klocktorn slår över Themsen. Tunnelbanan kallas röret.' },
@@ -225,7 +225,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
   mumbai: [
     { niva: 10, text: 'Här uppfanns 1966 en friterad potatisbiff i bröd vid ett stånd utanför en pendeltågsstation. Den kallas stadens hamburgare och kostar en bråkdel.' },
     { niva: 8, text: 'Staden byggdes på sju öar som engelsmännen fick i hemgift 1661 och sedan ägnade tvåhundra år åt att fylla ihop. Nu är det en ö, och den är full.' },
-    { niva: 6, text: 'På en ö i hamnen finns grottempel huggna ur berget. Elefanten som gav ön sitt namn försökte portugiserna flytta; den gick sönder.' },
+    { niva: 6, text: 'På en ö i hamnen finns grottempel huggna ur berget. Elefanten som gav ön sitt namn föll sönder när den skulle flyttas.' },
     { niva: 4, text: 'Här restes en triumfport vid kajen för en kungs besök 1911. De sista brittiska trupperna marscherade ut genom den 1948; grannhotellet är äldre än porten.' },
     { niva: 2, text: 'Här föddes Salman Rushdie 1947, samma år som landet blev fritt vid midnatt. Filmindustrin lånade namn av Hollywood, och stationen hette Victoria Terminus till 1996.' },
   ],
@@ -254,7 +254,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Under stadens gator ligger benen från omkring sex miljoner invånare, flyttade dit på 1780-talet när kyrkogårdarna svämmade över.' },
     { niva: 8, text: 'Basilikan på stadens kulle tvättar sig själv: stenen avger ett vitt ämne när det regnar. Resten av staden får sota.' },
     { niva: 6, text: 'Här stormades en fängelseborg den 14 juli 1789. Där satt sju fångar, varav en trodde sig vara Julius Caesar.' },
-    { niva: 4, text: 'Tornet som byggdes till världsutställningen 1889 skulle rivas efter tjugo år. En sångerska på 147 centimeter tog artistnamn efter sparven.' },
+    { niva: 4, text: 'Tornet som byggdes till världsutställningen 1889 skulle rivas efter tjugo år. En sångerska på 142 centimeter tog artistnamn efter sparven.' },
     { niva: 2, text: 'Här skrev Victor Hugo om ringaren för att rädda katedralen på ön i floden från rivning. Croissanten är österrikisk, men bagarna här behöll äran.' },
   ],
   peking: [
@@ -325,7 +325,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 8, text: 'Elva fartyg med 700 fångar anlände 1788 och staden var grundad. Datumet är nationaldag; inte alla firar.' },
     { niva: 6, text: 'Trattspindeln som bär stadens namn kan döda en människa – men sedan motgiftet kom 1981 har den inte gjort det.' },
     { niva: 4, text: 'AC/DC bildades här 1973, samma år som det segelformade operahuset invigdes. Hamnbron från 1932 får man klättra över i sele.' },
-    { niva: 2, text: 'Vi letar efter Nemo på 42 Wallaby Way, i OS-staden 2000 där Cathy Freeman tände elden, den största staden på sin kontinent.' },
+    { niva: 2, text: 'Vi letar efter Nemo på 42 Wallaby Way, i OS-staden 2000 där Cathy Freeman tände elden, en av de två största städerna på sin kontinent.' },
   ],
   tokyo: [
     { niva: 10, text: 'Kejsaren får enligt gammal regel inte äta stadens mest riskabla fisk, vars gift saknar motgift. Kockarna utbildas i flera år för licens.' },

@@ -2558,7 +2558,7 @@ export const JOBS: Job[] = [
         { text: 'Något sött från Portugal till osten.', svar: 'portvin', nastan: ['rodvin', 'rosevin', 'champagne'], fel: 'Sött, sa jag. Och portugisiskt. Det där är inget av det.' },
         { text: 'Jag vill se var ni förvarar flaskorna.', svar: 'vinkallare', nastan: ['ekfat', 'ishink', 'dekanter'], fel: 'Förvarar ni ALLT där? Det får inte plats.' },
         { text: 'Skumpa till hela bordet, det är hennes födelsedag!', svar: 'champagne', nastan: ['rosevin', 'vitvin', 'portvin'], fel: 'Skumpa. Med bubblor. Det var inte svårt.' },
-        { text: 'Något att ha till chokladtårtan, gärna starkt.', svar: 'portvin', nastan: ['rodvin', 'champagne', 'vitvin'], fel: 'Starkt och sött, sa jag. Det där är bara ett av det.' },
+        { text: 'Något att ha till chokladtårtan, gärna starkt.', svar: 'portvin', nastan: ['rodvin', 'champagne', 'vitvin'], fel: 'Starkt och sött, sa jag. Det där är bara det ena.' },
       ],
     },
     scene:
@@ -2634,7 +2634,7 @@ export const JOBS: Job[] = [
         { text: 'Montreal Canadiens – NHL:s äldsta lag, med flest Stanley Cup-titlar.', svar: 'logo-canadiens', nastan: ['logo-djurgarden', 'logo-redwings', 'logo-hv71'], fel: 'Det där är inte Montréal.' },
         { text: 'Boston Bruins – Original Six-laget där Bobby Orr flög genom luften 1970.', svar: 'logo-bruins', nastan: ['logo-brynas', 'logo-lightning', 'logo-rangers'], fel: 'Fel märke. Boston bryr sig.' },
         { text: 'Vancouver Canucks – laget från Kanadas västkust, med Sedin-tvillingarna i sjutton säsonger.', svar: 'logo-canucks', nastan: ['logo-frolunda', 'logo-lightning', 'logo-mapleleafs'], fel: 'Det där är fel kust.' },
-        { text: 'Philadelphia Flyers – Pennsylvanias lag, känt som Broad Street Bullies på 1970-talet.', svar: 'logo-flyers', nastan: ['logo-brynas', 'logo-capitals', 'logo-canucks'], fel: 'Fel märke. Philadelphia tittar bort.' },
+        { text: 'Philadelphia Flyers – Philadelphias lag, känt som Broad Street Bullies på 1970-talet.', svar: 'logo-flyers', nastan: ['logo-brynas', 'logo-capitals', 'logo-canucks'], fel: 'Fel märke. Philadelphia tittar bort.' },
         { text: 'Tampa Bay Lightning – Victor Hedmans lag i Florida.', svar: 'logo-lightning', nastan: ['logo-canucks', 'logo-hv71', 'logo-bruins'], fel: 'Ingen blixt. Hedman skakar på huvudet.' },
       ],
     },

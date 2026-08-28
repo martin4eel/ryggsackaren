@@ -6,7 +6,7 @@ import type { Question } from '../types';
  */
 export const CITY_QUESTIONS: Record<string, Question[]> = {
   stockholm: [
-    { q: 'Sevärdheten på bilden är stadens mest besökta museum. Vad heter det?', a: ['Vasamuseet', 'Skansen', 'Nationalmuseum', 'Moderna museet'], bild: 'stad:stockholm', d: 1 },
+    { q: 'Sevärdheten på bilden är ett museum byggt kring ett enda örlogsskepp. Vad heter det?', a: ['Vasamuseet', 'Skansen', 'Nationalmuseum', 'Moderna museet'], bild: 'stad:stockholm', d: 1 },
     { q: 'Vilket år sjönk regalskeppet på bilden?', bild: 'vasaskeppet', a: ['1628'], reglage: { artal: true, min: 1500, max: 1800, steg: 1, svar: 1628, tolerans: 8, liggande: true, lagst: '1500', hogst: '1800' }, d: 1 },
     {
       q: 'Vad heter stadsdelen på bilden, Stockholms gamla stadskärna med medeltida gränder?', bild: 'gamlastan',
@@ -779,9 +779,9 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 2,
     },
     {
-      q: 'Vilket djur är det på bilden, världens snabbaste landdjur?', bild: 'gepard',
-      a: ['Geparden', 'Lejonet', 'Antilopen', 'Strutsen'],
-      d: 1,
+      q: 'Hur fort kan djuret på bilden springa som mest, ungefär?', bild: 'gepard',
+      a: ['110 km/h', '70 km/h', '150 km/h', '45 km/h'],
+      d: 1, info: 'Geparden håller toppfarten bara i några hundra meter. Sedan måste den vila, jaktbyte eller inte.',
     },
 
     { q: 'Vem är kvinnan på bilden, den danska författaren som drev kaffefarm vid Ngongbergen utanför Nairobi?', bild: 'karenblixen', a: ['Karen Blixen', 'Selma Lagerlöf', 'Sigrid Undset', 'Tove Ditlevsen'], d: 1, info: 'Stadsdelen Karen är uppkallad efter henne. Farmen är i dag museum.' },
@@ -1514,7 +1514,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
 
     { q: 'Vad heter Gaudís park på bilden, med mosaiködlan vid trappan?', bild: 'parkguell', a: ['Park Güell', 'Parc de la Ciutadella', 'Parc del Laberint', 'Parc de Montjuïc'], d: 1, info: 'Parken var tänkt som ett villaområde med sextio tomter. Två hus såldes, och Gaudí bodde i ett av dem.' },
     { q: 'Vad heter FC Barcelonas hemmaarena på bilden?', bild: 'campnou', a: ['Camp Nou', 'Bernabéu', 'Mestalla', 'San Mamés'], d: 1, info: 'Klubbens motto är "Més que un club" – mer än en klubb – och under Franco var den katalanernas fristad.' },
-    { q: 'Vilken konstnär på bilden, född i Málaga, har ett museum i Barcelona med sina ungdomsverk?', bild: 'picasso', a: ['Pablo Picasso', 'Joan Miró', 'Salvador Dalí', 'Antoni Tàpies'], d: 1, info: 'Picasso kom till Barcelona som fjortonåring, och museet öppnade 1963 medan han fortfarande levde.' },
+    { q: 'Vilken konstnär på bilden, född i Málaga, har ett museum i Barcelona med sina ungdomsverk?', bild: 'picasso', a: ['Pablo Picasso', 'Joan Miró', 'Salvador Dalí', 'Antoni Tàpies'], d: 1, info: 'Picasso kom till Barcelona som trettonåring, och museet öppnade 1963 medan han fortfarande levde.' },
     { q: 'Vilken operasångerska på bilden, från Barcelona, sjöng "Barcelona" tillsammans med Freddie Mercury?', bild: 'caballe', a: ['Montserrat Caballé', 'Teresa Berganza', 'Victoria de los Ángeles', 'Ainhoa Arteta'], d: 1, info: 'Låten blev spelens signaturmelodi 1992, men Mercury dog året innan.' },
     { q: 'Vad heter det medeltida kvarteret runt katedralen på bilden?', bild: 'barcelonakatedralen', a: ['Barri Gòtic', 'El Raval', 'Eixample', 'Gràcia'], d: 1, info: 'Eixample är rutnätet utanför, ritat 1859 av Ildefons Cerdà med avskurna hörn så att hästvagnarna kunde svänga.' },
     { q: 'Vilken sjöfarare står på kolonnen på bilden, där La Rambla slutar vid hamnen?', bild: 'columbusmonumentet', a: ['Christofer Columbus', 'Vasco da Gama', 'Ferdinand Magellan', 'Amerigo Vespucci'], d: 1, info: 'Columbus mottogs av kungaparet i Barcelona 1493. Statyn pekar ut mot Medelhavet – inte mot Amerika.' },
