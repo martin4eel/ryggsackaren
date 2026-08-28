@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'ryggsackaren-v21';
+const CACHE = 'ryggsackaren-v22';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -62,7 +62,7 @@ const CITY_PHOTOS = [
   'sydney',
   'tokyo',
   'vasteras',
-].map((id) => `./cities/${id}.jpg`);
+].flatMap((id) => [`./cities/${id}.jpg`, `./cities/${id}-stad.jpg`]);
 
 /**
  * Frågebilderna är många - flera hundra - och listas i quiz/manifest.json,

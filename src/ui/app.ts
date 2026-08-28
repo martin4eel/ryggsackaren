@@ -172,7 +172,12 @@ const CATEGORY_LABELS: Record<string, string> = {
  * cacha dem för offline-spel. Relativ sökväg, precis som ikonerna, så att
  * det fungerar när spelet ligger i en undermapp.
  */
+/** Stadsbilden: vyn över staden. Sevärdheten har sin egen fil utan suffix. */
 function cityPhotoUrl(city: City): string {
+  return `./cities/${city.id}-stad.jpg`;
+}
+
+function landmarkPhotoUrl(city: City): string {
   return `./cities/${city.id}.jpg`;
 }
 
@@ -188,14 +193,17 @@ function photoImg(city: City, cls: string, hideParent?: HTMLElement): HTMLImageE
     loading: 'lazy',
     decoding: 'async',
   });
-  img.addEventListener(
-    'error',
-    () => {
-      if (hideParent) hideParent.classList.add('no-photo');
-      else img.classList.add('no-photo');
-    },
-    { once: true }
-  );
+  // Saknas stadsbilden faller vi tillbaka på sevärdheten innan vi ger upp.
+  let fallback = false;
+  img.addEventListener('error', () => {
+    if (!fallback) {
+      fallback = true;
+      img.src = landmarkPhotoUrl(city);
+      return;
+    }
+    if (hideParent) hideParent.classList.add('no-photo');
+    else img.classList.add('no-photo');
+  });
   return img;
 }
 
@@ -2670,7 +2678,7 @@ export class App {
       // annorlunda ut än ett i Reykjavík, också när frågorna är desamma.
       const site = el('section', {
         class: 'panel worksite',
-        style: `--foto:url("./cities/${this.city.id}.jpg")`,
+        style: `--foto:url("./cities/${this.city.id}-stad.jpg")`,
       });
       site.append(
         el('div', { class: 'worksite-head' },

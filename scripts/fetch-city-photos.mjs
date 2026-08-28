@@ -10,7 +10,7 @@
  * Skriptet laddar bara ner foton som saknas, så det går att köra om.
  */
 
-import { createWriteStream, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
@@ -153,23 +153,39 @@ async function download(url, dest) {
 
 mkdirSync(OUT_DIR, { recursive: true });
 
+/**
+ * Stadsbilderna: en vy över själva staden - skyline, flygfoto, hustak - som
+ * visas i stadsbilden och på startskärmen. Sevärdheten ovan är kvar på
+ * frågorna och turistbyrån. Listan ligger i scripts/city-skylines.json.
+ */
+const SKYLINE_FILE = join(ROOT, 'scripts', 'city-skylines.json');
+const CITY_SKYLINES = existsSync(SKYLINE_FILE)
+  ? JSON.parse(readFileSync(SKYLINE_FILE, 'utf8'))
+  : {};
+
 const credits = [];
 let failed = 0;
 
-for (const [cityId, source] of Object.entries(CITY_ARTICLES)) {
-  const dest = join(OUT_DIR, `${cityId}.jpg`);
+const jobb = [
+  ...Object.entries(CITY_ARTICLES).map(([cityId, source]) => ({ cityId, source, fil: `${cityId}.jpg` })),
+  ...Object.entries(CITY_SKYLINES).map(([cityId, source]) => ({ cityId, source, fil: `${cityId}-stad.jpg` })),
+];
+
+for (const { cityId, source, fil } of jobb) {
+  const dest = join(OUT_DIR, fil);
   try {
     const { thumbUrl, fileName } = source.file
       ? await commonsFile(source.file)
       : await pageImage(source.article);
     const credit = await fileCredits(fileName);
-    credits.push({ cityId, source: source.file ?? source.article, fileName, ...credit });
+    credits.push({ cityId, fil, source: source.file ?? source.article, fileName, ...credit });
     if (existsSync(dest)) {
-      console.log(`= ${cityId}: finns redan, uppdaterar bara attribution`);
+      console.log(`= ${fil}: finns redan, uppdaterar bara attribution`);
       continue;
     }
     await download(thumbUrl, dest);
-    console.log(`✓ ${cityId}: ${source.file ?? source.article} -> ${fileName}`);
+    console.log(`✓ ${fil}: ${source.file ?? source.article} -> ${fileName}`);
+    await new Promise((r) => setTimeout(r, 600));
   } catch (err) {
     failed++;
     console.error(`✗ ${cityId}: ${err.message}`);
@@ -188,7 +204,7 @@ if (credits.length > 0) {
   ];
   for (const c of credits) {
     lines.push(
-      `- **${c.cityId}.jpg** – [${c.fileName}](${c.page}) av ${c.artist}, ${c.license}.`
+      `- **${c.fil}** – [${c.fileName}](${c.page}) av ${c.artist}, ${c.license}.`
     );
   }
   lines.push('');

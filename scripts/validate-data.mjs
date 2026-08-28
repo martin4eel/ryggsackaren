@@ -169,6 +169,8 @@ try {
     // Saknas filen hämtas den med: node scripts/fetch-city-photos.mjs
     if (!existsSync(join(ROOT, 'public', 'cities', `${city.id}.jpg`)))
       problems.push(`stad ${city.id} saknar foto public/cities/${city.id}.jpg`);
+    if (!existsSync(join(ROOT, 'public', 'cities', `${city.id}-stad.jpg`)))
+      problems.push(`stad ${city.id} saknar stadsbild public/cities/${city.id}-stad.jpg – kör node scripts/fetch-city-photos.mjs`);
 
     const fakta = CITY_FACTS[city.id] ?? [];
     if (fakta.length < 4)

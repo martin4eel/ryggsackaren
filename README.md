@@ -112,8 +112,13 @@ webbläsaren och överlever att sparfilen raderas.
 
 1. **Vem är du, och var är du född?** Namnet trycks i passet och följer med i
    resedagboken. Födelsestaden är där resan börjar, dit du ska ta dig tillbaka,
-   och dess valuta är den du räknar i. Varje stad visas med ett foto av sin
-   sevärdhet, som ett vykort högst upp på stadsskärmen.
+   och dess valuta är den du räknar i. Varje stad har två foton: en
+   **stadsbild** – skyline, flygfoto, hustak – som är vykortet högst upp på
+   stadsskärmen och på startkortet, och ett foto av **sevärdheten**, som hör
+   till frågorna, turistbyrån och tidningens arkivfoto. Västerås ska se ut
+   som Västerås, inte som en äng med stenar. Stadsbilderna listas i
+   `scripts/city-skylines.json` och hämtas av samma skript som
+   sevärdheterna (`public/cities/<id>-stad.jpg`).
 2. **Välj svårighetsgrad.** Lägena delar mekanik, kartor och progression –
    det är kraven som skiljer. Allt som skiljer dem ligger samlat i
    `src/game/difficulty.ts`.
