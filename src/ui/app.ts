@@ -2525,7 +2525,7 @@ export class App {
       el('div', { class: 'row' },
         p.visits === 0
           ? button('Gör provet', () => this.startCityQuiz(), { class: 'btn btn-primary' })
-          : button('Fortsätt', () => this.go('stad'), { class: 'btn btn-primary' }),
+          : button('Tillbaka till staden', () => this.go('stad'), { class: 'btn btn-primary' }),
         p.visits === 0
           ? button('Tillbaka', () => this.go('stad'), { class: 'btn btn-ghost' })
           : button('Gör om provet', () => this.startCityQuiz(), { class: 'btn btn-ghost' })
