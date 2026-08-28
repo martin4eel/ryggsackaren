@@ -53,7 +53,7 @@ export function pointsIn(state: GameState, huvud: Huvudkategori): number {
 export function jobRequirement(job: Job): { points: number; rating: number } {
   if (job.wageClass === 1) return { points: 0, rating: 0 };
   if (job.wageClass === 2) return { points: 1, rating: 0 };
-  return { points: 3, rating: 75 };
+  return { points: 2, rating: 75 };
 }
 
 /**
@@ -74,7 +74,7 @@ export function jobRequirementText(job: Job): string {
   const namn = HUVUD_LABELS[job.huvud];
   if (job.wageClass === 1) return 'Inga krav';
   if (job.wageClass === 2) return `Kräver en poäng i ${namn}`;
-  return `Kräver tre poäng i ${namn} och minst 75 i stadsbetyg`;
+  return `Kräver två poäng i ${namn} och minst 75 i stadsbetyg`;
 }
 
 /** Lön per rätt svar i basenheter. */

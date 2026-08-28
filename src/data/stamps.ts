@@ -24,12 +24,12 @@ export interface Stamp {
 }
 
 const MASTARE: Array<{ id: string; huvud: string; name: string; desc: string; glyph: string }> = [
-  { id: 'mastare-vetenskap', huvud: 'vetenskap', name: 'Mästare: Vetenskap & historia', desc: 'Nå tre poäng i Vetenskap & historia - löneklass 3 är öppen.', glyph: '⚗' },
-  { id: 'mastare-konst', huvud: 'konst', name: 'Mästare: Konst & kultur', desc: 'Nå tre poäng i Konst & kultur - löneklass 3 är öppen.', glyph: '♫' },
-  { id: 'mastare-praktiskt', huvud: 'praktiskt', name: 'Mästare: Praktiska yrken', desc: 'Nå tre poäng i Praktiska yrken - löneklass 3 är öppen.', glyph: '⚒' },
-  { id: 'mastare-aventyr', huvud: 'aventyr', name: 'Mästare: Äventyr & natur', desc: 'Nå tre poäng i Äventyr & natur - löneklass 3 är öppen.', glyph: '⛰' },
-  { id: 'mastare-sport', huvud: 'sport', name: 'Mästare: Sport & fritid', desc: 'Nå tre poäng i Sport & fritid - löneklass 3 är öppen.', glyph: '⚽' },
-  { id: 'mastare-mat', huvud: 'mat', name: 'Mästare: Mat & dryck', desc: 'Nå tre poäng i Mat & dryck - löneklass 3 är öppen.', glyph: '♨' },
+  { id: 'mastare-vetenskap', huvud: 'vetenskap', name: 'Mästare: Vetenskap & historia', desc: 'Nå tre poäng i Vetenskap & historia - tre genomförda skift i kategorin.', glyph: '⚗' },
+  { id: 'mastare-konst', huvud: 'konst', name: 'Mästare: Konst & kultur', desc: 'Nå tre poäng i Konst & kultur - tre genomförda skift i kategorin.', glyph: '♫' },
+  { id: 'mastare-praktiskt', huvud: 'praktiskt', name: 'Mästare: Praktiska yrken', desc: 'Nå tre poäng i Praktiska yrken - tre genomförda skift i kategorin.', glyph: '⚒' },
+  { id: 'mastare-aventyr', huvud: 'aventyr', name: 'Mästare: Äventyr & natur', desc: 'Nå tre poäng i Äventyr & natur - tre genomförda skift i kategorin.', glyph: '⛰' },
+  { id: 'mastare-sport', huvud: 'sport', name: 'Mästare: Sport & fritid', desc: 'Nå tre poäng i Sport & fritid - tre genomförda skift i kategorin.', glyph: '⚽' },
+  { id: 'mastare-mat', huvud: 'mat', name: 'Mästare: Mat & dryck', desc: 'Nå tre poäng i Mat & dryck - tre genomförda skift i kategorin.', glyph: '♨' },
 ];
 
 const regionsVisited = (state: GameState, cityRegion: (id: string) => string | undefined) =>
@@ -211,7 +211,7 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
     {
       id: 'allkonstnar',
       name: 'Allkonstnär',
-      desc: 'Nå tre poäng i alla sex huvudkategorierna. Det finns inget jobb du inte får söka.',
+      desc: 'Nå tre poäng i alla sex huvudkategorierna. Arton skift, och inget jobb du inte behärskar.',
       glyph: '★',
       tier: 'sigill',
       test: (s) => MASTARE.every((m) => ((s.points as Record<string, number | undefined>)?.[m.huvud] ?? 0) >= 3),

@@ -361,7 +361,7 @@ webbläsaren och överlever att sparfilen raderas.
    natur*, *Sport & fritid* och *Mat & dryck* (`huvud` i `src/data/jobs.ts`).
    Löneklass 1 är öppen för alla. Varje genomfört skift ger **en poäng i
    jobbets huvudkategori**, oavsett hur det gick; en poäng öppnar löneklass 2
-   i samma kategori, tre poäng löneklass 3 – som därtill kräver 75 i
+   i samma kategori, två poäng löneklass 3 – som därtill kräver 75 i
    stadsbetyg. Den som diskat på ett fik kan alltså söka kockjobbet men inte
    museivärdsjobbet; dit går vägen via vävstolen. Poängen står under
    _Erfarenhet_ i ryggsäcken, och tidningen skriver ut hur många man har
@@ -437,7 +437,8 @@ webbläsaren och överlever att sparfilen raderas.
    kontinenter, tio i rad, perfekt skift, skuldfri, klimatbonus och så vidare. De som ännu
    inte tagits står i en kort lista under uppslaget, som en resplan. Varje
    stämpel är värd poäng på slutet. Sex av dem är **mästarstämplar**: en per
-   huvudkategori när man nått tre poäng och löneklass 3 står öppen. De är
+   huvudkategori när man nått tre poäng – ett skift mer än vad löneklass 3
+   kräver. De är
    större, trycks i guldfolie med lagerkrans och slås över grannarna, som ett
    riktigt avtryck ovanpå det som redan står där. Den som når dit i alla sex
    får dessutom ett rött lacksigill, *Allkonstnär*.

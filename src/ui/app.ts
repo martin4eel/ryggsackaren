@@ -2928,7 +2928,7 @@ export class App {
         const har = pointsIn(s, job.huvud);
         card.append(
           el('p', { class: 'note' },
-            `Kräver ${need.points === 1 ? 'en' : 'tre'} poäng i `,
+            `Kräver ${need.points === 1 ? 'en' : 'två'} poäng i `,
             huvudBadge(job.huvud),
             need.rating ? ` och minst ${need.rating} i stadsbetyg.` : '.',
             ` Du har ${har} av ${need.points}` + (need.rating ? ` och ${p.rating} i betyg.` : '.')
@@ -4223,7 +4223,7 @@ export class App {
     erf.append(
       el('h2', {}, 'Erfarenhet'),
       el('p', { class: 'muted' },
-        'Ett genomfört skift ger en poäng i sin huvudkategori. En poäng öppnar löneklass 2, tre poäng löneklass 3.'
+        'Ett genomfört skift ger en poäng i sin huvudkategori. En poäng öppnar löneklass 2, två poäng löneklass 3 - ett skift i klass 1 och ett i klass 2 räcker.'
       )
     );
     const erfList = el('div', { class: 'cert-grid' });
@@ -4234,7 +4234,7 @@ export class App {
           el('span', { class: 'cert-name' }, HUVUD_LABELS[h]),
           el('span', { class: 'cert-count' },
             `${'●'.repeat(Math.min(3, n))}${'○'.repeat(Math.max(0, 3 - n))} ` +
-              (n >= 3 ? 'klass 3 öppen' : n >= 1 ? 'klass 2 öppen' : 'klass 1')
+              (n >= 2 ? 'klass 3 öppen' : n >= 1 ? 'klass 2 öppen' : 'klass 1')
           )
         )
       );
