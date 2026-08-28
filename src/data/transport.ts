@@ -29,7 +29,7 @@ export const MODE_LABELS: Record<TransportMode, string> = {
  * Vilka landregioner som hänger ihop på marken. Listan läses åt båda hållen;
  * valideringen kontrollerar att den är symmetrisk.
  *
- * Grannskapen är de sträckor ryggsäckare faktiskt tar över land, inte varje
+ * Grannskapen är de sträckor upptäckare faktiskt tar över land, inte varje
  * teoretiskt gångbar landmassa. Sahara korsas med buss från Marocko till
  * Senegal, den afrikanska ryggraden går Kairo-Addis, Vänskapsvägen går över
  * Tibet till Katmandu och tåget söderut från Peking når Hanoi.
@@ -153,7 +153,7 @@ export const FERRY_LINKS: Array<[string, string, string]> = FERRY_LINES.map(
  *
  * Taken satt vid 200 mil gjorde elva av fyrtiosju städer till rena flygplatser
  * - Peking hade ingen tågstation, New York ingen bussterminal. Riktiga
- * ryggsäckare åker betydligt längre än så: bussen Kairo-Addis är tre dygn,
+ * upptäckare åker betydligt längre än så: bussen Kairo-Addis är tre dygn,
  * tåget Peking-Hanoi två, och Amtraks tvärbana över USA fyra. Taken ligger nu
  * där de sträckorna ryms, och tiden får vara det som avskräcker i stället för
  * en spärr - en buss på 300 mil kostar fem resdagar boende.

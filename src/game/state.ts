@@ -20,6 +20,8 @@ export type Screen =
   | 'telefon'
   /** Vart är vi på väg? - stadsgissning på ledtrådar */
   | 'sparet'
+  /** Sevärdheten: foto, text och valet att tillbringa en dag där */
+  | 'sevardhet'
   | 'slut';
 
 /**
@@ -39,6 +41,7 @@ const KANDA_SKARMAR = new Set<Screen>([
   'ryggsack',
   'telefon',
   'sparet',
+  'sevardhet',
   'slut',
 ]);
 

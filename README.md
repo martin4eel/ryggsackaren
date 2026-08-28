@@ -1,4 +1,4 @@
-# Ryggsäckaren
+# Upptäckaren
 
 Ett webbaserat geografi- och frågesportspel på svenska, inspirerat av
 _BackPacker 2_ (1997). Res jorden runt, ta jobb, svara på frågor, handla
@@ -165,9 +165,12 @@ webbläsaren och överlever att sparfilen raderas.
    Reykjavík har en, Stockholm två, Istanbul och Bangkok fyra. Båda sorterna
    finns bara en gång per stad.
 
-   **Ut på stan** och **sevärdheten** går också bara att göra en gång per stad.
-   De kostar en dag var och ger garanterat en händelse; när de är förbrukade
-   ligger ikonen kvar med en grön bock.
+   **Sevärdheten** går alltid att besöka: skylten öppnar en sida med fotot
+   och det spelet vet om platsen (myntfrågans kuriosa och broschyrens
+   stycken). Att titta kostar inget. Att *tillbringa dagen* där kostar en dag,
+   går en gång per stad, och det som händer på vägen hem visas efteråt på
+   stadsbilden – inte ovanpå sevärdheten man just tittade på. **Ut på stan**
+   kostar också en dag och ger garanterat en händelse.
 
    Ordningen på brickorna lottas per stad och ligger sedan fast. Med en fast
    ordning skulle man lära sig att första brickan alltid är turistbyrån, och då
@@ -257,12 +260,13 @@ webbläsaren och överlever att sparfilen raderas.
    i verkligheten, och då duger inte en illustration av en marulk – det ska
    vara en marulk.
 
-   **Varje yrkesfråga har en bild.** Alla 1 300 jobbfrågor visar ett foto:
+   **Varje fråga har en bild.** Alla 1 300 jobbfrågor och alla 900
+   stadsfrågor visar ett foto:
    personen som ska namnges, klubban som ska kännas igen, fordonet, rätten,
    instrumentet, platsen. Där bilden bär frågan är den skriven som en
    bildfråga (*"Vem är mannen på bilden?"*), annars sätter fotot bara
-   scenen. Närmare sjuhundra foton ligger i `public/quiz/` som WebP i
-   högst 560 pixlars bredd, omkring trettio kilobyte styck.
+   scenen. Närmare 1 300 foton ligger i `public/quiz/` som WebP i högst
+   560 pixlars bredd, omkring trettio kilobyte styck.
 
    **Svaret kvitteras rakt på sak.** Rätt svar: en rad. Fel svar: *Fel.
    Rätt svar: …* och, när frågan har en, kuriosan som förklarar saken,
@@ -281,7 +285,9 @@ webbläsaren och överlever att sparfilen raderas.
    en änka som visade sig sälja tidsdelat boende, en frågesport där du
    bromsade på tio – eller *bläddra förbi*, och då kommer annonsen inte
    tillbaka i den staden. Läs platsannonserna och ta ett skift. Varje fråga är en
-   arbetsdag: rätt svar ger lön, och boendet dras oavsett. Frågorna är unika
+   arbetsdag: rätt svar ger lön, och boendet dras oavsett. Ett gjort skift
+   stryks i tidningen med rött bläck och kommer inte tillbaka – samma yrke
+   får man söka i en annan stad, hos en annan arbetsgivare. Frågorna är unika
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
    - **Vart är vi på väg?** I varje stads tidning söker tv-frågesporten
@@ -308,7 +314,9 @@ webbläsaren och överlever att sparfilen raderas.
    fotot är uppgiften. Två undantag på egna meriter: skateboardinstruktören
    håller balansen, och hockeytränaren sorterar spelarnamn till rätt lag.
    Momentet ger upp till tre dagslöner i bonus, och ett felfritt moment ett
-   halvt dagsverke till.
+   halvt dagsverke till. Tempot är lugnt med flit – 14 sekunder per kund,
+   6–7 sekunder per foto på bandet – för det är frågorna som är spelet;
+   momentet ska pröva om man känner igen saken, inte hur fort man trycker.
 
    **Man börjar längst ner.** Yrkena hör till sex huvudkategorier:
    *Vetenskap & historia*, *Konst & kultur*, *Praktiska yrken*, *Äventyr &
@@ -478,7 +486,7 @@ bredd slår upprepning), träffsäkerhet på frågorna, ditt anseende, tempot
 (dagar per stad) och till sist kassan och ryggsäckens värde hemma. Kassan
 räknas bara upp till 25 000: resande ger poäng, pengar ger biljetter. Skulden
 dras av. Poängen ger också en titel, från _Hemvändare_ till _Legendarisk
-ryggsäckare_.
+upptäckare_.
 
 ## Innehåll
 
@@ -699,7 +707,9 @@ En ny stad behöver också en rad i `CITY_POPULATION` och ett land i
 `COUNTRY_FACTS` i `src/data/facts.ts`, annars stoppar valideringen bygget -
 atlasen ska inte kunna visa en tom rad för den stad spelaren just rest till.
 
-## Om förlagan
+## Om ursprunget
 
-Det här är ett nyskrivet hyllningsspel. All text, alla frågor och all grafik är
-egna; ingenting är hämtat från originalspelet.
+Upptäckaren började som en hyllning till Backpacker 2 och har vuxit till
+något eget: en blandning av Backpackers resa och På spårets ledtrådar. All
+text, alla frågor och all grafik är egna; ingenting är hämtat från
+originalspelet.

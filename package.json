@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Ryggsäckaren - ett geografi- och frågesportspel inspirerat av Backpacker 2",
+  "description": "Upptäckaren - ett geografi- och frågesportspel inspirerat av Backpacker 2",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && node scripts/validate-data.mjs && vite build",

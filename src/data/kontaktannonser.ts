@@ -254,7 +254,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     utfall: [
       { text: 'Du äter allt på menyn. Allt är gott utom en sak, och kocken tackar dig för just den. Du sparar en hel dags mat.', effekt: { money: 150 }, vikt: 3 },
       { text: 'Du äter allt på menyn. Det borde du inte ha gjort. Nästa dag tillbringas på hotellrummet.', effekt: { days: 1 } },
-      { text: 'Kocken är så nöjd att hen sätter ditt namn på en rätt. "Ryggsäckarens special" står på tavlan när du går.', effekt: { rykte: 2 } },
+      { text: 'Kocken är så nöjd att hen sätter ditt namn på en rätt. "Upptäckarens special" står på tavlan när du går.', effekt: { rykte: 2 } },
     ],
   },
 ];

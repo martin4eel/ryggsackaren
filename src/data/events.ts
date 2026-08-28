@@ -218,7 +218,7 @@ export const EVENTS: GameEvent[] = [
     id: 'delad-taxi',
     triggers: ['resa'],
     title: 'Delad taxi',
-    text: 'En annan ryggsäckare ska åt samma håll och föreslår att ni delar på notan från stationen.',
+    text: 'En annan upptäckare ska åt samma håll och föreslår att ni delar på notan från stationen.',
     tone: 'bra',
     weight: 3,
     choices: [
@@ -1289,7 +1289,7 @@ export const EVENTS: GameEvent[] = [
   {
     id: 'ryggsackaren',
     triggers: ['mote'],
-    title: 'En annan ryggsäckare',
+    title: 'En annan upptäckare',
     text: 'Ni hamnar bredvid varandra och det visar sig att hen kommer från precis dit du ska.',
     tone: 'bra',
     weight: 4,

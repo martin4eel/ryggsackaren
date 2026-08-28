@@ -434,8 +434,8 @@ try {
 
   for (const post of bildIdn) {
     const [label, id] = post.split('|');
-    if (id.startsWith('stad:')) {
-      const stad = id.slice(5);
+    if (id.startsWith('stad:') || id.startsWith('stadsbild:')) {
+      const stad = id.slice(id.indexOf(':') + 1);
       if (!cityById[stad])
         problems.push(`${label}: bilden pekar på okänd stad: ${id}`);
       continue;

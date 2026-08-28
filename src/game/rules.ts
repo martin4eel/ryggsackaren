@@ -319,13 +319,13 @@ export function newStamps(state: GameState): Stamp[] {
 /** Titel att skryta med på slutskärmen. */
 export function rankTitle(score: number): { title: string; desc: string } {
   if (score >= 90000)
-    return { title: 'Legendarisk ryggsäckare', desc: 'Det här gör ingen efter dig.' };
+    return { title: 'Legendarisk upptäckare', desc: 'Det här gör ingen efter dig.' };
   if (score >= 65000)
     return { title: 'Världsvan globetrotter', desc: 'Du har sett mer än de flesta hinner på ett helt liv.' };
   if (score >= 45000)
     return { title: 'Rutinerad resenär', desc: 'Packningen sitter, ekonomin höll och kartan är läst.' };
   if (score >= 28000)
-    return { title: 'Van ryggsäckare', desc: 'En riktig resa, med både arbete och äventyr.' };
+    return { title: 'Van upptäckare', desc: 'En riktig resa, med både arbete och äventyr.' };
   if (score >= 15000)
     return { title: 'Nyfiken nybörjare', desc: 'Du kom hem, och du kom hem klokare.' };
   return { title: 'Hemvändare', desc: 'Resan blev kort, men den blev av.' };
@@ -339,7 +339,7 @@ export const SCORE_CASH_CAP = 25000;
  *
  * Kassan har ett tak och certifikat räknas per ämne, så att fyrtio skift i
  * samma stad inte slår en resa jorden runt. Det som ger mest är städer,
- * världsdelar, stämplar och tempo - alltså att faktiskt vara ryggsäckare.
+ * världsdelar, stämplar och tempo - alltså att faktiskt vara upptäckare.
  */
 export function finalScore(state: GameState): number {
   const cash = Math.min(SCORE_CASH_CAP, state.money - state.debt);

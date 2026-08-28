@@ -1,4 +1,4 @@
-/* Ryggsäckaren - stilsättning inspirerad av 90-talets reseaffischer */
+/* Upptäckaren - stilsättning inspirerad av 90-talets reseaffischer */
 
 :root {
   --sea-deep: #071a29;
@@ -975,6 +975,11 @@ img.no-photo {
 .feedback-wrong {
   background: rgba(200, 69, 47, 0.13);
   border-left: 4px solid var(--stamp);
+}
+
+.feedback-near {
+  background: rgba(242, 166, 59, 0.16);
+  border-left: 4px solid var(--sun-dark);
 }
 
 .feedback .info {
@@ -6164,25 +6169,28 @@ body.sheet-oppen {
   opacity: 0.55;
 }
 
-/* Ett skift man redan gjort: annonsen är överkryssad med två streck i
-   bläck, som när man stryker en annons i tidningen med kulspetspennan. */
+/* Ett skift man redan gjort: annonsen är överkryssad med rött bläck, två
+   snabba drag med kulspetspennan - lite skeva, lite ojämna i trycket, som
+   när man stryker en annons i tidningen vid frukostbordet. */
 .paper-annonser .job-klar {
   position: relative;
-  opacity: 0.6;
+  opacity: 0.78;
 }
 
 .paper-annonser .job-klar::after {
   content: '';
   position: absolute;
-  inset: 6px 0 8px;
+  inset: 4px 2px 6px;
   pointer-events: none;
-  background:
-    linear-gradient(to top right, transparent calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% + 1.5px), transparent calc(50% + 1.5px)),
-    linear-gradient(to top left, transparent calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% - 1.5px), rgba(29, 43, 52, 0.75) calc(50% + 1.5px), transparent calc(50% + 1.5px));
+  background: no-repeat center / 100% 100%
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M4 8 C 30 30, 62 62, 96 91' fill='none' stroke='%23c1272d' stroke-width='2.2' stroke-linecap='round' opacity='0.85'/><path d='M5 9.5 C 33 33, 60 58, 95 92.5' fill='none' stroke='%23c1272d' stroke-width='1' stroke-linecap='round' opacity='0.45'/><path d='M96 7 C 66 28, 38 60, 3 93' fill='none' stroke='%23c1272d' stroke-width='2.4' stroke-linecap='round' opacity='0.85'/><path d='M95.5 8.5 C 64 30, 40 58, 4.5 92' fill='none' stroke='%23c1272d' stroke-width='0.9' stroke-linecap='round' opacity='0.4'/></svg>");
+  mix-blend-mode: multiply;
+  transform: rotate(-1.5deg);
 }
 
 .paper-annonser .job-klar .job-head h3 {
   text-decoration: line-through;
+  text-decoration-color: rgba(193, 39, 45, 0.85);
   text-decoration-thickness: 2px;
 }
 
@@ -7238,4 +7246,59 @@ body.sheet-oppen {
 
 .sparet-annons.kontakt-klar {
   opacity: 0.7;
+}
+
+/* ------------------------------------------------------- sevärdheten */
+.sevardhet-hero {
+  padding: 0;
+  overflow: hidden;
+}
+
+.sevardhet-foto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.sevardhet-text {
+  padding: 14px 18px 16px;
+}
+
+.sevardhet-text .title {
+  margin: 2px 0 0;
+}
+
+/* Marginalanteckning med egen penna: samma yrke gjort i en annan stad. */
+.job-anteckning {
+  position: absolute;
+  top: -6px;
+  right: 6px;
+  margin: 0;
+  padding: 0 4px;
+  max-width: 55%;
+  font-family: 'Bradley Hand', 'Segoe Script', 'Snell Roundhand', 'Comic Sans MS', cursive;
+  font-size: 0.92rem;
+  line-height: 1.15;
+  color: #1f4e8c;
+  transform: rotate(-4deg);
+  transform-origin: right top;
+  text-align: right;
+  opacity: 0.9;
+  pointer-events: none;
+  text-shadow: 0 0 0.4px rgba(31, 78, 140, 0.6);
+}
+
+.job-anteckning-bock {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.paper-annonser .job {
+  position: relative;
+}
+
+/* Gör plats för anteckningen: rubrikraden får inte gå in under den. */
+.paper-annonser .job:has(.job-anteckning) .job-head {
+  padding-right: 34%;
 }

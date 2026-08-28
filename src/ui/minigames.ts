@@ -363,8 +363,10 @@ function startSorting(
 
     // Tiden krymper med tempot, men aldrig under vad som går att hinna läsa.
     // Ett foto tar längre att känna igen än ett ord, och får mer tid.
+    // Lugnt tempo: momentet ska pröva om man känner igen fotot eller
+    // namnet, inte hur fort man trycker. Frågorna är spelets kärna.
     const total =
-      Math.max(1600, 3000 - round * 140) * ctx.slack * (typeof aktuell === 'string' ? 1 : 1.3);
+      Math.max(5000, 6000 - round * 100) * ctx.slack * (typeof aktuell === 'string' ? 1 : 1.25);
 
     /**
      * Föremålet ska glida över bandet på exakt den tid rundan varar, annars
@@ -1453,7 +1455,9 @@ function startPictureChoice(
     feedback.say('Peka på rätt foto.', 'neutral');
     clear(grid);
     val.forEach((id, i) => {
-      const b = button('', () => pick(id, b), { class: 'option option-bild mg-bildval-knapp', 'data-sound': 'av' });
+      // pointerdown, inte click: på en telefon kommer klicket först när
+      // fingret lyfts, och det hann bli "för sent" fast man tryckt i tid.
+      const b = snabbKnapp('', () => pick(id, b), { class: 'option option-bild mg-bildval-knapp', 'data-sound': 'av' });
       b.append(
         el('span', { class: 'option-body option-body-bild' },
           el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
@@ -1464,7 +1468,8 @@ function startPictureChoice(
       grid.append(b);
     });
     running = true;
-    timer.run((6500 - round * 250) * ctx.slack, () => pick(null, null));
+    // Gott om tid: man ska hinna titta på fyra foton i lugn och ro.
+    timer.run(14000 * ctx.slack, () => pick(null, null));
   };
 
   const pick = (id: string | null, knapp: HTMLElement | null) => {

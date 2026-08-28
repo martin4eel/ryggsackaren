@@ -110,6 +110,8 @@ interface QuizSession {
   questions: PreparedQuestion[];
   index: number;
   correct: number;
+  /** Antal nästan rätt på reglagefrågor; räknas som halva */
+  nara?: number;
   /** Pengar tjänade under skiftet */
   earnings: number;
   job?: Job;
@@ -122,6 +124,8 @@ interface QuizSession {
     combo: number;
     /** Del av utbetalningen som kom av att svaret gick fort */
     speed: number;
+    /** Nästan rätt: ett reglagesvar inom två och en halv tolerans, halv lön */
+    nara?: boolean;
     /** Talet spelaren drog fram, för reglagefrågor */
     reglage?: number;
   };
@@ -874,6 +878,9 @@ export class App {
       case 'sparet':
         main.append(this.renderSparet());
         break;
+      case 'sevardhet':
+        main.append(this.renderSevardhet());
+        break;
       case 'turistbyra':
         main.append(
           this.renderQuiz(this.quiz?.kind === 'mynt' ? this.city.name : 'Turistbyrån')
@@ -965,7 +972,7 @@ export class App {
       // Startskärmen saknar statusrad, så ljudknappen får en egen plats här.
       audioButton('hud-icon-btn hero-audio'),
       el('p', { class: 'kicker' }, 'Jorden runt på frågor och jobb'),
-      el('h1', { class: 'title' }, 'Ryggsäckaren'),
+      el('h1', { class: 'title' }, 'Upptäckaren'),
       el(
         'p',
         { class: 'lede' },
@@ -1108,7 +1115,7 @@ export class App {
     const sida = el('div', { class: 'passport-page passport-data startpass-sida' });
     sida.append(
       el('div', { class: 'passport-head' },
-        el('span', {}, 'Ryggsäckarpass · Passport'),
+        el('span', {}, 'Upptäckarpass · Passport'),
         el('span', {}, 'Sid. 1')
       )
     );
@@ -1332,13 +1339,7 @@ export class App {
     const journal = this.renderJournal();
     if (journal) wrap.append(journal);
 
-    wrap.append(
-      el(
-        'p',
-        { class: 'footnote' },
-        'Ett hyllningsspel till Backpacker 2. Frågor och innehåll är nyskrivna.'
-      )
-    );
+
     return wrap;
   }
 
@@ -1776,12 +1777,15 @@ export class App {
       'skylt-sevardhet',
       city.landmark,
       sevardKlar
-        ? `Du har varit vid ${city.landmark}. En gång räcker.`
-        : `Tillbringa en dag vid ${city.landmark}. Kostar en dag (${this.money(
+        ? `Du har tillbringat en dag vid ${city.landmark}. Att titta igen kostar inget.`
+        : `Se ${city.landmark}. Att tillbringa dagen där kostar en dag (${this.money(
             dailyCost(city, s.difficulty)
           )}).`,
-      () => this.besokSevardhet(),
-      { engangs: true, klar: sevardKlar }
+      () => {
+        playSound('sida');
+        this.go('sevardhet');
+      },
+      { engangs: true }
     );
     plats(
       'karta',
@@ -2256,11 +2260,76 @@ export class App {
     this.spendDays(1, city);
     this.commit();
     if (this.checkBroke()) return;
+    // Först besöket, sedan det som händer på vägen därifrån: händelsen visas
+    // på stadsbilden, inte ovanpå sevärdheten man just tittade på.
     this.fireEvent('sevardhet', 1);
     if (!this.state?.pendingEvent) {
       this.notify(`En stilla dag vid ${city.landmark}.`);
     }
-    this.render();
+    this.go('stad');
+  }
+
+  /**
+   * Sevärdheten. Alltid öppen att se: fotot, det broschyren och myntfrågan
+   * vet om den, och valet att tillbringa dagen där. Dagen kostar, och kan
+   * bara tillbringas en gång per stad; att titta är gratis.
+   */
+  private renderSevardhet(): HTMLElement {
+    const s = this.state!;
+    const city = this.city;
+    const p = getProgress(s, city.id);
+    const besokt = (p.spent ?? []).includes('sevardhet');
+    const wrap = el('div', { class: 'stack sevardhet' });
+
+    const hero = el('section', { class: 'panel sevardhet-hero' });
+    const bild = el('img', {
+      class: 'sevardhet-foto',
+      src: landmarkPhotoUrl(city),
+      alt: `${city.landmark} i ${city.name}`,
+      loading: 'eager',
+    });
+    hero.append(
+      bild,
+      el('div', { class: 'sevardhet-text' },
+        el('p', { class: 'kicker' }, `${city.name} · sevärdhet`),
+        el('h1', { class: 'title' }, city.landmark)
+      )
+    );
+    wrap.append(hero);
+
+    // Det spelet vet om sevärdheten: myntfrågans kuriosa och de
+    // broschyrstycken som nämner den.
+    // Nyckelorden: varje ord i namnet, nedkortat så att "Vasamuseet" hittar
+    // "Vasa" och "Brandenburger Tor" hittar "Brandenburger".
+    const nycklar = city.landmark
+      .split(/[\s-]+/)
+      .filter((o) => o.length > 3)
+      .map((o) => o.toLowerCase().slice(0, 4));
+    const stycken = (CITY_FACTS[city.id] ?? []).filter((t) => {
+      const l = t.toLowerCase();
+      return nycklar.some((n) => l.includes(n));
+    });
+    const kuriosa = COIN_QUESTIONS[city.id]?.info;
+    const panel = el('section', { class: 'panel' });
+    panel.append(el('h2', {}, 'Det man bör veta'));
+    const rader = [...(kuriosa ? [kuriosa] : []), ...stycken.filter((t) => t !== kuriosa)].slice(0, 4);
+    if (rader.length < 2) rader.push(city.blurb);
+    panel.append(el('ul', { class: 'broschyr-lista' }, ...rader.map((t) => el('li', {}, t))));
+    panel.append(
+      el('p', { class: 'broschyr-not' },
+        besokt
+          ? `Du tillbringade en dag här. Att komma tillbaka och titta kostar inget.`
+          : `Att titta kostar inget. Att tillbringa dagen här kostar en dag (${this.money(dailyCost(city, s.difficulty))} i boende), och något brukar hända på vägen hem.`
+      ),
+      el('div', { class: 'row' },
+        besokt
+          ? ''
+          : button('Tillbringa dagen här', () => this.besokSevardhet(), { class: 'btn btn-primary' }),
+        button('Tillbaka till staden', () => this.go('stad'), { class: 'btn btn-ghost' })
+      )
+    );
+    wrap.append(panel);
+    return wrap;
   }
 
   /**
@@ -2516,12 +2585,8 @@ export class App {
     const s = this.state!;
     const city = this.city;
     const p = getProgress(s, city.id);
-    // Nya annonser varje vecka, så att man aldrig blir helt fast utan inkomst.
-    if (p.adsRefreshedDay === undefined) p.adsRefreshedDay = s.days;
-    if (s.days - p.adsRefreshedDay >= 7 && p.workedJobs.length > 0) {
-      p.workedJobs = [];
-      p.adsRefreshedDay = s.days;
-    }
+    // Ett gjort skift är gjort: annonsen står överkryssad resten av resan.
+    // Samma yrke går att ta i en annan stad, hos en annan arbetsgivare.
     const wrap = el('div', { class: 'stack' });
 
     /**
@@ -2631,10 +2696,35 @@ export class App {
     for (const job of cityJobs(city)) {
       const allowed = canTakeJob(s, job);
       const worked = p.workedJobs.includes(job.id);
+      // Samma yrke gjort i en annan stad: en anteckning i marginalen, med
+      // egen penna, som när man själv bockar av i tidningen.
+      const annanStad = Object.entries(s.progress).find(
+        ([cid, pr]) => cid !== city.id && (pr.workedJobs ?? []).includes(job.id)
+      );
       const wage = wagePerCorrect(job, city, s.difficulty);
       const card = el('article', {
         class: `job ${worked ? 'job-klar' : allowed ? '' : 'job-locked'}`,
       });
+      if (annanStad && !worked) {
+        const stadNamn = CITY_BY_ID[annanStad[0]]?.name ?? annanStad[0];
+        const kommentarer = [
+          'aldrig igen',
+          'chefen var ok',
+          'bra fika',
+          'lönen kom i tid',
+          'kul, faktiskt',
+          'långa dagar',
+          'kan det här nu',
+          'samma frågor?',
+        ];
+        const k = kommentarer[Math.floor(pseudoRandom(`anteckning|${job.id}|${annanStad[0]}`) * kommentarer.length)]!;
+        card.append(
+          el('p', { class: 'job-anteckning', 'aria-label': `Anteckning: gjort i ${stadNamn}, ${k}` },
+            el('span', { class: 'job-anteckning-bock', 'aria-hidden': 'true' }, '✓'),
+            ` gjort i ${stadNamn} – ${k}`
+          )
+        );
+      }
       card.append(
         el('p', { class: 'annons-etikett' }, 'Sökes'),
         el('div', { class: 'job-head' },
@@ -2653,16 +2743,8 @@ export class App {
       );
 
       if (worked) {
-        const wait = 7 - (s.days - (p.adsRefreshedDay ?? s.days));
         card.append(
-          el(
-            'p',
-            { class: 'note' },
-            `Du har redan gjort ett skift här. Nya annonser om ${Math.max(
-              1,
-              wait
-            )} dagar.`
-          )
+          el('p', { class: 'note' }, 'Gjort. Samma jobb finns kanske i en annan stad.')
         );
       } else if (!allowed) {
         const need = jobRequirement(job);
@@ -3121,6 +3203,7 @@ export class App {
         ? Math.abs((answered.reglage ?? Number.NaN) - q0.reglage.svar) <=
           q0.reglage.tolerans
         : answered.picked === current.correctIndex;
+      const nara = Boolean(answered.nara);
       /**
        * Vad som var rätt. En reglagefråga har inget alternativ att peka på, så
        * där står svaret skrivet i `a[0]` - "1989", "8 849 m".
@@ -3130,13 +3213,15 @@ export class App {
           `${q0.reglage.svar}${q0.reglage.enhet ? ` ${q0.reglage.enhet}` : ''}`)
         : (current.options[current.correctIndex] ?? '');
       const feedback = el('div', {
-        class: `feedback ${right ? 'feedback-right' : 'feedback-wrong'}`,
+        class: `feedback ${right ? 'feedback-right' : nara ? 'feedback-near' : 'feedback-wrong'}`,
       });
       const headline = right
         ? q.streak >= 4
           ? `Rätt igen! ${q.streak} i rad.`
           : 'Rätt svar!'
-        : 'Fel.';
+        : nara
+          ? 'Nästan rätt!'
+          : 'Fel.';
       feedback.append(
         el('strong', {}, headline),
         el(
@@ -3146,9 +3231,13 @@ export class App {
             ? isJob
               ? ` Dagen är avklarad och du tjänade ${this.money(answered.payout)}.`
               : ' Ett steg närmare ett bra stadsbetyg.'
-            : isJob
-              ? ` Rätt svar: ${facit}. Dagen gav ingen lön.`
-              : ` Rätt svar: ${facit}.`
+            : nara
+              ? isJob
+                ? ` Rätt svar: ${facit}. Nära nog för halv dagslön, ${this.money(answered.payout)}.`
+                : ` Rätt svar: ${facit}. Det räknas som ett halvt rätt.`
+              : isJob
+                ? ` Rätt svar: ${facit}. Dagen gav ingen lön.`
+                : ` Rätt svar: ${facit}.`
         )
       );
       // Bonusarna redovisas var för sig, annars ser lönen bara ut att hoppa.
@@ -3332,8 +3421,12 @@ export class App {
     const q = this.quiz!;
     const current = q.questions[q.index]!;
     const reglage = current.question.reglage;
+    const avstand = reglage ? Math.abs((reglageVarde ?? Number.NaN) - reglage.svar) : Number.NaN;
+    // Nästan rätt: inom två och en halv tolerans. Halv lön, halvt poäng,
+    // och serien bryts inte - man var ju på rätt spår.
+    const nara = Boolean(reglage) && !(avstand <= reglage!.tolerans) && avstand <= reglage!.tolerans * 2.5;
     const right = reglage
-      ? Math.abs((reglageVarde ?? Number.NaN) - reglage.svar) <= reglage.tolerans
+      ? avstand <= reglage.tolerans
       : picked === current.correctIndex;
     const elapsed = performance.now() - q.askedAt;
     let payout = 0;
@@ -3370,11 +3463,12 @@ export class App {
     }
 
     if (right && q.streak >= 3) playCombo(q.streak);
-    else playSound(right ? 'ratt' : 'fel');
+    else playSound(right ? 'ratt' : nara ? 'blipp' : 'fel');
     q.dayResults[q.index] = right;
     q.answered = {
       picked,
       payout,
+      nara,
       combo: comboPart,
       speed: speedPart,
       reglage: reglageVarde,
@@ -3438,7 +3532,7 @@ export class App {
     const city = this.city;
     const p = getProgress(s, city.id);
     const total = q.questions.length;
-    const score = Math.round((q.correct / total) * 100);
+    const score = Math.round(((q.correct + (q.nara ?? 0) * 0.5) / total) * 100);
 
     /**
      * En frågebricka är en fråga och ingenting mer. Ingen dag går åt, inget
@@ -4139,7 +4233,7 @@ export class App {
 
     page.append(
       el('div', { class: 'passport-head' },
-        el('span', {}, 'Ryggsäckarpass'),
+        el('span', {}, 'Upptäckarpass'),
         el('span', {}, 'Sid. 1')
       )
     );
@@ -4153,7 +4247,7 @@ export class App {
     const emblem = el('div', { class: 'pdata-emblem' },
       el('span', { class: 'pdata-emblem-mark' }, '⊕'),
       el('span', { class: 'pdata-emblem-text' },
-        el('strong', {}, 'Ryggsäckaren'),
+        el('strong', {}, 'Upptäckaren'),
         el('span', {}, 'Utfärdat för världens skull')
       )
     );

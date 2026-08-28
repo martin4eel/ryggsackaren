@@ -13,7 +13,7 @@
  * Lägg till --om för att tvinga fram en ny hämtning av allt.
  */
 
-import { createWriteStream, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { spawnSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
@@ -126,9 +126,27 @@ const credits = [];
 let failed = 0;
 let hamtade = 0;
 
+/**
+ * Krediterna för bilder som redan finns läses ur den befintliga
+ * ATTRIBUTION.md i stället för att slås upp igen: med tusen bilder tog
+ * uppslagningarna längre tid än hämtningen, och Wikimedia strypte oss.
+ */
+const gamlaKrediter = new Map();
+if (existsSync(ATTRIBUTION_FILE)) {
+  for (const rad of readFileSync(ATTRIBUTION_FILE, 'utf8').split('\n')) {
+    const m = rad.match(/^- \*\*([a-z0-9-]+)\.webp\*\* .*$/);
+    if (m) gamlaKrediter.set(m[1], rad);
+  }
+}
+const radKrediter = [];
+
 for (const bild of QUIZ_IMAGES) {
   const dest = join(OUT_DIR, `${bild.id}.jpg`);
   const klar = join(OUT_DIR, `${bild.id}.webp`);
+  if ((existsSync(klar) || existsSync(dest)) && !FORCE && gamlaKrediter.has(bild.id)) {
+    radKrediter.push(gamlaKrediter.get(bild.id));
+    continue;
+  }
   try {
     const { thumbUrl, fileName } = bild.file
       ? await commonsFile(bild.file, bild.bred ? 1400 : 900)
@@ -160,7 +178,7 @@ writeFileSync(
   JSON.stringify(QUIZ_IMAGES.map((b) => b.id)) + '\n'
 );
 
-if (credits.length > 0) {
+if (credits.length > 0 || radKrediter.length > 0) {
   const lines = [
     '# Bildkrediter, frågebilder',
     '',
@@ -169,11 +187,12 @@ if (credits.length > 0) {
     'filen. Alla är riktiga fotografier eller avfotograferade konstverk.',
     '',
   ];
-  for (const c of credits.sort((a, b) => a.id.localeCompare(b.id, 'sv'))) {
-    lines.push(
+  for (const c of credits) {
+    radKrediter.push(
       `- **${c.id}.webp** (${c.alt}) – [${c.fileName}](${c.page}) av ${c.artist}, ${c.license}.`
     );
   }
+  for (const rad of radKrediter.sort((a, b) => a.localeCompare(b, 'sv'))) lines.push(rad);
   lines.push('');
   writeFileSync(ATTRIBUTION_FILE, lines.join('\n'));
   console.log(`\nAttribution skriven till ${ATTRIBUTION_FILE}`);
