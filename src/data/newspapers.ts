@@ -507,7 +507,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Pizzaslice under en dollar - i ett gathörn',
         text:
-          'Ett pizzeria i Midtown säljer fortfarande en slice för nittionio cent, vilket har lett till en kö som blockerar en bussfil. Ägaren säger att han lovade sin far att aldrig höja priset och inte tänker börja nu. Stadens trafikkontor har bett kön att stå på trottoaren. Kön står där den står.',
+          'En pizzeria i Midtown säljer fortfarande en slice för nittionio cent, vilket har lett till en kö som blockerar en bussfil. Ägaren säger att han lovade sin far att aldrig höja priset och inte tänker börja nu. Stadens trafikkontor har bett kön att stå på trottoaren. Kön står där den står.',
       },
     ],
     notiser: [
@@ -1024,10 +1024,10 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       },
     ],
     notiser: [
-      'Tågsgatan stängs för besökare, igen, tills nästa gång.',
+      'Tåggatan stängs för besökare, igen, tills nästa gång.',
       'Mopedparkeringen på Hang Bac-gatan har fått en tillsyningsman med visselpipa.',
       'Långa bron över Röda floden målas i samma rost.',
-      'Vattendocksteatern spelar samma pjäs som i tusen år och biljetterna är slut.',
+      'Vattendockteatern spelar samma pjäs som i tusen år och biljetterna är slut.',
       'Bánh mì-ståndet vid katedralen har fått en klocka så att kön vet vad klockan är.',
     ],
   },

@@ -224,9 +224,13 @@ webbläsaren och överlever att sparfilen raderas.
 5. **Turistbyrån.** Först en broschyr: sex till åtta korta stycken om staden
    (`src/data/cityFacts.ts`) – Stadshusets tre kronor, Stockholmssyndromet,
    Bellman, semlan som tog livet av en kung. Den är gratis att läsa och står
-   också i atlasen. Provet handlar om sådant som står i den, så det lönar sig
-   att läsa: läs, lär, svara. Varje stad har omkring tjugo frågor med kuriosa
-   efter svaret, i På spåret-anda – landmärken, historia, musik, konst,
+   också i atlasen. Provet handlar om sådant som står i den, och det är
+   inte bara ett löfte: minst tre av de fem frågorna dras bland dem vars
+   rätta svar står i broschyren (`cityQuizQuestions` i `src/game/rules.ts`).
+   Läs, lär, svara. Resultatet skrivs in i broschyren när man kommer
+   tillbaka – *Senaste provet: betyg 80* – i stället för att blinka förbi
+   som en notis. Varje stad har omkring tjugo frågor med kuriosa efter
+   svaret, i På spåret-anda – landmärken, historia, musik, konst,
    litteratur, mat.
 
    Sedan svarar man på frågor om staden, under en remsa av stadens foto
@@ -269,9 +273,12 @@ webbläsaren och överlever att sparfilen raderas.
    560 pixlars bredd, omkring trettio kilobyte styck.
 
    **Svaret kvitteras rakt på sak.** Rätt svar: en rad. Fel svar: *Fel.
-   Rätt svar: …* och, när frågan har en, kuriosan som förklarar saken,
-   personen eller platsen. Inga utklipp, ingen fot – det som ska fastna är
-   faktan.
+   Rätt svar: …* och kuriosan som förklarar saken, personen eller platsen.
+   Nästan alla frågor har en – 1 270 av 1 366 jobbfrågor – så att ett fel
+   svar på jobbet lär något, inte bara kostar en dagslön. Inga utklipp,
+   ingen fot – det som ska fastna är faktan. Stämplar som förtjänas mitt i
+   ett skift väntar tills lönen är kvitterad; de ska inte lägga sig över
+   frågan.
 
 7. **Tidningen.** Ett vitt bredsidesark i serif: frakturhuvud, datumrad
    med resdag, datum och väder, dagens jätterubrik, en artikel i spalter med
@@ -294,18 +301,22 @@ webbläsaren och överlever att sparfilen raderas.
    för varje yrke, så en bagare och en pizzabagare får aldrig samma frågor.
    Ett stämpelkort visar hur dagarna gått.
    - **Vart är vi på väg?** I varje stads tidning söker tv-frågesporten
-     tävlande, en gång per stad och mot en dag. Fem resmål, fem ledtrådar var
-     ur städernas broschyrer med stadens och landets namn maskade: bromsa på
+     tävlande, en gång per stad och mot en dag. Tre resmål, fem ledtrådar var,
+     skrivna som i programmet (`src/data/sparetLedtradar.ts`) i fallande
+     svårighet och utan stadens, landets eller landmärkenas namn: bromsa på
      första ledtråden för tio poäng, sedan åtta, sex, fyra, två – och gissar
      du fel är resmålet förlorat, precis som i programmet. Arvodet är sextio
      kronor per poäng, och två stämplar väntar: *Bromsade på tio* och
-     *Spårhund* (40 av 50). Det här är spelets På spåret-träning på riktigt:
+     *Spårhund* (24 av 30). Det här är spelets På spåret-träning på riktigt:
      ledtråd → plats, under fallande poäng.
    - **Svarsserie.** Rätt svar på raken höjer lönemultiplikatorn upp till
      ×2. Ett felsvar nollställer den.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Lönekvittot** på skiftets sista sida räknar upp delarna – grundlön,
+     svarsserie, snabba svar, bonus från sista passet – och summan, så att
+     773 kronor för två rätt går att förklara.
 8. **Sista passet.** Ingångsjobben i löneklass 1 är bara frågorna och
    lönen – fem dagar, inget pliktskyldigt arkadmoment. Jobben i klass 2 och 3
    avslutas med ett **bildspel byggt på yrkets egna foton**: antingen
@@ -315,7 +326,8 @@ webbläsaren och överlever att sparfilen raderas.
    ska dras till rätt korg (fisk eller skaldjur, Himalaya eller Anderna,
    sträng eller blås). Namnet visas först när man svarat; att känna igen
    fotot är uppgiften. Två undantag på egna meriter: skateboardinstruktören
-   håller balansen, och hockeytränaren sorterar spelarnamn till rätt lag.
+   håller balansen, och hockeytränaren pekar ut rätt klubbmärke – SHL och NHL
+   om vartannat, de loggor som finns fritt på Commons.
    Momentet ger upp till tre dagslöner i bonus, och ett felfritt moment ett
    halvt dagsverke till. Tempot är lugnt med flit – 14 sekunder per kund,
    6–7 sekunder per foto på bandet – för det är frågorna som är spelet;

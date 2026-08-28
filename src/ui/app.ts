@@ -1,6 +1,7 @@
 import { HUVUDKATEGORIER, HUVUD_LABELS } from '../data/jobs';
 import { CITIES, CITY_BY_ID } from '../data/cities';
 import { CITY_FACTS } from '../data/cityFacts';
+import { SPARET_LEDTRADAR } from '../data/sparetLedtradar';
 import { CURRENCIES, formatMoney } from '../data/currencies';
 import type { EventTone, EventTrigger } from '../data/events';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
@@ -114,6 +115,10 @@ interface QuizSession {
   nara?: number;
   /** Pengar tjänade under skiftet */
   earnings: number;
+  /** Lönens delar, för kvittot: grundlön, seriepåslag, snabbhetspåslag */
+  grund?: number;
+  serie?: number;
+  snabb?: number;
   job?: Job;
   /** Svar som väntar på att bekräftas */
   answered?: {
@@ -389,19 +394,60 @@ const REGION_LABELS: Record<string, string> = {
  */
 function maskeraStad(text: string, city: City): string {
   const fly = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const namn = [city.name, city.name.replace(/\s/g, ''), ...city.name.split(/\s+/).filter((d) => d.length > 3)];
+  // Ordgräns som förstår å, ä och ö: \b i JavaScript gör det inte.
+  const B = '(?<![\\p{L}])';
+  const E = '(?![\\p{L}])';
+  const kort = SPARET_KORTFORMER[city.id] ?? [];
+  const namn = [city.name, city.name.replace(/\s/g, ''), ...city.name.split(/\s+/).filter((d) => d.length > 3), ...kort];
   let ut = text;
   for (const n of namn) {
-    ut = ut.replace(new RegExp(`${fly(n)}s\\b`, 'g'), 'stadens');
-    ut = ut.replace(new RegExp(`\\b${fly(n)}\\b`, 'g'), 'staden');
+    // Namnet med alla avledningar och sammansättningar: "Stockholms",
+    // "Stockholmssyndromet", "Stockholmare" - allt blir "staden".
+    ut = ut.replace(new RegExp(`${B}${fly(n)}s${E}`, 'gu'), 'stadens');
+    ut = ut.replace(new RegExp(`${B}${fly(n)}\\p{L}*${E}`, 'gu'), 'staden');
   }
-  ut = ut.replace(new RegExp(`${fly(city.country)}s\\b`, 'g'), 'landets');
-  ut = ut.replace(new RegExp(`\\b${fly(city.country)}\\b`, 'g'), 'landet');
+  ut = ut.replace(new RegExp(`${B}${fly(city.country)}s${E}`, 'gu'), 'landets');
+  ut = ut.replace(new RegExp(`${B}${fly(city.country)}\\p{L}*${E}`, 'gu'), 'landet');
   // Nationalitetsord för de vanligaste länderna.
   const adj: Record<string, string> = { Sverige: 'svensk', Frankrike: 'fransk', Italien: 'italiensk', Spanien: 'spansk', Japan: 'japansk', USA: 'amerikansk', Storbritannien: 'brittisk', Tyskland: 'tysk', Egypten: 'egyptisk', Turkiet: 'turkisk', Ryssland: 'rysk', Kina: 'kinesisk', Indien: 'indisk', Thailand: 'thailändsk', Australien: 'australisk', Brasilien: 'brasiliansk', Mexiko: 'mexikansk', Peru: 'peruansk', Danmark: 'dansk', Norge: 'norsk', Finland: 'finsk', Nederländerna: 'holländsk', Grekland: 'grekisk', Portugal: 'portugisisk', Irland: 'irländsk', Island: 'isländsk', Marocko: 'marockansk', Kenya: 'kenyansk', Sydafrika: 'sydafrikansk', Nepal: 'nepalesisk', Vietnam: 'vietnamesisk', Argentina: 'argentinsk', Kuba: 'kubansk', Senegal: 'senegalesisk', Etiopien: 'etiopisk', Singapore: 'singaporiansk', Sydkorea: 'koreansk', Jordanien: 'jordansk', Tjeckien: 'tjeckisk', 'Nya Zeeland': 'nyzeeländsk' };
   const a = adj[city.country];
-  if (a) ut = ut.replace(new RegExp(`\\b${a}(a|t|e|)\\b`, 'gi'), 'inhemsk$1');
+  if (a) ut = ut.replace(new RegExp(`${B}${a}(a|t|e|)${E}`, 'giu'), 'inhemsk$1');
+  // Maskningen kan hamna först i en mening: "staden har..." ska bli "Staden har...".
+  ut = ut.replace(/(^|[.!?]\s+)(staden|stadens|landet|landets|inhemsk\p{L}*)/gu, (_m, f, o: string) => f + o[0]!.toUpperCase() + o.slice(1));
   return ut;
+}
+
+/** Kortformer och gamla namn som broschyren använder om staden. */
+const SPARET_KORTFORMER: Record<string, string[]> = {
+  rio: ['Rio'],
+  newyork: ['New York', 'Manhattan', 'Nya Amsterdam'],
+  mexikocity: ['Mexico City', 'Mexico'],
+  mumbai: ['Bombay'],
+  tokyo: ['Edo'],
+  oslo: ['Kristiania'],
+  peking: ['Beijing'],
+  istanbul: ['Konstantinopel', 'Bysans'],
+  hanoi: ['Hà Nội'],
+  kathmandu: ['Katmandu'],
+  sanfrancisco: ['Frisco'],
+  buenosaires: ['Buenos'],
+  kapstaden: ['Cape Town'],
+  goteborg: ['Götheborg', 'Gothenburg'],
+  helsingfors: ['Helsinki'],
+  kopenhamn: ['København'],
+  addisabeba: ['Addis'],
+  bangkok: ['Krung Thep'],
+  auckland: ['Tamaki Makaurau'],
+  singapore: ['Singapura'],
+  melbourne: ['Batmania'],
+  amman: ['Philadelphia', 'Rabbat Ammon'],
+};
+
+/** "Asien, Nordamerika och Oceanien" - regioner som en uppräkning. */
+function lista(regioner: string[]): string {
+  const namn = regioner.map((r) => REGION_LABELS[r] ?? r);
+  if (namn.length <= 1) return namn.join('');
+  return `${namn.slice(0, -1).join(', ')} och ${namn[namn.length - 1]}`;
 }
 
 export class App {
@@ -435,6 +481,10 @@ export class App {
   };
   /** Stämplar som just delats ut och ska visas som en kvittens */
   private stampToast: Stamp | null = null;
+  /** Rapporten efter ett avklarat skift, tills spelaren stänger den */
+  private skiftRapport: { titel: string; rubrik: string; rader: string[] } | null = null;
+  /** Stämpel som väntar på att skiftet ska ta slut innan den visas */
+  private pendingStamp: Stamp | null = null;
   private stampTimer: number | null = null;
   /** Sökfältet på startskärmens stadslista */
   private cityFilter = '';
@@ -640,6 +690,7 @@ export class App {
     const changed = this.state.screen !== screen;
     this.state.screen = screen;
     saveGame(this.state);
+    if (changed && this.pendingStamp && !this.quiz) this.commit();
     // Bara ett faktiskt skärmbyte ska rulla upp till toppen.
     if (changed) this.scrollToTopNext = true;
     this.render();
@@ -697,9 +748,14 @@ export class App {
     // Dagen stämpeln togs trycks sedan i själva stämpeln, som ett datum.
     for (const stamp of earned) s.stampDays[stamp.id] = s.days;
     saveGame(s);
-    if (earned.length > 0) {
+    if (earned.length > 0 && this.quiz && this.quiz.kind === 'jobb' && this.quiz.phase !== 'klart') {
+      // Mitt i ett skift: stämpeln får vänta tills lönen är kvitterad, så att
+      // den inte lägger sig över frågan.
+      this.pendingStamp ??= earned[0]!;
+    } else if (earned.length > 0 || this.pendingStamp) {
       // Bara den första visas som kvittens; resten finns i passet.
-      this.stampToast = earned[0]!;
+      this.stampToast = earned[0] ?? this.pendingStamp!;
+      this.pendingStamp = null;
       playSound('stampla');
       if (this.stampTimer !== null) window.clearTimeout(this.stampTimer);
       this.stampTimer = window.setTimeout(() => {
@@ -918,6 +974,19 @@ export class App {
 
     if (this.toast) {
       shell.append(el('div', { class: 'toast', role: 'status' }, this.toast));
+    }
+    if (this.skiftRapport) {
+      const r = this.skiftRapport;
+      shell.append(
+        el('div', { class: 'rapport-bak' },
+          el('div', { class: 'rapport', role: 'dialog', 'aria-label': 'Skiftrapport' },
+            el('p', { class: 'kicker' }, r.rubrik),
+            el('h2', { class: 'rapport-titel' }, r.titel),
+            el('ul', { class: 'rapport-lista' }, ...r.rader.map((t) => el('li', {}, t))),
+            button('Stäng rapporten', () => { this.skiftRapport = null; this.render(); }, { class: 'btn btn-primary btn-big' })
+          )
+        )
+      );
     }
     if (this.stampToast) {
       shell.append(
@@ -2314,7 +2383,13 @@ export class App {
     const panel = el('section', { class: 'panel' });
     panel.append(el('h2', {}, 'Det man bör veta'));
     const rader = [...(kuriosa ? [kuriosa] : []), ...stycken.filter((t) => t !== kuriosa)].slice(0, 4);
-    if (rader.length < 2) rader.push(city.blurb);
+    // Nämner broschyren inte sevärdheten får de första styckena om staden
+    // fylla ut - hellre det än stadens presentation en gång till.
+    for (const t of CITY_FACTS[city.id] ?? []) {
+      if (rader.length >= 3) break;
+      if (!rader.includes(t)) rader.push(t);
+    }
+    if (rader.length === 0) rader.push(city.blurb);
     panel.append(el('ul', { class: 'broschyr-lista' }, ...rader.map((t) => el('li', {}, t))));
     panel.append(
       el('p', { class: 'broschyr-not' },
@@ -2358,10 +2433,23 @@ export class App {
         el('ul', { class: 'broschyr-lista' }, ...fakta.map((t) => el('li', {}, t)))
       );
     }
+    if (p.lastProv) {
+      const lp = p.lastProv;
+      panel.append(
+        el('div', { class: `prov-resultat ${lp.score >= 85 ? 'prov-resultat-bra' : ''}` },
+          el('span', { class: 'prov-resultat-tal' }, `${lp.correct} av ${lp.total}`),
+          el('span', {},
+            el('strong', {}, `Senaste provet: betyg ${lp.score}.`),
+            ' ',
+            lp.score >= p.rating ? `Ditt bästa i ${city.name}.` : `Ditt bästa här är ${p.rating}.`
+          )
+        )
+      );
+    }
     panel.append(
       el('p', { class: 'broschyr-not' },
         p.visits === 0
-          ? 'Provet är fem frågor om staden. Betyget avgör vilka jobb du får söka. Det kostar en dag.'
+          ? 'Provet är fem frågor om staden, minst tre av dem om sådant som står här. Betyget avgör vilka jobb du får söka. Det kostar en dag.'
           : `Ditt betyg i ${city.name} är ${p.rating} av 100. Ett nytt prov kostar en dag och kan bara höja det.`
       ),
       el('div', { class: 'row' },
@@ -2395,12 +2483,23 @@ export class App {
     this.commit();
     if (this.checkBroke()) return;
     const s = this.state!;
-    // Fem städer med minst fem broschyrstycken, aldrig den man står i.
-    const kandidater = CITIES.filter((c) => c.id !== s.currentCityId && (CITY_FACTS[c.id]?.length ?? 0) >= 5);
-    const valda = shuffle(kandidater).slice(0, 5);
+    // Tre resmål med fem ledtrådar var, aldrig staden man står i.
+    const kandidater = CITIES.filter(
+      (c) => c.id !== s.currentCityId && ((SPARET_LEDTRADAR[c.id]?.length ?? 0) >= 5 || (CITY_FACTS[c.id]?.length ?? 0) >= 5)
+    );
+    const valda = shuffle(kandidater).slice(0, 3);
+    // De skrivna ledtrådarna ligger i fallande svårighet, som i tv. Saknas
+    // de får broschyren duga, maskad.
+    const ledtradar = (c: City): string[] => {
+      const skrivna = SPARET_LEDTRADAR[c.id];
+      if (skrivna && skrivna.length >= 5) {
+        return [...skrivna].sort((x, y) => y.niva - x.niva).slice(0, 5).map((l) => maskeraStad(l.text, c));
+      }
+      return shuffle(CITY_FACTS[c.id]!).slice(0, 5).map((t) => maskeraStad(t, c));
+    };
     s.sparet = {
       cities: valda.map((c) => c.id),
-      clues: valda.map((c) => shuffle(CITY_FACTS[c.id]!).slice(0, 5).map((t) => maskeraStad(t, c))),
+      clues: valda.map(ledtradar),
       round: 0,
       shown: 1,
       scores: [],
@@ -2454,7 +2553,7 @@ export class App {
     s.sparetBest = Math.max(s.sparetBest ?? 0, total);
     delete s.sparet;
     this.commit();
-    this.notify(`Vart är vi på väg?: ${total} av 50 poäng. Arvodet blev ${this.money(arvode)}.`);
+    this.notify(`Vart är vi på väg?: ${total} av 30 poäng. Arvodet blev ${this.money(arvode)}.`);
     this.go('stad');
   }
 
@@ -2783,14 +2882,14 @@ export class App {
         el('p', { class: 'annons-etikett' }, 'Tv-frågesport'),
         el('h3', { class: 'kontakt-rubrik' }, 'Vart är vi på väg?'),
         el('p', { class: 'kontakt-text' },
-          'Fem städer, fem ledtrådar var. Bromsa när du vet: tio poäng på första ledtråden, åtta på andra, sedan sex, fyra, två. Gissar du fel är rundan förlorad. Arvode efter poäng, och lokal-tv har lovat att inte klippa bort de pinsamma delarna.'
+          'Tre resmål, fem ledtrådar var. Bromsa när du vet: tio poäng på första ledtråden, åtta på andra, sedan sex, fyra, två. Gissar du fel är rundan förlorad. Arvode efter poäng, och lokal-tv har lovat att inte klippa bort de pinsamma delarna.'
         ),
         s.sparet
           ? el('div', { class: 'kontakt-knappar' },
               button('Fortsätt inspelningen', () => this.go('sparet'), { class: 'btn btn-primary' })
             )
           : sparetKlar
-            ? el('p', { class: 'muted' }, `Du ställde upp här${s.sparetBest !== undefined ? ` – bästa omgång ${s.sparetBest} av 50 poäng` : ''}.`)
+            ? el('p', { class: 'muted' }, `Du ställde upp här${s.sparetBest !== undefined ? ` – bästa omgång ${s.sparetBest} av 30 poäng` : ''}.`)
             : el('div', { class: 'kontakt-knappar' },
                 button('Ställ upp', () => this.startSparet(), { class: 'btn btn-primary' })
               )
@@ -3344,6 +3443,7 @@ export class App {
           stat('Frågor rätt', `${q.correct}/${total}`),
           stat('Total lön', this.money(q.earnings))
         ),
+        this.lonekvitto(q),
         button('Kvittera ut lönen', () => this.finishQuiz(), {
           class: 'btn btn-primary btn-big',
         })
@@ -3404,12 +3504,28 @@ export class App {
         stat('Bonus', this.money(q.bonus ?? 0)),
         stat('Total lön', this.money(q.earnings))
       ),
+      this.lonekvitto(q),
       button('Kvittera ut lönen', () => this.finishQuiz(), {
         class: 'btn btn-primary btn-big',
       })
     );
     wrap.append(panel);
     return wrap;
+  }
+
+  /** Lönekvittot rad för rad, så att summan går att räkna på. */
+  private lonekvitto(q: QuizSession): HTMLElement {
+    const rader: [string, number][] = [
+      ['Grundlön', q.grund ?? 0],
+      ['Svarsserie', q.serie ?? 0],
+      ['Snabba svar', q.snabb ?? 0],
+      ['Bonus, sista passet', q.bonus ?? 0],
+    ].filter((r): r is [string, number] => (r[1] as number) > 0) as [string, number][];
+    if (rader.length === 0) return el('div', { class: 'kvitto kvitto-tom' }, el('p', { class: 'muted' }, 'Ingen lön den här gången.'));
+    return el('div', { class: 'kvitto' },
+      ...rader.map(([namn, kr]) => el('div', { class: 'kvitto-rad' }, el('span', {}, namn), el('span', {}, this.money(kr)))),
+      el('div', { class: 'kvitto-rad kvitto-summa' }, el('span', {}, 'Summa'), el('span', {}, this.money(q.earnings)))
+    );
   }
 
   /**
@@ -3455,6 +3571,9 @@ export class App {
         speedPart = speedBonus(elapsed, wage);
         payout = withCombo + speedPart;
         q.earnings += payout;
+        q.grund = (q.grund ?? 0) + base;
+        q.serie = (q.serie ?? 0) + comboPart;
+        q.snabb = (q.snabb ?? 0) + speedPart;
       }
       s.wrongStreak = 0;
     } else {
@@ -3563,18 +3682,16 @@ export class App {
     if (q.kind === 'turistbyra') {
       p.visits += 1;
       p.rating = Math.max(p.rating, score);
+      p.lastProv = { correct: q.correct, total, score };
       // Ett provbesök kostar en dag.
       this.spendDays(1, city);
       this.quiz = null;
       this.commit();
       if (this.checkBroke()) return;
       playSound(score >= 85 ? 'fanfar' : 'stampla');
-      this.notify(
-        `Turistbyrån: ${q.correct}/${total} rätt, betyg ${score}. Bästa betyg i ${city.name}: ${p.rating}.`
-      );
-      // Dagen slutar på vandrarhemmet, och där kan något hända.
+      // Resultatet står i broschyren, där man ändå landar.
       this.fireEvent('boende');
-      this.go('stad');
+      this.go('broschyr');
       return;
     }
 
@@ -3622,7 +3739,13 @@ export class App {
       parts.push(
         `Certifikat i ${CATEGORY_LABELS[job.category] ?? job.category}!`
       );
-    this.notify(parts.join(' '));
+    // Skiftrapporten står kvar tills spelaren själv stänger den. En notis
+    // som försvinner efter några sekunder hann ingen läsa.
+    this.skiftRapport = {
+      titel: gotCert ? 'Certifikat!' : q.correct === total ? 'Felfritt skift' : 'Skiftet är klart',
+      rubrik: `${job.title} hos ${employerFor(city, job)}`,
+      rader: parts,
+    };
     /**
      * Skiftet är över. Något kan ha hänt på jobbet; annars kan något ha hänt
      * på vandrarhemmet under de nätter skiftet varade. Bara ett av dem, så att
@@ -3858,17 +3981,10 @@ export class App {
           'p',
           { class: 'muted' },
           cheap
-            ? `Tillverkas i den här delen av världen. Eftertraktad i ${souvenir.hotIn.map((r) => REGION_LABELS[r] ?? r).join(' och ')} – där betalar de bäst.`
+            ? `Tillverkas i den här delen av världen. Säljs bäst i ${lista(souvenir.hotIn)}.`
             : hot
-              ? 'Eftertraktad här – dyr att köpa, men lönsam att sälja.'
-              : `Normalt pris här. Billigast i ${souvenir.cheapIn.map((r) => REGION_LABELS[r] ?? r).join(' och ')}, dyrast i ${souvenir.hotIn.map((r) => REGION_LABELS[r] ?? r).join(' och ')}.`
-        ),
-        el(
-          'p',
-          { class: 'muted' },
-          `Säljs bäst i: ${souvenir.hotIn
-            .map((r) => REGION_LABELS[r] ?? r)
-            .join(', ')}.`
+              ? `Eftertraktad här – dyr att köpa, men lönsam att sälja. Billigast i ${lista(souvenir.cheapIn)}.`
+              : `Normalt pris här. Billigast i ${lista(souvenir.cheapIn)}, säljs bäst i ${lista(souvenir.hotIn)}.`
         )
       );
       const affordable = s.money >= price;

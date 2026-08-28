@@ -209,12 +209,8 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
   // Teckenförklaring, liten, i motsatt hörn.
   blad.append(
     el('div', { class: 'karta-legend' },
-      hem?.id === city.id
-        ? el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-nal' }), ` Här och start: ${city.name}`)
-        : el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-ring' }), ` Start: ${hem?.name ?? '—'}`),
-      hem?.id === city.id
-        ? ''
-        : el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-nal' }), ` Här: ${city.name}`),
+      el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-nal' }), ' Här'),
+      hem?.id === city.id ? '' : el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-ring' }), ' Start'),
       el('span', { class: 'karta-legend-rad' }, el('span', { class: 'karta-legend-streck' }), ' Resväg')
     )
   );

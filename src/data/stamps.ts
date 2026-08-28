@@ -192,9 +192,9 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
     {
       id: 'sparhund',
       name: 'Spårhund',
-      desc: 'Ta minst 40 av 50 poäng i en omgång av Vart är vi på väg?',
+      desc: 'Ta minst 24 av 30 poäng i en omgång av Vart är vi på väg?',
       glyph: '☊',
-      test: (s) => (s.sparetBest ?? 0) >= 40,
+      test: (s) => (s.sparetBest ?? 0) >= 24,
     },
     /**
      * Mästarstämplarna: en per huvudkategori när tre poäng nåtts, i guld.

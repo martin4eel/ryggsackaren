@@ -244,16 +244,22 @@ body::before {
 /* Raden under bilden: förklaringen till vänster, fotokrediten till höger. */
 .hero-foot {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  gap: 6px 12px;
   margin-top: -4px;
 }
 
+/* Förklaringen får hela raden; knappen och krediten delar nästa. */
 .hero-foot .sign-hint {
   margin: 0;
   text-align: left;
-  flex: 1 1 auto;
+  flex: 1 1 100%;
+}
+
+.hero-foot .vand-alla {
+  margin-right: auto;
 }
 
 .photo-credit {
@@ -2042,6 +2048,61 @@ img.no-photo {
   margin: 8px 0 0;
   font-size: 0.8rem;
   color: var(--ink-soft);
+}
+
+/* Utan tangentbord finns inget att tipsa om. */
+@media (pointer: coarse) {
+  .keyhint { display: none; }
+}
+
+/* ------------------------------------------------------------ lönekvittot */
+
+.kvitto {
+  margin: 4px 0 14px;
+  padding: 8px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  background: var(--paper-dim);
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 0.86rem;
+}
+
+.kvitto-rad {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+}
+
+.kvitto-summa {
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------- provresultat i broschyren */
+
+.prov-resultat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--paper-dim);
+  border: 1px solid var(--line);
+}
+
+.prov-resultat-tal {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.prov-resultat-bra {
+  border-color: var(--ok, #2e7d4f);
 }
 
 /* --------------------------------------------------------- souvenirtrender */
@@ -7414,3 +7475,45 @@ body.sheet-oppen {
   }
 }
 
+
+
+/* ------------------------------------------------------------- skiftrapporten */
+
+.rapport-bak {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(7, 26, 41, 0.55);
+}
+
+.rapport {
+  width: min(100%, 440px);
+  padding: 18px 20px 20px;
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 18px 40px rgba(4, 16, 26, 0.5);
+}
+
+.rapport .kicker { margin: 0 0 2px; }
+
+.rapport-titel {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+
+.rapport-lista {
+  margin: 0 0 16px;
+  padding-left: 18px;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.rapport-lista li + li { margin-top: 4px; }
+
+.rapport .btn { width: 100%; }

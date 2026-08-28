@@ -207,10 +207,10 @@ export const CITY_FACTS: Record<string, string[]> = {
   kairo: [
 
     'Kairos arabiska namn al-Qahira betyder Den segrande. Fatimiderna grundade staden 969, när planeten Mars, al-Qahir, stod på himlen. Det är förmodligen enda gången Mars fått bestämma ett stadsnamn.',
-    'Cheopspyramiden består av omkring 2,3 miljoner stenblock. Med tjugo års byggtid blir det ett block var tredje minut, dygnet runt, utan semester.',
+    'Cheopspyramiden består av omkring 2,3 miljoner stenblock. Med tjugo års byggtid blir det ett block var fjärde eller femte minut, dygnet runt, utan semester.',
     'Al-Azhar grundades 970 och är äldre än Bologna och Oxford. Studenterna satt i ring kring pelarna, en pelare per ämne.',
     'Naguib Mahfouz fick Nobelpriset 1988 för sina romaner om gamla Kairo. Han satt gärna på kaféet El Fishawi i basaren Khan el-Khalili, som hållit öppet i över 200 år, dygnet runt.',
-    'Sångerskan Umm Kulthum sände en konsert första torsdagen varje månad. Hela arabvärlden stannade. Vid hennes begravning 1975 fyllde miljoner Kairos gator, fler än vid presidentens.',
+    'Sångerskan Umm Kulthum sände en konsert första torsdagen varje månad. Hela arabvärlden stannade. Vid hennes begravning 1975 fyllde miljoner Kairos gator, lika många som vid president Nassers fem år tidigare.',
     'Suezkanalen invigdes 1869 och Verdi beställdes att skriva Aida till Kairos nya operahus. Han blev klar två år för sent, vilket är snabbt för en opera.',
     'Koshari, Kairos vardagsrätt, är ris, linser, pasta, kikärter och tomatsås i samma skål. Tre kolhydrater till priset av en.',
     'Grand Egyptian Museum vid pyramiderna öppnade helt 2025 efter tjugo års bygge. Tutankhamons fem tusen gravföremål visas nu samlade. Han var farao i tio år och museiföremål i hundra.',
@@ -367,7 +367,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   ],
   oslo: [
 
-    'Oslo hette Kristiania från 1624 till 1924, efter Kristian IV som byggde upp staden efter en brand och döpte den efter sig själv. Sedan ångrade sig norrmännen.',
+    'Oslo hette Kristiania från 1624 till 1925, efter Kristian IV som byggde upp staden efter en brand och döpte den efter sig själv. Sedan ångrade sig norrmännen.',
     'Henrik Ibsen bodde sina sista år vid Karl Johans gate och promenerade varje dag till Grand Café. Turister kom för att se honom äta lunch. Han var inte road.',
     'Brunost är karamelliserad vassle. 2013 brann ett lastbilslass i en tunnel i Nordland i fem dagar; osten brinner nämligen ungefär som socker.',
     'Varje december står en norsk gran på Trafalgar Square i London. Oslo har skickat den sedan 1947 som tack för hjälpen under kriget.',
@@ -467,7 +467,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   singapore: [
 
     'Singapura betyder lejonstaden. Det har aldrig funnits lejon här; prinsen i sägnen såg troligen en tiger. Statyn Merlion är därför halvt fisk, för säkerhets skull.',
-    'Stamford Raffles grundade handelsstationen 1819. Han har fått ett hotell, en drink och världens största blomma uppkallade efter sig. Blomman luktar lik.',
+    'Stamford Raffles grundade handelsstationen 1819. Han har fått ett hotell och världens största blomma uppkallade efter sig; hotellet uppfann sedan stadens egen drink. Blomman luktar lik.',
     'Singapore föll till Japan 1942 sedan kanonerna riktats mot havet och japanerna kommit på cykel genom djungeln. Churchill kallade det den värsta katastrofen i brittisk historia.',
     'Tuggummi förbjöds 1992 sedan det fastnat i tunnelbanans dörrar. Nikotintuggummi finns på apotek, mot recept.',
     'Landet har vuxit med en fjärdedel sedan 1960-talet genom att fylla ut havet. Indonesien slutade sälja sand 2007; Singapore hade börjat ta slut på grannar.',

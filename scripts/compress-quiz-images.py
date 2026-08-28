@@ -54,7 +54,15 @@ for name in sorted(os.listdir(quiz_dir)):
     skip_bytes = BRED_SKIP if bred else SKIP_BYTES
 
     with Image.open(path) as img:
-        img = ImageOps.exif_transpose(img).convert("RGB")
+        img = ImageOps.exif_transpose(img)
+        # Loggor och annat med genomskinlighet läggs på vitt; annars blir
+        # det genomskinliga svart i WebP utan alfa.
+        if img.mode in ("RGBA", "LA", "P"):
+            img = img.convert("RGBA")
+            vit = Image.new("RGBA", img.size, (255, 255, 255, 255))
+            vit.alpha_composite(img)
+            img = vit
+        img = img.convert("RGB")
         scale = min(
             1.0,
             max_width / img.width,

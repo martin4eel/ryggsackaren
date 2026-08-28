@@ -6,6 +6,7 @@ import { SOUVENIR_BY_ID } from '../data/souvenirs';
 import type { City, Huvudkategori, Job, Question, Souvenir } from '../data/types';
 import { JOB_QUESTIONS } from '../data/questions/jobQuestions';
 import { CITY_QUESTIONS } from '../data/questions/cityQuestions';
+import { CITY_FACTS } from '../data/cityFacts';
 import type { Difficulty, GameState } from './state';
 import { getProgress } from './state';
 
@@ -235,8 +236,19 @@ export function cityQuizQuestions(
   const eligible =
     difficulty === 'turist' ? pool.filter((q) => q.d === 1) : pool;
   const source = eligible.length >= count ? eligible : pool;
-  return shuffle(source)
-    .slice(0, count)
+  // Broschyren lovar att provet handlar om det som står i den. Minst tre av
+  // fem frågor ska därför gå att svara på med broschyren i handen: de vars
+  // rätta svar står i något stycke.
+  const broschyr = (CITY_FACTS[cityId] ?? []).join(' ').toLowerCase();
+  const tackt = (q: Question) => {
+    const svar = q.a[0]!.toLowerCase().replace(/\s*\(.*\)\s*$/, '');
+    const nyckel = svar.length >= 4 ? svar : '';
+    return Boolean(nyckel) && broschyr.includes(nyckel);
+  };
+  const ur = shuffle(source);
+  const tackta = ur.filter(tackt).slice(0, Math.min(3, count));
+  const ovriga = ur.filter((q) => !tackta.includes(q));
+  return shuffle([...tackta, ...ovriga.slice(0, count - tackta.length)])
     .map((q) => prepareQuestion(q, difficulty));
 }
 

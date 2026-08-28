@@ -295,7 +295,7 @@ try {
      * med några namngivna undantag som är bra på egna meriter.
      */
     const mg = job.minigame;
-    const UNDANTAG = { skateboardinstruktor: 'balans', hockeytranare: 'sortering' };
+    const UNDANTAG = { skateboardinstruktor: 'balans' };
     if (!mg) {
       if (job.wageClass >= 2) problems.push(`jobb ${job.id} (klass ${job.wageClass}) saknar minispel`);
     } else {

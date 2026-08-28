@@ -90,6 +90,8 @@ export interface CityProgress {
   spent?: string[];
   /** Resdagen då du först kom hit, för raden om återbesök. */
   firstDay?: number;
+  /** Senaste provet på turistbyrån, för resultatraden i broschyren. */
+  lastProv?: { correct: number; total: number; score: number };
 }
 
 export interface GameState {

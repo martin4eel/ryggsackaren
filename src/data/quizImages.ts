@@ -1385,6 +1385,20 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'beihai', alt: 'En vit stupa på en ö i en sjö i en park', article: 'Beihai Park' },
   { id: 'sparvagnshallplats', alt: 'Blå spårvagn kör in mot en hållplats med plattform', file: 'Femmans spårvagn anlöper Temperaturgatans hållplats i Länsmansgården, Göteborg, den 22 oktober 2006.JPG' },
   { id: 'perrongspar', alt: 'Järnvägsspår sedda från en perrong på en station', file: 'Spår och perronger, stationen i Vänersborg.jpg' },
+  // ----------------------------------------------------- hockeyloggor
+  { id: 'logo-frolunda', alt: 'En rund klubblogga i grönt, vitt och rött', file: 'Frölunda HC.png' },
+  { id: 'logo-djurgarden', alt: 'En sköld i rött, gult och blått', file: 'Djurgardens IF logo.svg' },
+  { id: 'logo-brynas', alt: 'Ett gult emblem med treklöver och lagerkrans', file: 'Brynasif emblem fullfarg rgb.png' },
+  { id: 'logo-hv71', alt: 'En klubblogga i blått och gult', file: 'HV71 Hockey.gif' },
+  { id: 'logo-rangers', alt: 'En sköld i blått, rött och vitt', file: 'New York Rangers Logo.svg' },
+  { id: 'logo-redwings', alt: 'Ett rött hjul med vinge', file: 'Detroit Red Wings logo.png' },
+  { id: 'logo-mapleleafs', alt: 'Ett blått lönnlöv', file: 'Toronto Maple Leafs Logo 1939 - 1967.svg' },
+  { id: 'logo-canadiens', alt: 'Ett rött C med ett blått H inuti', file: 'Montreal Canadiens.svg' },
+  { id: 'logo-bruins', alt: 'Ett svart och gult B i ett ekerhjul', file: 'Boston Bruins.svg' },
+  { id: 'logo-canucks', alt: 'En klubba i en rink, blått och grönt', file: 'Vancouver Canucks 70er.svg' },
+  { id: 'logo-flyers', alt: 'Ett bevingat orange P', file: 'Logo Philadelphia Flyers.svg' },
+  { id: 'logo-capitals', alt: 'En logga med stjärnor och en klubba i rött och blått', file: 'Washington Capitals.svg' },
+  { id: 'logo-lightning', alt: 'En blå blixt i en cirkel', file: 'Tampa Bay Lightning 2011.svg' },
 ];
 
 export const QUIZ_IMAGE_BY_ID: Record<string, QuizImage> = Object.fromEntries(

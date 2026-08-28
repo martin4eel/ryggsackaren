@@ -1055,7 +1055,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
     {
       q: 'Bron på bilden går över vattnet Tokyo ligger vid. Vilket?', bild: 'rainbowbridge',
-      a: ['Stilla havet (Tokyobukten)', 'Indiska oceanen', 'Japanska havet', 'Ochotska havet'],
+      a: ['Tokyobukten', 'Osakabukten', 'Japanska havet', 'Ochotska havet'],
       d: 2,
     },
     {
@@ -1267,9 +1267,9 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 2,
     },
     {
-      q: 'Vilket språk är officiellt i Mexiko?', bild: 'bellasartes',
-      a: ['Spanska', 'Portugisiska', 'Franska', 'Nahuatl'],
-      d: 1,
+      q: 'Vilket språk talar de allra flesta i Mexiko?', bild: 'bellasartes',
+      a: ['Spanska', 'Portugisiska', 'Franska', 'Italienska'],
+      d: 1, info: 'Mexiko har inget officiellt språk i lag. Spanska och 68 urfolksspråk, däribland nahuatl, räknas som nationella språk.',
     },
     {
       q: 'Vad kallas det stora torget på bilden, i Mexico Citys centrum?', bild: 'zocalo',
@@ -1931,7 +1931,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Var föddes Scheele, i en stad som då tillhörde Sverige?', bild: 'scheelestaty', a: ['Stralsund', 'Greifswald', 'Wismar', 'Riga'], d: 2, info: 'Svenska Pommern var svenskt från freden 1648 till 1815, så Sveriges störste kemist talade tyska hemma.' },
     { q: 'Vilket företag tillverkar växellådor i Köping, i en fabrik som var stadens mekaniska verkstad?', bild: 'industrirobot', a: ['Volvo', 'Scania', 'Saab', 'Husqvarna'], d: 1, info: 'Köpings Mekaniska Verkstad köptes av Volvo 1942 och har levererat växellådor till lastbilarna sedan dess.' },
     { q: 'Vilken å rinner genom Köping och ut i Mälaren?', bild: 'stad:koping', a: ['Köpingsån', 'Hedströmmen', 'Arbogaån', 'Kolbäcksån'], d: 1, info: 'Ån bildas där Kölstaån och Valstaån möts strax uppströms staden.' },
-    { q: 'Vad heter Mälarens västligaste fjärd, den som Köping ligger vid?', bild: 'stadsbild:koping', a: ['Galten', 'Björkfjärden', 'Ekoln', 'Blacken'], d: 2, info: 'Från Galten är det båtväg hela vägen till Stockholm, om man har tålamod med sunden och slussen i Södertälje.' },
+    { q: 'Vad heter Mälarens västligaste fjärd, den som Köping ligger vid?', bild: 'stadsbild:koping', a: ['Galten', 'Björkfjärden', 'Ekoln', 'Blacken'], d: 2, info: 'Från Galten är det båtväg hela vägen till Stockholm, om man har tålamod med sunden och Hammarbyslussen.' },
     { q: 'Mälaren är Sveriges tredje största sjö. Vilka två är större?', bild: 'stadsbild:koping', a: ['Vänern och Vättern', 'Vänern och Hjälmaren', 'Vättern och Siljan', 'Vänern och Storsjön'], d: 1, info: 'Mälarens yta ligger bara omkring sju decimeter över havet, så nivån hålls med slussar och dammar.' },
     { q: 'Vilken huvudstad har samma ordstam, köpa, i sitt namn som Köping?', bild: 'stadsbild:koping', a: ['Köpenhamn', 'Oslo', 'Helsingfors', 'Reykjavík'], d: 2, info: 'Köpenhamn kommer av Købmannahavn, köpmännens hamn. Köping var helt enkelt platsen där man handlade.' },
     { q: 'Ungefär hur långt är det från Köping till Västerås?', bild: 'stadsbild:vasteras', a: ['Omkring 40 km'], reglage: { min: 0, max: 200, steg: 5, svar: 40, tolerans: 12, liggande: true, lagst: '0 km', hogst: '200 km', enhet: 'km' }, d: 1, info: 'Tåget på Mälarbanan tar en knapp halvtimme och fortsätter till Stockholm åt ena hållet och Örebro åt det andra.' },
