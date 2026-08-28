@@ -982,7 +982,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **rupier.webp** (En sedel med en mans porträtt) – [100 Rupee of India - T.jpg](https://commons.wikimedia.org/wiki/File:100_Rupee_of_India_-_T.jpg) av Windrain, CC0.
 - **rushdie.webp** (En äldre man med glasögon och tunt hår) – [Salman_Rushdie,_2024.jpg](https://commons.wikimedia.org/wiki/File:Salman_Rushdie,_2024.jpg) av Elena Ternovaja, CC BY-SA 3.0.
 - **russin.webp** (Torkade skrumpna druvor) – [Raisins_01.jpg](https://commons.wikimedia.org/wiki/File:Raisins_01.jpg) av Paweł Kuźniar ( Jojo_1 , Jojo ), CC BY-SA 3.0.
-- **rydercup.webp** (En liten guldpokal) – [Ryder Cup 2025-228.jpg](https://commons.wikimedia.org/wiki/File:Ryder_Cup_2025-228.jpg) av Bryan Berlin, CC BY-SA 4.0.
+- **rydercup.webp** (En man i kavaj håller upp en liten guldpokal på en golfbana) – [Ryder Cup - 2014 - Paul McGinley (15360203186).jpg](https://commons.wikimedia.org/wiki/File:Ryder_Cup_-_2014_-_Paul_McGinley_(15360203186).jpg) av Scottish Government, CC BY 2.0.
 - **sacrecoeur.webp** (En vit kyrka med kupoler på en kulle) – [Le_sacre_coeur.jpg](https://commons.wikimedia.org/wiki/File:Le_sacre_coeur.jpg) av Tonchino, CC BY-SA 3.0.
 - **sacsayhuaman.webp** (Murar av enorma tätt fogade stenblock) – [Sacsayhuamán,_Cusco,_Perú,_2015-07-31,_DD_27.JPG](https://commons.wikimedia.org/wiki/File:Sacsayhuam%C3%A1n,_Cusco,_Per%C3%BA,_2015-07-31,_DD_27.JPG) av Diego Delso, CC BY-SA 4.0.
 - **saffran.webp** (Saffranstrådar) – [Saffron_-_premium_spice.jpg](https://commons.wikimedia.org/wiki/File:Saffron_-_premium_spice.jpg) av Shaharbano, CC BY 4.0.

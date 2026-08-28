@@ -739,7 +739,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'visir', alt: 'En man med genomskinligt visir framför ansiktet', article: 'Face shield' },
   { id: 'standrews', alt: 'En stenbro över en bäck på en golfbana', article: 'Old Course at St Andrews' },
   { id: 'annikasorenstam', alt: 'En kvinnlig golfare i utslagsposition', article: 'Annika Sörenstam' },
-  { id: 'rydercup', alt: 'En liten guldpokal', file: 'Ryder Cup 2025-228.jpg' },
+  { id: 'rydercup', alt: 'En man i kavaj håller upp en liten guldpokal på en golfbana', file: 'Ryder Cup - 2014 - Paul McGinley (15360203186).jpg' },
   { id: 'jacknicklaus', alt: 'En äldre man i keps', article: 'Jack Nicklaus' },
   { id: 'djmixer', alt: 'Ett mixerbord med reglar och vred', article: 'DJ mixer' },
   { id: 'skivspelare', alt: 'En skivspelare med vinylskiva', article: 'Technics SL-1200' },
