@@ -3,6 +3,7 @@ import { CITIES, CITY_BY_ID } from '../data/cities';
 import { CITY_FACTS } from '../data/cityFacts';
 import { SPARET_LEDTRADAR } from '../data/sparetLedtradar';
 import { SEVARDHETER } from '../data/sevardheter';
+import { UPPDRAG, type Uppdrag } from '../data/uppdrag';
 import { CURRENCIES, formatMoney } from '../data/currencies';
 import type { EventTone, EventTrigger } from '../data/events';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
@@ -58,7 +59,7 @@ import {
   loadGame,
   saveGame,
   type Difficulty,
-  type GameState, type BackpackItem } from '../game/state';
+  type GameState, type BackpackItem, type AktivtUppdrag } from '../game/state';
 import {
   cycleVolume,
   playCombo,
@@ -819,6 +820,21 @@ export class App {
   private fireEvent(trigger: EventTrigger, chance?: number): void {
     const s = this.state!;
     const city = this.city;
+    /**
+     * Var fjärde gång slumpen slår till är det inte en händelse utan ett
+     * uppdrag: någon med ett ärende till en annan stad. Det gör att resan
+     * vidare lönar sig, och att ryggsäcken får något att bära på.
+     */
+    if ((chance ?? 1) < 1 && !s.pendingEvent && !s.pendingUppdrag && (s.uppdrag?.length ?? 0) < 2 && Math.random() < 0.25) {
+      const erbjudet = this.lottaUppdrag();
+      if (erbjudet) {
+        s.pendingUppdrag = erbjudet;
+        s.lastEventDay = s.days;
+        playSound('sida');
+        this.commit();
+        return;
+      }
+    }
     const event = rollEvent(s, city, trigger, chance);
     if (!event) return;
     const kostnad = dailyCost(city, s.difficulty);
@@ -827,6 +843,90 @@ export class App {
       : applyImmediate(s, event, city, kostnad, (n) => this.money(n));
     playSound(EVENT_LJUD[event.tone]);
     this.commit();
+  }
+
+  /** Lottar ett uppdrag man inte sett, med ett mål man inte varit i. */
+  private lottaUppdrag(): AktivtUppdrag | null {
+    const s = this.state!;
+    const sedda = new Set(s.uppdragSedda ?? []);
+    const mallar = UPPDRAG.filter((u) => !sedda.has(u.id));
+    if (mallar.length === 0) return null;
+    const mall = mallar[Math.floor(Math.random() * mallar.length)]!;
+    const har = this.city;
+    // Målet: en stad man inte varit i, helst i en annan del av världen, som
+    // går att nå härifrån. Två till åtta resdagar bort är lagom.
+    const kandidater = CITIES.filter((c) => c.id !== har.id && !s.visited.includes(c.id) && cheapestRoute(har, c, s.difficulty));
+    if (kandidater.length === 0) return null;
+    const langt = kandidater.filter((c) => c.region !== har.region);
+    const pool = langt.length >= 3 ? langt : kandidater;
+    const mal = pool[Math.floor(Math.random() * pool.length)]!;
+    s.uppdragSedda = [...sedda, mall.id];
+    return {
+      id: mall.id,
+      mal: mal.id,
+      fran: har.id,
+      start: s.days,
+      belopp: mall.belopp,
+      deadline: mall.dagar ? s.days + mall.dagar : undefined,
+    };
+  }
+
+  private uppdragMall(id: string): Uppdrag | undefined {
+    return UPPDRAG.find((u) => u.id === id);
+  }
+
+  private uppdragText(text: string, malId: string, belopp = 0): string {
+    const c = CITY_BY_ID[malId];
+    return text
+      .replace(/\{stad\}/g, c?.name ?? malId)
+      .replace(/\{land\}/g, c?.country ?? '')
+      .replace(/\{belopp\}/g, this.money(belopp));
+  }
+
+  /** Erbjudandet: ja eller nej. */
+  private svaraUppdrag(ja: boolean): void {
+    const s = this.state!;
+    const u = s.pendingUppdrag;
+    if (!u) return;
+    delete s.pendingUppdrag;
+    if (ja) {
+      s.uppdrag = [...(s.uppdrag ?? []), u];
+      playSound('stampla');
+      this.notify(`${this.uppdragMall(u.id)?.foremal ?? 'Ärendet'} ligger i ryggsäcken. Mål: ${CITY_BY_ID[u.mal]?.name ?? u.mal}.`);
+    } else {
+      playSound('valj');
+    }
+    this.commit();
+    this.render();
+  }
+
+  /**
+   * Vid ankomst: uppdrag med den här staden som mål slutförs och betalas;
+   * uppdrag vars sista dag passerat stryks. Rapporten visas som ett kort.
+   */
+  private avslutaUppdragVidAnkomst(city: City): string[] {
+    const s = this.state!;
+    const rader: string[] = [];
+    const kvar: AktivtUppdrag[] = [];
+    for (const u of s.uppdrag ?? []) {
+      const mall = this.uppdragMall(u.id);
+      if (u.deadline !== undefined && s.days > u.deadline && u.mal !== city.id) {
+        rader.push(`${mall?.foremal ?? 'Ärendet'}: för sent. Den som väntade i ${CITY_BY_ID[u.mal]?.name ?? u.mal} har slutat vänta.`);
+        continue;
+      }
+      if (u.mal === city.id) {
+        const forSent = u.deadline !== undefined && s.days > u.deadline;
+        const belopp = forSent ? Math.round(u.belopp / 2) : u.belopp;
+        s.money += belopp;
+        s.earned += belopp;
+        s.uppdragKlara = (s.uppdragKlara ?? 0) + 1;
+        rader.push(`${mall?.titel ?? 'Uppdraget'}: ${this.uppdragText(mall?.klar ?? 'Lämnat.', u.mal)} ${forSent ? `Sent, så halva ersättningen: ${this.money(belopp)}.` : `${this.money(belopp)} utbetalt.`}`);
+        continue;
+      }
+      kvar.push(u);
+    }
+    s.uppdrag = kvar;
+    return rader;
   }
 
   /** Spelaren svarar. Utfallet lottas och verkställs. */
@@ -1019,6 +1119,29 @@ export class App {
 
     if (this.toast) {
       shell.append(el('div', { class: 'toast', role: 'status' }, this.toast));
+    }
+    if (s.pendingUppdrag && !s.pendingEvent) {
+      const u = s.pendingUppdrag;
+      const mall = this.uppdragMall(u.id);
+      const mal = CITY_BY_ID[u.mal];
+      shell.append(
+        el('div', { class: 'rapport-bak' },
+          el('div', { class: 'rapport uppdrag-kort', role: 'dialog', 'aria-label': 'Uppdrag' },
+            el('p', { class: 'kicker' }, 'Någon vill dig något'),
+            el('h2', { class: 'rapport-titel' }, mall?.titel ?? 'Ett ärende'),
+            el('p', { class: 'uppdrag-text' }, this.uppdragText(mall?.text ?? '', u.mal, u.belopp)),
+            el('div', { class: 'uppdrag-villkor' },
+              el('span', {}, el('strong', {}, 'Mål: '), `${mal?.name ?? u.mal}, ${mal?.country ?? ''}`),
+              el('span', {}, el('strong', {}, 'Ersättning: '), this.money(u.belopp)),
+              u.deadline !== undefined ? el('span', {}, el('strong', {}, 'Senast: '), `dag ${u.deadline} (${u.deadline - s.days} dagar)`) : ''
+            ),
+            el('div', { class: 'row' },
+              button('Jag tar det', () => this.svaraUppdrag(true), { class: 'btn btn-primary btn-big' }),
+              button('Nej tack', () => this.svaraUppdrag(false), { class: 'btn btn-ghost' })
+            )
+          )
+        )
+      );
     }
     if (this.skiftRapport) {
       const r = this.skiftRapport;
@@ -4224,6 +4347,9 @@ export class App {
     const pt = getProgress(s, target.id);
     pt.firstDay ??= s.days;
     this.travelFilter = null;
+    // Uppdrag som ska hit lämnas över och betalas innan kassan räknas;
+    // passerade sista dagar stryks.
+    const uppdragsrader = this.avslutaUppdragVidAnkomst(target);
     this.commit();
     if (this.checkBroke()) return;
     // Varje färdsätt låter som sig självt när det lämnar staden.
@@ -4234,9 +4360,14 @@ export class App {
       farja: 'skeppstuta',
     } as const;
     playSound(avgangsljud[option.mode]);
-    // Något kan ha hänt på vägen. Kortet ligger kvar tills det kvitterats, och
-    // syns först när resefilmen spelat klart.
-    this.fireEvent('resa');
+    if (uppdragsrader.length > 0) {
+      this.skiftRapport = { titel: 'Ärendet framme', rubrik: `Uppdrag i ${target.name}`, rader: uppdragsrader };
+      this.efterRapport = () => this.fireEvent('resa');
+    } else {
+      // Något kan ha hänt på vägen. Kortet ligger kvar tills det kvitterats, och
+      // syns först när resefilmen spelat klart.
+      this.fireEvent('resa');
+    }
     // Filmen visar sträckan; ankomstsignalen kommer när den spelat klart.
     this.filmNode = null;
     this.travelScene = {
@@ -4455,6 +4586,30 @@ export class App {
     wrap.append(head);
     const knowledge = this.renderCityKnowledge();
     if (knowledge) wrap.append(knowledge);
+    const uppdrag = s.uppdrag ?? [];
+    const upp = el('section', { class: 'panel' });
+    upp.append(el('h2', {}, 'Uppdrag'));
+    if (uppdrag.length === 0) {
+      upp.append(el('p', { class: 'muted' }, `Inga ärenden just nu. ${(s.uppdragKlara ?? 0) > 0 ? `${s.uppdragKlara} slutförda.` : 'Folk med konstiga ärenden dyker upp när man minst anar det.'}`));
+    } else {
+      for (const u of uppdrag) {
+        const mall = this.uppdragMall(u.id);
+        const mal = CITY_BY_ID[u.mal];
+        upp.append(
+          el('article', { class: 'item uppdrag-rad' },
+            el('div', { class: 'item-head' },
+              el('h3', {}, mall?.foremal ?? u.id),
+              el('span', { class: 'item-price' }, this.money(u.belopp))
+            ),
+            el('p', { class: 'muted' },
+              `Ska till ${mal?.name ?? u.mal}, ${mal?.country ?? ''}. Fick det i ${CITY_BY_ID[u.fran]?.name ?? u.fran} dag ${u.start}.` +
+                (u.deadline !== undefined ? ` Senast dag ${u.deadline}${s.days > u.deadline ? ' – för sent, halva ersättningen.' : ` (${u.deadline - s.days} dagar kvar).`}` : '')
+            )
+          )
+        );
+      }
+    }
+    wrap.append(upp);
     wrap.append(this.renderStampPanel());
 
     // Poängen per huvudkategori: stegen man klättrar på.

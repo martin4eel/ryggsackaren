@@ -66,6 +66,20 @@ export interface SparetSession {
   klar?: boolean;
 }
 
+/** Ett uppdrag man tagit på sig: ett ärende till en annan stad. */
+export interface AktivtUppdrag {
+  id: string;
+  /** Stads-id dit ärendet ska */
+  mal: string;
+  /** Var man fick det */
+  fran: string;
+  /** Dagen man fick det */
+  start: number;
+  belopp: number;
+  /** Sista dag, om det brådskar */
+  deadline?: number;
+}
+
 /** En fråga man svarat fel på, sparad för tidningens Repris. */
 export interface Miss {
   q: string;
@@ -223,6 +237,14 @@ export interface GameState {
     chosen?: number;
     outcome?: number;
   };
+  /** Aktiva uppdrag: ärenden till andra städer */
+  uppdrag?: AktivtUppdrag[];
+  /** Uppdrag som erbjuds just nu, tills man tackar ja eller nej */
+  pendingUppdrag?: AktivtUppdrag;
+  /** Antal slutförda uppdrag, för stämplarna */
+  uppdragKlara?: number;
+  /** Uppdrag man redan fått erbjudna, så att samma ärende inte kommer igen */
+  uppdragSedda?: string[];
   /** Sista resultatet, sätts när spelet är över */
   outcome?: 'vinst' | 'pank';
   finalScore?: number;

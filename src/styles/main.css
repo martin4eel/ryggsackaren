@@ -8137,3 +8137,10 @@ body.sheet-oppen {
   margin-bottom: 8px;
   border-bottom: 1px solid var(--ink);
 }
+
+
+/* Uppdrag */
+.uppdrag-text { margin: 0 0 10px; font-size: 1rem; line-height: 1.5; font-style: italic; }
+.uppdrag-villkor { display: grid; gap: 4px; margin: 0 0 14px; font-size: 0.92rem; }
+.uppdrag-kort .row { display: grid; gap: 8px; }
+.uppdrag-rad .item-head h3 { font-size: 1rem; }

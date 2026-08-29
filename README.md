@@ -381,6 +381,8 @@ webbläsaren och överlever att sparfilen raderas.
    fyra spelare med porträtt och namn ovanför – vem hör hemma i laget? 22
    spelare, 13 SHL- och NHL-märken, ingen klocka; efter svaret får laget
    sitt namn och fel val förklaras ("Chára hör till Boston Bruins").
+   Fotbollstränaren har samma spel med landslag: flaggan i mitten, 29
+   spelare, 12 landslag, 24 rundor ("Zlatan hör till Sverige").
 
    Sorteringsspelen är utbytta (2026-08-29): alla tjugo yrken som hade
    "dra foto till rätt hylla" har nu bildval i politikerspelets stil, där
@@ -576,6 +578,20 @@ räknas bara upp till 25 000: resande ger poäng, pengar ger biljetter. Skulden
 dras av. Poängen ger också en titel, från _Hemvändare_ till _Legendarisk
 upptäckare_.
 
+### Uppdrag
+
+Var fjärde gång slumpen skulle ha gett en händelse kommer i stället en
+människa med ett ärende: en döv katt till systern i Paris, en surdeg från
+1987, farfar i en urna som aldrig fick se Lissabon. Man tackar ja eller
+nej. Ärendet ligger sedan som en egen rad i ryggsäcken med mål, ersättning
+och sista dag, och betalas ut när man kliver av i rätt stad – halva
+summan om man är sen, och ett ärende med passerad sista dag stryks när
+man kommer till fel stad. Målet är alltid en stad man inte varit i, helst
+i en annan del av världen, och högst två ärenden får ligga i ryggsäcken.
+Sexton ärenden finns i `src/data/uppdrag.ts`; varje ärende dyker upp högst
+en gång per resa. Tre stämplar hör till: Kurir (1), Budbärare (3) och
+guldstämpeln Ärendenas mästare (6).
+
 ## Innehåll
 
 - 47 destinationer i 41 länder och alla åtta regioner, var och en med eget
@@ -584,7 +600,7 @@ upptäckare_.
 - 1 697 frågor uppdelade i två svårighetsgrader, varav 1 287 jobbfrågor
 - 50 fotografier från Wikimedia Commons till bild- och bildvalsfrågorna
 - 8 arkadmoment som avslutar arbetsskiften
-- 28 stämplar att samla i passet, varav sex mästarstämplar i guld och ett sigill
+- 31 stämplar att samla i passet, varav sju mästarstämplar i guld och ett sigill
 - 113 händelser med 137 val och 185 möjliga utfall, spridda över åtta
   tillfällen, var och en högst en gång per resa
 - 9–15 nedvända brickor per stad, varav 1–4 döljer en händelse eller en fråga

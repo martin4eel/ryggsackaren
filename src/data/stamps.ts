@@ -190,6 +190,28 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       test: (s) => (s.sparetTio ?? 0) >= 1,
     },
     {
+      id: 'forsta-uppdraget',
+      name: 'Kurir',
+      desc: 'Slutför ett uppdrag: lämna någons ärende i rätt stad.',
+      glyph: '✉',
+      test: (s) => (s.uppdragKlara ?? 0) >= 1,
+    },
+    {
+      id: 'budbarare',
+      name: 'Budbärare',
+      desc: 'Slutför tre uppdrag. Folk börjar känna igen dig på stationerna.',
+      glyph: '☞',
+      test: (s) => (s.uppdragKlara ?? 0) >= 3,
+    },
+    {
+      id: 'arendenas-mastare',
+      name: 'Ärendenas mästare',
+      desc: 'Slutför sex uppdrag. Döva katter, surdegar och urnor - allt kommer fram.',
+      glyph: '✦',
+      tier: 'guld',
+      test: (s) => (s.uppdragKlara ?? 0) >= 6,
+    },
+    {
       id: 'sparhund',
       name: 'Spårhund',
       desc: 'Ta minst 24 av 30 poäng i en omgång av Vart är vi på väg?',
