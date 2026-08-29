@@ -297,11 +297,16 @@ webbläsaren och överlever att sparfilen raderas.
    artiklar (`src/data/newspapers.ts`), så *Stockholms-Bladet* och Bangkoks
    blad ser inte likadana ut. Sedan följer platsannonserna, och sist den
    **personliga sidan**: tre kontaktannonser i veckan ur regionens pool
-   (`src/data/kontaktannonser.ts`). Du kan *svara* – det kostar en dag, och
-   vad som händer lottas bland annonsens utfall: en middag som blev gratis,
-   en änka som visade sig sälja tidsdelat boende, en frågesport där du
-   bromsade på tio – eller *bläddra förbi*, och då kommer annonsen inte
-   tillbaka i den staden. Läs platsannonserna och ta ett skift. Varje fråga är en
+   (`src/data/kontaktannonser.ts`). Veckans tre väljs en gång och ligger
+   sedan kvar: svarar du eller bläddrar förbi stryks raden över med en
+   stämpel i stället för att bytas mot en ny, för en spalt som fyller på sig
+   själv är en automat och inte en spalt. Du kan *svara* – det kostar en dag,
+   och vad som händer lottas bland annonsens utfall: en middag som blev
+   gratis, en änka som visade sig sälja tidsdelat boende, en frågesport där
+   du bromsade på tio – eller *bläddra förbi*. Ungefär var fjärde annons är
+   ett ärende förklätt till kontaktannons (`uppdrag: true`): den som svarar
+   får uppdragskortet i stället för ett utfall, och kan tacka ja till att
+   bära någons sak till en annan stad. Läs platsannonserna och ta ett skift. Varje fråga är en
    arbetsdag: rätt svar ger lön, och boendet dras oavsett. Ett gjort skift
    stryks i tidningen med rött bläck och kommer inte tillbaka – samma yrke
    får man söka i en annan stad, hos en annan arbetsgivare – och
