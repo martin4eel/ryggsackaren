@@ -1538,7 +1538,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'stenmurkla', alt: 'En stenmurkla med brun, hjärnliknande hatt på barrmark', file: 'Gyromitra esculenta01.jpg', altFraga: 'En brun, veckig svamp på barrmark' },
   { id: 'trattkantarell2', alt: 'Trattkantareller med bruna hattar och gula fötter i mossa', file: 'Trompetenpfifferling Craterellus tubaeformis.jpg', altFraga: 'Små brunhattade svampar med gula fötter i mossa' },
   { id: 'taggsvamp2', alt: 'Två bleka taggsvampar, den ena vänd så att taggarna syns', file: 'Hydnum repandum semmelstoppelpilz.jpg', altFraga: 'Två ljusa svampar, en vänd med undersidan upp' },
-  { id: 'smorsopp', alt: 'En smörsopp med brun, blank hatt bland barr och gräs', file: 'Suillus luteus 2010 G1.jpg', altFraga: 'En brun, blank svamp bland barr' },
+  { id: 'smorsopp', alt: 'Smörsoppar i mossa: bruna blanka hattar, gula porer och ring på foten', file: 'Suillus luteus 9.jpg', altFraga: 'Bruna, blanka svampar i mossa, en vänd så att undersidan syns' },
   { id: 'trumpetsvamp', alt: 'Rödgula trumpetsvampar med bruna trattar och gula fötter', file: 'Craterellus lutescens 01.jpg', altFraga: 'Trattformade svampar med gula fötter bland barr' },
   { id: 'fjallskivling2', alt: 'En stolt fjällskivling med stor fjällig hatt på hög fot i skogen', file: 'Parasol-Macrolepiota-procera.jpg', altFraga: 'En hög svamp med stor, fjällig hatt i skogen' },
   { id: 'gifthatting', alt: 'Gifthättingar med bruna hattar i klunga på murken ved', file: 'Galerina marginata.jpg', altFraga: 'Små bruna svampar i klunga på en stubbe' },

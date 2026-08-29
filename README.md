@@ -369,6 +369,12 @@ webbläsaren och överlever att sparfilen raderas.
    rätt som fel – hur man känner igen svampen och vad giftet gör. Alla
    fjorton är svenska arter.
 
+   Sorteringsspelen är utbytta (2026-08-29): alla tjugo yrken som hade
+   "dra foto till rätt hylla" har nu bildval i politikerspelets stil, där
+   passagerare, gäster, elever och beställare beskriver vad de behöver –
+   aldrig hur fotot ser ut. `scripts/merge-bildval.mjs` byter ett jobbs
+   sista pass ur JSON.
+
    Sommelieren har ett femte slag, *quiz*: åtta svårare frågor ur en bank på
    sexton (druvor, regioner, korkfel, champagnemetoden), en i taget utan
    klocka, med förklaring efter varje svar – ett vinprov snarare än en
