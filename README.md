@@ -327,6 +327,12 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Souvenirbutiken** är ett skyltfönster: foto av varan i en vriden vit
+     ram (`souv-<id>` i `quizImages.ts`, 60 av 64 har foto), handskriven
+     prislapp med hål och snöre, gummistämpel *Fynd*/*Turistpris*/*Vinst* i
+     passets bläck, butiksinnehavarens replik och knappen *Slå in*. Tidningens
+     *Marknaden* skvallrar om var ryggsäckens innehåll betalar bäst just nu,
+     med samma siffror som butiken men som rykten och läsarbrev.
    - **Poängkvittot** på slutskärmen visar slutpoängen rad för rad – kassa,
      ryggsäck, städer, världsdelar, stämplar, anseende, certifikat,
      träffsäkerhet och tempo – med uträkningen i klartext (`finalScoreBreakdown`).
