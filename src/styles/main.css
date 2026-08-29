@@ -8387,3 +8387,23 @@ body.sheet-oppen {
     linear-gradient(180deg, rgba(29, 43, 52, 0.12), transparent 40%),
     var(--paper-dim);
 }
+
+
+/* Låneförhandlingen i telefonkiosken. */
+.phone-reglage {
+  margin: 12px 0 4px;
+}
+
+.phone-skuldrad {
+  margin: 0 0 10px;
+}
+
+/* Det de säger när de säger nej. Står som en replik, inte som ett felmeddelande. */
+.phone-nej {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-left: 3px solid #a4342f;
+  background: rgba(164, 52, 47, 0.08);
+  font-style: italic;
+  line-height: 1.45;
+}

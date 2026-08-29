@@ -281,10 +281,24 @@ export function citySouvenirs(city: City): Souvenir[] {
     .filter((s): s is Souvenir => Boolean(s));
 }
 
-/** Lån hemifrån: mindre för varje samtal. */
-export function loanAmount(state: GameState): number {
-  const base = 2000;
-  return Math.round(base * Math.max(0.3, 1 - state.callsHome * 0.25));
+/** Mest man kan be om i ett samtal. Reglaget går inte längre. */
+export const LOAN_MAX = 2500;
+/** Minst man kan be om. Under det är det inte värt myntet i automaten. */
+export const LOAN_MIN = 200;
+export const LOAN_STEP = 100;
+
+/**
+ * Sannolikheten att de säger nej.
+ *
+ * Två hundra kronor får man nästan alltid; hela 2 500 får man sällan. Ovanpå
+ * det väger den skuld som redan finns - den som lånat tre gånger och inte
+ * betalat tillbaka får höra det. Aldrig helt säkert och aldrig helt hopplöst:
+ * spannet är fem till åttiofem procent.
+ */
+export function loanRefusalChance(state: GameState, amount: number): number {
+  const del = (amount - LOAN_MIN) / (LOAN_MAX - LOAN_MIN);
+  const skuld = Math.min(0.2, state.debt / 12000);
+  return Math.max(0.05, Math.min(0.85, 0.06 + del * 0.55 + skuld));
 }
 
 /**

@@ -32,7 +32,10 @@ import {
   optionCount,
   certificateThreshold,
   comboMultiplier,
-  loanAmount,
+  LOAN_MAX,
+  LOAN_MIN,
+  LOAN_STEP,
+  loanRefusalChance,
   loanDebt,
   newStamps,
   pityBonus,
@@ -330,11 +333,12 @@ interface PhoneCall {
   /** Vad som sägs, eller vad som hände. */
   rad: string;
   /**
-   * Beloppet som utlovades innan luren lyftes. Samtalet räknas när någon
-   * svarar, och utan det här hade erbjudandet blivit lägre än det som stod
-   * på skärmen sekunden innan.
+   * Högsta summa man får be om i det här samtalet. Efter ett nej sänks taket
+   * till strax under det man bad om - de sa nej till summan, inte till dig.
    */
-  belopp?: number;
+  tak?: number;
+  /** Vad de nyss sa nej till, och vad de sa. */
+  nekat?: { belopp: number; rad: string };
 }
 
 /** Repliker i luren. `{stad}` byts mot staden man ringer från. */
@@ -384,6 +388,26 @@ const PAPPA_LANAR = [
   '"Hrm." Pengarna kommer ändå. Han suckar så att luren blir fuktig.',
   '"Det här skrivs upp. Cell B8." Det låter som att han faktiskt skriver.',
   '"Sista gången." Det är fjärde gången han säger det.',
+];
+/**
+ * När de säger nej. Aldrig ett rent avslag - alltid en anledning som säger
+ * mer om dem än om pengarna. {summa} byts mot det man bad om.
+ */
+const MAMMA_NEKAR = [
+  '"{summa}? Vet du vad en kaffe kostar hemma? Nej, det gör du inte, för du är inte hemma."',
+  '"Jag har precis handlat till frysen. Fråga om något mindre, så ska vi se."',
+  '"{summa}. Jag hör vad du säger. Jag hör också vad pappa säger, och han säger nej."',
+  '"Så mycket hade jag inte ens med mig till Mallorca. Och där betalade vi allt kontant."',
+  '"Nu blev jag tvungen att sätta mig. Ta det där en gång till, men lägre."',
+  '"Jag skulle gärna, men jag har lovat mig själv en sak. Fråga igen med en mindre siffra."',
+];
+const PAPPA_NEKAR = [
+  '"{summa}." Lång tystnad. "Nej." Ännu längre tystnad. "Vad var din andra idé?"',
+  '"Det där är en tredjedel av en vinterdäcksuppsättning. Nej."',
+  '"Hrm." Du hör en penna läggas ner. "Vi tar en lägre siffra, så slipper jag räkna om."',
+  '"Jag har lagt in det i kalkylbladet. Bladet säger nej. Jag gjorde bladet."',
+  '"Din farfar for till Amerika med tolv kronor i fickan." Han låter nöjd med det. "Nej."',
+  '"Nej. Men jag lyssnar fortfarande, så du får gärna komma med ett bud."',
 ];
 const MAMMA_BETALAR = [
   '"Nämen, vad snäll du är. Behåll det, vetja. Nej? Okej då."',
@@ -5210,7 +5234,7 @@ export class App {
       else if (svarare === 'pappa') playSound('rostpappa');
       else if (svarare === 'fel') playSound('rostframmande');
       // Beloppet låses till det som stod på skärmen innan man ringde.
-      this.phoneCall = { phase: 'svar', svarare, rad, belopp: loanAmount(s) };
+      this.phoneCall = { phase: 'svar', svarare, rad, tak: LOAN_MAX };
       // Ett samtal räknas när någon svarar, inte först när man lånar.
       s.callsHome += 1;
       this.scrollToTopNext = false;
@@ -5222,7 +5246,6 @@ export class App {
     const s = this.state!;
     const wrap = el('div', { class: 'stack' });
     const samtal = this.phoneCall;
-    const amount = samtal?.belopp ?? loanAmount(s);
 
     const panel = el('section', { class: 'panel phone' });
     panel.append(el('h1', { class: 'title' }, 'Telefonkiosken'));
@@ -5248,7 +5271,7 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          `Nästa lån ger ${this.money(amount)} och läggs på skulden. Nuvarande skuld: ${this.money(
+          `Du kan be om upp till ${this.money(LOAN_MAX)}. Ju mer du ber om, desto större chans att de säger nej - och det som betalas ut läggs på skulden med ränta. Nuvarande skuld: ${this.money(
             s.debt
           )}. Skulden dras av från slutpoängen.`
         ),
@@ -5303,27 +5326,95 @@ export class App {
             )
           );
         }
-        panel.append(
-          el('p', { class: 'muted' },
-            `Ett lån ger ${this.money(amount)}, men skulden växer med ${this.money(loanDebt(amount))} - föräldrarna tar ränta (nu ${this.money(s.debt)}).`
-          ),
-          button(
-            pappa ? `Be pappa om ${this.money(amount)}` : `Be mamma om ${this.money(amount)}`,
-            () => {
-              s.money += amount;
-              s.debt += loanDebt(amount);
-              this.commit();
-              playSound(pappa ? 'rostpappa' : 'rostmamma');
-              window.setTimeout(() => playSound('kassa'), 2400);
-              this.notify(
-                `${this.money(amount)} insatt. ${slumpa(pappa ? PAPPA_LANAR : MAMMA_LANAR)}`
+        /**
+         * Hur mycket vågar man be om? Reglaget går till 2 500, men ju högre
+         * man drar det desto större är risken att svaret blir nej. Ett nej är
+         * inte slutet på samtalet: taket sänks till strax under det man bad
+         * om, och man får försöka igen så länge det finns något att be om.
+         */
+        const tak = samtal.tak ?? LOAN_MAX;
+        if (samtal.nekat) {
+          panel.append(el('p', { class: 'phone-nej' }, samtal.nekat.rad));
+        }
+        if (tak >= LOAN_MIN) {
+          const start = Math.max(LOAN_MIN, Math.round(tak / 2 / LOAN_STEP) * LOAN_STEP);
+          const visning = el('div', { class: 'reglage-varde' }, this.money(start));
+          const skuldrad = el('p', { class: 'muted phone-skuldrad' },
+            `Skulden växer med ${this.money(loanDebt(start))}. Föräldrarna tar ränta, nu ${this.money(s.debt)}.`
+          );
+          const input = el('input', {
+            class: 'reglage-input',
+            type: 'range',
+            min: String(LOAN_MIN),
+            max: String(tak),
+            step: String(LOAN_STEP),
+            value: String(start),
+            'aria-label': 'Hur mycket du ber om',
+          }) as HTMLInputElement;
+          let belopp = start;
+          const be = button('', () => {}, { class: 'btn btn-primary btn-big' });
+          const mala = () => {
+            visning.textContent = this.money(belopp);
+            skuldrad.textContent = `Skulden växer med ${this.money(loanDebt(belopp))}. Föräldrarna tar ränta, nu ${this.money(s.debt)}.`;
+            be.textContent = pappa ? `Be pappa om ${this.money(belopp)}` : `Be mamma om ${this.money(belopp)}`;
+          };
+          input.addEventListener('input', () => {
+            belopp = Number(input.value);
+            mala();
+          });
+          mala();
+          be.addEventListener('click', () => {
+            const nej = Math.random() < loanRefusalChance(s, belopp);
+            if (nej) {
+              playSound('fel');
+              const rad = String(slumpa(pappa ? PAPPA_NEKAR : MAMMA_NEKAR)).replace(
+                '{summa}',
+                this.money(belopp)
               );
-              this.laggPa();
-              this.go('stad');
-            },
-            { class: 'btn btn-primary btn-big' }
-          )
-        );
+              // De sa nej till summan. Nästa försök måste vara blygsammare.
+              this.phoneCall = {
+                ...samtal,
+                tak: belopp - LOAN_STEP * 3,
+                nekat: { belopp, rad },
+              };
+              this.scrollToTopNext = false;
+              this.render();
+              return;
+            }
+            s.money += belopp;
+            s.debt += loanDebt(belopp);
+            this.commit();
+            playSound(pappa ? 'rostpappa' : 'rostmamma');
+            window.setTimeout(() => playSound('kassa'), 2400);
+            this.notify(
+              `${this.money(belopp)} insatt. ${slumpa(pappa ? PAPPA_LANAR : MAMMA_LANAR)}`
+            );
+            this.laggPa();
+            this.go('stad');
+          });
+          panel.append(
+            el('div', { class: 'reglage reglage-liggande phone-reglage' },
+              visning,
+              el('div', { class: 'reglage-bana' },
+                input,
+                el('div', { class: 'reglage-spann' },
+                  el('span', {}, this.money(LOAN_MIN)),
+                  el('span', {}, this.money(tak))
+                )
+              )
+            ),
+            skuldrad,
+            be
+          );
+        } else {
+          panel.append(
+            el('p', { class: 'muted' },
+              pappa
+                ? 'Pappa har sagt nej så många gånger nu att det vore oartigt att fråga igen.'
+                : 'Mamma har sagt nej, och sedan förklarat varför i tre minuter. Fråga inte igen i dag.'
+            )
+          );
+        }
         panel.append(
           button('Bara prata en stund, inget lån', () => {
             playSound('valj');
