@@ -1445,9 +1445,8 @@ export class App {
           name
         );
         saveGame(this.state);
-        this.notify(
-          `${name}, resan börjar i ${city.name}. Besök minst ${MIN_CITIES_TO_FINISH} städer innan du kommer hem.`
-        );
+        // Ingen notis här: snabbguiden på första stadsskärmen säger samma sak,
+        // och en toast ovanpå den täcker punkt tre och fyra.
         this.scrollToTopNext = true;
         this.render();
       },
@@ -1600,7 +1599,9 @@ export class App {
     const stats = el('div', { class: 'hud-stats' });
     stats.append(
       stat('Kassa', this.money(s.money), s.money < 0 ? 'bad' : undefined),
-      stat('Dag', String(s.days)),
+      // Under ett skift räknas dagarna upp fråga för fråga, så att räknaren
+      // inte står still i en vecka och sedan hoppar.
+      stat('Dag', String(s.days + (this.quiz?.kind === 'jobb' && this.quiz.phase === 'fragor' ? this.quiz.index : 0))),
       stat('Städer', `${new Set(s.visited).size}/${CITIES.length}`),
       stat('Stämplar', `${s.stamps.length}/${STAMPS.length}`),
       stat('Skuld', this.money(s.debt), s.debt > 0 ? 'warn' : undefined)
@@ -2983,8 +2984,13 @@ export class App {
      */
     const spent = p.spent ?? [];
     const vecka = Math.floor(s.days / 7);
+    // Tv-frågesportens kontaktannons är ett skämt om Vart är vi på väg; den
+    // väntar tills den riktiga rutan i tidningen är förbrukad.
     const pool = annonserFor(city.region).filter(
-      (a) => !spent.includes(`kontakt:${a.id}`) && !spent.includes(`bort:${a.id}`)
+      (a) =>
+        !spent.includes(`kontakt:${a.id}`) &&
+        !spent.includes(`bort:${a.id}`) &&
+        !(a.id === 'fragesport' && !spent.includes('sparet'))
     );
     const valda = pool
       .map((a) => ({ a, k: pseudoRandom(`${city.id}|kontakt|${vecka}|${a.id}`) }))
@@ -3595,7 +3601,9 @@ export class App {
         ? 'Snyggt jobbat!'
         : (result?.score ?? 0) >= 0.5
           ? 'Godkänt.'
-          : 'Det där gick trögt.';
+          : (result?.score ?? 0) > 0
+            ? 'Det gick sådär, men något blev det.'
+            : 'Det där gick trögt.';
     panel.append(
       el('h2', {}, grade),
       el('p', { class: 'lede' }, result?.summary ?? ''),
@@ -4660,6 +4668,8 @@ export class App {
       else if (svarare === 'pappa') playSound('rostpappa');
       else if (svarare === 'fel') playSound('rostframmande');
       this.phoneCall = { phase: 'svar', svarare, rad };
+      // Ett samtal räknas när någon svarar, inte först när man lånar.
+      s.callsHome += 1;
       this.scrollToTopNext = false;
       this.render();
     }, vantan);
@@ -4738,7 +4748,6 @@ export class App {
             () => {
               s.money += amount;
               s.debt += loanDebt(amount);
-              s.callsHome += 1;
               this.commit();
               playSound(pappa ? 'rostpappa' : 'rostmamma');
               window.setTimeout(() => playSound('kassa'), 2400);

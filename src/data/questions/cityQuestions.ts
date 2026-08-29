@@ -99,8 +99,8 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 2,
     },
     {
-      q: 'Vad kallas den skånska specialiteten på bilden, gås som äts i november?', bild: 'martensgas',
-      a: ['Mårtengås', 'Julskinka', 'Surströmming', 'Lutfisk'],
+      q: 'Vilken kväll äts rätten på bilden traditionellt i Skåne, med svartsoppa till?', bild: 'martensgas',
+      a: ['Mårtensafton, 10 november', 'Luciakvällen, 12 december', 'Valborgsmässoafton', 'Midsommarafton'],
       d: 2,
     },
     {
@@ -1417,7 +1417,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad heter nöjesparken på bilden mitt i Köpenhamn, som öppnade 1843?', bild: 'tivoli', a: ['Tivoli', 'Liseberg', 'Prater', 'Gröna Lund'], d: 1, info: 'Bakken norr om staden är ännu äldre och räknas som världens äldsta.' },
     { q: 'Statyn på bilden vid Langelinie bygger på en saga av H.C. Andersen. Vad heter den?', bild: 'lillasjojungfrun', a: ['Den lilla sjöjungfrun', 'Havsguden', 'Sjömannen', 'Sirenen'], d: 1 },
     { q: 'Vad heter bron på bilden, som förbinder Köpenhamn med Malmö?', bild: 'oresundsbron', a: ['Öresundsbron', 'Stora Bältbron', 'Lilla Bältbron', 'Storströmsbron'], d: 1 },
-    { q: 'Vad heter det danska smörgåsbordet på bilden, med rågbröd och pålägg?', bild: 'smorrebrod', a: ['Smørrebrød', 'Koldtbord', 'Frokostplanke', 'Rugbord'], d: 1 },
+    { q: 'Vad heter den danska smörgåsen på bilden, rågbröd med högt pålägg?', bild: 'smorrebrod', a: ['Smørrebrød', 'Koldtbord', 'Frokostplanke', 'Rugbord'], d: 1 },
     { q: 'Stadsdelen på bilden utropade sig till fristad 1971. Vad heter den?', bild: 'christiania', a: ['Christiania', 'Christianshavn', 'Nørrebro', 'Amager'], d: 2 },
     { q: 'Vad heter Köpenhamns internationella flygplats på bilden?', bild: 'kastrup', a: ['Kastrup', 'Kaldbak', 'Karup', 'Billund'], d: 2 },
 
@@ -1475,7 +1475,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilken stad var Finlands huvudstad före Helsingfors, fram till 1812?', bild: 'aboslott', a: ['Åbo', 'Tammerfors', 'Viborg', 'Vasa'], d: 2, info: 'Tsar Alexander I flyttade huvudstaden närmare S:t Petersburg och längre bort från Sverige.' },
     { q: 'Vilket finländskt band på bilden vann Eurovision 2006 iförda monstermasker?', bild: 'lordi', a: ['Lordi', 'Nightwish', 'HIM', 'The Rasmus'], d: 1, info: 'Segern firades på Salutorget i Helsingfors, där 80 000 personer sjöng Hard Rock Hallelujah i världens största karaoke.' },
     { q: 'Vilket år hölls sommar-OS i Helsingfors?', bild: 'olympiastadionhelsingfors', a: ['1952'], reglage: { artal: true, min: 1896, max: 2024, steg: 1, svar: 1952, tolerans: 4, liggande: true, lagst: '1896', hogst: '2024' }, d: 2, info: 'Spelen var planerade till 1940 men sköts upp av kriget. Stadions torn är 72,71 meter, exakt Matti Järvinens världsrekord i spjut.' },
-    { q: 'Vilket finländskt designföretag, med butiken på bilden, är känt för valmuemönstret Unikko?', bild: 'marimekko', a: ['Marimekko', 'Iittala', 'Arabia', 'Fiskars'], d: 1, info: 'Unikko ritades 1964 av Maija Isola, trots att grundaren Armi Ratia hade förbjudit blommönster.' },
+    { q: 'Butiken på bilden är känd för ett valmuemönster från 1964 som fortfarande säljer. Vad heter mönstret?', bild: 'marimekko', a: ['Unikko', 'Kukka', 'Ruusu', 'Aalto'], d: 1, info: 'Unikko ritades 1964 av Maija Isola, trots att grundaren Armi Ratia hade förbjudit blommönster.' },
     { q: 'Vilket företag, med huvudkontor i Esbo utanför Helsingfors, tillverkade telefonen på bilden och sålde flest mobiler i världen kring år 2000?', bild: 'nokia3310', a: ['Nokia', 'Ericsson', 'Siemens', 'Motorola'], d: 2, info: 'Företaget började 1865 som pappersbruk vid ån Nokia och gjorde gummistövlar och kablar innan telefonerna.' },
     { q: 'Vad säger man när man skålar på finska?', bild: 'stout', a: ['Kippis', 'Kiitos', 'Terve', 'Hyvää'], d: 1, info: 'Kiitos betyder tack och terve hej. Blandar man ihop dem går det ändå bra.' },
     { q: 'Fästningen på bilden byggdes av Sverige men gavs upp 1808 nästan utan strid. Till vem?', a: ['Ryssland', 'Danmark', 'Frankrike', 'Preussen'], bild: 'stad:helsingfors', d: 2, info: 'Kommendanten Cronstedt kapitulerade, och Runeberg gjorde honom till landsförrädare i Fänrik Ståls sägner.' },
@@ -1665,8 +1665,8 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
   seoul: [
     { q: 'I vilket land ligger Seoul?', bild: 'stadsbild:seoul', a: ['Sydkorea', 'Nordkorea', 'Japan', 'Kina'], d: 1 },
     { q: 'Vilken flod, på bilden, rinner genom Seoul?', bild: 'hanfloden', a: ['Han', 'Yangtze', 'Mekong', 'Amur'], d: 1 },
-    { q: 'Museet på bilden är ägnat det koreanska skriftsystemet. Vad heter det?', bild: 'hangeulmuseet', a: ['Hangul', 'Kanji', 'Kyrilliska', 'Devanagari'], d: 1 },
-    { q: 'Vilken fermenterad kålrätt på bilden äts till nästan varje koreansk måltid?', bild: 'kimchi', a: ['Kimchi', 'Sushi', 'Dumplings', 'Miso'], d: 1 },
+    { q: 'Museet på bilden är ägnat det koreanska skriftsystemet. Vad heter skriftsystemet?', bild: 'hangeulmuseet', a: ['Hangul', 'Kanji', 'Kyrilliska', 'Devanagari'], d: 1 },
+    { q: 'Vilken fermenterad kålrätt på bilden äts till nästan varje koreansk måltid?', bild: 'kimchi', a: ['Kimchi', 'Sauerkraut', 'Tsukemono', 'Coleslaw'], d: 1 },
     { q: 'Vad heter Sydkoreas valuta, på bilden?', bild: 'won', a: ['Won', 'Yen', 'Yuan', 'Baht'], d: 1 },
     { q: 'Vilket palats i Seoul var Joseondynastins huvudpalats?', bild: 'stad:seoul', a: ['Gyeongbokgung', 'Förbjudna staden', 'Shurislottet', 'Potala'], d: 1 },
     { q: 'Vad kallas den demilitariserade zonen mellan Nord- och Sydkorea, på bilden?', bild: 'dmz', a: ['DMZ', 'Gröna linjen', 'Kontrollzonen', 'Järnridån'], d: 2 },

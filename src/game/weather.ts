@@ -178,7 +178,7 @@ const LINES: Record<WeatherKind, string[]> = {
     'Storm över {stad}. Paraplyer i papperskorgarna, vändade ut och in.',
     'Kuling från havet. Skyltarna smäller och {sevardhet} har stängt utsiktsplatsen.',
     'Vinden tar tag i allt som inte är fastskruvat. Kaféerna har plockat in stolarna.',
-    'Blåst som får spårvagnarna att vagga. Alla går lutade framåt, som i en film.',
+    'Blåst som får skyltarna att vagga. Alla går lutade framåt, som i en film.',
   ],
 };
 

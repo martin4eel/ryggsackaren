@@ -157,7 +157,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 8, text: 'Tidszonen ligger 5 timmar och 45 minuter före Greenwich, en kvart före grannen, och kalendern skriver år 2083. Kvarten är där för att markera att man inte är grannen.' },
     { niva: 6, text: 'Kronprinsen sköt ihjäl nästan hela kungafamiljen 2001 och monarkin avskaffades 2008. Soldaterna som britterna rekryterat sedan 1815 tjänstgör fortfarande.' },
     { niva: 4, text: 'Degknyten med chutney från Tibet är snabbmaten, och heliga apor styr trappan med 365 steg till templet på kullen. En jordbävning 2015 fällde stadens torn, som står igen sedan 2021.' },
-    { niva: 2, text: 'Härifrån startar expeditionerna mot världens högsta berg, vars topp nåddes 1953 av en sherpa och en nyzeeländare som aldrig avslöjade vem som klev upp först.' },
+    { niva: 2, text: 'Härifrån startar expeditionerna mot världens högsta berg, vars topp nåddes 1953 av en sherpa och en nyzeeländare som länge vägrade säga vem som klev upp först.' },
   ],
   kopenhamn: [
     { niva: 10, text: 'Ett torn från 1642 bestigs via en spiralramp utan trappsteg. En rysk tsar ska ha ridit uppför 1716; tsarinnan tog vagnen.' },
@@ -294,7 +294,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
   ],
   sanfrancisco: [
     { niva: 10, text: 'Sjölejonen flyttade in vid en av stadens pirer efter jordbävningen 1989 och bor kvar. Fiskebåtarna som hade bryggorna fick flytta.' },
-    { niva: 8, text: 'En bokhandel här gav ut Ginsbergs Howl 1957 och åtalades för det. Beatgenerationen fick ett hem och boken fick reklam.' },
+    { niva: 8, text: 'En bokhandel här gav ut Ginsbergs Howl 1956 och åtalades året efter. Beatgenerationen fick ett hem och boken fick reklam.' },
     { niva: 6, text: 'Lyckokakan uppfanns troligen här kring 1900; i Kina har ingen hört talas om den. Surdegen bakas på en kultur från guldrushen.' },
     { niva: 4, text: 'En gata här har åtta skarpa kurvor på ett enda kvarter, och fotbollslaget är uppkallat efter guldgrävarna som strömmade till 1849.' },
     { niva: 2, text: 'Vi åker kabelspårvagn uppför branta backar, ser en orangeröd hängbro i dimman och fängelseön ute i bukten, i hippierörelsens hemstad.' },

@@ -1162,7 +1162,6 @@ export const JOBS: Job[] = [
         { bild: 'lavendel', namn: 'Lavendelolja' },
         { bild: 'kokandevatten', namn: 'Varma handdukar' },
         { bild: 'spruta', namn: 'Spruta' },
-        { bild: 'mikrochip', namn: 'Injektionsampull' },
       ],
       kunder: [
         { text: 'Jag vill bara ligga på mage och bli knådad. Inget konstigt.', svar: 'massage', nastan: ['stenmassage', 'thaimassage', 'skelett'], fel: 'Konstigt var precis det jag inte ville ha.' },
@@ -1170,7 +1169,7 @@ export const JOBS: Job[] = [
         { text: 'Jag vill bli vikt som en solstol av någon som vet hur solstolar fungerar.', svar: 'thaimassage', nastan: ['massage', 'stenmassage', 'lopare'], fel: 'Ingen vek mig. Jag är fortfarande utfälld.' },
         { text: 'Kan ni visa var i kroppen det gör ont? Jag har ingen aning själv.', svar: 'skelett', nastan: ['stetoskop', 'massage', 'febertermometer'], fel: 'Det där visar ingenting. Det ligger bara där.' },
         { text: 'Jag känner mig varm. Inte på det trevliga sättet.', svar: 'febertermometer', nastan: ['stenmassage', 'kokandevatten', 'stetoskop'], fel: 'Nu är jag varm och förvirrad.' },
-        { text: 'Jag har sprungit fyra mil och benen tycker inte om mig längre. Vem ska jag bli?', svar: 'lopare', nastan: ['skelett', 'massage', 'thaimassage'], fel: 'Fel person. Den där personen har ju inte sprungit ett steg.' },
+        { text: 'Jag har sprungit fyra mil och benen tycker inte om mig längre. Visa mig någon som förstår.', svar: 'lopare', nastan: ['skelett', 'massage', 'thaimassage'], fel: 'Fel person. Den där personen har ju inte sprungit ett steg.' },
         { text: 'Något som luktar lugn. Lila, helst.', svar: 'lavendel', nastan: ['kokandevatten', 'stenmassage', 'massage'], fel: 'Det där luktar ingenting. Jag är lika stressad som förut.' },
         { text: 'Kan jag få något att lyssna på hjärtat med? Mitt eget, alltså.', svar: 'stetoskop', nastan: ['febertermometer', 'spruta', 'skelett'], fel: 'Jag hör fortfarande ingenting. Bara min egen oro.' },
         { text: 'Något varmt och fuktigt över nacken innan vi börjar, tack.', svar: 'kokandevatten', nastan: ['stenmassage', 'lavendel', 'massage'], fel: 'Det där var torrt. Och tungt.' },
@@ -1299,7 +1298,7 @@ export const JOBS: Job[] = [
         { bild: 'rosettastenen', namn: 'Rosettastenen' },
       ],
       kunder: [
-        { text: 'Ge mig den med draken på skaftet.', svar: 'tuschpensel', nastan: ['tuschkaka', 'fyraskatter', 'blytyper'], fel: 'Ingen drake. Inget skaft. Ingen nytta.' },
+        { text: 'Hämta det jag doppar. Hår i ena änden, bambu i den andra.', svar: 'tuschpensel', nastan: ['tuschkaka', 'fyraskatter', 'blytyper'], fel: 'Ingen drake. Inget skaft. Ingen nytta.' },
         { text: 'Bläcket är slut. Hämta stången jag river mot stenen.', svar: 'tuschkaka', nastan: ['tuschpensel', 'fyraskatter', 'rosettastenen'], fel: 'Det där går inte att riva. Jag har försökt.' },
         { text: 'Lägg fram allt på en gång: pensel, sten, tusch, papper.', svar: 'fyraskatter', nastan: ['tuschpensel', 'tuschkaka', 'blytyper'], fel: 'Det är en sak. Jag sa fyra.' },
         { text: 'Visa lärlingen hur tecknen ska se ut när penseln har varit där.', svar: 'kinesiskkalligrafi', nastan: ['arabiskkalligrafi', 'hieroglyfer', 'blytyper'], fel: 'Det där har ingen pensel varit i närheten av.' },
