@@ -7792,3 +7792,8 @@ body.sheet-oppen {
 .mg-peka-vantar .mg-peka-bild { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
 .mg-peka-laddar { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
 .mg-peka-fel-laddning { cursor: pointer; text-decoration: underline; color: var(--accent, #f2a63b); }
+
+/* Marknaden i tidningen */
+.marknad-lista { margin: 4px 0 0; padding-left: 18px; font-size: 0.92rem; line-height: 1.45; }
+.marknad-lista li + li { margin-top: 4px; }
+.marknad-tom { margin: 4px 0 0; font-size: 0.92rem; }

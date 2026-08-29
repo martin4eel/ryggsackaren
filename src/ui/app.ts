@@ -57,8 +57,7 @@ import {
   loadGame,
   saveGame,
   type Difficulty,
-  type GameState,
-} from '../game/state';
+  type GameState, type BackpackItem } from '../game/state';
 import {
   cycleVolume,
   playCombo,
@@ -471,6 +470,18 @@ function lista(regioner: string[]): string {
 /** Huvudkategorin som en liten färgad etikett, samma färg överallt. */
 function huvudBadge(h: Huvudkategori): HTMLElement {
   return el('strong', { class: `huvud-badge huvud-${h}` }, HUVUD_LABELS[h]);
+}
+
+/**
+ * Var en souvenir säljer bäst just nu: de städer i regionerna där den är
+ * eftertraktad, sorterade efter dagens säljpris. Det är detta handeln på en
+ * kort resa saknade - vetskapen om vart man ska åka med dalahästen.
+ */
+function bastaMarknader(souvenir: Souvenir, daySeed: number, utom: string, antal = 3): { city: City; pris: number }[] {
+  return CITIES.filter((c) => c.id !== utom && souvenir.hotIn.includes(c.region))
+    .map((c) => ({ city: c, pris: souvenirPrice(souvenir, c, daySeed, true) }))
+    .sort((x, y) => y.pris - x.pris)
+    .slice(0, antal);
 }
 
 export class App {
@@ -2899,6 +2910,45 @@ export class App {
       blad.append(uppslag);
     }
 
+    // ------------------------------------------------------------ marknaden
+    /**
+     * Börssidan för souvenirer. Vad ryggsäckens innehåll är värt var, i dag,
+     * så att handeln går att planera - och för den som inget har: vart det
+     * lönar sig att ta med det som säljs här.
+     */
+    const marknad = el('div', { class: 'paper-avdelning paper-marknad' });
+    marknad.append(el('h2', { class: 'paper-avdelning-namn' }, 'Marknaden'));
+    const unika = new Map<string, BackpackItem>();
+    for (const it of s.backpack) if (!unika.has(it.souvenirId)) unika.set(it.souvenirId, it);
+    if (unika.size > 0) {
+      const rader = el('ul', { class: 'marknad-lista' });
+      for (const it of unika.values()) {
+        const sv = SOUVENIR_BY_ID[it.souvenirId];
+        if (!sv) continue;
+        const har = souvenirPrice(sv, city, s.days, true);
+        const basta = bastaMarknader(sv, s.days, city.id);
+        rader.append(
+          el('li', {},
+            el('strong', {}, sv.name),
+            ` säljs här för ${this.money(har)} (${har >= it.paid ? '+' : '−'}${this.money(Math.abs(har - it.paid))} mot inköp). Bäst just nu: ` +
+              basta.map((b) => `${b.city.name} ${this.money(b.pris)}`).join(', ') +
+              '.'
+          )
+        );
+      }
+      marknad.append(rader);
+    } else {
+      const har = citySouvenirs(city).slice(0, 2);
+      marknad.append(
+        el('p', { class: 'marknad-tom' },
+          'Ryggsäcken är tom. ' +
+            har.map((sv) => `${sv.name} härifrån säljer bäst i ${bastaMarknader(sv, s.days, city.id, 2).map((b) => b.city.name).join(' och ')}`).join('; ') +
+            '.'
+        )
+      );
+    }
+    blad.append(marknad);
+
     // ------------------------------------------------------- platsannonser
     blad.append(
       el('div', { class: 'paper-avdelning' },
@@ -4142,7 +4192,7 @@ export class App {
           'p',
           { class: 'muted' },
           cheap
-            ? `Tillverkas i den här delen av världen. Säljs bäst i ${lista(souvenir.hotIn)}.`
+            ? `Tillverkas i den här delen av världen. Säljs bäst i ${lista(souvenir.hotIn)} – just nu ${bastaMarknader(souvenir, s.days, city.id, 2).map((b) => `${b.city.name} ${this.money(b.pris)}`).join(', ')}.`
             : hot
               ? `Eftertraktad här – dyr att köpa, men lönsam att sälja. Billigast i ${lista(souvenir.cheapIn)}.`
               : `Normalt pris här. Billigast i ${lista(souvenir.cheapIn)}, säljs bäst i ${lista(souvenir.hotIn)}.`
