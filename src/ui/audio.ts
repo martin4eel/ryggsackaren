@@ -231,7 +231,9 @@ export function playHandlare(nyckel: string): void {
     // Liten variation i tempo, så att det inte blir samma inspelning varje gång.
     src.playbackRate.value = 0.96 + ((summa >>> 8) % 9) * 0.02;
     const g = ctx.createGain();
-    g.gain.value = 0.5;
+    // Handlaren ska höras genom rummet, inte i örat. Rösten är dessutom
+    // normaliserad i efterbehandlingen och blir annars starkare än allt annat.
+    g.gain.value = 0.22;
     src.connect(g);
     g.connect(master);
     src.start();

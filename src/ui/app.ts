@@ -2075,8 +2075,8 @@ export class App {
       'Souvenirer',
       'Köp lokalt och sälj där varan är eftertraktad.',
       () => {
-        playSound('marknad');
-        // Handlaren hörs innan man ser honom.
+        // Handlaren hörs innan man ser honom. Marknadssorlet som låg här
+        // förut spelade ovanpå rösten och gjorde båda otydliga.
         playHandlare(`${this.state!.currentCityId}|hej`);
         this.go('souvenir');
       }
