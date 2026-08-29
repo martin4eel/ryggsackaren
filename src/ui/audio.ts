@@ -183,6 +183,71 @@ function ensureCtx(): AudioContext | null {
   return ctx;
 }
 
+/**
+ * Butiksrösten. Handlaren i souvenirbutiken är den enda i spelet som talar
+ * med en inspelad röst i stället för oscillatorer: tre repliker, inspelade
+ * och sedan körda genom telefonlinjen i `scripts/rosteffekt.py`, så att de
+ * hörs som prat utan att gå att uppfatta. Det som sägs står ändå i texten.
+ *
+ * Filerna hämtas först när någon går in i en butik, och en gång per sida -
+ * spelet ska fortfarande starta utan att ladda ljud.
+ */
+const ROSTER = ['./ljud/handlare-1.m4a', './ljud/handlare-2.m4a', './ljud/handlare-3.m4a'];
+const rostbuffert = new Map<string, AudioBuffer>();
+let rostSpelas: AudioBufferSourceNode | null = null;
+
+async function hamtaRost(c: AudioContext, url: string): Promise<AudioBuffer | null> {
+  const redan = rostbuffert.get(url);
+  if (redan) return redan;
+  try {
+    const svar = await fetch(url);
+    if (!svar.ok) return null;
+    const buf = await c.decodeAudioData(await svar.arrayBuffer());
+    rostbuffert.set(url, buf);
+    return buf;
+  } catch {
+    // Utan nät och utan cache står handlaren bara och ler.
+    return null;
+  }
+}
+
+/**
+ * Låter handlaren säga något. `nyckel` avgör vilken av rösterna det blir, så
+ * att samma butik låter likadant medan man står i den.
+ */
+export function playHandlare(nyckel: string): void {
+  const c = ensureCtx();
+  if (!c || !master) return;
+  let summa = 0;
+  for (let i = 0; i < nyckel.length; i++) summa = (summa * 31 + nyckel.charCodeAt(i)) >>> 0;
+  const url = ROSTER[summa % ROSTER.length]!;
+  void hamtaRost(c, url).then((buf) => {
+    if (!buf || !ctx || !master) return;
+    // En replik i taget: två handlare som pratar i mun på varandra är en av
+    // få saker som är värre än ingen handlare alls.
+    rostSpelas?.stop();
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    // Liten variation i tempo, så att det inte blir samma inspelning varje gång.
+    src.playbackRate.value = 0.96 + ((summa >>> 8) % 9) * 0.02;
+    const g = ctx.createGain();
+    g.gain.value = 0.5;
+    src.connect(g);
+    g.connect(master);
+    src.start();
+    rostSpelas = src;
+    src.onended = () => {
+      if (rostSpelas === src) rostSpelas = null;
+    };
+  });
+}
+
+/** Tystar handlaren, till exempel när man lämnar butiken. */
+export function stopHandlare(): void {
+  rostSpelas?.stop();
+  rostSpelas = null;
+}
+
 interface ToneOpts {
   type?: OscillatorType;
   gain?: number;

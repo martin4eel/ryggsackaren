@@ -356,6 +356,19 @@ webbläsaren och överlever att sparfilen raderas.
      Ingenstans i spelet står vad en souvenir ger i en annan stad - då vore
      handeln bokföring i stället för upptäckt. Tidningens *Marknaden*, som
      listade priser stad för stad, togs bort 2026-08-29 av samma skäl.
+   - **Souvenirbutiken har en röst.** Handlaren är det enda i spelet som
+     låter som en inspelad människa: tre repliker som Martin spelat in och
+     som körts genom `scripts/rosteffekt.py` - trimmade, uppsnabbade,
+     bandpassade som en telefonlinje och kvantiserade till åtta bitar, så att
+     det hörs som prat utan att gå att uppfatta. Filerna ligger i
+     `public/ljud/` (ett par tiotals kilobyte styck), hämtas först när någon
+     går in i en butik och cachas av service workern. Resten av ljudet är
+     fortfarande syntetiserat.
+   - **Butikens känsla**: en hälsning per stad och dag (handlaren räknar
+     sedlar, äter ur en påse, sänker radion en aning), tre handskrivna lappar
+     på väggen ur en pool på åtta (*Öppet: oftast*, *Sönderslaget räknas som
+     köpt*, *Fråga inte om nedersta hyllan*), en glödlampa som lyser snett
+     över skylten och en mörkare återköpsdisk med en egen replik.
    - **Ryggsäckens innehåll** listar souvenirerna som föremål: foto i en
      liten vit ram, namn, staden och dagen de köptes, och vad de kostade.
    - **Poängkvittot** på slutskärmen visar slutpoängen rad för rad – kassa,

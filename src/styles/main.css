@@ -8297,3 +8297,93 @@ body.sheet-oppen {
   text-transform: uppercase;
   transform: rotate(-3deg);
 }
+
+
+/* ====================================================================
+   SOUVENIRBUTIKEN: KÄNSLAN
+   En butik man hittar in i av misstag. Varm, dammig, halvmörk, med lappar
+   på väggen som ingen har tagit ner på tjugo år.
+   ==================================================================== */
+
+/* Skylten över disken får en glödlampa som lyser snett uppifrån. */
+.butik-skylt {
+  position: relative;
+  overflow: hidden;
+}
+
+.butik-skylt::after {
+  content: '';
+  position: absolute;
+  top: -70px;
+  right: -30px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(242, 166, 59, 0.4), transparent 68%);
+  pointer-events: none;
+}
+
+.butik-halsning {
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* Lapparna på väggen: uppsatta med tejp, aldrig helt raka. */
+.butik-anslag {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.butik-anslag-lapp {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px 6px;
+  background: #fdf6e3;
+  border: 1px solid rgba(29, 43, 52, 0.22);
+  box-shadow: 1px 2px 4px rgba(29, 43, 52, 0.16);
+  font-family: 'Bradley Hand', 'Segoe Script', 'Snell Roundhand', cursive;
+  line-height: 1.15;
+  transform: rotate(-1.4deg);
+}
+
+.butik-anslag-lapp:nth-child(2) { transform: rotate(1.8deg); }
+.butik-anslag-lapp:nth-child(3) { transform: rotate(-0.7deg); }
+
+.butik-anslag-lapp strong {
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #a4342f;
+}
+
+.butik-anslag-lapp span {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* Hyllorna står i skugga; varan man tittar på ligger i ljuset. */
+.butik-hylla {
+  background:
+    linear-gradient(180deg, rgba(29, 43, 52, 0.07), transparent 30%),
+    var(--paper);
+}
+
+.butik-vara {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.butik-vara:hover,
+.butik-vara:focus-within {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(29, 43, 52, 0.18);
+}
+
+/* Återköpsdisken är mörkare än hyllorna. Där sker det som sker. */
+.butik-aterkop {
+  background:
+    linear-gradient(180deg, rgba(29, 43, 52, 0.12), transparent 40%),
+    var(--paper-dim);
+}

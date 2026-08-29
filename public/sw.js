@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'upptackaren-v37';
+const CACHE = 'upptackaren-v38';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -65,6 +65,12 @@ const CITY_PHOTOS = [
 ].flatMap((id) => [`./cities/${id}.jpg`, `./cities/${id}-stad.jpg`]);
 
 /**
+ * Handlarens röster. Tre korta filer på ett par tiotals kilobyte, som hämtas
+ * in vid installationen så att butiken låter likadant offline.
+ */
+const LJUD = ['./ljud/handlare-1.m4a', './ljud/handlare-2.m4a', './ljud/handlare-3.m4a'];
+
+/**
  * Frågebilderna är många - flera hundra - och listas i quiz/manifest.json,
  * som hämtskriptet skriver. De hämtas inte vid installationen, som skulle
  * ta minuter på mobilnät, utan i bakgrunden efter aktiveringen, i lugn
@@ -106,6 +112,7 @@ self.addEventListener('install', (event) => {
         // Fotona får inte stoppa installationen om något saknas – de hämtas
         // då i stället vid första visningen och cachas löpande.
         cache.addAll(CITY_PHOTOS).catch(() => undefined),
+        cache.addAll(LJUD).catch(() => undefined),
       ])
     )
   );
