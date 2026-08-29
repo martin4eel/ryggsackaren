@@ -60,7 +60,7 @@ import {
   loadGame,
   saveGame,
   type Difficulty,
-  type GameState, type BackpackItem, type AktivtUppdrag } from '../game/state';
+  type GameState, type AktivtUppdrag } from '../game/state';
 import {
   cycleVolume,
   playCombo,
@@ -484,15 +484,52 @@ function huvudBadge(h: Huvudkategori): HTMLElement {
 }
 
 /**
- * Var en souvenir säljer bäst just nu: de städer i regionerna där den är
- * eftertraktad, sorterade efter dagens säljpris. Det är detta handeln på en
- * kort resa saknade - vetskapen om vart man ska åka med dalahästen.
+ * Vad handlaren i souvenirbutiken hört. Det är inte en kurslista: han säger
+ * en stad, aldrig en summa, och han har rätt ungefär två gånger av tre.
+ *
+ * Poängen är att handeln ska vara en upptäckt. Vet man exakt vad en dalahäst
+ * ger i Tokyo är resten bokföring; hör man att "de lär betala bra i Tokyo"
+ * får man åka dit och se efter, och ibland blir man lurad.
+ *
+ * Ryktet lottas per stad, vara och fyradagarsperiod, så att det ligger fast
+ * medan man står i butiken och ändrar sig om man kommer tillbaka långt
+ * senare.
  */
-function bastaMarknader(souvenir: Souvenir, daySeed: number, utom: string, antal = 3): { city: City; pris: number }[] {
-  return CITIES.filter((c) => c.id !== utom && souvenir.hotIn.includes(c.region))
-    .map((c) => ({ city: c, pris: souvenirPrice(souvenir, c, daySeed, true) }))
-    .sort((x, y) => y.pris - x.pris)
-    .slice(0, antal);
+function handlarRykte(
+  souvenir: Souvenir,
+  city: City,
+  days: number,
+  namn: (stad: City) => string,
+  /** Hyllplatsen, så att två varor bredvid varandra inte får samma replik. */
+  index = 0
+): string {
+  const period = Math.floor(days / 4);
+  const fro = `${city.id}|${souvenir.id}|${period}`;
+  const stamMed = pseudoRandom(`${fro}|sanning`) < 0.65;
+  const heta = CITIES.filter(
+    (c) => c.id !== city.id && souvenir.hotIn.includes(c.region)
+  );
+  const svala = CITIES.filter(
+    (c) => c.id !== city.id && !souvenir.hotIn.includes(c.region)
+  );
+  const pool = stamMed ? heta : svala;
+  if (pool.length === 0) return '';
+  const mal = pool[Math.floor(pseudoRandom(`${fro}|stad`) * pool.length)]!;
+  const stad = namn(mal);
+  const vara = souvenir.name.toLowerCase();
+  const mallar = [
+    `"Jag har hört att de betalar bra för ${vara} i ${stad}", säger handlaren. "Men jag har hört mycket."`,
+    `"Min bror sålde ${vara} i ${stad} i våras", säger handlaren. "Han överdriver i regel."`,
+    `"${stad}", säger handlaren och nickar. "Dit ska man ta en ${vara}. Sa en kund. Kunden köpte ingenting."`,
+    `Handlaren lutar sig fram: "Det ryktas om ${stad}. ${souvenir.name} lär gå åt där."`,
+    `"En resenär i förra veckan påstod att ${vara} är eftertraktade i ${stad}", säger handlaren. "Han påstod en del."`,
+    `"Ska du till ${stad}? Ta med ${vara}", säger handlaren. "Så sa min svärmor, och hon har rätt ibland."`,
+    `"Det står i en tidning jag läste att ${stad} betalar för ${vara}", säger handlaren. "Jag minns inte vilken tidning."`,
+    `"Folk frågar efter ${vara} i ${stad}, sägs det", säger handlaren och rycker på axlarna. "Sägs det."`,
+    `"Jag hade en kollega som gjorde grova pengar på ${vara} i ${stad}", säger handlaren. "Han har inte hört av sig sedan dess."`,
+    `"${stad} lär vara stället för ${vara} just nu", säger handlaren. "Just nu varar sällan länge."`,
+  ];
+  return mallar[(Math.floor(pseudoRandom(`${fro}|mall`) * mallar.length) + index) % mallar.length]!;
 }
 
 export class App {
@@ -3121,70 +3158,6 @@ export class App {
       blad.append(repris);
     }
 
-    // ------------------------------------------------------------ marknaden
-    /**
-     * Börssidan för souvenirer. Vad ryggsäckens innehåll är värt var, i dag,
-     * så att handeln går att planera - och för den som inget har: vart det
-     * lönar sig att ta med det som säljs här.
-     */
-    const marknad = el('div', { class: 'paper-avdelning paper-marknad' });
-    marknad.append(el('h2', { class: 'paper-avdelning-namn' }, 'Marknaden'));
-    const unika = new Map<string, BackpackItem>();
-    for (const it of s.backpack) if (!unika.has(it.souvenirId)) unika.set(it.souvenirId, it);
-    /**
-     * Tidningen skvallrar hellre än informerar. Samma siffror som butiken,
-     * men som rykten, läsarbrev och notiser - och ryktet lottas per vara och
-     * dag, så att sidan inte ser likadan ut två gånger.
-     */
-    const rykte = (vara: string, stad: string, pris: string, seed: string): string => {
-      const mallar = [
-        `Jag har hört att man älskar ${vara.toLowerCase()} i ${stad}. ${pris} betalar de, säger min kusin, och han ljuger sällan om pengar.`,
-        `Ryktet går att ${stad} skriker efter ${vara.toLowerCase()}. ${pris} styck, om ryktet stämmer. Ryktet stämmer ibland.`,
-        `En läsare i ${stad} skriver att folk står i kö för ${vara.toLowerCase()} och betalar ${pris} utan att blinka. Vi har inte kontrollerat kön.`,
-        `${vara} går för ${pris} i ${stad}, enligt en man som sålde på flygplatsen och nu ångrar det.`,
-        `Vår korrespondent i ${stad}: "${vara}? ${pris}. Fråga inte varför."`,
-        `${vara} betalar sig i ${stad}, har jag läst på nätet. ${pris}. Nätet har haft fel förr, men inte om det här, tror jag.`,
-        `Min granne säger att ${stad} betalar ${pris} för ${vara.toLowerCase()}. Min granne säger mycket. Det här lät sant.`,
-        `Läste på mjölkpaketet att ${vara.toLowerCase()} går för ${pris} i ${stad}. Mejeriet skriver sällan om sådant, så det måste vara viktigt.`,
-        `Enligt en taxichaufför i ${stad} är ${vara.toLowerCase()} värd ${pris} där. Han visste också vem som ska bli statsminister.`,
-        `Ett vykort från ${stad} nådde redaktionen: "${vara}, ${pris}. Ta med fler." Ingen avsändare, men snygg handstil.`,
-        `Min frisör har en syster i ${stad}. Systern säger ${pris} för ${vara.toLowerCase()}. Frisören säger att systern aldrig ljuger. Frisören ljuger ibland.`,
-        `Enligt en handskriven lapp på anslagstavlan i hamnen: "${vara} - ${pris} i ${stad}." Lappen är från i tisdags och ingen har tagit ner den.`,
-        `Hotellets nattportier viskade att ${vara.toLowerCase()} går för ${pris} i ${stad}. Han viskar om allt, men siffran stämde med tidningen i lobbyn.`,
-        `${vara} i ${stad}: ${pris}, enligt en podcast jag lyssnade på i halv fart. Det kan ha varit ${pris} i dubbel fart också.`,
-        `Guiden på turistbyrån nämnde i förbigående att ${stad} betalar ${pris} för ${vara.toLowerCase()}. Hon nämnde det tre gånger i förbigående.`,
-      ];
-      return mallar[Math.floor(pseudoRandom(seed) * mallar.length)]!;
-    };
-    if (unika.size > 0) {
-      const rader = el('ul', { class: 'tidning-notiser marknad-lista' });
-      for (const it of unika.values()) {
-        const sv = SOUVENIR_BY_ID[it.souvenirId];
-        if (!sv) continue;
-        const har = souvenirPrice(sv, city, s.days, true);
-        const basta = bastaMarknader(sv, s.days, city.id, 2);
-        const diff = har - it.paid;
-        const lokal =
-          diff >= 0
-            ? `Butiken på hörnet erbjuder ${this.money(har)} för din ${sv.name.toLowerCase()}. Det är ${this.money(diff)} mer än du gav. Butiken ser inte ut att förstå det.`
-            : `Butiken på hörnet erbjuder ${this.money(har)} för din ${sv.name.toLowerCase()}. Det är ${this.money(-diff)} mindre än du gav, vilket butiken kallar marknaden.`;
-        rader.append(el('li', {}, lokal));
-        if (basta[0]) rader.append(el('li', {}, rykte(sv.name, basta[0].city.name, this.money(basta[0].pris), `${city.id}|${sv.id}|${Math.floor(s.days / 3)}`)));
-        if (basta[1] && basta[1].pris > har) rader.append(el('li', {}, `Även ${basta[1].city.name} nämns i sammanhanget, med ${this.money(basta[1].pris)}. Något billigare, något närmare, beroende på var man är.`));
-      }
-      marknad.append(rader);
-    } else {
-      const har = citySouvenirs(city).slice(0, 2);
-      const rader = el('ul', { class: 'tidning-notiser marknad-lista' });
-      rader.append(el('li', {}, 'Ryggsäcken är tom, rapporterar ryggsäcken. Butiken har förslag.'));
-      for (const sv of har) {
-        const b = bastaMarknader(sv, s.days, city.id, 1)[0];
-        if (b) rader.append(el('li', {}, rykte(sv.name, b.city.name, this.money(b.pris), `${city.id}|${sv.id}|tom|${Math.floor(s.days / 3)}`)));
-      }
-      marknad.append(rader);
-    }
-    blad.append(marknad);
-
     // ------------------------------------------------------- platsannonser
     blad.append(
       el('div', { class: 'paper-avdelning' },
@@ -4472,7 +4445,7 @@ export class App {
     const buy = el('section', { class: 'panel butik-hylla' });
     buy.append(el('h2', { class: 'butik-rubrik' }, `På hyllan i ${city.name}`));
     const rad = el('div', { class: 'butik-varor' });
-    for (const souvenir of citySouvenirs(city)) {
+    for (const [hyllplats, souvenir] of citySouvenirs(city).entries()) {
       const price = souvenirPrice(souvenir, city, s.days, false);
       const cheap = souvenir.cheapIn.includes(city.region);
       const hot = souvenir.hotIn.includes(city.region);
@@ -4485,7 +4458,6 @@ export class App {
           : ratio >= 1.25
             ? { cls: 'stampel-turist', text: 'Turistpris' }
             : null;
-      const basta = bastaMarknader(souvenir, s.days, city.id, 2);
       const card = el('article', { class: 'butik-vara' });
       card.append(
         foto(souvenir),
@@ -4495,10 +4467,19 @@ export class App {
           el('p', { class: 'butik-replik' }, souvenir.desc),
           el('p', { class: 'butik-not' },
             cheap
-              ? `Görs här. Säljer bäst i ${basta.map((b) => `${b.city.name} (${this.money(b.pris)})`).join(', ')}.`
+              ? [
+                  'Görs här, och det märks på priset.',
+                  'Tillverkas i trakten. Därför priset.',
+                  'Lokalt hantverk, lokalt pris.',
+                  'Görs ett kvarter härifrån. Ingen frakt att betala.',
+                ][Math.floor(pseudoRandom(`${city.id}|${souvenir.id}|not`) * 4)]!
               : hot
-                ? `Eftertraktad här – dyr att köpa, bra att sälja. Billigast i ${lista(souvenir.cheapIn)}.`
-                : `Normalpris. Billigast i ${lista(souvenir.cheapIn)}; säljer bäst i ${basta.map((b) => b.city.name).join(' och ')}.`
+                ? `Eftertraktad här - dyr att köpa, bra att sälja. Billigast i ${lista(souvenir.cheapIn)}.`
+                : `Normalpris. Billigast i ${lista(souvenir.cheapIn)}.`
+          ),
+          // Vad handlaren hört. Ingen summa, och ingen garanti.
+          el('p', { class: 'butik-rykte' },
+            handlarRykte(souvenir, city, s.days, (c) => c.name, hyllplats)
           )
         ),
         el('div', { class: 'butik-prislapp' },
@@ -4530,7 +4511,6 @@ export class App {
         if (!souvenir) return;
         const price = souvenirPrice(souvenir, city, s.days, true);
         const profit = price - item.paid;
-        const basta = bastaMarknader(souvenir, s.days, city.id, 1)[0];
         const card = el('article', { class: 'butik-vara' });
         card.append(
           foto(souvenir),
@@ -4539,8 +4519,7 @@ export class App {
             el('h3', { class: 'butik-namn' }, souvenir.name),
             el('p', { class: 'butik-not' },
               `Köpt i ${CITY_BY_ID[item.boughtIn]?.name ?? 'okänd stad'} för ${this.money(item.paid)}. ` +
-                (profit >= 0 ? `Vinst ${this.money(profit)}.` : `Förlust ${this.money(-profit)}.`) +
-                (basta && basta.pris > price ? ` I ${basta.city.name} betalar de ${this.money(basta.pris)}.` : '')
+                (profit >= 0 ? `Vinst ${this.money(profit)}.` : `Förlust ${this.money(-profit)}.`)
             )
           ),
           el('div', { class: 'butik-prislapp' },
@@ -4572,6 +4551,7 @@ export class App {
       souvenirId: souvenir.id,
       paid: price,
       boughtIn: s.currentCityId,
+      boughtDay: s.days,
     });
     this.commit();
     playSound('mynt');
@@ -4713,18 +4693,38 @@ export class App {
     if (s.backpack.length === 0) {
       bag.append(el('p', { class: 'muted' }, 'Tom. Köp något att komma hem med.'));
     } else {
+      /**
+       * Ryggsäcken är en hylla, inte en kvittolista: varje sak ligger som ett
+       * föremål med sitt eget foto, i samma vita ram som butikens skyltfönster.
+       * Saknas fotot står namnet på en lapp i stället för en bruten ikon.
+       */
       const list = el('div', { class: 'bag-list' });
       for (const item of s.backpack) {
         const souvenir = SOUVENIR_BY_ID[item.souvenirId];
         if (!souvenir) continue;
+        const img = el('img', {
+          class: 'bag-foto',
+          src: quizImageUrl(`souv-${souvenir.id}`),
+          alt: souvenir.name,
+          loading: 'lazy',
+          draggable: 'false',
+        });
+        const ram = el('div', { class: 'bag-ram' }, img);
+        img.addEventListener('error', () => {
+          img.remove();
+          ram.append(el('span', { class: 'bag-lapp' }, souvenir.name));
+        });
         list.append(
-          el('div', { class: 'bag-item' },
-            el('span', {}, souvenir.name),
-            el(
-              'span',
-              { class: 'muted' },
-              `${CITY_BY_ID[item.boughtIn]?.name ?? '?'} · ${this.money(item.paid)}`
-            )
+          el('article', { class: 'bag-item' },
+            ram,
+            el('div', { class: 'bag-text' },
+              el('h3', { class: 'bag-namn' }, souvenir.name),
+              el('p', { class: 'muted bag-ursprung' },
+                `${CITY_BY_ID[item.boughtIn]?.name ?? 'Okänd stad'}` +
+                  (item.boughtDay === undefined ? '' : `, dag ${item.boughtDay}`)
+              )
+            ),
+            el('span', { class: 'bag-pris' }, this.money(item.paid))
           )
         );
       }

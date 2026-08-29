@@ -97,6 +97,8 @@ export interface BackpackItem {
   paid: number;
   /** Var du köpte den */
   boughtIn: string;
+  /** Vilken dag den hamnade i ryggsäcken */
+  boughtDay?: number;
 }
 
 export interface CityProgress {

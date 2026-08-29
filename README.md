@@ -345,9 +345,14 @@ webbläsaren och överlever att sparfilen raderas.
    - **Souvenirbutiken** är ett skyltfönster: foto av varan i en vriden vit
      ram (`souv-<id>` i `quizImages.ts`, 60 av 64 har foto), handskriven
      prislapp med hål och snöre, gummistämpel *Fynd*/*Turistpris*/*Vinst* i
-     passets bläck, butiksinnehavarens replik och knappen *Slå in*. Tidningens
-     *Marknaden* skvallrar om var ryggsäckens innehåll betalar bäst just nu,
-     med samma siffror som butiken men som rykten och läsarbrev.
+     passets bläck, butiksinnehavarens replik och knappen *Slå in*. Handlaren
+     berättar också vad han hört: en stad där varan lär gå åt, aldrig en
+     summa, och han har rätt ungefär två gånger av tre (`handlarRykte`).
+     Ingenstans i spelet står vad en souvenir ger i en annan stad - då vore
+     handeln bokföring i stället för upptäckt. Tidningens *Marknaden*, som
+     listade priser stad för stad, togs bort 2026-08-29 av samma skäl.
+   - **Ryggsäckens innehåll** listar souvenirerna som föremål: foto i en
+     liten vit ram, namn, staden och dagen de köptes, och vad de kostade.
    - **Poängkvittot** på slutskärmen visar slutpoängen rad för rad – kassa,
      ryggsäck, städer, världsdelar, stämplar, anseende, certifikat,
      träffsäkerhet och tempo – med uträkningen i klartext (`finalScoreBreakdown`).
