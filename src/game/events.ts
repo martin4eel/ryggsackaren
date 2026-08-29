@@ -147,6 +147,36 @@ export function eligibleEvents(
  * En händelse som redan väntar på svar blockerar nya. Två frågor på skärmen
  * samtidigt skulle betyda att den ena besvaras utan att ha lästs.
  */
+/**
+ * Reservbankerna. Sevärdheten har sexton egna händelser och resan kan gå
+ * genom femtiotvå städer: någon gång kring den sextonde staden är den egna
+ * banken tom, och dagen vid landmärket blev då en dag utan innehåll. Då lånas
+ * en händelse ur de breda banker som fortfarande har något kvar - en scen på
+ * stan eller ett möte passar lika bra vid Akropolis som på en gata.
+ */
+const RESERV: Record<EventTrigger, EventTrigger[]> = {
+  sevardhet: ['stad', 'mote'],
+  mote: ['stad', 'sevardhet'],
+  handel: ['stad', 'mote'],
+  boende: ['stad', 'vantan'],
+  arbete: ['stad', 'mote'],
+  vantan: ['resa', 'stad'],
+  resa: ['vantan', 'stad'],
+  stad: ['mote', 'sevardhet'],
+};
+
+function reservEvents(
+  trigger: EventTrigger,
+  ctx: EventContext,
+  seen: readonly string[]
+): GameEvent[] {
+  for (const reserv of RESERV[trigger] ?? []) {
+    const kandidater = eligibleEvents(reserv, ctx, seen);
+    if (kandidater.length) return kandidater;
+  }
+  return [];
+}
+
 export function rollEvent(
   state: GameState,
   city: City,
@@ -161,7 +191,9 @@ export function rollEvent(
   if (Math.random() >= chance) return null;
   const ctx = eventContext(state, city);
   const kandidater = eligibleEvents(trigger, ctx, state.eventsSeen);
-  const vald = weighted(kandidater);
+  const vald = weighted(
+    kandidater.length ? kandidater : reservEvents(trigger, ctx, state.eventsSeen)
+  );
   if (!vald) return null;
   state.pendingEvent = { eventId: vald.id };
   state.eventsSeen.push(vald.id);

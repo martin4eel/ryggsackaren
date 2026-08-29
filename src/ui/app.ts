@@ -473,6 +473,18 @@ function maskeraStad(text: string, city: City): string {
 }
 
 /** Kortformer och gamla namn som broschyren använder om staden. */
+/**
+ * Arvodet för en inspelning av Vart är vi på väg.
+ *
+ * Det var sextio kronor poängen, alltså upp till 1 800 kronor för en enda dag
+ * i studion - mer än vad ett helt femdagarsskift betalar, och det gick att
+ * göra om i varje stad. Tjugofem kronor poängen gör en stark omgång värd
+ * ungefär två bra arbetsdagar, vilket räcker gott som lockelse.
+ */
+function sparetArvode(poang: number): number {
+  return poang * 25;
+}
+
 const SPARET_KORTFORMER: Record<string, string[]> = {
   rio: ['Rio'],
   newyork: ['New York', 'Manhattan', 'Nya Amsterdam'],
@@ -681,8 +693,17 @@ export class App {
     const saved = loadGame();
     if (saved) {
       this.state = saved;
-      // Undvik att återuppta mitt i en fråga, sessionen är inte sparad.
-      if (saved.screen === 'jobb' || saved.screen === 'turistbyra') {
+      const pass = saved.pagaende as (Omit<QuizSession, 'job'> & { jobId?: string }) | undefined;
+      if (pass?.questions?.length) {
+        // Passet återupptas där det stod. Klockan för snabbhetsbonusen nollas:
+        // tiden som gått var inte betänketid, den var frånvaro.
+        this.quiz = {
+          ...(pass as unknown as QuizSession),
+          job: pass.jobId ? JOB_BY_ID[pass.jobId] : undefined,
+          askedAt: performance.now(),
+        };
+      } else if (saved.screen === 'jobb' || saved.screen === 'turistbyra') {
+        // Inget sparat pass: hellre stadsbilden än en tom frågesida.
         saved.screen = 'stad';
       }
     }
@@ -872,6 +893,21 @@ export class App {
   private commit(): void {
     const s = this.state;
     if (!s) return;
+    /*
+     * Det pågående passet följer med i sparfilen. Jobbet lagras som id, och
+     * arkadmomentet backas till briefen: DOM-noden går inte att spara, så den
+     * som laddar om mitt i ett minispel får börja om just det momentet.
+     */
+    if (this.quiz) {
+      const { job, ...resten } = this.quiz;
+      s.pagaende = {
+        ...resten,
+        jobId: job?.id,
+        phase: this.quiz.phase === 'spelar' ? 'brief' : this.quiz.phase,
+      } as Record<string, unknown>;
+    } else {
+      delete s.pagaende;
+    }
     s.peakMoney = Math.max(s.peakMoney, s.money);
     const earned = newStamps(s);
     // Dagen stämpeln togs trycks sedan i själva stämpeln, som ett datum.
@@ -887,10 +923,13 @@ export class App {
       this.pendingStamp = null;
       playSound('stampla');
       if (this.stampTimer !== null) window.clearTimeout(this.stampTimer);
-      this.stampTimer = window.setTimeout(() => {
-        this.stampToast = null;
-        this.render();
-      }, 4200);
+      this.stampTimer = window.setTimeout(
+        () => {
+          this.stampToast = null;
+          this.render();
+        },
+        this.stampToast.tier ? 7000 : 4200
+      );
     }
   }
 
@@ -1233,7 +1272,9 @@ export class App {
             el('div', { class: 'uppdrag-villkor' },
               el('span', {}, el('strong', {}, 'Mål: '), `${mal?.name ?? u.mal}, ${mal?.country ?? ''}`),
               el('span', {}, el('strong', {}, 'Ersättning: '), this.money(u.belopp)),
-              u.deadline !== undefined ? el('span', {}, el('strong', {}, 'Senast: '), `dag ${u.deadline} (${u.deadline - s.days} dagar)`) : ''
+              u.deadline !== undefined
+                ? el('span', {}, el('strong', {}, 'Senast: '), `dag ${u.deadline} (${u.deadline - s.days} dagar)`)
+                : el('span', {}, el('strong', {}, 'Senast: '), 'ingen brådska, men de väntar')
             ),
             el('div', { class: 'row' },
               button('Jag tar det', () => this.svaraUppdrag(true), { class: 'btn btn-primary btn-big' }),
@@ -1263,15 +1304,24 @@ export class App {
       );
     }
     if (this.stampToast) {
+      /*
+       * En guldstämpel är tre skift i samma huvudkategori och sigillet är
+       * arton. De fick tidigare exakt samma lilla ruta i hörnet som "Första
+       * lönen", och syntes i praktiken först när man gick in i passet. Nu tar
+       * de mitten av skärmen och en längre stund.
+       */
+      const tier = this.stampToast.tier;
+      const rubrik =
+        tier === 'sigill' ? 'Sigill' : tier === 'guld' ? 'Mästarstämpel' : 'Ny stämpel';
       shell.append(
         el(
           'div',
-          { class: 'stamp-toast', role: 'status' },
+          { class: `stamp-toast ${tier ? `stamp-toast-stor stamp-toast-${tier}` : ''}`, role: 'status' },
           el('span', { class: 'stamp-mark' }, this.stampToast.glyph),
           el(
             'span',
             { class: 'stamp-toast-text' },
-            el('strong', {}, `Ny stämpel: ${this.stampToast.name}`),
+            el('strong', {}, `${rubrik}: ${this.stampToast.name}`),
             el('span', {}, this.stampToast.desc)
           )
         )
@@ -2875,7 +2925,7 @@ export class App {
     const sp = s.sparet;
     if (!sp) return;
     const total = sp.scores.reduce((a, b) => a + b, 0);
-    const arvode = total * 60;
+    const arvode = sparetArvode(total);
     s.money += arvode;
     s.earned += arvode;
     s.sparetBest = Math.max(s.sparetBest ?? 0, total);
@@ -2891,7 +2941,7 @@ export class App {
     const sp = s.sparet!;
     const total = sp.scores.reduce((a, b) => a + b, 0);
     const max = sp.cities.length * 10;
-    const arvode = total * 60;
+    const arvode = sparetArvode(total);
     const basta = s.sparetBest ?? 0;
     const wrap = el('div', { class: 'stack sparet' });
     const panel = el('section', { class: 'panel sparet-resultat' });
@@ -3185,12 +3235,27 @@ export class App {
           el('img', { class: 'repris-foto', src: quizImageUrl(m.bild), alt: '', loading: 'lazy', draggable: 'false' })
         );
       }
+      /*
+       * Svaret ligger dolt tills man bett om det. En repris som visar frågan
+       * och facit i samma andetag är ingen repetition, det är en facitlista -
+       * man ska hinna tänka efter en gång till först.
+       */
+      const svarsruta = el('div', { class: 'repris-facit' },
+        el('p', { class: 'repris-svar' }, el('strong', {}, 'Rätt svar: '), m.svar),
+        m.info ? el('p', { class: 'repris-info' }, m.info) : ''
+      );
+      svarsruta.hidden = true;
+      const visaSvar = button('Visa svaret', () => {
+        svarsruta.hidden = false;
+        visaSvar.hidden = true;
+        playSound('sida');
+      }, { class: 'btn btn-small btn-ghost' });
       ruta.append(
         el('div', { class: 'repris-text' },
           el('p', { class: 'repris-ingress' }, m.dag === 0 ? `Frågan du missade i ${m.stad} första dagen:` : `Frågan du missade i ${m.stad}, dag ${m.dag}:`),
           el('p', { class: 'repris-fraga' }, m.q),
-          el('p', { class: 'repris-svar' }, el('strong', {}, 'Rätt svar: '), m.svar),
-          m.info ? el('p', { class: 'repris-info' }, m.info) : '',
+          visaSvar,
+          svarsruta,
           el('div', { class: 'row' },
             button('Nu sitter det', () => {
               const nu = this.state!;
@@ -4045,6 +4110,7 @@ export class App {
 
   /** Lönekvittot rad för rad, så att summan går att räkna på. */
   private lonekvitto(q: QuizSession): HTMLElement {
+    const s = this.state!;
     const rader: [string, number][] = [
       ['Grundlön', q.grund ?? 0],
       ['Svarsserie', q.serie ?? 0],
@@ -4052,9 +4118,27 @@ export class App {
       ['Bonus, sista passet', q.bonus ?? 0],
     ].filter((r): r is [string, number] => (r[1] as number) > 0) as [string, number][];
     if (rader.length === 0) return el('div', { class: 'kvitto kvitto-tom' }, el('p', { class: 'muted' }, 'Ingen lön den här gången.'));
+    /*
+     * Boendet står med. "Total lön 1 380 kr" i fet stil medan kassan steg med
+     * 550 är inte en lögn, men det är en halv sanning: dagarna kostade också.
+     */
+    const dagar = q.job?.shiftLength ?? 0;
+    const boende = dagar * dailyCost(this.city, s.difficulty);
     return el('div', { class: 'kvitto' },
       ...rader.map(([namn, kr]) => el('div', { class: 'kvitto-rad' }, el('span', {}, namn), el('span', {}, this.money(kr)))),
-      el('div', { class: 'kvitto-rad kvitto-summa' }, el('span', {}, 'Summa'), el('span', {}, this.money(q.earnings)))
+      el('div', { class: 'kvitto-rad kvitto-summa' }, el('span', {}, 'Summa'), el('span', {}, this.money(q.earnings))),
+      dagar > 0
+        ? el('div', { class: 'kvitto-rad kvitto-avdrag' },
+            el('span', {}, `Boende, ${dagar} ${dagar === 1 ? 'dag' : 'dagar'}`),
+            el('span', {}, `-${this.money(boende)}`)
+          )
+        : '',
+      dagar > 0
+        ? el('div', { class: 'kvitto-rad kvitto-netto' },
+            el('span', {}, 'Kvar när dagarna är betalda'),
+            el('span', {}, this.money(q.earnings - boende))
+          )
+        : ''
     );
   }
 
@@ -4894,7 +4978,9 @@ export class App {
             ),
             el('p', { class: 'muted' },
               `Ska till ${mal?.name ?? u.mal}, ${mal?.country ?? ''}. Fick det i ${CITY_BY_ID[u.fran]?.name ?? u.fran} dag ${u.start}.` +
-                (u.deadline !== undefined ? ` Senast dag ${u.deadline}${s.days > u.deadline ? ' – för sent, halva ersättningen.' : ` (${u.deadline - s.days} dagar kvar).`}` : '')
+                (u.deadline !== undefined
+                  ? ` Senast dag ${u.deadline}${s.days > u.deadline ? ' – för sent, halva ersättningen.' : ` (${u.deadline - s.days} dagar kvar).`}`
+                  : ' Ingen sista dag, men det ligger kvar tills det är levererat.')
             )
           )
         );
@@ -5530,9 +5616,15 @@ export class App {
               visning,
               el('div', { class: 'reglage-bana' },
                 input,
+                /*
+                 * Skalans ändar skrivs högsta först: den liggande varianten
+                 * vänder raden i CSS, så att lägsta talet hamnar till vänster
+                 * där reglaget börjar. Med min först stod 2 500 vid det låga
+                 * änden och reglaget såg ut att gå baklänges.
+                 */
                 el('div', { class: 'reglage-spann' },
-                  el('span', {}, this.money(LOAN_MIN)),
-                  el('span', {}, this.money(tak))
+                  el('span', {}, this.money(tak)),
+                  el('span', {}, this.money(LOAN_MIN))
                 )
               )
             ),
@@ -5629,6 +5721,75 @@ export class App {
     });
   }
 
+  /**
+   * Resans höjdpunkter. Slutskärmen räknar redan poängen rad för rad; det här
+   * är det den inte gjorde - berättar vad som hände. Allt hämtas ur siffror
+   * spelet redan sparar, och rader utan innehåll utelämnas hellre än att stå
+   * tomma.
+   */
+  private renderHojdpunkter(): HTMLElement {
+    const s = this.state!;
+    const rader: Array<[string, string]> = [];
+    const langst = [...s.visited]
+      .map((id, i, lista) => {
+        const fran = CITY_BY_ID[lista[i - 1] ?? ''];
+        const till = CITY_BY_ID[id];
+        return fran && till ? { fran, till, km: distanceKm(fran, till) } : null;
+      })
+      .filter(Boolean)
+      .sort((a, b) => (b!.km - a!.km))[0];
+    if (langst) {
+      rader.push([
+        'Längsta etappen',
+        `${langst.fran.name} till ${langst.till.name}, ${Math.round(langst.km).toLocaleString('sv-SE')} km`,
+      ]);
+    }
+    if (s.bestStreak >= 3) rader.push(['Längsta svit', `${s.bestStreak} rätt i rad utan att blinka`]);
+    if (s.perfectShifts > 0) {
+      rader.push(['Felfria skift', `${s.perfectShifts} skift utan ett enda fel`]);
+    }
+    if (s.bestTrade > 0) rader.push(['Bästa affären', `${this.money(s.bestTrade)} i vinst på en enda souvenir`]);
+    if ((s.uppdragKlara ?? 0) > 0) {
+      rader.push([
+        'Ärenden i mål',
+        `${s.uppdragKlara} ${s.uppdragKlara === 1 ? 'ärende som kom fram' : 'ärenden som kom fram'}`,
+      ]);
+    }
+    const kvar = s.uppdrag ?? [];
+    if (kvar.length > 0) {
+      const u = kvar[0]!;
+      const mall = this.uppdragMall(u.id);
+      rader.push([
+        'Kvar i ryggsäcken',
+        `${mall?.foremal ?? 'Ett ärende'} - den skulle till ${CITY_BY_ID[u.mal]?.name ?? u.mal}, och någon väntar fortfarande.`,
+      ]);
+    }
+    if ((s.sparetBest ?? 0) > 0) rader.push(['Vart är vi på väg', `${s.sparetBest} poäng som bäst av 30 möjliga`]);
+    if (s.callsHome > 0) {
+      rader.push([
+        'Samtal hem',
+        `${s.callsHome} ${s.callsHome === 1 ? 'gång' : 'gånger'}${(s.lan ?? 0) > 0 ? `, varav ${s.lan} gav pengar` : ', utan att be om pengar'}`,
+      ]);
+    }
+    const panel = el('section', { class: 'panel hojdpunkter' });
+    panel.append(el('h3', { class: 'kvitto-rubrik' }, 'Resans höjdpunkter'));
+    if (rader.length === 0) {
+      panel.append(el('p', { class: 'muted' }, 'Resan blev kort. Nästa gång hinner mer hända.'));
+      return panel;
+    }
+    const lista = el('div', { class: 'hojdpunkt-lista' });
+    for (const [rubrik, text] of rader) {
+      lista.append(
+        el('div', { class: 'hojdpunkt' },
+          el('span', { class: 'hojdpunkt-rubrik' }, rubrik),
+          el('span', { class: 'hojdpunkt-text' }, text)
+        )
+      );
+    }
+    panel.append(lista);
+    return panel;
+  }
+
   private renderEnd(): HTMLElement {
     const s = this.state!;
     const wrap = el('div', { class: 'stack' });
@@ -5713,6 +5874,7 @@ export class App {
       )
     );
     wrap.append(scores);
+    wrap.append(this.renderHojdpunkter());
 
     // Bokslutet på kartan: hela rutten på papperet, som den blev.
     const kartblad = renderAtlasScreen({

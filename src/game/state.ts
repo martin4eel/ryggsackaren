@@ -247,6 +247,13 @@ export interface GameState {
   };
   /** Vilken terminal man står i, så att en omladdning inte flyttar en */
   stationMode?: 'buss' | 'tag' | 'flyg' | 'farja';
+  /**
+   * Pågående prov eller arbetsskift, sparat så att en omladdning inte kastar
+   * bort det man hunnit svara. Formen hör till gränssnittslagret (QuizSession
+   * i ui/app.ts) och lagras därför löst typad; jobbet sparas som id eftersom
+   * hela jobbobjektet inte hör hemma i en sparfil.
+   */
+  pagaende?: Record<string, unknown>;
   /** Antal lån man faktiskt fått hem, inte antal samtal */
   lan?: number;
   /** Aktiva uppdrag: ärenden till andra städer */

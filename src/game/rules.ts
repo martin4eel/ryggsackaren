@@ -86,7 +86,15 @@ export function wagePerCorrect(
   difficulty: Difficulty
 ): number {
   const classFactor = job.wageClass === 1 ? 1 : job.wageClass === 2 ? 1.6 : 2.3;
-  const base = 160 * classFactor * (0.75 + city.costIndex * 0.45);
+  /*
+   * Lutningen mot costIndex höjdes 2026-08-30 från 0,45 till 0,73 (och basen
+   * sänktes så att billiga städer blir oförändrade). Boendet skiljer sig 3,9
+   * gånger mellan billigaste och dyraste stad medan lönen bara skilde 1,56 -
+   * följden var att ett skift i löneklass 1 gick back i femton av femtiotvå
+   * städer vid sextio procent rätt, och det var Paris, London, New York och
+   * Tokyo som förlorade pengar. Nu går de plus.
+   */
+  const base = 160 * classFactor * (0.64 + city.costIndex * 0.73);
   return Math.round(difficulty === 'turist' ? base : base * 1.15);
 }
 
@@ -352,21 +360,28 @@ export function newStamps(state: GameState): Stamp[] {
 
 /** Titel att skryta med på slutskärmen. */
 export function rankTitle(score: number): { title: string; desc: string } {
-  if (score >= 90000)
+  /*
+   * Trösklarna höjdes 2026-08-30. De gamla (15/28/45/65/90 tusen) gav en
+   * femstadsresa på tolv dagar tredje titeln av sex och en helt vanlig resa
+   * den femte; de två understa gick knappt att hamna på.
+   */
+  if (score >= 140000)
     return { title: 'Legendarisk upptäckare', desc: 'Det här gör ingen efter dig.' };
-  if (score >= 65000)
+  if (score >= 100000)
     return { title: 'Världsvan globetrotter', desc: 'Du har sett mer än de flesta hinner på ett helt liv.' };
-  if (score >= 45000)
+  if (score >= 70000)
     return { title: 'Rutinerad resenär', desc: 'Packningen sitter, ekonomin höll och kartan är läst.' };
-  if (score >= 28000)
+  if (score >= 45000)
     return { title: 'Van upptäckare', desc: 'En riktig resa, med både arbete och äventyr.' };
-  if (score >= 15000)
+  if (score >= 25000)
     return { title: 'Nyfiken nybörjare', desc: 'Du kom hem, och du kom hem klokare.' };
   return { title: 'Hemvändare', desc: 'Resan blev kort, men den blev av.' };
 }
 
 /** Kassan räknas bara upp till hit. Resten är bara pengar. */
 export const SCORE_CASH_CAP = 25000;
+/** Och ryggsäcken hit. Souvenirhandel ska löna sig, men inte avgöra resan. */
+export const SCORE_BAG_CAP = 8000;
 
 /**
  * Slutpoäng: resande först, pengar sedan.
@@ -390,7 +405,12 @@ export interface ScoreRow {
 export function finalScoreBreakdown(state: GameState): { rader: ScoreRow[]; total: number } {
   const cashRaw = state.money - state.debt;
   const cash = Math.min(SCORE_CASH_CAP, cashRaw);
-  const bag = backpackHomeValue(state);
+  /*
+   * Ryggsäcken räknades otakat medan kassan takades, och tolv knutna mattor
+   * var därför värda mer poäng än samtliga stämplar tillsammans - för noll
+   * dagars arbete. Påsen har nu ett eget tak på en tredjedel av kassans.
+   */
+  const bag = Math.min(SCORE_BAG_CAP, backpackHomeValue(state));
   const answered = state.correct + state.wrong;
   const accuracy = answered > 0 ? state.correct / answered : 0;
   // Första certifikatet i ett ämne är värt mest; bredd slår upprepning.
@@ -427,7 +447,7 @@ export function finalScoreBreakdown(state: GameState): { rader: ScoreRow[]; tota
   const pace = Math.max(0, Math.min(12000, 12000 - (daysPerCity - 2) * 600));
   const rader: ScoreRow[] = [
     { namn: 'Kassa minus skuld', detalj: `${cash.toLocaleString('sv-SE')} × 0,6${cashRaw > SCORE_CASH_CAP ? ` (max ${SCORE_CASH_CAP.toLocaleString('sv-SE')} räknas)` : ''}`, poang: Math.round(cash * 0.6) },
-    { namn: 'Ryggsäckens värde hemma', detalj: `${Math.round(bag).toLocaleString('sv-SE')} × 0,9`, poang: Math.round(bag * 0.9) },
+    { namn: 'Ryggsäckens värde hemma', detalj: `${Math.round(bag).toLocaleString('sv-SE')} × 0,9${backpackHomeValue(state) > SCORE_BAG_CAP ? ` (max ${SCORE_BAG_CAP.toLocaleString('sv-SE')} räknas)` : ''}`, poang: Math.round(bag * 0.9) },
     { namn: 'Städer', detalj: `${uniqueCities} × 1 500`, poang: cityPoints },
     { namn: 'Världsdelar', detalj: `${regions} × 2 000`, poang: regions * 2000 },
     { namn: 'Stämplar', detalj: `${state.stamps.length} × 900`, poang: stampPoints },

@@ -129,15 +129,6 @@ function karta(city: City, homeCityId: string, visited: string[], onStad?: (c: C
         'data-stad': c.id,
       })
     );
-    // Träffytan är större än pricken: ett finger ska kunna välja en stad.
-    if (onStad) {
-      const traff = svgEl('circle', { cx: x, cy: y, r: 9, class: 'karta-traff', 'data-stad': c.id });
-      traff.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        onStad(c);
-      });
-      svg.append(traff);
-    }
   }
 
   // Startstaden: inringad med pennan, namnet bredvid. Står man där man
@@ -156,11 +147,19 @@ function karta(city: City, homeCityId: string, visited: string[], onStad?: (c: C
     );
     if (!sammaStad) {
       const vansterHem = p.x > MAP_WIDTH * 0.8;
+      /*
+       * Stockholm och Västerås ligger fyra bildpunkter från varandra på en
+       * världskarta, och då skrevs "Start: Stockholm" rakt genom "Här:
+       * Västerås". Ligger de nära varandra hamnar starten under ringen i
+       * stället, där nålen inte når.
+       */
+      const nuP = project(city);
+      const trangt = Math.hypot(p.x - nuP.x, p.y - nuP.y) < 90;
       svg.append(
         svgEl('text', {
-          x: vansterHem ? p.x - r - 4 : p.x + r + 4,
-          y: p.y + 5,
-          class: `karta-anteckning ${vansterHem ? 'karta-anteckning-vanster' : ''}`,
+          x: trangt ? p.x : vansterHem ? p.x - r - 4 : p.x + r + 4,
+          y: trangt ? p.y + r + 30 : p.y + 5,
+          class: `karta-anteckning ${trangt ? 'karta-anteckning-mitt' : vansterHem ? 'karta-anteckning-vanster' : ''}`,
         }, `Start: ${hem.name}`)
       );
     }
@@ -184,13 +183,28 @@ function karta(city: City, homeCityId: string, visited: string[], onStad?: (c: C
    */
   const bredd = etikett.length * 8.5;
   const vanster = nu.x + 9 + bredd > MAP_WIDTH - 8;
+  /*
+   * På telefonen syns bara ungefär en tredjedel av kartans bredd åt gången,
+   * och kartan rullas fram så att nålen står mitt i rutan. En lång etikett
+   * skriven åt höger - "Här, och start: Stockholm" - rann då ut ur rutan.
+   * Är den längre än vad som får plats på ena sidan om nålen centreras den
+   * över nålen i stället, så att den delar på båda hållen.
+   */
+  const SYNLIG_HALVA = 165;
+  const mitt = !vanster && bredd > SYNLIG_HALVA;
+  /*
+   * Kartuschen med "Världskarta" ligger som en ruta över kartans övre vänstra
+   * hörn, och de nordiska städerna hamnar precis bakom den. Står nålen så
+   * högt skrivs namnet under pricken i stället.
+   */
+  const under = nu.y - 26 < VIEW_TOP + 62;
   svg.append(
     svgEl(
       'text',
       {
-        x: vanster ? Math.max(bredd + 8, nu.x - 9) : nu.x + 9,
-        y: nu.y - 20,
-        class: `karta-anteckning karta-anteckning-har ${vanster ? 'karta-anteckning-vanster' : ''}`,
+        x: vanster ? Math.max(bredd + 8, nu.x - 9) : mitt ? nu.x : nu.x + 9,
+        y: under ? nu.y + 20 : mitt ? nu.y - 26 : nu.y - 20,
+        class: `karta-anteckning karta-anteckning-har ${vanster && !under ? 'karta-anteckning-vanster' : ''} ${mitt || under ? 'karta-anteckning-mitt' : ''}`,
       },
       etikett
     )
@@ -208,6 +222,44 @@ function karta(city: City, homeCityId: string, visited: string[], onStad?: (c: C
     svgEl('text', { x: 0, y: -30, class: 'karta-kompass-text' }, 'N')
   );
   svg.append(ros);
+
+  /*
+   * Träffytan: ett enda genomskinligt lager över hela kartan, som väljer den
+   * stad som ligger närmast fingret. Tidigare hade varje stad en egen cirkel
+   * med nio enheters radie, och i Europa låg de ovanpå varandra: den stad man
+   * pekade på fångades av grannen som råkade ritas sist, och Köping, Västerås
+   * och Stockholm gick inte att träffa alls. Nu spelar ritordningen ingen
+   * roll, och nålen och etiketterna ligger heller inte i vägen.
+   */
+  if (onStad) {
+    const traffyta = svgEl('rect', {
+      x: 0,
+      y: VIEW_TOP,
+      width: MAP_WIDTH,
+      height: VIEW_BOTTOM - VIEW_TOP,
+      class: 'karta-traff',
+    });
+    traffyta.addEventListener('pointerdown', (e) => {
+      const ctm = (svg as SVGSVGElement).getScreenCTM();
+      if (!ctm) return;
+      const punkt = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse());
+      let narmast: City | null = null;
+      let basta = Infinity;
+      for (const c of CITIES) {
+        const { x, y } = project(c);
+        const d = Math.hypot(punkt.x - x, punkt.y - y);
+        if (d < basta) {
+          basta = d;
+          narmast = c;
+        }
+      }
+      // En träff långt ute i havet ska inte välja en stad på andra sidan.
+      if (!narmast || basta > 26) return;
+      e.preventDefault();
+      onStad(narmast);
+    });
+    svg.append(traffyta);
+  }
 
   return svg;
 }

@@ -1443,7 +1443,18 @@ function startPictureChoice(
   const grid = el('div', { class: 'options-bilder mg-bildval' });
   const timer = makeTimer();
   const feedback = makeFeedback();
-  host.append(status.node, bubble, grid, timer.node, feedback.node);
+  /*
+   * Vid rätt svar går spelet vidare av sig självt - man vet redan att man
+   * kunde det. Vid fel stannar det tills man trycker: facit står på skärmen,
+   * det rätta fotot lyser grönt och kunden säger vad hen egentligen ville ha,
+   * och det hann ingen läsa på en och en halv sekund.
+   */
+  const vidare = button('Nästa kund', () => {
+    vidare.hidden = true;
+    next();
+  }, { class: 'btn btn-primary mg-peka-vidare' });
+  vidare.hidden = true;
+  host.append(status.node, bubble, grid, timer.node, feedback.node, vidare);
 
   const finish = () => {
     onDone({
@@ -1454,6 +1465,7 @@ function startPictureChoice(
   };
 
   const next = () => {
+    vidare.hidden = true;
     if (round >= kunder.length) {
       finish();
       return;
@@ -1524,7 +1536,12 @@ function startPictureChoice(
     }
     status.set(`${roll.en} ${round + 1}/${kunder.length}`, `${right} ${roll.klara}`);
     round += 1;
-    after(ok ? 900 : 1500, next);
+    if (ok) {
+      after(1000, next);
+    } else {
+      vidare.textContent = round >= kunder.length ? 'Klart' : 'Nästa kund';
+      vidare.hidden = false;
+    }
   };
 
   next();
