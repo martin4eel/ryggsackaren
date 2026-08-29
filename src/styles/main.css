@@ -8121,3 +8121,19 @@ body.sheet-oppen {
 @media (min-width: 640px) {
   .mg-lagval-namn { font-size: 0.85rem; }
 }
+
+/* Marknaden och Repris: rubriken på egen rad mellan två linjer, texten under. */
+.paper-marknad,
+.paper-repris {
+  display: block;
+  padding: 0 0 8px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.paper-marknad .paper-avdelning-namn,
+.paper-repris .paper-avdelning-namn {
+  display: block;
+  padding: 6px 0;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--ink);
+}
