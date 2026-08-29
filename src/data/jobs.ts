@@ -762,7 +762,7 @@ export const JOBS: Job[] = [
     employer: 'Stellenbosch Estate',
     category: 'natur',
     huvud: 'mat',
-    wageClass: 2,
+    wageClass: 3,
     shiftLength: 6,
     ad: 'Skörd och pressning. Kunskap om druvor och klimat är avgörande.',
     minigame: {
@@ -2993,7 +2993,7 @@ export const JOBS: Job[] = [
     employer: 'Restaurang Druvan',
     category: 'mat',
     huvud: 'mat',
-    wageClass: 3,
+    wageClass: 2,
     shiftLength: 6,
     ad: 'Rekommendera vin till gästerna och sköt källaren. Näsa och tålamod krävs.',
     minigame: {
