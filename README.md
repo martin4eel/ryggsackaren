@@ -389,6 +389,20 @@ webbläsaren och överlever att sparfilen raderas.
    Fotbollstränaren har samma spel med landslag: flaggan i mitten, 29
    spelare, 12 landslag, 24 rundor ("Zlatan hör till Sverige").
 
+   Spelarporträtten får inte visa klubbtröjan - då syns svaret på bilden i
+   stället för i huvudet. Fem byttes 2026-08-29 mot landslagsbilder (Ovetjkin,
+   Sundin, Zibanejad och bröderna Sedin), och fyra där ingen fri bild utan
+   klubbtröja finns beskars till ansiktet med `scripts/beskar-portratt.py`:
+   bergeron `0.26 0 0.56 0.28`, chara `0.56 0 0.86 0.26`, giroux
+   `0.54 0 0.88 0.52`, hedman `0.22 0 0.52 0.30`. Samma skript beskär
+   henrik-sedin `0.22 0.06 0.62 0.42`, daniel-sedin `0.22 0.36 0.80 0.82` och
+   zibanejad `0.18 0.02 0.62 0.42`. Lindholm och Thörnberg bär tröjor från
+   klubbar som inte finns i spelet, så de avslöjar ingenting.
+
+   Klubbmärkena ska vara de nuvarande. Capitals, Maple Leafs och Canucks
+   byttes 2026-08-29; för de två sista finns bara ordbilden fritt licensierad,
+   eftersom lövet och späckhuggaren är upphovsrättsskyddade.
+
    Sorteringsspelen är utbytta (2026-08-29): alla tjugo yrken som hade
    "dra foto till rätt hylla" har nu bildval i politikerspelets stil, där
    passagerare, gäster, elever och beställare beskriver vad de behöver –

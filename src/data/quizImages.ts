@@ -14,6 +14,11 @@
  * är en namngiven Commons-fil, för de fall ledningsbilden är fel motiv eller
  * för hårt beskuren.
  *
+ * Fyra av hockeyporträtten - Bergeron, Chára, Giroux och Hedman - är
+ * beskurna till ansiktet med `scripts/beskar-portratt.py`, eftersom
+ * klubbmärket på tröjan annars avslöjar svaret i lagvalsspelet. Hämtas de om
+ * med `--om` måste beskärningen göras om; boxarna står i README.
+ *
  * Växterna använder genomgående `file`. Wikipedias artiklar om kryddor har
  * ofta en botanisk plansch från 1800-talet som ledningsbild, och en tecknad
  * ingefära duger inte i en fråga som går ut på att känna igen ingefära.
@@ -1671,21 +1676,21 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'sparvagnsrals', alt: 'Spårvagnsräls nedsänkt i gatsten', file: 'Rails de trams (33819684188).jpg' },
   // ------------------------------------------------------- hockeyspelare
   { id: 'spelare-lundqvist', alt: 'Henrik Lundqvist i vit t-shirt, tittar åt sidan', file: 'Henrik Lundqvist nov 2009.jpg' },
-  { id: 'spelare-zibanejad', alt: 'Mika Zibanejad i vit Rangers-matchtröja på isen', file: 'New York Rangers at Seattle Kraken - October 21, 2023 - Mika Zibanejad (53276886807).jpg' },
+  { id: 'spelare-zibanejad', alt: 'Mika Zibanejad i Tre Kronor-tröja', file: 'Mika Zibanejad.png' },
   { id: 'spelare-lidstrom', alt: 'Nicklas Lidström i blå tröja, närbild', file: 'Nicklas Lidstrom cropped.jpg' },
   { id: 'spelare-zetterberg', alt: 'Henrik Zetterberg med skägg i röd Red Wings-tröja', file: 'Henrik Zetterberg (03).jpg' },
   { id: 'spelare-salming', alt: 'Börje Salming leende i gul tröja', file: 'Börje Salming 2015-03-05.jpg' },
-  { id: 'spelare-sundin', alt: 'Mats Sundin i vit Maple Leafs-tröja med nummer 13', file: 'Mats Sundin 2008.jpg' },
+  { id: 'spelare-sundin', alt: 'Mats Sundin i gul förbundströja', file: 'Mats Sundin in feb 2015.jpg' },
   { id: 'spelare-nylander', alt: 'William Nylander närbild i vit och blå matchtröja', file: 'William Nylander (39540536784) (a).jpg' },
-  { id: 'spelare-hedman', alt: 'Victor Hedman i vit Lightning-tröja med nummer 77', file: 'Victor Hedman - Tampa Bay Lightning.jpg' },
-  { id: 'spelare-ovetjkin', alt: 'Alexander Ovetjkin i röd Capitals-tröja med kaptens-C', file: 'Alex Ovechkin 2017-05-06.jpg' },
+  { id: 'spelare-hedman', alt: 'Victor Hedman i hjälm, ansiktet i halvprofil', file: 'Victor Hedman - Tampa Bay Lightning.jpg' },
+  { id: 'spelare-ovetjkin', alt: 'Alexander Ovetjkin i ryska landslagströjan', file: 'Alexander Ovechkin Russia Olympics (cropped1).jpg' },
   { id: 'spelare-backstrom', alt: 'Nicklas Bäckström i vit hjälm och vit Capitals-tröja', file: 'Nicklas Backstrom (cropped).jpg' },
-  { id: 'spelare-henrik-sedin', alt: 'Henrik Sedin i vit Vancouver-tröja med kaptens-C', file: 'Blackhawks vs Canucks 102010 - Henrik Sedin crop.jpg' },
-  { id: 'spelare-daniel-sedin', alt: 'Daniel Sedin i grön Canucks-träningströja', file: 'Daniel Sedin Canucks practice 2012.jpg' },
-  { id: 'spelare-chara', alt: 'Zdeno Chára i vit Bruins-tröja med nummer 33', file: 'Zdeno Chara - Boston Bruins 2012.jpg' },
-  { id: 'spelare-bergeron', alt: 'Patrice Bergeron i vit Bruins-tröja med nummer 37', file: 'Patrice Bergeron - Boston Bruins 2016.jpg' },
+  { id: 'spelare-henrik-sedin', alt: 'Henrik Sedin i Tre Kronor-tröja', file: 'Henrik Sedin 2010 oly 2.jpg' },
+  { id: 'spelare-daniel-sedin', alt: 'Daniel Sedin i Tre Kronor-tröja med guldhjälm', file: 'Daniel Sedin lyfter VM-bucklan.jpg' },
+  { id: 'spelare-chara', alt: 'Zdeno Chára i hjälm, ansiktet i halvprofil', file: 'Zdeno Chara - Boston Bruins 2012.jpg' },
+  { id: 'spelare-bergeron', alt: 'Patrice Bergeron i hjälm, ansiktet i halvprofil', file: 'Patrice Bergeron - Boston Bruins 2016.jpg' },
   { id: 'spelare-lindros', alt: 'Eric Lindros i kostym och slips, leende', file: 'Eric Lindros 2014.jpg' },
-  { id: 'spelare-giroux', alt: 'Claude Giroux i vit och orange Flyers-tröja med nummer 28', file: 'Claude Giroux 2012-04-13.JPG' },
+  { id: 'spelare-giroux', alt: 'Claude Giroux i hjälm med visir, ansiktet i halvprofil', file: 'Claude Giroux 2012-04-13.JPG' },
   { id: 'spelare-price', alt: 'Carey Price i kostym och grå slips', file: 'Carey Price 2015.jpg' },
   { id: 'spelare-naslund', alt: 'Mats Näslund i kostym och prickig slips, leende', file: 'Mats Näslund in Jan 2014.jpg' },
   { id: 'spelare-joel-lundqvist', alt: 'Joel Lundqvist i mörkblå jacka med tre kronor', file: 'Joel Lundqvist May 4, 2014.jpg' },
