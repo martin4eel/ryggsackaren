@@ -1,7 +1,7 @@
 import { CITIES, CITY_BY_ID } from '../data/cities';
 import type { City } from '../data/types';
 import { LAND_PATH, MAP_HEIGHT, MAP_WIDTH } from '../data/worldMap';
-import { el, svgEl } from './dom';
+import { clear, el, svgEl } from './dom';
 
 /**
  * Kartan.
@@ -21,6 +21,22 @@ export interface AtlasOptions {
   distance: number;
   /** Resdag, för anteckningen i kartuschen */
   days: number;
+  /**
+   * Vad kartan vet om en stad när man trycker på den: betyg, prov, jobb man
+   * gjort där och vad en biljett dit kostar härifrån. Saknas den är kartan
+   * bara en resväg.
+   */
+  stadsinfo?: (c: City) => StadsInfo;
+}
+
+export interface StadsInfo {
+  betyg?: number;
+  provGjort: boolean;
+  jobbGjorda: string[];
+  besokt: boolean;
+  /** Billigaste vägen dit härifrån, om någon */
+  billigast?: { pris: string; satt: string; dagar: number };
+  snabbast?: { pris: string; satt: string; dagar: number };
 }
 
 /** Kartan beskärs i norr och söder; ingen destination ligger utanför. */
@@ -62,7 +78,7 @@ function pennlinje(punkter: Array<{ x: number; y: number }>): string {
   return d.trim();
 }
 
-function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
+function karta(city: City, homeCityId: string, visited: string[], onStad?: (c: City) => void): SVGElement {
   const svg = svgEl('svg', {
     class: 'karta-svg',
     viewBox: `0 ${VIEW_TOP} ${MAP_WIDTH} ${VIEW_BOTTOM - VIEW_TOP}`,
@@ -110,8 +126,18 @@ function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
         cy: y,
         r: harVarit ? 3.2 : 1.8,
         class: `karta-stad ${harVarit ? 'karta-stad-bevist' : ''}`,
+        'data-stad': c.id,
       })
     );
+    // Träffytan är större än pricken: ett finger ska kunna välja en stad.
+    if (onStad) {
+      const traff = svgEl('circle', { cx: x, cy: y, r: 9, class: 'karta-traff', 'data-stad': c.id });
+      traff.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        onStad(c);
+      });
+      svg.append(traff);
+    }
   }
 
   // Startstaden: inringad med pennan, namnet bredvid. Står man där man
@@ -180,7 +206,7 @@ function karta(city: City, homeCityId: string, visited: string[]): SVGElement {
 }
 
 export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
-  const { city, homeCityId, visited, distance, days } = opts;
+  const { city, homeCityId, visited, distance, days, stadsinfo } = opts;
   const wrap = el('div', { class: 'stack atlas' });
   const unika = new Set(visited).size;
   const hem = CITY_BY_ID[homeCityId];
@@ -193,7 +219,33 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
     el('div', { class: 'karta-veck karta-veck-vag' })
   );
   const mal = city;
-  const rullyta = el('div', { class: 'karta-rullyta' }, karta(city, homeCityId, visited));
+  // Infopanelen: det man får veta om staden man trycker på.
+  const info = el('div', { class: 'karta-info', hidden: true });
+  const visaStad = (c: City) => {
+    if (!stadsinfo) return;
+    const d = stadsinfo(c);
+    for (const m of Array.from(rullyta.querySelectorAll('.karta-stad'))) m.classList.toggle('karta-stad-vald', (m as SVGElement).dataset.stad === c.id);
+    clear(info);
+    const rader: string[] = [];
+    if (c.id === city.id) rader.push('Här står du.');
+    else if (d.besokt) rader.push('Besökt.');
+    rader.push(d.provGjort ? `Stadsbetyg ${d.betyg ?? 0} av 100.` : 'Provet på turistbyrån är inte gjort.');
+    if (d.jobbGjorda.length) rader.push(`Jobb gjorda här: ${d.jobbGjorda.join(', ')}.`);
+    if (c.id !== city.id) {
+      if (d.billigast) rader.push(`Billigast dit: ${d.billigast.satt} ${d.billigast.pris}, ${d.billigast.dagar} ${d.billigast.dagar === 1 ? 'dag' : 'dagar'}.`);
+      if (d.snabbast && d.snabbast.satt !== d.billigast?.satt) rader.push(`Snabbast: ${d.snabbast.satt} ${d.snabbast.pris}, ${d.snabbast.dagar} ${d.snabbast.dagar === 1 ? 'dag' : 'dagar'}.`);
+      if (!d.billigast) rader.push('Ingen direkt förbindelse härifrån.');
+    }
+    info.append(
+      el('div', { class: 'karta-info-huvud' },
+        el('strong', {}, c.name),
+        el('span', { class: 'karta-info-land' }, ` ${c.country} · ${c.landmark}`)
+      ),
+      el('p', { class: 'karta-info-rader' }, rader.join(' '))
+    );
+    info.hidden = false;
+  };
+  const rullyta = el('div', { class: 'karta-rullyta' }, karta(city, homeCityId, visited, stadsinfo ? visaStad : undefined));
   blad.append(rullyta);
 
   // Kartuschen: titel och resans siffror, som tryckt i ett hörn.
@@ -215,6 +267,7 @@ export function renderAtlasScreen(opts: AtlasOptions): HTMLElement {
     )
   );
   wrap.append(blad);
+  if (stadsinfo) wrap.append(el('p', { class: 'muted karta-tips' }, 'Tryck på en stad för betyg, jobb och biljettpris.'), info);
 
   // På en smal skärm är kartan bredare än rutan: rulla fram till nålen.
   // Bredden tas ur rullytan, inte ur svg:ns bounding box: utvikningen

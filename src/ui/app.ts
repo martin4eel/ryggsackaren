@@ -1,4 +1,4 @@
-import { HUVUDKATEGORIER, HUVUD_LABELS } from '../data/jobs';
+import { HUVUDKATEGORIER, HUVUD_LABELS, JOB_BY_ID } from '../data/jobs';
 import { CITIES, CITY_BY_ID } from '../data/cities';
 import { CITY_FACTS } from '../data/cityFacts';
 import { SPARET_LEDTRADAR } from '../data/sparetLedtradar';
@@ -43,7 +43,7 @@ import {
   type PreparedQuestion,
 } from '../game/rules';
 import { MODE_LABELS, type TransportMode } from '../data/transport';
-import { destinationsByMode, type Route } from '../game/travel';
+import { destinationsByMode, type Route, cheapestRoute, fastestRoute } from '../game/travel';
 import {
   cityKnowledge,
   loadHighscores,
@@ -4071,12 +4071,29 @@ export class App {
    */
   private renderAtlas(): HTMLElement {
     const s = this.state!;
+    const har = this.city;
+    const satt: Record<string, string> = { buss: 'buss', tag: 'tåg', farja: 'färja', flyg: 'flyg' };
     return renderAtlasScreen({
-      city: this.city,
+      city: har,
       homeCityId: s.homeCityId,
       visited: s.visited,
       distance: s.distance,
       days: s.days,
+      stadsinfo: (c) => {
+        const p = s.progress[c.id];
+        const b = c.id === har.id ? undefined : cheapestRoute(har, c, s.difficulty);
+        const f = c.id === har.id ? undefined : fastestRoute(har, c, s.difficulty);
+        const rutt = (r: { price: number; mode: string; days: number } | undefined) =>
+          r ? { pris: this.money(r.price), satt: satt[r.mode] ?? r.mode, dagar: r.days } : undefined;
+        return {
+          betyg: p?.rating,
+          provGjort: (p?.visits ?? 0) > 0,
+          jobbGjorda: (p?.workedJobs ?? []).map((id) => JOB_BY_ID[id]?.title ?? id),
+          besokt: s.visited.includes(c.id),
+          billigast: rutt(b),
+          snabbast: rutt(f),
+        };
+      },
     });
   }
 

@@ -327,6 +327,10 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Kartan** är tryckbar: varje stad är en träffyta, och panelen under
+     kartbladet visar stadsbetyg, om provet är gjort, vilka jobb du gjort där
+     och billigaste och snabbaste biljetten dit härifrån – ett
+     planeringsverktyg, inte bara en resvägslinje.
    - **Sevärdheten** har egna rader (`src/data/sevardheter.ts`, tre per stad):
      vad man ser, varför den finns, och det man berättar efteråt – skrivna
      för att inte upprepa broschyren, som tidigare fyllde sidan.
