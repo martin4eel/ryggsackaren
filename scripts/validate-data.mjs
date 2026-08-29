@@ -236,6 +236,7 @@ try {
     peka: { needed: 1 },
     avgor: { needed: 1 },
     quiz: { needed: 1 },
+    lagval: { needed: 1 },
   };
 
   /**
@@ -306,9 +307,16 @@ try {
         problems.push(`jobb ${job.id} är klass 1 och ska inte ha något minispel`);
       const fotoSortering =
         mg.kind === 'sortering' && (mg.pool ?? []).flat().every((x) => typeof x === 'object');
-      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || fotoSortering || UNDANTAG[job.id] === mg.kind;
+      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || mg.kind === 'lagval' || fotoSortering || UNDANTAG[job.id] === mg.kind;
       if (job.wageClass >= 2 && !okej)
         problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
+      for (const x of [...(mg.lagval?.lag ?? []), ...(mg.lagval?.spelare ?? [])]) {
+        if (!bildManifest.has(x.bild)) problems.push(`jobb ${job.id}: lagvalet pekar på okänd bild ${x.bild}`);
+      }
+      for (const r of mg.lagval?.rundor ?? []) {
+        const ids = new Set((mg.lagval?.spelare ?? []).map((p) => p.bild));
+        for (const x of [r.ratt, ...r.fel]) if (!ids.has(x)) problems.push(`jobb ${job.id}: lagvalsrundan pekar på okänd spelare ${x}`);
+      }
       // Quiz-passets frågor pekar på bilder som måste finnas.
       for (const q of mg.quiz?.fragor ?? []) {
         if (q.bild && !q.bild.startsWith('stad') && !bildManifest.has(q.bild))

@@ -112,6 +112,9 @@ export function renderMinigame(
     case 'quiz':
       startQuiz(host, game, done);
       break;
+    case 'lagval':
+      startTeamPick(host, game, done);
+      break;
   }
   return host;
 }
@@ -1831,6 +1834,104 @@ function startQuiz(host: HTMLElement, game: Minigame, onDone: Done): void {
         score: right / fragor.length,
         summary: `Du klarade ${right} av ${fragor.length} frågor i provet.`,
         perfect: right === fragor.length,
+      });
+      return;
+    }
+    visa();
+  };
+
+  visa();
+}
+
+
+// ----------------------------------------------------------------- lagval
+
+/**
+ * Lagmärket står stort i mitten. Ovanför: fyra spelare med ansikte och namn.
+ * Vem av dem hör hemma i laget? Ingen klocka, ett lag i taget, och efter
+ * svaret får den rätta spelaren sin ram och laget sitt namn.
+ */
+function startTeamPick(host: HTMLElement, game: Minigame, onDone: Done): void {
+  const spec = game.lagval!;
+  const lagNamn = new Map(spec.lag.map((l) => [l.bild, l.namn]));
+  const spelare = new Map(spec.spelare.map((p) => [p.bild, p]));
+  // Rundorna: angivna, annars lottade ur spelarlistan.
+  let rundor = spec.rundor ? shuffled(spec.rundor) : [];
+  if (rundor.length === 0) {
+    for (const p of shuffled(spec.spelare)) {
+      const fel = shuffled(spec.spelare.filter((x) => x.lag !== p.lag)).slice(0, 3).map((x) => x.bild);
+      if (fel.length === 3) rundor.push({ lag: p.lag, ratt: p.bild, fel });
+    }
+  }
+  rundor = rundor.slice(0, spec.antal ?? 8);
+  let index = 0;
+  let right = 0;
+  let vantar = false;
+
+  const status = makeStatus();
+  const fraga = el('p', { class: 'mg-kund mg-lagval-fraga' });
+  const rad = el('div', { class: 'mg-lagval-spelare' });
+  const marke = el('div', { class: 'mg-lagval-marke' });
+  const feedback = makeFeedback();
+  const vidare = button('Nästa lag', () => nasta(), { class: 'btn btn-primary mg-peka-vidare' });
+  vidare.hidden = true;
+  host.append(status.node, fraga, rad, marke, feedback.node, vidare);
+
+  const visa = () => {
+    const r = rundor[index]!;
+    status.set(`Lag ${index + 1}/${rundor.length}`, `${right} rätt`);
+    fraga.textContent = 'Vem av de fyra hör hemma i laget?';
+    clear(rad);
+    clear(marke);
+    marke.append(
+      el('img', { class: 'mg-lagval-logo', src: quizImageUrl(r.lag), alt: 'Lagmärke', draggable: 'false' }),
+      el('p', { class: 'mg-lagval-lagnamn' }, '\u00a0')
+    );
+    feedback.say('', 'neutral');
+    vidare.hidden = true;
+    vantar = false;
+    for (const id of shuffled([r.ratt, ...r.fel])) {
+      const p = spelare.get(id);
+      if (!p) continue;
+      const kort = snabbKnapp('', () => svara(id, kort), { class: 'mg-lagval-kort', 'data-sound': 'av', 'data-spelare': id });
+      kort.append(
+        el('img', { class: 'mg-lagval-foto', src: quizImageUrl(p.bild), alt: '', draggable: 'false' }),
+        el('span', { class: 'mg-lagval-namn' }, p.namn)
+      );
+      rad.append(kort);
+    }
+  };
+
+  const svara = (id: string, kort: HTMLElement) => {
+    if (vantar) return;
+    vantar = true;
+    const r = rundor[index]!;
+    const ok = id === r.ratt;
+    if (ok) right += 1;
+    playSound(ok ? 'ratt' : 'fel');
+    for (const k of Array.from(rad.children) as HTMLElement[]) {
+      (k as HTMLButtonElement).disabled = true;
+      if (k.dataset.spelare === r.ratt) k.classList.add('mg-lagval-ratt');
+      else if (k === kort) k.classList.add('mg-lagval-fel');
+      else k.classList.add('mg-lagval-dim');
+    }
+    const lag = lagNamn.get(r.lag) ?? '';
+    const rattNamn = spelare.get(r.ratt)?.namn ?? '';
+    const valdLag = lagNamn.get(spelare.get(id)?.lag ?? '') ?? '';
+    marke.querySelector('.mg-lagval-lagnamn')!.textContent = lag;
+    feedback.say(ok ? `Rätt. ${rattNamn} – ${lag}.` : `Fel. ${spelare.get(id)?.namn ?? ''} hör till ${valdLag}. ${lag}: ${rattNamn}.`, ok ? 'ok' : 'fel');
+    status.set(`Lag ${index + 1}/${rundor.length}`, `${right} rätt`);
+    vidare.textContent = index + 1 < rundor.length ? 'Nästa lag' : 'Klart';
+    vidare.hidden = false;
+  };
+
+  const nasta = () => {
+    index += 1;
+    if (index >= rundor.length) {
+      onDone({
+        score: right / rundor.length,
+        summary: `Du placerade rätt spelare i ${right} av ${rundor.length} lag.`,
+        perfect: right === rundor.length,
       });
       return;
     }

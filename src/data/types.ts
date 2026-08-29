@@ -113,6 +113,8 @@ export type MinigameKind =
   | 'avgor'
   /** Ett kunskapsprov: svårare frågor en i taget, utan klocka, med förklaring */
   | 'quiz'
+  /** Ett lagmärke i mitten, fyra spelare ovanför: vem hör hemma i laget? */
+  | 'lagval'
   /** Sortera föremål som rullar förbi på ett band till rätt korg */
   | 'sortering'
   /** Utför arbetsledarens order i rätt ordning innan tiden går ut */
@@ -203,6 +205,16 @@ export interface Minigame {
    * banken per skift; formatet är samma som jobbfrågornas.
    */
   quiz?: { antal: number; fragor: Question[] };
+  /**
+   * Bara för `lagval`: lagmärken och spelare (porträtt, namn, lag). Rundorna
+   * kan anges - lag, rätt spelare, tre fel - annars lottas de.
+   */
+  lagval?: {
+    lag: { bild: string; namn: string }[];
+    spelare: { bild: string; namn: string; lag: string }[];
+    rundor?: { lag: string; ratt: string; fel: string[] }[];
+    antal?: number;
+  };
   bildval?: { bild: string; namn: string }[];
   /** Sekunder per kund i bildvalet; utelämnas för standardtempot (14 s) */
   tid?: number;

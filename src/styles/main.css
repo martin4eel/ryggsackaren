@@ -4687,8 +4687,9 @@ body.sheet-oppen {
     gap: 0;
   }
 
+  /* Landet får inte plats på en telefon utan att klippas; namnet räcker. */
   .col-dest-land {
-    max-width: 100%;
+    display: none;
   }
 
   .col-stand::before {
@@ -6137,7 +6138,14 @@ body.sheet-oppen {
 }
 
 .travel-stad {
-  flex: 0 0 auto;
+  /* Namnen får krympa och klippas hellre än att staplas på varandra på
+     korta sträckor med långa stadsnamn. */
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 38%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-display);
   font-size: 0.86rem;
   color: var(--ink);
@@ -6149,7 +6157,8 @@ body.sheet-oppen {
 
 .travel-spar {
   position: relative;
-  flex: 1 1 auto;
+  flex: 1 1 60px;
+  min-width: 60px;
   height: 8px;
   border-radius: 999px;
   background: var(--paper-dim);
@@ -8029,4 +8038,86 @@ body.sheet-oppen {
   background: var(--paper-dim);
   font-size: 0.95rem;
   line-height: 1.45;
+}
+
+
+/* ------------------------------------------------------------ lagval-spelet */
+
+.mg-lagval-spelare {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.mg-lagval-kort {
+  appearance: none;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 8px 4px 6px;
+  background: var(--paper-dim);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.mg-lagval-kort:active { transform: scale(0.97); }
+
+.mg-lagval-foto {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(4, 16, 26, 0.25);
+}
+
+.mg-lagval-namn {
+  font-family: var(--display);
+  font-size: 0.72rem;
+  line-height: 1.15;
+  text-align: center;
+  font-weight: 700;
+}
+
+.mg-lagval-ratt { border-color: var(--ok, #2e7d4f); background: rgba(46, 125, 79, 0.12); }
+.mg-lagval-fel { border-color: #b3261e; background: rgba(179, 38, 30, 0.1); }
+.mg-lagval-dim { opacity: 0.45; }
+
+.mg-lagval-marke {
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6) 60%, transparent 100%),
+    var(--paper-dim);
+  box-shadow: inset 0 0 0 1px rgba(90, 70, 40, 0.15);
+}
+
+.mg-lagval-logo {
+  width: min(58%, 200px);
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgba(4, 16, 26, 0.25));
+}
+
+.mg-lagval-lagnamn {
+  margin: 0;
+  min-height: 1.4em;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 640px) {
+  .mg-lagval-namn { font-size: 0.85rem; }
 }
