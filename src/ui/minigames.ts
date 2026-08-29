@@ -1609,7 +1609,15 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
     yta.classList.add('mg-peka-facit');
     bild.src = quizImageUrl(spec.facitBild);
     bild.alt = 'Samma foto med alla reglage utmärkta och förklarade';
-    feedback.say(right === fragor.length ? 'Alla rätt. Du kan hytten.' : `${right} av ${fragor.length}. Facit på bilden.`, right === fragor.length ? 'topp' : 'neutral');
+    // "Du kan hytten" skrevs för lokföraren och följde med till lotsen,
+    // piloten och formsprutaren. Texten säger nu samma sak utan att påstå
+    // vad man står i.
+    feedback.say(
+      right === fragor.length
+        ? 'Alla rätt. Du kan din maskin.'
+        : `${right} av ${fragor.length}. Facit på bilden.`,
+      right === fragor.length ? 'topp' : 'neutral'
+    );
     forklaring.textContent = '';
     // Texten på facitbilden är liten på en telefon: en länk till fullstorlek.
     forklaring.append(
@@ -1639,13 +1647,21 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
     // Närmaste träffyta som fingret hamnat inom; radien mäts i bildbredd,
     // så avståndet i höjdled räknas om till samma skala.
     const kvot = rect.width / rect.height;
+    /*
+     * Minsta träffyta i pixlar. Radien anges i procent av bildens bredd, och
+     * på en telefon är bilden 366 pixlar bred - ett nödstopp med radien 3,2
+     * blir då tolv pixlar, mindre än ett finger. Ytan får aldrig vara mindre
+     * än 22 pixlar i radie, oavsett vad datan säger, och punkterna ligger
+     * ändå så pass isär att närmaste-träffen avgör rätt.
+     */
+    const minRadie = (22 / rect.width) * 100;
     let traff: (typeof spec.punkter)[number] | null = null;
     let basta = Infinity;
     for (const p of spec.punkter) {
       const dx = x - p.x;
       const dy = (y - p.y) / kvot;
       const d = Math.hypot(dx, dy);
-      if (d <= p.r && d < basta) {
+      if (d <= Math.max(p.r, minRadie) && d < basta) {
         basta = d;
         traff = p;
       }

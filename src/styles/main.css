@@ -8219,16 +8219,18 @@ body.sheet-oppen {
   display: inline-block;
   margin-top: 8px;
   padding: 6px 12px;
-  border: 1px solid var(--linje, rgba(29, 43, 52, 0.35));
+  /* Länken ligger på minispelets mörka botten, inte på papper: ljus text. */
+  border: 1px solid rgba(246, 239, 224, 0.4);
   border-radius: 999px;
-  color: var(--ink);
+  color: rgba(246, 239, 224, 0.92);
   font-size: 0.85rem;
   text-decoration: none;
 }
 
 .mg-peka-lank:hover,
 .mg-peka-lank:focus-visible {
-  background: rgba(29, 43, 52, 0.08);
+  background: rgba(246, 239, 224, 0.12);
+  color: var(--paper);
   text-decoration: underline;
 }
 

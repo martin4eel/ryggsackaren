@@ -408,7 +408,10 @@ webbläsaren och överlever att sparfilen raderas.
    eller fel sägs direkt med förklaring, och till sist visas samma foto med
    alla reglage utmärkta (`Tågprov.jpg`/`Tågprov svar.png`, Martins egna).
    Piloten (Boeing 737-cockpit) och lotsen (bryggan på MV Monte Alegre) har
-   samma slags prov; deras facitbilder ritas av `scripts/facitbild.py` ur
+   samma slags prov, och sedan 2026-08-29 även formsprutaren, som bytte från
+   bildval till ett foto av maskinen där tratten, cylindern, skyddsluckan,
+   nödstoppet, manöverpanelen och hydraulmotorn ska pekas ut; deras
+   facitbilder ritas av `scripts/facitbild.py` ur
    träffytorna i `jobs.ts`. Mykologen har ett fjärde slag, *avgör*: ett
    svampfoto i taget, ätlig eller giftig, ingen klocka, och efter svaret –
    rätt som fel – hur man känner igen svampen och vad giftet gör. Alla
