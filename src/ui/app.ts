@@ -2982,6 +2982,16 @@ export class App {
         `En läsare i ${stad} skriver att folk står i kö för ${vara.toLowerCase()} och betalar ${pris} utan att blinka. Vi har inte kontrollerat kön.`,
         `${vara} går för ${pris} i ${stad}, enligt en man som sålde på flygplatsen och nu ångrar det.`,
         `Vår korrespondent i ${stad}: "${vara}? ${pris}. Fråga inte varför."`,
+        `${vara} betalar sig i ${stad}, har jag läst på nätet. ${pris}. Nätet har haft fel förr, men inte om det här, tror jag.`,
+        `Min granne säger att ${stad} betalar ${pris} för ${vara.toLowerCase()}. Min granne säger mycket. Det här lät sant.`,
+        `Läste på mjölkpaketet att ${vara.toLowerCase()} går för ${pris} i ${stad}. Mejeriet skriver sällan om sådant, så det måste vara viktigt.`,
+        `Enligt en taxichaufför i ${stad} är ${vara.toLowerCase()} värd ${pris} där. Han visste också vem som ska bli statsminister.`,
+        `Ett vykort från ${stad} nådde redaktionen: "${vara}, ${pris}. Ta med fler." Ingen avsändare, men snygg handstil.`,
+        `Min frisör har en syster i ${stad}. Systern säger ${pris} för ${vara.toLowerCase()}. Frisören säger att systern aldrig ljuger. Frisören ljuger ibland.`,
+        `Enligt en handskriven lapp på anslagstavlan i hamnen: "${vara} - ${pris} i ${stad}." Lappen är från i tisdags och ingen har tagit ner den.`,
+        `Hotellets nattportier viskade att ${vara.toLowerCase()} går för ${pris} i ${stad}. Han viskar om allt, men siffran stämde med tidningen i lobbyn.`,
+        `${vara} i ${stad}: ${pris}, enligt en podcast jag lyssnade på i halv fart. Det kan ha varit ${pris} i dubbel fart också.`,
+        `Guiden på turistbyrån nämnde i förbigående att ${stad} betalar ${pris} för ${vara.toLowerCase()}. Hon nämnde det tre gånger i förbigående.`,
       ];
       return mallar[Math.floor(pseudoRandom(seed) * mallar.length)]!;
     };
