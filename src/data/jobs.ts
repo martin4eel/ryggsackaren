@@ -2983,12 +2983,19 @@ export const JOBS: Job[] = [
     shiftLength: 5,
     ad: 'Håll nybörjarkurser i parken under lovet. Du ska kunna stå på en bräda och kunna din historia.',
     minigame: {
-      kind: 'balans',
-      title: 'Håll dig på brädan',
+      kind: 'trick',
+      title: 'Sätt tricket',
       brief:
-        'Du visar hur man rullar rakt genom parken. Håll tyngdpunkten över brädan, annars går du av.',
-      items: ['Brädan'],
-      unit: 'graders lutning',
+        'Klassen har satt sig på kanten för att se hur det ska gå till. Varje trick har två ögonblick: poppen, när svansen slår i marken, och draget, när framfoten planar ut brädan. Tryck en gång i vart och ett av fönstren. Sex trick, och de blir inte lättare.',
+      items: ['Ollie', 'Shove-it', 'Kickflip', 'Heelflip', 'Frontside 180', '360 flip'],
+      trickCue: [
+        'Bakfoten slår ner svansen, framfoten stryker mot nosen. Allt annat bygger på den här.',
+        'Bakfoten sveper åt sidan och brädan snurrar ett halvt varv under dig, utan att vända sig.',
+        'Framfoten sparkar ut över kanten på tåsidan och brädan rullar runt ett varv.',
+        'Samma sak fast åt hälsidan, med framfotens häl utanför kanten.',
+        'Du och brädan vrider ett halvt varv tillsammans, med axlarna först.',
+        'En kickflip och en shove-it samtidigt. Tre hundra sextio grader åt två håll.',
+      ],
     },
     scene:
       'Betongen är varm och tolv nybörjare med lånade hjälmar väntar på att du ska säga till. Någon har redan glömt var bromsen sitter, och det finns ingen.',

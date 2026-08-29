@@ -102,6 +102,9 @@ export function renderMinigame(
     case 'takt':
       startRhythm(host, game, ctx, done);
       break;
+    case 'trick':
+      startTrick(host, game, ctx, done);
+      break;
     case 'bildval':
       startPictureChoice(host, game, ctx, done);
       break;
@@ -1412,6 +1415,275 @@ function startRhythm(
     );
     return true;
   });
+}
+
+// ------------------------------------------------------------------- trick
+
+/**
+ * Sätt tricket.
+ *
+ * Ett trick på en bräda består av två ögonblick som ligger strax efter
+ * varandra: poppen, när svansen slår i marken och brädan far upp, och
+ * draget, när framfoten stryker framåt och planar ut den i luften. Missar
+ * man det ena spelar det ingen roll hur bra det andra satt.
+ *
+ * Brädan rullar över banan en gång per trick, och spelaren trycker två
+ * gånger - första trycket bedöms mot poppfönstret, andra mot dragfönstret.
+ * Fönstren blir smalare och rullningen snabbare för varje trick, så en
+ * ollie är beskedlig och en 360 flip är det inte. Domen sägs på åkarnas
+ * eget språk: den som planar ut för sent landar i primo.
+ *
+ * Momentet ersatte ett balansspel som var samma spel för vilket yrke som
+ * helst - en markör som drev åt sidan i tjugotvå sekunder.
+ */
+function startTrick(
+  host: HTMLElement,
+  game: Minigame,
+  ctx: MinigameContext,
+  onDone: Done
+): void {
+  const namn = game.items;
+  const cues = game.trickCue ?? [];
+  const ANTAL = namn.length;
+  /** Var på banan de två ögonblicken ligger, som andel av rullningen. */
+  const POPP_MITT = 0.34;
+  const DRAG_MITT = 0.66;
+
+  let index = 0;
+  /** 0 till 1 genom rullningen. */
+  let phase = 0;
+  let poppVid: number | null = null;
+  let dragVid: number | null = null;
+  let landade = 0;
+  let rena = 0;
+  let poang = 0;
+  let running = true;
+  /** Sant medan brädan rullar; mellan tricken står domen kvar en stund. */
+  let rullar = false;
+  let stoppaRull: (() => void) | null = null;
+
+  /**
+   * Var på banan ett läge i rullningen ritas, i procent. Brädan är fyrtiosex
+   * bildpunkter bred och sitter centrerad kring sitt läge, så ett spann från
+   * kant till kant skulle klippa av den i båda ändarna. Samma funktion ritar
+   * både brädan och fönstren - ritas de ur olika tal visar spelet en zon och
+   * bedömer en annan.
+   */
+  const spar = (t: number) => 3 + t * 94;
+
+  /** Rullningens längd för ett givet trick. Det går fortare ju svårare. */
+  const svep = (i: number) => Math.max(1400, 2400 - i * 190);
+  /**
+   * Halva fönstret, som andel av rullningen, och svårighetsgraden vidgar
+   * det. Ollien är generös - en van spelare ska aldrig missa den - medan
+   * 360 flip har omkring nittio millisekunders marginal på Turist och sjuttio
+   * på Globetrotter. Rent kräver hälften av det, och det är meningen att
+   * sex rena trick ska vara ovanligt.
+   */
+  const poppHalv = (i: number) => Math.max(0.045, 0.105 - i * 0.011) * ctx.slack;
+  const dragHalv = (i: number) => Math.max(0.04, 0.095 - i * 0.011) * ctx.slack;
+
+  const status = makeStatus();
+  const feedback = makeFeedback();
+  const rubrik = el('h3', { class: 'mg-trick-namn' });
+  const cue = el('p', { class: 'mg-trick-cue' });
+  const poppZon = el('span', { class: 'mg-trick-zon mg-trick-zon-popp' }, el('span', { class: 'mg-trick-zonnamn' }, 'popp'));
+  const dragZon = el('span', { class: 'mg-trick-zon mg-trick-zon-drag' }, el('span', { class: 'mg-trick-zonnamn' }, 'drag'));
+  // Brädan sedd från sidan: en däcka och två hjul.
+  const brada = el(
+    'span',
+    { class: 'mg-trick-brada' },
+    el('span', { class: 'mg-trick-dacka' }),
+    el('span', { class: 'mg-trick-hjul mg-trick-hjul-bak' }),
+    el('span', { class: 'mg-trick-hjul mg-trick-hjul-fram' })
+  );
+  const mark = el('span', { class: 'mg-trick-mark' });
+  const bana = el('div', { class: 'mg-trick-bana' }, mark, poppZon, dragZon, brada);
+  const prickar = el('div', { class: 'mg-trick-prickar' });
+  const knapp = snabbKnapp('Tryck', () => tryck(), {
+    class: 'btn btn-primary mg-strike',
+    'data-sound': 'av',
+  });
+
+  host.append(
+    status.node,
+    rubrik,
+    cue,
+    bana,
+    prickar,
+    feedback.node,
+    el('div', { class: 'mg-buttons' }, knapp)
+  );
+
+  const prickEls: HTMLElement[] = [];
+  for (let i = 0; i < ANTAL; i++) {
+    const p = el('span', { class: 'mg-trick-prick' });
+    prickEls.push(p);
+    prickar.append(p);
+  }
+
+  const visa = () =>
+    status.set(
+      `Trick ${Math.min(index + 1, ANTAL)}/${ANTAL}`,
+      `${landade} landade · ${rena} rena`
+    );
+
+  /** Ritar fönstren för tricket som står på tur. */
+  const ritaZoner = (i: number) => {
+    const p = poppHalv(i);
+    const d = dragHalv(i);
+    poppZon.style.left = `${spar(POPP_MITT - p)}%`;
+    poppZon.style.width = `${spar(POPP_MITT + p) - spar(POPP_MITT - p)}%`;
+    dragZon.style.left = `${spar(DRAG_MITT - d)}%`;
+    dragZon.style.width = `${spar(DRAG_MITT + d) - spar(DRAG_MITT - d)}%`;
+  };
+
+  const finish = () => {
+    if (!running) return;
+    running = false;
+    stoppaRull?.();
+    unbind();
+    const missade = ANTAL - landade;
+    onDone({
+      score: poang / ANTAL,
+      summary:
+        landade === ANTAL
+          ? `Du satte alla ${ANTAL} tricken, ${rena} av dem rent.`
+          : `Du satte ${landade} av ${ANTAL} trick och bommade ${missade}.`,
+      perfect: rena === ANTAL,
+    });
+  };
+
+  const tryck = () => {
+    if (!running || !rullar) return;
+    // Fördröjningen från finger till händelse räknas bort, så ett tryck som
+    // såg rätt ut på skärmen bedöms som rätt.
+    const lag = INPUT_LAG_MS / svep(index);
+    const nu = Math.max(0, phase - lag);
+    if (poppVid === null) {
+      poppVid = nu;
+      brada.classList.add('mg-trick-brada-popp');
+      playSound('fotdunk');
+    } else if (dragVid === null) {
+      dragVid = nu;
+      brada.classList.add('mg-trick-brada-drag');
+      playSound('svisch');
+    }
+  };
+
+  /** Bedömer rullningen som just tog slut och säger vad som gick fel. */
+  const doma = () => {
+    rullar = false;
+    const p = poppHalv(index);
+    const d = dragHalv(index);
+    const poppAvst = poppVid === null ? Infinity : Math.abs(poppVid - POPP_MITT);
+    const dragAvst = dragVid === null ? Infinity : Math.abs(dragVid - DRAG_MITT);
+    const poppOk = poppAvst <= p;
+    const dragOk = dragAvst <= d;
+    const rent = poppAvst <= p / 2 && dragAvst <= d / 2;
+    const trick = namn[index] ?? 'Tricket';
+    /*
+     * Brädan stannar i det läge domen beskriver: platt under fötterna när
+     * tricket sitter, på kant när det inte gjorde det. Det säger samma sak
+     * som texten, fast utan att man behöver läsa den.
+     */
+    brada.classList.remove('mg-trick-brada-popp', 'mg-trick-brada-drag');
+    brada.classList.add(poppOk && dragOk ? 'mg-trick-brada-landad' : 'mg-trick-brada-primo');
+
+    if (poppOk && dragOk) {
+      landade += 1;
+      poang += rent ? 1 : 0.8;
+      if (rent) rena += 1;
+      prickEls[index]!.className = `mg-trick-prick ${rent ? 'mg-trick-prick-ren' : 'mg-trick-prick-ok'}`;
+      playSound(rent ? 'perfekt' : 'ratt');
+      feedback.say(
+        rent
+          ? `Ren ${trick.toLowerCase()}. Brädan landar rakt under fötterna.`
+          : `${trick} landad, men skakigt. Klassen såg det.`,
+        rent ? 'topp' : 'ok'
+      );
+    } else {
+      poang += poppOk || dragOk ? 0.3 : 0;
+      prickEls[index]!.className = 'mg-trick-prick mg-trick-prick-miss';
+      playSound('fel');
+      /*
+       * Domen ska säga vad som gick fel, inte att det gick fel. Poppen
+       * bedöms först: utan den händer ingenting alls, och då är draget
+       * ointressant.
+       */
+      let text: string;
+      if (poppVid === null) text = 'Du stod bara kvar på brädan. Ingen popp, inget trick.';
+      else if (!poppOk && poppVid < POPP_MITT) text = 'Du poppade innan svansen var nere. Brädan gick ingenstans.';
+      else if (!poppOk) text = 'Poppen kom för sent. Hindret var redan passerat.';
+      else if (dragVid === null) text = 'Fin popp, men du glömde draget. Brädan flög iväg utan dig.';
+      else if (dragVid < DRAG_MITT) text = 'Du drog upp framfoten innan brädan hunnit vända. Halvvägs runt.';
+      else text = 'Du planade ut för sent och landade i primo, på kant.';
+      feedback.say(text, 'fel');
+    }
+    visa();
+
+    after(1400, () => {
+      if (!running) return;
+      index += 1;
+      if (index >= ANTAL) {
+        finish();
+        return;
+      }
+      nastaTrick();
+    });
+  };
+
+  /** Ställer upp nästa trick och rullar i gång brädan efter en förberedelse. */
+  const nastaTrick = () => {
+    poppVid = null;
+    dragVid = null;
+    phase = 0;
+    brada.classList.remove(
+      'mg-trick-brada-popp',
+      'mg-trick-brada-drag',
+      'mg-trick-brada-landad',
+      'mg-trick-brada-primo'
+    );
+    brada.style.left = `${spar(0)}%`;
+    ritaZoner(index);
+    rubrik.textContent = namn[index] ?? '';
+    cue.textContent = cues[index] ?? '';
+    visa();
+    feedback.say('Gör dig redo.', 'neutral');
+    bana.classList.add('mg-trick-bana-vantar');
+    after(900, () => {
+      if (!running) return;
+      bana.classList.remove('mg-trick-bana-vantar');
+      feedback.say('Poppa, sedan dra.', 'neutral');
+      playSound('tick');
+      rullar = true;
+      const langd = svep(index);
+      stoppaRull = loop((dt) => {
+        if (!running || !rullar) return false;
+        phase += dt / langd;
+        if (phase >= 1) {
+          brada.style.left = `${spar(1)}%`;
+          doma();
+          return false;
+        }
+        brada.style.left = `${spar(phase)}%`;
+        return true;
+      });
+    });
+  };
+
+  const onKey = (event: KeyboardEvent) => {
+    if (event.key !== ' ' && event.key !== 'Enter') return;
+    event.preventDefault();
+    tryck();
+  };
+  window.addEventListener('keydown', onKey);
+  const unbind = onTeardown(() => {
+    running = false;
+    window.removeEventListener('keydown', onKey);
+  });
+
+  nastaTrick();
 }
 
 // ----------------------------------------------------------------- bildval

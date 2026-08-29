@@ -132,7 +132,9 @@ export type MinigameKind =
   /** Håll något i balans medan det driver åt sidan */
   | 'balans'
   /** Träffa slaget i takt med metronomen */
-  | 'takt';
+  | 'takt'
+  /** Två tryck per försök: först poppen, sedan draget */
+  | 'trick';
 
 /**
  * Ett föremål på sorteringsbandet: en text, eller ett foto med namn. Med
@@ -158,6 +160,7 @@ export interface Minigame {
    * - `traffa`: det som ska plockas, med `avoid` som det som ska undvikas
    * - `balans`: namnet på det som ska hållas i balans (första posten)
    * - `takt`: slagen som ska träffas i tur och ordning
+   * - `trick`: tricken i tur och ordning, lättast först
    */
   items: string[];
   /** Enhet eller måttord som visas i precisionsspelet */
@@ -170,6 +173,13 @@ export interface Minigame {
   pool?: PoolItem[][];
   /** Bara för `traffa`: sådant som inte får träffas. */
   avoid?: string[];
+  /**
+   * Bara för `trick`: en rad per trick om vad fötterna gör, i samma ordning
+   * som `items`. Raden står framme medan man gör tricket, så den som inte
+   * kan skillnaden på en kickflip och en heelflip får veta den här - men
+   * bara i ord, tajmingen måste man göra själv.
+   */
+  trickCue?: string[];
   /**
    * Bara för `bildval`: katalogen av foton (id ur data/quizImages.ts) med
    * namn, och kunderna som kommer in. Varje kund pekar på ett foto som är

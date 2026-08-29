@@ -3216,6 +3216,141 @@ img.no-photo {
   font-size: 1.05rem;
 }
 
+/* --------------------------------------------------------------- trick
+ * Brädan rullar över banan och de två fönstren ligger utsatta på den, popp
+ * först och drag sedan. Banan är asfalt, inte papper: det här är det enda
+ * momentet som utspelar sig utomhus på betong.
+ */
+.mg-trick-namn {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.mg-trick-cue {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
+.mg-trick-bana {
+  position: relative;
+  height: 76px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: linear-gradient(180deg, #cfd6d9 0%, #b9c2c6 62%, #aab4b9 100%);
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.mg-trick-bana-vantar {
+  opacity: 0.45;
+}
+
+/* Marken som brädan rullar på. */
+.mg-trick-mark {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  height: 2px;
+  background: rgba(29, 43, 52, 0.35);
+}
+
+.mg-trick-zon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.mg-trick-zon-popp {
+  background: rgba(242, 166, 59, 0.3);
+  border-left: 2px solid var(--sun-dark);
+  border-right: 2px solid var(--sun-dark);
+}
+
+.mg-trick-zon-drag {
+  background: rgba(71, 163, 130, 0.3);
+  border-left: 2px solid var(--palm);
+  border-right: 2px solid var(--palm);
+}
+
+.mg-trick-zonnamn {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.75;
+}
+
+.mg-trick-brada {
+  position: absolute;
+  bottom: 8px;
+  width: 46px;
+  height: 16px;
+  margin-left: -23px;
+  transform-origin: 30% 100%;
+  transition: transform 0.12s ease;
+}
+
+.mg-trick-dacka {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 6px;
+  border-radius: 4px 6px 4px 6px;
+  background: var(--ink);
+}
+
+.mg-trick-hjul {
+  position: absolute;
+  bottom: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e6c76b;
+  border: 1px solid rgba(29, 43, 52, 0.5);
+}
+
+.mg-trick-hjul-bak { left: 6px; }
+.mg-trick-hjul-fram { right: 6px; }
+
+/* Poppen lyfter svansen, draget planar ut brädan igen. */
+.mg-trick-brada-popp { transform: rotate(-32deg) translateY(-10px); }
+.mg-trick-brada-drag { transform: rotate(-4deg) translateY(-16px); }
+/* Domen: platt på marken, eller på kant - primo. */
+.mg-trick-brada-landad { transform: none; }
+.mg-trick-brada-primo { transform: rotate(76deg) translate(-4px, -6px); }
+
+.mg-trick-prickar {
+  display: flex;
+  gap: 5px;
+}
+
+.mg-trick-prick {
+  flex: 1 1 0;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(29, 43, 52, 0.15);
+}
+
+.mg-trick-prick-ren { background: var(--palm); }
+.mg-trick-prick-ok { background: var(--sun); }
+.mg-trick-prick-miss { background: var(--stamp); }
+
+@media (prefers-reduced-motion: reduce) {
+  .mg-trick-brada { transition: none; }
+}
+
 @media (max-width: 520px) {
   .mg-grid {
     grid-template-columns: repeat(2, 1fr);

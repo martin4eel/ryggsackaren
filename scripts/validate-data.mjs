@@ -232,6 +232,7 @@ try {
     traffa: { needed: 2 },
     balans: { needed: 1 },
     takt: { needed: 2 },
+    trick: { needed: 4 },
     bildval: { needed: 1 },
     peka: { needed: 1 },
     avgor: { needed: 1 },
@@ -299,7 +300,7 @@ try {
      * med några namngivna undantag som är bra på egna meriter.
      */
     const mg = job.minigame;
-    const UNDANTAG = { skateboardinstruktor: 'balans', mykolog: 'avgor' };
+    const UNDANTAG = { skateboardinstruktor: 'trick', mykolog: 'avgor' };
     if (!mg) {
       if (job.wageClass >= 2) problems.push(`jobb ${job.id} (klass ${job.wageClass}) saknar minispel`);
     } else {
