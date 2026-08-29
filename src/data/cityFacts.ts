@@ -136,7 +136,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Burj Al Arab, hotellet som ser ut som ett segel, kallar sig sjustjärnigt. Beteckningen finns inte. Fem är max, men ingen har lyckats säga det till dem.',
     'Ski Dubai i Mall of the Emirates håller minus fyra grader året runt, med pistmaskin och pingviner. Utanför är det plus fyrtio.',
     'Tunnelbanan öppnade 2009 helt förarlös, då världens längsta av sitt slag. En vagn i varje tåg är Guldklass med skinnfåtöljer, och en är reserverad för kvinnor och barn.',
-    'Expo 2020 hölls 2021-2022 och behöll namnet trots pandemin. Det var första världsutställningen i arabvärlden. Burj Khalifa, med 163 våningar, var redan klar sedan 2010 och behövde inte skynda sig.',
+    'Expo 2020 hölls 2021–2022 och behöll namnet trots pandemin. Det var första världsutställningen i arabvärlden. Burj Khalifa, med 163 våningar, var redan klar sedan 2010 och behövde inte skynda sig.',
   ],
   dublin: [
 
@@ -304,7 +304,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   melbourne: [
 
     'Melbourne hette Batmania en kort tid efter grundaren John Batman 1835. Sedan döptes den om efter en brittisk premiärminister. Serietidningen kom hundra år senare.',
-    'Staden var Australiens huvudstad 1901-1927, tills Canberra byggts klart. Sydney och Melbourne kunde inte enas, så man lade huvudstaden mitt emellan där ingen bodde.',
+    'Staden var Australiens huvudstad 1901–1927, tills Canberra byggts klart. Sydney och Melbourne kunde inte enas, så man lade huvudstaden mitt emellan där ingen bodde.',
     'OS 1956 hölls här, utom ridsporten som hölls i Stockholm eftersom hästarna inte släpptes in i landet. Karantänreglerna gällde även olympier.',
     'Melbourne Cup första tisdagen i november är helgdag i staden. MCG tar 100 000 åskådare och tomt ser ut som ett hål i marken.',
     'Vegemite uppfanns här 1922 av bryggerirester. Kaffekulturen kom med italienarna efter kriget; grekerna kom också, i så stort antal att Melbourne räknas bland de största grekiska städerna.',
@@ -456,7 +456,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   seoul: [
 
     'Alfabetet hangul beställdes av kung Sejong på 1440-talet så att vanligt folk skulle kunna läsa. Bokstäverna är formade efter munnens ställning. Sejong står staty mitt på Gwanghwamun.',
-    'Under Koreakriget 1950-53 bytte Seoul ägare fyra gånger. Kriget slutade med vapenstillestånd, inte fred, och pågår formellt fortfarande.',
+    'Under Koreakriget 1950–53 bytte Seoul ägare fyra gånger. Kriget slutade med vapenstillestånd, inte fred, och pågår formellt fortfarande.',
     'Samsung betyder tre stjärnor och började 1938 med torkad fisk och nudlar. Det gick bra sedan.',
     'Gangnam betyder söder om floden och är stadens dyraste stadsdel. Psy gjorde den till Youtubes första miljardvideo 2012.',
     'Bäcken Cheonggyecheon låg under en motorväg i fyrtio år. 2005 rev staden vägen och grävde fram bäcken. Trafiken minskade, till trafikplanerarnas förvåning.',

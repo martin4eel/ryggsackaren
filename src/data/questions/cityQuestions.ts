@@ -529,7 +529,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
     {
       q: 'Vilket rike hade Istanbul som huvudstad fram till 1922?', bild: 'dolmabahce',
-      a: ['Ottomanska riket', 'Persiska riket', 'Romerska riket', 'Mongolriket'],
+      a: ['Osmanska riket', 'Persiska riket', 'Romerska riket', 'Mongolriket'],
       d: 1,
     },
     {
@@ -738,7 +738,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
 
     { q: 'Vilken modeskapare köpte och räddade trädgården på bilden, Jardin Majorelle, 1980?', bild: 'majorelle', a: ['Yves Saint Laurent', 'Christian Dior', 'Pierre Cardin', 'Karl Lagerfeld'], d: 1, info: 'Den skarpa koboltblå färgen på husen kallas Majorelleblått efter målaren som anlade trädgården.' },
     { q: 'Vilken färg har Marrakech fått som smeknamn, efter murar som den på bilden?', bild: 'marrakechmurar', a: ['Den röda', 'Den vita', 'Den blå', 'Den gula'], d: 1, info: 'Stadsbestämmelser kräver än i dag att fasaderna hålls i den rosaröda lerfärgen.' },
-    { q: 'Vilken dryck är det på bilden, som hälls från hög höjd i små glas tills det skummar?', bild: 'myntate', a: ['Mintte', 'Kaffe', 'Sockerrörsjuice', 'Mandelmjölk'], d: 1, info: 'Kallas skämtsamt berberwhisky. Grönt te kom till Marocko med brittiska handelsmän på 1800-talet.' },
+    { q: 'Vilken dryck är det på bilden, som hälls från hög höjd i små glas tills det skummar?', bild: 'myntate', a: ['Myntate', 'Kaffe', 'Sockerrörsjuice', 'Mandelmjölk'], d: 1, info: 'Kallas skämtsamt berberwhisky. Grönt te kom till Marocko med brittiska handelsmän på 1800-talet.' },
     { q: 'Vilket marockanskt träd klättrar getterna på bilden i, ett träd som ger en dyrbar olja?', bild: 'arganget', a: ['Argan', 'Oliv', 'Johannesbröd', 'Korkek'], d: 1, info: 'Getterna äter frukten och lämnar kärnorna. Trädet växer nästan bara i sydvästra Marocko.' },
     { q: 'Vad kallas ett traditionellt hus i medinan som på bilden, byggt kring en innergård med fontän?', bild: 'riad', a: ['Riad', 'Kasbah', 'Ksar', 'Fondouk'], d: 1, info: 'Riad betyder trädgård. Utåt gatan har husen nästan inga fönster - allt vänder sig inåt.' },
     { q: 'Vem är mannen på bilden, kung av Marocko sedan 1999?', bild: 'mohammedvi', a: ['Mohammed VI', 'Hassan II', 'Mohammed V', 'Moulay Hicham'], d: 1, info: 'Kungen är också "de troendes anförare" och räknar sin släkt från profeten Muhammed.' },
@@ -783,7 +783,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
     {
       q: 'Vilken stor geologisk formation, som på bilden, går genom Östafrika?', bild: 'riftvalley',
-      a: ['Riftvalley', 'Mariannegraven', 'Grand Canyon', 'Atlasklyftan'],
+      a: ['Östafrikanska riftdalen', 'Mariannegraven', 'Grand Canyon', 'Atlasklyftan'],
       d: 2,
     },
     {
@@ -806,7 +806,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vem är kvinnan på bilden, kenyanskan som fick Nobels fredspris 2004 för sin trädplanteringsrörelse?', bild: 'wangarimaathai', a: ['Wangari Maathai', 'Ellen Johnson Sirleaf', 'Leymah Gbowee', 'Graça Machel'], d: 1, info: 'Green Belt Movement har planterat över femtio miljoner träd. Hon var första afrikanska kvinna med priset.' },
     { q: 'Vad heter den fasta majsgröten på bilden, basföda i Kenya?', bild: 'ugali', a: ['Ugali', 'Fufu', 'Injera', 'Couscous'], d: 1, info: 'Äts med händerna: en klump ugali doppas i grytan. Nyama choma, grillat kött, är helgens tillbehör.' },
     { q: 'Vem är mannen på bilden, som blev Kenyas förste president vid självständigheten 1963?', bild: 'kenyatta', a: ['Jomo Kenyatta', 'Daniel arap Moi', 'Mwai Kibaki', 'Raila Odinga'], d: 1, info: 'Hans son Uhuru blev president 2013. Flygplatsen i Nairobi bär faderns namn.' },
-    { q: 'Vem är löparen på bilden, kenyanen som som förste människa sprang ett maraton under två timmar 2019?', bild: 'kipchoge', a: ['Eliud Kipchoge', 'Kelvin Kiptum', 'Paul Tergat', 'Haile Gebrselassie'], d: 1, info: 'Loppet i Wien räknas inte som rekord, eftersom han hade roterande farthållare och drycker langade från cykel.' },
+    { q: 'Vem är löparen på bilden, kenyanen som förste människa sprang ett maraton under två timmar 2019?', bild: 'kipchoge', a: ['Eliud Kipchoge', 'Kelvin Kiptum', 'Paul Tergat', 'Haile Gebrselassie'], d: 1, info: 'Loppet i Wien räknas inte som rekord, eftersom han hade roterande farthållare och drycker langade från cykel.' },
     { q: 'Hur högt över havet ligger Nairobi?', bild: 'stadsbild:nairobi', a: ['1 800 m'], reglage: { min: 0, max: 4000, steg: 10, svar: 1800, tolerans: 200, liggande: false, lagst: '0 m', hogst: '4 000 m', enhet: 'm' }, d: 1, info: 'Höjden gör att nätterna blir kyliga trots att ekvatorn ligger nära. Det är därför löparna tränar här.' },
     { q: 'Vad betyder det swahiliuttryck som Lejonkungen gjorde världsberömt, hakuna matata?', bild: 'lejon', a: ['Inga problem', 'God morgon', 'Välkommen hem', 'Vi ses snart'], d: 1, info: 'Swahili har många arabiska lånord. Safari betyder helt enkelt resa.' },
     { q: 'Vem är kvinnan på bilden, som spelade Karen Blixen i filmen Mitt Afrika 1985?', bild: 'merylstreep', a: ['Meryl Streep', 'Glenn Close', 'Sigourney Weaver', 'Jessica Lange'], d: 2, info: 'Filmen vann sju Oscar. Robert Redford spelade Denys Finch Hatton, som ligger begravd i Ngongbergen.' },
@@ -1251,7 +1251,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 2,
     },
     {
-      q: 'Skyskrapan på bilden var världens högsta 1931-1970. Vad heter den?', bild: 'empirestate',
+      q: 'Skyskrapan på bilden var världens högsta 1931–1970. Vad heter den?', bild: 'empirestate',
       a: ['Empire State Building', 'Chrysler Building', 'Woolworth Building', 'Flatiron Building'],
       d: 2,
     },
@@ -1792,13 +1792,13 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Varför kallas templet på bilden, Swayambhunath ovanför Katmandu, för Apstemplet?', bild: 'swayambhunath', a: ['Heliga apor lever på kullen', 'Det är byggt av apfigurer', 'Apguden Hanuman dyrkas där', 'Trappan ringlar som en apsvans'], d: 1, info: 'Trappan upp har 365 steg. Aporna anses heliga och tar det som en anledning att stjäla.' },
     { q: 'Vem är mannen på bilden, som stod tillsammans med Edmund Hillary på Everests topp 1953?', bild: 'tenzingnorgay', a: ['Tenzing Norgay', 'Ang Rita', 'Reinhold Messner', 'George Mallory'], d: 1, info: 'Mallory försvann på berget 1924 och hittades 1999. Om han nådde toppen vet ingen; kameran saknas fortfarande.' },
     { q: 'Kniven på bilden bärs av vilka nepalesiska soldater, i brittisk tjänst sedan 1815?', bild: 'kukri', a: ['Gurkhas', 'Sherpas', 'Sikher', 'Rajputer'], d: 1, info: 'Deras krökta kniv khukuri ingår i uniformen. Britterna rekryterade dem efter att ha förlorat mot dem i krig.' },
-    { q: 'Vilken fylld degknyte på bilden är Katmandus favoritsnabbmat?', bild: 'momo', a: ['Momo', 'Samosa', 'Baozi', 'Manti'], d: 1, info: 'Kom med tibetanska handelsmän och serveras med en tomatchutney. Newarfolket äter dem också i soppa.' },
+    { q: 'Vilket fyllda degknyte på bilden är Katmandus favoritsnabbmat?', bild: 'momo', a: ['Momo', 'Samosa', 'Baozi', 'Manti'], d: 1, info: 'Kom med tibetanska handelsmän och serveras med en tomatchutney. Newarfolket äter dem också i soppa.' },
     { q: 'Vem föddes enligt traditionen vid templet på bilden i Lumbini i södra Nepal omkring 500 f.Kr.?', bild: 'mayadevi', a: ['Buddha', 'Konfucius', 'Mahavira', 'Guru Nanak'], d: 1, info: 'Kejsar Ashoka reste en pelare på platsen 249 f.Kr. Nepaleserna påpekar gärna att Buddha inte var indier.' },
     { q: 'Vilket år drabbades Nepal av jordbävningen på bilden, som dödade nära 9 000 människor?', bild: 'nepaljordbavning', a: ['2015'], reglage: { artal: true, min: 1950, max: 2025, steg: 1, svar: 2015, tolerans: 1, liggande: true, lagst: '1950', hogst: '2025' }, d: 2, info: 'Tornet Dharahara i Katmandu rasade och byggdes upp igen 2021. Skalvet utlöste även en lavin i baslägret på Everest.' },
     { q: 'Vad hände med Nepals monarki, som bodde i palatset på bilden, 2008?', bild: 'narayanhiti', a: ['Den avskaffades och landet blev republik', 'Kungen abdikerade till förmån för sonen', 'Kungen återfick sin absoluta makt', 'Tronen gick till en buddhistisk lama'], d: 2, info: 'Sju år tidigare hade kronprinsen skjutit ihjäl nästan hela kungafamiljen vid en middag i palatset.' },
     { q: 'Nepals kalender Bikram Sambat ligger före vår. Vilket år börjar där i april 2026?', bild: 'stadsbild:kathmandu', a: ['2083', '1447', '2569', '5786'], d: 2, info: 'Kalendern ligger knappt 57 år före den västerländska. Nyåret firas i mitten av april.' },
     { q: 'Vad är ovanligt med Nepals tidszon?', bild: 'stadsbild:kathmandu', a: ['Den ligger 45 minuter efter hel timme', 'Den byter riktning på sommaren', 'Den följer Pekingtid', 'Den är samma som Londons'], d: 2, info: 'UTC plus 5 timmar 45 minuter, en kvart före Indien. Skillnaden är tänkt att markera självständighet från grannen.' },
-    { q: 'Vilken bok av mannen på bilden, Jon Krakauer, skildrar katastrofen på Everest 1996?', bild: 'krakauer', a: ['Tunn luft', 'Sju år i Tibet', 'Snöleoparden', 'Topparnas tystnad'], d: 2, info: 'Åtta klättrare dog i en storm den 10 och 11 maj. Krakauer var själv med på berget som reporter.' },
+    { q: 'Vilken bok av mannen på bilden, Jon Krakauer, skildrar katastrofen på Everest 1996?', bild: 'krakauer', a: ['I tunn luft', 'Sju år i Tibet', 'Snöleoparden', 'Topparnas tystnad'], d: 2, info: 'Åtta klättrare dog i en storm den 10 och 11 maj. Krakauer var själv med på berget som reporter.' },
   ],
   buenosaires: [
     { q: 'I vilket land ligger Buenos Aires?', bild: 'stadsbild:buenosaires', a: ['Argentina', 'Chile', 'Uruguay', 'Paraguay'], d: 1 },
@@ -1914,7 +1914,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'I vilken etiopisk stad står kyrkan på bilden, en av elva som höggs rakt ner i berget på 1100- och 1200-talen?', bild: 'lalibela', a: ['Lalibela', 'Aksum', 'Gondar', 'Harar'], d: 1, info: 'Kyrkorna skulle bli ett nytt Jerusalem för pilgrimer som inte kunde ta sig till det riktiga.' },
     { q: 'Vad heter kryddblandningen på bilden, med chili och bockhornsklöver, som färgar de flesta etiopiska grytor röda?', bild: 'berbere', a: ['Berbere', 'Ras el-hanout', 'Harissa', 'Garam masala'], d: 1, info: 'Grytorna heter wat. Doro wat, kycklinggryta med hårdkokt ägg, är festmaten.' },
     { q: 'Vilket år grundades Addis Abeba av Menelik II?', bild: 'menelik', a: ['1886'], reglage: { artal: true, min: 1700, max: 1950, steg: 1, svar: 1886, tolerans: 15, liggande: true, lagst: '1700', hogst: '1950' }, d: 2, info: 'Bristen på ved höll på att tvinga hovet att flytta igen, tills eukalyptus från Australien planterades överallt.' },
-    { q: 'Vilken kolonialmakt besegrade Etiopien i slaget vid Adwa 1896?', bild: 'menelik', a: ['Italien', 'Storbritannien', 'Frankrike', 'Portugal'], d: 2, info: 'Segern gjorde Etiopien till det enda afrikanska land som aldrig koloniserades - Italien ockuperade det dock 1936-41.' },
+    { q: 'Vilken kolonialmakt besegrade Etiopien i slaget vid Adwa 1896?', bild: 'menelik', a: ['Italien', 'Storbritannien', 'Frankrike', 'Portugal'], d: 2, info: 'Segern gjorde Etiopien till det enda afrikanska land som aldrig koloniserades - Italien ockuperade det dock 1936–41.' },
     { q: 'Vilket skriftsystem, som på bilden, skrivs amhariska med?', bild: 'geezskrift', a: ['Ge\'ez-skrift', 'Arabisk skrift', 'Latinsk skrift', 'Tifinagh'], d: 2, info: 'Varje tecken står för en stavelse. Skriften har omkring 250 tecken och är Afrikas äldsta i bruk.' },
     { q: 'Vad heter lerkannan på bilden, som kaffet kokas i under den etiopiska kaffeceremonin?', bild: 'jebena', a: ['Jebena', 'Cezve', 'Dallah', 'Samovar'], d: 2, info: 'Ceremonin tar en timme och bjuder på tre koppar. Att gå efter den första är oartigt.' },
     { q: 'Vem är mannen på bilden, som kallas Ethio-jazzens fader?', bild: 'mulatuastatke', a: ['Mulatu Astatke', 'Fela Kuti', 'Hugh Masekela', 'Ali Farka Touré'], d: 2, info: 'Hans musik fick nytt liv i Jim Jarmuschs film Broken Flowers 2005.' },

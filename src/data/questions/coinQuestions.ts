@@ -50,7 +50,7 @@ export const COIN_QUESTIONS: Record<string, Question> = {
   },
   paris: {
     q: 'Tornet på bilden byggdes till ett bestämt tillfälle. Vilket?',
-    a: ['Världsutställningen 1889', 'Olympiska spelen 1900', 'Kröningen av Napoleon III', 'Franska revolutionens hundraårsjubileum i kyrkan'],
+    a: ['Världsutställningen 1889', 'Olympiska spelen 1900', 'Kröningen av Napoleon III', 'Invigningen av tunnelbanan'],
     bild: 'stad:paris',
     d: 1,
     info: 'Det skulle rivas efter tjugo år, men radion räddade det.',
@@ -95,7 +95,7 @@ export const COIN_QUESTIONS: Record<string, Question> = {
     a: ['Minaret', 'Kampanil', 'Pagod', 'Stupa'],
     bild: 'stad:marrakech',
     d: 1,
-    info: 'Koutoubias minaret är sjuttio meter högt och från 1100-talet.',
+    info: 'Koutoubias minaret är sjuttio meter hög och från 1100-talet.',
   },
   nairobi: {
     q: 'Nationalparken på bilden är ovanlig. Varför?',
