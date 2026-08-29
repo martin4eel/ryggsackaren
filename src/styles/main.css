@@ -7797,3 +7797,170 @@ body.sheet-oppen {
 .marknad-lista { margin: 4px 0 0; padding-left: 18px; font-size: 0.92rem; line-height: 1.45; }
 .marknad-lista li + li { margin-top: 4px; }
 .marknad-tom { margin: 4px 0 0; font-size: 0.92rem; }
+
+
+/* ---------------------------------------------------------- souvenirbutiken */
+
+.butik-skylt {
+  background:
+    linear-gradient(135deg, rgba(242, 166, 59, 0.22), transparent 55%),
+    var(--paper);
+}
+
+.butik-devis {
+  margin: 4px 0 0;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.butik-rubrik {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Hyllan: en list under varorna, som i ett skyltfönster. */
+.butik-varor {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .butik-varor { grid-template-columns: 1fr 1fr; }
+}
+
+.butik-vara {
+  position: relative;
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  grid-template-rows: auto auto;
+  gap: 4px 12px;
+  padding: 12px 12px 14px;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, transparent calc(100% - 10px), rgba(90, 70, 40, 0.18) calc(100% - 10px), rgba(90, 70, 40, 0.28) 100%),
+    var(--paper-dim);
+  box-shadow: inset 0 0 0 1px rgba(90, 70, 40, 0.12);
+}
+
+.butik-ram {
+  grid-row: 1 / span 2;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(4, 16, 26, 0.18), inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transform: rotate(-1.5deg);
+}
+
+.butik-vara:nth-child(even) .butik-ram { transform: rotate(1.2deg); }
+
+.butik-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+}
+
+.butik-lapp {
+  padding: 6px;
+  font-family: var(--display);
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.butik-text { min-width: 0; }
+
+.butik-namn {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.15rem;
+  line-height: 1.15;
+}
+
+.butik-replik {
+  margin: 3px 0 0;
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.butik-not {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+/* Prislappen: en pappersetikett med hål och snöre, lätt vriden. */
+.butik-prislapp {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.butik-pris {
+  position: relative;
+  display: inline-block;
+  padding: 4px 10px 4px 22px;
+  border-radius: 3px 12px 12px 3px;
+  background: #fbf3dc;
+  box-shadow: 0 1px 3px rgba(4, 16, 26, 0.25), inset 0 0 0 1px rgba(90, 70, 40, 0.25);
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  transform: rotate(-3deg);
+  white-space: nowrap;
+}
+
+.butik-pris::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--paper-dim);
+  box-shadow: inset 0 0 0 1.5px rgba(90, 70, 40, 0.45);
+}
+
+/* Gummistämpeln i rött bläck, som passets. */
+.butik-stampel {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  padding: 2px 8px;
+  border: 2px solid #b3261e;
+  border-radius: 4px;
+  color: #b3261e;
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: rotate(-8deg);
+  opacity: 0.85;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.stampel-turist { color: #6b5a2e; border-color: #6b5a2e; transform: rotate(6deg); }
+.stampel-vinst { color: #2e7d4f; border-color: #2e7d4f; }
+
+.butik-aterkop .butik-vara {
+  background:
+    linear-gradient(180deg, transparent calc(100% - 10px), rgba(90, 70, 40, 0.18) calc(100% - 10px), rgba(90, 70, 40, 0.28) 100%),
+    var(--paper);
+}
