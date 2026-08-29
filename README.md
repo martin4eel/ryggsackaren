@@ -327,6 +327,9 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Sevärdheten** har egna rader (`src/data/sevardheter.ts`, tre per stad):
+     vad man ser, varför den finns, och det man berättar efteråt – skrivna
+     för att inte upprepa broschyren, som tidigare fyllde sidan.
    - **Repris** i tidningen: frågor man svarat fel på (de senaste trettio)
      kommer tillbaka en i taget, med facit och kuriosa, tills man trycker
      *Nu sitter det*. Det är spelets repetition – fel svar får en andra chans

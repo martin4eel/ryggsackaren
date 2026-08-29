@@ -2,6 +2,7 @@ import { HUVUDKATEGORIER, HUVUD_LABELS } from '../data/jobs';
 import { CITIES, CITY_BY_ID } from '../data/cities';
 import { CITY_FACTS } from '../data/cityFacts';
 import { SPARET_LEDTRADAR } from '../data/sparetLedtradar';
+import { SEVARDHETER } from '../data/sevardheter';
 import { CURRENCIES, formatMoney } from '../data/currencies';
 import type { EventTone, EventTrigger } from '../data/events';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
@@ -2439,13 +2440,11 @@ export class App {
     const kuriosa = COIN_QUESTIONS[city.id]?.info;
     const panel = el('section', { class: 'panel' });
     panel.append(el('h2', {}, 'Det man bör veta'));
-    const rader = [...(kuriosa ? [kuriosa] : []), ...stycken.filter((t) => t !== kuriosa)].slice(0, 4);
-    // Nämner broschyren inte sevärdheten får de första styckena om staden
-    // fylla ut - hellre det än stadens presentation en gång till.
-    for (const t of CITY_FACTS[city.id] ?? []) {
-      if (rader.length >= 3) break;
-      if (!rader.includes(t)) rader.push(t);
-    }
+    // Sevärdheten har egna rader (data/sevardheter.ts); broschyrstycken som
+    // nämner den läggs efter, kuriosan från myntfrågan sist om den är ny.
+    const egna = SEVARDHETER[city.id] ?? [];
+    const rader = [...egna, ...stycken.filter((t) => !egna.includes(t))].slice(0, 5);
+    if (kuriosa && !rader.includes(kuriosa) && rader.length < 5) rader.push(kuriosa);
     if (rader.length === 0) rader.push(city.blurb);
     panel.append(el('ul', { class: 'broschyr-lista' }, ...rader.map((t) => el('li', {}, t))));
     panel.append(
