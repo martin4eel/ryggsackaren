@@ -1664,6 +1664,10 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'souv-brygghusglas', alt: 'Pintglas med bärnstensfärgad öl', file: 'IPA in a pint glass.jpeg' },
   { id: 'souv-bonhandduk', alt: 'Tibetanska böneflaggor i vinden', file: 'Tibetan prayer flags at Manali.jpg' },
   { id: 'souv-khukuri', alt: 'Polerad khukurikniv, friställd', file: 'Polished kukri noBG.jpg' },
+  { id: 'souv-vikingahjalm', alt: 'En rekonstruerad vikingahjälm i järn med ringbrynja, utan horn', file: 'Helmet, reconstruction (6915505559).jpg' },
+  { id: 'souv-korkhatt', alt: 'En didgeridoo av trä på en gräsmatta', file: 'Didgeridoo-grass.jpg' },
+  { id: 'souv-surfvax', alt: 'Ett par solglasögon med gröna glas', file: 'Sunglasses-1.jpg' },
+  { id: 'souv-kaffefilter', alt: 'En snöglob med en stadssiluett inuti', file: 'Snow Globe.jpeg' },
 ];
 
 export const QUIZ_IMAGE_BY_ID: Record<string, QuizImage> = Object.fromEntries(

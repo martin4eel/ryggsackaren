@@ -43,7 +43,7 @@ export const SOUVENIRS: Souvenir[] = [
     basePrice: 420,
     cheapIn: ['norden'],
     hotIn: ['nordamerika', 'asien', 'oceanien'],
-    desc: 'Historiskt tvivelaktiga horn, kommersiellt oemotståndliga.',
+    desc: 'Utan horn, som de riktiga. Kunderna frågar ändå var hornen är.',
   },
   {
     id: 'tehandduk',
@@ -263,11 +263,11 @@ export const SOUVENIRS: Souvenir[] = [
   },
   {
     id: 'korkhatt',
-    name: 'Hatt med korkar',
+    name: 'Didgeridoo',
     basePrice: 190,
     cheapIn: ['oceanien'],
     hotIn: ['europa', 'norden', 'nordamerika'],
-    desc: 'Håller flugorna borta och värdigheten på avstånd.',
+    desc: 'Låter som en lastbil i sorg. Grannarna kommer att veta att du varit borta.',
   },
   {
     id: 'jadesmycke',
@@ -487,11 +487,11 @@ export const SOUVENIRS: Souvenir[] = [
   },
   {
     id: 'surfvax',
-    name: 'Surfvax i burk',
+    name: 'Solglasögon',
     basePrice: 120,
     cheapIn: ['oceanien', 'nordamerika'],
     hotIn: ['norden', 'europa', 'mellanostern'],
-    desc: 'Doftar kokos. Smälter i ryggsäcken om du är oförsiktig.',
+    desc: 'Köpta i solen, tappade i skuggan. Alla har ett par de saknar.',
   },
   {
     id: 'bonhandduk',
@@ -511,11 +511,11 @@ export const SOUVENIRS: Souvenir[] = [
   },
   {
     id: 'kaffefilter',
-    name: 'Handbryggare i keramik',
+    name: 'Snöglob',
     basePrice: 280,
     cheapIn: ['nordamerika', 'asien'],
     hotIn: ['afrika', 'latinamerika', 'mellanostern'],
-    desc: 'Tratt med spiralräfflor. Föremål för oproportionerligt starka åsikter.',
+    desc: 'Skakas i tullen av alla utom dig. Snöar över en stad som aldrig sett snö.',
   },
 ];
 
