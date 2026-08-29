@@ -1541,8 +1541,23 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
 
   const status = makeStatus();
   const fraga = el('p', { class: 'mg-kund mg-peka-fraga' });
-  const bild = el('img', { class: 'mg-peka-bild', src: quizImageUrl(spec.bild), alt: 'Foto att peka på', draggable: 'false' });
-  const yta = el('div', { class: 'mg-peka-yta' }, bild);
+  const bild = el('img', { class: 'mg-peka-bild', src: quizImageUrl(spec.bild), alt: 'Foto att peka på', draggable: 'false', width: '1400', height: '1000' });
+  const laddar = el('p', { class: 'mg-peka-laddar' }, 'Fotot laddas …');
+  const yta = el('div', { class: 'mg-peka-yta mg-peka-vantar' }, bild, laddar);
+  // Ytan är reserverad tills fotot kommit; fallerar hämtningen (dålig
+  // täckning, gammal cache) går det att försöka igen utan att lämna passet.
+  bild.addEventListener('load', () => {
+    yta.classList.remove('mg-peka-vantar');
+    laddar.remove();
+  });
+  bild.addEventListener('error', () => {
+    laddar.textContent = 'Fotot kunde inte hämtas. Tryck här för att försöka igen.';
+    laddar.classList.add('mg-peka-fel-laddning');
+    laddar.onclick = () => {
+      laddar.textContent = 'Fotot laddas …';
+      bild.src = `${quizImageUrl(spec.bild)}?igen=${Date.now()}`;
+    };
+  });
   const feedback = makeFeedback();
   const forklaring = el('p', { class: 'mg-peka-forklaring' });
   const vidare = button('Nästa fråga', () => nasta(), { class: 'btn btn-primary mg-peka-vidare' });

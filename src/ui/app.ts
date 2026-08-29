@@ -3194,7 +3194,9 @@ export class App {
       // annorlunda ut än ett i Reykjavík, också när frågorna är desamma.
       const site = el('section', {
         class: 'panel worksite',
-        style: `--foto:url("./cities/${this.city.id}-stad.jpg")`,
+        // Absolut adress: en url() i en CSS-variabel löses av webbläsaren mot
+        // stilmallen (som ligger under /assets/ i bygget), inte mot sidan.
+        style: `--foto:url("${new URL(`./cities/${this.city.id}-stad.jpg`, document.baseURI).href}")`,
       });
       site.append(
         el('div', { class: 'worksite-head' },

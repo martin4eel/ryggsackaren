@@ -7785,3 +7785,10 @@ body.sheet-oppen {
 .kvitto-rubrik { margin: 14px 0 4px; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
 .kvitto-detalj { color: var(--ink-soft); font-weight: 400; }
 .kvitto-minus span:last-child { color: #b3261e; }
+
+
+/* Pek-spelet: reserverad yta tills fotot kommit */
+.mg-peka-vantar { min-height: 200px; display: grid; place-items: center; }
+.mg-peka-vantar .mg-peka-bild { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; }
+.mg-peka-laddar { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+.mg-peka-fel-laddning { cursor: pointer; text-decoration: underline; color: var(--accent, #f2a63b); }
