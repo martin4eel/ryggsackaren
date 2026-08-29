@@ -63,10 +63,15 @@ export const EVENT_COOLDOWN_DAYS = 3;
  */
 export function mysterySpotCount(cityId: string): number {
   const folk = CITY_POPULATION[cityId] ?? 0;
-  if (folk >= 9_000_000) return 4;
-  if (folk >= 2_500_000) return 3;
-  if (folk >= 500_000) return 2;
-  return 1;
+  if (folk >= 9_000_000) return 5;
+  if (folk >= 2_500_000) return 4;
+  if (folk >= 500_000) return 3;
+  /*
+   * Minst två: den första brickan är alltid frågan om staden, så en stad med
+   * bara en plats skulle få en fråga och ingenting som händer. Köping ska
+   * vara mindre än Kairo, men inte tomt.
+   */
+  return 2;
 }
 
 /** Allt motorn behöver veta om spelaren, i en form datan kan läsa. */
