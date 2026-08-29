@@ -4571,12 +4571,22 @@ export class App {
     rum.style.setProperty('--butik-disk', yta('butik-disk.webp'));
     rum.style.setProperty('--butik-bracka', yta('butik-bracka.webp'));
 
-    /** Lampan i taket: sladd, skärm och en glödlampa som lyser över disken. */
+    /**
+     * Taklampan är en lysrörsarmatur av den sort som sitter i lagerlokaler och
+     * i butiker som inte gjorts om sedan åttiotalet: två kedjor, en plåtkåpa
+     * och ett rör som lyser kallvitt och flimrar till då och då.
+     */
     const lampa = el('div', { class: 'butik-lampa', 'aria-hidden': 'true' },
-      svgEl('svg', { viewBox: '0 0 120 96', class: 'butik-lampa-svg' },
-        svgEl('line', { class: 'butik-lampa-sladd', x1: '60', y1: '0', x2: '60', y2: '26' }),
-        svgEl('path', { class: 'butik-lampa-skarm', d: 'M60 24 L92 60 H28 Z' }),
-        svgEl('ellipse', { class: 'butik-lampa-glodlampa', cx: '60', cy: '64', rx: '7', ry: '9' })
+      svgEl('svg', { viewBox: '0 0 240 52', class: 'butik-lampa-svg' },
+        svgEl('line', { class: 'butik-lampa-kedja', x1: '54', y1: '0', x2: '54', y2: '15' }),
+        svgEl('line', { class: 'butik-lampa-kedja', x1: '186', y1: '0', x2: '186', y2: '15' }),
+        // Plåtkåpan, med en ljusare kant där taket speglar sig.
+        svgEl('path', { class: 'butik-lampa-kapa', d: 'M26 15h188a4 4 0 0 1 4 4v9a4 4 0 0 1-4 4H26a4 4 0 0 1-4-4v-9a4 4 0 0 1 4-4z' }),
+        svgEl('path', { class: 'butik-lampa-kant', d: 'M22 30h196v3a3 3 0 0 1-3 3H25a3 3 0 0 1-3-3z' }),
+        // Ändstycken och själva röret.
+        svgEl('rect', { class: 'butik-lampa-galge', x: '30', y: '32', width: '9', height: '7', rx: '2' }),
+        svgEl('rect', { class: 'butik-lampa-galge', x: '201', y: '32', width: '9', height: '7', rx: '2' }),
+        svgEl('rect', { class: 'butik-lampa-ror', x: '38', y: '33', width: '164', height: '5', rx: '2.5' })
       ),
       el('span', { class: 'butik-lampa-sken' })
     );
@@ -4586,23 +4596,24 @@ export class App {
     );
 
     /**
-     * Handlaren: en kontur bakom disken, med lampan i ryggen. Han lutar sig
-     * mot skivan med ena armen och håller den andra i sidan, som den gör som
-     * väntat i en butik i tjugofem år.
+     * Handlaren: en kontur bakom disken, med lampan i ryggen. Bilden är en
+     * silhuett renderad ur en 3D-modell med `scripts/rendera-silhuett.py`,
+     * beskuren vid midjan - resten står bakom skivan.
      */
-    const handlare = el('div', { class: 'butik-handlare', 'aria-hidden': 'true' },
-      svgEl('svg', { viewBox: '0 0 150 170', class: 'butik-handlare-svg' },
-        svgEl('path', {
-          class: 'butik-handlare-kropp',
-          // Keps med skärm, huvud, hals, axlar och en kropp som vidgas nedåt.
-          d: 'M56 30c0-9 7-16 17-16s17 7 17 16v3l14 3c1 0 1 2-1 2l-13 1v4c0 8-3 14-8 18l1 6 22 8c11 4 18 13 21 25l7 47H23l7-47c3-12 10-21 21-25l22-8 1-6c-5-4-8-10-8-18v-4l-13-1c-2 0-2-2-1-2l14-3z',
-        }),
-        svgEl('path', {
-          class: 'butik-handlare-arm',
-          // Armen ut mot disken, med handen vilande på skivan.
-          d: 'M104 82c14 6 24 17 29 32l3 10-14 4-3-10c-4-12-11-20-21-25z',
-        })
-      )
+    // Två handlare, och den ena vänd åt andra hållet i hälften av städerna:
+    // fyra butiksinnehavare räcker för att ingen stad ska kännas som en kopia.
+    const vem = pseudoRandom(`${city.id}|handlare`) < 0.5 ? 1 : 2;
+    const spegel = pseudoRandom(`${city.id}|handlare|vand`) < 0.5;
+    const handlare = el('div', {
+      class: `butik-handlare ${spegel ? 'butik-handlare-spegel' : ''}`,
+      'aria-hidden': 'true',
+    },
+      el('img', {
+        class: 'butik-handlare-bild',
+        src: new URL(`butik/handlare-${vem}.webp`, document.baseURI).href,
+        alt: '',
+        draggable: 'false',
+      })
     );
 
     const hylla = el('div', { class: 'butik-hyllvagg' });

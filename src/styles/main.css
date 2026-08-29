@@ -8425,7 +8425,7 @@ body.sheet-oppen {
   border: 1px solid rgba(20, 12, 6, 0.75);
   /* Panelen bakom hyllorna är ett foto; gradienten ovanpå sänker hörnen. */
   background:
-    radial-gradient(ellipse at 50% 8%, rgba(255, 198, 112, 0.16), transparent 58%),
+    radial-gradient(ellipse 70% 30% at 50% 6%, rgba(214, 232, 255, 0.17), transparent 62%),
     linear-gradient(180deg, rgba(10, 6, 3, 0.55), rgba(10, 6, 3, 0.2) 45%, rgba(10, 6, 3, 0.72)),
     var(--butik-vagg, linear-gradient(180deg, #1a1209, #2e2011)) center / cover;
   color: #e8dcc3;
@@ -8450,12 +8450,12 @@ body.sheet-oppen {
 }
 
 /* Lampan hänger snett över disken och lyser upp mitten av rummet. */
-/* Lampan hänger i sin sladd ovanför disken. */
+/* Lysrörsarmaturen hänger i två kedjor ovanför hyllan. */
 .butik-lampa {
   position: absolute;
-  top: 6px;
+  top: 10px;
   left: 50%;
-  width: 120px;
+  width: min(72%, 300px);
   transform: translateX(-50%);
   pointer-events: none;
   z-index: 2;
@@ -8468,48 +8468,80 @@ body.sheet-oppen {
   overflow: visible;
 }
 
-.butik-lampa-sladd {
-  stroke: #0f0a05;
-  stroke-width: 2.5;
+.butik-lampa-kedja {
+  stroke: #0d0904;
+  stroke-width: 2;
+  stroke-dasharray: 3 2;
 }
 
-.butik-lampa-skarm {
-  fill: #1d140c;
-  stroke: rgba(255, 220, 150, 0.7);
-  stroke-width: 1.5;
-  /* Undersidan av skärmen fångar ljuset från lampan. */
-  filter: drop-shadow(0 4px 10px rgba(255, 196, 104, 0.45));
+.butik-lampa-kapa {
+  fill: #221a12;
+  stroke: rgba(255, 226, 170, 0.35);
+  stroke-width: 1;
 }
 
-.butik-lampa-glodlampa {
-  fill: #fff0cd;
-  filter: drop-shadow(0 0 18px rgba(255, 205, 120, 1)) drop-shadow(0 0 42px rgba(255, 186, 84, 0.8));
+.butik-lampa-kant {
+  fill: #16100a;
 }
 
-/* Skenet under lampan, som lägger sig över hyllor och disk. */
+.butik-lampa-galge {
+  fill: #2c2118;
+}
+
+/* Röret: kallvitt mot rummets varma trä, och det är just kontrasten som gör
+   att butiken känns som en butik och inte som ett vardagsrum. */
+.butik-lampa-ror {
+  fill: #f2f7ff;
+  filter: drop-shadow(0 0 8px rgba(210, 232, 255, 0.8))
+    drop-shadow(0 0 22px rgba(150, 190, 240, 0.4));
+  animation: lysror 7s infinite steps(1, end);
+}
+
+/*
+ * Flimret. Ett rör som är på väg att ta slut slocknar aldrig helt - det
+ * darrar till, tar sig, och darrar igen. Håll det sällsynt: det ska märkas
+ * en gång medan man handlar, inte hela tiden.
+ */
+@keyframes lysror {
+  0%, 86% { opacity: 1; }
+  87% { opacity: 0.45; }
+  88% { opacity: 1; }
+  90% { opacity: 0.6; }
+  91%, 100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .butik-lampa-ror {
+    animation: none;
+  }
+}
+
+/* Ljuset under röret är avlångt, inte runt. */
 .butik-lampa-sken {
   position: absolute;
-  top: 44px;
+  top: 26px;
   left: 50%;
-  width: 460px;
-  height: 380px;
+  width: 128%;
+  height: 190px;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse at 50% 0%, rgba(255, 205, 120, 0.36), rgba(255, 190, 90, 0.12) 42%, transparent 72%);
+  /* Svagt: röret ska lysa upp hyllan, inte blända den som handlar. */
+  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(226, 240, 255, 0.1), rgba(190, 214, 245, 0.04) 45%, transparent 74%);
 }
 
 /* Hyllsektionen: brädor i mörkt trä med varorna i skugga. */
 .butik-hyllor {
   position: relative;
   z-index: 2;
-  /* Takhöjd över hyllan, så att lampan får hänga i sin sladd. */
-  padding: 80px 12px 54px;
+  /* Takhöjd över hyllan, så att armaturen får plats i taket. */
+  padding: 76px 12px 54px;
 }
 
 .butik-hyllvagg {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  max-width: 460px;
+  /* Plats kvar till höger, där handlaren står. */
+  max-width: min(460px, 72%);
 }
 
 /* Varje plats i hyllan: en mörk ruta med mässingsram, som ett fack. */
@@ -8594,24 +8626,17 @@ body.sheet-oppen {
 /* Handlaren står bakom disken, mellan hyllan och lampan. */
 .butik-handlare {
   position: absolute;
-  right: 8px;
-  bottom: -58px;
-  width: 118px;
+  right: 4px;
+  bottom: -16px;
+  /* Höjden styr, inte bredden: de två handlarna är olika breda men ska stå
+     lika höga bakom disken. */
+  height: 168px;
+  width: auto;
   pointer-events: none;
   z-index: 2;
   opacity: 0.95;
 }
 
-.butik-handlare-svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.butik-handlare-kropp,
-.butik-handlare-arm {
-  fill: #0d0805;
-}
 
 /* Disken: en bräda i ljusare trä där varan läggs fram. */
 .butik-disk {
@@ -8685,17 +8710,12 @@ body.sheet-oppen {
     grid-template-columns: repeat(4, 1fr);
   }
   .butik-handlare {
-    width: 140px;
+    height: 210px;
     right: 28px;
   }
 }
 
 
-/* Lampan bakom handlaren ger honom en kant, så att han läses som en människa. */
-.butik-handlare-kropp {
-  filter: drop-shadow(0 -2px 0 rgba(255, 208, 130, 0.35))
-    drop-shadow(2px 0 0 rgba(255, 208, 130, 0.18));
-}
 
 /* Namnet på varan i ljuset ska inte konkurrera med prislappen. */
 .butik-disk-text .butik-replik {
@@ -8762,12 +8782,18 @@ body.sheet-oppen {
 }
 
 
-/* Handlarens kontur: mörk mot panelen, med lampan som kant. */
-.butik-handlare-kropp,
-.butik-handlare-arm {
-  fill: #0b0603;
+/* Handlarens kontur: mörk mot panelen, med lysröret som kant. */
+.butik-handlare-bild {
+  display: block;
+  height: 100%;
+  width: auto;
+  filter: brightness(0)
+    drop-shadow(0 -2px 0 rgba(226, 240, 255, 0.42))
+    drop-shadow(-2px 0 0 rgba(226, 240, 255, 0.16));
 }
 
-.butik-handlare-svg {
-  filter: drop-shadow(0 -1px 0 rgba(255, 214, 150, 0.4));
+
+/* Somliga handlare står vända åt andra hållet, in mot rummet. */
+.butik-handlare-spegel .butik-handlare-bild {
+  transform: scaleX(-1);
 }
