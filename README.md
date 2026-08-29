@@ -377,6 +377,11 @@ webbläsaren och överlever att sparfilen raderas.
    rätt som fel – hur man känner igen svampen och vad giftet gör. Alla
    fjorton är svenska arter.
 
+   Hockeytränaren har ett sjätte slag, *lagval*: lagmärket stort i mitten och
+   fyra spelare med porträtt och namn ovanför – vem hör hemma i laget? 22
+   spelare, 13 SHL- och NHL-märken, ingen klocka; efter svaret får laget
+   sitt namn och fel val förklaras ("Chára hör till Boston Bruins").
+
    Sorteringsspelen är utbytta (2026-08-29): alla tjugo yrken som hade
    "dra foto till rätt hylla" har nu bildval i politikerspelets stil, där
    passagerare, gäster, elever och beställare beskriver vad de behöver –
