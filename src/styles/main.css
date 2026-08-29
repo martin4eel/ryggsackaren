@@ -8019,3 +8019,14 @@ body.sheet-oppen {
 /* Notiser ligger ovanpå men tar aldrig ett tryck: ett svar mitt i ett pass ska inte ätas upp av en stämpel. */
 .toast, .stamp-toast { pointer-events: none; }
 .sparet-runda { white-space: nowrap; }
+
+
+/* Telefonen: föräldrarnas tips ur broschyren */
+.phone-tips {
+  margin: 8px 0 10px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent, #f2a63b);
+  background: var(--paper-dim);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}

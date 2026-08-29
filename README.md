@@ -327,6 +327,10 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Telefonen**: när mamma eller pappa svarar har de läst på – en mening ur
+     stadens broschyr, förklädd till något moster Gun sagt eller en dokumentär
+     pappa sett, "bra att veta till provet". Man kan också bara prata en stund
+     utan att låna.
    - **Kartan** är tryckbar: varje stad är en träffyta, och panelen under
      kartbladet visar stadsbetyg, om provet är gjort, vilka jobb du gjort där
      och billigaste och snabbaste biljetten dit härifrån – ett

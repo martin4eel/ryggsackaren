@@ -4958,6 +4958,27 @@ export class App {
       );
       if (foralder) {
         const pappa = samtal.svarare === 'pappa';
+        /**
+         * Föräldrarna har läst på. Ett stycke ur stadens broschyr, omgjort till
+         * något mamma hört av moster Gun eller pappa sett i en dokumentär -
+         * samma fakta som provet på turistbyrån kan fråga om.
+         */
+        const fakta = CITY_FACTS[this.city.id] ?? [];
+        if (fakta.length > 0) {
+          const seed = pseudoRandom(`${this.city.id}|ring|${s.days}|${samtal.svarare}`);
+          const stycke = fakta[Math.floor(seed * fakta.length)]!;
+          const mening = stycke.split(/(?<=[.!?])\s+/)[0] ?? stycke;
+          const inled = pappa
+            ? ['Jag såg en dokumentär om det där stället.', 'Jag slog upp det. Hrm.', 'Det stod i tidningen i går.']
+            : ['Moster Gun sa något om det.', 'Jag läste på nätet, du vet att jag kan det nu.', 'Grannen har varit där.'];
+          panel.append(
+            el('p', { class: 'phone-tips' },
+              el('strong', {}, `${inled[Math.floor(seed * inled.length)]} `),
+              mening.charAt(0).toLowerCase() === mening.charAt(0) ? mening : `${mening.charAt(0).toLowerCase()}${mening.slice(1)}`.replace(/^/, 'Att '),
+              ' Bra att veta till provet, tänkte jag.'
+            )
+          );
+        }
         panel.append(
           el('p', { class: 'muted' },
             `Ett lån ger ${this.money(amount)}, men skulden växer med ${this.money(loanDebt(amount))} - föräldrarna tar ränta (nu ${this.money(s.debt)}).`
@@ -4978,6 +4999,14 @@ export class App {
             },
             { class: 'btn btn-primary btn-big' }
           )
+        );
+        panel.append(
+          button('Bara prata en stund, inget lån', () => {
+            playSound('valj');
+            this.notify(pappa ? 'Pappa säger hej. Det betyder mycket, från pappa.' : 'Mamma säger att du ska ha på dig mössa. Du lovar.');
+            this.laggPa();
+            this.go('stad');
+          }, { class: 'btn btn-ghost' })
         );
         if (s.debt > 0 && s.money >= 500) {
           const payment = Math.min(s.debt, Math.floor(s.money / 2));
