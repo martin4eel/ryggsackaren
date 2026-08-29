@@ -244,14 +244,25 @@ export function playHandlare(nyckel: string, uppsattning: 1 | 2 = 1, plats = 0):
     src.playbackRate.value = 0.96 + ((summa >>> 8) % 9) * 0.02;
     const g = ctx.createGain();
     /*
-     * Handlaren ska höras genom rummet, inte i örat. Spelets syntetiska ljud
-     * ligger på 0,02-0,10 och varar tiondelar av en sekund; en normaliserad
-     * röst som pratar i tre sekunder upplevs mycket starkare vid samma
-     * siffra. Den andra uppsättningen är dessutom bandpassad och överstyrd,
-     * vilket lyfter den ytterligare - därför något lägre.
+     * Handlaren ska mumla, inte tala. Spelets syntetiska ljud ligger på
+     * 0,02-0,10 och varar tiondelar av en sekund; en normaliserad röst som
+     * pratar i tre sekunder upplevs mycket starkare vid samma siffra. Den
+     * andra uppsättningen är dessutom bandpassad och överstyrd, vilket lyfter
+     * den ytterligare - därför något lägre.
      */
-    g.gain.value = uppsattning === 2 ? 0.1 : 0.12;
-    src.connect(g);
+    g.gain.value = uppsattning === 2 ? 0.055 : 0.07;
+    /*
+     * Ett lågpass ovanpå volymen: det som gör skillnad mellan en tyst röst
+     * och en mumlande är inte styrkan utan att diskanten är borta. Så låter
+     * någon som pratar en bit bort, med ryggen till, medan man tittar på
+     * hyllan.
+     */
+    const dampa = ctx.createBiquadFilter();
+    dampa.type = 'lowpass';
+    dampa.frequency.value = uppsattning === 2 ? 1500 : 1300;
+    dampa.Q.value = 0.7;
+    src.connect(dampa);
+    dampa.connect(g);
     g.connect(master);
     src.start();
     rostSpelas = src;
