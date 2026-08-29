@@ -243,9 +243,14 @@ export function playHandlare(nyckel: string, uppsattning: 1 | 2 = 1, plats = 0):
     // Liten variation i tempo, så att det inte blir samma inspelning varje gång.
     src.playbackRate.value = 0.96 + ((summa >>> 8) % 9) * 0.02;
     const g = ctx.createGain();
-    // Handlaren ska höras genom rummet, inte i örat. Rösten är dessutom
-    // normaliserad i efterbehandlingen och blir annars starkare än allt annat.
-    g.gain.value = 0.22;
+    /*
+     * Handlaren ska höras genom rummet, inte i örat. Spelets syntetiska ljud
+     * ligger på 0,02-0,10 och varar tiondelar av en sekund; en normaliserad
+     * röst som pratar i tre sekunder upplevs mycket starkare vid samma
+     * siffra. Den andra uppsättningen är dessutom bandpassad och överstyrd,
+     * vilket lyfter den ytterligare - därför något lägre.
+     */
+    g.gain.value = uppsattning === 2 ? 0.1 : 0.12;
     src.connect(g);
     g.connect(master);
     src.start();
