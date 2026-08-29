@@ -368,9 +368,13 @@ webbläsaren och överlever att sparfilen raderas.
      halvmörkt, trä, en lampa i taket och handlarens kontur bakom disken.
      Ytorna är ett riktigt träfoto (Commons, CC BY-SA) klippt till vägg, disk
      och hyllplan av `scripts/butiksytor.py` - samma trä i hela rummet, som i
-     en butik som snickrats en gång. Lampan hänger i sin sladd och handlaren
-     står i motljus; båda är SVG, alltså rummets möbler och inte dess
-     innehåll. Filerna ligger i `public/butik/` med egen ATTRIBUTION.
+     en butik som snickrats en gång. I taket hänger en lysrörsarmatur i två
+     kedjor, ritad som SVG, med ett rör som flimrar till då och då (avstängt
+     vid `prefers-reduced-motion`). Handlaren är en silhuett renderad ur en
+     3D-modell med `scripts/rendera-silhuett.py`; två modeller och en
+     spegling ger fyra innehavare, lottade per stad, så att ingen butik
+     känns som en kopia av en annan. Filerna ligger i `public/butik/` med
+     egen ATTRIBUTION.
      Varorna står i skugga på hyllan - man ser att det står något där, inte
      vad det är - och först när man pekar på en tar handlaren fram den på
      disken, i ljuset, med namn, omdöme, pris och *Slå in*. Facket i hyllan
