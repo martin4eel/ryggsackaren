@@ -952,7 +952,13 @@ img.no-photo {
 
 .option-right {
   border-color: var(--palm);
-  background: rgba(71, 163, 130, 0.16);
+  /*
+   * Genomskinlig grön botten fungerade så länge knappen låg på papper. I
+   * minispelen ligger den på mörkblått, och då lyste bakgrunden igenom och
+   * gjorde det mörka bläcket oläsligt - rätt svar var det enda man inte kunde
+   * läsa. Grönt över vitt, ogenomskinligt.
+   */
+  background: #dcefe6;
 }
 
 .option-right .option-key {
@@ -962,7 +968,7 @@ img.no-photo {
 
 .option-wrong {
   border-color: var(--stamp);
-  background: rgba(200, 69, 47, 0.13);
+  background: #f6dcd6;
 }
 
 .option-wrong .option-key {

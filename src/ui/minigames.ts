@@ -1918,12 +1918,17 @@ function startTeamPick(host: HTMLElement, game: Minigame, onDone: Done): void {
      * räcker, och då slipper vi använda någon annans varumärke.
      */
     const bild = lagBild.get(r.lag);
+    /*
+     * Har laget ett märke avslöjas namnet först när man svarat, på raden
+     * under. Står namnet redan på skylten vore raden en upprepning, så då
+     * utelämnas den.
+     */
     marke.append(
       bild
         ? el('img', { class: 'mg-lagval-logo', src: quizImageUrl(bild), alt: 'Lagmärke', draggable: 'false' })
-        : el('p', { class: 'mg-lagval-skylt' }, lagetsNamn),
-      el('p', { class: 'mg-lagval-lagnamn' }, '\u00a0')
+        : el('p', { class: 'mg-lagval-skylt' }, lagetsNamn)
     );
+    if (bild) marke.append(el('p', { class: 'mg-lagval-lagnamn' }, '\u00a0'));
     feedback.say('', 'neutral');
     vidare.hidden = true;
     vantar = false;
@@ -1955,7 +1960,8 @@ function startTeamPick(host: HTMLElement, game: Minigame, onDone: Done): void {
     const lag = lagNamn.get(r.lag) ?? '';
     const rattNamn = spelare.get(r.ratt)?.namn ?? '';
     const valdLag = lagNamn.get(spelare.get(id)?.lag ?? '') ?? '';
-    marke.querySelector('.mg-lagval-lagnamn')!.textContent = lag;
+    const namnrad = marke.querySelector('.mg-lagval-lagnamn');
+    if (namnrad) namnrad.textContent = lag;
     feedback.say(ok ? `Rätt. ${rattNamn} – ${lag}.` : `Fel. ${spelare.get(id)?.namn ?? ''} hör till ${valdLag}. ${lag}: ${rattNamn}.`, ok ? 'ok' : 'fel');
     status.set(`Lag ${index + 1}/${rundor.length}`, `${right} rätt`);
     vidare.textContent = index + 1 < rundor.length ? 'Nästa lag' : 'Klart';

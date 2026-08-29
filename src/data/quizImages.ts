@@ -1182,6 +1182,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'katakomber', alt: 'Skallar och ben staplade längs väggarna i en gång under jord', article: 'Catacombs of Paris' },
   { id: 'palaisgarnier', alt: 'En praktfull byggnad med kolonner och gyllene statyer', article: 'Palais Garnier' },
   { id: 'tankaren', alt: 'En bronsstaty av en sittande man med hakan i handen', article: 'The Thinker' },
+  { id: 'oljetanker', alt: 'Ett långt lastfartyg som ligger djupt i vattnet', file: 'Solomon Sea (oil tanker), in the Solent, England.jpg', bred: true, altFraga: 'Ett långt, lågt fartyg med däcket fullt av rör' },
   { id: 'tjeckiskakronor', alt: 'Sedlar och mynt', article: 'Czech koruna' },
   { id: 'kafka', alt: 'En ung man med mörkt hår i kostym', article: 'Franz Kafka' },
   { id: 'pilsner', alt: 'Ett glas ljus öl med vitt skum', article: 'Pilsner' },
