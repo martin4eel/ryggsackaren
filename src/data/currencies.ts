@@ -7,8 +7,8 @@ import type { Currency } from './types';
  */
 export const CURRENCIES: Record<string, Currency> = {
   SEK: { code: 'SEK', symbol: 'kr', name: 'svenska kronor', perBase: 1, decimals: 0 },
-  NOK: { code: 'NOK', symbol: 'kr', name: 'norska kronor', perBase: 1.02, decimals: 0 },
-  DKK: { code: 'DKK', symbol: 'kr', name: 'danska kronor', perBase: 0.68, decimals: 0 },
+  NOK: { code: 'NOK', symbol: 'NOK', name: 'norska kronor', perBase: 1.02, decimals: 0 },
+  DKK: { code: 'DKK', symbol: 'DKK', name: 'danska kronor', perBase: 0.68, decimals: 0 },
   EUR: { code: 'EUR', symbol: '€', name: 'euro', perBase: 0.091, decimals: 2 },
   GBP: { code: 'GBP', symbol: '£', name: 'brittiska pund', perBase: 0.077, decimals: 2 },
   USD: { code: 'USD', symbol: '$', name: 'US-dollar', perBase: 0.098, decimals: 2 },
@@ -29,7 +29,7 @@ export const CURRENCIES: Record<string, Currency> = {
   AUD: { code: 'AUD', symbol: 'A$', name: 'australiska dollar', perBase: 0.148, decimals: 2 },
   NZD: { code: 'NZD', symbol: 'NZ$', name: 'nyzeeländska dollar', perBase: 0.163, decimals: 2 },
   RUB: { code: 'RUB', symbol: '₽', name: 'ryska rubel', perBase: 8.6, decimals: 0 },
-  ISK: { code: 'ISK', symbol: 'kr', name: 'isländska kronor', perBase: 13.4, decimals: 0 },
+  ISK: { code: 'ISK', symbol: 'ISK', name: 'isländska kronor', perBase: 13.4, decimals: 0 },
   CZK: { code: 'CZK', symbol: 'Kč', name: 'tjeckiska kronor', perBase: 2.2, decimals: 0 },
   PLN: { code: 'PLN', symbol: 'zł', name: 'polska zloty', perBase: 0.38, decimals: 2 },
   HUF: { code: 'HUF', symbol: 'Ft', name: 'ungerska forint', perBase: 34, decimals: 0 },

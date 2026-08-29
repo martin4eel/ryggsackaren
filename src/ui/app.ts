@@ -1233,7 +1233,21 @@ export class App {
         'aria-expanded': this.showModeDetails ? 'true' : 'false',
       }
     );
+    const startkassaRad = el('p', { class: 'muted startkassa' });
+    const malaStartkassa = () => {
+      const hem = CITY_BY_ID[this.startPick.cityId];
+      const kassa = this.startPick.difficulty === 'turist' ? 6000 : 4000;
+      if (!hem) return;
+      startkassaRad.textContent =
+        hem.currency === 'SEK'
+          ? `Startkassa: ${formatMoney(kassa, 'SEK')}.`
+          : `Startkassa: ${formatMoney(kassa, hem.currency)}. Hela resan räknas i ${CURRENCIES[hem.currency]?.name ?? hem.currency}; det motsvarar ${formatMoney(kassa, 'SEK')}.`;
+    };
+    malaStartkassa();
     diffPanel.append(modeToggle);
+    // Kassan räknas i hemstadens valuta hela resan. Den som startar i Reykjavik
+    // ska inte tro att 80 400 isländska kronor är en förmögenhet.
+    diffPanel.append(startkassaRad);
     wrap.append(diffPanel);
 
     /**
@@ -1333,6 +1347,7 @@ export class App {
       paintList();
       paintPass();
       uppdateraStart();
+      malaStartkassa();
     };
 
     const paintList = () => {
