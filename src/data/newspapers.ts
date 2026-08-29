@@ -1374,4 +1374,144 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       'Priset på ett paket mate steg på tisdagen och sjönk på onsdagen, vilket är normalt.',
     ],
   },
+  belgrad: {
+    namn: 'Beogradski List',
+    devis: 'Vid flodmötet sedan 1889',
+    grundad: 1889,
+    artiklar: [
+      {
+        rubrik: 'Flotten fick nytt förtöjningstillstånd efter tre år',
+        text:
+          'Klubbflotten vid Sava har fått sitt förtöjningstillstånd förnyat, tre år efter att det gick ut. Hamnkontoret uppger att handläggningen försenats av att ingen kunde enas om vilken myndighet som ansvarar för saker som flyter. Flotten har hållit öppet under hela perioden. Ägaren säger att musiken inte kommer att sänkas.',
+      },
+      {
+        rubrik: 'Spårvagn 2 gick fel väg runt fästningen',
+        text:
+          'Spårvagnslinje 2, som går i ring, körde på tisdagen ringen åt fel håll i drygt två timmar innan någon anmälde det. Passagerarna uppges ha kommit fram ändå, om än i omvänd ordning. Trafikledningen kallar händelsen ovanlig men inte unik.',
+      },
+      {
+        rubrik: 'Kaféet på Skadarlija stänger klockan fyra - på eftermiddagen',
+        text:
+          'Ett kafé i bohemkvarteret har infört stängning klockan sexton, vilket väckt uppmärksamhet i ett kvarter där verksamheter i regel öppnar då. Ägaren förklarar att han vill hinna hem och äta middag med sin mor. Grannkrogarna har uttryckt förståelse och fördubblat sina egna öppettider.',
+      },
+    ],
+    notiser: [
+      'Fästningsparkens klocka går tolv minuter fel, i vilken riktning har inte fastställts.',
+      'Kajen städas på lördag. Föreningen efterlyser folk med stövlar.',
+      'Den försvunna katten från Dorćol har hittats i en färja. Färjan var förtöjd.',
+      'Vinterns is på Donau har släppt. Flottarna bogseras tillbaka i tur och ordning.',
+    ],
+  },
+  hudiksvall: {
+    namn: 'Glada Hudikbladet',
+    devis: 'Hälsinglands äldsta stad, sedan 1582',
+    grundad: 1846,
+    artiklar: [
+      {
+        rubrik: 'Möljens bodar målas om i exakt samma röda',
+        text:
+          'Kommunen har beslutat att sjöbodarna vid kanalen ska målas om i falu rödfärg av samma kulör som tidigare. Beslutet föregicks av en remissrunda där tre alternativa kulörer föreslogs och samtliga avstyrktes. Målningen börjar i maj, om vädret tillåter, vilket det sällan gör i maj.',
+      },
+      {
+        rubrik: 'Skärgårdsbåten får en tur till på söndagar',
+        text:
+          'Trafiken ut mot Hornslandet utökas med en söndagstur från och med midsommar. Rederiet uppger att efterfrågan finns, särskilt bland dem som missat den befintliga turen. Turen går klockan halv elva och tar en och en halv timme, väder och passagerarantal tillåtande.',
+      },
+      {
+        rubrik: 'Hälsingegård öppnar festvåningen två helger extra',
+        text:
+          'En av världsarvsgårdarna utanför staden håller öppet ytterligare två helger i sommar. Festvåningen, som ägaren beskriver som använd omkring fyra gånger på hundra år, visas mot avgift. Kaffe serveras i köket, där man däremot suttit varje dag.',
+      },
+    ],
+    notiser: [
+      'Torgets fontän är igång igen efter att en anka byggt bo i den.',
+      'Linberedningens vänner söker någon som kan laga en bråka.',
+      'Stadsbussen kör om planerat efter att vägarbetet blev klart en vecka för tidigt.',
+      'Iskiosken vid Möljen öppnar när isen gått, meddelar innehavaren utan att ange datum.',
+    ],
+  },
+  brescia: {
+    namn: 'Il Corriere Bresciano',
+    devis: 'Fra le Alpi e il lago',
+    grundad: 1873,
+    artiklar: [
+      {
+        rubrik: 'Astronomiska uret gick två minuter fel i påsk',
+        text:
+          'Uret på Piazza della Loggia, i drift sedan 1546, visade under påskhelgen två minuter fel. Urmakaren som sköter verket förklarar att fukten spelar in och att två minuter på fem sekel får anses godtagbart. Stadens kommunfullmäktige har tackat honom.',
+      },
+      {
+        rubrik: 'Veteranbilarna samlas på Viale Venezia',
+        text:
+          'Startplatsen för det klassiska landsvägsloppet fylls som vanligt av bilar äldre än sina förare. Arrangörerna påminner om att hastighetsbegränsningarna gäller även för dem som betalat startavgift. Kaféerna längs vägen öppnar klockan fem på morgonen.',
+      },
+      {
+        rubrik: 'Franciacortaproducenterna eniga om skördetiden',
+        text:
+          'Vinodlarna söder om staden har enats om att skörden inleds tredje veckan i augusti. Beslutet fattades efter provsmakning av druvor från åtta gårdar, en process som enligt protokollet tog två dagar längre än planerat.',
+      },
+    ],
+    notiser: [
+      'Museets romerska golv är åter framme efter att glaset putsats.',
+      'Marknaden på Piazza Rovetta flyttas en dag på grund av helgen.',
+      'Bergbanan till Maddalena stängd för översyn, vandringsleden är öppen.',
+      'Bibliotekets kopia av stadsplanen från 1764 är utlånad. Till vem framgår inte.',
+    ],
+  },
+  sansebastian: {
+    namn: 'El Faro Donostiarra',
+    devis: 'Entre la Concha y el monte',
+    grundad: 1902,
+    artiklar: [
+      {
+        rubrik: 'Pintxosbarerna enades om pinnpriset',
+        text:
+          'Barerna i gamla stan har kommit överens om ett gemensamt riktpris per pintxo, efter att gäster klagat på att räkningen varierat mellan gator. Överenskommelsen omfattar inte de barer som räknar med tandpetare, vilket är de flesta. Frågan tas upp igen efter sommaren.',
+      },
+      {
+        rubrik: 'Rekordmånga i vattnet vid Zurriola',
+        text:
+          'Vågorna vid stadens surfstrand lockade i helgen fler än vad livräddarna kunde räkna. Strandvakten uppmanar till hänsyn mellan brädor och simmande, och påminner om att bukten intill är spegelblank för den som föredrar det.',
+      },
+      {
+        rubrik: 'Bergbanan till Igueldo fyller år, vagnarna får ny lack',
+        text:
+          'Banan från 1912 rustas i vinter. Vagnarna behåller sin form och sitt tempo, som bolaget beskriver som lugnt med avsikt. Utsikten uppges vara oförändrad.',
+      },
+    ],
+    notiser: [
+      'Ön i bukten har fått ny brygga. Färjan går varje halvtimme.',
+      'Filmfestivalens biljettkassa öppnar i september, kön börjar i augusti.',
+      'Stadens äldsta kafé har bytt kaffesort. Stamgästerna har noterat det.',
+      'Nästa högvatten sammanfaller med lunchen. Promenaden längs muren avråds.',
+    ],
+  },
+  oaxaca: {
+    namn: 'El Zócalo de Oaxaca',
+    devis: 'Siete moles, una ciudad',
+    grundad: 1912,
+    artiklar: [
+      {
+        rubrik: 'Marknaden vid Zócalo utökar med tre stånd',
+        text:
+          'Efter två års väntan har marknaden fått tillstånd att öppna tre nya stånd, samtliga för chili. Förvaltningen uppger att ansökningarna om mole avslogs eftersom antalet grytor redan anses tillräckligt. Beslutet överklagas.',
+      },
+      {
+        rubrik: 'Mezcalproducenterna vill ha egen märkning',
+        text:
+          'Destillerierna i dalen kräver en märkning som skiljer jordugnsrostad agave från industriell produktion. Branschorganisationen stöder förslaget men varnar för att en ny etikett kräver en ny myndighet, och att myndigheten kräver en ny etikett.',
+      },
+      {
+        rubrik: 'Väverierna i Teotitlán färgar med kochenill igen',
+        text:
+          'Efterfrågan på naturfärgade mattor har fått flera väverier att återgå till kochenill, sköldlusen som ger rött. En vävare uppger att kunderna frågar efter färgen men sällan efter insekten.',
+      },
+    ],
+    notiser: [
+      'Kyrkogårdens grindar hålls öppna till gryningen under allhelgonahelgen.',
+      'Utgrävningen på berget söker frivilliga med tålamod och egen hatt.',
+      'Regnet kom på eftermiddagen, som utlovat, och slutade lika punktligt.',
+      'Bussen till Hierve el Agua går igen, sedan vägen skrapats efter regnet.',
+    ],
+  },
 };

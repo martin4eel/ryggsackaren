@@ -238,4 +238,29 @@ export const SEVARDHETER: Record<string, string[]> = {
     'Högen restes troligen på 500- eller 600-talet; namnet kommer från sagokungen Bröt-Anund, men ingen vet vem som ligger där. Den har aldrig grävts ut.',
     'Runstenen berättar att Folkvid reste stenarna efter sin son Heden, och att Vred ristade. Här hölls ting, och Eriksgatan gick förbi; vägen är fortfarande markerad.',
   ],
+  belgrad: [
+    'Fästningen Kalemegdan på udden mellan Sava och Donau, med vallar från flera århundraden och parken där staden går ut för att titta på flodmötet.',
+    'Skadarlija, bohemkvarteret med kullersten, kafanas och levande musik varje kväll. Räkningen kommer när gästen frågar, inte förr.',
+    'Nikola Tesla-museet i en villa från 1929, där hans aska förvaras i en förgylld sfär och besökarna får hålla i lysrör som tänds av sig själva.',
+  ],
+  hudiksvall: [
+    'Möljen: raden av rödmålade fiske- och sjöbodar längs kanalen mitt i staden, från 1700- och 1800-talen, med speglingar i vattnet på kvällen.',
+    'Hälsingegårdarna utanför staden, sju av dem på Unescos världsarvslista, med målade festvåningar som bönderna knappt använde.',
+    'Hornslandet, halvön med klapperstensfält, gamla fiskelägen och en kust som fortfarande stiger ur havet efter inlandsisen.',
+  ],
+  brescia: [
+    'Det romerska forumet mitt i staden, med tempelrester från år 73 e.Kr., på Unescos världsarvslista sedan 2011.',
+    'Piazza della Loggia med sitt astronomiska ur från 1546, som visar månfaser och stjärntecken medan två bronsfigurer slår i klockan.',
+    'Museo Santa Giulia i ett gammalt kloster, byggt över romerska villor som ligger kvar under golvet och går att se genom glas.',
+  ],
+  sansebastian: [
+    'La Concha, den snäckformade bukten med sitt vita järnräcke, skyddad av ön Santa Clara och nästan alltid spegelblank.',
+    'Gamla stan med sina pintxosbarer, där snittarna står framme på diskarna och man betalar per pinne innan man går vidare till nästa bar.',
+    'Monte Igueldo med sin bergbana från 1912 och utsikten över hela bukten, staden och Atlanten bakom.',
+  ],
+  oaxaca: [
+    'Monte Albán på bergskrönet ovanför dalen: zapotekernas stad med bollplan, gravar och stenreliefer som kallas los danzantes.',
+    'Templo de Santo Domingo med sitt förgyllda inre och den botaniska trädgården i klostrets gamla kvarter.',
+    'Mercado Benito Juárez och grillgången intill, där chilin hänger i knippen och mole säljs i påsar efter färg.',
+  ],
 };

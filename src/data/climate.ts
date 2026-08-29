@@ -28,6 +28,7 @@ export const CITY_CLIMATE: Record<string, Climate> = {
   malmo: 'nordiskt',
   vasteras: 'nordiskt',
   koping: 'nordiskt',
+  hudiksvall: 'nordiskt',
   oslo: 'nordiskt',
   helsingfors: 'nordiskt',
   kopenhamn: 'nordiskt',
@@ -70,6 +71,10 @@ export const CITY_CLIMATE: Record<string, Climate> = {
   melbourne: 'subtropiskt',
   auckland: 'subtropiskt',
   buenosaires: 'subtropiskt',
+  belgrad: 'tempererat',
+  brescia: 'medelhav',
+  sansebastian: 'tempererat',
+  oaxaca: 'hogland',
 };
 
 /** Höjd över havet i meter, för städer där det märks i temperaturen. */
@@ -79,4 +84,5 @@ export const CITY_ALTITUDE: Record<string, number> = {
   addisabeba: 2355,
   nairobi: 1795,
   mexikocity: 2240,
+  oaxaca: 1550,
 };

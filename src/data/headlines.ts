@@ -52,4 +52,9 @@ export const CITY_HEADLINES: Record<string, string[]> = {
   melbourne: ['Spårvagnarna gratis i centrum', 'Flinders Street får ny klocka'],
   auckland: ['Sky Tower: bungeehoppen fortsätter', 'Färjorna till Waiheke förlängs'],
   buenosaires: ['Tangofestivalen fyller La Boca', 'Fotbollsderbyt på söndag utsålt'],
+  belgrad: ['Flotten vid Sava fick nytt förtöjningstillstånd', 'Spårvagn 2 gick fel väg runt fästningen - igen'],
+  hudiksvall: ['Möljens bodar målas om i samma röda som förra gången', 'Skärgårdsbåten fick en till tur på söndagar'],
+  brescia: ['Astronomiska uret på torget gick två minuter fel i påsk', 'Veteranbilar samlas för start på Viale Venezia'],
+  sansebastian: ['Pintxosbarerna enades om pinnpriset', 'Vågorna vid Zurriola lockade rekordmånga i helgen'],
+  oaxaca: ['Marknaden vid Zócalo utökar med tre stånd', 'Mezcalproducenterna vill ha egen ursprungsmärkning'],
 };

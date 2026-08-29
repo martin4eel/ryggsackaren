@@ -192,7 +192,10 @@ function ensureCtx(): AudioContext | null {
  * Filerna hämtas först när någon går in i en butik, och en gång per sida -
  * spelet ska fortfarande starta utan att ladda ljud.
  */
-const ROSTER = ['./ljud/handlare-1.m4a', './ljud/handlare-2.m4a', './ljud/handlare-3.m4a'];
+const ROSTER: Record<1 | 2, string[]> = {
+  1: ['./ljud/handlare-a-1.m4a', './ljud/handlare-a-2.m4a', './ljud/handlare-a-3.m4a'],
+  2: ['./ljud/handlare-b-1.m4a', './ljud/handlare-b-2.m4a', './ljud/handlare-b-3.m4a'],
+};
 const rostbuffert = new Map<string, AudioBuffer>();
 let rostSpelas: AudioBufferSourceNode | null = null;
 
@@ -213,14 +216,17 @@ async function hamtaRost(c: AudioContext, url: string): Promise<AudioBuffer | nu
 
 /**
  * Låter handlaren säga något. `nyckel` avgör vilken av rösterna det blir, så
- * att samma butik låter likadant medan man står i den.
+ * att samma butik låter likadant medan man står i den, och `uppsattning`
+ * vilken av de två handlarna som talar - de har olika röster, och den andra
+ * låter som en gammal telefonlur.
  */
-export function playHandlare(nyckel: string): void {
+export function playHandlare(nyckel: string, uppsattning: 1 | 2 = 1): void {
   const c = ensureCtx();
   if (!c || !master) return;
   let summa = 0;
   for (let i = 0; i < nyckel.length; i++) summa = (summa * 31 + nyckel.charCodeAt(i)) >>> 0;
-  const url = ROSTER[summa % ROSTER.length]!;
+  const lista = ROSTER[uppsattning];
+  const url = lista[summa % lista.length]!;
   void hamtaRost(c, url).then((buf) => {
     if (!buf || !ctx || !master) return;
     // En replik i taget: två handlare som pratar i mun på varandra är en av

@@ -1,143 +1,158 @@
 {
- "stockholm": {
-  "file": "Stockholm aerial 6.jpg"
- },
- "malmo": {
-  "file": "Malmö from above (17164888637).jpg"
- },
- "goteborg": {
-  "file": "Gothenburg skyline (3883926931).jpg"
- },
- "vasteras": {
-  "file": "Öster Mälarstrand, Västerås.jpg"
- },
- "koping": {
-  "file": "Köping 2013-08-24 image02.jpg"
- },
- "reykjavik": {
-  "file": "Reykjavik, Iceland aerial cityscape (Unsplash).jpg"
- },
- "london": {
-  "file": "River Thames viewed from the Tower Bridge in London.jpg"
- },
- "paris": {
-  "file": "Paris aerial view.jpg"
- },
- "amsterdam": {
-  "file": "Amsterdam Skyline View.jpg"
- },
- "rom": {
-  "file": "Rome Skyline (8012016319).jpg"
- },
- "istanbul": {
-  "file": "View of Istanbul from Galata Tower.jpg"
- },
- "moskva": {
-  "file": "View to Moscow river from Bolshoy Moskvoretsky Bridge.jpg"
- },
- "kairo": {
-  "file": "Cairo skyline, Panoramic view, Egypt.jpg"
- },
- "marrakech": {
-  "file": "Marrakech skyline view.jpg"
- },
- "nairobi": {
-  "file": "Aerial view of the Nairobi skyline from the KICC rooftop at golden hour.jpg"
- },
- "kapstaden": {
-  "file": "Aerial View of Cape Town (iau2305a).jpg"
- },
- "mumbai": {
-  "file": "Panoramic view of Mumbai (54345507779).jpg"
- },
- "bangkok": {
-  "file": "Bangkok Skyline from Wat Saket.jpg"
- },
- "peking": {
-  "file": "Skyline of Beijing CBD from the southeast (20210907074131).jpg"
- },
- "tokyo": {
-  "file": "Shiba-koen, aerial view on Tokyo Tower at dusk (Unsplash).jpg"
- },
- "sydney": {
-  "file": "Aerial view of Sydney Harbour Bridge.jpg"
- },
- "auckland": {
-  "file": "Auckland Skyline as seen from Devonport 20100128 3.jpg"
- },
- "newyork": {
-  "file": "Manhattan - Aerial view looking south.jpg"
- },
- "mexikocity": {
-  "file": "Paseo de la Reforma Skyline Mexico City.jpg"
- },
- "cusco": {
-  "file": "Cusco skyline - October 2025.jpg"
- },
- "rio": {
-  "file": "Rio-panorama-Botafogo-Sugarloaf.jpg"
- },
- "kopenhamn": {
-  "file": "Aerial views of Copenhagen 02.jpg"
- },
- "oslo": {
-  "file": "Air oslo s.jpg"
- },
- "helsingfors": {
-  "file": "Southern Helsinki panorama 2011-06-24 2.jpg"
- },
- "berlin": {
-  "file": "Berlin Panorama Mitte.jpg"
- },
- "barcelona": {
-  "file": "Barcelona - view from Tibidabo toward Sagrada Famila.jpg"
- },
- "lissabon": {
-  "file": "Alfama Rooftops and Tagus River View, Lisbon (54733828355).jpg"
- },
- "aten": {
-  "file": "Attica 06-13 Athens 40 View from Lycabettus.jpg"
- },
- "prag": {
-  "file": "Lascar View of Prague's skyline from the Petřínská rozhledna (4501601667).jpg"
- },
- "dublin": {
-  "file": "Aerial photograph of Dublin 11 October 2015.jpg"
- },
- "dubai": {
-  "file": "Dubai Skyline from Zabeel Park.jpg"
- },
- "amman": {
-  "file": "Amman view from citadel 0350 panorama.jpg"
- },
- "seoul": {
-  "file": "Han River Seoul skyline Pixabay 1214950.jpg"
- },
- "singapore": {
-  "file": "1 singapore city skyline dusk panorama 2011.jpg"
- },
- "hanoi": {
-  "file": "Hanoi Skyline - NKS.jpg"
- },
- "kathmandu": {
-  "file": "View of Kathmandu from Swayambhunath 2, Nepal.jpg"
- },
- "buenosaires": {
-  "file": "Aerial view of Buenos Aires, 2009-03-28.jpg"
- },
- "havanna": {
-  "file": "Havana. view from FOCSA. - panoramio.jpg"
- },
- "sanfrancisco": {
-  "file": "Aerial view of downtown San Francisco from the north dllu.jpg"
- },
- "dakar": {
-  "file": "Dakar, Senegal - Left Half (5662420768).jpg"
- },
- "addisabeba": {
-  "file": "Addis Ababa (16314616596).jpg"
- },
- "melbourne": {
-  "file": "Melbourne Docklands Panorama old and new (40125070352).jpg"
- }
+  "stockholm": {
+    "file": "Stockholm aerial 6.jpg"
+  },
+  "malmo": {
+    "file": "Malmö from above (17164888637).jpg"
+  },
+  "goteborg": {
+    "file": "Gothenburg skyline (3883926931).jpg"
+  },
+  "vasteras": {
+    "file": "Öster Mälarstrand, Västerås.jpg"
+  },
+  "koping": {
+    "file": "Köping 2013-08-24 image02.jpg"
+  },
+  "reykjavik": {
+    "file": "Reykjavik, Iceland aerial cityscape (Unsplash).jpg"
+  },
+  "london": {
+    "file": "River Thames viewed from the Tower Bridge in London.jpg"
+  },
+  "paris": {
+    "file": "Paris aerial view.jpg"
+  },
+  "amsterdam": {
+    "file": "Amsterdam Skyline View.jpg"
+  },
+  "rom": {
+    "file": "Rome Skyline (8012016319).jpg"
+  },
+  "istanbul": {
+    "file": "View of Istanbul from Galata Tower.jpg"
+  },
+  "moskva": {
+    "file": "View to Moscow river from Bolshoy Moskvoretsky Bridge.jpg"
+  },
+  "kairo": {
+    "file": "Cairo skyline, Panoramic view, Egypt.jpg"
+  },
+  "marrakech": {
+    "file": "Marrakech skyline view.jpg"
+  },
+  "nairobi": {
+    "file": "Aerial view of the Nairobi skyline from the KICC rooftop at golden hour.jpg"
+  },
+  "kapstaden": {
+    "file": "Aerial View of Cape Town (iau2305a).jpg"
+  },
+  "mumbai": {
+    "file": "Panoramic view of Mumbai (54345507779).jpg"
+  },
+  "bangkok": {
+    "file": "Bangkok Skyline from Wat Saket.jpg"
+  },
+  "peking": {
+    "file": "Skyline of Beijing CBD from the southeast (20210907074131).jpg"
+  },
+  "tokyo": {
+    "file": "Shiba-koen, aerial view on Tokyo Tower at dusk (Unsplash).jpg"
+  },
+  "sydney": {
+    "file": "Aerial view of Sydney Harbour Bridge.jpg"
+  },
+  "auckland": {
+    "file": "Auckland Skyline as seen from Devonport 20100128 3.jpg"
+  },
+  "newyork": {
+    "file": "Manhattan - Aerial view looking south.jpg"
+  },
+  "mexikocity": {
+    "file": "Paseo de la Reforma Skyline Mexico City.jpg"
+  },
+  "cusco": {
+    "file": "Cusco skyline - October 2025.jpg"
+  },
+  "rio": {
+    "file": "Rio-panorama-Botafogo-Sugarloaf.jpg"
+  },
+  "kopenhamn": {
+    "file": "Aerial views of Copenhagen 02.jpg"
+  },
+  "oslo": {
+    "file": "Air oslo s.jpg"
+  },
+  "helsingfors": {
+    "file": "Southern Helsinki panorama 2011-06-24 2.jpg"
+  },
+  "berlin": {
+    "file": "Berlin Panorama Mitte.jpg"
+  },
+  "barcelona": {
+    "file": "Barcelona - view from Tibidabo toward Sagrada Famila.jpg"
+  },
+  "lissabon": {
+    "file": "Alfama Rooftops and Tagus River View, Lisbon (54733828355).jpg"
+  },
+  "aten": {
+    "file": "Attica 06-13 Athens 40 View from Lycabettus.jpg"
+  },
+  "prag": {
+    "file": "Lascar View of Prague's skyline from the Petřínská rozhledna (4501601667).jpg"
+  },
+  "dublin": {
+    "file": "Aerial photograph of Dublin 11 October 2015.jpg"
+  },
+  "dubai": {
+    "file": "Dubai Skyline from Zabeel Park.jpg"
+  },
+  "amman": {
+    "file": "Amman view from citadel 0350 panorama.jpg"
+  },
+  "seoul": {
+    "file": "Han River Seoul skyline Pixabay 1214950.jpg"
+  },
+  "singapore": {
+    "file": "1 singapore city skyline dusk panorama 2011.jpg"
+  },
+  "hanoi": {
+    "file": "Hanoi Skyline - NKS.jpg"
+  },
+  "kathmandu": {
+    "file": "View of Kathmandu from Swayambhunath 2, Nepal.jpg"
+  },
+  "buenosaires": {
+    "file": "Aerial view of Buenos Aires, 2009-03-28.jpg"
+  },
+  "havanna": {
+    "file": "Havana. view from FOCSA. - panoramio.jpg"
+  },
+  "sanfrancisco": {
+    "file": "Aerial view of downtown San Francisco from the north dllu.jpg"
+  },
+  "dakar": {
+    "file": "Dakar, Senegal - Left Half (5662420768).jpg"
+  },
+  "addisabeba": {
+    "file": "Addis Ababa (16314616596).jpg"
+  },
+  "melbourne": {
+    "file": "Melbourne Docklands Panorama old and new (40125070352).jpg"
+  },
+  "belgrad": {
+    "file": "Sava and Danube in Belgrade, view from Kalemegdan Park at the Victor statue.jpg"
+  },
+  "hudiksvall": {
+    "file": "Hudiksvall July 2014 05.jpg"
+  },
+  "brescia": {
+    "file": "Veduta di Brescia dal Castello.jpg"
+  },
+  "sansebastian": {
+    "file": "Donosti (112287257).jpeg"
+  },
+  "oaxaca": {
+    "file": "Templo de Santo Domingo de Guzmán, Oaxaca-2.jpg"
+  }
 }

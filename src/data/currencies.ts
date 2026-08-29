@@ -35,6 +35,7 @@ export const CURRENCIES: Record<string, Currency> = {
   HUF: { code: 'HUF', symbol: 'Ft', name: 'ungerska forint', perBase: 34, decimals: 0 },
   CHF: { code: 'CHF', symbol: 'Fr', name: 'schweizerfranc', perBase: 0.085, decimals: 2 },
   AED: { code: 'AED', symbol: 'د.إ', name: 'emiratiska dirham', perBase: 0.36, decimals: 2 },
+  RSD: { code: 'RSD', symbol: 'RSD', name: 'serbiska dinarer', perBase: 10.2, decimals: 0 },
   JOD: { code: 'JOD', symbol: 'JD', name: 'jordanska dinarer', perBase: 0.069, decimals: 2 },
   KRW: { code: 'KRW', symbol: '₩', name: 'sydkoreanska won', perBase: 135, decimals: 0 },
   SGD: { code: 'SGD', symbol: 'S$', name: 'singaporianska dollar', perBase: 0.128, decimals: 2 },

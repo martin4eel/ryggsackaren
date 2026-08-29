@@ -85,6 +85,11 @@ export const OPERATORS: Record<string, CountryOperators> = {
     rail: { name: 'Bohemia Rail', speed: 100 },
     bus: 'Moravabus',
   },
+  Serbien: {
+    air: { name: 'Danubia Air', code: 'DU' },
+    rail: { name: 'Balkanspåret', speed: 75 },
+    bus: 'Beogradbussen',
+  },
   Italien: {
     air: { name: 'Volare Italia', code: 'VI' },
     rail: { name: 'Ferrovie del Sole', speed: 155 },

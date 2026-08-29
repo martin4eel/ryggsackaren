@@ -79,6 +79,11 @@ const CITY_ARTICLES = {
   melbourne: { article: 'Flinders Street railway station' },
   vasteras: { article: 'Anundshög' },
   koping: { file: 'Köping 2013-08-23 image01.jpg' },
+  belgrad: { file: 'Pobednik monument, Kalemegdan, Belgrade.jpg' },
+  hudiksvall: { file: 'Huddikhamn.JPG' },
+  brescia: { file: 'Palazzo della Loggia e piazza Brescia.jpg' },
+  sansebastian: { file: 'San Sebastian La Concha-20120902-RM-125922.jpg' },
+  oaxaca: { file: 'Monte Alban, Main Plaza, Building J, and the North Platform (20498776500).jpg' },
 };
 
 async function api(url) {

@@ -2107,7 +2107,10 @@ export class App {
       () => {
         // Handlaren hörs innan man ser honom. Marknadssorlet som låg här
         // förut spelade ovanpå rösten och gjorde båda otydliga.
-        playHandlare(`${this.state!.currentCityId}|hej`);
+        // Handlaren i staden man går in i har sin egen röst.
+        const stad = this.city;
+        const vilken: 1 | 2 = CITIES.findIndex((c) => c.id === stad.id) % 2 === 0 ? 1 : 2;
+        playHandlare(`${stad.id}|hej`, vilken);
         this.go('souvenir');
       }
     );
@@ -4600,9 +4603,13 @@ export class App {
      * silhuett renderad ur en 3D-modell med `scripts/rendera-silhuett.py`,
      * beskuren vid midjan - resten står bakom skivan.
      */
-    // Två handlare, och den ena vänd åt andra hållet i hälften av städerna:
-    // fyra butiksinnehavare räcker för att ingen stad ska kännas som en kopia.
-    const vem = pseudoRandom(`${city.id}|handlare`) < 0.5 ? 1 : 2;
+    /*
+     * Två handlare, jämnt fördelade: varannan stad i listan får den ena och
+     * varannan den andra, i stället för att lotta - lotten gav sex av tio åt
+     * samma håll. Den ena vänds dessutom åt andra hållet i hälften av
+     * städerna, så att fyra butiksinnehavare täcker hela världen.
+     */
+    const vem: 1 | 2 = CITIES.findIndex((c) => c.id === city.id) % 2 === 0 ? 1 : 2;
     const spegel = pseudoRandom(`${city.id}|handlare|vand`) < 0.5;
     const handlare = el('div', {
       class: `butik-handlare ${spegel ? 'butik-handlare-spegel' : ''}`,
@@ -4632,7 +4639,7 @@ export class App {
         () => {
           this.butikVald = this.butikVald === souvenir.id ? null : souvenir.id;
           playSound('valj');
-          playHandlare(`${city.id}|${souvenir.id}`);
+          playHandlare(`${city.id}|${souvenir.id}`, vem);
           this.scrollToTopNext = false;
           this.render();
         },

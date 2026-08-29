@@ -335,6 +335,9 @@ export function getProgress(state: GameState, cityId: string): CityProgress {
   if (p) {
     p.revealed ??= [];
     p.spent ??= [];
+    // Utan den här raden kraschade tidningen på en sparfil från en äldre
+    // version: platsannonserna slår upp workedJobs för varje jobb i staden.
+    p.workedJobs ??= [];
   }
   if (!p) {
     p = { rating: 0, visits: 0, workedJobs: [], revealed: [], spent: [] };

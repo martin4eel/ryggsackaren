@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'upptackaren-v45';
+const CACHE = 'upptackaren-v47';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -68,7 +68,10 @@ const CITY_PHOTOS = [
  * Handlarens röster. Tre korta filer på ett par tiotals kilobyte, som hämtas
  * in vid installationen så att butiken låter likadant offline.
  */
-const LJUD = ['./ljud/handlare-1.m4a', './ljud/handlare-2.m4a', './ljud/handlare-3.m4a'];
+const LJUD = [
+  './ljud/handlare-a-1.m4a', './ljud/handlare-a-2.m4a', './ljud/handlare-a-3.m4a',
+  './ljud/handlare-b-1.m4a', './ljud/handlare-b-2.m4a', './ljud/handlare-b-3.m4a',
+];
 
 /** Butikens ytor: vägg, disk och hyllplan, klippta ur ett träfoto. */
 const BUTIK = ['./butik/butik-vagg.webp', './butik/butik-disk.webp', './butik/butik-bracka.webp', './butik/handlare-1.webp', './butik/handlare-2.webp'];

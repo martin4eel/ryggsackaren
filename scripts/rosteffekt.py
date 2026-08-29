@@ -7,7 +7,7 @@ någonstans mellan simlish och rösten i en tv-spelstelefon från 2002. Orden
 ska höras som prat utan att gå att uppfatta, för handlaren säger ändå
 samma sak i texten bredvid.
 
-  python3 scripts/rosteffekt.py <in.wav> <ut.wav> [tonhojning]
+  python3 scripts/rosteffekt.py <in.wav> <ut.wav> [tonhojning] [--telefon]
 
 Kedjan: trimma tystnad, snabba upp (och därmed höja tonen), bandpassa som en
 telefonlinje, mjuk överstyrning, kvantisera till åtta bitar, tona in och ut,
@@ -117,21 +117,69 @@ def normalisera(s, topp=0.72):
     return [x * topp / m for x in s] if m else s
 
 
-def kor(in_fil, ut_fil, tonhojning=1.14, ut_sr=22050):
+def brus(s, sr, niva=0.006):
+    """Linjebrus: ett svagt sus som ligger under rösten hela samtalet."""
+    ut = []
+    frö = 12345
+    for x in s:
+        # Enkel linjär kongruensgenerator: samma brus varje gång skriptet körs,
+        # så att en omkörning ger exakt samma fil.
+        frö = (1103515245 * frö + 12345) % 2147483648
+        ut.append(x + (frö / 2147483648 - 0.5) * 2 * niva)
+    return ut
+
+
+def knaster(s, sr, antal=7, styrka=0.16):
+    """Enstaka knäppar i linjen, som en dålig kontakt i luren."""
+    ut = list(s)
+    frö = 99
+    for k in range(antal):
+        frö = (1103515245 * frö + 12345) % 2147483648
+        i = int((frö / 2147483648) * max(1, len(ut) - 40))
+        for j in range(12):
+            if i + j < len(ut):
+                ut[i + j] += styrka * (1 - j / 12) * (1 if j % 2 else -1)
+    return ut
+
+
+def kor(in_fil, ut_fil, tonhojning=1.14, ut_sr=22050, telefon=False):
+    """
+    `telefon` snävar av bandet ytterligare, lägger på linjebrus och några
+    knäpp: skillnaden mellan en röst i rummet och en röst i en gammal lur.
+    """
     sr, s = las_wav(in_fil)
     s = trimma(s, sr)
     s = samla_om(s, tonhojning * sr / ut_sr)   # ton upp och ner till 22 kHz
     sr = ut_sr
-    s = hogpass(s, sr, 420)
-    s = lagpass(s, sr, 2900)
-    s = overstyr(s)
-    s = lagpass(s, sr, 3200)                   # jämna ut det överstyrningen rev upp
-    s = kvantisera(s, 8)
+    if telefon:
+        # Telefonbandet är smalare än radions: allt under 500 och över 2 400
+        # Hz försvann i kopparledningen, och det är det örat känner igen.
+        s = hogpass(s, sr, 520, 0.9)
+        s = hogpass(s, sr, 520, 0.9)
+        s = lagpass(s, sr, 2400, 0.9)
+        s = lagpass(s, sr, 2400, 0.9)
+        s = overstyr(s, 3.4)
+        s = lagpass(s, sr, 2600)
+        s = kvantisera(s, 7)
+        s = brus(s, sr)
+        s = knaster(s, sr)
+        s = hogpass(s, sr, 480)
+    else:
+        s = hogpass(s, sr, 420)
+        s = lagpass(s, sr, 2900)
+        s = overstyr(s)
+        s = lagpass(s, sr, 3200)               # jämna ut det överstyrningen rev upp
+        s = kvantisera(s, 8)
     s = tona(s, sr)
     s = normalisera(s)
     skriv_wav(ut_fil, sr, s)
-    print(f'{ut_fil}: {len(s) / sr:.2f} s @ {sr} Hz')
+    print(f'{ut_fil}: {len(s) / sr:.2f} s @ {sr} Hz{" (telefon)" if telefon else ""}')
 
 
 if __name__ == '__main__':
-    kor(sys.argv[1], sys.argv[2], float(sys.argv[3]) if len(sys.argv) > 3 else 1.14)
+    kor(
+        sys.argv[1],
+        sys.argv[2],
+        float(sys.argv[3]) if len(sys.argv) > 3 else 1.14,
+        telefon='--telefon' in sys.argv,
+    )
