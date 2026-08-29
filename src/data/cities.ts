@@ -497,11 +497,10 @@ export const CITIES: City[] = [
       pilot: 'Haneda',
       sushikock: 'Sushi Tsukiji',
       robottekniker: 'Akihabara Robotics',
-      tagvard: 'Yamanote Line',
       butiksvard: 'Konbini Shinjuku',
       taikotrummis: 'Taiko Asakusa',
     },
-    jobs: ['sushikock', 'robottekniker', 'tagvard', 'butiksvard', 'taikotrummis', 'pilot'],
+    jobs: ['sushikock', 'robottekniker', 'butiksvard', 'taikotrummis', 'pilot'],
     souvenirs: ['origamiset', 'keramikskal', 'sidenfjader'],
   },
   {
