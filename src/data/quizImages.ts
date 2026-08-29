@@ -30,6 +30,12 @@ export interface QuizImage {
   alt: string;
   article?: string;
   file?: string;
+  /**
+   * Bilder som inte hämtas från Commons utan ligger färdiga i public/quiz/.
+   * Värdet är källan, som den ska stå i ATTRIBUTION.md. Hämtskriptet hoppar
+   * över dem och datakontrollen kräver inte någon Commons-fil.
+   */
+  lokal?: string;
   /** Bred vinjett: komprimeringen sparar fler pixlar. */
   bred?: boolean;
   /**
@@ -1405,10 +1411,10 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'logo-hv71', alt: 'En klubblogga i blått och gult', file: 'HV71 Hockey.gif' },
   { id: 'logo-rangers', alt: 'En sköld i blått, rött och vitt', file: 'New York Rangers Logo.svg' },
   { id: 'logo-redwings', alt: 'Ett rött hjul med vinge', file: 'Detroit Red Wings logo.png' },
-  { id: 'logo-mapleleafs', alt: 'Klubbens ordbild i marinblått', file: 'MapleLeafsWordmark.png' },
+  { id: 'logo-mapleleafs', alt: 'Ett blått lönnlöv med klubbens namn i', lokal: 'Toronto Maple Leafs klubbmärke, © Toronto Maple Leafs / NHL' },
   { id: 'logo-canadiens', alt: 'Ett rött C med ett blått H inuti', file: 'Montreal Canadiens.svg' },
   { id: 'logo-bruins', alt: 'Ett svart och gult B i ett ekerhjul', file: 'Boston Bruins.svg' },
-  { id: 'logo-canucks', alt: 'Klubbens ordbild i blått', file: 'CanucksWordmark.gif' },
+  { id: 'logo-canucks', alt: 'En späckhuggare formad som ett C', lokal: 'Vancouver Canucks klubbmärke, © Vancouver Canucks / NHL' },
   { id: 'logo-flyers', alt: 'Ett bevingat orange P', file: 'Logo Philadelphia Flyers.svg' },
   { id: 'logo-capitals', alt: 'Klubbmärke i marinblått med tre röda stjärnor', file: 'Washington Capitals logo.svg' },
   { id: 'logo-lightning', alt: 'En blå blixt i en cirkel', file: 'Tampa Bay Lightning 2011.svg' },

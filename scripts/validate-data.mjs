@@ -428,8 +428,8 @@ try {
    */
   for (const b of QUIZ_IMAGES) {
     if (!b.alt?.trim()) problems.push(`bilden ${b.id} saknar alt-text`);
-    if (!b.article && !b.file)
-      problems.push(`bilden ${b.id} saknar både artikel och Commons-fil`);
+    if (!b.article && !b.file && !b.lokal)
+      problems.push(`bilden ${b.id} saknar både artikel, Commons-fil och lokal källa`);
     if (!existsSync(join(ROOT, 'public', 'quiz', `${b.id}.webp`)))
       problems.push(
         `bilden ${b.id} saknar fil i public/quiz/ – kör node scripts/fetch-quiz-images.mjs`

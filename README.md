@@ -432,8 +432,11 @@ webbläsaren och överlever att sparfilen raderas.
    klubbar som inte finns i spelet, så de avslöjar ingenting.
 
    Klubbmärkena ska vara de nuvarande. Capitals, Maple Leafs och Canucks
-   byttes 2026-08-29; för de två sista finns bara ordbilden fritt licensierad,
-   eftersom lövet och späckhuggaren är upphovsrättsskyddade.
+   byttes 2026-08-29. Lönnlövet och späckhuggaren är klubbarnas egna
+   varumärken och finns inte fritt licensierade; Martin har beslutat att de
+   används ändå, med rättighetshavaren angiven i `public/quiz/ATTRIBUTION.md`.
+   De är märkta `lokal` i `quizImages.ts`, vilket gör att hämtskriptet hoppar
+   över dem och att datakontrollen inte kräver någon Commons-fil.
 
    Bildvalen frågar om sak, inte om foto (2026-08-29). En replik som
    beskriver bilden - "trappan som rör sig själv", "gatan med alla bankerna"

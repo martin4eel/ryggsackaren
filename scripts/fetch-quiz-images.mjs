@@ -141,6 +141,8 @@ if (existsSync(ATTRIBUTION_FILE)) {
 const radKrediter = [];
 
 for (const bild of QUIZ_IMAGES) {
+  // Bilder med egen källa ligger redan i public/quiz och ska inte hämtas om.
+  if (bild.lokal) continue;
   const dest = join(OUT_DIR, `${bild.id}.jpg`);
   const klar = join(OUT_DIR, `${bild.id}.webp`);
   if ((existsSync(klar) || existsSync(dest)) && !FORCE && gamlaKrediter.has(bild.id)) {
