@@ -727,7 +727,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
     {
       q: 'Byn på bilden, Aït Benhaddou, byggdes av det marockanska folkslag vars språk är amazigh. Vilket?', bild: 'aitbenhaddou',
-      a: ['Berberna', 'Tuaregerna enbart', 'Kopterna', 'Nubierna'],
+      a: ['Berberna', 'Tuaregerna', 'Kopterna', 'Nubierna'],
       d: 2,
     },
     {
@@ -1349,7 +1349,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     },
     {
       q: 'Vilket är Perus officiella huvudspråk vid sidan om quechua?', bild: 'stadsbild:cusco',
-      a: ['Spanska', 'Portugisiska', 'Engelska', 'Aymara enbart'],
+      a: ['Spanska', 'Portugisiska', 'Engelska', 'Aymara'],
       d: 1,
     },
     {
@@ -1436,7 +1436,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilka två sydamerikanska länder gränsar inte till Brasilien?', bild: 'stadsbild:rio', a: ['Chile och Ecuador', 'Peru och Bolivia', 'Uruguay och Paraguay', 'Colombia och Venezuela'], d: 2, info: 'Brasilien gränsar till tio länder – fler än något annat land i Sydamerika.' },
     { q: 'Vem är den Rio-födde författaren på bilden, som skrev "Alkemisten"?', bild: 'paulocoelho', a: ['Paulo Coelho', 'Jorge Amado', 'Machado de Assis', 'Clarice Lispector'], d: 1, info: 'Machado de Assis, också från Rio, grundade Brasiliens litterära akademi 1897.' },
     { q: 'Statyn på bilden är gjuten i betong men klädd i något annat. Vad?', bild: 'stad:rio', a: ['Små plattor av täljsten', 'Vit marmor', 'Kalksten', 'Glaserad keramik'], d: 2, info: 'Tusentals plattor limmades på av frivilliga kvinnor. Många skrev en önskan på baksidan innan de satte dit dem.' },
-    { q: 'Vem är mannen på bilden, kompositören bakom Flickan från Ipanema, som gett namn åt Rios internationella flygplats?', bild: 'jobim', a: ['Tom Jobim', 'Vinicius de Moraes', 'João Gilberto', 'Caetano Veloso'], d: 1, info: 'Flickan hette Helô Pinheiro och gick förbi baren Veloso varje dag. Baren heter numera Garota de Ipanema.' },
+    { q: 'Vem är mannen på bilden, kompositören bakom Flickan från Ipanema, som gett namn åt Rios internationella flygplats?', bild: 'jobim', a: ['Tom Jobim', 'Vinicius de Moraes', 'João Gilberto', 'Caetano Veloso'], d: 1, info: 'Jobim skrev också Desafinado och Corcovado. Rios flygplats Galeão bär hans namn sedan 1999.' },
     { q: 'Vem är mannen på bilden, Riofödd kompositör som blandade Bach med brasiliansk folkmusik i Bachianas Brasileiras?', bild: 'villalobos', a: ['Heitor Villa-Lobos', 'Antônio Carlos Gomes', 'Ernesto Nazareth', 'Chiquinha Gonzaga'], d: 2, info: 'Han spelade cello på biografer och reste runt Amazonas. Nio sviter Bachianas, och den femte sjungs med sopran och åtta cellor.' },
   ],
   kopenhamn: [
