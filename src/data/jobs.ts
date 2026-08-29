@@ -2812,7 +2812,7 @@ export const JOBS: Job[] = [
         fragor: [
           { text: 'Dimma över farleden. Var ser styrmannen på vänster sida andra fartyg som ekon?', svar: 'radar' },
           { text: 'Hamnen anropar på kanal 12. Var svarar du?', svar: 'vhf' },
-          { text: 'Var, mitt på bryggan, ser du kurs, fart och position samlade på en skärm?', svar: 'ecdis' },
+          { text: 'Var på bryggan ser du kurs, fart och position samlade på en skärm?', svar: 'ecdis' },
           { text: 'Sakta in till halv fart back. Var ger du maskinen ordern?', svar: 'maskintelegraf' },
           { text: 'Vilken kurs håller vi? Var läser du av den utan störning från fartygets järn?', svar: 'kompass' },
           { text: 'Autopiloten kopplas ur inför kajen. Vad styr du med?', svar: 'ratt' },
