@@ -62,6 +62,8 @@ export interface SparetSession {
   scores: number[];
   /** Senaste rundans utfall, tills man går vidare */
   outcome?: { correct: boolean; guessed?: string; points: number };
+  /** Alla resmål klara: resultattavlan visas tills arvodet kvitteras */
+  klar?: boolean;
 }
 
 export interface BackpackItem {

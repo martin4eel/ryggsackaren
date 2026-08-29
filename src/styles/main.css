@@ -7743,3 +7743,39 @@ body.sheet-oppen {
 @media (max-width: 640px) {
   .mg-peka-facit .mg-peka-bild { width: 220%; max-width: none; }
 }
+
+
+/* ------------------------------------------ Vart är vi på väg: resultattavlan */
+
+.sparet-tabell {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 14px;
+  font-size: 0.95rem;
+}
+
+.sparet-tabell th,
+.sparet-tabell td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.sparet-tabell th {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sparet-tabell .tal { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.sparet-tabell tfoot td {
+  border-bottom: none;
+  font-weight: 800;
+  font-family: var(--display);
+  font-size: 1.1rem;
+}
+
+.sparet-rad-tio td:last-child { color: var(--ok, #2e7d4f); font-weight: 800; }
+.sparet-rad-noll td { color: var(--ink-soft); }

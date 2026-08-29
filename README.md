@@ -316,7 +316,10 @@ webbläsaren och överlever att sparfilen raderas.
      skrivna som i programmet (`src/data/sparetLedtradar.ts`) i fallande
      svårighet och utan stadens, landets eller landmärkenas namn: bromsa på
      första ledtråden för tio poäng, sedan åtta, sex, fyra, två – och gissar
-     du fel är resmålet förlorat, precis som i programmet. Arvodet är sextio
+     du fel är resmålet förlorat, precis som i programmet. Efter tredje
+     resmålet visas resultattavlan – stad, vilken ledtråd du bromsade på,
+     poäng, summa, arvode och ditt bästa – och arvodet kvitteras därifrån.
+     Hemstaden och städer du redan besökt dras aldrig som resmål. Arvodet är sextio
      kronor per poäng, och två stämplar väntar: *Bromsade på tio* och
      *Spårhund* (24 av 30). Det här är spelets På spåret-träning på riktigt:
      ledtråd → plats, under fallande poäng.

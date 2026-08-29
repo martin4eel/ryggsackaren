@@ -2559,8 +2559,14 @@ export class App {
     if (this.checkBroke()) return;
     const s = this.state!;
     // Tre resmål med fem ledtrådar var, aldrig staden man står i.
+    // Aldrig staden man står i, hemstaden eller städer man redan besökt: där
+    // har man läst broschyren, och ledtrådarna vore ett facit.
     const kandidater = CITIES.filter(
-      (c) => c.id !== s.currentCityId && ((SPARET_LEDTRADAR[c.id]?.length ?? 0) >= 5 || (CITY_FACTS[c.id]?.length ?? 0) >= 5)
+      (c) =>
+        c.id !== s.currentCityId &&
+        c.id !== s.homeCityId &&
+        !s.visited.includes(c.id) &&
+        ((SPARET_LEDTRADAR[c.id]?.length ?? 0) >= 5 || (CITY_FACTS[c.id]?.length ?? 0) >= 5)
     );
     const valda = shuffle(kandidater).slice(0, 3);
     // De skrivna ledtrådarna ligger i fallande svårighet, som i tv. Saknas
@@ -2620,7 +2626,19 @@ export class App {
       this.render();
       return;
     }
-    // Omgången är slut: arvode efter poäng.
+    // Omgången är slut: resultattavlan visas tills arvodet kvitteras.
+    sp.klar = true;
+    delete sp.outcome;
+    this.commit();
+    this.scrollToTopNext = true;
+    this.render();
+  }
+
+  /** Kvitterar arvodet efter resultattavlan och lämnar studion. */
+  private sparetAvsluta(): void {
+    const s = this.state!;
+    const sp = s.sparet;
+    if (!sp) return;
     const total = sp.scores.reduce((a, b) => a + b, 0);
     const arvode = total * 60;
     s.money += arvode;
@@ -2628,13 +2646,64 @@ export class App {
     s.sparetBest = Math.max(s.sparetBest ?? 0, total);
     delete s.sparet;
     this.commit();
-    this.notify(`Vart är vi på väg?: ${total} av 30 poäng. Arvodet blev ${this.money(arvode)}.`);
+    playSound(total >= 24 ? 'fanfar' : 'kassa');
     this.go('stad');
+  }
+
+  /** Resultattavlan: tre resmål, poäng per runda, summa, arvode och bästa. */
+  private renderSparetResultat(): HTMLElement {
+    const s = this.state!;
+    const sp = s.sparet!;
+    const total = sp.scores.reduce((a, b) => a + b, 0);
+    const max = sp.cities.length * 10;
+    const arvode = total * 60;
+    const basta = s.sparetBest ?? 0;
+    const wrap = el('div', { class: 'stack sparet' });
+    const panel = el('section', { class: 'panel sparet-resultat' });
+    panel.append(
+      el('p', { class: 'kicker' }, 'Tv-frågesport · inspelningen är slut'),
+      el('h1', { class: 'title' }, total === max ? 'Fullt hus!' : total >= max * 0.7 ? 'Stark inspelning' : total >= max * 0.4 ? 'Godkänd inspelning' : 'Det blir en kort sändning'),
+      el('table', { class: 'sparet-tabell' },
+        el('thead', {}, el('tr', {}, el('th', {}, 'Resmål'), el('th', {}, 'Bromsade på'), el('th', { class: 'tal' }, 'Poäng'))),
+        el('tbody', {},
+          ...sp.cities.map((id, i) => {
+            const c = CITY_BY_ID[id];
+            const p = sp.scores[i] ?? 0;
+            const ordning: Record<number, string> = { 10: 'första', 8: 'andra', 6: 'tredje', 4: 'fjärde', 2: 'femte' };
+            const niva = p > 0 ? `${ordning[p] ?? ''} ledtråden` : 'fel eller ingen broms';
+            return el('tr', { class: p === 10 ? 'sparet-rad-tio' : p === 0 ? 'sparet-rad-noll' : '' },
+              el('td', {}, c ? (c.country === c.name ? c.name : `${c.name}, ${c.country}`) : id),
+              el('td', {}, niva),
+              el('td', { class: 'tal' }, String(p))
+            );
+          })
+        ),
+        el('tfoot', {}, el('tr', {}, el('td', {}, 'Summa'), el('td', {}, ''), el('td', { class: 'tal' }, `${total} av ${max}`)))
+      ),
+      el('div', { class: 'stat-grid' },
+        stat('Arvode', this.money(arvode)),
+        stat('Ditt bästa', total > basta ? `${total} – nytt rekord` : `${basta} av ${max}`),
+        stat('Tior', `${sp.scores.filter((p) => p === 10).length}`)
+      ),
+      el('p', { class: 'muted' },
+        total === max
+          ? 'Tre tior. Programledaren tittar på produktionen och undrar om frågorna var för lätta.'
+          : total >= max * 0.7
+            ? 'Publiken applåderar. Redaktionen antecknar ditt namn till en ny säsong.'
+            : total >= max * 0.4
+              ? 'Ett par bra bromsar och ett resmål som gick förbi. Så ser de flesta inspelningar ut.'
+              : 'Lokal-tv har lovat att inte klippa bort de pinsamma delarna. De lovade också att inte visa dem.'
+      ),
+      button(`Kvittera arvodet och gå tillbaka till ${this.city.name}`, () => this.sparetAvsluta(), { class: 'btn btn-primary btn-big' })
+    );
+    wrap.append(panel);
+    return wrap;
   }
 
   private renderSparet(): HTMLElement {
     const s = this.state!;
     const sp = s.sparet;
+    if (sp?.klar) return this.renderSparetResultat();
     const wrap = el('div', { class: 'stack sparet' });
     if (!sp) {
       wrap.append(el('section', { class: 'panel' }, el('p', {}, 'Ingen inspelning pågår.')));
