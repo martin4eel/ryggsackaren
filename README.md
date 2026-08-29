@@ -648,6 +648,18 @@ räknas bara upp till 25 000: resande ger poäng, pengar ger biljetter. Skulden
 dras av. Poängen ger också en titel, från _Hemvändare_ till _Legendarisk
 upptäckare_.
 
+### Speltest av de nya städerna 2026-08-29
+
+Fem fynd som var värda att rätta: väderskylten på stadsbilden hade fått en
+klickyta i CSS trots att den bara är en skylt, och åt upp brickan under sig -
+i Brescia, som bara har en bricka, var hela mystikfunktionen död på telefon.
+Myntfrågan visades bara i städer med minst två brickor, alltså aldrig i
+Köping, Hudiksvall, Brescia, San Sebastián eller Oaxaca; nu har varje stad
+alltid sin fråga. Tidningsrubriker med långa sammansättningar gav sidoscroll
+på 390 pixlar. Världskartan var 165 pixlar hög på mobil med tom skärm under.
+Och Balkan saknade landförbindelse till Sydeuropa, så Belgrad-Rom bara gick
+med flyg - nu går bussen, som den gör i verkligheten.
+
 ### Granskningsrond 2026-08-29
 
 Två granskare gick igenom spelet efter uppdragen och fotbollsspelet. Det som

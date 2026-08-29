@@ -4916,9 +4916,14 @@ body.sheet-oppen {
   height: auto;
 }
 
-/* På telefonen är kartan bredare än rutan och rullas i sidled. */
+/*
+ * På telefonen är kartan bredare än rutan och rullas i sidled. Den var
+ * dessutom för låg: 165 pixlar karta med 300 pixlar tom skärm under, och
+ * etiketterna "Här" och "Start" låg ovanpå varandra. 260 procent ger både
+ * höjd och luft mellan städerna.
+ */
 @media (max-width: 640px) {
-  .karta-svg { width: 190%; min-width: 700px; }
+  .karta-svg { width: 260%; min-width: 980px; }
 }
 
 .karta-hav { fill: #e6d6b3; }
@@ -8231,17 +8236,14 @@ body.sheet-oppen {
 /*
  * Stadens namn och väderraden ligger över fotot, och på en telefon hamnar
  * mynten ovanpå orden. Texten läggs därför överst men släpper igenom
- * pekningar, så att myntet under den fortfarande går att vända. Väderskylten
- * är en knapp och tar tillbaka sina egna klick.
+ * pekningar, så att myntet under den fortfarande går att vända. Inget i
+ * blocket är klickbart - väderskylten ser ut som en knapp men är en skylt.
  */
 .city-hero-text {
   z-index: 3;
   pointer-events: none;
 }
 
-.city-hero-text .city-vader {
-  pointer-events: auto;
-}
 
 .city-vader-rad {
   /* Egen botten bakom orden, så att de läses även med ett mynt bakom. */
@@ -8822,4 +8824,18 @@ body.sheet-oppen {
   text-align: center;
   text-transform: uppercase;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+/*
+ * Tidningsrubriker med långa sammansättningar - "Franciacortaproducenterna" -
+ * sprängde spalten och gav hela sidan sidoscroll på en telefon. Ord bryts
+ * hellre än att bilda en horisontell rullning.
+ */
+.tidning-rubrik,
+.tidning-underrubrik,
+.tidning-notiser li,
+.kontakt-rubrik {
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }

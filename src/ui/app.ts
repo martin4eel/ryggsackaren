@@ -2185,9 +2185,15 @@ export class App {
      * döljer händelser. Båda sorterna finns bara en gång per stad.
      */
     const spent = p.spent ?? [];
+    /*
+     * Varje stad har minst en bricka, och den första är alltid frågan om
+     * staden. Tidigare krävdes två brickor för att frågan skulle dyka upp,
+     * och då fick alla städer under en halv miljon invånare - Köping,
+     * Hudiksvall, Brescia, Oaxaca - en skriven myntfråga som aldrig visades.
+     */
     const antalBrickor = mysterySpotCount(city.id);
-    const harFraga = antalBrickor >= 2;
-    if (harFraga && !spent.includes('fraga')) {
+    const harFraga = true;
+    if (!spent.includes('fraga')) {
       platser.push({
         id: 'fraga',
         ikon: 'skylt-mystik',
@@ -3016,6 +3022,17 @@ export class App {
       }
     };
     search.addEventListener('input', mala);
+    /*
+     * Enter bromsar på den översta träffen. Att skriva "Bel" och trycka Enter
+     * ska gissa Belgrad; att behöva flytta handen till en knapp mitt i en
+     * gissningslek är onödigt motstånd.
+     */
+    search.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key !== 'Enter') return;
+      e.preventDefault();
+      const forsta = traffar.querySelector('button');
+      if (forsta) (forsta as HTMLButtonElement).click();
+    });
     panel.append(
       el('div', { class: 'row' }, search),
       traffar,

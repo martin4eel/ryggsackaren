@@ -337,7 +337,23 @@ export function weatherFor(
         : LABEL[kind];
   const rader =
     period === 'natt' && (kind === 'sol' || kind === 'hetta' || kind === 'dis') ? NATT_LINES : LINES[kind];
-  const rad = rader[Math.floor(pseudoRandom(seed + '|l') * rader.length)]!;
+  /*
+   * Somliga rader hör till en viss tid på dygnet - "tjock morgondimma" när
+   * klockan är åtta på kvällen läser som ett fel. De sorteras bort när tiden
+   * inte stämmer; blir ingen kvar används listan som den är.
+   */
+  const TIDSORD: Array<[RegExp, DayPeriod[]]> = [
+    [/morgon|gryning|frukost/i, ['morgon']],
+    [/eftermiddag/i, ['dag']],
+    [/kväll|skymning/i, ['kvall', 'skymning']],
+    [/natt(en)?\b/i, ['natt']],
+  ];
+  const passar = rader.filter((r) => {
+    const krav = TIDSORD.find(([re]) => re.test(r));
+    return !krav || krav[1].includes(period);
+  });
+  const lista = passar.length > 0 ? passar : rader;
+  const rad = lista[Math.floor(pseudoRandom(seed + '|l') * lista.length)]!;
   const line = rad.replace(/\{stad\}/g, city.name).replace(/\{sevardhet\}/g, city.landmark);
   return {
     kind,

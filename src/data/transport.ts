@@ -40,9 +40,9 @@ export const MODE_LABELS: Record<TransportMode, string> = {
 export const LAND_ADJACENCY: Record<string, string[]> = {
   norden: ['centraleuropa'],
   centraleuropa: ['norden', 'sydeuropa', 'osteuropa', 'brittiska-oarna', 'balkan'],
-  sydeuropa: ['centraleuropa'],
+  sydeuropa: ['centraleuropa', 'balkan'],
   'brittiska-oarna': ['centraleuropa'],
-  balkan: ['centraleuropa', 'osteuropa'],
+  balkan: ['centraleuropa', 'osteuropa', 'sydeuropa'],
   osteuropa: ['centraleuropa', 'balkan', 'finland', 'mellanostern'],
   finland: ['osteuropa'],
   mellanostern: ['osteuropa', 'nordafrika'],
