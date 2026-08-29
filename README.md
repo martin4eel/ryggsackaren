@@ -578,6 +578,20 @@ räknas bara upp till 25 000: resande ger poäng, pengar ger biljetter. Skulden
 dras av. Poängen ger också en titel, från _Hemvändare_ till _Legendarisk
 upptäckare_.
 
+### Granskningsrond 2026-08-29
+
+Två granskare gick igenom spelet efter uppdragen och fotbollsspelet. Det som
+rättades: fem spelare i hockeyns lagval hörde till fel klubb och åtta rundor
+hade lockbeten som faktiskt spelat i laget; bildvalens repliker beskrev hur
+fotot såg ut i stället för vad kunden ville ha; jobb som finns i flera städer
+antog en av dem (färjematrosen frågade om Bosporen i Dublin, taxichauffören
+körde till Manhattan i Rom); tre punkter i tågprovet pekade på fel instrument
+- högerpanelen är ENGINE-knappar på ett dieselfordon, inte strömavtagare - och
+klaffspaken i cockpiten låg tre procent för långt åt höger. I frågebanken
+rättades tjugo faktafel, sjutton dubbletter togs bort och ersattes, och de
+frågor där svaret gick att gissa på formuleringen skrevs om. Facitbilderna
+till tågprovet och cockpiten är omgjorda med `scripts/facitbild.py`.
+
 ### Uppdrag
 
 Var fjärde gång slumpen skulle ha gett en händelse kommer i stället en

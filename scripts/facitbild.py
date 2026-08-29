@@ -1,7 +1,8 @@
 """
 Ritar facitbilden till ett pek-spel: fotot med numrerade ringar runt varje
-träffyta och en förklaringsruta per punkt. Används för pilotens och lotsens
-prov, där Martins tågprov har en handgjord förlaga.
+träffyta och en förklaringsruta per punkt. Används för pilotens, lotsens och
+tågprovets facit. Tågprovets handgjorda förlaga byttes 2026-08-29, när tre
+av punkterna visade sig peka på fel instrument.
 
   python3 scripts/facitbild.py <foto.webp> <punkter.json> <ut.webp>
 
