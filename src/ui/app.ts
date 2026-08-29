@@ -29,6 +29,7 @@ import {
   jobRequirement,
   pointsIn,
   arcadeSlack,
+  optionCount,
   certificateThreshold,
   comboMultiplier,
   loanAmount,
@@ -326,6 +327,12 @@ interface PhoneCall {
   svarare: Svarare;
   /** Vad som sägs, eller vad som hände. */
   rad: string;
+  /**
+   * Beloppet som utlovades innan luren lyftes. Samtalet räknas när någon
+   * svarar, och utan det här hade erbjudandet blivit lägre än det som stod
+   * på skärmen sekunden innan.
+   */
+  belopp?: number;
 }
 
 /** Repliker i luren. `{stad}` byts mot staden man ringer från. */
@@ -1114,7 +1121,7 @@ export class App {
         main.append(this.renderQuiz(this.quiz?.job?.title ?? 'Arbete'));
         break;
       case 'station':
-        main.append(this.renderStationScreen(this.travelFilter ?? 'buss'));
+        main.append(this.renderStationScreen(this.travelFilter ?? s.stationMode ?? 'buss'));
         break;
       case 'varldskarta':
         main.append(this.renderAtlas());
@@ -1803,6 +1810,7 @@ export class App {
           () => {
             this.quiz = null;
             this.travelFilter = null;
+            delete this.state!.stationMode;
             this.go('stad');
           },
           {
@@ -2048,6 +2056,7 @@ export class App {
         `${beskrivning} ${antal} ${antal === 1 ? 'destination' : 'destinationer'} härifrån.`,
         () => {
           this.travelFilter = mode;
+          s.stationMode = mode;
           playSound('valj');
           this.go('station');
           this.fireEvent('vantan');
@@ -2140,6 +2149,20 @@ export class App {
 
     const DOLD_TIPS = 'Nedvänd bricka. Tryck för att se vad som finns här.';
     const nedvanda = platser.filter((pl) => !arVand(pl));
+
+    /**
+     * Frågebrickan och mystikbrickorna räknas med i hinten men inte i knappen
+     * "Vänd resten" - de är överraskningar man ska välja själv. Utan den här
+     * raden ser siffrorna ut som ett räknefel.
+     */
+    const overraskningar = nedvanda.filter(
+      (pl) => pl.id === 'fraga' || pl.id.startsWith('mystik-')
+    ).length;
+    const brickText = () =>
+      `${nedvanda.length} ${nedvanda.length === 1 ? 'bricka' : 'brickor'} kvar att vända på.` +
+      (overraskningar > 0
+        ? ` ${overraskningar === 1 ? 'En är en överraskning' : `${overraskningar} är överraskningar`} du väljer själv.`
+        : '');
 
     /**
      * Myntens placering på fotot. Bilden delas i ett rutnät och varje mynt får
@@ -2259,9 +2282,7 @@ export class App {
       const doljs = () => {
         hint.textContent =
           nedvanda.length > 0
-            ? `${nedvanda.length} ${
-                nedvanda.length === 1 ? 'bricka' : 'brickor'
-              } kvar att vända på.`
+            ? brickText()
             : p.visits === 0 && revealed.includes('turistbyra')
               ? 'Börja på turistbyrån: läs broschyren och gör provet.'
               : 'Tryck på en skylt för att gå dit.';
@@ -2276,9 +2297,7 @@ export class App {
       hint.textContent =
         revealed.length === 0 && city.id !== s.homeCityId
           ? 'Du har aldrig varit här. Vänd på brickorna för att se vad staden har.'
-          : `${nedvanda.length} ${
-              nedvanda.length === 1 ? 'bricka' : 'brickor'
-            } kvar att vända på.`;
+          : brickText();
     }
     hero.append(mynt);
     // Inslaget spelas en gång; nästa omritning ska inte spela det igen.
@@ -2347,7 +2366,7 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          'Boendet dras varje dag, så tid är också pengar. På tangentbordet svarar du med 1-4 eller A-D.'
+          `Boendet dras varje dag, så tid är också pengar. På tangentbordet svarar du med 1-${optionCount(s.difficulty)} eller A-${String.fromCharCode(64 + optionCount(s.difficulty))}.`
         ),
         button(
           'Jag är med',
@@ -3790,15 +3809,20 @@ export class App {
       this.focusAfterRender = next;
     }
 
-    if (!isJob && q.kind !== 'mynt') {
+    // Raden visas först när något är besvarat: "0 av 0" säger ingenting.
+    const besvarade = q.index + (answered ? 1 : 0);
+    if (!isJob && q.kind !== 'mynt' && besvarade > 0) {
       panel.append(
         el('p', { class: 'muted' },
-          `Rätt så här långt: ${q.correct} av ${q.index + (answered ? 1 : 0)}` +
+          `Rätt så här långt: ${q.correct} av ${besvarade}` +
             (q.streak >= 2 ? ` · ${q.streak} i rad` : '')
         )
       );
     }
     if (!answered) {
+      // Turistläget har tre alternativ, de andra fyra. Tipset ska stämma.
+      const antalAlt = optionCount(s.difficulty);
+      const tangentspann = `1-${antalAlt} eller A-${String.fromCharCode(64 + antalAlt)}`;
       panel.append(
         el(
           'p',
@@ -3806,8 +3830,8 @@ export class App {
           q0.reglage
             ? 'Dra reglaget till rätt tal och tryck OK. Piltangenterna finjusterar, Enter svarar.'
             : current.images
-              ? 'Tryck på rätt bild, eller svara med 1-4 eller A-D.'
-              : 'Svara med 1-4 eller A-D, eller tryck på alternativet.'
+              ? `Tryck på rätt bild, eller svara med ${tangentspann}.`
+              : `Svara med ${tangentspann}, eller tryck på alternativet.`
         )
       );
     }
@@ -3897,6 +3921,7 @@ export class App {
           {
             money: (amount) => this.money(amount),
             slack: arcadeSlack(this.state!.difficulty),
+            alternativ: optionCount(this.state!.difficulty),
           },
           (result) => this.finishMinigame(result)
         );
@@ -4366,6 +4391,7 @@ export class App {
     const pt = getProgress(s, target.id);
     pt.firstDay ??= s.days;
     this.travelFilter = null;
+    delete s.stationMode;
     // Uppdrag som ska hit lämnas över och betalas innan kassan räknas;
     // passerade sista dagar stryks.
     const uppdragsrader = this.avslutaUppdragVidAnkomst(target);
@@ -5070,7 +5096,8 @@ export class App {
       if (svarare === 'mamma') playSound('rostmamma');
       else if (svarare === 'pappa') playSound('rostpappa');
       else if (svarare === 'fel') playSound('rostframmande');
-      this.phoneCall = { phase: 'svar', svarare, rad };
+      // Beloppet låses till det som stod på skärmen innan man ringde.
+      this.phoneCall = { phase: 'svar', svarare, rad, belopp: loanAmount(s) };
       // Ett samtal räknas när någon svarar, inte först när man lånar.
       s.callsHome += 1;
       this.scrollToTopNext = false;
@@ -5081,8 +5108,8 @@ export class App {
   private renderPhone(): HTMLElement {
     const s = this.state!;
     const wrap = el('div', { class: 'stack' });
-    const amount = loanAmount(s);
     const samtal = this.phoneCall;
+    const amount = samtal?.belopp ?? loanAmount(s);
 
     const panel = el('section', { class: 'panel phone' });
     panel.append(el('h1', { class: 'title' }, 'Telefonkiosken'));

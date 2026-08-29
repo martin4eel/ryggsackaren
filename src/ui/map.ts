@@ -99,7 +99,9 @@ export function renderTravelScene(options: TravelSceneOptions): HTMLElement {
     plats: Vinkel,
     namn: string,
     k: Kamera,
-    halo: boolean
+    halo: boolean,
+    /** Sätt namnet under pricken i stället för över, när de två ligger nära. */
+    under = false
   ) => {
     while (g.firstChild) g.removeChild(g.firstChild);
     const p = projicera(plats, k);
@@ -119,7 +121,7 @@ export function renderTravelScene(options: TravelSceneOptions): HTMLElement {
         'text',
         {
           x: p.x,
-          y: p.y - r * 1.9,
+          y: under ? p.y + r * 1.9 + text : p.y - r * 1.9,
           'text-anchor': 'middle',
           'font-size': text,
           'stroke-width': text * 0.28,
@@ -155,7 +157,18 @@ export function renderTravelScene(options: TravelSceneOptions): HTMLElement {
     kvar.setAttribute('stroke-width', String(Math.max(1, r * 0.007)));
     kvar.setAttribute('stroke-dasharray', `${r * 0.02} ${r * 0.02}`);
 
-    ritaPin(pinA, A, from.name, k, false);
+    /**
+     * Kort resa: de två prickarna hamnar nästan på varandra, och två namn på
+     * samma rad blir en enda oläslig sträng. Avresestaden får då ligga under.
+     */
+    const pA = projicera(A, k);
+    const pB = projicera(B, k);
+    const textStorlek = Math.max(9, k.r * 0.045);
+    const nara =
+      pA.synlig &&
+      pB.synlig &&
+      Math.hypot(pA.x - pB.x, pA.y - pB.y) < textStorlek * 3;
+    ritaPin(pinA, A, from.name, k, false, nara);
     ritaPin(pinB, B, to.name, k, true);
 
     // Riktningen tas ur nästa punkt på rutten, projicerad till skärmen.

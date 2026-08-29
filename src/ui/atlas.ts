@@ -176,16 +176,23 @@ function karta(city: City, homeCityId: string, visited: string[], onStad?: (c: C
     svgEl('circle', { cx: -1.4, cy: -17.4, r: 1.3, class: 'karta-nal-glans' })
   );
   svg.append(nal);
-  const vanster = nu.x > MAP_WIDTH * 0.8;
+  const etikett = sammaStad ? `Här, och start: ${city.name}` : `Här: ${city.name}`;
+  /*
+   * Handstilen är ungefär 17 px hög och drygt halva det breda per tecken.
+   * Får texten inte plats till höger om nålen skrivs den åt vänster i
+   * stället, annars hamnar slutet utanför kartans kant.
+   */
+  const bredd = etikett.length * 8.5;
+  const vanster = nu.x + 9 + bredd > MAP_WIDTH - 8;
   svg.append(
     svgEl(
       'text',
       {
-        x: vanster ? nu.x - 9 : nu.x + 9,
+        x: vanster ? Math.max(bredd + 8, nu.x - 9) : nu.x + 9,
         y: nu.y - 20,
         class: `karta-anteckning karta-anteckning-har ${vanster ? 'karta-anteckning-vanster' : ''}`,
       },
-      sammaStad ? `Här och start: ${city.name}` : `Här: ${city.name}`
+      etikett
     )
   );
 

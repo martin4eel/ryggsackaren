@@ -33,6 +33,8 @@ export interface MinigameContext {
    * båda lägena; det är kraven som skiljer.
    */
   slack: number;
+  /** Hur många svarsalternativ läget visar: tre i Turist, fyra annars. */
+  alternativ: number;
 }
 
 type Done = (result: MinigameResult) => void;
@@ -110,7 +112,7 @@ export function renderMinigame(
       startDecide(host, game, done);
       break;
     case 'quiz':
-      startQuiz(host, game, done);
+      startQuiz(host, game, ctx, done);
       break;
     case 'lagval':
       startTeamPick(host, game, done);
@@ -1770,7 +1772,7 @@ function startDecide(host: HTMLElement, game: Minigame, onDone: Done): void {
  * ingen klocka. Efter varje svar visas facit och förklaringen - det är
  * förklaringen som är poängen. Alternativen blandas per fråga.
  */
-function startQuiz(host: HTMLElement, game: Minigame, onDone: Done): void {
+function startQuiz(host: HTMLElement, game: Minigame, ctx: MinigameContext, onDone: Done): void {
   const spec = game.quiz!;
   const fragor = shuffled(spec.fragor).slice(0, spec.antal);
   let index = 0;
@@ -1799,10 +1801,18 @@ function startQuiz(host: HTMLElement, game: Minigame, onDone: Done): void {
     vidare.hidden = true;
     vantar = false;
     const ratt = f.a[0]!;
-    const alternativ = shuffled(f.a);
+    // Turistläget visar tre alternativ, precis som på frågeskärmen: rätt svar
+    // plus de första lockbetena, sedan blandat.
+    const antalAlt = Math.max(2, Math.min(ctx.alternativ, f.a.length));
+    const alternativ = shuffled([ratt, ...f.a.slice(1, antalAlt)]);
     alternativ.forEach((text, i) => {
       const b = snabbKnapp('', () => svara(text === ratt, b), { class: 'option mg-quiz-knapp', 'data-sound': 'av' });
-      b.append(el('span', { class: 'option-key' }, String.fromCharCode(65 + i)), el('span', {}, text));
+      b.append(
+        el('span', { class: 'option-body' },
+          el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
+          el('span', { class: 'option-text' }, text)
+        )
+      );
       b.dataset.ratt = text === ratt ? '1' : '0';
       val.append(b);
     });

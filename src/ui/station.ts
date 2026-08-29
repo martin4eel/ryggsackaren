@@ -195,8 +195,14 @@ export function renderStation(opts: StationOpts): StationHandle {
         rad(gate.split(' ')[0]!, d.stand),
         d.code === '—' ? '' : rad('Status', statusText(d)),
         d.terminal ? rad('Terminal', d.terminal.replace('Terminal ', '')) : '',
+        /*
+         * Restiden är tiden ombord. Dagarna är vad resan kostar i kalendern:
+         * incheckning, byten, en natt på vägen och en dag att komma i ordning.
+         * Två olika saker, och biljetten ska inte låta som att den säger emot
+         * sig själv.
+         */
         rad(
-          'Resdagar',
+          'Dagar ur resan',
           `${d.route.days} ${d.route.days === 1 ? 'dag' : 'dagar'}`
         ),
         rad('Pris', money(d.route.price), 'ticket-price'),

@@ -237,6 +237,8 @@ export interface GameState {
     chosen?: number;
     outcome?: number;
   };
+  /** Vilken terminal man står i, så att en omladdning inte flyttar en */
+  stationMode?: 'buss' | 'tag' | 'flyg' | 'farja';
   /** Aktiva uppdrag: ärenden till andra städer */
   uppdrag?: AktivtUppdrag[];
   /** Uppdrag som erbjuds just nu, tills man tackar ja eller nej */

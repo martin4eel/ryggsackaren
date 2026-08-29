@@ -260,6 +260,21 @@ body::before {
 
 .hero-foot .vand-alla {
   margin-right: auto;
+  /*
+   * Knappen ligger mot den mörka sidbakgrunden under fotot, inte mot en ljus
+   * panel som andra spökknappar. Utan egen färg blir den nästan osynlig.
+   */
+  color: rgba(246, 239, 224, 0.92);
+  border-color: rgba(246, 239, 224, 0.38);
+  background: rgba(7, 26, 41, 0.45);
+  text-shadow: 0 1px 4px rgba(7, 26, 41, 0.8);
+}
+
+.hero-foot .vand-alla:hover,
+.hero-foot .vand-alla:focus-visible {
+  color: var(--paper);
+  border-color: rgba(246, 239, 224, 0.7);
+  background: rgba(7, 26, 41, 0.7);
 }
 
 .photo-credit {
@@ -8144,3 +8159,53 @@ body.sheet-oppen {
 .uppdrag-villkor { display: grid; gap: 4px; margin: 0 0 14px; font-size: 0.92rem; }
 .uppdrag-kort .row { display: grid; gap: 8px; }
 .uppdrag-rad .item-head h3 { font-size: 1rem; }
+
+
+/* Facitlänken i pekspelen: en knapp i spelets palett, inte en blå webbläsarlänk. */
+.mg-peka-lank {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--linje, rgba(29, 43, 52, 0.35));
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.mg-peka-lank:hover,
+.mg-peka-lank:focus-visible {
+  background: rgba(29, 43, 52, 0.08);
+  text-decoration: underline;
+}
+
+
+/*
+ * Stadens namn och väderraden ligger över fotot, och på en telefon hamnar
+ * mynten ovanpå orden. Texten läggs därför överst men släpper igenom
+ * pekningar, så att myntet under den fortfarande går att vända. Väderskylten
+ * är en knapp och tar tillbaka sina egna klick.
+ */
+.city-hero-text {
+  z-index: 3;
+  pointer-events: none;
+}
+
+.city-hero-text .city-vader {
+  pointer-events: auto;
+}
+
+.city-vader-rad {
+  /* Egen botten bakom orden, så att de läses även med ett mynt bakom. */
+  padding: 2px 6px;
+  margin-left: -6px;
+  border-radius: 6px;
+  background: rgba(7, 26, 41, 0.55);
+  width: fit-content;
+}
+
+/* Hjälptexten under världskartan ligger mot mörk botten, inte mot papper. */
+.karta-tips {
+  color: rgba(246, 239, 224, 0.82);
+  text-shadow: 0 1px 4px rgba(7, 26, 41, 0.7);
+}
