@@ -421,6 +421,18 @@ webbläsaren och överlever att sparfilen raderas.
    byttes 2026-08-29; för de två sista finns bara ordbilden fritt licensierad,
    eftersom lövet och späckhuggaren är upphovsrättsskyddade.
 
+   Bildvalen frågar om sak, inte om foto (2026-08-29). En replik som
+   beskriver bilden - "trappan som rör sig själv", "gatan med alla bankerna"
+   - kräver ingen kunskap, bara läsförmåga. 631 repliker i 49 jobb är därför
+   omskrivna till att bära en kontrollerad sakuppgift: piperin mot capsaicin,
+   Semmelweis 1847, Zamboni 1949, 1435 millimeters spårvidd, tipo 00 och
+   glutenet, hundrafemtio newton som vänder en medvetslös rätt. Regeln är att
+   repliken ska gå att resonera sig till bland de fyra alternativen, och att
+   `fel`-texten ska stämma oavsett vilket av de tre lockbetena man pekat på.
+   Tunnelbanevärden, börsmäklaren, kaffeprovaren och flygplatsvärden byggdes
+   om helt, och tunnelbanevärden fick fyra nya foton (Guimards entré i Paris,
+   Komsomolskaja i Moskva, rusningen i Tokyo, en spärrlinje).
+
    Sorteringsspelen är utbytta (2026-08-29): alla tjugo yrken som hade
    "dra foto till rätt hylla" har nu bildval i politikerspelets stil, där
    passagerare, gäster, elever och beställare beskriver vad de behöver –
