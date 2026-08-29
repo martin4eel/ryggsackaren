@@ -109,6 +109,9 @@ export function renderMinigame(
     case 'avgor':
       startDecide(host, game, done);
       break;
+    case 'quiz':
+      startQuiz(host, game, done);
+      break;
   }
   return host;
 }
@@ -1747,6 +1750,87 @@ function startDecide(host: HTMLElement, game: Minigame, onDone: Done): void {
         score: right / poster.length,
         summary: `Du avgjorde rätt om ${right} av ${poster.length} svampar.`,
         perfect: right === poster.length,
+      });
+      return;
+    }
+    visa();
+  };
+
+  visa();
+}
+
+
+// ------------------------------------------------------------------- quiz
+
+/**
+ * Ett prov i yrkets kärnkunskap: svårare frågor än skiftets, en i taget,
+ * ingen klocka. Efter varje svar visas facit och förklaringen - det är
+ * förklaringen som är poängen. Alternativen blandas per fråga.
+ */
+function startQuiz(host: HTMLElement, game: Minigame, onDone: Done): void {
+  const spec = game.quiz!;
+  const fragor = shuffled(spec.fragor).slice(0, spec.antal);
+  let index = 0;
+  let right = 0;
+  let vantar = false;
+
+  const status = makeStatus();
+  const fraga = el('p', { class: 'mg-kund mg-quiz-fraga' });
+  const bildYta = el('div', { class: 'mg-quiz-bild' });
+  const val = el('div', { class: 'mg-quiz-val' });
+  const feedback = makeFeedback();
+  const info = el('p', { class: 'mg-peka-forklaring' });
+  const vidare = button('Nästa fråga', () => nasta(), { class: 'btn btn-primary mg-peka-vidare' });
+  vidare.hidden = true;
+  host.append(status.node, fraga, bildYta, val, feedback.node, info, vidare);
+
+  const visa = () => {
+    const f = fragor[index]!;
+    status.set(`Fråga ${index + 1}/${fragor.length}`, `${right} rätt`);
+    fraga.textContent = f.q;
+    clear(bildYta);
+    if (f.bild) bildYta.append(el('img', { src: quizImageUrl(f.bild), alt: '', draggable: 'false', loading: 'lazy' }));
+    clear(val);
+    feedback.say('', 'neutral');
+    info.textContent = '';
+    vidare.hidden = true;
+    vantar = false;
+    const ratt = f.a[0]!;
+    const alternativ = shuffled(f.a);
+    alternativ.forEach((text, i) => {
+      const b = snabbKnapp('', () => svara(text === ratt, b), { class: 'option mg-quiz-knapp', 'data-sound': 'av' });
+      b.append(el('span', { class: 'option-key' }, String.fromCharCode(65 + i)), el('span', {}, text));
+      b.dataset.ratt = text === ratt ? '1' : '0';
+      val.append(b);
+    });
+  };
+
+  const svara = (ok: boolean, knapp: HTMLElement) => {
+    if (vantar) return;
+    vantar = true;
+    const f = fragor[index]!;
+    if (ok) right += 1;
+    playSound(ok ? 'ratt' : 'fel');
+    for (const b of Array.from(val.children) as HTMLElement[]) {
+      (b as HTMLButtonElement).disabled = true;
+      if (b.dataset.ratt === '1') b.classList.add('option-right');
+      else if (b === knapp) b.classList.add('option-wrong');
+      else b.classList.add('option-dim');
+    }
+    feedback.say(ok ? 'Rätt.' : `Fel. Rätt svar: ${f.a[0]}.`, ok ? 'ok' : 'fel');
+    info.textContent = f.info ?? '';
+    status.set(`Fråga ${index + 1}/${fragor.length}`, `${right} rätt`);
+    vidare.textContent = index + 1 < fragor.length ? 'Nästa fråga' : 'Klart';
+    vidare.hidden = false;
+  };
+
+  const nasta = () => {
+    index += 1;
+    if (index >= fragor.length) {
+      onDone({
+        score: right / fragor.length,
+        summary: `Du klarade ${right} av ${fragor.length} frågor i provet.`,
+        perfect: right === fragor.length,
       });
       return;
     }

@@ -111,6 +111,8 @@ export type MinigameKind =
   | 'peka'
   /** Avgör en sak i taget mellan två alternativ, utan klocka, med fakta efteråt */
   | 'avgor'
+  /** Ett kunskapsprov: svårare frågor en i taget, utan klocka, med förklaring */
+  | 'quiz'
   /** Sortera föremål som rullar förbi på ett band till rätt korg */
   | 'sortering'
   /** Utför arbetsledarens order i rätt ordning innan tiden går ut */
@@ -196,6 +198,11 @@ export interface Minigame {
   };
   /** Bara för `bildval`: vad "kunden" kallas i statusraden, t.ex. 'Gäst'/'gäster' */
   roll?: { en: string; flera: string; klara: string };
+  /**
+   * Bara för `quiz`: ett prov i yrkets kärnkunskap. `antal` frågor lottas ur
+   * banken per skift; formatet är samma som jobbfrågornas.
+   */
+  quiz?: { antal: number; fragor: Question[] };
   bildval?: { bild: string; namn: string }[];
   /** Sekunder per kund i bildvalet; utelämnas för standardtempot (14 s) */
   tid?: number;

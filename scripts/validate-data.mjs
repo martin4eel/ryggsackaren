@@ -235,6 +235,7 @@ try {
     bildval: { needed: 1 },
     peka: { needed: 1 },
     avgor: { needed: 1 },
+    quiz: { needed: 1 },
   };
 
   /**
@@ -305,9 +306,15 @@ try {
         problems.push(`jobb ${job.id} är klass 1 och ska inte ha något minispel`);
       const fotoSortering =
         mg.kind === 'sortering' && (mg.pool ?? []).flat().every((x) => typeof x === 'object');
-      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || fotoSortering || UNDANTAG[job.id] === mg.kind;
+      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || fotoSortering || UNDANTAG[job.id] === mg.kind;
       if (job.wageClass >= 2 && !okej)
         problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
+      // Quiz-passets frågor pekar på bilder som måste finnas.
+      for (const q of mg.quiz?.fragor ?? []) {
+        if (q.bild && !q.bild.startsWith('stad') && !bildManifest.has(q.bild))
+          problems.push(`jobb ${job.id}: quizfrågan "${q.q.slice(0, 40)}" pekar på okänd bild ${q.bild}`);
+        if (!q.a || q.a.length !== 4) problems.push(`jobb ${job.id}: quizfrågan "${q.q.slice(0, 40)}" ska ha fyra alternativ`);
+      }
       const spec = MINIGAME_KINDS[mg.kind];
       if (!spec) problems.push(`jobb ${job.id} har okänd minispelstyp ${mg.kind}`);
       if (!mg.title?.trim()) problems.push(`jobb ${job.id}: minispel utan titel`);
