@@ -66,6 +66,17 @@ export interface SparetSession {
   klar?: boolean;
 }
 
+/** En fråga man svarat fel på, sparad för tidningens Repris. */
+export interface Miss {
+  q: string;
+  svar: string;
+  info?: string;
+  bild?: string;
+  /** Var det hände: stadens namn */
+  stad: string;
+  dag: number;
+}
+
 export interface BackpackItem {
   souvenirId: string;
   /** Vad du betalade i basenheter */
@@ -134,6 +145,10 @@ export interface GameState {
   sparet?: SparetSession;
   /** Bästa resultat i Vart är vi på väg? (max 50), och antal bromsningar på tio. */
   sparetBest?: number;
+  /** Frågor man svarat fel på, de senaste trettio - tidningen repriserar en i taget */
+  missade?: Miss[];
+  /** Hur många repriser som visats, för att rotera */
+  repriser?: number;
   sparetTio?: number;
 
   /** Antal rätta och felaktiga svar totalt */

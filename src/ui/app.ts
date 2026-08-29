@@ -2910,6 +2910,55 @@ export class App {
       blad.append(uppslag);
     }
 
+    // --------------------------------------------------------------- repris
+    /**
+     * Frågan du missade kommer tillbaka. En i taget, i tur och ordning, med
+     * facit och kuriosa - tidningens sätt att se till att ett fel svar lär
+     * något andra gången.
+     */
+    const missade = s.missade ?? [];
+    if (missade.length > 0) {
+      const m = missade[(s.repriser ?? 0) % missade.length]!;
+      const repris = el('div', { class: 'paper-avdelning paper-repris' });
+      repris.append(el('h2', { class: 'paper-avdelning-namn' }, 'Repris'));
+      const ruta = el('div', { class: 'repris-ruta' });
+      if (m.bild) {
+        ruta.append(
+          el('img', { class: 'repris-foto', src: quizImageUrl(m.bild), alt: '', loading: 'lazy', draggable: 'false' })
+        );
+      }
+      ruta.append(
+        el('div', { class: 'repris-text' },
+          el('p', { class: 'repris-ingress' }, `Frågan du missade i ${m.stad}, dag ${m.dag}:`),
+          el('p', { class: 'repris-fraga' }, m.q),
+          el('p', { class: 'repris-svar' }, el('strong', {}, 'Rätt svar: '), m.svar),
+          m.info ? el('p', { class: 'repris-info' }, m.info) : '',
+          el('div', { class: 'row' },
+            button('Nu sitter det', () => {
+              const nu = this.state!;
+              nu.missade = (nu.missade ?? []).filter((x) => x.q !== m.q);
+              nu.repriser = (nu.repriser ?? 0) + 1;
+              playSound('valj');
+              this.commit();
+              this.scrollToTopNext = false;
+              this.render();
+            }, { class: 'btn btn-small btn-primary' }),
+            missade.length > 1
+              ? button('En annan', () => {
+                  const nu = this.state!;
+                  nu.repriser = (nu.repriser ?? 0) + 1;
+                  this.commit();
+                  this.scrollToTopNext = false;
+                  this.render();
+                }, { class: 'btn btn-small btn-ghost' })
+              : ''
+          )
+        )
+      );
+      repris.append(ruta, el('p', { class: 'muted repris-antal' }, `${missade.length} ${missade.length === 1 ? 'fråga' : 'frågor'} kvar att repetera.`));
+      blad.append(repris);
+    }
+
     // ------------------------------------------------------------ marknaden
     /**
      * Börssidan för souvenirer. Vad ryggsäckens innehåll är värt var, i dag,
@@ -3801,6 +3850,17 @@ export class App {
       s.wrong += 1;
       s.wrongStreak += 1;
       q.streak = 0;
+      // Fel svar sparas till tidningens Repris: det man missade ska komma
+      // tillbaka, med facit och kuriosa, tills det fastnat.
+      const q0 = current.question;
+      const svar = q0.reglage
+        ? (q0.a[0] ?? `${q0.reglage.svar}${q0.reglage.enhet ? ` ${q0.reglage.enhet}` : ''}`)
+        : (current.options[current.correctIndex] ?? '');
+      s.missade ??= [];
+      if (!s.missade.some((m) => m.q === q0.q)) {
+        s.missade.push({ q: q0.q, svar, info: q0.info, bild: q0.bild, stad: this.city.name, dag: s.days });
+        if (s.missade.length > 30) s.missade.shift();
+      }
     }
 
     if (right && q.streak >= 3) playCombo(q.streak);

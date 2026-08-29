@@ -327,6 +327,10 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Repris** i tidningen: frågor man svarat fel på (de senaste trettio)
+     kommer tillbaka en i taget, med facit och kuriosa, tills man trycker
+     *Nu sitter det*. Det är spelets repetition – fel svar får en andra chans
+     att fastna.
    - **Souvenirbutiken** är ett skyltfönster: foto av varan i en vriden vit
      ram (`souv-<id>` i `quizImages.ts`, 60 av 64 har foto), handskriven
      prislapp med hål och snöre, gummistämpel *Fynd*/*Turistpris*/*Vinst* i
