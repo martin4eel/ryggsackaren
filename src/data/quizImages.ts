@@ -455,7 +455,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'chamonix', alt: 'En alpdal med by och snöiga berg', article: 'Chamonix' },
   { id: 'glaskross', alt: 'Krossat färgat glas i en hög', article: 'Glass recycling', altFraga: 'En hög av krossade, färgade genomskinliga skärvor' },
   { id: 'biogasanlaggning', alt: 'En anläggning med runda rötkammare', article: 'Anaerobic digestion' },
-  { id: 'plastflaska', alt: 'En plastflaska', article: 'Plastic bottle' },
+  { id: 'plastflaska', alt: 'En klar PET-flaska med vatten', file: 'Plastic Water Bottle.jpg' },
   { id: 'aluminiumburk', alt: 'En dryckesburk med ringöppning', article: 'Drink can' },
   { id: 'atervinningskarl', alt: 'Färgade kärl för sorterat avfall', article: 'Recycling bin' },
   { id: 'pantautomat', alt: 'En automat där flaskor och burkar matas in', article: 'Reverse vending machine' },
@@ -737,7 +737,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'plastprylar', alt: 'Vardagsföremål i olika färger', article: 'Plastic' },
   { id: 'legoklossar', alt: 'En hög med färgglada byggklossar', file: 'Lego bricks.jpg' },
   { id: 'granulat', alt: 'Små korn i en hög', article: 'Nurdle (bead)' },
-  { id: 'plastpase', alt: 'En tunn påse i en soptunna', article: 'Plastic bag' },
+  { id: 'plastpase', alt: 'Två tunna plastpåsar med handtag', file: 'Hemdchentuete.jpg' },
   { id: 'bakelittelefon', alt: 'En svart gammal telefon med fingerskiva', file: 'Bakelittelefon 1947a.jpg' },
   { id: 'formspruta', alt: 'En stor industrimaskin i en fabrikshall', file: 'Arburg-swiss plastic 2026.jpg' },
   { id: 'visir', alt: 'En man med genomskinligt visir framför ansiktet', article: 'Face shield' },
@@ -1668,6 +1668,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'souv-korkhatt', alt: 'En didgeridoo av trä på en gräsmatta', file: 'Didgeridoo-grass.jpg' },
   { id: 'souv-surfvax', alt: 'Ett par solglasögon med gröna glas', file: 'Sunglasses-1.jpg' },
   { id: 'souv-kaffefilter', alt: 'En snöglob med en stadssiluett inuti', file: 'Snow Globe.jpeg' },
+  { id: 'sparvagnsrals', alt: 'Spårvagnsräls nedsänkt i gatsten', file: 'Rails de trams (33819684188).jpg' },
 ];
 
 export const QUIZ_IMAGE_BY_ID: Record<string, QuizImage> = Object.fromEntries(

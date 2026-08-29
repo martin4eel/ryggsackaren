@@ -149,13 +149,13 @@ export const SEVARDHETER: Record<string, string[]> = {
     'Katedralen bredvid lutar för att den står på den gamla sjöbotten och sjunker fortfarande. Aztekernas tempel står kvar där det stod.',
   ],
   moskva: [
-    'Nio kapell kring ett mittorn, varje lök i eget mönster. Inne är det trångt: smala gångar mellan små rum, ingen stor sal. Färgerna kom först på 1600-talet.',
+    'Åtta kapell kring ett nionde i mitten, varje lök i eget mönster. Inne är det trångt: smala gångar mellan små rum, ingen stor sal. Färgerna kom först på 1600-talet.',
     'Ivan den förskräcklige lät bygga den 1555–1561 för segern över Kazan. Officiellt heter den Förbönskatedralen; Vasilij var en helig dåre som begravdes intill.',
     'Stalin ville riva den. När Kaganovitj lyfte bort kyrkan från modellen av Röda torget ska Stalin ha sagt: Lazar, ställ tillbaka den. Den står kvar.',
   ],
   mumbai: [
     'En 26 meter hög basaltbåge vid vattnet, med gallerverk i gujaratisk stil och fyra små torn. Från kajen bakom går båtarna till Elephanta.',
-    'George Wittet ritade den i indo-sarasenisk stil. När kungen kom 1911 fanns bara en modell i papp att visa upp, för man hade inte hunnit bygga.',
+    'George Wittet ritade den i indo-sarasenisk stil och blandade hinduiskt och muslimskt gallerverk i basalten. Klar först 1924, tretton år efter kungabesöket den skulle hedra.',
     'Bågen står vänd mot havet, så att man kom in i Indien sjövägen genom den. I dag kommer nästan alla besökare från landsidan och går ut genom porten.',
   ],
   nairobi: [
@@ -191,7 +191,7 @@ export const SEVARDHETER: Record<string, string[]> = {
   reykjavik: [
     'Tornet är 74,5 meter, och fasaden är betongpelare som stiger i trappsteg som basaltpelarna vid Svartifoss. Framför står Leifur Eiríksson med ryggen mot kyrkan.',
     'Guðjón Samúelsson ritade kyrkan 1937; bygget började 1945 och var klart 1986. Namnet är psalmdiktaren Hallgrímur Péturssons, från 1600-talet.',
-    'Statyn av Leifur var en gåva från USA 1930 till Alltingets tusenårsjubileum, och stod på platsen i femton år innan kyrkan ens börjat byggas.',
+    'Statyn av Leifur var en gåva från USA 1930 till Alltingets tusenårsjubileum, och stod på platsen i drygt tio år innan kyrkan ens börjat byggas.',
   ],
   rio: [
     '30 meter staty på åtta meters sockel, på Corcovados topp 710 meter upp. Armspannet är 28 meter, och ansiktet är vänt mot centrum, inte mot havet.',
@@ -214,7 +214,7 @@ export const SEVARDHETER: Record<string, string[]> = {
     'Japan lade sitt generalguvernement mitt framför tronsalen 1926; huset revs 1995 och palatset återuppbyggs sedan dess. Den som bär hanbok slipper entré.',
   ],
   singapore: [
-    'Arton Supertrees i stål och betong, 25 till 50 meter, klädda med orkidéer och ormbunkar. Sju av dem binds ihop av en gångbro 22 meter upp.',
+    'Arton Supertrees i stål och betong, 25 till 50 meter, klädda med orkidéer och ormbunkar. Två av dem binds ihop av en 128 meter lång gångbro 22 meter upp.',
     'Öppnade 2012 på utfylld mark vid Marina Bay, som del av planen att göra Singapore till en stad i en trädgård. Ritat av Grant Associates i Bath.',
     'Cloud Forest-kupolen har ett 35 meter högt vattenfall inomhus, och några av Supertrees är skorstenar för pannan som eldar parkens trädgårdsavfall.',
   ],

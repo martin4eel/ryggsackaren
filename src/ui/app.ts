@@ -2978,7 +2978,7 @@ export class App {
         `Jag har hört att man älskar ${vara.toLowerCase()} i ${stad}. ${pris} betalar de, säger min kusin, och han ljuger sällan om pengar.`,
         `Ryktet går att ${stad} skriker efter ${vara.toLowerCase()}. ${pris} styck, om ryktet stämmer. Ryktet stämmer ibland.`,
         `En läsare i ${stad} skriver att folk står i kö för ${vara.toLowerCase()} och betalar ${pris} utan att blinka. Vi har inte kontrollerat kön.`,
-        `${vara} går för ${pris} i ${stad}, enligt en man som sålde sin på flygplatsen och nu ångrar det.`,
+        `${vara} går för ${pris} i ${stad}, enligt en man som sålde på flygplatsen och nu ångrar det.`,
         `Vår korrespondent i ${stad}: "${vara}? ${pris}. Fråga inte varför."`,
       ];
       return mallar[Math.floor(pseudoRandom(seed) * mallar.length)]!;
