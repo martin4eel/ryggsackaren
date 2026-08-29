@@ -88,6 +88,8 @@ import {
   describeEffect,
   eventContext,
   fillText,
+  EVENT_CHANCE,
+  EVENT_COOLDOWN_DAYS,
   pendingEffect,
   pendingEvent,
   pendingOutcome,
@@ -825,17 +827,34 @@ export class App {
      * uppdrag: någon med ett ärende till en annan stad. Det gör att resan
      * vidare lönar sig, och att ryggsäcken får något att bära på.
      */
-    if ((chance ?? 1) < 1 && !s.pendingEvent && !s.pendingUppdrag && (s.uppdrag?.length ?? 0) < 2 && Math.random() < 0.25) {
-      const erbjudet = this.lottaUppdrag();
-      if (erbjudet) {
-        s.pendingUppdrag = erbjudet;
-        s.lastEventDay = s.days;
-        playSound('sida');
-        this.commit();
-        return;
+    const slumpen = chance ?? EVENT_CHANCE[trigger];
+    let tvingad = chance;
+    if (
+      slumpen < 1 &&
+      !s.pendingEvent &&
+      !s.pendingUppdrag &&
+      s.days - (s.lastEventDay ?? -99) >= EVENT_COOLDOWN_DAYS &&
+      Math.random() < slumpen
+    ) {
+      // Slumpen slog till. Var fjärde gång blir det ett uppdrag i stället för
+      // en händelse; annars går händelsen fram utan ett andra tärningskast.
+      if ((s.uppdrag?.length ?? 0) < 2 && Math.random() < 0.25) {
+        const erbjudet = this.lottaUppdrag();
+        if (erbjudet) {
+          s.pendingUppdrag = erbjudet;
+          s.lastEventDay = s.days;
+          playSound('sida');
+          this.commit();
+          return;
+        }
       }
+      // Karenstiden är redan kontrollerad här, så händelsen tvingas fram.
+      tvingad = 1;
+    } else if (slumpen < 1) {
+      // Karens eller otur: ingen händelse den här gången heller.
+      return;
     }
-    const event = rollEvent(s, city, trigger, chance);
+    const event = rollEvent(s, city, trigger, tvingad);
     if (!event) return;
     const kostnad = dailyCost(city, s.difficulty);
     this.eventEffects = event.choices
