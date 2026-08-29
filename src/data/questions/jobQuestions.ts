@@ -1056,7 +1056,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vad kallas en ägarandel i ett företag?', bild: 'aktiebrev', a: ['Aktie', 'Obligation', 'Option', 'Faktura'], d: 1 },
     { q: 'Vad kallas skillnaden mellan köp- och säljkurs?', bild: 'bloombergterminal', a: ['Spread', 'Spot', 'Swap', 'Split'], d: 1 },
     { q: 'Vad innebär utdelning till aktieägare?', bild: 'aktiebrev', a: ['Del av företagets vinst betalas ut', 'Aktien delas i två', 'Skulden skrivs av', 'Kursen halveras'], d: 1 },
-    { q: 'Gatan på bilden är USA:s finanscentrum. Vad heter den?', bild: 'wallstreet', a: ['Wall Street', 'Broadway', 'Fifth Avenue', 'Bourbon Street'], d: 1, info: 'Namnet kommer från en mur som holländarna byggde på 1600-talet till skydd för Nya Amsterdam.' },
+    { q: 'Vilken gata i nedre Manhattan, knappt en kilometer lång, gav namn åt hela finansvärlden?', bild: 'wallstreet', a: ['Wall Street', 'Broadway', 'Fifth Avenue', 'Bourbon Street'], d: 1, info: 'Namnet kommer från en mur som holländarna byggde på 1600-talet till skydd för Nya Amsterdam.' },
     { q: 'Vad kallas det när du köper billigt på en marknad och säljer dyrt på en annan samtidigt?', bild: 'bloombergterminal', a: ['Arbitrage', 'Hedging', 'Dumpning', 'Blankning'], d: 2 },
     { q: 'Vad innebär det att blanka en aktie?', bild: 'borsgolv', a: ['Sälja lånade aktier i tro att kursen faller', 'Köpa för att behålla länge', 'Byta aktie mot obligation', 'Dela aktien i två'], d: 1 },
     { q: 'Vad kallas en marknad där kurserna stiger under lång tid?', bild: 'tjur', a: ['Tjurmarknad', 'Björnmarknad', 'Sidledsmarknad', 'Blankningsmarknad'], d: 1 },

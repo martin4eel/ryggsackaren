@@ -102,6 +102,12 @@ export interface BackpackItem {
 }
 
 export interface CityProgress {
+  /**
+   * Veckans personliga sida: tre annonser, valda en gång och sedan låsta.
+   * Svarar man eller bläddrar förbi stryks annonsen över - platsen fylls
+   * inte på med en ny, för då vore spalten en oändlig kran.
+   */
+  annonser?: { vecka: number; ids: string[] };
   /** Bästa resultat på turistbyrån, 0-100 */
   rating: number;
   /** Antal gånger du frågat ut turistbyrån */

@@ -8265,3 +8265,35 @@ body.sheet-oppen {
   font-style: italic;
   opacity: 0.85;
 }
+
+
+/*
+ * En besvarad eller överbläddrad annons stryks över i tidningen i stället för
+ * att bytas ut. Spalten är tryckt en gång i veckan; någon har suttit med
+ * pennan sedan dess.
+ */
+.kontakt-overstruken {
+  position: relative;
+  opacity: 0.62;
+}
+
+.kontakt-overstruken .kontakt-rubrik,
+.kontakt-overstruken .kontakt-text,
+.kontakt-overstruken .kontakt-signatur {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.kontakt-stampel {
+  display: inline-block;
+  margin: 6px 0 0;
+  padding: 2px 8px;
+  border: 1px solid #a4342f;
+  border-radius: 3px;
+  color: #a4342f;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+}

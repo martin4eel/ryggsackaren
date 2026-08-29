@@ -961,7 +961,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Vad heter templet på bilden?', bild: 'watpho',
+      q: 'I vilket tempel i Bangkok ligger den 46 meter långa liggande Buddhan på bilden?', bild: 'watpho',
       a: ['Wat Pho', 'Wat Arun', 'Angkor Wat', 'Borobudur'],
       d: 2,
     },
@@ -1241,7 +1241,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 2,
     },
     {
-      q: 'Vilken gata, som syns på bilden, är centrum för USA:s finansvärld?', bild: 'wallstreet',
+      q: 'I vilken gata i New York ligger börsen och de gamla bankpalatsen?', bild: 'wallstreet',
       a: ['Wall Street', 'Broadway', 'Fifth Avenue', 'Bourbon Street'],
       d: 1,
     },

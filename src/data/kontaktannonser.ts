@@ -32,9 +32,81 @@ export interface Kontaktannons {
   /** Regioner där annonsen förekommer. Saknas den finns den överallt. */
   regioner?: Region[];
   utfall: Utfall[];
+  /**
+   * Annonsen är i själva verket ett ärende till en annan stad. Att svara
+   * kostar en dag som vanligt, men i stället för ett utfall får man
+   * uppdragskortet: vad som ska bäras, vart, och för hur mycket. Tackar man
+   * nej har man ändå lagt en dag på att gå dit och lyssna.
+   */
+  uppdrag?: boolean;
 }
 
 export const KONTAKTANNONSER: Kontaktannons[] = [
+  /*
+   * Ärendeannonser. De ser ut som vilken rad som helst i spalten, men den
+   * som svarar får ett uppdrag till en annan stad i stället för ett utfall.
+   * Utfallen nedan används bara i nödfall, om ingen stad går att lotta.
+   */
+  {
+    id: 'arende-bud',
+    rubrik: 'Bud sökes, betalning kontant',
+    text: 'Har en sak som ska till en annan stad och postens försäkring täcker den inte. Du reser ändå. Vi träffas på kaféet vid stationen, jag har paketet med mig.',
+    signatur: 'Sitter vid fönstret med en kasse',
+    uppdrag: true,
+    utfall: [
+      { text: 'Kaféet är stängt. Ingen kasse, ingen sak, ingen betalning. Du dricker kaffe på ett annat ställe och tänker på saken.' },
+    ],
+  },
+  {
+    id: 'arende-slakt',
+    rubrik: 'Släkt söker kontakt via ombud',
+    text: 'Min familj bor utspridd över halva världen och telefonen räcker inte längre. Söker någon som är på väg och kan ta med sig något som väger mer än ett brev. Ersättning avtalas.',
+    signatur: 'Äldre kvinna med långt minne',
+    uppdrag: true,
+    utfall: [
+      { text: 'Ni sitter en timme och tittar på fotografier. Släkten är stor och ingen av dem behöver något just nu. Kaffet var starkt.' },
+    ],
+  },
+  {
+    id: 'arende-loften',
+    rubrik: 'Löfte ska infrias, hjälp önskas',
+    text: 'Lovade en sak för länge sedan och har inte hållit det. Nu går jag inte längre själv, men du gör det. Jag betalar för besväret och sover bättre efteråt.',
+    signatur: 'Den som lovade för mycket',
+    uppdrag: true,
+    utfall: [
+      { text: 'Personen ändrar sig i dörren. "Det var kanske inte ett löfte. Det var mer en tanke." Du får en kaka och går.' },
+    ],
+  },
+  {
+    id: 'arende-flyttlass',
+    rubrik: 'En enda sak blev kvar',
+    text: 'Flyttade härifrån för tre år sedan och glömde en sak som inte går att posta. Den som kan ta den dit jag bor nu får bra betalt och min eviga tacksamhet, i den ordningen.',
+    signatur: 'Bor numera långt bort',
+    uppdrag: true,
+    utfall: [
+      { text: 'Saken visar sig redan ha hämtats av en granne, som körde den till en annan stad förra veckan. Ingen har sagt något till annonsören.' },
+    ],
+  },
+  {
+    id: 'arende-hemlighet',
+    rubrik: 'Diskret ärende, inga frågor',
+    text: 'Söker någon som reser och inte är nyfiken. Föremålet är lagligt, lätt och tål inte fukt. Betalning i kontanter när det är framme. Fråga inte vad det är, det gör inte jag heller.',
+    signatur: 'Diskret, som sagt',
+    uppdrag: true,
+    utfall: [
+      { text: 'Ni möts vid en bänk. Personen tittar på dig länge, säger "nej, du är för nyfiken" och går. Du hade inte frågat något.' },
+    ],
+  },
+  {
+    id: 'arende-forsoning',
+    rubrik: 'Försoning sökes, ombud betalas',
+    text: 'Vi har inte pratat på elva år och det var mitt fel. Jag kan inte åka själv. Ta med det jag skickar med, säg ingenting mer än det som står på lappen, och kom ihåg pengarna på vägen ut.',
+    signatur: 'Storasyster, envis',
+    uppdrag: true,
+    utfall: [
+      { text: 'Hon öppnar dörren, säger "jag har ändrat mig" och stänger den igen. Två minuter senare öppnar hon och säger "nej, jag hade rätt första gången". Sedan stänger hon igen.' },
+    ],
+  },
   {
     id: 'middag',
     rubrik: 'Sällskap till middag sökes',

@@ -3289,19 +3289,47 @@ export class App {
      */
     const spent = p.spent ?? [];
     const vecka = Math.floor(s.days / 7);
-    // Tv-frågesportens kontaktannons är ett skämt om Vart är vi på väg; den
-    // väntar tills den riktiga rutan i tidningen är förbrukad.
-    const pool = annonserFor(city.region).filter(
-      (a) =>
-        !spent.includes(`kontakt:${a.id}`) &&
-        !spent.includes(`bort:${a.id}`) &&
-        !(a.id === 'fragesport' && !spent.includes('sparet'))
-    );
-    const valda = pool
-      .map((a) => ({ a, k: pseudoRandom(`${city.id}|kontakt|${vecka}|${a.id}`) }))
-      .sort((x, y) => x.k - y.k)
-      .slice(0, 3)
-      .map((x) => x.a);
+    const forbrukad = (id: string) =>
+      spent.includes(`kontakt:${id}`) || spent.includes(`bort:${id}`);
+    /**
+     * Veckans tre annonser väljs en gång och ligger sedan kvar. Svarar man
+     * eller bläddrar förbi stryks raden över i stället för att bytas ut: en
+     * spalt som fyller på sig själv är ingen spalt, det är en automat.
+     *
+     * Ungefär var fjärde annons är ett ärende till en annan stad. Den som
+     * svarar får uppdragskortet i stället för ett utfall.
+     */
+    if (p.annonser?.vecka !== vecka) {
+      // Tv-frågesportens annons är ett skämt om Vart är vi på väg och väntar
+      // tills den riktiga rutan i tidningen är förbrukad.
+      const tillganglig = annonserFor(city.region).filter(
+        (a) => !forbrukad(a.id) && !(a.id === 'fragesport' && !spent.includes('sparet'))
+      );
+      const vanliga = tillganglig.filter((a) => !a.uppdrag);
+      const arenden = tillganglig.filter((a) => a.uppdrag);
+      const ordna = (lista: Kontaktannons[], nyckel: string) =>
+        lista
+          .map((a) => ({ a, k: pseudoRandom(`${city.id}|${nyckel}|${vecka}|${a.id}`) }))
+          .sort((x, y) => x.k - y.k)
+          .map((x) => x.a);
+      const kvarVanliga = ordna(vanliga, 'kontakt');
+      const kvarArenden = ordna(arenden, 'arende');
+      const ids: string[] = [];
+      for (let plats = 0; plats < 3; plats++) {
+        const arende =
+          pseudoRandom(`${city.id}|arendeplats|${vecka}|${plats}`) < 0.25 &&
+          kvarArenden.length > 0;
+        const vald = arende ? kvarArenden.shift() : kvarVanliga.shift();
+        if (vald) ids.push(vald.id);
+        else if (!arende && kvarArenden.length > 0) ids.push(kvarArenden.shift()!.id);
+      }
+      p.annonser = { vecka, ids };
+      saveGame(s);
+    }
+    const alla = annonserFor(city.region);
+    const valda = p.annonser.ids
+      .map((id) => alla.find((a) => a.id === id))
+      .filter((a): a is Kontaktannons => Boolean(a));
     const svar = this.kontaktSvar;
     if (valda.length > 0 || svar) {
       blad.append(
@@ -3325,15 +3353,19 @@ export class App {
         );
       }
       for (const a of valda) {
+        const besvarad = spent.includes(`kontakt:${a.id}`);
+        const bortbladdrad = spent.includes(`bort:${a.id}`);
         sida.append(
-          el('article', { class: 'kontakt' },
+          el('article', { class: `kontakt ${besvarad || bortbladdrad ? 'kontakt-overstruken' : ''}` },
             el('h3', { class: 'kontakt-rubrik' }, a.rubrik),
             el('p', { class: 'kontakt-text' }, a.text),
             el('p', { class: 'kontakt-signatur' }, `— ${a.signatur}`),
-            el('div', { class: 'kontakt-knappar' },
-              button('Svara', () => this.svaraKontakt(a), { class: 'btn btn-primary btn-small' }),
-              button('Bläddra förbi', () => this.ignoreraKontakt(a.id), { class: 'btn btn-ghost btn-small' })
-            )
+            besvarad || bortbladdrad
+              ? el('p', { class: 'kontakt-stampel' }, besvarad ? 'Besvarad' : 'Överbläddrad')
+              : el('div', { class: 'kontakt-knappar' },
+                  button('Svara', () => this.svaraKontakt(a), { class: 'btn btn-primary btn-small' }),
+                  button('Bläddra förbi', () => this.ignoreraKontakt(a.id), { class: 'btn btn-ghost btn-small' })
+                )
           )
         );
       }
@@ -3353,6 +3385,24 @@ export class App {
     if (p.spent.includes(`kontakt:${a.id}`)) return;
     p.spent.push(`kontakt:${a.id}`);
     this.spendDays(1, city);
+    /*
+     * Ärendeannonsen leder till uppdragskortet i stället för ett utfall: man
+     * går dit, får höra vad som ska bäras vart, och bestämmer sig sedan.
+     * Finns inget mål att lotta - allt är besökt, eller ryggsäcken är full av
+     * ärenden - faller annonsen tillbaka på sitt vanliga utfall.
+     */
+    if (a.uppdrag && !s.pendingUppdrag && (s.uppdrag?.length ?? 0) < 2) {
+      const erbjudet = this.lottaUppdrag();
+      if (erbjudet) {
+        s.pendingUppdrag = erbjudet;
+        playSound('sida');
+        this.commit();
+        if (this.checkBroke()) return;
+        this.scrollToTopNext = false;
+        this.render();
+        return;
+      }
+    }
     const summa = a.utfall.reduce((n, u) => n + (u.vikt ?? 1), 0);
     let lott = Math.random() * summa;
     let utfall = a.utfall[a.utfall.length - 1]!;
