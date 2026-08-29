@@ -1334,7 +1334,7 @@ export const CITIES: City[] = [
       arkeologassistent: 'Utgrävningen i Vinča',
     },
     jobs: ['gatukoksbitrade', 'vaxlare', 'bollkalle', 'sparvagnsforare', 'klubbdj', 'kanalskeppare', 'arkeologassistent'],
-    souvenirs: ['murbit', 'fotbollstroja', 'konsttryck'],
+    souvenirs: ['laderbalte', 'fotbollstroja', 'konsttryck'],
   },
   {
     id: 'hudiksvall',
@@ -1357,13 +1357,13 @@ export const CITIES: City[] = [
       fikabitrade: 'Café Möljen',
       hamnarbetare: 'Hudiksvalls hamn',
       farmarbetare: 'Hälsingegården i Norrbo',
-      ullfabriksarbetare: 'Hudiksvalls ullspinneri',
+      vavare: 'Linväveriet i Hudiksvall',
       livraddare: 'Badplatsen Lövudden',
       tidningsbud: 'Glada Hudikbladets bud',
-      mattvavare: 'Väveriet i Delsbo',
+      museivard: 'Hälsingegårdarnas museum',
       skargardsguide: 'Hornslandets båttrafik',
     },
-    jobs: ['fikabitrade', 'hamnarbetare', 'farmarbetare', 'ullfabriksarbetare', 'livraddare', 'tidningsbud', 'mattvavare', 'skargardsguide'],
+    jobs: ['fikabitrade', 'hamnarbetare', 'farmarbetare', 'vavare', 'livraddare', 'tidningsbud', 'museivard', 'skargardsguide'],
     souvenirs: ['ulltroja', 'sillburk', 'trolldocka'],
   },
   {
@@ -1389,7 +1389,7 @@ export const CITIES: City[] = [
       sommelier: 'Enoteca Franciacorta',
       formsprutare: 'Officine Bresciane',
       museivard: 'Museo Santa Giulia',
-      fotbollstranare: 'Calcio Brescia ungdom',
+      fotbollstranare: 'Ungdomslaget Leonessa',
     },
     jobs: ['torghandlare', 'vespabud', 'sommelier', 'formsprutare', 'museivard', 'fotbollstranare'],
     souvenirs: ['olivoljeflaska', 'ostkniv', 'konsttryck'],
@@ -1422,7 +1422,7 @@ export const CITIES: City[] = [
       kock: 'Restaurante Monte Igueldo',
     },
     jobs: ['fikabitrade', 'butiksvard', 'badplatsvard', 'servitor', 'filmproducent', 'valskadeguide', 'skateboardinstruktor', 'kock'],
-    souvenirs: ['ulltroja', 'olivoljeflaska', 'kakelplatta'],
+    souvenirs: ['ulltroja', 'ostkniv', 'konsttryck'],
   },
   {
     id: 'oaxaca',
@@ -1451,7 +1451,7 @@ export const CITIES: City[] = [
       arkeologassistent: 'Utgrävningen på Monte Albán',
     },
     jobs: ['torghandlare', 'basarforsaljare', 'farmarbetare', 'vavare', 'kryddhandlare', 'muralmalare', 'arkeologassistent'],
-    souvenirs: ['chilipase', 'solmask', 'silverarmband'],
+    souvenirs: ['chilipase', 'laderbalte', 'trumma'],
   },
 ];
 

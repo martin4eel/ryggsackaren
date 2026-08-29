@@ -241,11 +241,11 @@ export const SEVARDHETER: Record<string, string[]> = {
   belgrad: [
     'Fästningen Kalemegdan på udden mellan Sava och Donau, med vallar från flera århundraden och parken där staden går ut för att titta på flodmötet.',
     'Skadarlija, bohemkvarteret med kullersten, kafanas och levande musik varje kväll. Räkningen kommer när gästen frågar, inte förr.',
-    'Nikola Tesla-museet i en villa från 1929, där hans aska förvaras i en förgylld sfär och besökarna får hålla i lysrör som tänds av sig själva.',
+    'Nikola Tesla-museet i en villa från 1927, där hans aska förvaras i en förgylld sfär och besökarna får hålla i lysrör som tänds av sig själva.',
   ],
   hudiksvall: [
     'Möljen: raden av rödmålade fiske- och sjöbodar längs kanalen mitt i staden, från 1700- och 1800-talen, med speglingar i vattnet på kvällen.',
-    'Hälsingegårdarna utanför staden, sju av dem på Unescos världsarvslista, med målade festvåningar som bönderna knappt använde.',
+    'Hälsingegårdarna i landskapet, sju av dem på Unescos världsarvslista, med målade festvåningar som bönderna knappt använde. Närmaste gård ligger sex mil bort.',
     'Hornslandet, halvön med klapperstensfält, gamla fiskelägen och en kust som fortfarande stiger ur havet efter inlandsisen.',
   ],
   brescia: [
@@ -255,7 +255,7 @@ export const SEVARDHETER: Record<string, string[]> = {
   ],
   sansebastian: [
     'La Concha, den snäckformade bukten med sitt vita järnräcke, skyddad av ön Santa Clara och nästan alltid spegelblank.',
-    'Gamla stan med sina pintxosbarer, där snittarna står framme på diskarna och man betalar per pinne innan man går vidare till nästa bar.',
+    'Gamla stan med sina pintxosbarer, där snittarna står framme på diskarna och pinnarna räknas när man betalar, innan man går vidare till nästa bar.',
     'Monte Igueldo med sin bergbana från 1912 och utsikten över hela bukten, staden och Atlanten bakom.',
   ],
   oaxaca: [

@@ -1426,7 +1426,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
     notiser: [
       'Torgets fontän är igång igen efter att en anka byggt bo i den.',
       'Linberedningens vänner söker någon som kan laga en bråka.',
-      'Stadsbussen kör om planerat efter att vägarbetet blev klart en vecka för tidigt.',
+      'Stadsbussen kör enligt tidtabell igen, sedan vägarbetet blev klart en vecka för tidigt.',
       'Iskiosken vid Möljen öppnar när isen gått, meddelar innehavaren utan att ange datum.',
     ],
   },
@@ -1448,13 +1448,13 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Franciacortaproducenterna eniga om skördetiden',
         text:
-          'Vinodlarna söder om staden har enats om att skörden inleds tredje veckan i augusti. Beslutet fattades efter provsmakning av druvor från åtta gårdar, en process som enligt protokollet tog två dagar längre än planerat.',
+          'Vinodlarna väster om staden har enats om att skörden inleds tredje veckan i augusti. Beslutet fattades efter provsmakning av druvor från åtta gårdar, en process som enligt protokollet tog två dagar längre än planerat.',
       },
     ],
     notiser: [
       'Museets romerska golv är åter framme efter att glaset putsats.',
       'Marknaden på Piazza Rovetta flyttas en dag på grund av helgen.',
-      'Bergbanan till Maddalena stängd för översyn, vandringsleden är öppen.',
+      'Vägen upp till Maddalena är avstängd för asfaltering. Vandringsleden är öppen.',
       'Bibliotekets kopia av stadsplanen från 1764 är utlånad. Till vem framgår inte.',
     ],
   },

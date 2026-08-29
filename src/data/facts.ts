@@ -287,7 +287,7 @@ export const CITY_POPULATION: Record<string, number> = {
   malmo: 360_000,
   vasteras: 130_000,
   koping: 18_000,
-  hudiksvall: 15_000,
+  hudiksvall: 17_000,
   belgrad: 1_200_000,
   brescia: 200_000,
   sansebastian: 190_000,

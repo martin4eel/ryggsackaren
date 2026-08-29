@@ -80,9 +80,9 @@ const CITY_ARTICLES = {
   vasteras: { article: 'Anundshög' },
   koping: { file: 'Köping 2013-08-23 image01.jpg' },
   belgrad: { file: 'Pobednik monument, Kalemegdan, Belgrade.jpg' },
-  hudiksvall: { file: 'Huddikhamn.JPG' },
+  hudiksvall: { file: 'Hudiksvall July 2014 05.jpg' },
   brescia: { file: 'Palazzo della Loggia e piazza Brescia.jpg' },
-  sansebastian: { file: 'San Sebastian La Concha-20120902-RM-125922.jpg' },
+  sansebastian: { file: 'Donosti (112287257).jpeg' },
   oaxaca: { file: 'Monte Alban, Main Plaza, Building J, and the North Platform (20498776500).jpg' },
 };
 

@@ -72,7 +72,7 @@ export const CITY_CLIMATE: Record<string, Climate> = {
   auckland: 'subtropiskt',
   buenosaires: 'subtropiskt',
   belgrad: 'tempererat',
-  brescia: 'medelhav',
+  brescia: 'tempererat',
   sansebastian: 'tempererat',
   oaxaca: 'hogland',
 };

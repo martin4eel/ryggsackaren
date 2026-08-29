@@ -1633,20 +1633,9 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **zocalo.webp** (Ett enormt öppet torg omgivet av gamla byggnader) – [Zócalo,_Ciudad_de_México_(32846556446)_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Z%C3%B3calo,_Ciudad_de_M%C3%A9xico_(32846556446)_(cropped).jpg) av Comisión Mexicana de Filmaciones from México D. F., México, CC BY-SA 2.0.
 - **zulu.webp** (Dansare i traditionell dräkt) – [Zulu_Culture,_KwaZulu-Natal,_South_Africa_(20325329170).jpg](https://commons.wikimedia.org/wiki/File:Zulu_Culture,_KwaZulu-Natal,_South_Africa_(20325329170).jpg) av South African Tourism from South Africa, CC BY 2.0.
 
-## Klubbmärken med egen upphovsrätt
+## Om klubbmärken
 
-Två av hockeymärkena är inte fritt licensierade utan klubbarnas egna
-varumärken, hämtade från Wikipedias artiklar om klubbarna:
-
-| Fil | Märke | Rättighetshavare |
-| --- | --- | --- |
-| logo-mapleleafs.webp | Toronto Maple Leafs primärmärke (2016-) | Toronto Maple Leafs / NHL |
-| logo-canucks.webp | Vancouver Canucks primärmärke | Vancouver Canucks / NHL |
-
-De används för att peka ut vilket lag en fråga gäller i ett gratis, icke
-kommersiellt frågespel, med rättighetshavaren angiven. Spelets ägare har
-fattat det beslutet efter att ha vägt saken. Övriga märken i spelet är
-fritt licensierade eller ligger under verkshöjd (se raderna ovan).
-
-Skulle en rättighetshavare invända tas märket bort och ersätts med
-klubbens ordbild, som finns fritt licensierad på Wikimedia Commons.
+Hockeyspelet visade tidigare klubbarnas märken. De togs bort 2026-08-29:
+frågan lyder nu "vem av de fyra hör hemma i Boston Bruins?" med lagets namn
+utskrivet, vilket gör samma nytta utan att använda någon annans varumärke.
+Landslagen i fotbollsspelet visas med flagga, och flaggor är fria.

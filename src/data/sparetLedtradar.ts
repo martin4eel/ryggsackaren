@@ -349,9 +349,9 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 2, text: 'Här möts Sava och Donau, i huvudstaden i ett land som betalar med dinarer och skriver med två alfabet.' },
   ],
   hudiksvall: [
-    { niva: 10, text: 'Sju gårdar i trakten står på Unescos världsarvslista. Bönderna målade festvåningar de knappt använde, för att visa vad linet gett.' },
-    { niva: 8, text: 'Stadens smeknamn kommer från 1800-talet, när borgarna ansågs festa mer än ekonomin tålde. En teatergrupp har tagit namnet.' },
-    { niva: 6, text: 'Ryssarna brände staden 1721. Den var då redan landskapets äldsta, med privilegier från Johan III.' },
+    { niva: 10, text: 'Sju gårdar i landskapet står på Unescos världsarvslista. Bönderna målade festvåningar de knappt använde, för att visa vad linet gett.' },
+    { niva: 8, text: 'Ryssarna brände staden 1721. Den var då redan landskapets äldsta, med privilegier från Johan III.' },
+    { niva: 6, text: 'Stadens smeknamn kommer från 1800-talet, när borgarna ansågs festa mer än ekonomin tålde. En teatergrupp har tagit namnet.' },
     { niva: 4, text: 'Röda fiskebodar står i rad längs kanalen mitt i staden, och halvön utanför har klapperstensfält.' },
     { niva: 2, text: 'Hälsinglands äldsta stad, vid Bottenhavet, med femton tusen invånare och ett glatt tillnamn.' },
   ],
@@ -359,14 +359,14 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Ett landsvägslopp på tusen italienska mil startade här 1927 och körs numera som rally för veteranbilar.' },
     { niva: 8, text: 'Vinet söder om staden jäser en andra gång i flaskan, precis som i Champagne, men får bara heta Franciacorta.' },
     { niva: 6, text: 'Ett astronomiskt ur från 1546 visar månfaser på torget, och två bronsfigurer slår i klockan.' },
-    { niva: 4, text: 'Staden hette Brixia på romartiden och har ett forum kvar mitt i centrum, på Unescos lista.' },
+    { niva: 4, text: 'Romarna anlade staden och forumet ligger kvar mitt i centrum, på Unescos lista sedan 2011.' },
     { niva: 2, text: 'Lombardisk industristad mellan Gardasjön och Alperna, känd för metall och vapen sedan medeltiden.' },
   ],
   sansebastian: [
     { niva: 10, text: 'Staden brann ner 1813 när brittiska och portugisiska trupper intog den, och byggdes upp igen efter en rutplan.' },
     { niva: 8, text: 'Filmfestivalen har hållits sedan 1953 och delar ut en guldsnäcka, uppkallad efter stadens bukt.' },
     { niva: 6, text: 'Här finns fler stjärnkrogar per invånare än nästan någon annanstans, och snittarna på barernas diskar räknas i pinnar.' },
-    { niva: 4, text: 'Staden har två namn på skyltarna, ett spanskt och ett baskiskt, och ligger två mil från franska gränsen.' },
+    { niva: 4, text: 'Skyltarna har två namn, ett på landets språk och ett på baskiska, och gränsen till Frankrike ligger två mil bort.' },
     { niva: 2, text: 'Badstad vid Atlanten kring en snäckformad bukt, med surfing på stranden bortom floden.' },
   ],
   oaxaca: [
@@ -374,6 +374,6 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 8, text: 'Agaven rostas i jordugn innan den destilleras, och det är därifrån röksmaken kommer.' },
     { niva: 6, text: 'På bergskrönet ovanför dalen ligger en stad som zapotekerna började bygga omkring 500 f.Kr.' },
     { niva: 4, text: 'I byarna omkring vävs mattor på trampvävstolar med färger ur indigo och kochenill.' },
-    { niva: 2, text: 'Dalstad i södra Mexiko, 1 550 meter över havet, med marknader och allhelgonafirande på kyrkogårdarna.' },
+    { niva: 2, text: 'Dalstad femtio mil söder om huvudstaden, 1 550 meter över havet, med marknader och allhelgonafirande på kyrkogårdarna.' },
   ],
 };

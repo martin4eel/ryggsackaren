@@ -210,7 +210,13 @@ export interface Minigame {
    * kan anges - lag, rätt spelare, tre fel - annars lottas de.
    */
   lagval?: {
-    lag: { bild: string; namn: string }[];
+    /**
+     * Laget som ska matchas. `bild` är valfri: saknas den skrivs lagets namn
+     * ut i stället för ett märke. Landslagen visas med flagga, klubbarna med
+     * namn - ett klubbmärke är någon annans varumärke, och behövs inte för
+     * att frågan ska gå att svara på.
+     */
+    lag: { id: string; bild?: string; namn: string }[];
     spelare: { bild: string; namn: string; lag: string }[];
     rundor?: { lag: string; ratt: string; fel: string[] }[];
     antal?: number;

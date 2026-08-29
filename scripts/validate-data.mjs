@@ -310,11 +310,23 @@ try {
       const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || mg.kind === 'lagval' || fotoSortering || UNDANTAG[job.id] === mg.kind;
       if (job.wageClass >= 2 && !okej)
         problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
-      for (const x of [...(mg.lagval?.lag ?? []), ...(mg.lagval?.spelare ?? [])]) {
+      // Lagen får sakna märke - då skrivs namnet ut - men har de ett måste det finnas.
+      for (const x of [...(mg.lagval?.lag ?? [])]) {
+        if (x.bild && !bildManifest.has(x.bild))
+          problems.push(`jobb ${job.id}: lagvalet pekar på okänd bild ${x.bild}`);
+        if (!x.id) problems.push(`jobb ${job.id}: ett lag i lagvalet saknar id`);
+        if (!x.namn?.trim()) problems.push(`jobb ${job.id}: ett lag i lagvalet saknar namn`);
+      }
+      for (const x of mg.lagval?.spelare ?? []) {
         if (!bildManifest.has(x.bild)) problems.push(`jobb ${job.id}: lagvalet pekar på okänd bild ${x.bild}`);
+      }
+      const lagIds = new Set((mg.lagval?.lag ?? []).map((l) => l.id));
+      for (const p of mg.lagval?.spelare ?? []) {
+        if (!lagIds.has(p.lag)) problems.push(`jobb ${job.id}: spelaren ${p.namn} hör till okänt lag ${p.lag}`);
       }
       for (const r of mg.lagval?.rundor ?? []) {
         const ids = new Set((mg.lagval?.spelare ?? []).map((p) => p.bild));
+        if (!lagIds.has(r.lag)) problems.push(`jobb ${job.id}: lagvalsrundan pekar på okänt lag ${r.lag}`);
         for (const x of [r.ratt, ...r.fel]) if (!ids.has(x)) problems.push(`jobb ${job.id}: lagvalsrundan pekar på okänd spelare ${x}`);
       }
       // Quiz-passets frågor pekar på bilder som måste finnas.

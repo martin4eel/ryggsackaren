@@ -1863,7 +1863,8 @@ function startQuiz(host: HTMLElement, game: Minigame, ctx: MinigameContext, onDo
  */
 function startTeamPick(host: HTMLElement, game: Minigame, onDone: Done): void {
   const spec = game.lagval!;
-  const lagNamn = new Map(spec.lag.map((l) => [l.bild, l.namn]));
+  const lagNamn = new Map(spec.lag.map((l) => [l.id, l.namn]));
+  const lagBild = new Map(spec.lag.map((l) => [l.id, l.bild]));
   const spelare = new Map(spec.spelare.map((p) => [p.bild, p]));
   // Rundorna: angivna, annars lottade ur spelarlistan.
   let rundor = spec.rundor ? shuffled(spec.rundor) : [];
@@ -1890,11 +1891,21 @@ function startTeamPick(host: HTMLElement, game: Minigame, onDone: Done): void {
   const visa = () => {
     const r = rundor[index]!;
     status.set(`Lag ${index + 1}/${rundor.length}`, `${right} rätt`);
+    const lagetsNamn = lagNamn.get(r.lag) ?? '';
+    // Står namnet på skylten behöver frågan inte upprepa det.
     fraga.textContent = 'Vem av de fyra hör hemma i laget?';
     clear(rad);
     clear(marke);
+    /*
+     * Har laget ett märke visas det stort; annars står lagets namn på en
+     * skylt i samma format. Klubbarna har inga märken i spelet - namnet
+     * räcker, och då slipper vi använda någon annans varumärke.
+     */
+    const bild = lagBild.get(r.lag);
     marke.append(
-      el('img', { class: 'mg-lagval-logo', src: quizImageUrl(r.lag), alt: 'Lagmärke', draggable: 'false' }),
+      bild
+        ? el('img', { class: 'mg-lagval-logo', src: quizImageUrl(bild), alt: 'Lagmärke', draggable: 'false' })
+        : el('p', { class: 'mg-lagval-skylt' }, lagetsNamn),
       el('p', { class: 'mg-lagval-lagnamn' }, '\u00a0')
     );
     feedback.say('', 'neutral');
