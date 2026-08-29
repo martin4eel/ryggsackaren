@@ -247,6 +247,8 @@ export interface GameState {
   };
   /** Vilken terminal man står i, så att en omladdning inte flyttar en */
   stationMode?: 'buss' | 'tag' | 'flyg' | 'farja';
+  /** Antal lån man faktiskt fått hem, inte antal samtal */
+  lan?: number;
   /** Aktiva uppdrag: ärenden till andra städer */
   uppdrag?: AktivtUppdrag[];
   /** Uppdrag som erbjuds just nu, tills man tackar ja eller nej */

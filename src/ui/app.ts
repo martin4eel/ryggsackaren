@@ -32,6 +32,7 @@ import {
   optionCount,
   certificateThreshold,
   comboMultiplier,
+  LOAN_LIMIT,
   LOAN_MAX,
   LOAN_MIN,
   LOAN_STEP,
@@ -4559,19 +4560,48 @@ export class App {
 
     // ------------------------------------------------------------ rummet
     const rum = el('section', { class: 'panel butik-rum' });
+    /*
+     * Ytorna är ett riktigt fotografi av träpanel, klippt till vägg, disk och
+     * hyllplan i scripts/butiksytor.py. Adresserna sätts här i stället för i
+     * stilmallen: url() i CSS räknas ut mot filen i /assets/, och då pekar de
+     * fel så snart bygget lägger stilmallen någon annanstans.
+     */
+    const yta = (fil: string) => `url("${new URL(`butik/${fil}`, document.baseURI).href}")`;
+    rum.style.setProperty('--butik-vagg', yta('butik-vagg.webp'));
+    rum.style.setProperty('--butik-disk', yta('butik-disk.webp'));
+    rum.style.setProperty('--butik-bracka', yta('butik-bracka.webp'));
+
+    /** Lampan i taket: sladd, skärm och en glödlampa som lyser över disken. */
+    const lampa = el('div', { class: 'butik-lampa', 'aria-hidden': 'true' },
+      svgEl('svg', { viewBox: '0 0 120 96', class: 'butik-lampa-svg' },
+        svgEl('line', { class: 'butik-lampa-sladd', x1: '60', y1: '0', x2: '60', y2: '26' }),
+        svgEl('path', { class: 'butik-lampa-skarm', d: 'M60 24 L92 60 H28 Z' }),
+        svgEl('ellipse', { class: 'butik-lampa-glodlampa', cx: '60', cy: '64', rx: '7', ry: '9' })
+      ),
+      el('span', { class: 'butik-lampa-sken' })
+    );
     rum.append(
       el('p', { class: 'kicker butik-ort' }, `${city.name} · souvenirer & minnen`),
-      el('div', { class: 'butik-lampa', 'aria-hidden': 'true' })
+      lampa
     );
 
-    /** Handlaren: en mörk kontur bakom disken, med lampan i ryggen. */
+    /**
+     * Handlaren: en kontur bakom disken, med lampan i ryggen. Han lutar sig
+     * mot skivan med ena armen och håller den andra i sidan, som den gör som
+     * väntat i en butik i tjugofem år.
+     */
     const handlare = el('div', { class: 'butik-handlare', 'aria-hidden': 'true' },
-      svgEl('svg', { viewBox: '0 0 120 150', class: 'butik-handlare-svg' },
+      svgEl('svg', { viewBox: '0 0 150 170', class: 'butik-handlare-svg' },
         svgEl('path', {
           class: 'butik-handlare-kropp',
-          d: 'M60 18c11 0 19 9 19 20 0 7-3 13-7 17 13 4 22 12 27 24 4 10 6 22 7 34H14c1-12 3-24 7-34 5-12 14-20 27-24-4-4-7-10-7-17 0-11 8-20 19-20z',
+          // Keps med skärm, huvud, hals, axlar och en kropp som vidgas nedåt.
+          d: 'M56 30c0-9 7-16 17-16s17 7 17 16v3l14 3c1 0 1 2-1 2l-13 1v4c0 8-3 14-8 18l1 6 22 8c11 4 18 13 21 25l7 47H23l7-47c3-12 10-21 21-25l22-8 1-6c-5-4-8-10-8-18v-4l-13-1c-2 0-2-2-1-2l14-3z',
         }),
-        svgEl('path', { class: 'butik-handlare-arm', d: 'M86 62c8 3 14 9 17 17l-9 4c-3-7-8-12-14-14z' })
+        svgEl('path', {
+          class: 'butik-handlare-arm',
+          // Armen ut mot disken, med handen vilande på skivan.
+          d: 'M104 82c14 6 24 17 29 32l3 10-14 4-3-10c-4-12-11-20-21-25z',
+        })
       )
     );
 
@@ -5333,9 +5363,11 @@ export class App {
         el(
           'p',
           { class: 'muted' },
-          `Du kan be om upp till ${this.money(LOAN_MAX)}. Ju mer du ber om, desto större chans att de säger nej - och det som betalas ut läggs på skulden med ränta. Nuvarande skuld: ${this.money(
-            s.debt
-          )}. Skulden dras av från slutpoängen.`
+          (s.lan ?? 0) >= LOAN_LIMIT
+            ? `De har skickat pengar ${LOAN_LIMIT} gånger den här resan. Fler lån blir det inte - men du kan alltid ringa och prata. Nuvarande skuld: ${this.money(s.debt)}.`
+            : `Du kan be om upp till ${this.money(LOAN_MAX)}. Ju mer du ber om, desto större chans att de säger nej - och det som betalas ut läggs på skulden med ränta. De skickar pengar högst ${LOAN_LIMIT} gånger per resa; ${LOAN_LIMIT - (s.lan ?? 0)} kvar. Nuvarande skuld: ${this.money(
+                s.debt
+              )}. Skulden dras av från slutpoängen.`
         ),
         button('Ring hem', () => this.ringHem(), { class: 'btn btn-primary btn-big' })
       );
@@ -5394,7 +5426,8 @@ export class App {
          * inte slutet på samtalet: taket sänks till strax under det man bad
          * om, och man får försöka igen så länge det finns något att be om.
          */
-        const tak = samtal.tak ?? LOAN_MAX;
+        const slutlanat = (s.lan ?? 0) >= LOAN_LIMIT;
+        const tak = slutlanat ? 0 : (samtal.tak ?? LOAN_MAX);
         if (samtal.nekat) {
           panel.append(el('p', { class: 'phone-nej' }, samtal.nekat.rad));
         }
@@ -5445,6 +5478,7 @@ export class App {
             }
             s.money += belopp;
             s.debt += loanDebt(belopp);
+            s.lan = (s.lan ?? 0) + 1;
             this.commit();
             playSound(pappa ? 'rostpappa' : 'rostmamma');
             window.setTimeout(() => playSound('kassa'), 2400);
@@ -5471,9 +5505,13 @@ export class App {
         } else {
           panel.append(
             el('p', { class: 'muted' },
-              pappa
-                ? 'Pappa har sagt nej så många gånger nu att det vore oartigt att fråga igen.'
-                : 'Mamma har sagt nej, och sedan förklarat varför i tre minuter. Fråga inte igen i dag.'
+              slutlanat
+                ? pappa
+                  ? '"Vi har skickat tre gånger", säger pappa. "Det står i bladet. Nu får du klara dig, och det kommer att gå bra."'
+                  : '"Tre gånger, gubben", säger mamma. "Nu räcker det, säger pappa. Jag håller med honom, för en gångs skull."'
+                : pappa
+                  ? 'Pappa har sagt nej så många gånger nu att det vore oartigt att fråga igen.'
+                  : 'Mamma har sagt nej, och sedan förklarat varför i tre minuter. Fråga inte igen i dag.'
             )
           );
         }

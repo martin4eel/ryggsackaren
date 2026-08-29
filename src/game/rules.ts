@@ -281,6 +281,11 @@ export function citySouvenirs(city: City): Souvenir[] {
     .filter((s): s is Souvenir => Boolean(s));
 }
 
+/**
+ * Hur många gånger de går med på att skicka pengar under en resa. Efter tre
+ * lån är det inte längre en tjänst utan en vana, och då tar det slut.
+ */
+export const LOAN_LIMIT = 3;
 /** Mest man kan be om i ett samtal. Reglaget går inte längre. */
 export const LOAN_MAX = 2500;
 /** Minst man kan be om. Under det är det inte värt myntet i automaten. */

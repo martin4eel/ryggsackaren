@@ -366,6 +366,11 @@ webbläsaren och överlever att sparfilen raderas.
      fortfarande syntetiserat.
    - **Butiken är ett rum**, byggt efter souvenirbutiken i Backpacker 2:
      halvmörkt, trä, en lampa i taket och handlarens kontur bakom disken.
+     Ytorna är ett riktigt träfoto (Commons, CC BY-SA) klippt till vägg, disk
+     och hyllplan av `scripts/butiksytor.py` - samma trä i hela rummet, som i
+     en butik som snickrats en gång. Lampan hänger i sin sladd och handlaren
+     står i motljus; båda är SVG, alltså rummets möbler och inte dess
+     innehåll. Filerna ligger i `public/butik/` med egen ATTRIBUTION.
      Varorna står i skugga på hyllan - man ser att det står något där, inte
      vad det är - och först när man pekar på en tar handlaren fram den på
      disken, i ljuset, med namn, omdöme, pris och *Slå in*. Facket i hyllan
@@ -523,9 +528,15 @@ webbläsaren och överlever att sparfilen raderas.
    suckar, och båda lånar ut pengar. Ibland är det upptaget, ibland svarar
    ingen, och ibland har du slagit fel och får en pizzeria i Neapel. Då är det
    bara att ringa igen. Första gången svarar alltid mamma – hon har väntat.
+   Hur mycket du ber om drar du själv på ett reglage, upp till 2 500 kronor,
+   och ju högre du drar det desto större är chansen att svaret blir nej –
+   knappt sex procent längst ner, uppåt sextio vid taket, plus ett påslag om
+   du redan är skyldig dem pengar (`loanRefusalChance`). Ett nej är ingen
+   återvändsgränd: taket sänks till strax under det du bad om och du får
+   lägga ett nytt bud. De skickar pengar högst tre gånger per resa
+   (`LOAN_LIMIT`); efter det får du klara dig, och det säger de rakt ut.
    Lånen läggs på skulden med tjugo procents ränta – föräldrarna lånar inte
-   ut gratis – och skulden dras av från slutpoängen. Varje samtal ger
-   mindre än det förra. Rösterna är syntetiska (`rostmamma`, `rostpappa` i
+   ut gratis – och skulden dras av från slutpoängen. Rösterna är syntetiska (`rostmamma`, `rostpappa` i
    `src/ui/audio.ts`) och replikerna står överst i `src/ui/app.ts`.
 12. **Passet.** Under _Ryggsäck och pass_ ligger ett pass med tre sidor.
 

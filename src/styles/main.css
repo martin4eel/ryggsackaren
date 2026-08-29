@@ -8422,10 +8422,23 @@ body.sheet-oppen {
   position: relative;
   overflow: hidden;
   padding: 0;
-  border: 1px solid rgba(20, 12, 6, 0.6);
+  border: 1px solid rgba(20, 12, 6, 0.75);
+  /* Panelen bakom hyllorna är ett foto; gradienten ovanpå sänker hörnen. */
   background:
-    linear-gradient(180deg, #1a1209 0%, #241809 42%, #2e2011 100%);
+    radial-gradient(ellipse at 50% 8%, rgba(255, 198, 112, 0.16), transparent 58%),
+    linear-gradient(180deg, rgba(10, 6, 3, 0.55), rgba(10, 6, 3, 0.2) 45%, rgba(10, 6, 3, 0.72)),
+    var(--butik-vagg, linear-gradient(180deg, #1a1209, #2e2011)) center / cover;
   color: #e8dcc3;
+}
+
+/* Vinjett: rummets kanter faller bort i mörker. */
+.butik-rum::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 42%, transparent 45%, rgba(6, 3, 1, 0.72) 100%);
 }
 
 .butik-ort {
@@ -8437,23 +8450,59 @@ body.sheet-oppen {
 }
 
 /* Lampan hänger snett över disken och lyser upp mitten av rummet. */
+/* Lampan hänger i sin sladd ovanför disken. */
 .butik-lampa {
   position: absolute;
-  top: -120px;
+  top: 6px;
   left: 50%;
-  width: 340px;
-  height: 320px;
+  width: 120px;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(255, 205, 120, 0.34), rgba(255, 190, 90, 0.1) 45%, transparent 70%);
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
+}
+
+.butik-lampa-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.butik-lampa-sladd {
+  stroke: #0f0a05;
+  stroke-width: 2.5;
+}
+
+.butik-lampa-skarm {
+  fill: #1d140c;
+  stroke: rgba(255, 220, 150, 0.7);
+  stroke-width: 1.5;
+  /* Undersidan av skärmen fångar ljuset från lampan. */
+  filter: drop-shadow(0 4px 10px rgba(255, 196, 104, 0.45));
+}
+
+.butik-lampa-glodlampa {
+  fill: #fff0cd;
+  filter: drop-shadow(0 0 18px rgba(255, 205, 120, 1)) drop-shadow(0 0 42px rgba(255, 186, 84, 0.8));
+}
+
+/* Skenet under lampan, som lägger sig över hyllor och disk. */
+.butik-lampa-sken {
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  width: 460px;
+  height: 380px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 205, 120, 0.36), rgba(255, 190, 90, 0.12) 42%, transparent 72%);
 }
 
 /* Hyllsektionen: brädor i mörkt trä med varorna i skugga. */
 .butik-hyllor {
   position: relative;
   z-index: 2;
-  padding: 10px 12px 54px;
+  /* Takhöjd över hyllan, så att lampan får hänga i sin sladd. */
+  padding: 80px 12px 54px;
 }
 
 .butik-hyllvagg {
@@ -8477,16 +8526,19 @@ body.sheet-oppen {
   overflow: hidden;
 }
 
+/* Hyllbrädan under facket är samma trä som resten av rummet. */
 .butik-plats::after {
-  /* Hyllbrädan under facket. */
   content: '';
   position: absolute;
-  left: -2px;
-  right: -2px;
-  bottom: -5px;
-  height: 5px;
-  background: linear-gradient(180deg, #6b4a24, #3a2612);
+  left: -3px;
+  right: -3px;
+  bottom: -6px;
+  height: 7px;
+  background:
+    linear-gradient(180deg, rgba(255, 214, 150, 0.35), rgba(0, 0, 0, 0.55)),
+    var(--butik-bracka, linear-gradient(180deg, #6b4a24, #3a2612)) center / cover;
   border-radius: 1px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
 }
 
 .butik-form {
@@ -8542,9 +8594,9 @@ body.sheet-oppen {
 /* Handlaren står bakom disken, mellan hyllan och lampan. */
 .butik-handlare {
   position: absolute;
-  right: 10px;
-  bottom: -52px;
-  width: 96px;
+  right: 8px;
+  bottom: -58px;
+  width: 118px;
   pointer-events: none;
   z-index: 2;
   opacity: 0.95;
@@ -8566,12 +8618,15 @@ body.sheet-oppen {
   position: relative;
   z-index: 3;
   margin-top: 16px;
-  padding: 14px;
-  border-top: 3px solid #7a5326;
+  padding: 16px 14px 14px;
+  /* Diskens skiva: fotograferat trä i lampans ljus, med en blank framkant. */
   background:
-    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0 2px, transparent 2px 26px),
-    linear-gradient(180deg, #6f4a22, #56371a 70%, #422a13);
-  box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.45);
+    linear-gradient(180deg, rgba(255, 216, 150, 0.28), transparent 12%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.42)),
+    var(--butik-disk, linear-gradient(180deg, #6f4a22, #422a13)) center / cover;
+  box-shadow:
+    inset 0 3px 0 rgba(255, 226, 170, 0.35),
+    0 -14px 28px rgba(0, 0, 0, 0.55);
 }
 
 .butik-disk .butik-halsning,
@@ -8704,4 +8759,15 @@ body.sheet-oppen {
 .butik-disk .butik-prislapp {
   justify-content: flex-start;
   gap: 18px;
+}
+
+
+/* Handlarens kontur: mörk mot panelen, med lampan som kant. */
+.butik-handlare-kropp,
+.butik-handlare-arm {
+  fill: #0b0603;
+}
+
+.butik-handlare-svg {
+  filter: drop-shadow(0 -1px 0 rgba(255, 214, 150, 0.4));
 }

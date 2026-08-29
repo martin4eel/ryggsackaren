@@ -7,7 +7,7 @@
  * har innehållshash i namnet och cachas därför permanent.
  */
 
-const CACHE = 'upptackaren-v42';
+const CACHE = 'upptackaren-v43';
 
 /**
  * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
@@ -70,6 +70,9 @@ const CITY_PHOTOS = [
  */
 const LJUD = ['./ljud/handlare-1.m4a', './ljud/handlare-2.m4a', './ljud/handlare-3.m4a'];
 
+/** Butikens ytor: vägg, disk och hyllplan, klippta ur ett träfoto. */
+const BUTIK = ['./butik/butik-vagg.webp', './butik/butik-disk.webp', './butik/butik-bracka.webp'];
+
 /**
  * Frågebilderna är många - flera hundra - och listas i quiz/manifest.json,
  * som hämtskriptet skriver. De hämtas inte vid installationen, som skulle
@@ -113,6 +116,7 @@ self.addEventListener('install', (event) => {
         // då i stället vid första visningen och cachas löpande.
         cache.addAll(CITY_PHOTOS).catch(() => undefined),
         cache.addAll(LJUD).catch(() => undefined),
+        cache.addAll(BUTIK).catch(() => undefined),
       ])
     )
   );
