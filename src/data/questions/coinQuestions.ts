@@ -333,7 +333,7 @@ export const COIN_QUESTIONS: Record<string, Question> = {
     a: ['En gravhög', 'En slaggvarp', 'En vall från ett fäste', 'En isälvsavlagring'],
     bild: 'stad:vasteras',
     d: 2,
-    info: 'Anundshög är fjorton meter hög och från järnåldern.',
+    info: 'Anundshög är nio meter hög och 64 meter i diameter, från järnåldern.',
   },
   koping: {
     q: 'Vilket vatten leder hamnen på bilden ut till?',

@@ -2443,8 +2443,10 @@ export class App {
     // Sevärdheten har egna rader (data/sevardheter.ts); broschyrstycken som
     // nämner den läggs efter, kuriosan från myntfrågan sist om den är ny.
     const egna = SEVARDHETER[city.id] ?? [];
-    const rader = [...egna, ...stycken.filter((t) => !egna.includes(t))].slice(0, 5);
-    if (kuriosa && !rader.includes(kuriosa) && rader.length < 5) rader.push(kuriosa);
+    // Finns egna rader räcker de: broschyrstycken och myntkuriosa säger
+    // ofta samma sak en gång till, ibland med andra siffror.
+    const rader = egna.length >= 3 ? [...egna] : [...egna, ...stycken.filter((t) => !egna.includes(t))].slice(0, 4);
+    if (egna.length < 3 && kuriosa && !rader.includes(kuriosa)) rader.push(kuriosa);
     if (rader.length === 0) rader.push(city.blurb);
     panel.append(el('ul', { class: 'broschyr-lista' }, ...rader.map((t) => el('li', {}, t))));
     panel.append(
@@ -2928,7 +2930,7 @@ export class App {
       }
       ruta.append(
         el('div', { class: 'repris-text' },
-          el('p', { class: 'repris-ingress' }, `Frågan du missade i ${m.stad}, dag ${m.dag}:`),
+          el('p', { class: 'repris-ingress' }, m.dag === 0 ? `Frågan du missade i ${m.stad} första dagen:` : `Frågan du missade i ${m.stad}, dag ${m.dag}:`),
           el('p', { class: 'repris-fraga' }, m.q),
           el('p', { class: 'repris-svar' }, el('strong', {}, 'Rätt svar: '), m.svar),
           m.info ? el('p', { class: 'repris-info' }, m.info) : '',
@@ -3984,8 +3986,11 @@ export class App {
     s.shiftsWorked += 1;
     if (q.correct === total) s.perfectShifts += 1;
     // Ett genomfört skift är en poäng i huvudkategorin, oavsett hur det gick.
+    // Poängen i huvudkategorin kräver att man faktiskt fick något rätt:
+    // noll rätt på ett skift ska inte öppna nästa löneklass.
     s.points ??= {};
-    s.points[job.huvud] = (s.points[job.huvud] ?? 0) + 1;
+    const fickPoang = q.correct > 0;
+    if (fickPoang) s.points[job.huvud] = (s.points[job.huvud] ?? 0) + 1;
     this.spendDays(job.shiftLength, city);
 
     // Certifikat om du klarar tillräckligt av skiftet (se difficulty.ts). Arkadmomentet
@@ -4012,7 +4017,9 @@ export class App {
       `${job.title}: ${q.correct}/${total} rätt.`,
       `Lön ${this.money(q.earnings)}.`,
       `${job.shiftLength} dagar gick åt.`,
-      `+1 poäng i ${HUVUD_LABELS[job.huvud]} (nu ${s.points[job.huvud]}).`,
+      fickPoang
+        ? `+1 poäng i ${HUVUD_LABELS[job.huvud]} (nu ${s.points[job.huvud]}).`
+        : `Ingen poäng i ${HUVUD_LABELS[job.huvud]} - inte ett enda rätt svar.`,
     ];
     if (bestStreak >= 4) parts.push(`Bästa svit: ${bestStreak} i rad.`);
     if ((q.bonus ?? 0) > 0)
@@ -4312,10 +4319,11 @@ export class App {
           el('span', { class: 'butik-pris' }, this.money(price)),
           (() => {
             const affordable = s.money >= price;
+            const full = s.backpack.length >= 12;
             return button(
-              affordable ? 'Slå in' : 'Har inte råd',
+              full ? 'Ryggsäcken är full' : affordable ? 'Slå in' : 'Har inte råd',
               () => this.buySouvenir(souvenir, price),
-              { class: `btn ${affordable ? 'btn-primary' : 'btn-ghost'} btn-small`, disabled: affordable ? undefined : true }
+              { class: `btn ${affordable && !full ? 'btn-primary' : 'btn-ghost'} btn-small`, disabled: affordable && !full ? undefined : true }
             );
           })()
         )

@@ -8014,3 +8014,8 @@ body.sheet-oppen {
 .karta-info-huvud { font-family: var(--display); font-size: 1.1rem; }
 .karta-info-land { font-family: var(--body, inherit); font-size: 0.85rem; color: var(--ink-soft); }
 .karta-info-rader { margin: 4px 0 0; font-size: 0.92rem; line-height: 1.45; }
+
+
+/* Notiser ligger ovanpå men tar aldrig ett tryck: ett svar mitt i ett pass ska inte ätas upp av en stämpel. */
+.toast, .stamp-toast { pointer-events: none; }
+.sparet-runda { white-space: nowrap; }
