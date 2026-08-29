@@ -7779,3 +7779,9 @@ body.sheet-oppen {
 
 .sparet-rad-tio td:last-child { color: var(--ok, #2e7d4f); font-weight: 800; }
 .sparet-rad-noll td { color: var(--ink-soft); }
+
+
+/* Poängkvittot på slutskärmen */
+.kvitto-rubrik { margin: 14px 0 4px; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.kvitto-detalj { color: var(--ink-soft); font-weight: 400; }
+.kvitto-minus span:last-child { color: #b3261e; }

@@ -356,15 +356,34 @@ export const SCORE_CASH_CAP = 25000;
  * samma stad inte slår en resa jorden runt. Det som ger mest är städer,
  * världsdelar, stämplar och tempo - alltså att faktiskt vara upptäckare.
  */
-export function finalScore(state: GameState): number {
-  const cash = Math.min(SCORE_CASH_CAP, state.money - state.debt);
+/** En rad i poängkvittot på slutskärmen. */
+export interface ScoreRow {
+  namn: string;
+  /** Hur raden räknats, i klartext */
+  detalj: string;
+  poang: number;
+}
+
+/**
+ * Slutpoängen rad för rad. Samma siffror som finalScore, men utskrivna så
+ * att den som fått 36 541 poäng kan se varifrån de kom.
+ */
+export function finalScoreBreakdown(state: GameState): { rader: ScoreRow[]; total: number } {
+  const cashRaw = state.money - state.debt;
+  const cash = Math.min(SCORE_CASH_CAP, cashRaw);
   const bag = backpackHomeValue(state);
   const answered = state.correct + state.wrong;
   const accuracy = answered > 0 ? state.correct / answered : 0;
   // Första certifikatet i ett ämne är värt mest; bredd slår upprepning.
   let certPoints = 0;
+  let certAntal = 0;
+  let certAmnen = 0;
   for (const n of Object.values(state.certificates)) {
-    if ((n ?? 0) > 0) certPoints += 900 + ((n ?? 1) - 1) * 250;
+    if ((n ?? 0) > 0) {
+      certPoints += 900 + ((n ?? 1) - 1) * 250;
+      certAmnen += 1;
+      certAntal += n ?? 0;
+    }
   }
   const uniqueCities = new Set(state.visited).size;
   const cityPoints = uniqueCities * 1500;
@@ -378,7 +397,8 @@ export function finalScore(state: GameState): number {
    * på slutet också för den som inte fick hittelön, och att behålla pengarna
    * ska kosta något mer än en rad i en resedagbok.
    */
-  const rykte = Math.max(-6, Math.min(12, state.rykte ?? 0)) * 700;
+  const rykteVarde = Math.max(-6, Math.min(12, state.rykte ?? 0));
+  const rykte = rykteVarde * 700;
   /**
    * Tempobonus: dagar per stad. Åtta dagar per stad ger drygt hälften, den
    * som stannar tjugo dagar i varje stad får ingenting, och en resa på
@@ -386,20 +406,23 @@ export function finalScore(state: GameState): number {
    */
   const daysPerCity = uniqueCities > 0 ? state.days / uniqueCities : 99;
   const pace = Math.max(0, Math.min(12000, 12000 - (daysPerCity - 2) * 600));
-  return Math.max(
-    0,
-    Math.round(
-      cash * 0.6 +
-        bag * 0.9 +
-        cityPoints +
-        regions * 2000 +
-        stampPoints +
-        rykte +
-        certPoints +
-        accuracy * 10000 +
-        pace
-    )
-  );
+  const rader: ScoreRow[] = [
+    { namn: 'Kassa minus skuld', detalj: `${cash.toLocaleString('sv-SE')} × 0,6${cashRaw > SCORE_CASH_CAP ? ` (max ${SCORE_CASH_CAP.toLocaleString('sv-SE')} räknas)` : ''}`, poang: Math.round(cash * 0.6) },
+    { namn: 'Ryggsäckens värde hemma', detalj: `${Math.round(bag).toLocaleString('sv-SE')} × 0,9`, poang: Math.round(bag * 0.9) },
+    { namn: 'Städer', detalj: `${uniqueCities} × 1 500`, poang: cityPoints },
+    { namn: 'Världsdelar', detalj: `${regions} × 2 000`, poang: regions * 2000 },
+    { namn: 'Stämplar', detalj: `${state.stamps.length} × 900`, poang: stampPoints },
+    { namn: 'Anseende', detalj: `${rykteVarde >= 0 ? '+' : ''}${rykteVarde} × 700`, poang: rykte },
+    { namn: 'Certifikat', detalj: certAntal > 0 ? `${certAmnen} ${certAmnen === 1 ? 'ämne' : 'ämnen'} à 900, ${certAntal - certAmnen} extra à 250` : 'inga', poang: certPoints },
+    { namn: 'Träffsäkerhet', detalj: `${Math.round(accuracy * 100)} % av 10 000`, poang: Math.round(accuracy * 10000) },
+    { namn: 'Tempo', detalj: `${daysPerCity.toFixed(1).replace('.', ',')} dagar per stad`, poang: Math.round(pace) },
+  ];
+  const total = Math.max(0, rader.reduce((a, r) => a + r.poang, 0));
+  return { rader, total };
+}
+
+export function finalScore(state: GameState): number {
+  return finalScoreBreakdown(state).total;
 }
 
 /** Har du besökt tillräckligt för att få avsluta resan hemma? */

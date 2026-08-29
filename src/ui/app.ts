@@ -21,6 +21,7 @@ import {
   dailyCost,
   distanceKm,
   finalScore,
+  finalScoreBreakdown,
   jobQuestions,
   prepareQuestion,
   jobRequirement,
@@ -4941,6 +4942,20 @@ export class App {
         'p',
         { class: 'muted' },
         `Reseväg: ${s.visited.map((id) => CITY_BY_ID[id]?.name ?? id).join(' → ')}`
+      )
+    );
+    // Poängen rad för rad, som lönekvittot: den som fått 36 541 ska se varför.
+    const bokslut = finalScoreBreakdown(s);
+    scores.append(
+      el('h3', { class: 'kvitto-rubrik' }, 'Så räknades poängen'),
+      el('div', { class: 'kvitto' },
+        ...bokslut.rader.map((r) =>
+          el('div', { class: `kvitto-rad ${r.poang < 0 ? 'kvitto-minus' : ''}` },
+            el('span', {}, r.namn, el('small', { class: 'kvitto-detalj' }, ` ${r.detalj}`)),
+            el('span', {}, r.poang.toLocaleString('sv-SE'))
+          )
+        ),
+        el('div', { class: 'kvitto-rad kvitto-summa' }, el('span', {}, 'Slutpoäng'), el('span', {}, bokslut.total.toLocaleString('sv-SE')))
       )
     );
     wrap.append(scores);

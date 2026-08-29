@@ -327,6 +327,9 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Poängkvittot** på slutskärmen visar slutpoängen rad för rad – kassa,
+     ryggsäck, städer, världsdelar, stämplar, anseende, certifikat,
+     träffsäkerhet och tempo – med uträkningen i klartext (`finalScoreBreakdown`).
    - **Lönekvittot** på skiftets sista sida räknar upp delarna – grundlön,
      svarsserie, snabba svar, bonus från sista passet – och summan, så att
      773 kronor för två rätt går att förklara.
