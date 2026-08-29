@@ -4639,7 +4639,9 @@ export class App {
         () => {
           this.butikVald = this.butikVald === souvenir.id ? null : souvenir.id;
           playSound('valj');
-          playHandlare(`${city.id}|${souvenir.id}`, vem);
+          // Nyckeln är staden, inte varan: då avgör hyllplatsen ensam vilken
+          // replik det blir, och tre varor får garanterat tre olika.
+          playHandlare(city.id, vem, i);
           this.scrollToTopNext = false;
           this.render();
         },

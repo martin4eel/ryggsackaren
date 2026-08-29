@@ -216,17 +216,23 @@ async function hamtaRost(c: AudioContext, url: string): Promise<AudioBuffer | nu
 
 /**
  * Låter handlaren säga något. `nyckel` avgör vilken av rösterna det blir, så
- * att samma butik låter likadant medan man står i den, och `uppsattning`
+ * att samma vara låter likadant medan man står i butiken, `uppsattning`
  * vilken av de två handlarna som talar - de har olika röster, och den andra
- * låter som en gammal telefonlur.
+ * låter som en gammal telefonlur - och `plats` ser till att tre varor på
+ * hyllan får tre olika repliker.
  */
-export function playHandlare(nyckel: string, uppsattning: 1 | 2 = 1): void {
+export function playHandlare(nyckel: string, uppsattning: 1 | 2 = 1, plats = 0): void {
   const c = ensureCtx();
   if (!c || !master) return;
   let summa = 0;
   for (let i = 0; i < nyckel.length; i++) summa = (summa * 31 + nyckel.charCodeAt(i)) >>> 0;
   const lista = ROSTER[uppsattning];
-  const url = lista[summa % lista.length]!;
+  /*
+   * `plats` är varans hyllplats. Med tre repliker och tre varor ger stegen
+   * ett garanterat unikt ljud per vara - hashen ensam kunde ge samma replik
+   * åt två föremål i samma butik, vilket lät som ett fel.
+   */
+  const url = lista[(summa + plats) % lista.length]!;
   void hamtaRost(c, url).then((buf) => {
     if (!buf || !ctx || !master) return;
     // En replik i taget: två handlare som pratar i mun på varandra är en av
