@@ -364,11 +364,16 @@ webbläsaren och överlever att sparfilen raderas.
      `public/ljud/` (ett par tiotals kilobyte styck), hämtas först när någon
      går in i en butik och cachas av service workern. Resten av ljudet är
      fortfarande syntetiserat.
-   - **Butikens känsla**: en hälsning per stad och dag (handlaren räknar
-     sedlar, äter ur en påse, sänker radion en aning), tre handskrivna lappar
-     på väggen ur en pool på åtta (*Öppet: oftast*, *Sönderslaget räknas som
-     köpt*, *Fråga inte om nedersta hyllan*), en glödlampa som lyser snett
-     över skylten och en mörkare återköpsdisk med en egen replik.
+   - **Butiken är ett rum**, byggt efter souvenirbutiken i Backpacker 2:
+     halvmörkt, trä, en lampa i taket och handlarens kontur bakom disken.
+     Varorna står i skugga på hyllan - man ser att det står något där, inte
+     vad det är - och först när man pekar på en tar handlaren fram den på
+     disken, i ljuset, med namn, omdöme, pris och *Slå in*. Facket i hyllan
+     står då tomt med en dammfläck kvar. Till det: en hälsning per stad och
+     dag (handlaren räknar sedlar, äter ur en påse, sänker radion en aning),
+     tre handskrivna lappar ur en pool på åtta (*Öppet: oftast*,
+     *Sönderslaget räknas som köpt*, *Fråga inte om nedersta hyllan*) och en
+     återköpsdisk i samma mörka trä, med en egen replik.
    - **Ryggsäckens innehåll** listar souvenirerna som föremål: foto i en
      liten vit ram, namn, staden och dagen de köptes, och vad de kostade.
    - **Poängkvittot** på slutskärmen visar slutpoängen rad för rad – kassa,

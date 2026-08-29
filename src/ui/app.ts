@@ -74,7 +74,7 @@ import {
   volumeLevel,
   type Sound,
 } from './audio';
-import { button, clear, el } from './dom';
+import { button, clear, el, svgEl } from './dom';
 import { icon, iconGroup, type IconName } from './icons';
 import {
   renderMinigame,
@@ -574,6 +574,8 @@ export class App {
    */
   private phoneCall: PhoneCall | null = null;
   private phoneTimer: number | null = null;
+  /** Varan handlaren tagit fram på disken, tills man ställer tillbaka den. */
+  private butikVald: string | null = null;
   /** Svaret på en kontaktannons man just besvarat, tills tidningen lämnas. */
   private kontaktSvar: { id: string; text: string; rader: EffectLine[] } | null = null;
   private toastTimer: number | null = null;
@@ -793,7 +795,10 @@ export class App {
   private go(screen: GameState['screen']): void {
     if (screen !== 'tidning') this.kontaktSvar = null;
     // Handlaren tystnar när man går ut genom dörren.
-    if (screen !== 'souvenir') stopHandlare();
+    if (screen !== 'souvenir') {
+      stopHandlare();
+      this.butikVald = null;
+    }
     // Att öppna ryggsäcken kvitterar notisen på knappen.
     if (screen === 'ryggsack' && this.state) {
       this.state.packSeen = {
@@ -4495,16 +4500,12 @@ export class App {
     const wrap = el('div', { class: 'stack butik' });
 
     /**
-     * Butiken är ett skyltfönster: varorna står på hyllor med foto och en
-     * handskriven prislapp, och fyndpris eller turistpris slås i rött bläck
-     * med en gummistämpel. Samma papper-och-stämpel-värld som passet och
-     * tidningen - inte en lista med knappar.
-     */
-    /**
-     * Butiken ska kännas som en butik man hittar in i av misstag: dammig,
-     * halvmörk, med en innehavare som svarar på frågor man inte ställt. Allt
-     * lottas per stad och dag, så att två butiker inte är samma butik och så
-     * att den man står i står still medan man handlar.
+     * Butiken är ett rum, inte en lista. Hyllorna står i halvmörker och
+     * varorna syns bara som mörka former - man ser att det står något där,
+     * inte vad det är. Först när man plockar fram en sak på disken kommer den
+     * i ljuset, med namn, pris och handlarens omdöme. Förlagan är
+     * souvenirbutiken i Backpacker 2, och poängen är densamma: att gå in i en
+     * butik ska kännas som att gå in någonstans.
      */
     const fro = `${city.id}|butik|${Math.floor(s.days / 2)}`;
     const valj = <T,>(lista: T[], nyckel: string): T =>
@@ -4512,7 +4513,7 @@ export class App {
 
     const HALSNINGAR = [
       'Handlaren tittar upp från ett korsord. "Titta er omkring. Rör inget på nedersta hyllan."',
-      'Någon ropar "kommer strax" från ett bakre rum. Ingen kommer. Efter en stund står handlaren ändå bredvid dig.',
+      'Någon ropar "kommer strax" från ett bakre rum. Ingen kommer. Efter en stund står handlaren ändå bakom disken.',
       'Handlaren sitter på en pall och äter något ur en påse. Han nickar mot hyllorna med påsen.',
       '"Välkommen in", säger handlaren utan att titta upp. "Priset står på lappen. Lappen stämmer oftast."',
       'En radio spelar något på ett språk du inte känner igen. Handlaren sänker den en aning, som en artighet.',
@@ -4520,41 +4521,24 @@ export class App {
       '"Ni är den fjärde i dag", säger handlaren. "De tre andra köpte ingenting. Ni ser klokare ut."',
       'Handlaren står och putsar något med en trasa. Han slutar inte medan ni pratar, och det blir aldrig renare.',
     ];
-    const SKYLTAR = [
+    const SKYLTAR: Array<[string, string]> = [
       ['Öppet', 'oftast'],
       ['Inga returer', 'efter solnedgången'],
       ['Pruta gärna', 'svaret är nej'],
       ['Vi tar kort', 'ibland'],
       ['Sönderslaget', 'räknas som köpt'],
       ['Fråga inte', 'om nedersta hyllan'],
-      ['Kvitto', 'på begäran, i mån av penna'],
+      ['Kvitto', 'i mån av penna'],
       ['Endast kontant', 'och ibland inte ens det'],
     ];
     const skyltar = SKYLTAR.map((x, i) => ({ x, k: pseudoRandom(`${fro}|skylt|${i}`) }))
-      .sort((a, b2) => a.k - b2.k)
+      .sort((a, b) => a.k - b.k)
       .slice(0, 3)
       .map((v) => v.x);
 
-    const skylt = el('section', { class: 'panel butik-skylt' });
-    skylt.append(
-      el('p', { class: 'kicker' }, `${city.name} · souvenirer & minnen`),
-      el('h1', { class: 'title' }, 'Souvenirbutiken'),
-      el('p', { class: 'butik-halsning' }, valj(HALSNINGAR, 'halsning')),
-      el('div', { class: 'butik-anslag' },
-        ...skyltar.map(([rubrik, rad]) =>
-          el('span', { class: 'butik-anslag-lapp' },
-            el('strong', {}, rubrik!),
-            el('span', {}, rad!)
-          )
-        )
-      ),
-      el('p', { class: 'butik-devis' }, 'Köp där det tillverkas, sälj där det är exotiskt. Butiken tar mellanskillnad vid återköp, och ingen prutar efter klockan fyra.')
-    );
-    wrap.append(skylt);
-
-    const foto = (souvenir: Souvenir) => {
+    const foto = (souvenir: Souvenir, klass: string) => {
       const img = el('img', {
-        class: 'butik-foto',
+        class: klass,
         src: quizImageUrl(`souv-${souvenir.id}`),
         alt: souvenir.name,
         loading: 'lazy',
@@ -4569,64 +4553,142 @@ export class App {
       return ram;
     };
 
-    const buy = el('section', { class: 'panel butik-hylla' });
-    buy.append(el('h2', { class: 'butik-rubrik' }, `På hyllan i ${city.name}`));
-    const rad = el('div', { class: 'butik-varor' });
-    for (const [hyllplats, souvenir] of citySouvenirs(city).entries()) {
+    const varor = citySouvenirs(city);
+    const vald =
+      varor.find((v) => v.id === this.butikVald) ?? null;
+
+    // ------------------------------------------------------------ rummet
+    const rum = el('section', { class: 'panel butik-rum' });
+    rum.append(
+      el('p', { class: 'kicker butik-ort' }, `${city.name} · souvenirer & minnen`),
+      el('div', { class: 'butik-lampa', 'aria-hidden': 'true' })
+    );
+
+    /** Handlaren: en mörk kontur bakom disken, med lampan i ryggen. */
+    const handlare = el('div', { class: 'butik-handlare', 'aria-hidden': 'true' },
+      svgEl('svg', { viewBox: '0 0 120 150', class: 'butik-handlare-svg' },
+        svgEl('path', {
+          class: 'butik-handlare-kropp',
+          d: 'M60 18c11 0 19 9 19 20 0 7-3 13-7 17 13 4 22 12 27 24 4 10 6 22 7 34H14c1-12 3-24 7-34 5-12 14-20 27-24-4-4-7-10-7-17 0-11 8-20 19-20z',
+        }),
+        svgEl('path', { class: 'butik-handlare-arm', d: 'M86 62c8 3 14 9 17 17l-9 4c-3-7-8-12-14-14z' })
+      )
+    );
+
+    const hylla = el('div', { class: 'butik-hyllvagg' });
+    for (const [i, souvenir] of varor.entries()) {
       const price = souvenirPrice(souvenir, city, s.days, false);
-      const cheap = souvenir.cheapIn.includes(city.region);
-      const hot = souvenir.hotIn.includes(city.region);
-      // Prislappen jämförs med varans grundvärde, så att det syns på en gång
-      // om det här är ett fynd eller ett turistpris.
-      const ratio = price / souvenir.basePrice;
+      const plats = button(
+        el('span', { class: 'butik-form' },
+          el('img', {
+            class: 'butik-form-foto',
+            src: quizImageUrl(`souv-${souvenir.id}`),
+            alt: '',
+            loading: 'lazy',
+            draggable: 'false',
+          })
+        ),
+        () => {
+          this.butikVald = this.butikVald === souvenir.id ? null : souvenir.id;
+          playSound('valj');
+          playHandlare(`${city.id}|${souvenir.id}`);
+          this.scrollToTopNext = false;
+          this.render();
+        },
+        {
+          class: `butik-plats ${vald?.id === souvenir.id ? 'butik-plats-vald' : ''}`,
+          // Namnet står inte här: det är själva poängen att man inte ser vad
+          // det är förrän handlaren tagit fram det.
+          'aria-label': `Något på hyllan, plats ${i + 1}. Peka för att se vad det är.`,
+          title: 'Be handlaren ta fram den',
+          'data-pris': String(price),
+        }
+      );
+      hylla.append(plats);
+    }
+    rum.append(el('div', { class: 'butik-hyllor' }, hylla, handlare));
+
+    // ------------------------------------------------------------- disken
+    const disk = el('div', { class: 'butik-disk' });
+    if (!vald) {
+      disk.append(
+        el('p', { class: 'butik-halsning' }, valj(HALSNINGAR, 'halsning')),
+        el('p', { class: 'butik-uppmaning' }, 'Peka på något i hyllan, så tar handlaren fram det.')
+      );
+    } else {
+      const price = souvenirPrice(vald, city, s.days, false);
+      const cheap = vald.cheapIn.includes(city.region);
+      const hot = vald.hotIn.includes(city.region);
+      const ratio = price / vald.basePrice;
       const stampel =
         ratio <= 0.8
           ? { cls: 'stampel-fynd', text: 'Fynd' }
           : ratio >= 1.25
             ? { cls: 'stampel-turist', text: 'Turistpris' }
             : null;
-      const card = el('article', { class: 'butik-vara' });
-      card.append(
-        foto(souvenir),
-        stampel ? el('span', { class: `butik-stampel ${stampel.cls}` }, stampel.text) : '',
-        el('div', { class: 'butik-text' },
-          el('h3', { class: 'butik-namn' }, souvenir.name),
-          el('p', { class: 'butik-replik' }, souvenir.desc),
-          el('p', { class: 'butik-not' },
-            cheap
-              ? [
-                  'Görs här, och det märks på priset.',
-                  'Tillverkas i trakten. Därför priset.',
-                  'Lokalt hantverk, lokalt pris.',
-                  'Görs ett kvarter härifrån. Ingen frakt att betala.',
-                ][Math.floor(pseudoRandom(`${city.id}|${souvenir.id}|not`) * 4)]!
-              : hot
-                ? `Eftertraktad här - dyr att köpa, bra att sälja. Billigast i ${lista(souvenir.cheapIn)}.`
-                : `Normalpris. Billigast i ${lista(souvenir.cheapIn)}.`
-          ),
-          // Vad handlaren hört. Ingen summa, och ingen garanti.
-          el('p', { class: 'butik-rykte' },
-            handlarRykte(souvenir, city, s.days, (c) => c.name, hyllplats)
+      const affordable = s.money >= price;
+      const full = s.backpack.length >= 12;
+      const hyllplats = varor.findIndex((v) => v.id === vald.id);
+      disk.append(
+        el('div', { class: 'butik-disk-vara' },
+          foto(vald, 'butik-foto'),
+          stampel ? el('span', { class: `butik-stampel ${stampel.cls}` }, stampel.text) : '',
+          el('div', { class: 'butik-disk-text' },
+            el('h3', { class: 'butik-namn' }, vald.name),
+            el('p', { class: 'butik-replik' }, vald.desc),
+            el('p', { class: 'butik-not' },
+              cheap
+                ? [
+                    'Görs här, och det märks på priset.',
+                    'Tillverkas i trakten. Därför priset.',
+                    'Lokalt hantverk, lokalt pris.',
+                    'Görs ett kvarter härifrån. Ingen frakt att betala.',
+                  ][Math.floor(pseudoRandom(`${city.id}|${vald.id}|not`) * 4)]!
+                : hot
+                  ? `Eftertraktad här - dyr att köpa, bra att sälja. Billigast i ${lista(vald.cheapIn)}.`
+                  : `Normalpris. Billigast i ${lista(vald.cheapIn)}.`
+            ),
+            el('p', { class: 'butik-rykte' },
+              handlarRykte(vald, city, s.days, (c) => c.name, Math.max(0, hyllplats))
+            ),
+            el('div', { class: 'butik-prislapp' },
+              el('span', { class: 'butik-pris' }, this.money(price)),
+              button(
+                full ? 'Ryggsäcken är full' : affordable ? 'Slå in' : 'Har inte råd',
+                () => {
+                  this.butikVald = null;
+                  this.buySouvenir(vald, price);
+                },
+                {
+                  class: `btn ${affordable && !full ? 'btn-primary' : 'btn-ghost'} btn-small`,
+                  disabled: affordable && !full ? undefined : true,
+                }
+              )
+            )
           )
         ),
-        el('div', { class: 'butik-prislapp' },
-          el('span', { class: 'butik-pris' }, this.money(price)),
-          (() => {
-            const affordable = s.money >= price;
-            const full = s.backpack.length >= 12;
-            return button(
-              full ? 'Ryggsäcken är full' : affordable ? 'Slå in' : 'Har inte råd',
-              () => this.buySouvenir(souvenir, price),
-              { class: `btn ${affordable && !full ? 'btn-primary' : 'btn-ghost'} btn-small`, disabled: affordable && !full ? undefined : true }
-            );
-          })()
-        )
+        button('Ställ tillbaka', () => {
+          this.butikVald = null;
+          playSound('klick');
+          this.scrollToTopNext = false;
+          this.render();
+        }, { class: 'btn btn-ghost btn-small butik-tillbaka' })
       );
-      rad.append(card);
     }
-    buy.append(rad);
-    wrap.append(buy);
+    rum.append(disk);
+    rum.append(
+      el('div', { class: 'butik-anslag' },
+        ...skyltar.map(([rubrik, rad]) =>
+          el('span', { class: 'butik-anslag-lapp' },
+            el('strong', {}, rubrik),
+            el('span', {}, rad)
+          )
+        )
+      )
+    );
+    wrap.append(rum);
 
+    // ------------------------------------------------------ återköpsdisken
     const DISKREPLIKER = [
       'Handlaren väger varan i handen och tittar på dig, inte på varan.',
       'Disken är av trä och full av ringar efter kaffekoppar. Handlaren torkar inte bort dem.',
@@ -4650,7 +4712,7 @@ export class App {
         const profit = price - item.paid;
         const card = el('article', { class: 'butik-vara' });
         card.append(
-          foto(souvenir),
+          foto(souvenir, 'butik-foto'),
           profit >= 0 ? el('span', { class: 'butik-stampel stampel-vinst' }, 'Vinst') : '',
           el('div', { class: 'butik-text' },
             el('h3', { class: 'butik-namn' }, souvenir.name),

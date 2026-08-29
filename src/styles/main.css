@@ -7984,6 +7984,8 @@ body.sheet-oppen {
 .butik-pris {
   position: relative;
   display: inline-block;
+  /* Lappen är av papper var den än hänger: mörkt bläck, aldrig ärvd färg. */
+  color: var(--ink);
   padding: 4px 10px 4px 22px;
   border-radius: 3px 12px 12px 3px;
   background: #fbf3dc;
@@ -8406,4 +8408,300 @@ body.sheet-oppen {
   background: rgba(164, 52, 47, 0.08);
   font-style: italic;
   line-height: 1.45;
+}
+
+
+/* ====================================================================
+   SOUVENIRBUTIKEN SOM RUM
+   Halvmörkt, trä, en lampa i taket och en handlare som står i motljus.
+   Varorna på hyllan syns bara som former; den man ber om kommer fram på
+   disken och tänds. Förlagan är souvenirbutiken i Backpacker 2.
+   ==================================================================== */
+
+.butik-rum {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(20, 12, 6, 0.6);
+  background:
+    linear-gradient(180deg, #1a1209 0%, #241809 42%, #2e2011 100%);
+  color: #e8dcc3;
+}
+
+.butik-ort {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  padding: 10px 14px 0;
+  color: rgba(242, 200, 130, 0.75);
+}
+
+/* Lampan hänger snett över disken och lyser upp mitten av rummet. */
+.butik-lampa {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  width: 340px;
+  height: 320px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255, 205, 120, 0.34), rgba(255, 190, 90, 0.1) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hyllsektionen: brädor i mörkt trä med varorna i skugga. */
+.butik-hyllor {
+  position: relative;
+  z-index: 2;
+  padding: 10px 12px 54px;
+}
+
+.butik-hyllvagg {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+  max-width: 460px;
+}
+
+/* Varje plats i hyllan: en mörk ruta med mässingsram, som ett fack. */
+.butik-plats {
+  position: relative;
+  display: block;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: 1px solid rgba(214, 168, 88, 0.45);
+  border-radius: 3px;
+  background: #120c06;
+  box-shadow: inset 0 8px 18px rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.butik-plats::after {
+  /* Hyllbrädan under facket. */
+  content: '';
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  bottom: -5px;
+  height: 5px;
+  background: linear-gradient(180deg, #6b4a24, #3a2612);
+  border-radius: 1px;
+}
+
+.butik-form {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Varan i mörkret. Fotot är kvar, men nersläckt till en form - man ser att
+ * det står något där, inte vad det är.
+ */
+.butik-form-foto {
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  filter: brightness(0.34) contrast(1.15) saturate(0.18);
+  transition: filter 0.25s ease, transform 0.25s ease;
+}
+
+.butik-plats:hover .butik-form-foto,
+.butik-plats:focus-visible .butik-form-foto {
+  filter: brightness(0.62) contrast(1.1) saturate(0.55);
+  transform: scale(1.04);
+}
+
+.butik-plats-vald {
+  border-color: rgba(242, 200, 130, 0.95);
+  box-shadow: inset 0 8px 18px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(242, 200, 130, 0.35);
+}
+
+/*
+ * Den vara handlaren tagit fram står på disken - alltså inte i hyllan. Facket
+ * lämnas tomt med en ljusare fläck där den stått, som damm runt en sak som
+ * inte flyttats på länge.
+ */
+.butik-plats-vald .butik-form-foto {
+  opacity: 0;
+}
+
+.butik-plats-vald::before {
+  content: '';
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 18%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(214, 168, 88, 0.22), transparent 70%);
+}
+
+/* Handlaren står bakom disken, mellan hyllan och lampan. */
+.butik-handlare {
+  position: absolute;
+  right: 10px;
+  bottom: -52px;
+  width: 96px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.95;
+}
+
+.butik-handlare-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.butik-handlare-kropp,
+.butik-handlare-arm {
+  fill: #0d0805;
+}
+
+/* Disken: en bräda i ljusare trä där varan läggs fram. */
+.butik-disk {
+  position: relative;
+  z-index: 3;
+  margin-top: 16px;
+  padding: 14px;
+  border-top: 3px solid #7a5326;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0 2px, transparent 2px 26px),
+    linear-gradient(180deg, #6f4a22, #56371a 70%, #422a13);
+  box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.45);
+}
+
+.butik-disk .butik-halsning,
+.butik-disk .butik-uppmaning,
+.butik-disk .butik-replik,
+.butik-disk .butik-not,
+.butik-disk .butik-rykte {
+  color: #f4e9d2;
+}
+
+.butik-uppmaning {
+  margin: 8px 0 0;
+  font-size: 0.86rem;
+  color: rgba(244, 233, 210, 0.72);
+}
+
+/* Varan i ljuset: foto till vänster, namn, omdöme och pris till höger. */
+.butik-disk-vara {
+  position: relative;
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  gap: 14px;
+  align-items: start;
+  max-width: 640px;
+}
+
+.butik-disk-vara .butik-ram {
+  transform: rotate(-1deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
+}
+
+.butik-disk-text .butik-namn {
+  color: #fff6e2;
+}
+
+.butik-disk .butik-prislapp {
+  margin-top: 10px;
+}
+
+.butik-tillbaka {
+  margin-top: 12px;
+  color: rgba(244, 233, 210, 0.85);
+  border-color: rgba(244, 233, 210, 0.35);
+}
+
+/* Lapparna sitter på väggen bredvid disken, inte i skyltfönstret. */
+.butik-rum .butik-anslag {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  padding: 12px 14px 14px;
+}
+
+@media (min-width: 700px) {
+  .butik-hyllvagg {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .butik-handlare {
+    width: 140px;
+    right: 28px;
+  }
+}
+
+
+/* Lampan bakom handlaren ger honom en kant, så att han läses som en människa. */
+.butik-handlare-kropp {
+  filter: drop-shadow(0 -2px 0 rgba(255, 208, 130, 0.35))
+    drop-shadow(2px 0 0 rgba(255, 208, 130, 0.18));
+}
+
+/* Namnet på varan i ljuset ska inte konkurrera med prislappen. */
+.butik-disk-text .butik-replik {
+  font-style: italic;
+  opacity: 0.92;
+}
+
+
+/* Återköpsdisken hör till samma rum: mörkt trä, inte en ljus panel. */
+.butik-aterkop {
+  border: 1px solid rgba(20, 12, 6, 0.6);
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0 2px, transparent 2px 26px),
+    linear-gradient(180deg, #2b1d10, #241809);
+  color: #e8dcc3;
+}
+
+.butik-aterkop .butik-rubrik,
+.butik-aterkop .butik-halsning,
+.butik-aterkop .butik-replik,
+.butik-aterkop .butik-namn,
+.butik-aterkop .butik-not {
+  color: #f4e9d2;
+}
+
+.butik-aterkop .butik-rubrik {
+  color: rgba(242, 200, 130, 0.8);
+}
+
+.butik-aterkop .butik-vara {
+  background: rgba(255, 240, 214, 0.06);
+  border: 1px solid rgba(214, 168, 88, 0.22);
+}
+
+.butik-aterkop .butik-vara:hover,
+.butik-aterkop .butik-vara:focus-within {
+  background: rgba(255, 240, 214, 0.1);
+}
+
+
+/* Knappar mot mörkt trä behöver egen kontrast; papperspaletten syns inte där. */
+.butik-rum .btn-ghost,
+.butik-aterkop .btn-ghost {
+  color: #f4e9d2;
+  border-color: rgba(244, 233, 210, 0.4);
+  background: rgba(255, 240, 214, 0.06);
+}
+
+.butik-rum .btn-ghost:hover,
+.butik-aterkop .btn-ghost:hover {
+  background: rgba(255, 240, 214, 0.14);
+}
+
+.butik-rum .btn-ghost[disabled],
+.butik-aterkop .btn-ghost[disabled] {
+  color: rgba(244, 233, 210, 0.5);
+}
+
+
+/* På disken hör priset och knappen ihop, även när rummet är brett. */
+.butik-disk .butik-prislapp {
+  justify-content: flex-start;
+  gap: 18px;
 }
