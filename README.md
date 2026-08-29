@@ -173,8 +173,7 @@ webbläsaren och överlever att sparfilen raderas.
    och det spelet vet om platsen (myntfrågans kuriosa och broschyrens
    stycken). Att titta kostar inget. Att *tillbringa dagen* där kostar en dag,
    går en gång per stad, och det som händer på vägen hem visas efteråt på
-   stadsbilden – inte ovanpå sevärdheten man just tittade på. **Ut på stan**
-   kostar också en dag och ger garanterat en händelse.
+   stadsbilden – inte ovanpå sevärdheten man just tittade på.
 
    Ordningen på brickorna lottas per stad och ligger sedan fast. Med en fast
    ordning skulle man lära sig att första brickan alltid är turistbyrån, och då
@@ -474,10 +473,10 @@ webbläsaren och överlever att sparfilen raderas.
    piltangenterna och taktmomentet med mellanslag.
 15. **Händelser.** Något kan hända på åtta olika sorters tillfällen: på vägen,
     på vandrarhemmet, på jobbet, vid sevärdheten, ute på gatorna, i butiken, i
-    mötet med någon, och i väntan på en avgång. Två av dem har egna knappar på
-    stadsskärmen – _Ut på stan_ och _Besök_ vid sevärdheten – och kostar en
-    dag var, i utbyte mot att något garanterat händer. De andra sex slår till
-    av sig själva när man ändå gör det man gör.
+    mötet med någon, och i väntan på en avgång. Sevärdheten har en egen knapp på
+    stadsskärmen och kostar en dag, i utbyte mot att något garanterat händer
+    – gatan och mötet lottas fram där. De andra slår till av sig själva när
+    man ändå gör det man gör.
 
     **Varje händelse inträffar högst en gång per resa.** Att möta samma hund på
     samma gata två gånger får världen att krympa. Priset är att banken måste
@@ -712,7 +711,7 @@ båda), att ingen har fler än tre val eftersom tangenterna räcker till `A`–`
 att varje val har minst ett utfall, att souvenirer som delas ut finns, att
 inga okända platshållare som `{stad}` står kvar oöversatta, och att varje
 tillfälle har minst fem händelser att välja bland – annars ser en spelare
-samma sak andra gången hen går ut på stan.
+samma sak andra gången hen besöker en sevärdhet.
 
 Sedan stationerna kom till kontrolleras också **trafikbolagen**: att varje
 stads land finns i `data/operators.ts`, att en stad med fjärrtåg ligger i ett

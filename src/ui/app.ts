@@ -1901,24 +1901,10 @@ export class App {
       );
     }
     /**
-     * Sevärdheten och en dag ute på gatorna. Båda kostar en dag och ger
-     * garanterat en händelse - och båda finns bara en gång per stad. Att kunna
-     * trycka om och om igen gjorde dem till en spak att dra i, inte till något
-     * man gör en gång och minns.
+     * Sevärdheten kostar en dag och ger garanterat en händelse - och finns
+     * bara en gång per stad. Att kunna trycka om och om igen gjorde den till
+     * en spak att dra i, inte till något man gör en gång och minns.
      */
-    const stanKlar = (p.spent ?? []).includes('stan');
-    plats(
-      'stan',
-      'skylt-stad',
-      'Ut på stan',
-      stanKlar
-        ? `Du har redan gått runt i ${city.name}. Nästa stad har egna gator.`
-        : `Gå runt på gatorna en dag och se vad som händer. Kostar en dag (${this.money(
-            dailyCost(city, s.difficulty)
-          )}).`,
-      () => this.gaUtPaStan(),
-      { engangs: true, klar: stanKlar }
-    );
     const sevardKlar = (p.spent ?? []).includes('sevardhet');
     plats(
       'sevardhet',
@@ -2285,31 +2271,6 @@ export class App {
 
   // ----------------------------------------------------------- turistbyrån
 
-  /**
-   * En dag ute i staden. Alltid en händelse - annars vore det bara en dag som
-   * kostade pengar. Vilken sorts tillfälle det blir lottas: gatan är vanligast,
-   * sevärdheten och mötet med någon lika sannolika sinsemellan.
-   */
-  private gaUtPaStan(): void {
-    const s0 = this.state!;
-    const city = this.city;
-    const p = getProgress(s0, city.id);
-    p.spent ??= [];
-    if (p.spent.includes('stan')) return;
-    p.spent.push('stan');
-    playSound('valj');
-    this.spendDays(1, city);
-    this.commit();
-    if (this.checkBroke()) return;
-    // Gatan är vanligast, men ungefär var tredje gång är det någon man möter.
-    const trigger: EventTrigger = Math.random() < 0.36 ? 'mote' : 'stad';
-    this.fireEvent(trigger, 1);
-    if (!this.state?.pendingEvent) {
-      // Alla händelser för tillfället var redan förbrukade. Dagen gick ändå.
-      this.notify(`En dag i ${city.name} utan att något särskilt hände.`);
-    }
-    this.render();
-  }
 
   /**
    * Vänder upp en nedvänd bricka på stadsbilden.
