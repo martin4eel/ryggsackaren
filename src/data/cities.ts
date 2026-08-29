@@ -144,7 +144,6 @@ export const CITIES: City[] = [
     landmark: 'Tower Bridge',
     employers: {
       pilot: 'Heathrow',
-      musikproducent: 'Abbey Road Studios',
       politiskradgivare: '10 Downing Street',
       pubvard: 'The Camden Arms',
       tunnelbanevard: 'Underground Trafik',
@@ -152,7 +151,7 @@ export const CITIES: City[] = [
       teaterinspicient: 'Shaftesbury Theatre',
       bartender: 'Soho Cocktail Bar',
     },
-    jobs: ['pubvard', 'tunnelbanevard', 'tidningsbud', 'teaterinspicient', 'bartender', 'politiskradgivare', 'musikproducent', 'pilot'],
+    jobs: ['pubvard', 'tunnelbanevard', 'tidningsbud', 'teaterinspicient', 'bartender', 'politiskradgivare', 'pilot'],
     souvenirs: ['tehandduk', 'vinylskiva', 'fotbollstroja'],
   },
   {
@@ -175,12 +174,11 @@ export const CITIES: City[] = [
     employers: {
       politiskradgivare: 'Élysée-palatset',
       bagare: 'Boulangerie Rue Cler',
-      konstguide: 'Galerie Montmartre',
       modeassistent: 'Maison Saint-Honoré',
       cykelkurir: 'Vélo Bastille',
       bollkalle: 'Roland Tennis Club',
     },
-    jobs: ['bagare', 'konstguide', 'modeassistent', 'cykelkurir', 'bollkalle', 'politiskradgivare'],
+    jobs: ['bagare', 'modeassistent', 'cykelkurir', 'bollkalle', 'politiskradgivare'],
     souvenirs: ['parfymflaska', 'konsttryck', 'ostkniv'],
   },
   {
@@ -579,7 +577,6 @@ export const CITIES: City[] = [
       'Staden som aldrig sover. Frihetsgudinnan var en gåva från Frankrike 1886 och Central Park är större än många europeiska stadskärnor.',
     landmark: 'Frihetsgudinnan',
     employers: {
-      musikproducent: 'Electric Lady Studios',
       diplomat: 'Sveriges FN-representation',
       tidningsbud: 'Brooklyn Morning Post',
       taxichauffor: 'Manhattan Yellow Cab',
@@ -589,7 +586,7 @@ export const CITIES: City[] = [
       bollkalle: 'Flushing Tennis Courts',
       hockeytranare: 'Madison Ice Rink',
     },
-    jobs: ['tidningsbud', 'taxichauffor', 'jazzmusiker', 'borsmaklare', 'bartender', 'bollkalle', 'hockeytranare', 'diplomat', 'musikproducent'],
+    jobs: ['tidningsbud', 'taxichauffor', 'jazzmusiker', 'borsmaklare', 'bartender', 'bollkalle', 'hockeytranare', 'diplomat'],
     souvenirs: ['vinylskiva', 'basebollkeps', 'konsttryck'],
   },
   {
@@ -1184,12 +1181,11 @@ export const CITIES: City[] = [
     employers: {
       torghandlare: 'Marché Sandaga',
       hamnarbetare: 'Port de Dakar',
-      vavare: 'Tissage Médina',
       ostronplockare: 'Huîtres de Joal',
       sambatrummis: 'Sabar Ensemble Ngor',
       arkeologassistent: 'Île de Gorée Utgrävning',
     },
-    jobs: ['torghandlare', 'hamnarbetare', 'vavare', 'ostronplockare', 'sambatrummis', 'arkeologassistent'],
+    jobs: ['torghandlare', 'hamnarbetare', 'ostronplockare', 'sambatrummis', 'arkeologassistent'],
     souvenirs: ['koradocka', 'tygbunt', 'trumma'],
   },
   {
