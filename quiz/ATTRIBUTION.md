@@ -1633,6 +1633,18 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **zocalo.webp** (Ett enormt öppet torg omgivet av gamla byggnader) – [Zócalo,_Ciudad_de_México_(32846556446)_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Z%C3%B3calo,_Ciudad_de_M%C3%A9xico_(32846556446)_(cropped).jpg) av Comisión Mexicana de Filmaciones from México D. F., México, CC BY-SA 2.0.
 - **zulu.webp** (Dansare i traditionell dräkt) – [Zulu_Culture,_KwaZulu-Natal,_South_Africa_(20325329170).jpg](https://commons.wikimedia.org/wiki/File:Zulu_Culture,_KwaZulu-Natal,_South_Africa_(20325329170).jpg) av South African Tourism from South Africa, CC BY 2.0.
 
+## Provbilderna i pekspelen
+
+Fyra jobb har ett foto man pekar i, med en genererad facitbild vid sidan
+(`scripts/facitbild.py`). Fotona kommer från Commons som resten:
+
+| Fil | Motiv | Källa |
+| --- | --- | --- |
+| formsprutaprov.webp | Formspruta i verkstad | [Spritzgussmaschine 300-1.jpg](https://commons.wikimedia.org/wiki/File:Spritzgussmaschine_300-1.jpg) |
+| tagprov.webp | Förarhytt i motorvagnståg | hämtad i tidigare omgång, källan behöver fyllas i |
+| pilotprov.webp | Cockpit i trafikflygplan | hämtad i tidigare omgång, källan behöver fyllas i |
+| lotsprov.webp | Brygga på fartyg | hämtad i tidigare omgång, källan behöver fyllas i |
+
 ## Om klubbmärken
 
 Hockeyspelet visade tidigare klubbarnas märken. De togs bort 2026-08-29:
