@@ -175,6 +175,8 @@ export interface Minigame {
   peka?: {
     bild: string;
     facitBild: string;
+    /** Fotograf eller rättighetshavare, sätts under bilden när den kräver det */
+    foto?: string;
     punkter: { id: string; namn: string; x: number; y: number; r: number; forklaring: string }[];
     fragor: { text: string; svar: string }[];
   };

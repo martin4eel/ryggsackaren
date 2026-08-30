@@ -1390,7 +1390,10 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
   const forklaring = el('p', { class: 'mg-peka-forklaring' });
   const vidare = button('Nästa fråga', () => nasta(), { class: 'btn btn-primary mg-peka-vidare' });
   vidare.hidden = true;
-  host.append(status.node, fraga, yta, feedback.node, forklaring, vidare);
+  // Vissa foton får bara användas med synlig kredit; den följer bilden i
+  // både frågorna och facit.
+  const kredit = spec.foto ? el('p', { class: 'mg-peka-kredit' }, spec.foto) : null;
+  host.append(status.node, fraga, yta, ...(kredit ? [kredit] : []), feedback.node, forklaring, vidare);
 
   const punkt = (id: string) => spec.punkter.find((p) => p.id === id)!;
 

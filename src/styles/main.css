@@ -7744,6 +7744,14 @@ body.sheet-oppen {
   line-height: 1.45;
 }
 
+.mg-peka-kredit {
+  margin: 2px 0 6px;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
 .mg-peka-vidare { width: 100%; }
 
 
