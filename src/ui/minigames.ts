@@ -1467,29 +1467,35 @@ function startPointAt(host: HTMLElement, game: Minigame, onDone: Done): void {
     vantar = true;
     const f = fragor[index]!;
     const ratt = punkt(f.svar);
-    // Närmaste träffyta som fingret hamnat inom; radien mäts i bildbredd,
-    // så avståndet i höjdled räknas om till samma skala.
+    // Radien mäts i bildbredd, så avståndet i höjdled räknas om till
+    // samma skala.
     const kvot = rect.width / rect.height;
     /*
      * Minsta träffyta i pixlar. Radien anges i procent av bildens bredd, och
-     * på en telefon är bilden 366 pixlar bred - ett nödstopp med radien 3,2
-     * blir då tolv pixlar, mindre än ett finger. Ytan får aldrig vara mindre
-     * än 22 pixlar i radie, oavsett vad datan säger, och punkterna ligger
-     * ändå så pass isär att närmaste-träffen avgör rätt.
+     * på en telefon är bilden 366 pixlar bred - ett nödstopp med radien 2,2
+     * blir då åtta pixlar, mindre än ett finger. Ytan får aldrig vara mindre
+     * än 22 pixlar i radie, oavsett vad datan säger.
      */
     const minRadie = (22 / rect.width) * 100;
+    const avstand = (p: (typeof spec.punkter)[number]) =>
+      Math.hypot(x - p.x, (y - p.y) / kvot);
     let traff: (typeof spec.punkter)[number] | null = null;
     let basta = Infinity;
     for (const p of spec.punkter) {
-      const dx = x - p.x;
-      const dy = (y - p.y) / kvot;
-      const d = Math.hypot(dx, dy);
+      const d = avstand(p);
       if (d <= Math.max(p.r, minRadie) && d < basta) {
         basta = d;
         traff = p;
       }
     }
-    const ok = traff?.id === ratt.id;
+    /*
+     * Hellre fria än fälla: ligger trycket inom den efterfrågade ytan räknas
+     * det som rätt, även om en grannes mittpunkt råkar ligga närmare. Delarna
+     * överlappar på riktigt - nödstoppet sitter tätt över skärmen - och den
+     * som pekat på rätt sak ska inte falla på några pixlar. Närmaste punkten
+     * används fortfarande för att säga vad det var man träffade i stället.
+     */
+    const ok = avstand(ratt) <= Math.max(ratt.r, minRadie);
     if (ok) {
       right += 1;
       playSound('ratt');
