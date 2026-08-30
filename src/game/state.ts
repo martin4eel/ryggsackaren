@@ -192,8 +192,11 @@ export interface GameState {
    * Det senast avklarade skiftet: vilket jobb, var, och vilken resdag. Räknas
    * inte i spelet utan finns för internetcaféet, där det är den rad som säger
    * mest om vad någon annan just håller på med.
+   *
+   * Dagen saknas för resor som påbörjades innan caféet fanns och fyllts i
+   * bakåt av migreringen - då vet vi vilket jobb, men inte vilken dag.
    */
-  senasteYrke?: { jobId: string; cityId: string; dag: number };
+  senasteYrke?: { jobId: string; cityId: string; dag?: number };
   /** Skift utan ett enda felsvar */
   perfectShifts: number;
   /** Felfria arkadmoment */
@@ -428,6 +431,26 @@ function migrate(
   state.kmByMode ??= {};
   // Resor som påbörjades innan namnet fanns får en neutral benämning.
   state.playerName ||= 'Resenären';
+  /*
+   * Internetcaféet visar det senast avklarade yrket, men fältet finns bara på
+   * skift som gjorts efter att caféet byggdes. En resa som pågick då hade
+   * annars sagt "har inte arbetat än" till någon med fem skift bakom sig, så
+   * det fylls i bakåt: senaste besökta staden som har ett avklarat jobb, och
+   * det sista jobbet där. Ordningen mellan städer är en kvalificerad gissning
+   * - `visited` är i besöksordning - och gäller bara tills nästa skift är
+   * klart och skriver över med något vi vet.
+   */
+  if (!state.senasteYrke && (state.shiftsWorked ?? 0) > 0) {
+    for (let i = (state.visited?.length ?? 0) - 1; i >= 0; i--) {
+      const cityId = state.visited[i];
+      const gjorda = state.progress?.[cityId]?.workedJobs;
+      const jobId = gjorda?.[gjorda.length - 1];
+      if (jobId) {
+        state.senasteYrke = { jobId, cityId };
+        break;
+      }
+    }
+  }
   return state;
 }
 

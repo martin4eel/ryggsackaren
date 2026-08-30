@@ -4,8 +4,8 @@ Den enda serverdelen i Upptäckaren. Spelet i övrigt bor helt i webbläsaren �
 det här är bara en brevlåda där en spelare kan lägga sin resedagbok så att en
 kompis kan titta på den.
 
-En dagbok innehåller namn, stad och land, antal stämplar, den senaste stämpeln
-och det senast avklarade yrket. Ingenting mer: inte pengarna, inte ryggsäcken,
+En dagbok innehåller namn, stad och land, antal besökta städer, antal stämplar,
+den senaste stämpeln och det senast avklarade yrket. Ingenting mer: inte pengarna, inte ryggsäcken,
 inte facit på frågorna. Inga konton, inga lösenord, ingen e-post, ingen
 spårning. Ingenting skickas i väg förrän spelaren själv tryckt på *Dela min
 resedagbok*, och *Sluta dela* raderar dagboken på servern. En dagbok som ingen

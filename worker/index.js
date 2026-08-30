@@ -4,7 +4,8 @@
  * Spelet i övrigt bor helt i webbläsaren. Den här arbetaren finns bara för att
  * två spelare på var sin telefon ska kunna titta på varandras resedagböcker,
  * och den vet därför så lite som möjligt: ett namn, var man är, hur många
- * stämplar man har, den senaste stämpeln och det senast avklarade yrket.
+ * städer man hunnit besöka, hur många stämplar man har, den senaste stämpeln
+ * och det senast avklarade yrket.
  * Inga konton, inga lösenord, ingen e-post, ingen spårning.
  *
  * Varje dagbok får ett sexsiffrigt id som spelaren läser upp för en kompis,
@@ -151,6 +152,7 @@ async function lasKropp(request) {
     namn,
     stad,
     land,
+    stader: heltal(rad.stader, 0, 500),
     stamplar: heltal(rad.stamplar, 0, 500),
     dag: heltal(rad.dag, 0, 5000),
   };

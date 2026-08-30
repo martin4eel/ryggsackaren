@@ -49,6 +49,7 @@ const DAGBOK = {
   namn: 'Elsa',
   stad: 'Kathmandu',
   land: 'Nepal',
+  stader: 9,
   stamplar: 7,
   dag: 12,
   senasteStampel: { namn: 'Över molnen', tecken: '⛰', dag: 11 },
@@ -76,6 +77,7 @@ test('läser dagboken utan nyckel, men får aldrig se nyckeln', async () => {
   const kropp = await svar.json();
   assert.equal(kropp.dagbok.namn, 'Elsa');
   assert.equal(kropp.dagbok.stad, 'Kathmandu');
+  assert.equal(kropp.dagbok.stader, 9);
   assert.equal(kropp.dagbok.senasteYrke.titel, 'Bergsguide');
   assert.equal(kropp.nyckel, undefined, 'nyckeln får inte lämna servern');
 });
@@ -162,11 +164,12 @@ test('orimliga tal klipps till spelets värld', async () => {
   const { id } = await (
     await anrop('/dagbok', {
       method: 'POST',
-      body: { ...DAGBOK, stamplar: 99999, dag: -5 },
+      body: { ...DAGBOK, stamplar: 99999, stader: 99999, dag: -5 },
     })
   ).json();
   const { dagbok } = await (await anrop(`/dagbok/${id}`)).json();
   assert.equal(dagbok.stamplar, 500);
+  assert.equal(dagbok.stader, 500);
   assert.equal(dagbok.dag, 0);
 });
 

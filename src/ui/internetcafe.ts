@@ -2,6 +2,7 @@ import {
   CafeFel,
   FARSK_MS,
   MAX_FOLJER,
+  arMinimerad,
   byggDagbok,
   cachad,
   egenSynk,
@@ -11,6 +12,7 @@ import {
   formateraId,
   hamta,
   kanskeSynka,
+  sattMinimerad,
   slutaDela,
   slutaFolja,
   startaDelning,
@@ -40,8 +42,16 @@ export interface CafeOpts {
   onStang: () => void;
 }
 
+/**
+ * Sant medan spelaren just skapat sitt nummer under det här besöket. Då står
+ * rutan öppen även om den annars ligger hopfälld - man vill se numret man
+ * nyss fick, och kortet som visar vad andra kommer att se.
+ */
+let nyssDelat = false;
+
 export function renderInternetcafe(opts: CafeOpts): HTMLElement {
   const { state, onStang } = opts;
+  nyssDelat = false;
   const wrap = el('div', { class: 'stack' });
 
   const min = el('section', { class: 'panel cafe' });
@@ -82,12 +92,11 @@ function ritaMin(panel: HTMLElement, state: GameState): void {
   clear(panel);
   const id = egetId();
 
-  panel.append(
-    el('h1', { class: 'title' },
-      icon('skylt-internetcafe', 'cafe-titelikon'),
-      'Internetcaféet'
-    )
+  const rubrik = el('h1', { class: 'title' },
+    icon('skylt-internetcafe', 'cafe-titelikon'),
+    'Internetcaféet'
   );
+  panel.append(rubrik);
 
   if (!id) {
     panel.append(
@@ -98,6 +107,7 @@ function ritaMin(panel: HTMLElement, state: GameState): void {
       el('ul', { class: 'cafe-lista' },
         el('li', {}, 'ditt namn, ', el('strong', {}, state.playerName || 'Resenären')),
         el('li', {}, 'staden och landet du är i'),
+        el('li', {}, 'hur många städer du hunnit besöka'),
         el('li', {}, 'hur många stämplar du har, och vilken som var den senaste'),
         el('li', {}, 'det yrke du senast arbetade ett skift i')
       ),
@@ -116,6 +126,8 @@ function ritaMin(panel: HTMLElement, state: GameState): void {
         try {
           await startaDelning(state);
           playSound('stampla');
+          // Numret man precis fått ska synas, hopfällt förval eller ej.
+          nyssDelat = true;
           ritaMin(panel, state);
         } catch (err) {
           knapp.disabled = false;
@@ -128,6 +140,42 @@ function ritaMin(panel: HTMLElement, state: GameState): void {
     panel.append(el('div', { class: 'row' }, knapp), fel);
     return;
   }
+
+  /*
+   * Hopfälld: bara en rad med numret kvar läsbart. Den som redan delar kommer
+   * hit för att se hur det går för de andra, och då ska deras kort ligga
+   * överst - men numret ska ändå gå att läsa upp utan att leta.
+   */
+  if (arMinimerad() && !nyssDelat) {
+    panel.append(
+      el('div', { class: 'cafe-hopfalld' },
+        el('span', { class: 'cafe-etikett' }, 'Ditt nummer'),
+        el('span', { class: 'cafe-nummer cafe-nummer-liten' }, formateraId(id)),
+        button(
+          'Visa',
+          () => {
+            sattMinimerad(false);
+            ritaMin(panel, state);
+          },
+          { class: 'btn btn-liten', 'aria-expanded': 'false' }
+        )
+      )
+    );
+    return;
+  }
+
+  // Fällknappen sitter i rubriken, där man letar efter den.
+  rubrik.append(
+    button(
+      'Dölj',
+      () => {
+        sattMinimerad(true);
+        nyssDelat = false;
+        ritaMin(panel, state);
+      },
+      { class: 'btn btn-liten cafe-fall', 'aria-expanded': 'true' }
+    )
+  );
 
   /* Delningen är igång: numret först, det är det man kom hit för. */
   panel.append(
@@ -424,6 +472,15 @@ function dagbokKort(d: Resedagbok): HTMLElement {
   );
 
   const rader = el('ul', { class: 'cafe-rader' });
+  // Äldre dagböcker saknar stadsräkningen. Hellre ingen rad än en gissad.
+  if (typeof d.stader === 'number') {
+    rader.append(
+      el('li', {},
+        el('span', { class: 'cafe-etikett' }, 'Städer'),
+        el('span', { class: 'cafe-varde' }, String(d.stader))
+      )
+    );
+  }
   rader.append(
     el('li', {},
       el('span', { class: 'cafe-etikett' }, 'Stämplar'),
@@ -441,15 +498,22 @@ function dagbokKort(d: Resedagbok): HTMLElement {
       )
     );
   }
+  /*
+   * Yrket följer resenären, inte staden: ett skift i Stockholm står kvar när
+   * man rest vidare till Bangkok. Staden skrivs ut inom parentes just när den
+   * skiljer sig från där resenären är nu - står man kvar där man arbetade
+   * säger den ingenting man inte redan ser en rad upp.
+   */
+  const yrke = d.senasteYrke;
   rader.append(
     el('li', {},
       el('span', { class: 'cafe-etikett' }, 'Senaste yrke'),
       el('span', { class: 'cafe-varde' },
-        d.senasteYrke
-          ? d.senasteYrke.stad
-            ? `${d.senasteYrke.titel} i ${d.senasteYrke.stad}`
-            : d.senasteYrke.titel
-          : 'Har inte arbetat än'
+        !yrke
+          ? 'Har inte arbetat än'
+          : yrke.stad && yrke.stad !== d.stad
+            ? `${yrke.titel} (${yrke.stad})`
+            : yrke.titel
       )
     )
   );

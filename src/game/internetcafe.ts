@@ -12,8 +12,9 @@ import type { GameState } from './state';
  * skickas till en kompis, som slår in det i sitt eget café och därefter ser
  * samma sex rader varje gång hen tittar in.
  *
- * Vad som delas är hela listan: namn, stad och land, antal stämplar, den
- * senaste stämpeln och det senast avklarade yrket. Ingenting mer - inte
+ * Vad som delas är hela listan: namn, stad och land, antal besökta städer,
+ * antal stämplar, den senaste stämpeln och det senast avklarade yrket.
+ * Ingenting mer - inte
  * pengarna, inte ryggsäcken, inte facit på frågorna. Den som får numret ska
  * kunna heja, inte spionera.
  *
@@ -27,6 +28,11 @@ export interface Resedagbok {
   namn: string;
   stad: string;
   land: string;
+  /**
+   * Antal olika städer som besökts, hemstaden inräknad. Saknas på dagböcker
+   * som skrevs innan raden fanns - de ligger kvar på servern i sextio dagar.
+   */
+  stader?: number;
   stamplar: number;
   /** Vilken resdag resenären är inne på */
   dag: number;
@@ -55,6 +61,11 @@ interface EgenDelning {
 
 interface Sparat {
   egen?: EgenDelning;
+  /**
+   * Om den egna rutan ligger hopfälld. Den som redan delar kommer hit för att
+   * se hur det går för de andra, inte för att läsa sitt eget nummer igen.
+   */
+  minimerad?: boolean;
   /** Kompisarnas nummer, i den ordning de lades till */
   foljer: string[];
   /** Senast hämtade dagbok per nummer, så att caféet har något att visa direkt */
@@ -95,6 +106,7 @@ function las(): Sparat {
     const parsed = JSON.parse(raw) as Partial<Sparat>;
     return {
       egen: parsed.egen,
+      minimerad: parsed.minimerad,
       foljer: Array.isArray(parsed.foljer) ? parsed.foljer.filter(giltigtId) : [],
       cache: parsed.cache && typeof parsed.cache === 'object' ? parsed.cache : {},
     };
@@ -135,6 +147,21 @@ export function egenSynk(): number {
   return las().egen?.synkad ?? 0;
 }
 
+/**
+ * Om den egna rutan ska ligga hopfälld. Förvalt ja: har man väl ett nummer är
+ * det kompisarnas resor man kommer hit för att titta på. Rutan fälls ut igen
+ * med ett tryck, och valet ligger kvar.
+ */
+export function arMinimerad(): boolean {
+  return las().minimerad ?? true;
+}
+
+export function sattMinimerad(v: boolean): void {
+  const s = las();
+  s.minimerad = v;
+  spara(s);
+}
+
 /** Kompisarnas nummer, i den ordning de lades till. */
 export function foljda(): string[] {
   return las().foljer;
@@ -155,6 +182,8 @@ export function byggDagbok(state: GameState): Resedagbok {
     namn: state.playerName || 'Resenären',
     stad: stad?.name ?? 'Okänd stad',
     land: stad?.country ?? '',
+    // Samma räkning som statusraden: olika städer, inte antal resor.
+    stader: new Set(state.visited).size,
     stamplar: state.stamps.length,
     dag: state.days,
   };
@@ -178,7 +207,8 @@ export function byggDagbok(state: GameState): Resedagbok {
       dagbok.senasteYrke = {
         titel: jobb.title,
         stad: dar?.name ?? '',
-        dag: state.senasteYrke.dag,
+        // Bakåtifyllda skift saknar dag; då får dagens siffra duga.
+        dag: state.senasteYrke.dag ?? state.days,
       };
     }
   }

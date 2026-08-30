@@ -350,14 +350,19 @@ webbläsaren och överlever att sparfilen raderas.
    - **Internetcaféet** är spelets enda kontakt med omvärlden. Trycker du på
      *Dela min resedagbok* får du ett sexsiffrigt nummer att läsa upp för den
      du vill ska kunna följa resan – ungefär som en Kahoot-pin. Den som slår in
-     numret i sitt eget café ser namn, stad och land, antal stämplar, den
-     senaste stämpeln och det yrke du senast arbetade ett skift i, och kan
-     titta om när som helst under resans gång. Inte pengarna, inte ryggsäcken,
+     numret i sitt eget café ser namn, stad och land, antal besökta städer,
+     antal stämplar, den senaste stämpeln och det yrke du senast arbetade ett
+     skift i, och kan titta om när som helst under resans gång. Yrket följer
+     resenären och inte staden – ett skift i Stockholm står kvar sedan man
+     rest vidare, och staden skrivs då inom parentes. Inte pengarna, inte ryggsäcken,
      inte facit på frågorna – den som får numret ska kunna heja, inte spionera.
      Ingenting lämnar telefonen förrän du tryckt på knappen, och *Sluta dela*
      raderar dagboken. Dagboken uppdaterar sig själv medan du reser, som mest
      var tredje minut, så kompisen ser var du är med några minuters
-     eftersläpning.
+     eftersläpning. Har du väl ett nummer ligger den egna rutan hopfälld till
+     en rad – numret kvar läsbart, men kompisarnas kort överst, för det är dem
+     man kommer hit för att titta på. Ett tryck fäller ut den igen, och valet
+     ligger kvar.
    - **Telefonen**: när mamma eller pappa svarar har de läst på – en mening ur
      stadens broschyr, förklädd till något moster Gun sagt eller en dokumentär
      pappa sett, "bra att veta till provet". Man kan också bara prata en stund

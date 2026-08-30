@@ -9157,3 +9157,28 @@ body.sheet-oppen {
   letter-spacing: 0.08em;
   color: var(--ink-soft);
 }
+
+/* Hopfälld delningsruta: en rad med numret kvar läsbart. */
+.cafe-hopfalld {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cafe-hopfalld .cafe-etikett {
+  flex: none;
+}
+
+.cafe-nummer-liten {
+  flex: 1 1 auto;
+  padding: 8px 12px;
+  font-size: clamp(1.2rem, 6vw, 1.6rem);
+  letter-spacing: 0.06em;
+  text-shadow: none;
+}
+
+/* Fällknappen skjuts ut till rubrikens högerkant. */
+.cafe-fall {
+  margin-left: auto;
+}
