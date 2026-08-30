@@ -1041,6 +1041,15 @@ img.no-photo {
   font-size: 0.98rem;
 }
 
+/*
+ * Huvudkategorierna i ryggsäcken bär tidningens färger. Utan dem fick man
+ * läsa sig fram till vilken rad som var vilken varje gång; med dem känner
+ * man igen kategorin på samma färg som annonsen hade.
+ */
+.cert-name[class*='huvud-'] {
+  color: var(--huvud-text, inherit);
+}
+
 .cert-count {
   font-size: 0.8rem;
   color: var(--ink-soft);
@@ -7599,12 +7608,19 @@ body.sheet-oppen {
   vertical-align: 1px;
 }
 
-.huvud-vetenskap { --huvud: #1f5f9e; }
-.huvud-konst { --huvud: #8a2f6b; }
-.huvud-praktiskt { --huvud: #6b5a2e; }
-.huvud-aventyr { --huvud: #2f7a4b; }
-.huvud-sport { --huvud: #c2561b; }
-.huvud-mat { --huvud: #a8262b; }
+/*
+ * Två toner per kategori: --huvud är brickans botten i tidningen, med vit
+ * text ovanpå, och --huvud-text är samma färg satt som text på papper. De
+ * skiljer sig något, för en färg som bär vit text inte alltid har nog med
+ * kontrast åt andra hållet. Sport är den som märks: orangen fungerar som
+ * botten men blir för ljus som text, och är därför mörkare här.
+ */
+.huvud-vetenskap { --huvud: #1f5f9e; --huvud-text: #1a5288; }
+.huvud-konst { --huvud: #8a2f6b; --huvud-text: #7a295e; }
+.huvud-praktiskt { --huvud: #6b5a2e; --huvud-text: #5c4d27; }
+.huvud-aventyr { --huvud: #2f7a4b; --huvud-text: #276840; }
+.huvud-sport { --huvud: #c2561b; --huvud-text: #9c4415; }
+.huvud-mat { --huvud: #a8262b; --huvud-text: #932126; }
 
 .job-meta { margin-top: 6px; }
 

@@ -5074,7 +5074,9 @@ export class App {
       const n = s.points?.[h] ?? 0;
       erfList.append(
         el('div', { class: `cert ${n === 0 ? 'cert-tom' : ''}` },
-          el('span', { class: 'cert-name' }, HUVUD_LABELS[h]),
+          // Samma färg som kategorin har i tidningens platsannonser, så att
+          // man känner igen den på färgen i stället för att läsa varje gång.
+          el('span', { class: `cert-name huvud-${h}` }, HUVUD_LABELS[h]),
           el('span', { class: 'cert-count' },
             `${'●'.repeat(Math.min(3, n))}${'○'.repeat(Math.max(0, 3 - n))} ` +
               (n >= 2 ? 'klass 3 öppen' : n >= 1 ? 'klass 2 öppen' : 'klass 1')
