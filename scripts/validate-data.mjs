@@ -37,6 +37,17 @@ try {
   const { CITIES } = await load('/src/data/cities.ts');
   const { QUIZ_IMAGES, altLacker } = await load('/src/data/quizImages.ts');
   const bildManifest = new Set(QUIZ_IMAGES.map((b) => b.id));
+  /*
+   * Två poster med samma id är alltid ett fel: bara en fil hämtas, och vilken
+   * alt-text som gäller beror på i vilken ordning uppslagningen byggs. Det
+   * upptäcktes när livraddartorn stod två gånger med olika beskrivningar och
+   * bara ett foto på disk.
+   */
+  const sedda = new Set();
+  for (const b of QUIZ_IMAGES) {
+    if (sedda.has(b.id)) problems.push(`bilden ${b.id} står två gånger i manifestet`);
+    sedda.add(b.id);
+  }
   const { JOBS } = await load('/src/data/jobs.ts');
   const { SOUVENIR_BY_ID } = await load('/src/data/souvenirs.ts');
   const { LAND_ADJACENCY, FERRY_LINKS, FERRY_LINES } = await load(
