@@ -26,6 +26,7 @@ export type IconName =
   | 'skylt-tag'
   | 'skylt-farja'
   | 'skylt-telefon'
+  | 'skylt-internetcafe'
   | 'skylt-karta'
   | 'skylt-stad'
   | 'skylt-mystik'
@@ -346,6 +347,18 @@ const ICONS: Record<IconName, Part[]> = {
     { tag: 'path', attrs: { d: 'M5 5.5h14v15.5H5z', fill: 'currentColor', stroke: 'none' } },
     { tag: 'path', attrs: { d: 'M3.8 2.5h16.4a.8.8 0 0 1 .8.8v2.2H3V3.3a.8.8 0 0 1 .8-.8z', fill: 'currentColor', stroke: 'none' } },
     { tag: 'path', attrs: { d: 'M7 8h4v4.5H7zM13 8h4v4.5h-4zM7 14.5h4V19H7zM13 14.5h4V19h-4z', class: 'icon-knockout', stroke: 'none' } },
+  ],
+  'skylt-internetcafe': [
+    // En bildskärm på ett bord, med en kaffekopp bredvid. Skärmen är tjock i
+    // ryggen med flit: caféet ska se ut som ett internetcafé på nittiotalet,
+    // inte som en modern platt skärm.
+    { tag: 'path', attrs: { d: 'M3 4.5h13.5a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'path', attrs: { d: 'M4 6h11.5v7H4z', class: 'icon-knockout', stroke: 'none' } },
+    // Foten under skärmen.
+    { tag: 'path', attrs: { d: 'M7.5 15.5h4.5v2.2H7.5zM5 17.7h9.5v1.4H5z', fill: 'currentColor', stroke: 'none' } },
+    // Koppen: kropp och öra.
+    { tag: 'path', attrs: { d: 'M18.2 15h4.3v2.6a2.2 2.2 0 0 1-2.2 2.2 2.2 2.2 0 0 1-2.1-2.2z', fill: 'currentColor', stroke: 'none' } },
+    { tag: 'path', attrs: { d: 'M22.5 15.6a1.3 1.3 0 0 1 0 2.6', fill: 'none' } },
   ],
   pass: [
     {

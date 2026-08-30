@@ -1,0 +1,15 @@
+{
+  "name": "upptackaren-internetcafe",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Internetcaféet i Upptäckaren: delade resedagböcker",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node prov.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}

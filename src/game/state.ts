@@ -22,6 +22,8 @@ export type Screen =
   | 'sparet'
   /** Sevärdheten: foto, text och valet att tillbringa en dag där */
   | 'sevardhet'
+  /** Internetcaféet: dela din resedagbok och följ andras */
+  | 'internetcafe'
   | 'slut';
 
 /**
@@ -42,6 +44,7 @@ const KANDA_SKARMAR = new Set<Screen>([
   'telefon',
   'sparet',
   'sevardhet',
+  'internetcafe',
   'slut',
 ]);
 
@@ -185,6 +188,12 @@ export interface GameState {
   bestStreak: number;
   /** Antal avslutade arbetsskift */
   shiftsWorked: number;
+  /**
+   * Det senast avklarade skiftet: vilket jobb, var, och vilken resdag. Räknas
+   * inte i spelet utan finns för internetcaféet, där det är den rad som säger
+   * mest om vad någon annan just håller på med.
+   */
+  senasteYrke?: { jobId: string; cityId: string; dag: number };
   /** Skift utan ett enda felsvar */
   perfectShifts: number;
   /** Felfria arkadmoment */

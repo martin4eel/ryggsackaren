@@ -86,6 +86,8 @@ import type { Stamp } from '../data/stamps';
 import { renderTravelScene } from './map';
 import { renderStation, type StationHandle } from './station';
 import { renderAtlasScreen } from './atlas';
+import { renderInternetcafe } from './internetcafe';
+import { kanskeSynka } from '../game/internetcafe';
 import {
   applyEffect,
   applyImmediate,
@@ -913,6 +915,9 @@ export class App {
     // Dagen stämpeln togs trycks sedan i själva stämpeln, som ett datum.
     for (const stamp of earned) s.stampDays[stamp.id] = s.days;
     saveGame(s);
+    // Delar spelaren sin resa får internetcaféet veta hur långt hen kommit.
+    // Anropet är strypt i sig självt och gör oftast ingenting alls.
+    void kanskeSynka(s);
     if (earned.length > 0 && this.quiz && this.quiz.kind === 'jobb' && this.quiz.phase !== 'klart') {
       // Mitt i ett skift: stämpeln får vänta tills lönen är kvitterad, så att
       // den inte lägger sig över frågan.
@@ -1282,6 +1287,11 @@ export class App {
         break;
       case 'telefon':
         main.append(this.renderPhone());
+        break;
+      case 'internetcafe':
+        main.append(
+          renderInternetcafe({ state: s, onStang: () => this.go('stad') })
+        );
         break;
       case 'slut':
         main.append(this.renderEnd());
@@ -2261,6 +2271,16 @@ export class App {
       playSound('telefonbabbel');
       this.go('telefon');
     });
+    plats(
+      'internetcafe',
+      'skylt-internetcafe',
+      'Internetcaféet',
+      'Dela din resedagbok med en kompis, och följ hens resa.',
+      () => {
+        playSound('sida');
+        this.go('internetcafe');
+      }
+    );
 
     /**
      * Brickorna som inte är funktioner. Antalet följer stadens storlek, och
@@ -4459,6 +4479,8 @@ export class App {
     const fickPoang = q.correct > 0;
     if (fickPoang) s.points[job.huvud] = (s.points[job.huvud] ?? 0) + 1;
     this.spendDays(job.shiftLength, city);
+    // Raden internetcaféet visar upp: vad man senast arbetade med, och var.
+    s.senasteYrke = { jobId: job.id, cityId: city.id, dag: s.days };
 
     // Certifikat om du klarar tillräckligt av skiftet (se difficulty.ts). Arkadmomentet
     // väger in, så ett svagt frågeresultat kan räddas av gott handlag.

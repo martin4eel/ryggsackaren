@@ -8961,3 +8961,199 @@ body.sheet-oppen {
 
 /* "Start" skrivs under ringen när hemstaden ligger nära den man står i. */
 .karta-anteckning-mitt { text-anchor: middle; }
+
+
+/* ------------------------------------------------------ internetcaféet */
+
+/*
+ * Caféet lånar sitt utseende av terminalerna på 90-talet: en rutig skärm,
+ * gula post-it-lappar och ett stort nummer att läsa upp i telefonen. Numret
+ * är sidans mittpunkt - allt annat är text runt omkring.
+ */
+
+.cafe .title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cafe-titelikon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  color: var(--palm);
+  /* Urtagen i ikonen är annars papperets färg mot papperets bakgrund. */
+  --skylt-bg: var(--paper);
+}
+
+.cafe-brod {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.cafe-diskret {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.cafe-lista {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+
+.cafe-fel {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(189, 63, 42, 0.1);
+  border: 1px solid rgba(189, 63, 42, 0.35);
+  color: var(--stamp);
+  font-weight: 600;
+}
+
+/* Numret. Läses upp i telefon, så siffrorna ska gå att skilja åt på håll. */
+.cafe-nummer {
+  margin: 0;
+  padding: 14px 10px;
+  border-radius: var(--radius);
+  background: var(--sea-deep);
+  color: #7dffb0;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: clamp(2.1rem, 11vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-shadow: 0 0 14px rgba(125, 255, 176, 0.4);
+}
+
+.cafe-knappar {
+  flex-wrap: wrap;
+}
+
+.cafe-sokrad {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.cafe-falt {
+  flex: 1 1 160px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 1.3rem;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.cafe-falt:focus-visible {
+  outline: none;
+  border-color: var(--palm);
+}
+
+.btn-liten {
+  padding: 8px 14px;
+  font-size: 0.86rem;
+  min-height: 38px;
+  background: var(--paper-dim);
+  color: var(--ink);
+}
+
+/* Själva dagbokskortet: ett vykort med en handfull rader. */
+.cafe-dagbok {
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #fffdf6 0%, var(--paper-dim) 100%);
+  padding: 14px 16px;
+}
+
+.cafe-namn {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  /* Svenska prickar behöver luft; 1.0 klipper dem mot raden ovanför. */
+  line-height: 1.25;
+}
+
+.cafe-plats {
+  margin: 2px 0 0;
+  font-size: 1.02rem;
+}
+
+.cafe-dag {
+  margin: 2px 0 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.cafe-rader {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.cafe-rader li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+
+.cafe-etikett {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  flex: none;
+}
+
+.cafe-varde {
+  text-align: right;
+  font-weight: 600;
+}
+
+.cafe-tecken {
+  display: inline-block;
+  margin-right: 6px;
+  color: var(--stamp);
+  font-size: 1.1rem;
+}
+
+.cafe-vanner {
+  display: grid;
+  gap: 14px;
+}
+
+.cafe-van {
+  display: grid;
+  gap: 8px;
+}
+
+.cafe-van-fot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cafe-vannummer {
+  margin-right: auto;
+  font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}

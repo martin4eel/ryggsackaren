@@ -69,6 +69,19 @@ Kontrollera att Pages fortfarande står på rätt källa. Om _Source_ har hamnat
 Kom också ihåg att spelet cachas av sin service worker. Ladda om sidan två
 gånger, eller hårdladda, om du inte ser ändringen direkt.
 
+### Internetcaféet: den enda serverdelen
+
+Delade resedagböcker kräver något som lagrar dem, och det är den enda punkt
+där spelet lämnar webbläsaren. Servern är en Cloudflare-arbetare på ett par
+hundra rader som ligger i `worker/`, med egen README, egna prov och ett sätt
+att köras lokalt utan konto.
+
+Spelet fungerar utan den: är caféet inte publicerat står skylten kvar i staden
+och säger att uppkopplingen är nere. Allt annat rör aldrig nätet.
+
+Se **[`worker/README.md`](worker/README.md)** för hur den provas, publiceras
+och pekas ut.
+
 ### Alternativ: Netlify Drop, utan konto eller repo
 
 ```bash
@@ -332,6 +345,17 @@ webbläsaren och överlever att sparfilen raderas.
    - **Snabbhetsbonus.** Svarar du inom några sekunder får du ett påslag på
      dagslönen. Efter tolv sekunder ger den ingenting, så det lönar sig att
      kunna svaret, inte att chansa snabbt.
+   - **Internetcaféet** är spelets enda kontakt med omvärlden. Trycker du på
+     *Dela min resedagbok* får du ett sexsiffrigt nummer att läsa upp för den
+     du vill ska kunna följa resan – ungefär som en Kahoot-pin. Den som slår in
+     numret i sitt eget café ser namn, stad och land, antal stämplar, den
+     senaste stämpeln och det yrke du senast arbetade ett skift i, och kan
+     titta om när som helst under resans gång. Inte pengarna, inte ryggsäcken,
+     inte facit på frågorna – den som får numret ska kunna heja, inte spionera.
+     Ingenting lämnar telefonen förrän du tryckt på knappen, och *Sluta dela*
+     raderar dagboken. Dagboken uppdaterar sig själv medan du reser, som mest
+     var tredje minut, så kompisen ser var du är med några minuters
+     eftersläpning.
    - **Telefonen**: när mamma eller pappa svarar har de läst på – en mening ur
      stadens broschyr, förklädd till något moster Gun sagt eller en dokumentär
      pappa sett, "bra att veta till provet". Man kan också bara prata en stund
@@ -759,6 +783,8 @@ src/
                            status och restid. Presentation, inte speltid.
     difficulty.ts          Allt som skiljer Turist från Globetrotter
     highscores.ts          Resedagboken och statistiken över stadskunskap
+    internetcafe.ts        Delade resedagböcker: vad som delas, och allt prat
+                           med servern. Enda stället i spelet som rör nätet.
   ui/
     app.ts                 Skärmar, spelloop och tangentbordsstyrning
     eventcard.ts           Händelsekortet med sina val och sitt utfall
@@ -773,11 +799,17 @@ src/
                            platt karta till klot, storcirklar och horisontklipp
     globepicker.ts         Startskärmens glob: snurra, zooma och välja stad
     minigames.ts           De åtta arkadmomenten
+    internetcafe.ts        Caféskärmen: eget nummer, och korten för dem du följer
     dom.ts                 Små hjälpare för att bygga element
     audio.ts               Syntetiserade ljudeffekter och ljudstyrning
     icons.ts               Inline SVG-ikoner (högtalare, menyer)
   styles/main.css          All stilsättning
   sw-register.ts           Registrerar service workern i produktionsbygget
+worker/
+  index.js                 Internetcaféets server (Cloudflare Worker + KV)
+  prov.mjs                 Prov för servern, körs med Node utan Cloudflare
+  lokal.mjs                Kör servern lokalt, i minnet, för att klicka igenom
+  README.md                Hur caféet provas, publiceras och pekas ut
 scripts/
   validate-data.mjs        Kontrollerar speldatan, körs vid varje bygge
   deploy-pages.mjs         Publicerar bygget till gh-pages-branchen

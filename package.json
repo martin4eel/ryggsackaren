@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-data.mjs",
     "granska": "node scripts/granska-fragor.mjs",
+    "prov:cafe": "node worker/prov.mjs",
     "deploy": "npm run build && node scripts/deploy-pages.mjs"
   },
   "devDependencies": {

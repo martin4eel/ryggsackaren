@@ -1,0 +1,24 @@
+# Internetcaféet i Upptäckaren.
+#
+# Publiceras med:  npx wrangler deploy   (körs i den här mappen)
+#
+# Innan första deployen behöver KV-utrymmet skapas en gång:
+#   npx wrangler kv namespace create DAGBOK
+# Kommandot skriver ut ett id som ska klistras in nedan.
+
+name = "upptackaren-internetcafe"
+main = "index.js"
+compatibility_date = "2026-08-30"
+
+# Ingen anonym användningsstatistik behövs för det här.
+send_metrics = false
+
+[[kv_namespaces]]
+binding = "DAGBOK"
+id = "FYLL_I_EFTER_wrangler_kv_namespace_create"
+
+# När domänen är på plats i Cloudflare: avkommentera raderna nedan så svarar
+# caféet på cafe.upptackaren.se i stället för på workers.dev-adressen.
+# [[routes]]
+# pattern = "cafe.upptackaren.se"
+# custom_domain = true
