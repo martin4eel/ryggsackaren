@@ -542,7 +542,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Franciacorta väster om staden gör mousserande vin med andrajäsning i flaskan, samma metod som i Champagne. Namnet får bara användas inom området.',
     'Staden är ett centrum för metall och vapentillverkning sedan medeltiden, och Beretta har sin fabrik i dalen norr om Brescia sedan 1526.',
     'Piazza della Loggia har ett astronomiskt ur från 1546 som visar månfaser och stjärntecken. Två bronsfigurer slår i klockan, och kallas på dialekt i màcc de le ure - timmarnas galningar.',
-    'Brescia ligger mellan Gardasjön och Isesjön, med Alperna i norr. Det gör att man kan bada i sjö och stå på en glaciär samma dag, om man har bil och tid.',
+    'Brescia ligger mellan Gardasjön och Iseosjön, med Alperna i norr. Det gör att man kan bada i sjö och stå på en glaciär samma dag, om man har bil och tid.',
   ],
   sansebastian: [
     'San Sebastián heter Donostia på baskiska, och båda namnen står på skyltarna. Staden ligger vid den snäckformade bukten La Concha i Baskien, två mil från franska gränsen.',
