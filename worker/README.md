@@ -27,46 +27,45 @@ VITE_INTERNETCAFE=http://localhost:8787 npm run dev
 `lokal.mjs` sparar bara i minnet och tappar allt när den stängs av. Den finns
 för att kunna klicka igenom caféet, inte för att köras på riktigt.
 
-## Publicera
+## Kontot
 
-Kräver ett Cloudflare-konto. Gratisnivån räcker med mycket god marginal:
-100 000 anrop och 1 000 skrivningar om dagen, och spelet skriver som mest någon
-gång var tredje minut per spelare som delar.
+Caféet ligger på Cloudflare-kontot **martink.1987@gmail.com** – inte på
+Compeas-kontot, som datorn annars är inloggad på i wrangler. De två hålls isär
+med `XDG_CONFIG_HOME`: uppgifterna för caféet ligger i
+`~/.wrangler-upptackaren`, Compeas ligger kvar på sitt vanliga ställe.
 
-```bash
-cd worker
-npx wrangler login                      # öppnar webbläsaren, en gång
-npx wrangler kv namespace create DAGBOK # skriver ut ett id
-```
-
-Klistra in id:t i `wrangler.toml` under `[[kv_namespaces]]`, och publicera:
+Därför går alla wrangler-kommandon genom npm-skripten här, som sätter den
+variabeln åt dig. Kör aldrig `npx wrangler deploy` rakt av i den här mappen –
+då hamnar caféet på fel konto.
 
 ```bash
-npx wrangler deploy
+npm run whoami     # ska säga martink.1987@gmail.com
+npm run deploy     # publicerar
+npm run logg       # följer anropen live
+npm run login      # bara om inloggningen gått ut
 ```
 
-Wrangler skriver ut adressen, något i stil med
-`https://upptackaren-internetcafe.<ditt-konto>.workers.dev`.
-
-### Peka spelet mot caféet
-
-Spelet letar efter caféet på `https://cafe.upptackaren.se`. Två vägar dit:
-
-**Egen underdomän (det som är tänkt).** Kräver att `upptackaren.se` ligger som
-zon i Cloudflare. Avkommentera `[[routes]]`-blocket i `wrangler.toml` och kör
-`npx wrangler deploy` igen. Då behöver spelet inte byggas om.
-
-**Direkt på workers.dev.** Bygg spelet med adressen inbakad:
+## Publicera en ändring
 
 ```bash
-VITE_INTERNETCAFE=https://upptackaren-internetcafe.<konto>.workers.dev npm run build
-node scripts/deploy-pages.mjs
+npm test           # proven först
+npm run deploy
 ```
 
-Lägg i så fall till adressen i `tillatetUrsprung` i `index.js` om du också vill
-kunna prova från något annat än `upptackaren.se`.
+Uppsättningen är redan gjord och behöver inte göras om: KV-utrymmet finns
+(id:t står i `wrangler.toml`), och `cafe.upptackaren.se` är satt som egen
+domän. Cloudflare la DNS-posten själv – apex-posten mot GitHub Pages rördes
+inte.
 
-### Om caféet inte är publicerat
+Spelet letar efter caféet på `https://cafe.upptackaren.se`, som är
+förvalt i `src/game/internetcafe.ts`. Ändras adressen behöver spelet byggas om
+med `VITE_INTERNETCAFE=<adressen> npm run build` från repots rot.
+
+Gratisnivån räcker med mycket god marginal: 100 000 anrop och 1 000
+skrivningar om dagen, och spelet skriver som mest någon gång var tredje minut
+per spelare som delar.
+
+### Om caféet ligger nere
 
 Ingenting går sönder. Skylten står kvar i staden, och den som trycker på
 *Dela min resedagbok* får veta att uppkopplingen är nere. Resten av spelet rör
@@ -98,4 +97,4 @@ det egna nätet får svar med CORS-huvud.
 | `index.js`      | Hela servern                                          |
 | `prov.mjs`      | Proven, körs med Node mot ett låtsas-KV               |
 | `lokal.mjs`     | Kör servern lokalt utan Cloudflare                    |
-| `wrangler.toml` | Namn, KV-koppling och (utkommenterad) egen domän      |
+| `wrangler.toml` | Namn, KV-koppling och egen domän                      |

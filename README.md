@@ -76,11 +76,13 @@ där spelet lämnar webbläsaren. Servern är en Cloudflare-arbetare på ett par
 hundra rader som ligger i `worker/`, med egen README, egna prov och ett sätt
 att köras lokalt utan konto.
 
-Spelet fungerar utan den: är caféet inte publicerat står skylten kvar i staden
-och säger att uppkopplingen är nere. Allt annat rör aldrig nätet.
+Den ligger uppe på <https://cafe.upptackaren.se> och på Cloudflare-kontot
+`martink.1987@gmail.com` – inte på något arbetskonto. Spelet fungerar utan
+den: ligger caféet nere står skylten kvar i staden och säger att uppkopplingen
+är nere. Allt annat rör aldrig nätet.
 
 Se **[`worker/README.md`](worker/README.md)** för hur den provas, publiceras
-och pekas ut.
+och hålls isär från andra Cloudflare-konton.
 
 ### Alternativ: Netlify Drop, utan konto eller repo
 

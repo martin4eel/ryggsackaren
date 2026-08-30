@@ -5,11 +5,14 @@
   "type": "module",
   "description": "Internetcaféet i Upptäckaren: delade resedagböcker",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
-    "test": "node prov.mjs"
+    "test": "node prov.mjs",
+    "lokal": "node lokal.mjs",
+    "deploy": "XDG_CONFIG_HOME=$HOME/.wrangler-upptackaren wrangler deploy",
+    "whoami": "XDG_CONFIG_HOME=$HOME/.wrangler-upptackaren wrangler whoami",
+    "login": "XDG_CONFIG_HOME=$HOME/.wrangler-upptackaren wrangler login",
+    "logg": "XDG_CONFIG_HOME=$HOME/.wrangler-upptackaren wrangler tail"
   },
   "devDependencies": {
-    "wrangler": "^3.90.0"
+    "wrangler": "^4.127.1"
   }
 }

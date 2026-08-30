@@ -1,10 +1,10 @@
 # Internetcaféet i Upptäckaren.
 #
-# Publiceras med:  npx wrangler deploy   (körs i den här mappen)
+# Publiceras med:  npm run deploy   (körs i den här mappen)
 #
-# Innan första deployen behöver KV-utrymmet skapas en gång:
-#   npx wrangler kv namespace create DAGBOK
-# Kommandot skriver ut ett id som ska klistras in nedan.
+# Använd npm-skripten, inte npx wrangler rakt av: skripten pekar wrangler mot
+# uppgifterna för kontot martink.1987@gmail.com. Datorn är annars inloggad på
+# ett arbetskonto, och en deploy därifrån hamnar på fel ställe. Se README.md.
 
 name = "upptackaren-internetcafe"
 main = "index.js"
@@ -15,10 +15,10 @@ send_metrics = false
 
 [[kv_namespaces]]
 binding = "DAGBOK"
-id = "FYLL_I_EFTER_wrangler_kv_namespace_create"
+id = "63ae588ccaad4950b050228401d66678"
 
-# När domänen är på plats i Cloudflare: avkommentera raderna nedan så svarar
-# caféet på cafe.upptackaren.se i stället för på workers.dev-adressen.
-# [[routes]]
-# pattern = "cafe.upptackaren.se"
-# custom_domain = true
+# Caféet svarar på sin egen underdomän. Cloudflare lägger DNS-posten själv;
+# apex-posten mot GitHub Pages rörs inte.
+[[routes]]
+pattern = "cafe.upptackaren.se"
+custom_domain = true
