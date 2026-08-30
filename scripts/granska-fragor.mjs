@@ -41,6 +41,35 @@ try {
 
   const textEko = [];
   const bildEko = [];
+  const talEko = [];
+
+  /*
+   * Talord som svar. "Hur många lag fanns i NHL:s Original Six?" hade svaret
+   * Sex, och ordet stod i frågan - på engelska, vilket är varför den vanliga
+   * ordjämförelsen missade den. Här jämförs själva talet i stället för ordet,
+   * på svenska, engelska och som siffra.
+   */
+  const TAL = {
+    1: ['ett', 'en', 'one'],
+    2: ['två', 'two'],
+    3: ['tre', 'three'],
+    4: ['fyra', 'four'],
+    5: ['fem', 'five'],
+    6: ['sex', 'six'],
+    7: ['sju', 'seven'],
+    8: ['åtta', 'eight'],
+    9: ['nio', 'nine'],
+    10: ['tio', 'ten'],
+    11: ['elva', 'eleven'],
+    12: ['tolv', 'twelve'],
+  };
+  /** Vilket tal ett svar står för, eller null om det inte är ett tal. */
+  const talet = (svar) => {
+    const t = platt(svar).trim();
+    if (/^\d+$/.test(t)) return Number(t);
+    for (const [n, ord] of Object.entries(TAL)) if (ord.includes(t)) return Number(n);
+    return null;
+  };
 
   const kolla = (etikett, fragor) => {
     for (const q of fragor) {
@@ -50,6 +79,14 @@ try {
       const iFragan = platt(q.q);
       const eko = ord(q.a[0], 6).filter((w) => iFragan.includes(w) && !fel.has(w));
       if (eko.length) textEko.push(`${etikett} | ${eko.join(',')} | ${q.q} -> ${q.a[0]}`);
+
+      // 1b. Svaret är ett tal som redan står i frågan, med ord eller siffra.
+      const n = talet(q.a[0]);
+      if (n !== null) {
+        const ord = [String(n), ...(TAL[n] ?? [])];
+        const iTexten = ord.some((o) => new RegExp(`(^|[^a-zåäö0-9])${o}([^a-zåäö0-9]|$)`, 'i').test(platt(q.q)));
+        if (iTexten) talEko.push(`${etikett} | ${q.q} -> ${q.a[0]}`);
+      }
 
       // 2. Fotot bär svaret, och frågan handlar inte om fotot.
       if (!q.bild || q.bild.startsWith('stad') || HANVISAR.test(q.q)) continue;
@@ -68,6 +105,8 @@ try {
 
   console.log(`\nSvaret står i frågan: ${textEko.length} att läsa igenom`);
   for (const r of textEko) console.log('  ' + r);
+  console.log(`\nTalet står redan i frågan: ${talEko.length} att läsa igenom`);
+  for (const r of talEko) console.log('  ' + r);
   console.log(`\nFotot kan peka ut svaret: ${bildEko.length} att läsa igenom`);
   for (const r of bildEko) console.log('  ' + r);
   console.log('\nBåda listorna innehåller frågor där ekot är avsikten. Läs, döm, rätta.');

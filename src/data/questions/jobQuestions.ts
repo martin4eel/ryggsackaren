@@ -1567,7 +1567,7 @@ export const JOB_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vem är mannen på bilden, som avgjorde OS-finalen 1994 med ett frimärke?', bild: 'forsberg', a: ['Peter (Foppa) Forsberg', 'Mats Sundin', 'Tomas Holmström', 'Markus Näslund'], d: 2, info: 'Straffen mot Kanada hamnade på ett riktigt frimärke året efter.' },
     { q: 'Vem är mannen på bilden, som har flest poäng i NHL:s historia?', bild: 'gretzky', a: ['Wayne (The Great One) Gretzky', 'Mario Lemieux', 'Sidney Crosby', 'Bobby Orr'], d: 2, info: 'Hans nummer 99 är pensionerat i hela NHL.' },
     { q: 'Vad kallas det när pucken skjuts från egen planhalva hela vägen över motståndarnas mållinje?', bild: 'hockeyklubba', a: ['Icing', 'Offside', 'Tripping', 'Boarding'], d: 2, info: 'Domaren blåser och tekningen flyttas till det felande lagets zon. Tvålinjespasset, som stoppade långa passningar över två linjer, avskaffades i NHL 2005.' },
-    { q: 'Hur många lag fanns i NHL:s "Original Six"?', bild: 'stanleycup', a: ['Sex', 'Fyra', 'Åtta', 'Tolv'], d: 2, info: 'Boston, Chicago, Detroit, Montreal, New York Rangers och Toronto, 1942–1967.' },
+    { q: 'Hur många av lagen i NHL:s "Original Six" låg i Kanada?', bild: 'stanleycup', a: ['Två', 'Ett', 'Tre', 'Fyra'], d: 2, info: 'Montreal och Toronto. De fyra andra var Boston, Chicago, Detroit och New York Rangers, och uppsättningen stod sig från 1942 till 1967.' },
     { q: 'Vad heter Rangers tidigare kapten på bilden, som vann Stanley Cup 1994?', bild: 'msg', a: ['Mark Messier', 'Wayne Gretzky', 'Brian Leetch', 'Mike Richter'], d: 2, info: 'Rangers första titel på 54 år; Messier hade lovat vinst i semifinalen.' },
   ],
   diplomat: [
