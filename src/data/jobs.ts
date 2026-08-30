@@ -2880,12 +2880,12 @@ export const JOBS: Job[] = [
         facitBild: 'engelprov-svar',
         foto: 'Foto: ENGEL',
         punkter: [
-          { id: 'matartratt', namn: 'Matartratten', x: 85.2, y: 9, r: 4.5, forklaring: 'Den blå matarenheten högst upp. Granulatet sugs hit genom slangen, torrt och kallt, och faller sedan ner i sprutenheten med sin egen tyngd. En tom tratt stoppar maskinen mitt i serien.' },
-          { id: 'sprutenhet', namn: 'Sprutenheten', x: 83.2, y: 21, r: 4.5, forklaring: 'Under tratten sitter cylindern med skruven. Värmeband utanpå, skruv inuti: den drar in granulatet, smälter det med friktion och värme och trycker sedan in smältan i verktyget. Här sker hela sprutningen.' },
-          { id: 'skyddslucka', namn: 'Skyddsluckan', x: 51, y: 42, r: 10, forklaring: 'Luckan framför formen. Öppnas den mitt i cykeln stannar maskinen, och det går inte att stänga formen med luckan öppen.' },
-          { id: 'nodstopp', namn: 'Nödstoppet', x: 73.2, y: 37.3, r: 2.2, forklaring: 'Den röda svampen på gult, strax ovanför skärmen. Ett slag på den bryter allt, och den måste vridas ut igen innan maskinen får startas om.' },
-          { id: 'manoverpanel', namn: 'Manöverpanelen', x: 73.8, y: 48.5, r: 3.5, forklaring: 'Skärmen där cykeltid, temperaturer i cylinderns zoner, insprutningstryck och eftertryck ställs in. Det är här ett recept ändras, inte ute vid maskinen.' },
-          { id: 'skylt', namn: 'Maskinskylten', x: 11.3, y: 39, r: 6, forklaring: 'ENGEL e-motion 50. Siffran är låskraften: 50 ton, som håller verktyget stängt mot smältans tryck. En e-motion är helelektrisk - servomotorer istället för hydraulik, tystare och snålare.' },
+          { id: 'matartratt', namn: 'Matartratten', x: 85, y: 10.5, r: 7, forklaring: 'Den blå matarenheten högst upp. Granulatet sugs hit genom slangen, torrt och kallt, och faller sedan ner i sprutenheten med sin egen tyngd. En tom tratt stoppar maskinen mitt i serien.' },
+          { id: 'sprutenhet', namn: 'Sprutenheten', x: 84.5, y: 22.5, r: 7, forklaring: 'Under tratten sitter cylindern med skruven. Värmeband utanpå, skruv inuti: den drar in granulatet, smälter det med friktion och värme och trycker sedan in smältan i verktyget. Här sker hela sprutningen.' },
+          { id: 'skyddslucka', namn: 'Skyddsluckan', x: 50.5, y: 39.5, r: 20, forklaring: 'Luckan framför formen. Öppnas den mitt i cykeln stannar maskinen, och det går inte att stänga formen med luckan öppen.' },
+          { id: 'nodstopp', namn: 'Nödstoppet', x: 73.2, y: 37.6, r: 2.2, forklaring: 'Den röda svampen på gult, strax ovanför skärmen. Ett slag på den bryter allt, och den måste vridas ut igen innan maskinen får startas om.' },
+          { id: 'manoverpanel', namn: 'Manöverpanelen', x: 73.5, y: 47.5, r: 10.5, forklaring: 'Skärmen där cykeltid, temperaturer i cylinderns zoner, insprutningstryck och eftertryck ställs in. Det är här ett recept ändras, inte ute vid maskinen.' },
+          { id: 'skylt', namn: 'Maskinskylten', x: 11.5, y: 41, r: 9, forklaring: 'ENGEL e-motion 50. Siffran är låskraften: 50 ton, som håller verktyget stängt mot smältans tryck. En e-motion är helelektrisk - servomotorer istället för hydraulik, tystare och snålare.' },
         ],
         fragor: [
           { text: 'Granulatet ska fyllas på. Var kommer det in i maskinen?', svar: 'matartratt' },

@@ -38,7 +38,11 @@ topp = int(nr * 2.9)
 lagda = []
 for i, p in enumerate(pts):
     farg = FARGER[i % len(FARGER)]
-    cx, cy, rr = p['x'] / 100 * W, p['y'] / 100 * H, p['r'] / 100 * W
+    # Ringen får ritas mindre än träffytan: en hög, smal del kräver stor
+    # radie för att nå sina hörn, men en ring i den storleken ser ut att
+    # svälja grannen. 'ritr' skiljer det som visas från det som träffar.
+    cx, cy = p['x'] / 100 * W, p['y'] / 100 * H
+    rr = p.get('ritr', p['r']) / 100 * W
     bx, by = p['box'][0] / 100 * W, p['box'][1] / 100 * H
     rader = textwrap.wrap(p['forklaring'], 34)
     bh = int(topp + lh * len(rader) + W * 0.012)
