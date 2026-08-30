@@ -346,6 +346,8 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **ellafitzgerald.webp** (En kvinna sjunger i mikrofon) – [Ella_Fitzgerald_6_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Ella_Fitzgerald_6_(cropped).jpg) av Carl Van Vechten, Public domain.
 - **ellington.webp** (En man i kostym vid ett piano) – [Duke_Ellington_-_publicity.JPG](https://commons.wikimedia.org/wiki/File:Duke_Ellington_-_publicity.JPG) av Unknown author Unknown author, Public domain.
 - **ellisisland.webp** (En ö med stora tegelbyggnader sedd från luften) – [Aerial_view_of_Ellis_Island,_Jersey_City,_New_Jersey_LCCN2011635626_-_cropped_balance.jpg](https://commons.wikimedia.org/wiki/File:Aerial_view_of_Ellis_Island,_Jersey_City,_New_Jersey_LCCN2011635626_-_cropped_balance.jpg) av Carol M. Highsmith, CC BY-SA 4.0.
+- **engelprov.webp** (En ENGEL victory 160 formspruta sedd från sidan) – pressbild från ENGEL Austria GmbH, använd med kredit "Foto: ENGEL" i spelet.
+- **engelprov-svar.webp** (Samma maskin med maskindelarna utmärkta) – pressbild från ENGEL Austria GmbH, använd med kredit "Foto: ENGEL" i spelet.
 - **elstangsel.webp** (Ett stängsel med tråd och en apparat) – [Electric-fence-charger.jpg](https://commons.wikimedia.org/wiki/File:Electric-fence-charger.jpg) av Kreuzschnabel, CC BY-SA 3.0.
 - **emmentaler.webp** (En bit emmentaler) – [Emmentaler_Premier_Cru.jpg](https://commons.wikimedia.org/wiki/File:Emmentaler_Premier_Cru.jpg) av Manuel2, CC BY-SA 2.0 de.
 - **empirestate.webp** (En hög art déco-skyskrapa med spira) – [Empire_State_Building_(aerial_view).jpg](https://commons.wikimedia.org/wiki/File:Empire_State_Building_(aerial_view).jpg) av Sam Valadi, Public domain.
@@ -419,8 +421,6 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **forarhytt.webp** (En förarhytt med skärmar, reglage och spåret genom rutan) – [Driving Cab Vectron DualMode.JPG](https://commons.wikimedia.org/wiki/File:Driving_Cab_Vectron_DualMode.JPG) av Peatala36, CC BY-SA 4.0.
 - **forbranningsanlaggning.webp** (En anläggning med hög färgglad skorsten) – [District_heating_plant_spittelau_ssw_crop1.png](https://commons.wikimedia.org/wiki/File:District_heating_plant_spittelau_ssw_crop1.png) av Croped by Gralo from a self-taken image by Contributor, CC BY-SA 3.0.
 - **formspruta.webp** (En stor industrimaskin i en fabrikshall) – [Arburg-swiss plastic 2026.jpg](https://commons.wikimedia.org/wiki/File:Arburg-swiss_plastic_2026.jpg) av Bricetofly, CC0.
-- **formsprutaprov.webp** (En formsprutmaskin sedd från sidan i en verkstad) – [Spritzgussmaschine 300-1.jpg](https://commons.wikimedia.org/wiki/File:Spritzgussmaschine_300-1.jpg) av Kobel, public domain.
-- **formsprutaprov-svar.webp** (Samma maskin med maskindelarna utmärkta) – [Spritzgussmaschine 300-1.jpg](https://commons.wikimedia.org/wiki/File:Spritzgussmaschine_300-1.jpg) av Kobel, public domain.
 - **forratt.webp** (Små rätter på ett fat) – [Ringier_175_Jahre_Jubiläum_(2499873203)_(2).jpg](https://commons.wikimedia.org/wiki/File:Ringier_175_Jahre_Jubil%C3%A4um_(2499873203)_(2).jpg) av Chris Schaer from Zofingen, Schweiz, CC BY-SA 2.0.
 - **forsberg.webp** (En man i kostym) – [Peter_Forsberg_2016-03-17_001_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Peter_Forsberg_2016-03-17_001_(cropped).jpg) av Magnus Ragnvid / Kanal 5, CC BY 3.0.
 - **forskepp.webp** (Främre delen av ett fartyg som klyver vågorna) – [HMS_Caroline_(43649273285).jpg](https://commons.wikimedia.org/wiki/File:HMS_Caroline_(43649273285).jpg) av Conall from Downpatrick, Northern Ireland, CC BY 2.0.
