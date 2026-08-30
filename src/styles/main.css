@@ -5388,6 +5388,32 @@ body.sheet-oppen {
   background: var(--paper-dim);
 }
 
+/* Bilden göms medan omladdningsraden står där, och raden ligger gömd så
+   länge bilden bär sig åt. Reglerna som sätter display slår webbläsarens
+   egen regel för hidden om vi inte säger till - båda behöver sägas till. */
+.quiz-bild img[hidden],
+.quiz-bild-omladdning[hidden] {
+  display: none;
+}
+
+/* Gick fotot inte att hämta står raden i dess ställe, lika hög som en liten
+   bild, så att frågan inte hoppar när den väl kommer. Den ser ut som pappret
+   omkring och skriker inte - det är en upplysning, inte ett fel man orsakat. */
+.quiz-bild-omladdning {
+  display: block;
+  width: 100%;
+  min-height: 96px;
+  padding: 18px 16px;
+  border: 0;
+  background: var(--paper-dim);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
+}
+
 @media (min-width: 700px) {
   .quiz-bild img {
     max-height: 420px;

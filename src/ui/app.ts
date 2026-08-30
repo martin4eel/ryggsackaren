@@ -3817,15 +3817,55 @@ export class App {
     const bildRedanIRemsan =
       q.kind === 'turistbyra' && q0.bild === `stad:${this.city.id}`;
     if (q0.bild && !bildRedanIRemsan) {
+      const bildId = q0.bild;
       const bildruta = el('figure', { class: 'quiz-bild' });
       const img = el('img', {
-        src: quizImageUrl(q0.bild),
-        alt: quizImageAltIFraga(q0.bild, q0.a, this.city.name),
+        src: quizImageUrl(bildId),
+        alt: quizImageAltIFraga(bildId, q0.a, this.city.name),
         loading: 'eager',
         decoding: 'async',
       }) as HTMLImageElement;
-      img.addEventListener('error', () => bildruta.remove());
-      bildruta.append(img);
+      /**
+       * Ett tapp i täckningen ska inte kosta en bild.
+       *
+       * Förr togs figuren bort vid första felet, och då var fotot borta för
+       * gott: frågan visades utan bild, som om den aldrig haft någon. På en
+       * telefon räcker en sekunds dåligt nät för att det ska hända. Nu görs
+       * två nya försök - det andra med ett tillägg i adressen, som går förbi
+       * både webbläsarens och service workerns cache ifall det var en trasig
+       * post som svarade - och först därefter ges det upp, med en rad man kan
+       * trycka på i stället för tystnad.
+       */
+      let forsok = 0;
+      const omladdning = el('button', {
+        type: 'button',
+        class: 'quiz-bild-omladdning',
+      }, 'Fotot kunde inte hämtas. Tryck för att försöka igen.');
+      omladdning.hidden = true;
+      omladdning.addEventListener('click', () => {
+        omladdning.hidden = true;
+        img.hidden = false;
+        forsok = 0;
+        img.src = `${quizImageUrl(bildId)}?igen=${Date.now()}`;
+      });
+      img.addEventListener('load', () => {
+        omladdning.hidden = true;
+        img.hidden = false;
+      });
+      img.addEventListener('error', () => {
+        forsok += 1;
+        if (forsok <= 2) {
+          const url = quizImageUrl(bildId);
+          const igen = forsok === 1 ? url : `${url}?igen=${Date.now()}`;
+          window.setTimeout(() => {
+            img.src = igen;
+          }, forsok * 400);
+          return;
+        }
+        img.hidden = true;
+        omladdning.hidden = false;
+      });
+      bildruta.append(img, omladdning);
       if (answered) {
         const ratt = q0.reglage
           ? Math.abs((answered.reglage ?? Number.NaN) - q0.reglage.svar) <= q0.reglage.tolerans
