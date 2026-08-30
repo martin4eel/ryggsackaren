@@ -10,7 +10,7 @@ export const CITY_FACTS: Record<string, string[]> = {
 
     'Addis Abeba betyder ny blomma. Kejsarinnan Taytu valde namnet 1886 för att hon gillade de varma källorna; maken Menelik II ville flytta igen när veden tog slut, tills någon planterade eukalyptus från Australien överallt.',
     'Den etiopiska kalendern har tretton månader och ligger sju-åtta år efter vår. Dygnet börjar dessutom vid soluppgången, så klockan sex på morgonen är klockan tolv. Turister missar många frukostar.',
-    'Vid Adwa 1896 besegrade Etiopien Italien och blev det enda afrikanska land som aldrig koloniserades. Italien kom tillbaka 1936 och stannade fem år, vilket etiopierna räknar som ockupation, inte koloni.',
+    'Vid Adwa 1896 besegrade Etiopien Italien och blev ett av två afrikanska länder som aldrig koloniserades, vid sidan av Liberia. Italien kom tillbaka 1936 och stannade fem år, vilket etiopierna räknar som ockupation, inte koloni.',
     'Haile Selassie, kejsare från 1930, hette Ras Tafari före kröningen. Det är därifrån rastafarirörelsen på Jamaica fått sitt namn, och sin kejsare.',
     'Amhariska skrivs med ge\'ez-skrift, där varje tecken är en stavelse. Omkring 250 tecken, och Afrikas äldsta skrift som fortfarande används.',
     'Kaffeceremonin tar en timme och bjuder på tre koppar ur lerkannan jebena. Att gå efter första koppen är oartigt. Att gå efter tredje går bra, men då är det sent.',
@@ -103,7 +103,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Astor Piazzolla förnyade tangon med bandoneon. Traditionalisterna sa att man inte kunde dansa till den. Han höll med.',
     'Eva Perón ligger på Recoleta-kyrkogården. Hennes kropp var försvunnen i 16 år innan den kom dit, vilket är en egen historia.',
     'Avenida 9 de Julio har sexton filer och är uppkallad efter självständighetsdagen 1816. Att korsa den till fots tar två gröna gubbar.',
-    'Påven Franciskus föddes här och har medlemskort i fotbollsklubben San Lorenzo. Kortet förnyas årligen.',
+    'Påven Franciskus föddes här och hade medlemskort i fotbollsklubben San Lorenzo. Han förnyade det varje år ända till slutet.',
   ],
   cusco: [
 
@@ -119,7 +119,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   dakar: [
 
     'Dakar ligger på halvön Kap Verde, Afrikas västligaste punkt. Öarna med samma namn ligger 60 mil västerut och döptes efter halvön, inte tvärtom.',
-    'Senegals förste president Léopold Sédar Senghor var poet och den förste afrikanen i Franska akademien. Flygplatsen bär hans namn, vilket är fler flygplatser än de flesta poeter får.',
+    'Senegals förste president Léopold Sédar Senghor var poet och den förste afrikanen i Franska akademien. Den gamla flygplatsen bar hans namn tills trafiken flyttade 2017, vilket är fler flygplatser än de flesta poeter får.',
     'Dakarrallyt startade 1979 i Paris och gick i mål i Dakar fram till 2007. Sedan flyttade det till Sydamerika och därefter Saudiarabien. Namnet stannade kvar.',
     'Youssou N\'Dour sjöng "7 Seconds" med Neneh Cherry 1994 och gjorde mbalax, dansmusiken byggd på sabartrummor, känd i hela världen. Senare blev han turistminister.',
     'Lac Retba norr om staden är rosa. Färgen kommer från alger som trivs i det extremt salta vattnet, och saltet skördas för hand av män som smörjer in sig i sheasmör för att inte fräta sönder.',
@@ -130,7 +130,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   dubai: [
 
     'Dubai levde på pärlfiske tills japanska odlade pärlor slog ut handeln på 1930-talet. Oljan kom på 1960-talet och står i dag för bara några procent av Dubais ekonomi; Abu Dhabi har nästan all olja.',
-    'Förenade Arabemiraten bildades 1971 av sju emirat, när britterna drog sig ur. Bahrain och Qatar tackade nej till att gå med. Abu Dhabi är huvudstad, hur mycket Dubai än syns.',
+    'Förenade Arabemiraten bildades 1971 av sex emirat när britterna drog sig ur; det sjunde, Ras al-Khaimah, kom med året därpå. Bahrain och Qatar tackade nej till att gå med. Abu Dhabi är huvudstad, hur mycket Dubai än syns.',
     'Dubai Creek skiljer Deira från Bur Dubai. Viken var den ursprungliga hamnen, och dhower från Iran lastar fortfarande kylskåp vid kajen, granne med guldsouken.',
     'Palm Jumeirah är en konstgjord ö formad som en palm. Ögruppen The World utanför föreställer en världskarta, men de flesta länderna är fortfarande obebyggd sand.',
     'Burj Al Arab, hotellet som ser ut som ett segel, kallar sig sjustjärnigt. Beteckningen finns inte. Fem är max, men ingen har lyckats säga det till dem.',
@@ -156,7 +156,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Volvos första bil, ÖV4 med smeknamnet Jakob, rullade ut på Hisingen 1927. Enligt legenden var bakaxeln felmonterad, så den första bilen kunde bara backa.',
     'Håkan Hellström fyllde Ullevi två kvällar i rad 2016, drygt 70 000 personer per kväll. Alla sjöng med, inte alla höll tonen.',
     'På öarna i södra skärgården är bilar förbjudna. Öborna kör flakmoped, och färjan från Saltholmen ingår i kollektivtrafiken.',
-    'Carl Milles Poseidon på Götaplatsen väckte anstöt 1931, och skulptören fick krympa vissa detaljer innan staden godkände honom.',
+    'Carl Milles Poseidon på Götaplatsen kritiserades 1931 för att vara ful, och skulptören fick krympa vissa detaljer innan staden godkände honom.',
     'Evert Taube växte upp på Vinga, där fadern var fyrmästare. Havet han sjöng om började bokstavligen på trappan.',
     'Chalmers grundades 1829 för pengar som William Chalmers tjänat på Ostindiska kompaniet. Tekniska högskolan är alltså byggd på te.',
   ],
@@ -164,8 +164,8 @@ export const CITY_FACTS: Record<string, string[]> = {
 
     'Hanoi betyder innanför floden, och floden är Röda floden. Den är verkligen röd, av lera från Kina.',
     'Ho Chi Minh utropade självständigheten på Ba Dinh-torget 1945 med ett citat ur USA:s självständighetsförklaring. Det hjälpte inte. Han ville bli kremerad; han ligger balsamerad i ett mausoleum på samma torg.',
-    'Litteraturtemplet är Vietnams första universitet, grundat 1070. De godkända fick sina namn huggna på stenstelar som bärs av sköldpaddor. Sköldpaddorna har hållit i 900 år.',
-    'Fängelset Hoa Lo döptes av amerikanska krigsfångar till Hanoi Hilton. John McCain bodde där i fem och ett halvt år. Han rekommenderade det inte.',
+    'Litteraturtemplet grundades 1070, och landets första universitet inrättades inne i det 1076. De godkända fick sina namn huggna på stenstelar som bärs av sköldpaddor. Stelarna började resas 1484 och står kvar.',
+    'Fängelset Hoa Lo döptes av amerikanska krigsfångar till Hanoi Hilton. John McCain satt fången i fem och ett halvt år, delvis här. Han rekommenderade det inte.',
     'Vietnameserna kallar Vietnamkriget för amerikanska kriget. Det är en fråga om var man står.',
     'Äggkaffe, ca phe trung, uppfanns 1946 när mjölken tog slut. Obama åt bun cha för sex dollar här 2016; bordet är nu inglasat.',
     'Vietnamesiska skrivs med latinska bokstäver och sex toner, tack vare jesuiter på 1600-talet. Vattendockteatern är äldre: den började på översvämmade risfält.',
@@ -173,7 +173,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   ],
   havanna: [
 
-    'Under kupolen i El Capitolio ligger en diamant i golvet. Alla avstånd på Kuba mäts därifrån. Den stals 1946 och dök upp på presidentens skrivbord två år senare.',
+    'Under kupolen i El Capitolio ligger en diamant i golvet. Alla avstånd på Kuba mäts därifrån. Den stals 1946 och dök upp på presidentens skrivbord drygt ett år senare.',
     'Fidel Castro tog makten 1959 och talade sedan i 4 timmar och 29 minuter i FN. Det är fortfarande rekord.',
     'Che Guevara pryder Inrikesministeriets fasad i stål. På grannhuset hänger Camilo Cienfuegos och säger "det går bra, Fidel".',
     'Kubakrisen 1962 varade i tretton dagar. Den löstes med en hemlig byteshandel om robotar i Turkiet, som ingen fick berätta om.',
@@ -190,12 +190,12 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Sommar-OS 1952 skulle ha hållits 1940. Olympiastadions torn är 72,71 meter högt, exakt lika långt som Matti Järvinens världsrekord i spjut.',
     'När Lordi vunnit Eurovision 2006 samlades 80 000 personer på Salutorget och sjöng Hard Rock Hallelujah i kör. Det räknades som världens största karaoke.',
     'Marimekkos valmuemönster Unikko ritades 1964 av Maija Isola, efter att grundaren förbjudit blommönster. Det är fortfarande företagets mest sålda.',
-    'Nokia började 1865 som pappersbruk vid ån Nokia och gjorde gummistövlar och kablar innan mobiltelefonerna. Stövlarna görs fortfarande.',
+    'Nokia började 1865 som pappersbruk i Tammerfors och tog namnet efter sitt andra bruk vid ån Nokianvirta. Bolaget gjorde gummistövlar och kablar innan mobiltelefonerna. Stövlarna görs fortfarande.',
     'Kippis betyder skål, kiitos betyder tack. Blandar man ihop dem går det ändå bra.',
   ],
   istanbul: [
 
-    'Hagia Sofia var världens största katedral i nästan tusen år, tills Sevilla byggde en större på 1520-talet. Kupolen tog fem år att bygga - renoveringen har tagit längre.',
+    'Hagia Sofia var världens största katedral i nästan tusen år, tills Sevilla byggde en större på 1520-talet. Hela kyrkan tog fem år att bygga, men kupolen rasade i en jordbävning 558 och ersattes 562. Den att bygga - renoveringen har tagit längre.',
     'Blå moskén är inte blå utanpå. Namnet kommer från tjugotusen kakelplattor från Iznik på insidan, och de sex minareterna gjorde att sultanen fick skicka en sjunde till Mecka för att inte förarga någon.',
     'Turkarna dricker mer te per person än något annat folk, ur små tulpanformade glas. Kaffet, som de gjorde världsberömt, är mest till för att spå i sumpen.',
     'Simit, brödringen med sesam, har sålts från vagnar sedan 1500-talet. Den är fortfarande billigare än en tidning, och betydligt mer aktuell.',
@@ -231,7 +231,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'I Katmandu bor en levande gudinna, Kumari. Hon väljs som liten flicka och avgår vid puberteten. Sedan får hon pension och gå på marken igen.',
     'Buddha föddes i Lumbini i södra Nepal, vilket nepaleserna gärna påpekar för indier. Kejsar Ashoka satte upp en pelare på platsen redan 249 f.Kr.',
     'Swayambhunath kallas Apstemplet, för aporna. De är heliga och vet om det. Trappan har 365 steg.',
-    'Tenzing Norgay och Edmund Hillary nådde toppen av Everest 1953. Vem som satte foten där först kom de överens om att inte säga.',
+    'Tenzing Norgay och Edmund Hillary nådde toppen av Everest 1953. De kom överens om att inte säga vem som satte foten där först. Tenzing avslöjade i sin bok 1955 att det var Hillary.',
     'Nepal ligger 5 timmar och 45 minuter före Greenwich, en kvart före Indien, och skriver år 2083 från april 2026. Det är en självständig nation och vill att klockan visar det.',
     'Kronprinsen sköt ihjäl nästan hela kungafamiljen 2001. Monarkin avskaffades 2008. Gurkhasoldaterna, som britterna rekryterat sedan 1815, tjänstgör fortfarande.',
     'Jordbävningen 2015 dödade nära 9 000 och fällde tornet Dharahara. Det står upp igen sedan 2021.',
@@ -254,14 +254,14 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Apotekaren Carl Wilhelm Scheele upptäckte volfram, molybden och citronsyra i Köping. Han smakade på allt han hittade, och dog 43 år gammal.',
     'Scheele föddes i Stralsund i Svenska Pommern, som var svenskt 1648–1815. Han var alltså svensk kemist, fast från Tyskland.',
     'Volvo har tillverkat växellådor i Köping sedan företaget köpte Köpings Mekaniska Verkstad 1942. Lastbilarna byggs i Göteborg, men växlar gör de på västmanländska.',
-    'Köping ligger vid Galten, Mälarens västligaste fjärd. Härifrån är det båtväg hela vägen till Stockholm, om man har tålamod med slussarna.',
+    'Köping ligger vid Galten, Mälarens västligaste fjärd. Härifrån är det båtväg hela vägen in till Stockholm utan en enda sluss - Mälaren är ett enda vatten. Slussen behövs först ut mot Östersjön.',
     'E18 passerar Köping på sin väg från Nordirland till S:t Petersburg. Det är stadens enda gata med anknytning till båda.',
     'Köpenhamn och Köping delar ordstam: båda handlar om att köpa. Köpenhamn var köpmännens hamn, Köping var helt enkelt platsen där man handlade.',
   ],
   lissabon: [
 
-    'Bron över Tejo hette Salazarbron tills revolutionen 1974. Nu heter den 25 april, efter dagen då den fick nytt namn.',
-    'Nejlikerevolutionen fick sitt namn av en blomsterförsäljerska på Rossio som stack nejlikor i gevärspiporna. Soldaterna lät henne.',
+    'Bron över Tejo hette Salazarbron tills revolutionen 1974. Nu heter den 25 april, efter revolutionsdagen.',
+    'Nejlikerevolutionen fick sitt namn av blommorna till en inställd jubileumsfest på en restaurang vid Rossio. En anställd delade ut dem, och soldaterna satte dem i gevärspiporna.',
     'Portugiserna sägs ha 365 recept på saltad torsk. Torsken kommer från Norge, recepten från Lissabon.',
     'Fernando Pessoa skrev under ett sjuttiotal namn, alla med egen biografi. Ett par av dem recenserade varandra.',
     'Saudade är längtan efter något som kanske aldrig funnits. Ordet går inte att översätta, vilket alla portugiser gärna översätter.',
@@ -272,7 +272,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   london: [
 
     'Londons taxiförare måste klara provet The Knowledge: 25 000 gator utantill. Det tar tre–fyra år. GPS:en får de ha, men den räknas inte.',
-    'Nollmeridianen går genom Greenwich, så all världens tid räknas från en stadsdel i sydöstra London. Fransmännen höll sig till Paris i tjugo år till.',
+    'Nollmeridianen går genom Greenwich, så all världens tid räknas från en stadsdel i sydöstra London. Fransmännen höll sig till Paris ända till 1911.',
     'Den stora branden 1666 började i ett bageri på Pudding Lane. Bagaren nekade till alltihop.',
     'Finanskvarteret kallas Square Mile och har en egen borgmästare, Lord Mayor. Han väljs varje år och bor i ett hus som heter Mansion House.',
     'Sherlock Holmes bodde på Baker Street 221B, en adress som inte fanns när böckerna skrevs. Nu finns den, och posten kommer fram.',
@@ -341,7 +341,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Järnvägsstationen Chhatrapati Shivaji Terminus hette Victoria Terminus tills 1996 och är världsarv. Tre miljoner pendlare om dagen har inte tid att beundra gotiken.',
     'Vada pav, en friterad potatisbiff i bröd, uppfanns 1966 vid ett stånd utanför Dadar-stationen. Den kallas Mumbais hamburgare och kostar en bråkdel.',
     'Salman Rushdie föddes i Bombay 1947, samma år som Indien blev självständigt vid midnatt. Därav titeln "Midnattsbarnen".',
-    'På ön Elephanta i hamnen finns grottempel till Shiva huggna ur berget. Elefanten som gav ön sitt namn försökte portugiserna flytta; den gick sönder.',
+    'På ön Elephanta i hamnen finns grottempel till Shiva huggna ur berget. Elefanten som gav ön sitt namn försökte britterna flytta 1864; den gick sönder på vägen.',
     'Delstatens språk är marathi, och stadens namn kommer från gudinnan Mumba. Bollywood talar hindi, men det är film.',
   ],
   nairobi: [
@@ -356,7 +356,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   ],
   newyork: [
 
-    'Manhattan köptes 1626 av holländaren Peter Minuit för varor värda 60 gulden. Priset per kvadratmeter har stigit sedan dess.',
+    'Manhattan köptes 1626 av vallonen Peter Minuit, på uppdrag av holländarna, för varor värda 60 gulden. Priset per kvadratmeter har stigit sedan dess.',
     'Brooklyn Bridge invigdes 1883. Året efter lät P.T. Barnum 21 elefanter gå över den för att visa att den höll. Den höll.',
     'Nyårskulan på Times Square har fallit sedan 1907. Torget är uppkallat efter tidningen The New York Times, som flyttade dit 1904.',
     'Frihetsgudinnan håller en fackla i ena handen och en tavla med datumet 4 juli 1776 i den andra. Vid fötterna ligger brutna kedjor.',
@@ -392,7 +392,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Peking blev huvudstad på 1200-talet under Kublai khan, som Marco Polo tjänade. Farfar Djingis hade bränt ner den. Släkten var inte överens om stadsplanering.',
     'Förbjudna staden byggdes av Mingdynastin och stod klar 1420. Bertolucci fick filma där 1987; "Den siste kejsaren" vann nio Oscar.',
     'I Himmelska templet bad kejsaren varje år om god skörd. Bönehallen är byggd utan en enda spik, vilket säger något om skördarna eller snickarna.',
-    'Änkekejsarinnan Cixi byggde en båt av marmor i Sommarpalatset, enligt sägnen för flottans pengar. Marmorbåten står kvar. Flottan sänktes 1895.',
+    'Änkekejsarinnan Cixi lät bygga om marmorbåten i Sommarpalatset, enligt sägnen för flottans pengar. Marmorbåten står kvar. Flottan sänktes 1895.',
     'Pekingmänniskan, en halv miljon år gammal, försvann 1941 när fossilen skulle skickas till USA. Ingen har sett henne sedan dess.',
     'Mao utropade Folkrepubliken från Himmelska fridens port den 1 oktober 1949. Porträttet på porten byts mot ett nymålat varje år, så det åldras inte.',
     'De gamla gränderna heter hutong och gårdshusen siheyuan. Ai Weiwei, som var med och ritade OS-stadion Fågelboet, bojkottade invigningen.',
@@ -401,7 +401,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   prag: [
 
     'År 1618 kastades två ståthållare ut genom ett fönster på borgen. De landade i en gödselhög och överlevde. Trettioåriga kriget gjorde det också.',
-    'Ordet robot är tjeckiskt, från en pjäs 1920. Karel Čapek skrev pjäsen, hans bror Josef hittade på ordet. Roboterna tog över i akt tre.',
+    'Ordet robot är tjeckiskt, från en pjäs 1920. Karel Čapek skrev pjäsen, hans bror Josef hittade på ordet. Roboterna tog över i akt två.',
     'Tjeckerna dricker mest öl i världen, omkring 130 liter per person och år. På krogen är ölet ofta billigare än vattnet, vilket förklarar en del.',
     'Smetana skrev Moldau helt döv. Floden hade han hört tidigare.',
     'John Lennon satte aldrig sin fot i Prag, men har en mur. Frank Zappa var kulturrådgivare åt presidenten och fick ingen.',
@@ -414,7 +414,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Reykjavík betyder rökviken. Ingólfur Arnarson såg ångan från de heta källorna på 870-talet och drog fel slutsats, men bra ortnamn.',
     'Reagan och Gorbatjov möttes i Höfði-huset 1986. De kom inte överens, men de kom närmare, och året efter skrev de under ett nedrustningsavtal.',
     'Bobby Fischer slog Boris Spasskij i Reykjavík 1972, i det som kallas århundradets match. Han blev isländsk medborgare 2005 och ligger begravd på ön.',
-    'Island ligger där den nordamerikanska och den eurasiska plattan glider isär, ett par centimeter om året. På Tingvalla kan man stå med en fot på varje.',
+    'Island ligger där den nordamerikanska och den eurasiska plattan glider isär, ett par centimeter om året. På Tingvalla går sprickorna i marken, men plattkanterna ligger sju kilometer isär - man står inte med en fot på varje, hur gärna man än vill.',
     'Konserthuset Harpa påbörjades i högkonjunktur och stod som ett halvfärdigt glasskal när bankerna kraschade 2008. Det blev klart 2011, ungefär som ekonomin.',
     'Hákarl är haj som fått jäsa i marken i månader. Färsk är den giftig; jäst är den bara en åsiktsfråga.',
     'Eyjafjallajökull ställde in Europas flyg i april 2010. Nyhetsuppläsarna lärde sig aldrig uttala den.',
@@ -429,13 +429,13 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Feijoada är svarta bönor och fläsk, och äts på lördagar. Söndagen går åt till att återhämta sig.',
     'Copacabanas vågiga strandpromenad ritades av landskapsarkitekten Roberto Burle Marx. Havet bidrog med idén.',
     'OS 2016 var de första i Sydamerika. Två år tidigare hade Tyskland vunnit fotbolls-VM på Maracanã, vilket ingen här nämner.',
-    'Favelan Rocinha har fler invånare än Uppsala. Utsikten är bättre, allt annat sämre.',
+    'Favelan Rocinha har omkring sjuttiotusen invånare, ungefär som Karlstad. Utsikten är bättre, allt annat sämre.',
   ],
   rom: [
 
     'Caesar mördades den 15 mars 44 f.Kr. på en plats som i dag är ett kattreservat. Katterna har inte uttalat sig.',
     'Spanska trappan betalades av en fransman och leder till en fransk kyrka. Spanien hade ambassaden vid foten och tog namnet.',
-    'Carbonaran görs på ägg, sidfläsk och pecorino. Den som ber om grädde får en blick.',
+    'Carbonaran görs på ägg, guanciale och pecorino. Grädde förekommer inte. Den som ber om grädde får en blick.',
     'Rom blev huvudstad i Italien 1871. Påven tyckte inte om det och stannade inne i Vatikanen i nästan sextio år.',
     'Sanningens mun biter av handen på lögnare. Den var troligen ett brunnslock, vilket förklarar det rundade uttrycket.',
     'Michelangelo tog på sig Peterskyrkans kupol som sjuttioettåring. Han hann inte se den färdig, vilket ingen förvånades av.',
@@ -450,7 +450,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Sommaren 1967 samlades hippierörelsen i Haight-Ashbury. Sången om blommor i håret var reklam för en festival i Monterey.',
     'Lombard Street har åtta skarpa kurvor på ett enda kvarter. De byggdes 1922 för att bilarna skulle klara lutningen på 27 procent.',
     'Sjölejonen vid Pier 39 flyttade in efter jordbävningen 1989 och bor kvar. Fiskebåtarna som hade bryggorna fick flytta.',
-    'Stadens surdegsbröd bakas enligt bageriet Boudin på en kultur från 1849. Jästsvampen i den bär numera stadens namn.',
+    'Stadens surdegsbröd bakas enligt bageriet Boudin på en kultur från 1849. Mjölksyrabakterien i den bär numera stadens namn.',
     'Lyckokakan uppfanns troligen i San Francisco kring 1900. I Kina har ingen hört talas om den.',
   ],
   seoul: [
@@ -459,7 +459,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Under Koreakriget 1950–53 bytte Seoul ägare fyra gånger. Kriget slutade med vapenstillestånd, inte fred, och pågår formellt fortfarande.',
     'Samsung betyder tre stjärnor och började 1938 med torkad fisk och nudlar. Det gick bra sedan.',
     'Gangnam betyder söder om floden och är stadens dyraste stadsdel. Psy gjorde den till Youtubes första miljardvideo 2012.',
-    'Bäcken Cheonggyecheon låg under en motorväg i fyrtio år. 2005 rev staden vägen och grävde fram bäcken. Trafiken minskade, till trafikplanerarnas förvåning.',
+    'Bäcken Cheonggyecheon göms under betong 1958 och fick en motorväg ovanpå sig 1976. 2005 rev staden vägen och grävde fram bäcken. Trafiken minskade, till trafikplanerarnas förvåning.',
     'Bibimbap betyder blandat ris, och det knapriga riset i botten på stenskålen är hela poängen. Soju är nationaldrycken; Jinro säljer flest flaskor sprit i världen.',
     'Bong Joon-hos "Parasit" tog Oscar för bästa film 2020, som första icke-engelskspråkiga. Han Kang tog Nobelpriset 2024. BTS tog Billboardlistan 2020. Det var ett bra decennium.',
     'Vid N Seoul Tower på Namsan hänger par upp hänglås och kastar nyckeln. Taekwondo har sitt högkvarter i staden; det blev OS-gren i Sydney 2000.',
@@ -468,7 +468,7 @@ export const CITY_FACTS: Record<string, string[]> = {
 
     'Singapura betyder lejonstaden. Det har aldrig funnits lejon här; prinsen i sägnen såg troligen en tiger. Statyn Merlion är därför halvt fisk, för säkerhets skull.',
     'Stamford Raffles grundade handelsstationen 1819. Han har fått ett hotell och världens största blomma uppkallade efter sig; hotellet uppfann sedan stadens egen drink. Blomman luktar lik.',
-    'Singapore föll till Japan 1942 sedan kanonerna riktats mot havet och japanerna kommit på cykel genom djungeln. Churchill kallade det den värsta katastrofen i brittisk historia.',
+    'Singapore föll till Japan 1942, och myten säger att kanonerna satt fast mot havet. De flesta gick att svänga norrut - felet var att ammunitionen var pansarbrytande i stället för sprängladdad och japanerna kommit på cykel genom djungeln. Churchill kallade det den värsta katastrofen i brittisk historia.',
     'Tuggummi förbjöds 1992 sedan det fastnat i tunnelbanans dörrar. Nikotintuggummi finns på apotek, mot recept.',
     'Landet har vuxit med en fjärdedel sedan 1960-talet genom att fylla ut havet. Indonesien slutade sälja sand 2007; Singapore hade börjat ta slut på grannar.',
     'Hawker centres är hallarna med matstånd. Två stånd fick Michelinstjärna 2016, och hela kulturen är Unescoklassad sedan 2020. Peranakanernas nyonyakök har laksan.',
@@ -490,7 +490,7 @@ export const CITY_FACTS: Record<string, string[]> = {
 
     'James Cook landsteg vid Botany Bay 1770. Aderton år senare kom elva fartyg med 700 fångar, och Sydney var grundat. Den 26 januari är nationaldag; inte alla firar.',
     'Harbour Bridge invigdes 1932 med sex miljoner nitar. Sedan 1998 får man klättra över bågen, 134 meter upp, i sele och overall.',
-    'Bondi betyder ungefär vatten mot klippor. Livräddarklubben från 1907 var världens första, och stranden har den mest fotograferade simhallen.',
+    'Bondi betyder ungefär vatten mot klippor. Livräddarklubben från 1907 är Australiens äldsta, och stranden har den mest fotograferade simhallen.',
     'Sydneytrattspindeln kan döda en människa. Sedan motgiftet 1981 har den inte gjort det. Blue Mountains är blå av eukalyptusolja i luften.',
     'AC/DC bildades här 1973 av två bröder från Glasgow. Samma år fick Sydneybon Patrick White Nobelpriset i litteratur, och Operahuset invigdes. Det var mycket det året.',
     'Nemo hamnade hos en tandläkare på 42 Wallaby Way, Sydney. Adressen fick brev.',
