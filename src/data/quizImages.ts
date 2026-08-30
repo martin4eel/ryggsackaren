@@ -138,6 +138,15 @@ export const QUIZ_IMAGES: QuizImage[] = [
     article: 'The Great Wave off Kanagawa',   ansikte: { x: 28, y: 38, b: 30 }, reaktion: { fel: ['Jag sköljer bort det där svaret.'] },
   },
   { id: 'venusfodelse', alt: 'Botticellis Venus födelse', article: 'The Birth of Venus', ansikte: { x: 50, y: 28, b: 20 }, reaktion: { fel: ['Jag kliver tillbaka i snäckan.'] } },
+  // Verk till konstguidens hängning: alla så gamla att de är fria, och valda
+  // för att ligga utspridda i tiden från 1500-tal till mellankrigstid.
+  { id: 'jagarnaisnon', alt: 'Bruegels Jägarna i snön', article: 'The Hunters in the Snow', altFraga: 'Vinterlandskap sett uppifrån med jägare och hundar i förgrunden' },
+  { id: 'lasmeninas', alt: 'Velázquez Las Meninas', article: 'Las Meninas', altFraga: 'Målning av en flicka i vit klänning omgiven av hovfolk i ett rum' },
+  { id: 'tredjemaj', alt: 'Goyas Den tredje maj 1808', article: 'The Third of May 1808', altFraga: 'Målning av en man i vit skjorta med utsträckta armar framför en exekutionspluton' },
+  { id: 'frihetenledarfolket', alt: 'Delacroix Friheten leder folket', article: 'Liberty Leading the People', altFraga: 'Målning av en kvinna med flagga som leder människor över en barrikad' },
+  { id: 'frukostidetgrona', alt: 'Manets Frukost i det gröna', article: 'Le Déjeuner sur l\'herbe', altFraga: 'Målning av två klädda män och en naken kvinna på en gräsmatta' },
+  { id: 'solrosor', alt: 'Van Goghs Solrosor', article: 'Sunflowers (Van Gogh series)', altFraga: 'Målning av gula blommor i en vas mot gul bakgrund' },
+  { id: 'kyssenklimt', alt: 'Klimts Kyssen', article: 'The Kiss (Klimt)', altFraga: 'Målning av ett par i guldmönstrade dräkter som omfamnar varandra' },
 
 
   // ---------------------------------------------- mat, djur, platser, ting
