@@ -296,8 +296,15 @@ body::before {
   min-height: 120px;
 }
 
-.city-hero.no-photo .city-hero-img,
-.city-hero.no-photo .photo-credit {
+.city-hero.no-photo .city-hero-img {
+  display: none;
+}
+
+/* Bylinen ligger i .hero-foot, som är syskon till hjälten och inte barn till
+   den - därför biter inte en vanlig ättlingsregel här. Utan foto ska den bort:
+   en fotokredit utan foto att kreditera är bara förvirrande. Det märks oftare
+   nu när fotona hämtas när staden visas i stället för i förväg. */
+.city-hero.no-photo ~ .hero-foot .photo-credit {
   display: none;
 }
 
