@@ -235,11 +235,7 @@ try {
    * `avoid` för träffmomentet, eftersom de spelen blir meningslösa utan.
    */
   const MINIGAME_KINDS = {
-    sortering: { needed: 2 },
-    sekvens: { needed: 3 },
     precision: { needed: 1 },
-    vaxel: { needed: 3 },
-    traffa: { needed: 2 },
     balans: { needed: 1 },
     takt: { needed: 2 },
     trick: { needed: 4 },
@@ -321,19 +317,14 @@ try {
     const UNDANTAG = {
       skateboardinstruktor: 'trick',
       mykolog: 'avgor',
-      servitor: 'vaxel',
       taikotrummis: 'takt',
-      ostronplockare: 'traffa',
-      kalligrafiassistent: 'sekvens',
     };
     if (!mg) {
       if (job.wageClass >= 2) problems.push(`jobb ${job.id} (klass ${job.wageClass}) saknar minispel`);
     } else {
       if (job.wageClass === 1 && UNDANTAG[job.id] !== mg.kind)
         problems.push(`jobb ${job.id} är klass 1 och ska inte ha något minispel`);
-      const fotoSortering =
-        mg.kind === 'sortering' && (mg.pool ?? []).flat().every((x) => typeof x === 'object');
-      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || mg.kind === 'lagval' || mg.kind === 'tidslinje' || fotoSortering || UNDANTAG[job.id] === mg.kind;
+      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || mg.kind === 'lagval' || mg.kind === 'tidslinje' || UNDANTAG[job.id] === mg.kind;
       if (job.wageClass >= 2 && !okej)
         problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
       /*

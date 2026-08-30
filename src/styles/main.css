@@ -1383,42 +1383,8 @@ img.no-photo {
 }
 
 /* Löpande band */
-.mg-belt {
-  position: relative;
-  height: 78px;
-  border-radius: 12px;
-  overflow: hidden;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(29, 43, 52, 0.1) 0 18px,
-      rgba(29, 43, 52, 0.04) 18px 36px
-    ),
-    var(--paper-dim);
-  border: 2px solid var(--line);
-  display: flex;
-  align-items: center;
-}
-
-.mg-item {
-  position: absolute;
-  left: 0;
-  padding: 10px 16px;
-  border-radius: 10px;
-  background: #fff;
-  border: 2px solid var(--ink-soft);
-  font-weight: 700;
-  font-size: 0.98rem;
-  white-space: nowrap;
-  box-shadow: 0 3px 8px rgba(4, 16, 26, 0.18);
-}
-
 /* Bandets hastighet styrs av samma tid som rundans nedräkning, så att
    föremålet når slutet av bandet precis när tiden går ut. */
-.mg-item-moving {
-  animation: belt-slide var(--belt-time, 2.4s) linear forwards;
-}
-
 @keyframes belt-slide {
   from {
     left: -30%;
@@ -1426,22 +1392,6 @@ img.no-photo {
   to {
     left: 100%;
   }
-}
-
-.mg-item-right {
-  left: 50%;
-  transform: translateX(-50%);
-  border-color: var(--palm);
-  background: rgba(71, 163, 130, 0.2);
-  color: #1f5a46;
-}
-
-.mg-item-wrong {
-  left: 50%;
-  transform: translateX(-50%);
-  border-color: var(--stamp);
-  background: rgba(200, 69, 47, 0.16);
-  color: var(--stamp);
 }
 
 /* Tidsmätare */
@@ -1478,42 +1428,6 @@ img.no-photo {
 }
 
 /* Minnessekvens */
-.mg-pads {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.mg-pad {
-  appearance: none;
-  cursor: pointer;
-  min-height: 76px;
-  border-radius: 14px;
-  border: 3px solid var(--line);
-  background: var(--paper-dim);
-  color: var(--ink);
-  font-family: var(--font);
-  font-size: 0.95rem;
-  font-weight: 800;
-  transition: background 0.1s ease, transform 0.1s ease, border-color 0.1s ease;
-}
-
-.mg-pad-on {
-  background: var(--sun);
-  border-color: var(--sun-dark);
-  transform: scale(1.03);
-}
-
-.mg-pad-right {
-  background: rgba(71, 163, 130, 0.4);
-  border-color: var(--palm);
-}
-
-.mg-pad-wrong {
-  background: rgba(200, 69, 47, 0.35);
-  border-color: var(--stamp);
-}
-
 /* Precisionsmätare */
 .mg-gauge {
   position: relative;
@@ -1565,10 +1479,6 @@ img.no-photo {
 }
 
 @media (min-width: 700px) {
-  .mg-pads {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
   .mg-stop {
     width: auto;
     min-width: 240px;
@@ -2865,98 +2775,7 @@ img.no-photo {
 
 /* ------------------------------------------------------------------ växel */
 
-.mg-till {
-  border-radius: 12px;
-  border: 2px solid var(--line);
-  background: #fff;
-  padding: 10px 14px;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-
-.mg-till-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 5px 0;
-  font-size: 0.95rem;
-}
-
-.mg-till-price {
-  font-weight: 700;
-}
-
-.mg-till-sum {
-  border-top: 2px solid var(--line);
-  margin-top: 4px;
-  padding-top: 8px;
-  font-weight: 800;
-}
-
-.mg-till-paid {
-  color: var(--sun-dark);
-  font-weight: 800;
-}
-
-.mg-change-options {
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-}
-
-.mg-change-btn {
-  font-variant-numeric: tabular-nums;
-  font-weight: 800;
-}
-
-.mg-change-right {
-  border-color: var(--palm);
-  background: rgba(71, 163, 130, 0.22);
-  color: #1f5a46;
-}
-
-.mg-change-wrong {
-  border-color: var(--stamp);
-  background: rgba(200, 69, 47, 0.16);
-  color: var(--stamp);
-}
-
 /* ----------------------------------------------------------------- träffa */
-
-.mg-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.mg-slot {
-  min-height: 84px;
-  border-radius: 12px;
-  border: 2px dashed var(--line);
-  background: rgba(29, 43, 52, 0.06);
-  color: var(--ink);
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 0.86rem;
-  line-height: 1.25;
-  padding: 8px;
-  cursor: pointer;
-  transition: transform 0.09s ease, background 0.12s ease;
-}
-
-.mg-slot-up {
-  border-style: solid;
-  background: #fff;
-  animation: mg-pop 0.16s ease;
-}
-
-.mg-slot-taken {
-  background: rgba(71, 163, 130, 0.25);
-  transform: scale(0.94);
-}
-
-.mg-slot-oops {
-  background: rgba(200, 69, 47, 0.22);
-  transform: scale(0.94);
-}
 
 @keyframes mg-pop {
   from {
@@ -3355,10 +3174,6 @@ img.no-photo {
 }
 
 @media (max-width: 520px) {
-  .mg-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .stamp-grid {
     grid-template-columns: 1fr;
   }
@@ -3598,11 +3413,6 @@ img.no-photo {
     scroll-behavior: auto !important;
   }
 
-  .mg-item-moving {
-    animation: none;
-    left: 50%;
-    transform: translateX(-50%);
-  }
 }
 
 /* ================================================================= omgång 3
@@ -7472,40 +7282,6 @@ body.sheet-oppen {
   .globe-vehicle > g:last-child {
     animation: none;
   }
-}
-
-/* Foton på sorteringsbandet: bilden utan namn, namnet när man svarat. */
-.mg-item-foto {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 4px;
-}
-
-.mg-item-foto img {
-  display: block;
-  width: 96px;
-  height: 72px;
-  object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(4, 16, 26, 0.35);
-}
-
-.mg-item-namn {
-  font-size: 0.72rem;
-  font-weight: 700;
-  min-height: 1em;
-}
-
-/* Bandet blir högre när det bär foton, så att bilden syns hel. */
-.mg-belt:has(.mg-item-foto) {
-  height: 112px;
-}
-
-.mg-item.mg-item-foto {
-  top: 50%;
-  margin-top: -46px;
 }
 
 /* Startknappen ligger kvar i underkant medan man rullar i listan. */

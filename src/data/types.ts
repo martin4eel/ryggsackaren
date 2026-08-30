@@ -115,16 +115,8 @@ export type MinigameKind =
   | 'quiz'
   /** Ett lagmärke i mitten, fyra spelare ovanför: vem hör hemma i laget? */
   | 'lagval'
-  /** Sortera föremål som rullar förbi på ett band till rätt korg */
-  | 'sortering'
-  /** Upprepa en sekvens ur minnet */
-  | 'sekvens'
   /** Stoppa en mätare inom rätt zon */
   | 'precision'
-  /** Räkna ihop rätt växel i huvudet */
-  | 'vaxel'
-  /** Träffa det som ska plockas och låt resten vara */
-  | 'traffa'
   /** Kunden säger vad hen behöver; peka ut rätt foto av fyra */
   | 'bildval'
   /** Håll något i balans medan det driver åt sidan */
@@ -136,13 +128,6 @@ export type MinigameKind =
   /** Häng fyra verk i tidsordning, äldst först */
   | 'tidslinje';
 
-/**
- * Ett föremål på sorteringsbandet: en text, eller ett foto med namn. Med
- * foton blir sorteringen en bildfråga - man ser fisken och ska veta vilket
- * nät den hör i, i stället för att läsa ordet "torsk".
- */
-export type PoolItem = string | { bild: string; namn: string };
-
 export interface Minigame {
   kind: MinigameKind;
   /** Rubrik på uppgiften, t.ex. "Sortera fångsten" */
@@ -152,11 +137,7 @@ export interface Minigame {
   /**
    * Etiketter för det som ska hanteras. Betydelsen beror på typen:
    *
-   * - `sortering`: korgarnas namn, med `pool` som innehåll
-   * - `sekvens`: plattorna som blinkar
    * - `precision`: namnet på det som mäts in (första posten)
-   * - `vaxel`: varorna i kassan
-   * - `traffa`: det som ska plockas, med `avoid` som det som ska undvikas
    * - `balans`: namnet på det som ska hållas i balans (första posten)
    * - `takt`: slagen som ska träffas i tur och ordning
    * - `trick`: tricken i tur och ordning, lättast först
@@ -165,20 +146,6 @@ export interface Minigame {
   items: string[];
   /** Enhet eller måttord som visas i precisionsspelet */
   unit?: string;
-  /**
-   * Bara för `sortering`: konkreta föremål per korg, i samma ordning som
-   * `items`. Utan det här blir sorteringen meningslös, eftersom föremålet
-   * annars bara är korgens eget namn.
-   */
-  pool?: PoolItem[][];
-  /** Bara för `traffa`: sådant som inte får träffas. */
-  avoid?: string[];
-  /**
-   * Bara för `vaxel`: riktpris per vara i basenheter, i samma ordning som
-   * `items`. Utan det slumpas priset brett, och en espresso kunde kosta lika
-   * mycket som en middag. Priset varierar en femtedel kring riktpriset.
-   */
-  priser?: number[];
   /**
    * Bara för `tidslinje`: verken som ska hängas i tidsordning. `ar` styr
    * ordningen och `artext` skrivs ut i facit när året inte är exakt - ett

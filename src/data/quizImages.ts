@@ -719,6 +719,13 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'regibok', alt: 'En uppslagen bok med handskrivna anteckningar', article: 'Prompt book' },
   { id: 'dramaten', alt: 'En vit teaterbyggnad med guldfigurer på taket', article: 'Royal Dramatic Theatre' },
   { id: 'strindberg', alt: 'En man med bakåtstruket hår och mustasch', article: 'August Strindberg' },
+  // Dramatiker till teaterinspicientens minispel: regissören säger pjäsen och
+  // man pekar ut den som skrev den.
+  { id: 'shakespeare', alt: 'Ett porträtt av en man med örhänge och vit krage', article: 'William Shakespeare', altFraga: 'Målat porträtt av en man med kalufs, örhänge och vit krage' },
+  { id: 'moliere', alt: 'Ett porträtt av en man med lockig peruk', article: 'Molière', altFraga: 'Målat porträtt av en man med långt lockigt hår och krage' },
+  { id: 'brecht', alt: 'En man med kortklippt hår och glasögon, svartvitt foto', article: 'Bertolt Brecht' },
+  { id: 'lorca', alt: 'En ung man i kostym, svartvitt foto', article: 'Federico García Lorca' },
+  { id: 'aischylos', alt: 'En marmorbyst av en man med kort skägg', article: 'Aeschylus' },
   { id: 'akihabara', alt: 'En gata med färgglada skyltar i Tokyo', article: 'Akihabara' },
   { id: 'storyboard', alt: 'En handritad storyboardsida med fyra rutor och anteckningar', file: 'Storyboard page.jpg' },
   { id: 'miyazaki', alt: 'En äldre man med vitt skägg och glasögon', article: 'Hayao Miyazaki' },
