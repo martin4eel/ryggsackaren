@@ -236,7 +236,6 @@ try {
    */
   const MINIGAME_KINDS = {
     sortering: { needed: 2 },
-    instrument: { needed: 3 },
     sekvens: { needed: 3 },
     precision: { needed: 1 },
     vaxel: { needed: 3 },
@@ -322,7 +321,6 @@ try {
     const UNDANTAG = {
       skateboardinstruktor: 'trick',
       mykolog: 'avgor',
-      sparvagnsforare: 'instrument',
       servitor: 'vaxel',
       taikotrummis: 'takt',
       ostronplockare: 'traffa',

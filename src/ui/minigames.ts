@@ -81,9 +81,6 @@ export function renderMinigame(
     case 'sortering':
       startSorting(host, game, ctx, done);
       break;
-    case 'instrument':
-      startInstruments(host, game, ctx, done);
-      break;
     case 'sekvens':
       startSequence(host, game, ctx, done);
       break;
@@ -451,145 +448,6 @@ function startSorting(
   nextRound();
 }
 
-// -------------------------------------------------------------- instrument
-
-/**
- * Arbetsledaren ropar ut flera moment på en gång och spelaren utför dem i
- * ordning innan tiden går ut. Kön växer allteftersom, så det räcker inte att
- * reagera - man måste hålla ordningen i huvudet.
- */
-function startInstruments(
-  host: HTMLElement,
-  game: Minigame,
-  ctx: MinigameContext,
-  onDone: Done
-): void {
-  const ROUNDS = 6;
-  const items = game.items;
-  let round = 0;
-  let cleared = 0;
-  /** Utförda respektive begärda moment, för delpoängen. */
-  let stepsDone = 0;
-  let stepsTotal = 0;
-  let queue: number[] = [];
-  let at = 0;
-  let running = false;
-
-  const status = makeStatus();
-  const order = el('div', { class: 'mg-order' });
-  const feedback = makeFeedback();
-  const timer = makeTimer();
-  const panel = el('div', { class: 'mg-panel' });
-  host.append(status.node, order, timer.node, feedback.node, panel);
-
-  /** Om ordern visas i klartext (under genomgången) eller är dold. */
-  let visible = true;
-
-  /**
-   * Ordern visas bara under genomgången. Sedan döljs den, och man utför den
-   * ur minnet - annars är momentet att läsa en lista och trycka på knappar.
-   * De utförda stegen bockas av så att man ser var man är.
-   */
-  const drawOrder = () => {
-    clear(order);
-    queue.forEach((idx, i) => {
-      const done = i < at;
-      const now = i === at;
-      const chip = el(
-        'span',
-        {
-          class: `mg-chip ${done ? 'mg-chip-done' : now ? 'mg-chip-now' : ''} ${
-            visible ? '' : 'mg-chip-dold'
-          }`,
-        },
-        visible || done ? `${i + 1}. ${items[idx]}` : `${i + 1}. ?`
-      );
-      order.append(chip);
-    });
-  };
-
-  const nextRound = () => {
-    if (round >= ROUNDS) {
-      // Delpoäng: varje utfört moment räknas, även i en följd som bröts.
-      // Hela följder väger tyngre, så det lönar sig fortfarande att gå i mål.
-      const partial = stepsTotal > 0 ? stepsDone / stepsTotal : 0;
-      const whole = cleared / ROUNDS;
-      onDone({
-        score: whole * 0.6 + partial * 0.4,
-        summary: `Du klarade ${cleared} av ${ROUNDS} orderföljder och ${stepsDone} av ${stepsTotal} enskilda moment.`,
-        perfect: cleared === ROUNDS,
-      });
-      return;
-    }
-    // Två moment i början, upp till fyra på slutet.
-    // Två moment i början, upp till fem på slutet.
-    const length = Math.min(5, 2 + Math.floor(round / 2));
-    queue = Array.from({ length }, () => randInt(items.length));
-    stepsTotal += length;
-    at = 0;
-    running = false;
-    visible = true;
-    status.set(`Order ${round + 1}/${ROUNDS}`, `${cleared} klarade`);
-    feedback.say('Memorera ordern.', 'neutral');
-    drawOrder();
-    clear(panel);
-
-    // Genomgången: en stund per steg, sedan försvinner texten.
-    const study = (900 + length * 650) * ctx.slack;
-    after(study, () => {
-      if (round >= ROUNDS) return;
-      visible = false;
-      running = true;
-      drawOrder();
-      feedback.say('Utför momenten ur minnet, uppifrån och ner.', 'neutral');
-      const total = (1500 + length * 1100 - round * 120) * ctx.slack;
-      timer.run(total, () => fail('Tiden gick ut.'));
-      items.forEach((name, i) => {
-        panel.append(
-          button(name, () => press(i), {
-            class: 'mg-knob',
-            'data-sound': 'av',
-          })
-        );
-      });
-    });
-  };
-
-  const fail = (why: string) => {
-    if (!running) return;
-    running = false;
-    timer.halt();
-    playSound('fel');
-    feedback.say(`${why} Rätt var ${items[queue[at]!]}.`, 'fel');
-    visible = true;
-    drawOrder();
-    round += 1;
-    after(1300, nextRound);
-  };
-
-  const press = (i: number) => {
-    if (!running) return;
-    if (i !== queue[at]) {
-      fail('Fel reglage.');
-      return;
-    }
-    playSound('blipp');
-    at += 1;
-    stepsDone += 1;
-    drawOrder();
-    if (at < queue.length) return;
-    running = false;
-    timer.halt();
-    cleared += 1;
-    playCombo(cleared);
-    feedback.say('Hela följden rätt!', 'topp');
-    round += 1;
-    after(650, nextRound);
-  };
-
-  nextRound();
-}
-
 // ----------------------------------------------------------------- sekvens
 
 /**
@@ -664,9 +522,15 @@ function startSequence(
       });
       return;
     }
-    // Längden växer: 2, 3, 4 ... och varje nivå ger ett extra försök.
-    sequence = Array.from({ length: level + 2 }, () => randInt(items.length));
-    lives = 1;
+    /*
+     * Längden växer 2, 3, 4, 5 och stannar där. En sjätte platta i följd av
+     * ord man nyss lärt sig är en annan sorts uppgift än de fem första, och
+     * momentet är tänkt att pröva om man följt med, inte hur långt minnet
+     * räcker. Två försök per nivå av samma skäl: ett feltryck ska kosta en
+     * omspelning, inte hela sekvensen.
+     */
+    sequence = Array.from({ length: Math.min(5, level + 2) }, () => randInt(items.length));
+    lives = 2;
     showLives();
     void playSequence();
   };

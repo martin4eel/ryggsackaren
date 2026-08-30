@@ -117,8 +117,6 @@ export type MinigameKind =
   | 'lagval'
   /** Sortera föremål som rullar förbi på ett band till rätt korg */
   | 'sortering'
-  /** Utför arbetsledarens order i rätt ordning innan tiden går ut */
-  | 'instrument'
   /** Upprepa en sekvens ur minnet */
   | 'sekvens'
   /** Stoppa en mätare inom rätt zon */
@@ -155,7 +153,6 @@ export interface Minigame {
    * Etiketter för det som ska hanteras. Betydelsen beror på typen:
    *
    * - `sortering`: korgarnas namn, med `pool` som innehåll
-   * - `instrument`: reglagen i panelen
    * - `sekvens`: plattorna som blinkar
    * - `precision`: namnet på det som mäts in (första posten)
    * - `vaxel`: varorna i kassan
