@@ -463,6 +463,10 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'stilleben', alt: 'En målning med frukt, grönsaker och vilt', article: 'Still life' },
   { id: 'carllarsson', alt: 'En målning av en julaftonsfest i ett hem', file: 'Julaftonen av Carl Larsson 1904.jpg' },
   { id: 'dali', alt: 'En man med uppvriden mustasch', article: 'Salvador Dalí' },
+  // Två målare till som porträtt, så att en fråga om vem som gjort något kan
+  // ha fyra personer att välja mellan i stället för tre personer och en tavla.
+  { id: 'monet', alt: 'En äldre man med yvigt vitt skägg', article: 'Claude Monet' },
+  { id: 'munch', alt: 'En man i kostym med kort mustasch, svartvitt foto', article: 'Edvard Munch' },
   { id: 'nilen', alt: 'Segelbåt med stort trekantigt segel på en lugn bred flod i solnedgång', file: 'Felucca on the River Nile - Luxor - panoramio.jpg' },
   { id: 'assuandammen', alt: 'Stor sluttande dammvall i sten med kraftverk och flod nedanför', file: '02010 05878 Aswan High Dam.jpg' },
   { id: 'blanilenfallen', alt: 'Ett brett vattenfall i grönt landskap', article: 'Blue Nile Falls' },
