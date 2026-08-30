@@ -3772,8 +3772,15 @@ export class App {
      */
     if (q0.reglage) {
       const r = q0.reglage;
+      /*
+       * Ett årtal löper alltid i läsriktningen, som en tidslinje. Femtiosju av
+       * spelets sextionio årtalsfrågor sade redan liggande, tolv hade glömt
+       * det och fick en lodrät skala - och en lodrät skala är dessutom bara
+       * hälften så lång på en telefon, vilket gör den svår att pricka.
+       */
+      const liggande = r.liggande ?? r.artal ?? false;
       const skala = el('div', {
-        class: `reglage ${r.liggande ? 'reglage-liggande' : 'reglage-staende'}`,
+        class: `reglage ${liggande ? 'reglage-liggande' : 'reglage-staende'}`,
       });
       const startvarde = answered?.reglage ?? Math.round((r.min + r.max) / 2 / r.steg) * r.steg;
       /**
@@ -3785,6 +3792,23 @@ export class App {
           r.enhet ? ` ${r.enhet}` : ''
         }`;
       const visning = el('div', { class: 'reglage-varde' }, skriv(startvarde));
+      /**
+       * Knapparna som nyper till ett steg i taget.
+       *
+       * Reglaget ensamt räckte inte på en telefon. En årtalsfråga som spänner
+       * över fyra sekler med fem års marginal ger ett målfönster på nio
+       * bildpunkter, alltså smalare än ett finger, och tjugotre av spelets
+       * nittiofyra reglagefrågor låg under tjugo. Man drar sig nära och nyper
+       * sedan till exakt, i stället för att pricka.
+       */
+      const nyp = (riktning: number) => {
+        const nytt = Math.min(r.max, Math.max(r.min, varde + riktning * r.steg));
+        if (nytt === varde) return;
+        varde = nytt;
+        input.value = String(varde);
+        visning.textContent = skriv(varde);
+        playSound('valj');
+      };
       const input = el('input', {
         class: 'reglage-input',
         type: 'range',
@@ -3794,13 +3818,30 @@ export class App {
         value: String(startvarde),
         'aria-label': q0.q,
         disabled: answered ? true : undefined,
-        ...(r.liggande ? {} : { orient: 'vertical' }),
+        ...(liggande ? {} : { orient: 'vertical' }),
       }) as HTMLInputElement;
       let varde = startvarde;
       input.addEventListener('input', () => {
         varde = Number(input.value);
         visning.textContent = skriv(varde);
       });
+      const styr = el(
+        'div',
+        { class: 'reglage-styr' },
+        button('−', () => nyp(-1), {
+          class: 'btn btn-ghost reglage-nyp',
+          'aria-label': `Minska med ${r.steg}`,
+          disabled: answered ? true : undefined,
+          'data-sound': 'av',
+        }),
+        visning,
+        button('+', () => nyp(1), {
+          class: 'btn btn-ghost reglage-nyp',
+          'aria-label': `Öka med ${r.steg}`,
+          disabled: answered ? true : undefined,
+          'data-sound': 'av',
+        })
+      );
       const spann = el('div', { class: 'reglage-spann' },
         el('span', {}, r.hogst ?? skriv(r.max)),
         el('span', {}, r.lagst ?? skriv(r.min))
@@ -3812,14 +3853,28 @@ export class App {
         bana.append(
           el('span', {
             class: 'reglage-ratt',
-            style: r.liggande ? `left: ${andel.toFixed(1)}%` : `bottom: ${andel.toFixed(1)}%`,
+            style: liggande ? `left: ${andel.toFixed(1)}%` : `bottom: ${andel.toFixed(1)}%`,
             title: `Rätt svar: ${skriv(r.svar)}`,
           }, skriv(r.svar))
         );
       }
-      skala.append(visning, bana);
+      skala.append(styr, bana);
       panel.append(skala);
       if (!answered) {
+        /*
+         * Marginalen sägs ut. Utan den satt spelaren och försökte pricka ett
+         * exakt årtal fast det räckte att komma inom tjugofem, vilket gjorde
+         * en generös fråga till en omöjlig.
+         */
+        panel.append(
+          el(
+            'p',
+            { class: 'muted reglage-marginal' },
+            r.artal
+              ? `Inom ${r.tolerans} år räknas som rätt.`
+              : `Inom ${skriv(r.tolerans)} räknas som rätt.`
+          )
+        );
         panel.append(
           button('OK', () => {
             if (this.quiz?.answered) return;

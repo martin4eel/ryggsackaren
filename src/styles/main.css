@@ -5735,6 +5735,39 @@ body.sheet-oppen {
   text-align: center;
 }
 
+/*
+ * Värdet med en knapp på var sida. Reglaget ger det grova, knapparna det
+ * exakta: ett målfönster på nio bildpunkter går inte att pricka med ett
+ * finger, men det går att nypa sig fram till.
+ */
+.reglage-styr {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.reglage-nyp {
+  flex: 0 0 auto;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 999px;
+}
+
+.reglage-nyp:disabled {
+  opacity: 0.35;
+}
+
+.reglage-marginal {
+  margin: -6px 0 12px;
+  font-size: 0.85rem;
+}
+
 .reglage-bana {
   flex: 1 1 auto;
   display: flex;
@@ -5755,6 +5788,10 @@ body.sheet-oppen {
 .reglage-liggande {
   flex-direction: column;
   align-items: stretch;
+}
+
+.reglage-liggande .reglage-styr {
+  justify-content: space-between;
 }
 
 .reglage-liggande .reglage-bana {
