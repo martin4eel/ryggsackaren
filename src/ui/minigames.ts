@@ -856,8 +856,19 @@ function startChange(
   const options = el('div', { class: 'mg-buttons mg-change-options' });
   host.append(status.node, till, timer.node, feedback.node, options);
 
-  /** Priser i basenheter, alltid jämna tiotal så att huvudräkning går. */
-  const priceFor = (): number => 20 + randInt(18) * 10;
+  /**
+   * Priset på en vara, i basenheter och alltid jämna tiotal så att
+   * huvudräkningen går. Utan `priser` slumpas det i ett brett spann, och då
+   * kunde notan ta hundranittio kronor för en espresso. Med ett riktpris per
+   * vara varierar priset en femtedel uppåt eller nedåt kring det, vilket
+   * räcker för att två kvitton inte ska se likadana ut.
+   */
+  const priceFor = (index: number): number => {
+    const bas = game.priser?.[index];
+    if (bas === undefined) return 20 + randInt(18) * 10;
+    const spann = Math.max(1, Math.round((bas * 0.2) / 10));
+    return Math.max(10, Math.round(bas / 10) * 10 + (randInt(spann * 2 + 1) - spann) * 10);
+  };
 
   const nextRound = () => {
     if (round >= ROUNDS) {
@@ -870,8 +881,10 @@ function startChange(
     }
     answered = false;
     const count = round < 2 ? 2 : 3;
-    const goods = shuffled(game.items).slice(0, count);
-    const prices = goods.map(priceFor);
+    // Index blandas, inte namnen, så att varje vara behåller sitt riktpris.
+    const valda = shuffled(game.items.map((_, i) => i)).slice(0, count);
+    const goods = valda.map((i) => game.items[i]!);
+    const prices = valda.map(priceFor);
     const total = prices.reduce((a, b) => a + b, 0);
     // Sedeln avrundas uppåt till närmaste hundralapp, minst hundra över noll.
     const bill = Math.max(100, Math.ceil((total + 1) / 100) * 100);
@@ -1015,7 +1028,13 @@ function startCatch(
     slot.label = list[randInt(list.length)] ?? '';
     slot.good = good;
     slot.node.textContent = slot.label;
-    slot.node.className = `mg-slot mg-slot-up ${good ? 'mg-slot-good' : 'mg-slot-bad'}`;
+    /*
+     * Rutan får INTE avslöja om den ska plockas eller lämnas. Den gröna
+     * respektive orangea ramen gjorde momentet läsbart utan att läsa: man
+     * tryckte på de gröna och lät de andra vara, och då prövas ingenting.
+     * Skillnaden syns först efter trycket, som beröm eller tillrättavisning.
+     */
+    slot.node.className = 'mg-slot mg-slot-up';
     slot.until = performance.now() + (1500 + Math.random() * 900) * ctx.slack;
   };
 

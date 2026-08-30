@@ -3036,14 +3036,6 @@ img.no-photo {
   animation: mg-pop 0.16s ease;
 }
 
-.mg-slot-good {
-  border-color: var(--palm);
-}
-
-.mg-slot-bad {
-  border-color: var(--sun-dark);
-}
-
 .mg-slot-taken {
   background: rgba(71, 163, 130, 0.25);
   transform: scale(0.94);

@@ -311,7 +311,22 @@ try {
      * med några namngivna undantag som är bra på egna meriter.
      */
     const mg = job.minigame;
-    const UNDANTAG = { skateboardinstruktor: 'trick', mykolog: 'avgor' };
+    /*
+     * Moment som inte bygger på foton men som är bättre än ett bildval just
+     * i det här yrket. Fram till nu var bildvalet 56 av 65 minispel, alltså
+     * samma avslutning på nästan varje skift oavsett jobb. De här sju byter
+     * ut verbet i stället för bara innehållet: du räknar, minns, håller takt
+     * eller sorterar, och det är fortfarande yrkets kunskap som prövas.
+     */
+    const UNDANTAG = {
+      skateboardinstruktor: 'trick',
+      mykolog: 'avgor',
+      sparvagnsforare: 'instrument',
+      servitor: 'vaxel',
+      taikotrummis: 'takt',
+      ostronplockare: 'traffa',
+      kalligrafiassistent: 'sekvens',
+    };
     if (!mg) {
       if (job.wageClass >= 2) problems.push(`jobb ${job.id} (klass ${job.wageClass}) saknar minispel`);
     } else {

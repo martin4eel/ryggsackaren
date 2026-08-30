@@ -174,6 +174,12 @@ export interface Minigame {
   /** Bara för `traffa`: sådant som inte får träffas. */
   avoid?: string[];
   /**
+   * Bara för `vaxel`: riktpris per vara i basenheter, i samma ordning som
+   * `items`. Utan det slumpas priset brett, och en espresso kunde kosta lika
+   * mycket som en middag. Priset varierar en femtedel kring riktpriset.
+   */
+  priser?: number[];
+  /**
    * Bara för `trick`: en rad per trick om vad fötterna gör, i samma ordning
    * som `items`. Raden står framme medan man gör tricket, så den som inte
    * kan skillnaden på en kickflip och en heelflip får veta den här - men
