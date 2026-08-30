@@ -9,7 +9,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Sevärdheten på bilden är ett museum byggt kring ett enda örlogsskepp. Vad heter det?', a: ['Vasamuseet', 'Skansen', 'Nationalmuseum', 'Moderna museet'], bild: 'stad:stockholm', d: 1 },
     { q: 'Vilket år sjönk regalskeppet på bilden?', bild: 'vasaskeppet', a: ['1628'], reglage: { artal: true, min: 1500, max: 1800, steg: 1, svar: 1628, tolerans: 8, liggande: true, lagst: '1500', hogst: '1800' }, d: 1 },
     {
-      q: 'Vad heter stadsdelen på bilden, Stockholms gamla stadskärna med medeltida gränder?', bild: 'gamlastan',
+      q: 'Vad heter stadsdelen på bilden, Stockholms medeltida stadskärna med trånga gränder?', bild: 'gamlastan',
       a: ['Gamla stan', 'Södermalm', 'Östermalm', 'Kungsholmen'],
       d: 1,
     },
@@ -115,7 +115,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
     { q: 'Vilket år blev Skåne svenskt genom freden i Roskilde?', bild: 'roskildedomkyrka', a: ['1658'], reglage: { artal: true, min: 1500, max: 1800, steg: 1, svar: 1658, tolerans: 8, liggande: true, lagst: '1500', hogst: '1800' }, d: 2, info: 'Karl X Gustav hade tågat med hela hären över isen på Bälten, vilket Danmark inte räknat med.' },
     { q: 'Vad kallas kallbadhuset på bilden, Ribersborgs kallbadhus, i folkmun?', bild: 'ribersborg', a: ['Kallis', 'Ribban', 'Doppet', 'Pålis'], d: 1, info: 'Badhuset har stått på pålar i Öresund sedan 1898: bastu först, sedan rakt ner i sundet, året runt.' },
     { q: 'Hur många gånger har Malmö stått värd för Eurovision Song Contest?', bild: 'malmoarena', a: ['Tre', 'En', 'Två', 'Fem'], d: 1, info: 'Åren var 1992, 2013 och 2024. Finalen 2013 vanns av grannlandet Danmark.' },
-    { q: 'Vad heter den skånska kakan på bilden, som gräddas på ett roterande spett över öppen eld?', bild: 'spettekaka', a: ['Spettekaka', 'Kransekaka', 'Kroppkaka', 'Äggakaka'], d: 1, info: 'Den består i stort sett av ägg, socker och potatismjöl och är skyddad som skånsk specialitet inom EU.' },
+    { q: 'Vad heter den skånska kakan på bilden, som byggs upp i lager över öppen eld till ett högt torn?', bild: 'spettekaka', a: ['Spettekaka', 'Kransekaka', 'Kroppkaka', 'Äggakaka'], d: 1, info: 'Den består i stort sett av ägg, socker och potatismjöl och är skyddad som skånsk specialitet inom EU.' },
     { q: 'Vad heter parken på bilden, som anlades till Baltiska utställningen 1914?', bild: 'pildammsparken', a: ['Pildammsparken', 'Kungsparken', 'Slottsparken', 'Folkets park'], d: 2, info: 'Sverige, Danmark, Tyskland och Ryssland ställde ut sida vid sida. Några månader senare var de två sistnämnda i krig med varandra.' },
     { q: 'Kranen på bilden var länge stadens symbol. Vilket varv i Malmö hörde den till fram till 1980-talet?', bild: 'kockumskranen', a: ['Kockums', 'Götaverken', 'Eriksberg', 'Öresundsvarvet'], d: 1, info: 'Kranen såldes 2002 till ett varv i Sydkorea för en symbolisk dollar. Frakten kostade betydligt mer.' },
     { q: 'Vem är mannen på bilden, poet född i Malmö 1898, ledamot av Svenska Akademien och författare till Kärlek i tjugonde seklet?', bild: 'hjalmargullberg', a: ['Hjalmar Gullberg', 'Gunnar Ekelöf', 'Nils Ferlin', 'Karin Boye'], d: 2, info: 'Gullberg var också chef för Radioteatern i Sveriges Radio i fjorton år.' },
@@ -158,7 +158,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       info: 'Göteborg har Nordens största spårvägsnät.',
     },
     {
-      q: 'Vad kallas paradgatan på bilden, som egentligen heter Kungsportsavenyen?', bild: 'avenyn',
+      q: 'Vad kallas paradgatan på bilden, som går från Kungsportsplatsen upp till Götaplatsen?', bild: 'avenyn',
       a: ['Avenyn', 'Vasagatan', 'Linnégatan', 'Övre Husargatan'],
       d: 1,
     },
@@ -756,7 +756,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       d: 1,
     },
     {
-      q: 'Bilden är tagen i Nairobi National Park. Vad är unikt med Nairobi bland världens storstäder?', bild: 'nairobinationalpark',
+      q: 'Bilden är tagen några kilometer från Nairobis centrum. Vad är unikt med Nairobi bland världens storstäder?', bild: 'nairobinationalpark',
       a: [
         'En nationalpark ligger inom stadsgränsen',
         'Staden har inga bilar',
@@ -782,7 +782,7 @@ export const CITY_QUESTIONS: Record<string, Question[]> = {
       info: '5 895 meter över havet, i Tanzania.',
     },
     {
-      q: 'Vilken stor geologisk formation, som på bilden, går genom Östafrika?', bild: 'riftvalley',
+      q: 'Vilken stor geologisk formation, som på bilden, går genom Kenya från norr till söder?', bild: 'riftvalley',
       a: ['Östafrikanska riftdalen', 'Mariannegraven', 'Grand Canyon', 'Atlasklyftan'],
       d: 2,
     },
