@@ -564,9 +564,9 @@ try {
     }
   }
   /**
-   * Service workern cachar bilderna ur quiz/manifest.json, som hämtskriptet
-   * skriver. Saknas en bild där får den som sitter på ett flyg en bruten
-   * bildikon mitt i ett skift, och det märks aldrig under utveckling.
+   * quiz/manifest.json är hämtskriptets förteckning över vilka foton som
+   * ligger i public/quiz/. Saknas en bild där har hämtningen inte gått hela
+   * vägen, och filen på disken kan vara en kvarleva från ett tidigare bygge.
    */
   const manifestFil = join(ROOT, 'public', 'quiz', 'manifest.json');
   const manifest = new Set(
