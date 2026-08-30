@@ -13,63 +13,26 @@
  * megabyte stadsfoton en gång till bara för att en frågetext rättats.
  */
 
-const SKAL = 'upptackaren-skal-v96';
+const SKAL = 'upptackaren-skal-v97';
 const MEDIA = 'upptackaren-media-v1';
 
 /**
- * Stadsfotona ligger med stabila namn under cities/ och hämtas in redan vid
- * installationen, så att stadsvyerna fungerar offline även på ställen man
- * inte besökt än. Listan matchar städerna i src/data/cities.ts.
+ * Stadsfotona hämtas inte i förväg heller.
+ *
+ * Här stod tidigare en lista på alla städer, och installationen drog hem
+ * bådas fotona för var och en: hundrafjorton filer, arton megabyte, innan
+ * spelaren ens valt var resan skulle börja. Den som provade spelet på
+ * mobildata betalade för fyrtiosju städer och hann besöka fem.
+ *
+ * Listan hade dessutom glidit isär från src/data/cities.ts - tio städer hade
+ * tillkommit utan att någon mindes att fylla på här - vilket är vad sådana
+ * listor gör med tiden.
+ *
+ * Fotona cachas nu när staden visas, precis som frågebilderna. Den som varit
+ * någonstans har den kvar offline. Den som reser till en helt ny stad utan
+ * täckning får se staden utan foto, och photoImg i app.ts tar hand om det
+ * utan trasig bildikon.
  */
-const CITY_PHOTOS = [
-  'addisabeba',
-  'amman',
-  'amsterdam',
-  'aten',
-  'auckland',
-  'bangkok',
-  'barcelona',
-  'berlin',
-  'buenosaires',
-  'cusco',
-  'dakar',
-  'dubai',
-  'dublin',
-  'goteborg',
-  'hanoi',
-  'havanna',
-  'helsingfors',
-  'istanbul',
-  'kairo',
-  'kapstaden',
-  'kathmandu',
-  'kopenhamn',
-  'koping',
-  'lissabon',
-  'london',
-  'malmo',
-  'marrakech',
-  'melbourne',
-  'mexikocity',
-  'moskva',
-  'mumbai',
-  'nairobi',
-  'newyork',
-  'oslo',
-  'paris',
-  'peking',
-  'prag',
-  'reykjavik',
-  'rio',
-  'rom',
-  'sanfrancisco',
-  'seoul',
-  'singapore',
-  'stockholm',
-  'sydney',
-  'tokyo',
-  'vasteras',
-].flatMap((id) => [`./cities/${id}.jpg`, `./cities/${id}-stad.jpg`]);
 
 /**
  * Handlarens röster. Tre korta filer på ett par tiotals kilobyte, som hämtas
@@ -147,10 +110,12 @@ self.addEventListener('install', (event) => {
       // Lägg in startsidan så att offline-start fungerar.
       await skal.add(new Request('./', { cache: 'reload' })).catch(() => undefined);
       const media = await caches.open(MEDIA);
-      // Fotona får inte stoppa installationen om något saknas - de hämtas
-      // då i stället vid första visningen och cachas löpande. Det som redan
-      // ligger i mediecachen sedan förra utgåvan hämtas inte om.
-      for (const grupp of [CITY_PHOTOS, LJUD, BUTIK]) {
+      // Rösterna och butiksytorna är tillsammans ett par hundra kilobyte och
+      // hämtas in direkt: de hör till en yta man kommer tillbaka till varje
+      // stad. De får inte stoppa installationen om något saknas - då hämtas
+      // de i stället vid första visningen. Det som redan ligger i
+      // mediecachen sedan förra utgåvan hämtas inte om.
+      for (const grupp of [LJUD, BUTIK]) {
         const saknas = [];
         for (const url of grupp) {
           if (!(await media.match(url))) saknas.push(url);
