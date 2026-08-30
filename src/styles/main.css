@@ -9143,11 +9143,43 @@ body.sheet-oppen {
   gap: 8px;
 }
 
+/* Raden under kortet: när det senast uppdaterades, och vägen till knapparna. */
+.cafe-van-rad {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.cafe-van-status {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cafe-mer {
+  flex: none;
+  align-self: center;
+  background: transparent;
+  border: 2px solid var(--line);
+}
+
 .cafe-van-fot {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+/* display: flex slår annars ut webbläsarens egen regel för hidden. */
+.cafe-van-fot[hidden] {
+  display: none;
+}
+
+/* Ta bort som väntar på ett andra tryck. */
+.cafe-farlig {
+  background: var(--stamp);
+  border-color: var(--stamp);
+  color: #fff;
 }
 
 .cafe-vannummer {
@@ -9181,4 +9213,14 @@ body.sheet-oppen {
 /* Fällknappen skjuts ut till rubrikens högerkant. */
 .cafe-fall {
   margin-left: auto;
+}
+
+/*
+ * "Följ en till" står under korten. Linjen behövs: utan den läser sökrutan
+ * som en del av det sista kortet i stället för som ett nytt ärende.
+ */
+.cafe-folj-rubrik {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
 }

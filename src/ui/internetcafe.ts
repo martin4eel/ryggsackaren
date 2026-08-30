@@ -290,7 +290,22 @@ function synkText(synkad: number): string {
 
 function ritaAndras(panel: HTMLElement): void {
   clear(panel);
-  panel.append(el('h2', { class: 'title' }, 'Följ en resenär'));
+  const koder = foljda();
+
+  /*
+   * Korten först, sökrutan sist. Den som redan följer några kommer hit för att
+   * se hur det går för dem - att lägga till en till är något man gör en gång
+   * i veckan, och ska inte stå i vägen varje gång.
+   */
+  panel.append(
+    el('h2', { class: 'title' }, koder.length > 0 ? 'Resenärer du följer' : 'Följ en resenär')
+  );
+
+  if (koder.length > 0) {
+    const lista = el('div', { class: 'cafe-vanner' });
+    for (const id of koder) lista.append(vanKort(id, () => ritaAndras(panel)));
+    panel.append(lista);
+  }
 
   const falt = el('input', {
     class: 'cafe-falt',
@@ -342,24 +357,14 @@ function ritaAndras(panel: HTMLElement): void {
   });
 
   panel.append(
-    el('p', { class: 'cafe-brod' },
-      'Har någon gett dig sitt resedagboksnummer? Skriv in det här, så ligger resenären kvar i caféet.'
-    ),
+    koder.length > 0
+      ? el('p', { class: 'kicker cafe-folj-rubrik' }, 'Följ en till')
+      : el('p', { class: 'cafe-brod' },
+          'Har någon gett dig sitt resedagboksnummer? Skriv in det här, så ligger resenären kvar i caféet.'
+        ),
     el('div', { class: 'cafe-sokrad' }, falt, slaUpp),
     fel
   );
-
-  const koder = foljda();
-  if (koder.length === 0) {
-    panel.append(
-      el('p', { class: 'cafe-diskret' }, 'Du följer ingen än.')
-    );
-    return;
-  }
-
-  const lista = el('div', { class: 'cafe-vanner' });
-  panel.append(lista);
-  for (const id of koder) lista.append(vanKort(id, () => ritaAndras(panel)));
 
   if (koder.length >= MAX_FOLJER) {
     panel.append(
@@ -374,13 +379,17 @@ function ritaAndras(panel: HTMLElement): void {
  * Ett kort för en resenär man följer. Det som redan finns i cachen visas
  * omedelbart, och en färsk hämtning läggs ovanpå när den kommer - annars
  * hade caféet stått tomt varje gång man klev in med dålig täckning.
+ *
+ * Numret och knapparna ligger dolda bakom Mer. Ta bort låg tidigare framme
+ * mitt i listan, och på en telefon är det en tumme från att råka radera någon
+ * man följer. Det man kommer hit för är att läsa kortet, inte att sköta det.
  */
 function vanKort(id: string, omRitaOm: () => void): HTMLElement {
   const kort = el('div', { class: 'cafe-van' });
   const cache = cachad(id);
 
   const innehall = el('div', { class: 'cafe-van-kropp' });
-  const status = el('p', { class: 'cafe-diskret' },
+  const status = el('span', { class: 'cafe-diskret cafe-van-status' },
     cache ? sedan(cache.uppdaterad) : 'Hämtar...'
   );
 
@@ -388,7 +397,7 @@ function vanKort(id: string, omRitaOm: () => void): HTMLElement {
     clear(innehall);
     if (h) {
       innehall.append(dagbokKort(h.dagbok));
-      status.textContent = `Resenärens dagbok uppdaterades ${sedan(h.uppdaterad)}.`;
+      status.textContent = `Uppdaterad ${sedan(h.uppdaterad)}.`;
     }
   };
 
@@ -409,23 +418,64 @@ function vanKort(id: string, omRitaOm: () => void): HTMLElement {
     { class: 'btn btn-liten' }
   );
 
-  kort.append(
-    innehall,
-    el('div', { class: 'cafe-van-fot' },
-      el('span', { class: 'cafe-vannummer' }, formateraId(id)),
-      uppdatera,
-      button(
-        'Ta bort',
-        () => {
-          slutaFolja(id);
-          playSound('sida');
-          omRitaOm();
-        },
-        { class: 'btn btn-liten btn-ghost' }
-      )
-    ),
-    status
+  /*
+   * Ta bort frågar en gång. Knappen ligger redan dold bakom Mer, men den som
+   * öppnat foten för att uppdatera ska ändå inte kunna radera med en darrig
+   * tumme. Frågan går tillbaka av sig själv om man inte svarar.
+   */
+  let sakert = false;
+  let angerTimer: number | null = null;
+  const taBort = button(
+    'Ta bort',
+    () => {
+      if (!sakert) {
+        sakert = true;
+        taBort.textContent = 'Säkert?';
+        taBort.classList.add('cafe-farlig');
+        if (angerTimer !== null) window.clearTimeout(angerTimer);
+        angerTimer = window.setTimeout(() => {
+          sakert = false;
+          taBort.textContent = 'Ta bort';
+          taBort.classList.remove('cafe-farlig');
+        }, 4000);
+        return;
+      }
+      if (angerTimer !== null) window.clearTimeout(angerTimer);
+      slutaFolja(id);
+      playSound('sida');
+      omRitaOm();
+    },
+    { class: 'btn btn-liten btn-ghost' }
   );
+
+  const fot = el('div', { class: 'cafe-van-fot', hidden: true },
+    el('span', { class: 'cafe-vannummer' }, formateraId(id)),
+    uppdatera,
+    taBort
+  );
+
+  const mer = button(
+    'Mer',
+    () => {
+      const oppen = !fot.hidden;
+      fot.hidden = oppen;
+      mer.textContent = oppen ? 'Mer' : 'Dölj';
+      mer.setAttribute('aria-expanded', String(!oppen));
+      // En stängd fot ska inte lämna kvar en halvställd fråga.
+      if (oppen && sakert) {
+        sakert = false;
+        taBort.textContent = 'Ta bort';
+        taBort.classList.remove('cafe-farlig');
+      }
+    },
+    {
+      class: 'btn btn-liten cafe-mer',
+      'aria-expanded': 'false',
+      'aria-label': `Nummer och val för resenär ${formateraId(id)}`,
+    }
+  );
+
+  kort.append(innehall, el('div', { class: 'cafe-van-rad' }, status, mer), fot);
 
   /*
    * Hämta om av sig själv när det man har är gammalt. Kortet ska visa något
