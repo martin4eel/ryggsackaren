@@ -2880,10 +2880,10 @@ export const JOBS: Job[] = [
         facitBild: 'formsprutaprov-svar',
         punkter: [
           { id: 'tratt', namn: 'Matartratten', x: 66, y: 31.3, r: 6, forklaring: 'Här hälls granulatet i, torrt och kallt. Tratten matar ner plasten i cylindern med sin egen tyngd, och en tom tratt stoppar maskinen mitt i serien.' },
-          { id: 'cylinder', namn: 'Cylindern med skruven', x: 76, y: 47, r: 6, forklaring: 'Värmeband utanpå och en skruv inuti: skruven drar in granulatet, smälter det med friktion och värme och trycker sedan in smältan i verktyget. Här sker hela sprutningen.' },
+          { id: 'cylinder', namn: 'Cylindern med skruven', x: 60.8, y: 46.4, r: 5, forklaring: 'Värmeband utanpå och en skruv inuti: skruven drar in granulatet, smälter det med friktion och värme och trycker sedan in smältan i verktyget. Här sker hela sprutningen.' },
           { id: 'skyddslucka', namn: 'Skyddsluckan', x: 31.7, y: 37.5, r: 8, forklaring: 'Luckan framför formen. Öppnas den mitt i cykeln stannar maskinen, och den går inte att stänga formen med luckan öppen - låskraften är hundratals ton.' },
           { id: 'nodstopp', namn: 'Nödstoppet', x: 44.6, y: 35.1, r: 3.2, forklaring: 'Den röda svampen på manöverdosan. Ett slag på den bryter allt, och den måste vridas ut igen innan maskinen får startas om.' },
-          { id: 'manoverpanel', namn: 'Manöverpanelen', x: 92, y: 34, r: 10, forklaring: 'Skärm och knappsatser för cykeltid, temperaturer i cylinderns zoner, insprutningstryck och eftertryck. Det är här ett recept ändras, inte ute vid maskinen.' },
+          { id: 'manoverpanel', namn: 'Manöverpanelen', x: 92, y: 32, r: 7, forklaring: 'Skärm och knappsatser för cykeltid, temperaturer i cylinderns zoner, insprutningstryck och eftertryck. Det är här ett recept ändras, inte ute vid maskinen.' },
           { id: 'motor', namn: 'Motorn och hydraulpumpen', x: 89.4, y: 77.8, r: 6, forklaring: 'Elmotorn driver hydraulpumpen, och det är hydrauliken som håller formen stängd mot smältans tryck. Låskraften anges i ton och är maskinens viktigaste siffra.' },
         ],
         fragor: [
