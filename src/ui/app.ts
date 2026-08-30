@@ -2385,6 +2385,15 @@ export class App {
       mynt.append(b);
     });
 
+    /** Vilken skylt som vinkar just nu, eller ingen. */
+    const lockar = (id: string): boolean => {
+      const plats = platser.find((x) => x.id === id);
+      if (!plats || plats.klar) return false;
+      if (id === 'turistbyra') return p.visits === 0;
+      if (id === 'tidning') return p.visits > 0 && (p.workedJobs?.length ?? 0) === 0;
+      return false;
+    };
+
     for (const pl of platser) {
       if (!arVand(pl)) continue;
       const b = button(
@@ -2400,10 +2409,18 @@ export class App {
           pl.onClick();
         },
         {
-          // Turistbyrån är det man ska börja med: skylten vinkar tills provet
-          // är gjort, så att ingen behöver gissa var man startar.
+          /*
+           * Skylten som vinkar visar vad man ska göra härnäst, och bara en i
+           * taget gör det. Turistbyrån vinkar när man är ny i staden, och när
+           * provet är gjort går vinkningen vidare till tidningen: provet ger
+           * stadsbetyget, och betyget är det som öppnar jobben. Tidningen
+           * slutar vinka så snart man tagit ett skift i staden.
+           *
+           * Villkoren utesluter varandra - visits är noll eller mer - så två
+           * skyltar kan aldrig vinka samtidigt.
+           */
           class: `sign ${pl.klar ? 'sign-klar' : ''} ${this.nyBricka === pl.id ? 'sign-ny' : ''} ${
-            pl.id === 'turistbyra' && p.visits === 0 && !pl.klar ? 'sign-lockar' : ''
+            lockar(pl.id) ? 'sign-lockar' : ''
           }`,
           title: pl.beskrivning,
           'aria-label': `${pl.namn}. ${pl.beskrivning}`,
