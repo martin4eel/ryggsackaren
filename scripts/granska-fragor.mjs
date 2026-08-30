@@ -74,11 +74,28 @@ try {
   const kolla = (etikett, fragor) => {
     for (const q of fragor) {
       if (!q.a || q.a.length < 2) continue;
-      const fel = new Set(q.a.slice(1).flatMap((d) => ord(d, 6)));
-      // 1. Rätt svar delar ett ord med frågan som inget felsvar har.
+      /*
+       * Jämförelsen görs på stam, inte på hela ordet. "Vad kallas den
+       * valutareserv en centralbank håller?" med svaret Valutareserven slank
+       * igenom när orden jämfördes hela: frågan har den obestämda formen och
+       * svaret den bestämda. Fem tecken räcker för att fånga böjningen och
+       * ger få nya falska träffar.
+       */
+      /*
+       * Bildfrågor av typen "Vilken av blommorna är en lotus?" ska eka - där
+       * är igenkänningen hela uppgiften. De sorteras bort ur textnätet av
+       * samma skäl som ur bildnätet, annars drunknar de riktiga fynden.
+       */
+      if (/vilke[nt] av (dem|de |bilderna|blommorna|kryddorna|fiskarna|djuren|frukterna|verken|instrumenten|klubborna)|kunden (ber om|vill ha)|gästen har beställt/i.test(q.q)) {
+        // gå vidare till bildkontrollen nedan
+      } else {
+      const stam = (t) => ord(t, 5).map((w) => w.slice(0, 5));
+      const fel = new Set(q.a.slice(1).flatMap(stam));
+      // 1. Rätt svar delar en ordstam med frågan som inget felsvar har.
       const iFragan = platt(q.q);
-      const eko = ord(q.a[0], 6).filter((w) => iFragan.includes(w) && !fel.has(w));
+      const eko = stam(q.a[0]).filter((w) => iFragan.includes(w) && !fel.has(w));
       if (eko.length) textEko.push(`${etikett} | ${eko.join(',')} | ${q.q} -> ${q.a[0]}`);
+      }
 
       // 1b. Svaret är ett tal som redan står i frågan, med ord eller siffra.
       const n = talet(q.a[0]);
