@@ -3905,7 +3905,7 @@ export class App {
             class: 'reglage-ratt',
             style: liggande ? `left: ${andel.toFixed(1)}%` : `bottom: ${andel.toFixed(1)}%`,
             title: `Rätt svar: ${skriv(r.svar)}`,
-          }, skriv(r.svar))
+          }, `Rätt: ${skriv(r.svar)}`)
         );
       }
       skala.append(styr, bana);
@@ -4007,15 +4007,34 @@ export class App {
         : nara
           ? 'Nästan rätt!'
           : 'Fel.';
+      /*
+       * Reglagefrågan säger sitt svar även när svaret är rätt. Marginalen är
+       * bred nog att man kan träffa utan att veta årtalet, och då stod det
+       * rätta bara som en liten markering på skalan. Nu skrivs det ut, med
+       * hur nära man kom.
+       */
+      const reglageTraff = (() => {
+        const r = q0.reglage;
+        if (!r || !right) return '';
+        const gissat = answered.reglage;
+        if (gissat == null || !Number.isFinite(gissat)) return `Det var ${facit}.`;
+        const avstand = Math.abs(gissat - r.svar);
+        if (avstand === 0) return `${facit}, precis på pricken.`;
+        const ifran = r.artal
+          ? `${avstand} ${avstand === 1 ? 'år' : 'år'}`
+          : `${avstand.toLocaleString('sv-SE')}${r.enhet ? ` ${r.enhet}` : ''}`;
+        return `Det var ${facit} – du var ${ifran} ifrån.`;
+      })();
+      const rattText = isJob
+        ? `Dagen är avklarad och du tjänade ${this.money(answered.payout)}.`
+        : 'Ett steg närmare ett bra stadsbetyg.';
       feedback.append(
         el('strong', {}, headline),
         el(
           'span',
           {},
           right
-            ? isJob
-              ? ` Dagen är avklarad och du tjänade ${this.money(answered.payout)}.`
-              : ' Ett steg närmare ett bra stadsbetyg.'
+            ? ` ${[reglageTraff, rattText].filter(Boolean).join(' ')}`
             : nara
               ? isJob
                 ? ` Rätt svar: ${facit}. Nära nog för halv dagslön, ${this.money(answered.payout)}.`

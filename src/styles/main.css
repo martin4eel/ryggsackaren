@@ -7658,15 +7658,18 @@ body.sheet-oppen {
 .reglage-ratt {
   position: absolute;
   transform: translateX(-50%);
-  top: -1.55em;
-  padding: 1px 6px;
-  border-radius: 4px;
+  top: -1.9em;
+  padding: 3px 9px;
+  border-radius: 5px;
   background: var(--ok, #2e7d4f);
   color: #fff;
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
   white-space: nowrap;
   pointer-events: none;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+  z-index: 2;
 }
 
 .reglage-ratt::after {
@@ -7679,16 +7682,51 @@ body.sheet-oppen {
   margin-left: -5px;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid var(--ok, #2e7d4f);
+  border-top: 7px solid var(--ok, #2e7d4f);
 }
 
+/*
+ * En stapel ner till skalan. Etiketten ensam svävade ovanför reglaget och
+ * det gick inte att se vilket läge den pekade ut - särskilt inte när man
+ * hade rätt och inte behövde leta efter sitt eget svar.
+ */
+.reglage-liggande .reglage-ratt::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-left: -1px;
+  width: 2px;
+  height: 1.5em;
+  background: var(--ok, #2e7d4f);
+  opacity: 0.75;
+}
+
+/*
+ * Den stående skalan ligger längst till höger i rutan, så etiketten får gå
+ * åt vänster in i den tomma ytan. Lagd åt höger hamnade den utanför kortet
+ * och drog ut sidan i breddled.
+ */
 .reglage-staende .reglage-ratt {
   transform: translateY(50%);
   top: auto;
-  left: calc(100% + 6px);
+  left: auto;
+  right: calc(100% + 10px);
 }
 
 .reglage-staende .reglage-ratt::after { display: none; }
+
+.reglage-staende .reglage-ratt::before {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-top: -1px;
+  width: 10px;
+  height: 2px;
+  background: var(--ok, #2e7d4f);
+  opacity: 0.75;
+}
 
 .sparet-runda { min-width: 2.2em; padding: 0 6px; }
 
