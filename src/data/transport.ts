@@ -82,6 +82,14 @@ const kl = (h: number, m = 0) => h * 60 + m;
 export const FERRY_LINES: FerryLink[] = [
   {
     a: 'stockholm',
+    b: 'visby',
+    rederi: 'Gotlandsbolaget',
+    fartyg: 'Visborg',
+    desc: 'Över Östersjön från Nynäshamn, drygt tre timmar.',
+    avgangar: [kl(8, 15), kl(12, 30), kl(19, 45)],
+  },
+  {
+    a: 'stockholm',
     b: 'helsingfors',
     rederi: 'Ålandslinjen',
     fartyg: 'Aurora',

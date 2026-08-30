@@ -75,6 +75,11 @@ export const CITY_CLIMATE: Record<string, Climate> = {
   brescia: 'tempererat',
   sansebastian: 'tempererat',
   oaxaca: 'hogland',
+  alicante: 'medelhav',
+  montgomery: 'subtropiskt',
+  visby: 'nordiskt',
+  kingston: 'tropiskt',
+  chicago: 'tempererat',
 };
 
 /** Höjd över havet i meter, för städer där det märks i temperaturen. */

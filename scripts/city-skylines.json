@@ -154,5 +154,20 @@
   },
   "oaxaca": {
     "file": "Templo de Santo Domingo de Guzmán, Oaxaca-2.jpg"
+  },
+  "alicante": {
+    "file": "Explanada de España Alicante 1.jpg"
+  },
+  "montgomery": {
+    "file": "Aerial view of Montgomery, Alabama LCCN2011646683.jpg"
+  },
+  "visby": {
+    "file": "Vista Visby.jpg"
+  },
+  "kingston": {
+    "file": "View of the Kingston Waterfront.jpg"
+  },
+  "chicago": {
+    "file": "Chicago Skyline 2022 3.jpg"
   }
 }

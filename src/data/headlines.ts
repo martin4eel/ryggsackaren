@@ -57,4 +57,9 @@ export const CITY_HEADLINES: Record<string, string[]> = {
   brescia: ['Astronomiska uret på torget gick två minuter fel i påsk', 'Veteranbilar samlas för start på Viale Venezia'],
   sansebastian: ['Pintxosbarerna enades om pinnpriset', 'Vågorna vid Zurriola lockade rekordmånga i helgen'],
   oaxaca: ['Marknaden vid Zócalo utökar med tre stånd', 'Mezcalproducenterna vill ha egen ursprungsmärkning'],
+  alicante: ['Marmorplattorna på Explanaden läggs om efter vinterns regn', 'Färjan till Tabarca får en extratur i juli'],
+  montgomery: ['Bussmuseets originalskylt tas ner för konservering', 'Floden står högt efter tre dygns regn'],
+  visby: ['Ringmurens torn nummer nitton får nytt tak', 'Färjan till Nynäshamn sätter in extratur inför medeltidsveckan'],
+  kingston: ['Kaffeskörden i Blue Mountains börjar två veckor sent', 'Ljudsystemet på Hope Road får nytt tillstånd till klockan två'],
+  chicago: ['Broarna över floden öppnas för seglen i morgon bitti', 'Blåsten på Lake Shore Drive stänger cykelbanan'],
 };

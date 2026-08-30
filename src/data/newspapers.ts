@@ -1514,4 +1514,144 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       'Bussen till Hierve el Agua går igen, sedan vägen skrapats efter regnet.',
     ],
   },
+  alicante: {
+    namn: 'El Faro de Alacant',
+    devis: 'Entre el castillo y el mar',
+    grundad: 1898,
+    artiklar: [
+      {
+        rubrik: 'Marmorplattorna på Explanaden läggs om efter vinterns regn',
+        text:
+          'Sextio kvadratmeter av vågmönstret har satt sig och ska tas upp och läggas om. Arbetet görs för hand, eftersom plattorna är av tre färger och ordningen inte får kastas om. Staden räknar med tre veckor och ber promenerande hålla till höger.',
+      },
+      {
+        rubrik: 'Färjan till Tabarca får en extratur i juli',
+        text:
+          'Rederiet sätter in en fjärde avgång på eftermiddagen. Ön är marint reservat sedan 1986, och besökarna påminns om att fisket runt den är reglerat och att flaskor tas med hem igen.',
+      },
+      {
+        rubrik: 'Årets benådade figur flyttas till museet',
+        text:
+          'Efter omröstning fick en av årets hogueras stå kvar när resten brann på Johannesnatten. Figuren bärs nu till museet, där den ställs bland de tidigare benådade. En besökare påpekade att samlingen börjar bli trång.',
+      },
+    ],
+    notiser: [
+      'Hissen upp i berget till borgen står stilla mellan ett och tre.',
+      'Turrónbagarna i Jijona öppnar för säsongen i nästa vecka.',
+      'Vattnet i hamnen håller nitton grader, vilket anses svalt.',
+      'Palmerna i Elche beskärs, och gatorna under dem stängs av.',
+    ],
+  },
+  montgomery: {
+    namn: 'The Dexter Avenue Herald',
+    devis: 'One block from the Capitol',
+    grundad: 1889,
+    artiklar: [
+      {
+        rubrik: 'Bussmuseets originalskylt tas ner för konservering',
+        text:
+          'Skylten som delade bussen i två delar har börjat vittra och skickas till konservator. Museet visar under tiden en kopia, med en lapp om att originalet är på lagning. Personalen uppger att besökare oftast stannar längst framför just den skylten.',
+      },
+      {
+        rubrik: 'Minnesmärket på kullen tar emot fler besökare än väntat',
+        text:
+          'Sedan öppnandet 2018 har antalet besökare stigit varje år. Stiftelsen bakom platsen uppger att de flesta kommer från andra delstater, och att uppgiften att hitta sitt eget läns pelare tar längre tid än folk räknar med.',
+      },
+      {
+        rubrik: 'Floden står högt efter tre dygns regn',
+        text:
+          'Alabamafloden ligger över normalvattenstånd och bryggan vid Riverwalk är avspärrad. Kommunen bedömer att nivån sjunker under veckan. Ingen bebyggelse hotas.',
+      },
+    ],
+    notiser: [
+      'Gudstjänsten på Dexter Avenue börjar en halvtimme senare i sommar.',
+      'Kapitoliets trappa är avstängd för stenarbete till fredag.',
+      'Countrykvällen på Commerce Street flyttar inomhus vid åska.',
+      'Blomsterläggningen vid Hank Williams grav sker på söndag.',
+    ],
+  },
+  visby: {
+    namn: 'Innanför Muren',
+    devis: 'Tjugosju marktorn och en domkyrka',
+    grundad: 1873,
+    artiklar: [
+      {
+        rubrik: 'Ringmurens torn nummer nitton får nytt tak',
+        text:
+          'Kalkbruket ska blandas på plats efter gammalt recept, vilket enligt länsstyrelsen är enda sättet att få det att sitta. Arbetet beräknas ta hela sommaren och stängslet står kvar hela tiden. Guiderna leder om sina turer.',
+      },
+      {
+        rubrik: 'Färjan sätter in extratur inför medeltidsveckan',
+        text:
+          'Rederiet lägger till en avgång från Nynäshamn på fredagen. Biljetterna för fordon är redan slut, och resenärer utan bil uppmanas komma i god tid till terminalen.',
+      },
+      {
+        rubrik: 'Fler ansöker om att gräva än det finns skäl att gräva',
+        text:
+          'Sedan silverskatten hittades 1999 kommer ansökningar varje vår från privatpersoner med metalldetektor. Länsstyrelsen påminner om att fornfynd tillhör staten och att sökning kräver tillstånd.',
+      },
+    ],
+    notiser: [
+      'Domkyrkans klockspel provas klockan nio och kan höras i hela staden.',
+      'Salmbären är sena i år och sylten räcker inte till alla kaféer.',
+      'Bilar hänvisas till parkeringen utanför Österport under veckan.',
+      'Turerna till Lilla Karlsö ställs in vid mer än åtta sekundmeter.',
+    ],
+  },
+  kingston: {
+    namn: 'The Harbour Gleaner',
+    devis: 'From the mountains to the sea',
+    grundad: 1834,
+    artiklar: [
+      {
+        rubrik: 'Kaffeskörden i Blue Mountains börjar två veckor sent',
+        text:
+          'Regnet kom sent och bären mognade långsammare än vanligt. Odlarna uppger att kvaliteten inte påverkas men att plockningen blir kortare och mer intensiv. Priset sätts först när skörden vägts in.',
+      },
+      {
+        rubrik: 'Ljudsystemet på Hope Road får nytt tillstånd',
+        text:
+          'Tillståndet gäller till klockan två på natten, en timme längre än förra året. Grannföreningen har begärt att basen vänds bort från bostadskvarteret, vilket arrangören gått med på.',
+      },
+      {
+        rubrik: 'Utgrävningarna vid Port Royal fortsätter under vattnet',
+        text:
+          'Delar av staden som sjönk 1692 ligger kvar på botten och kartläggs år för år. Dykarna arbetar i grumligt vatten och rapporterar att husgrunderna står kvar i ursprungliga kvarter.',
+      },
+    ],
+    notiser: [
+      'Glasskön vid Devon House är kortast före elva på förmiddagen.',
+      'Färjan över hamnen till Port Royal går varje hel timme.',
+      'Vandringen upp till Blue Mountain Peak startar klockan två på natten.',
+      'Marknaden håller stängt på söndag och öppnar tidigt på måndag.',
+    ],
+  },
+  chicago: {
+    namn: 'The Loop Ledger',
+    devis: 'Built twice, and higher the second time',
+    grundad: 1871,
+    artiklar: [
+      {
+        rubrik: 'Broarna över floden öppnas för seglen i morgon bitti',
+        text:
+          'Vårens första broöppningar börjar klockan åtta och rullar uppströms bro för bro. Biltrafiken i Loopen påverkas i två timmar. Staden påminner om att båtarna har företräde och att tidtabellen finns anslagen vid varje bro.',
+      },
+      {
+        rubrik: 'Blåsten på Lake Shore Drive stänger cykelbanan',
+        text:
+          'Vågorna slår över kajkanten och spolar grus på banan. Avstängningen gäller tills vinden vänder. Cyklister hänvisas till gatorna innanför, där hastigheten är sänkt.',
+      },
+      {
+        rubrik: 'Bönan poleras inför säsongen',
+        text:
+          'Cloud Gate tvättas två gånger om året och poleras en gång. Fingeravtryck på undersidan tas bort med samma medel som används på köksbänkar, uppger parkförvaltningen, som avråder från att pröva hemma.',
+      },
+    ],
+    notiser: [
+      'Tunnelbanan i Loopen går långsammare i kurvorna vid Wabash.',
+      'Floden färgas grön på lördag och färgen är borta på söndag.',
+      'Deep dish tar en halvtimme i ugnen, uppger restaurangerna trött.',
+      'Glasboxarna på Willis Tower stängs vid åska i området.',
+    ],
+  },
 };

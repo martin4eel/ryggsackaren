@@ -263,4 +263,34 @@ export const SEVARDHETER: Record<string, string[]> = {
     'Templo de Santo Domingo med sitt förgyllda inre och den botaniska trädgården i klostrets gamla kvarter.',
     'Mercado Benito Juárez och grillgången intill, där chilin hänger i knippen och mole säljs i påsar efter färg.',
   ],
+  alicante: [
+    'Castell de Santa Bárbara på Benacantil, med hiss inne i berget upp från strandsidan.',
+    'Explanada de España, marmormosaiken i vågmönster längs hamnen.',
+    'Barrio de la Santa Cruz, de kalkade husen i backen under borgen.',
+    'Mercado Central i sitt tegelpalats, och färjeläget mot Tabarca.',
+  ],
+  montgomery: [
+    'Dexter Avenue King Memorial Baptist Church, ett kvarter från kapitoliet.',
+    'Rosa Parks Museum vid hållplatsen där hon steg på bussen.',
+    'National Memorial for Peace and Justice, minnesmärket på kullen.',
+    'Alabama State Capitol, där både Jefferson Davis och Selmamarschen slutade sin väg.',
+  ],
+  visby: [
+    'Ringmuren med sina 27 bevarade marktorn, bäst sedd från Studentallén utanför.',
+    'Sankta Maria domkyrka, den enda medeltidskyrkan i staden som fortfarande används.',
+    'Kyrkoruinerna S:ta Karin, S:t Nicolai och Drotten, mitt inne i kvarteren.',
+    'Botaniska trädgården innanför muren, och Almedalen nere vid hamnen.',
+  ],
+  kingston: [
+    'Bob Marley Museum på Hope Road 56, i huset där han bodde.',
+    'Trench Town Culture Yard, kvarteret där reggaen växte fram.',
+    'Devon House, det vita huset från 1881, och kön till glasskiosken.',
+    'Port Royal ute på udden, resterna av staden som jordbävningen tog.',
+  ],
+  chicago: [
+    'Cloud Gate i Millennium Park, den polerade bönan mitt på torget.',
+    'Willis Tower och glasboxarna som skjuter ut från 103:e våningen.',
+    'Art Institute of Chicago, med American Gothic och Nighthawks på samma plan.',
+    'Loopen, där tunnelbanan går på balkar ett par våningar över gatan.',
+  ],
 };

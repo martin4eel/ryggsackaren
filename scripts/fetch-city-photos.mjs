@@ -84,6 +84,11 @@ const CITY_ARTICLES = {
   brescia: { file: 'Palazzo della Loggia e piazza Brescia.jpg' },
   sansebastian: { file: 'Donosti (112287257).jpeg' },
   oaxaca: { file: 'Monte Alban, Main Plaza, Building J, and the North Platform (20498776500).jpg' },
+  alicante: { file: 'Playa del Postiguet 2.jpg' },
+  montgomery: { file: 'Dexter Avenue Baptist Church.jpg' },
+  visby: { file: 'Visby ringmur June 2026.jpg' },
+  kingston: { file: 'Hope Road Jamaika2.jpg' },
+  chicago: { file: 'Chicago River ferry b.jpg' },
 };
 
 async function api(url) {

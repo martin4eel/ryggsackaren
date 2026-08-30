@@ -212,6 +212,10 @@ export const OPERATORS: Record<string, CountryOperators> = {
     air: { name: 'Azteca Air', code: 'AZ' },
     bus: 'Autobuses del Norte',
   },
+  Jamaica: {
+    air: { name: 'Island Air Jamaica', code: 'IJ' },
+    bus: 'Knutsford Express',
+  },
   Kuba: {
     air: { name: 'Caribe Air', code: 'CB' },
     bus: 'Ómnibus Nacionales',

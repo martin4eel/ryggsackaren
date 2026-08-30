@@ -42,6 +42,7 @@ export const CURRENCIES: Record<string, Currency> = {
   VND: { code: 'VND', symbol: '₫', name: 'vietnamesiska dong', perBase: 2500, decimals: 0 },
   NPR: { code: 'NPR', symbol: 'Rs', name: 'nepalesiska rupier', perBase: 13.2, decimals: 0 },
   IDR: { code: 'IDR', symbol: 'Rp', name: 'indonesiska rupiah', perBase: 1600, decimals: 0 },
+  JMD: { code: 'JMD', symbol: 'J$', name: 'jamaicanska dollar', perBase: 15.4, decimals: 0 },
   CUP: { code: 'CUP', symbol: '$MN', name: 'kubanska peso', perBase: 2.4, decimals: 0 },
   XOF: { code: 'XOF', symbol: 'CFA', name: 'västafrikanska franc', perBase: 59, decimals: 0 },
   ETB: { code: 'ETB', symbol: 'Br', name: 'etiopiska birr', perBase: 11.5, decimals: 0 },
