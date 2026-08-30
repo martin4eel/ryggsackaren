@@ -346,7 +346,7 @@ filen. Alla är riktiga fotografier eller avfotograferade konstverk.
 - **ellafitzgerald.webp** (En kvinna sjunger i mikrofon) – [Ella_Fitzgerald_6_(cropped).jpg](https://commons.wikimedia.org/wiki/File:Ella_Fitzgerald_6_(cropped).jpg) av Carl Van Vechten, Public domain.
 - **ellington.webp** (En man i kostym vid ett piano) – [Duke_Ellington_-_publicity.JPG](https://commons.wikimedia.org/wiki/File:Duke_Ellington_-_publicity.JPG) av Unknown author Unknown author, Public domain.
 - **ellisisland.webp** (En ö med stora tegelbyggnader sedd från luften) – [Aerial_view_of_Ellis_Island,_Jersey_City,_New_Jersey_LCCN2011635626_-_cropped_balance.jpg](https://commons.wikimedia.org/wiki/File:Aerial_view_of_Ellis_Island,_Jersey_City,_New_Jersey_LCCN2011635626_-_cropped_balance.jpg) av Carol M. Highsmith, CC BY-SA 4.0.
-- **engelprov.webp** (En ENGEL victory 160 formspruta sedd från sidan) – pressbild från ENGEL Austria GmbH, använd med kredit "Foto: ENGEL" i spelet.
+- **engelprov.webp** (En ENGEL e-motion 50 formspruta sedd från sidan) – pressbild från ENGEL Austria GmbH, använd med kredit "Foto: ENGEL" i spelet.
 - **engelprov-svar.webp** (Samma maskin med maskindelarna utmärkta) – pressbild från ENGEL Austria GmbH, använd med kredit "Foto: ENGEL" i spelet.
 - **elstangsel.webp** (Ett stängsel med tråd och en apparat) – [Electric-fence-charger.jpg](https://commons.wikimedia.org/wiki/File:Electric-fence-charger.jpg) av Kreuzschnabel, CC BY-SA 3.0.
 - **emmentaler.webp** (En bit emmentaler) – [Emmentaler_Premier_Cru.jpg](https://commons.wikimedia.org/wiki/File:Emmentaler_Premier_Cru.jpg) av Manuel2, CC BY-SA 2.0 de.
