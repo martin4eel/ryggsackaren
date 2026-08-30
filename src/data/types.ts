@@ -232,8 +232,6 @@ export interface Minigame {
     antal?: number;
   };
   bildval?: { bild: string; namn: string }[];
-  /** Sekunder per kund i bildvalet; utelämnas för standardtempot (14 s) */
-  tid?: number;
   kunder?: {
     /** Vad kunden säger */
     text: string;

@@ -106,7 +106,7 @@ export function renderMinigame(
       startTrick(host, game, ctx, done);
       break;
     case 'bildval':
-      startPictureChoice(host, game, ctx, done);
+      startPictureChoice(host, game, done);
       break;
     case 'peka':
       startPointAt(host, game, done);
@@ -1694,13 +1694,13 @@ function startTrick(
  * så att puttern får sällskap av en wedge och inte av en golfbil. Namnen
  * skrivs ut först när man pekat - att veta vilket foto som är vilket är
  * hela uppgiften.
+ *
+ * Ingen klocka. Momentet hade en på fjorton sekunder per kund, men det är
+ * fel sorts svårighet här: uppgiften är att känna igen fyra foton, och den
+ * som inte känner igen dem hinner inte lära sig det på fjorton sekunder
+ * heller. Klockan straffade bara den som tittade noga.
  */
-function startPictureChoice(
-  host: HTMLElement,
-  game: Minigame,
-  ctx: MinigameContext,
-  onDone: Done
-): void {
+function startPictureChoice(host: HTMLElement, game: Minigame, onDone: Done): void {
   const ROUNDS = 8;
   const katalog = game.bildval ?? [];
   const namn = new Map(katalog.map((b) => [b.bild, b.namn]));
@@ -1713,7 +1713,6 @@ function startPictureChoice(
   const status = makeStatus();
   const bubble = el('p', { class: 'mg-kund' });
   const grid = el('div', { class: 'options-bilder mg-bildval' });
-  const timer = makeTimer();
   const feedback = makeFeedback();
   /*
    * Vid rätt svar går spelet vidare av sig självt - man vet redan att man
@@ -1726,7 +1725,7 @@ function startPictureChoice(
     next();
   }, { class: 'btn btn-primary mg-peka-vidare' });
   vidare.hidden = true;
-  host.append(status.node, bubble, grid, timer.node, feedback.node, vidare);
+  host.append(status.node, bubble, grid, feedback.node, vidare);
 
   const finish = () => {
     onDone({
@@ -1767,15 +1766,11 @@ function startPictureChoice(
       grid.append(b);
     });
     running = true;
-    // Gott om tid: man ska hinna titta på fyra foton i lugn och ro. Spel
-    // som vill vara ännu lugnare sätter sin egen tid.
-    timer.run((game.tid ?? 14) * 1000 * ctx.slack, () => pick(null, null));
   };
 
-  const pick = (id: string | null, knapp: HTMLElement | null) => {
+  const pick = (id: string, knapp: HTMLElement) => {
     if (!running) return;
     running = false;
-    timer.halt();
     const kund = kunder[round]!;
     const ok = id === kund.svar;
     // Visa namnen nu, och markera rätt och fel.
@@ -1799,12 +1794,7 @@ function startPictureChoice(
       feedback.say(`Just det, ${egennamn ? n : n.toLowerCase()}. Kunden nickar.`, 'topp');
     } else {
       playSound('fel');
-      feedback.say(
-        id === null
-          ? `Kunden tröttnade och gick. Det var ${namn.get(kund.svar)?.toLowerCase()}.`
-          : kund.fel ?? `Nej – kunden ville ha ${namn.get(kund.svar)?.toLowerCase()}.`,
-        'fel'
-      );
+      feedback.say(kund.fel ?? `Nej - kunden ville ha ${namn.get(kund.svar)?.toLowerCase()}.`, 'fel');
     }
     status.set(`${roll.en} ${round + 1}/${kunder.length}`, `${right} ${roll.klara}`);
     round += 1;
