@@ -120,6 +120,34 @@ try {
   for (const [id, f] of Object.entries(JOB_QUESTIONS)) kolla(`jobb:${id}`, f);
   for (const [id, f] of Object.entries(CITY_QUESTIONS)) kolla(`stad:${id}`, f);
 
+  /*
+   * Längdlutningen. Ett rätt svar som är längre än felsvaren är en gratis
+   * ledtråd: strategin "välj det längsta" gav en gång fyrtiosju procent rätt
+   * på Turist, mot trettiotre för ren gissning. Måttet räknar vad den
+   * strategin ger i dag, och ska ligga så nära gissningen som möjligt.
+   */
+  const langst = (antal) => {
+    let ratt = 0;
+    let tot = 0;
+    const rakna = (fragor) => {
+      for (const q of fragor) {
+        if (!q.a || q.reglage) continue;
+        const alt = q.a.slice(0, Math.min(antal, q.a.length));
+        if (alt.length < 2) continue;
+        tot += 1;
+        const l = alt.map((x) => String(x).length);
+        const max = Math.max(...l);
+        if (l[0] === max) ratt += 1 / l.filter((x) => x === max).length;
+      }
+    };
+    for (const f of Object.values(JOB_QUESTIONS)) rakna(f);
+    for (const f of Object.values(CITY_QUESTIONS)) rakna(f);
+    return (ratt / tot) * 100;
+  };
+  console.log('\nLängdlutning: "välj alltid det längsta svaret" ger');
+  console.log(`  Turist ${langst(3).toFixed(0)} procent rätt (gissning ger 33)`);
+  console.log(`  Globetrotter ${langst(4).toFixed(0)} procent rätt (gissning ger 25)`);
+
   console.log(`\nSvaret står i frågan: ${textEko.length} att läsa igenom`);
   for (const r of textEko) console.log('  ' + r);
   console.log(`\nTalet står redan i frågan: ${talEko.length} att läsa igenom`);
