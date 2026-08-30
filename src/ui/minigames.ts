@@ -105,6 +105,9 @@ export function renderMinigame(
     case 'trick':
       startTrick(host, game, ctx, done);
       break;
+    case 'tidslinje':
+      startTimeline(host, game, done);
+      break;
     case 'bildval':
       startPictureChoice(host, game, done);
       break;
@@ -1434,6 +1437,215 @@ function startRhythm(
     );
     return true;
   });
+}
+
+// --------------------------------------------------------------- tidslinje
+
+/**
+ * Häng salen i tidsordning.
+ *
+ * Fyra verk ur samlingen ligger på bordet och ska upp på väggen med det
+ * äldsta först. Titlarna står framme - det är inte igenkänningen som prövas
+ * här utan dateringen, och att veta att Nattvakten kom före Skriet men efter
+ * Caravaggio är en annan sorts kunskap än att veta vilken tavla som är
+ * vilken.
+ *
+ * Rundorna väljs med ett minsta avstånd i år mellan verken, och avståndet
+ * krymper: första salen spänner över sekler, sista över ett par decennier.
+ * Utan det kunde en runda ge Stjärnenatt, Skriet, Julaftonen och Näckrosor
+ * på nitton år, vilket ingen kan datera utan att slå upp det.
+ *
+ * Ingen klocka. Momentet är att tänka efter, och en klocka gör det bara till
+ * en gissning under tidspress.
+ */
+interface TidslinjeVerk {
+  bild: string;
+  namn: string;
+  ar: number;
+  artext?: string;
+}
+
+function startTimeline(host: HTMLElement, game: Minigame, onDone: Done): void {
+  const bank = game.tidslinje ?? [];
+  const ROUNDS = 5;
+  /** Minsta antal år mellan två verk i samma runda, per runda. */
+  const MINSTA_GAP = [70, 45, 30, 18, 10];
+
+  let round = 0;
+  /** Summan av andelen rätt ordnade par, en runda i taget. */
+  let poang = 0;
+  let helaRatt = 0;
+  let valda: TidslinjeVerk[] = [];
+  let ordning: TidslinjeVerk[] = [];
+  let facit = false;
+
+  const status = makeStatus();
+  const uppgift = el('p', { class: 'mg-tid-uppgift' });
+  const grid = el('div', { class: 'mg-tid-grid' });
+  const feedback = makeFeedback();
+  const vidare = button('Nästa sal', () => nextRound(), {
+    class: 'btn btn-primary mg-peka-vidare',
+  });
+  vidare.hidden = true;
+  host.append(status.node, uppgift, grid, feedback.node, vidare);
+
+  /**
+   * Fyra verk med minst `gap` år mellan varandra i tidsordning. Hittas ingen
+   * sådan uppsättning på hundra försök krymper kravet - banken avgör hur
+   * spretig den kan vara, och spelet ska aldrig fastna.
+   */
+  const lotta = (gap: number): TidslinjeVerk[] => {
+    for (let försök = 0; försök < 100; försök++) {
+      const kandidater = shuffled(bank).slice(0, 4).sort((a, b) => a.ar - b.ar);
+      if (kandidater.length < 4) return kandidater;
+      let ok = true;
+      for (let i = 1; i < kandidater.length; i++) {
+        if (kandidater[i]!.ar - kandidater[i - 1]!.ar < gap) ok = false;
+      }
+      if (ok) return kandidater;
+    }
+    return gap > 5 ? lotta(Math.floor(gap / 2)) : shuffled(bank).slice(0, 4);
+  };
+
+  const visa = () =>
+    status.set(`Sal ${Math.min(round + 1, ROUNDS)}/${ROUNDS}`, `${helaRatt} rätt hängda`);
+
+  /** Korten i den ordning de ligger på skärmen, för uppdatering på plats. */
+  let kortEls: HTMLElement[] = [];
+
+  /**
+   * Numren och markeringen ändras vid varje tryck, men fotona ska inte laddas
+   * om. Att rita om hela rutnätet fick bilderna att blinka till på en långsam
+   * telefon, så bara siffran och ramen rörs.
+   */
+  const uppdatera = () => {
+    valda.forEach((verk, i) => {
+      const kort = kortEls[i];
+      if (!kort) return;
+      const plats = ordning.indexOf(verk);
+      kort.classList.toggle('mg-tid-kort-vald', plats >= 0);
+      const nummer = kort.querySelector('.mg-tid-nummer');
+      if (nummer) nummer.textContent = plats >= 0 ? String(plats + 1) : '\u00a0';
+    });
+  };
+
+  /** Ritar korten. Efter svaret står årtalen framme och ordningen bedöms. */
+  const rita = () => {
+    clear(grid);
+    kortEls = [];
+    const ratt = [...valda].sort((a, b) => a.ar - b.ar);
+    for (const verk of valda) {
+      const plats = ordning.indexOf(verk);
+      const kort = button(
+        '',
+        () => valj(verk),
+        {
+          class: `mg-tid-kort ${plats >= 0 ? 'mg-tid-kort-vald' : ''} ${
+            facit ? (ratt[plats] === verk ? 'mg-tid-ratt' : 'mg-tid-fel') : ''
+          }`,
+          'data-sound': 'av',
+        }
+      );
+      kort.append(
+        el(
+          'span',
+          { class: 'mg-tid-nummer' },
+          plats >= 0 ? String(plats + 1) : '\u00a0'
+        ),
+        el('img', {
+          class: 'mg-tid-foto',
+          src: quizImageUrl(verk.bild),
+          alt: '',
+          draggable: 'false',
+        }),
+        el('span', { class: 'mg-tid-namn' }, verk.namn),
+        el('span', { class: 'mg-tid-ar' }, facit ? (verk.artext ?? String(verk.ar)) : '\u00a0')
+      );
+      kortEls.push(kort);
+      grid.append(kort);
+    }
+  };
+
+  const valj = (verk: TidslinjeVerk) => {
+    if (facit) return;
+    if (ordning.includes(verk)) {
+      // Ett tryck till ångrar valet, och numren efter flyttas upp.
+      ordning = ordning.filter((v) => v !== verk);
+      playSound('valj');
+      uppdatera();
+      return;
+    }
+    ordning.push(verk);
+    playSound('valj');
+    if (ordning.length < valda.length) {
+      uppdatera();
+      return;
+    }
+    doma();
+  };
+
+  /** Bedömer hängningen på hur många par som står i rätt inbördes ordning. */
+  const doma = () => {
+    facit = true;
+    let ratt = 0;
+    let par = 0;
+    for (let i = 0; i < ordning.length; i++) {
+      for (let j = i + 1; j < ordning.length; j++) {
+        par += 1;
+        if (ordning[i]!.ar <= ordning[j]!.ar) ratt += 1;
+      }
+    }
+    const andel = par > 0 ? ratt / par : 0;
+    poang += andel;
+    const allt = ratt === par;
+    if (allt) helaRatt += 1;
+    playSound(allt ? 'perfekt' : andel >= 0.5 ? 'ratt' : 'fel');
+    const iOrdning = [...valda].sort((a, b) => a.ar - b.ar);
+    const aldst = iOrdning[0]!;
+    // Marginalen mellan de två första avgör om salen var svårdaterad.
+    const marginal = (iOrdning[1]?.ar ?? aldst.ar) - aldst.ar;
+    feedback.say(
+      allt
+        ? marginal <= 20
+          ? `Hela salen rätt hängd, och det skilde bara ${marginal} år mellan de två första.`
+          : `Hela salen rätt hängd. Först ${aldst.namn}, ${aldst.artext ?? aldst.ar}.`
+        : `${ratt} av ${par} par står rätt. Äldst är ${aldst.namn}, ${aldst.artext ?? aldst.ar}.`,
+      allt ? 'topp' : andel >= 0.5 ? 'ok' : 'fel'
+    );
+    visa();
+    rita();
+    vidare.textContent = round + 1 >= ROUNDS ? 'Klart' : 'Nästa sal';
+    vidare.hidden = false;
+  };
+
+  const nextRound = () => {
+    vidare.hidden = true;
+    round += 1;
+    if (round >= ROUNDS) {
+      onDone({
+        score: poang / ROUNDS,
+        summary:
+          helaRatt === ROUNDS
+            ? `Du hängde alla ${ROUNDS} salarna i rätt ordning.`
+            : `Du hängde ${helaRatt} av ${ROUNDS} salar helt rätt.`,
+        perfect: helaRatt === ROUNDS,
+      });
+      return;
+    }
+    starta();
+  };
+
+  const starta = () => {
+    facit = false;
+    ordning = [];
+    valda = shuffled(lotta(MINSTA_GAP[round] ?? 10));
+    uppgift.textContent = 'Tryck på verken i tidsordning, det äldsta först.';
+    feedback.say('Titlarna står framme. Årtalen får du veta efteråt.', 'neutral');
+    visa();
+    rita();
+  };
+
+  starta();
 }
 
 // ------------------------------------------------------------------- trick

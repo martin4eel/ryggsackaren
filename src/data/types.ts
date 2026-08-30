@@ -134,7 +134,9 @@ export type MinigameKind =
   /** Träffa slaget i takt med metronomen */
   | 'takt'
   /** Två tryck per försök: först poppen, sedan draget */
-  | 'trick';
+  | 'trick'
+  /** Häng fyra verk i tidsordning, äldst först */
+  | 'tidslinje';
 
 /**
  * Ett föremål på sorteringsbandet: en text, eller ett foto med namn. Med
@@ -161,6 +163,7 @@ export interface Minigame {
    * - `balans`: namnet på det som ska hållas i balans (första posten)
    * - `takt`: slagen som ska träffas i tur och ordning
    * - `trick`: tricken i tur och ordning, lättast först
+   * - `tidslinje`: bara en etikett för samlingen; verken ligger i `tidslinje`
    */
   items: string[];
   /** Enhet eller måttord som visas i precisionsspelet */
@@ -179,6 +182,14 @@ export interface Minigame {
    * mycket som en middag. Priset varierar en femtedel kring riktpriset.
    */
   priser?: number[];
+  /**
+   * Bara för `tidslinje`: verken som ska hängas i tidsordning. `ar` styr
+   * ordningen och `artext` skrivs ut i facit när året inte är exakt - ett
+   * verk som målats under ett decennium har inget datum att sätta ut.
+   * Banken bör vara djup och spridd över tid, för spelet väljer fyra verk
+   * per runda med ett minsta avstånd i år som krymper ju längre man kommer.
+   */
+  tidslinje?: { bild: string; namn: string; ar: number; artext?: string }[];
   /**
    * Bara för `trick`: en rad per trick om vad fötterna gör, i samma ordning
    * som `items`. Raden står framme medan man gör tricket, så den som inte

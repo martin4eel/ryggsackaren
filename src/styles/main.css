@@ -3208,6 +3208,105 @@ img.no-photo {
   font-size: 1.05rem;
 }
 
+/* ----------------------------------------------------------- tidslinje
+ * Fyra verk på bordet som ska upp på väggen i tidsordning. Kortet får ett
+ * nummer när det valts, och årtalet skrivs ut först i facit.
+ */
+.mg-tid-uppgift {
+  margin: 0;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.mg-tid-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.mg-tid-kort {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 6px 8px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.mg-tid-kort-vald {
+  border-color: var(--sun-dark);
+  box-shadow: inset 0 0 0 2px rgba(212, 132, 43, 0.35);
+}
+
+/*
+ * Facit: kortet som hamnade på rätt plats i tidsordningen får grön ram, det
+ * som hamnade fel får röd. Reglerna står efter .mg-tid-kort-vald för att
+ * vinna över den orangea markeringen man valde med.
+ */
+.mg-tid-ratt {
+  border-color: var(--palm);
+  box-shadow: inset 0 0 0 2px rgba(47, 125, 99, 0.3);
+}
+
+.mg-tid-fel {
+  border-color: var(--stamp);
+  box-shadow: inset 0 0 0 2px rgba(189, 63, 42, 0.28);
+}
+
+.mg-tid-ratt .mg-tid-nummer { background: var(--palm); }
+.mg-tid-fel .mg-tid-nummer { background: var(--stamp); }
+
+.mg-tid-foto {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.mg-tid-nummer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.mg-tid-kort:not(.mg-tid-kort-vald) .mg-tid-nummer {
+  background: transparent;
+}
+
+.mg-tid-namn {
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.mg-tid-ar {
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  min-height: 1em;
+}
+
+@media (max-width: 560px) {
+  .mg-tid-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* --------------------------------------------------------------- trick
  * Brädan rullar över banan och de två fönstren ligger utsatta på den, popp
  * först och drag sedan. Banan är asfalt, inte papper: det här är det enda

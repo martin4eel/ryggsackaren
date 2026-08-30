@@ -4045,7 +4045,7 @@ export class App {
           'p',
           { class: 'muted' },
           'Går det bra får du en bonus på upp till tre dagslöner.' +
-            (game.kind === 'avgor' || game.kind === 'peka' || game.kind === 'bildval' ? ' Ingen klocka - ta den tid du behöver.' : ' Momentet går lika bra att styra med finger som med mus.')
+            (game.kind === 'avgor' || game.kind === 'peka' || game.kind === 'bildval' || game.kind === 'tidslinje' ? ' Ingen klocka - ta den tid du behöver.' : ' Momentet går lika bra att styra med finger som med mus.')
         ),
         button('Sätt igång', () => this.startMinigame(), {
           class: 'btn btn-primary btn-big',

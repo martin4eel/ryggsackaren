@@ -244,6 +244,7 @@ try {
     balans: { needed: 1 },
     takt: { needed: 2 },
     trick: { needed: 4 },
+    tidslinje: { needed: 1 },
     bildval: { needed: 1 },
     peka: { needed: 1 },
     avgor: { needed: 1 },
@@ -334,7 +335,7 @@ try {
         problems.push(`jobb ${job.id} är klass 1 och ska inte ha något minispel`);
       const fotoSortering =
         mg.kind === 'sortering' && (mg.pool ?? []).flat().every((x) => typeof x === 'object');
-      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || mg.kind === 'lagval' || fotoSortering || UNDANTAG[job.id] === mg.kind;
+      const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || mg.kind === 'lagval' || mg.kind === 'tidslinje' || fotoSortering || UNDANTAG[job.id] === mg.kind;
       if (job.wageClass >= 2 && !okej)
         problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
       /*
@@ -344,6 +345,26 @@ try {
        * lättare, eftersom platsen fylls med ett slumpat foto i stället.
        * Tre lockbeten krävs för att alla fyra alternativen ska vara valda.
        */
+      /*
+       * Tidslinjen: verken måste finnas som foton, årtalen måste vara tal, och
+       * banken måste vara djup och spänna över tillräckligt lång tid för att
+       * fem rundor om fyra verk ska gå att lotta med rimlig spridning.
+       */
+      if (mg.kind === 'tidslinje') {
+        const verk = mg.tidslinje ?? [];
+        if (verk.length < 10)
+          problems.push(`jobb ${job.id}: tidslinjen har ${verk.length} verk, minst 10 behövs`);
+        for (const v of verk) {
+          if (!bildManifest.has(v.bild))
+            problems.push(`jobb ${job.id}: tidslinjen pekar på okänd bild ${v.bild}`);
+          if (!Number.isFinite(v.ar))
+            problems.push(`jobb ${job.id}: verket ${v.namn} saknar årtal`);
+          if (!v.namn?.trim()) problems.push(`jobb ${job.id}: ett verk i tidslinjen saknar namn`);
+        }
+        const ar = verk.map((v) => v.ar).sort((a, b) => a - b);
+        if (ar.length > 1 && ar[ar.length - 1] - ar[0] < 100)
+          problems.push(`jobb ${job.id}: tidslinjen spänner bara ${ar[ar.length - 1] - ar[0]} år`);
+      }
       if (mg.kind === 'bildval') {
         const katalog = new Set((mg.bildval ?? []).map((b) => b.bild));
         for (const k of mg.kunder ?? []) {
