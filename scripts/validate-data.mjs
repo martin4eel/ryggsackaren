@@ -322,6 +322,27 @@ try {
       const okej = mg.kind === 'bildval' || mg.kind === 'peka' || mg.kind === 'avgor' || mg.kind === 'quiz' || mg.kind === 'lagval' || fotoSortering || UNDANTAG[job.id] === mg.kind;
       if (job.wageClass >= 2 && !okej)
         problems.push(`jobb ${job.id}: minispelet ${mg.kind} bygger inte på foton`);
+      /*
+       * Bildvalet: kundens svar och lockbeten måste finnas i jobbets egen
+       * katalog. Spelet filtrerar bort id:n det inte känner igen, så ett
+       * felstavat lockbete märks inte i spelet - rundan blir bara tyst
+       * lättare, eftersom platsen fylls med ett slumpat foto i stället.
+       * Tre lockbeten krävs för att alla fyra alternativen ska vara valda.
+       */
+      if (mg.kind === 'bildval') {
+        const katalog = new Set((mg.bildval ?? []).map((b) => b.bild));
+        for (const k of mg.kunder ?? []) {
+          if (!katalog.has(k.svar))
+            problems.push(`jobb ${job.id}: bildvalets svar ${k.svar} finns inte i katalogen`);
+          for (const n of k.nastan ?? [])
+            if (!katalog.has(n))
+              problems.push(`jobb ${job.id}: bildvalets lockbete ${n} finns inte i katalogen`);
+          if ((k.nastan ?? []).length < 3)
+            problems.push(
+              `jobb ${job.id}: kunden "${String(k.text).slice(0, 40)}" har bara ${(k.nastan ?? []).length} lockbeten, tre behövs`
+            );
+        }
+      }
       // Lagen får sakna märke - då skrivs namnet ut - men har de ett måste det finnas.
       for (const x of [...(mg.lagval?.lag ?? [])]) {
         if (x.bild && !bildManifest.has(x.bild))
