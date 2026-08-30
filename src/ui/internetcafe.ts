@@ -132,7 +132,7 @@ function ritaMin(panel: HTMLElement, state: GameState): void {
         } catch (err) {
           knapp.disabled = false;
           knapp.textContent = 'Dela min resedagbok';
-          visaFel(fel, err, 'Caféets uppkoppling är nere. Försök igen om en stund.');
+          visaFel(fel, err);
         }
       },
       { class: 'btn btn-primary btn-big' }
@@ -327,12 +327,7 @@ function ritaAndras(panel: HTMLElement): void {
       } catch (err) {
         slaUpp.disabled = false;
         slaUpp.textContent = 'Slå upp';
-        visaFel(
-          fel,
-          err,
-          'Caféets uppkoppling är nere. Försök igen om en stund.',
-          'Ingen resedagbok har det numret. Kontrollera siffrorna.'
-        );
+        visaFel(fel, err, 'Ingen resedagbok har det numret. Kontrollera siffrorna.');
       }
     },
     { class: 'btn btn-primary' }
@@ -407,10 +402,7 @@ function vanKort(id: string, omRitaOm: () => void): HTMLElement {
       try {
         rita(await hamta(id));
       } catch (err) {
-        status.textContent =
-          err instanceof CafeFel && err.status === 404
-            ? 'Dagboken finns inte längre. Resenären har slutat dela.'
-            : 'Caféets uppkoppling är nere just nu.';
+        status.textContent = felText(err, 'Dagboken finns inte längre. Resenären har slutat dela.');
       }
       uppdatera.disabled = false;
     },
@@ -444,10 +436,7 @@ function vanKort(id: string, omRitaOm: () => void): HTMLElement {
       (h) => rita(h),
       (err: unknown) => {
         if (cache) return; // Det gamla kortet duger bättre än ett felmeddelande.
-        status.textContent =
-          err instanceof CafeFel && err.status === 404
-            ? 'Dagboken finns inte längre. Resenären har slutat dela.'
-            : 'Caféets uppkoppling är nere just nu.';
+        status.textContent = felText(err, 'Dagboken finns inte längre. Resenären har slutat dela.');
       }
     );
   }
@@ -532,16 +521,25 @@ function visaText(nod: HTMLElement, text: string): void {
 }
 
 /**
- * Ett fel i klartext. Ett 404 betyder att numret inte finns, allt annat att
- * caféet inte går att nå - och ingendera är något spelaren kan rätta genom att
- * få se en statuskod.
+ * Felet i klartext.
+ *
+ * Skillnaden spelar roll för den som står med telefonen i handen: kom anropet
+ * aldrig fram är det nätet som ska lagas, svarade caféet nej är det inget man
+ * kan göra åt själv. Statuskoder säger ingenting till en tolvåring.
  */
-function visaFel(nod: HTMLElement, err: unknown, nere: string, saknas?: string): void {
-  if (saknas && err instanceof CafeFel && err.status === 404) {
-    visaText(nod, saknas);
-    return;
+function felText(err: unknown, saknas?: string): string {
+  if (err instanceof CafeFel) {
+    if (saknas && err.status === 404) return saknas;
+    if (err.sort === 'nat') {
+      return 'Kom inte fram till caféet. Kontrollera att du har nät och försök igen.';
+    }
+    if (err.sort === 'tid') return 'Caféet svarade inte i tid. Försök igen om en stund.';
   }
-  visaText(nod, nere);
+  return 'Caféet krånglar just nu. Försök igen om en stund.';
+}
+
+function visaFel(nod: HTMLElement, err: unknown, saknas?: string): void {
+  visaText(nod, felText(err, saknas));
 }
 
 /** "för tolv minuter sedan" och liknande. */

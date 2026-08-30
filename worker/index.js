@@ -223,11 +223,18 @@ function likaHemligheter(a, b) {
  * på det egna nätet - Vite lyssnar på alla gränssnitt, så en telefon som testar
  * bygget kommer in med maskinens IP som ursprung.
  */
+const SPELETS_ADRESSER = new Set([
+  'https://upptackaren.se',
+  'https://www.upptackaren.se',
+  // GitHub Pages-adressen. Den brukar skicka vidare till egen domän, men gör
+  // den inte det ska caféet ändå svara - annars ser det ut som att servern är
+  // nere, fast det bara är fel adress i adressfältet.
+  'https://martin4eel.github.io',
+]);
+
 function tillatetUrsprung(ursprung) {
   if (!ursprung) return null;
-  if (ursprung === 'https://upptackaren.se' || ursprung === 'https://www.upptackaren.se') {
-    return ursprung;
-  }
+  if (SPELETS_ADRESSER.has(ursprung)) return ursprung;
   if (
     /^http:\/\/(localhost|127\.0\.0\.1|\[::1\]|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+):\d+$/.test(
       ursprung

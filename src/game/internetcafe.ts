@@ -224,17 +224,29 @@ async function anrop(
   const styr = new AbortController();
   const timer = window.setTimeout(() => styr.abort(), TIMEOUT_MS);
   try {
-    const svar = await fetch(`${CAFE_URL}${vag}`, {
-      ...rest,
-      signal: styr.signal,
-      headers: {
-        ...(rest.body ? { 'Content-Type': 'application/json' } : {}),
-        ...(nyckel ? { 'x-nyckel': nyckel } : {}),
-      },
-    });
+    let svar: Response;
+    try {
+      svar = await fetch(`${CAFE_URL}${vag}`, {
+        ...rest,
+        signal: styr.signal,
+        headers: {
+          ...(rest.body ? { 'Content-Type': 'application/json' } : {}),
+          ...(nyckel ? { 'x-nyckel': nyckel } : {}),
+        },
+      });
+    } catch {
+      /*
+       * fetch kastar likadant vare sig namnet inte gick att slå upp, nätet är
+       * borta eller webbläsaren stoppade svaret. Alla tre betyder samma sak
+       * för den som står i caféet: anropet kom aldrig fram.
+       */
+      throw styr.signal.aborted
+        ? new CafeFel('caféet svarade inte i tid', undefined, 'tid')
+        : new CafeFel('kom inte fram till caféet', undefined, 'nat');
+    }
     const kropp = (await svar.json().catch(() => null)) as { fel?: string } | null;
     if (!svar.ok) {
-      throw new CafeFel(kropp?.fel ?? `caféet svarade ${svar.status}`, svar.status);
+      throw new CafeFel(kropp?.fel ?? `caféet svarade ${svar.status}`, svar.status, 'svar');
     }
     return kropp;
   } finally {
@@ -242,11 +254,25 @@ async function anrop(
   }
 }
 
-/** Ett fel från caféet, med statuskoden kvar så att UI:t kan välja ordalydelse. */
+/**
+ * Ett fel från caféet. Både statuskoden och slaget av fel följer med, så att
+ * skärmen kan säga vad som faktiskt hände: att telefonen inte kom fram är
+ * något annat än att caféet svarade nej, och det är spelaren som ska kunna
+ * avgöra om det är nätet eller servern som strular.
+ */
+export type Felsort =
+  /** Kom aldrig fram: inget nät, fel adress, eller blockerat av webbläsaren */
+  | 'nat'
+  /** Kom fram men svarade inte inom tidsgränsen */
+  | 'tid'
+  /** Svarade, men med ett nej */
+  | 'svar';
+
 export class CafeFel extends Error {
   constructor(
     message: string,
-    readonly status?: number
+    readonly status?: number,
+    readonly sort: Felsort = 'svar'
   ) {
     super(message);
     this.name = 'CafeFel';

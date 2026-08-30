@@ -223,6 +223,17 @@ test('bara spelets egna sidor får svar med cors-huvud', async () => {
     telefon.headers.get('Access-Control-Allow-Origin'),
     'http://192.168.1.42:5173'
   );
+
+  // Pages-adressen räknas som spelets egen, för den som hamnat där.
+  const pages = await anrop('/dagbok/123456', { ursprung: 'https://martin4eel.github.io' });
+  assert.equal(
+    pages.headers.get('Access-Control-Allow-Origin'),
+    'https://martin4eel.github.io'
+  );
+
+  // En adress som bara börjar likadant ska inte släppas in.
+  const nastan = await anrop('/dagbok/123456', { ursprung: 'https://upptackaren.se.elak.example' });
+  assert.equal(nastan.headers.get('Access-Control-Allow-Origin'), null);
 });
 
 test('förfrågan om lov besvaras utan kropp', async () => {
