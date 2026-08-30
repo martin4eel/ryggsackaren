@@ -76,8 +76,6 @@ export interface AktivtUppdrag {
   /** Dagen man fick det */
   start: number;
   belopp: number;
-  /** Sista dag, om det brådskar */
-  deadline?: number;
 }
 
 /** En fråga man svarat fel på, sparad för tidningens Repris. */

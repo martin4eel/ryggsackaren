@@ -985,10 +985,19 @@ export class App {
   }
 
   /** Lottar ett uppdrag man inte sett, med ett mål man inte varit i. */
+  /**
+   * Uppdrag som bara finns som fortsättning på ett annat. De ska aldrig
+   * lottas fram på egen hand - Margaretas svar är obegripligt för den som
+   * inte lämnat Ingegerds vykort först.
+   */
+  private static readonly FORTSATTNINGAR = new Set(
+    UPPDRAG.map((u) => u.nasta).filter((x): x is string => Boolean(x))
+  );
+
   private lottaUppdrag(): AktivtUppdrag | null {
     const s = this.state!;
     const sedda = new Set(s.uppdragSedda ?? []);
-    const mallar = UPPDRAG.filter((u) => !sedda.has(u.id));
+    const mallar = UPPDRAG.filter((u) => !sedda.has(u.id) && !App.FORTSATTNINGAR.has(u.id));
     if (mallar.length === 0) return null;
     const mall = mallar[Math.floor(Math.random() * mallar.length)]!;
     const har = this.city;
@@ -1006,8 +1015,27 @@ export class App {
       fran: har.id,
       start: s.days,
       belopp: mall.belopp,
-      deadline: mall.dagar ? s.days + mall.dagar : undefined,
     };
+  }
+
+  /**
+   * Ett bestämt uppdrag, till en stad man inte varit i. Används när ett
+   * ärende fortsätter: den som tagit emot har något eget att skicka vidare.
+   */
+  private lottaFortsattning(id: string): AktivtUppdrag | null {
+    const s = this.state!;
+    const mall = UPPDRAG.find((u) => u.id === id);
+    if (!mall) return null;
+    const har = this.city;
+    const kandidater = CITIES.filter(
+      (c) => c.id !== har.id && !s.visited.includes(c.id) && cheapestRoute(har, c, s.difficulty)
+    );
+    if (kandidater.length === 0) return null;
+    const langt = kandidater.filter((c) => c.region !== har.region);
+    const pool = langt.length >= 3 ? langt : kandidater;
+    const mal = pool[Math.floor(Math.random() * pool.length)]!;
+    s.uppdragSedda = [...new Set([...(s.uppdragSedda ?? []), id])];
+    return { id, mal: mal.id, fran: har.id, start: s.days, belopp: mall.belopp };
   }
 
   private uppdragMall(id: string): Uppdrag | undefined {
@@ -1049,20 +1077,27 @@ export class App {
     const kvar: AktivtUppdrag[] = [];
     for (const u of s.uppdrag ?? []) {
       const mall = this.uppdragMall(u.id);
-      if (u.deadline !== undefined && s.days > u.deadline && u.mal !== city.id) {
-        rader.push(`${mall?.foremal ?? 'Ärendet'}: för sent. Den som väntade i ${CITY_BY_ID[u.mal]?.name ?? u.mal} har slutat vänta.`);
+      if (u.mal !== city.id) {
+        kvar.push(u);
         continue;
       }
-      if (u.mal === city.id) {
-        const forSent = u.deadline !== undefined && s.days > u.deadline;
-        const belopp = forSent ? Math.round(u.belopp / 2) : u.belopp;
-        s.money += belopp;
-        s.earned += belopp;
-        s.uppdragKlara = (s.uppdragKlara ?? 0) + 1;
-        rader.push(`${mall?.titel ?? 'Uppdraget'}: ${this.uppdragText(mall?.klar ?? 'Lämnat.', u.mal)} ${forSent ? `Sent, så halva ersättningen: ${this.money(belopp)}.` : `${this.money(belopp)} utbetalt.`}`);
-        continue;
+      s.money += u.belopp;
+      s.earned += u.belopp;
+      s.uppdragKlara = (s.uppdragKlara ?? 0) + 1;
+      rader.push(
+        `${mall?.titel ?? 'Uppdraget'}: ${this.uppdragText(mall?.klar ?? 'Lämnat.', u.mal)} ${this.money(u.belopp)} utbetalt.`
+      );
+      /*
+       * Ärendet fortsätter. Den som tog emot har något eget att skicka
+       * vidare, och erbjudandet ligger kvar tills spelaren svarat - precis
+       * som ett lottat uppdrag. Har man redan två ärenden i ryggsäcken eller
+       * ett obesvarat erbjudande får fortsättningen vänta till nästa gång
+       * man är här, alltså i praktiken tills det finns plats.
+       */
+      if (mall?.nasta && !s.pendingUppdrag && (s.uppdrag?.length ?? 0) <= 2) {
+        const nasta = this.lottaFortsattning(mall.nasta);
+        if (nasta) s.pendingUppdrag = nasta;
       }
-      kvar.push(u);
     }
     s.uppdrag = kvar;
     return rader;
@@ -1272,9 +1307,7 @@ export class App {
             el('div', { class: 'uppdrag-villkor' },
               el('span', {}, el('strong', {}, 'Mål: '), `${mal?.name ?? u.mal}, ${mal?.country ?? ''}`),
               el('span', {}, el('strong', {}, 'Ersättning: '), this.money(u.belopp)),
-              u.deadline !== undefined
-                ? el('span', {}, el('strong', {}, 'Senast: '), `dag ${u.deadline} (${u.deadline - s.days} dagar)`)
-                : el('span', {}, el('strong', {}, 'Senast: '), 'ingen brådska, men de väntar')
+              el('span', {}, el('strong', {}, 'Tid: '), 'ingen brådska, men de väntar')
             ),
             el('div', { class: 'row' },
               button('Jag tar det', () => this.svaraUppdrag(true), { class: 'btn btn-primary btn-big' }),
@@ -5049,10 +5082,7 @@ export class App {
               el('span', { class: 'item-price' }, this.money(u.belopp))
             ),
             el('p', { class: 'muted' },
-              `Ska till ${mal?.name ?? u.mal}, ${mal?.country ?? ''}. Fick det i ${CITY_BY_ID[u.fran]?.name ?? u.fran} dag ${u.start}.` +
-                (u.deadline !== undefined
-                  ? ` Senast dag ${u.deadline}${s.days > u.deadline ? ' – för sent, halva ersättningen.' : ` (${u.deadline - s.days} dagar kvar).`}`
-                  : ' Ingen sista dag, men det ligger kvar tills det är levererat.')
+              `Ska till ${mal?.name ?? u.mal}, ${mal?.country ?? ''}. Fick det i ${CITY_BY_ID[u.fran]?.name ?? u.fran} dag ${u.start}. Ingen sista dag - det ligger kvar tills det är levererat.`
             )
           )
         );

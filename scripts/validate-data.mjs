@@ -36,7 +36,39 @@ try {
   const { CITY_PAPERS } = await load('/src/data/newspapers.ts');
   const { CITIES } = await load('/src/data/cities.ts');
   const { QUIZ_IMAGES, altLacker } = await load('/src/data/quizImages.ts');
+  const { UPPDRAG } = await load('/src/data/uppdrag.ts');
   const bildManifest = new Set(QUIZ_IMAGES.map((b) => b.id));
+  /*
+   * Uppdragskedjorna. Ett `nasta` som pekar på ingenting bryter kedjan tyst -
+   * spelaren lämnar över och får ingen fortsättning, utan att något syns. Ett
+   * uppdrag som pekar på sig självt eller tillbaka i kedjan gör den oändlig.
+   */
+  {
+    const idn = new Set(UPPDRAG.map((u) => u.id));
+    for (const u of UPPDRAG) {
+      if (!u.nasta) continue;
+      if (!idn.has(u.nasta)) problems.push(`uppdraget ${u.id} pekar på okänd fortsättning ${u.nasta}`);
+      if (u.nasta === u.id) problems.push(`uppdraget ${u.id} pekar på sig självt`);
+    }
+    // Följ varje kedja och se att den tar slut.
+    for (const start of UPPDRAG) {
+      const sedda = new Set([start.id]);
+      let nu = start;
+      while (nu.nasta) {
+        if (sedda.has(nu.nasta)) {
+          problems.push(`uppdragskedjan från ${start.id} går i cirkel vid ${nu.nasta}`);
+          break;
+        }
+        sedda.add(nu.nasta);
+        const n = UPPDRAG.find((u) => u.id === nu.nasta);
+        if (!n) break;
+        nu = n;
+      }
+    }
+    console.log(
+      `Uppdrag: ${UPPDRAG.length} stycken, ${UPPDRAG.filter((u) => u.nasta).length} med fortsättning, inga tidsgränser`
+    );
+  }
   /*
    * Två poster med samma id är alltid ett fel: bara en fil hämtas, och vilken
    * alt-text som gäller beror på i vilken ordning uppslagningen byggs. Det
