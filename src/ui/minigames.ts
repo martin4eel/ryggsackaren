@@ -191,6 +191,52 @@ function loop(fn: (dt: number, elapsed: number) => boolean): () => void {
 
 // ------------------------------------------------------------- gemensamt
 
+/**
+ * Ett foto som inte ger upp vid första nätfelet.
+ *
+ * Frågebilden och pekspelet fick det här mönstret först: ett tapp i
+ * täckningen på en telefon gav en trasig bildikon, eller bara alt-texten
+ * "Alternativ B" där kryddan skulle ha stått, och det såg ut som om spelet
+ * visade fel bilder. Två nya försök görs - det andra med ett tillägg i
+ * adressen som går förbi både webbläsarens och service workerns cache ifall
+ * det var en trasig post som svarade. Först därefter ges det upp, och då får
+ * anroparen veta det så att något begripligt kan stå i fotots ställe.
+ *
+ * `igen` börjar om från början, för en knapp som spelaren trycker på själv.
+ */
+function envisFoto(
+  bildId: string,
+  attrs: Record<string, string>,
+  vidUppgivet?: (img: HTMLImageElement) => void
+): { img: HTMLImageElement; igen: () => void } {
+  const img = el('img', { ...attrs, src: quizImageUrl(bildId), draggable: 'false' });
+  let forsok = 0;
+  // Mellan försöken visas varken trasig bildikon eller alt-text: rutan
+  // behåller sin storlek men står tom tills fotot kommer.
+  img.addEventListener('load', () => {
+    img.classList.remove('foto-saknas', 'foto-vantar');
+  });
+  img.addEventListener('error', () => {
+    img.classList.add('foto-vantar');
+    forsok += 1;
+    if (forsok <= 2) {
+      const url = quizImageUrl(bildId);
+      const adress = forsok === 1 ? url : `${url}?igen=${Date.now()}`;
+      after(forsok * 400, () => {
+        img.src = adress;
+      });
+      return;
+    }
+    img.classList.add('foto-saknas');
+    vidUppgivet?.(img);
+  });
+  const igen = () => {
+    forsok = 0;
+    img.src = `${quizImageUrl(bildId)}?igen=${Date.now()}`;
+  };
+  return { img, igen };
+}
+
 function randInt(max: number): number {
   return Math.floor(Math.random() * max);
 }
@@ -862,12 +908,7 @@ function startTimeline(host: HTMLElement, game: Minigame, onDone: Done): void {
           { class: 'mg-tid-nummer' },
           plats >= 0 ? String(plats + 1) : '\u00a0'
         ),
-        el('img', {
-          class: 'mg-tid-foto',
-          src: quizImageUrl(verk.bild),
-          alt: '',
-          draggable: 'false',
-        }),
+        envisFoto(verk.bild, { class: 'mg-tid-foto', alt: '' }).img,
         el('span', { class: 'mg-tid-namn' }, verk.namn),
         el('span', { class: 'mg-tid-ar' }, facit ? (verk.artext ?? String(verk.ar)) : '\u00a0')
       );
@@ -1266,7 +1307,19 @@ function startPictureChoice(host: HTMLElement, game: Minigame, onDone: Done): vo
     next();
   }, { class: 'btn btn-primary mg-peka-vidare' });
   vidare.hidden = true;
-  host.append(status.node, bubble, grid, feedback.node, vidare);
+  /*
+   * Gav ett foto upp efter sina egna omförsök står en ruta med text i dess
+   * ställe, och en knapp under fotona hämtar om allt som saknas. Knappen kan
+   * inte ligga i själva rutan - ett tryck där är ett svar.
+   */
+  const saknade = new Set<() => void>();
+  const hamtaIgen = button('Hämta fotona igen', () => {
+    hamtaIgen.hidden = true;
+    for (const igen of saknade) igen();
+    saknade.clear();
+  }, { class: 'btn mg-bildval-igen' });
+  hamtaIgen.hidden = true;
+  host.append(status.node, bubble, grid, hamtaIgen, feedback.node, vidare);
 
   const finish = () => {
     onDone({
@@ -1293,14 +1346,29 @@ function startPictureChoice(host: HTMLElement, game: Minigame, onDone: Done): vo
     bubble.textContent = `”${kund.text}”`;
     feedback.say('Peka på rätt foto.', 'neutral');
     clear(grid);
+    saknade.clear();
+    hamtaIgen.hidden = true;
     val.forEach((id, i) => {
       // pointerdown, inte click: på en telefon kommer klicket först när
       // fingret lyfts, och det hann bli "för sent" fast man tryckt i tid.
       const b = snabbKnapp('', () => pick(id, b), { class: 'option option-bild mg-bildval-knapp', 'data-sound': 'av', 'data-bild': id });
+      const platshallare = el('span', { class: 'option-foto-saknas' }, 'Fotot kunde inte hämtas');
+      platshallare.hidden = true;
+      const foto = envisFoto(id, { class: 'option-foto', alt: `Alternativ ${String.fromCharCode(65 + i)}` }, (img) => {
+        img.hidden = true;
+        platshallare.hidden = false;
+        saknade.add(() => {
+          platshallare.hidden = true;
+          img.hidden = false;
+          foto.igen();
+        });
+        hamtaIgen.hidden = false;
+      });
       b.append(
         el('span', { class: 'option-body option-body-bild' },
           el('span', { class: 'option-key' }, String.fromCharCode(65 + i)),
-          el('img', { class: 'option-foto', src: quizImageUrl(id), alt: `Alternativ ${String.fromCharCode(65 + i)}`, draggable: 'false' })
+          foto.img,
+          platshallare
         ),
         el('span', { class: 'option-facit' }, '\u00a0')
       );
@@ -1639,7 +1707,7 @@ function startQuiz(host: HTMLElement, game: Minigame, ctx: MinigameContext, onDo
     status.set(`Fråga ${index + 1}/${fragor.length}`, `${right} rätt`);
     fraga.textContent = f.q;
     clear(bildYta);
-    if (f.bild) bildYta.append(el('img', { src: quizImageUrl(f.bild), alt: '', draggable: 'false', loading: 'lazy' }));
+    if (f.bild) bildYta.append(envisFoto(f.bild, { alt: '', loading: 'lazy' }).img);
     clear(val);
     feedback.say('', 'neutral');
     info.textContent = '';
@@ -1754,7 +1822,7 @@ function startTeamPick(host: HTMLElement, game: Minigame, onDone: Done): void {
      */
     marke.append(
       bild
-        ? el('img', { class: 'mg-lagval-logo', src: quizImageUrl(bild), alt: 'Lagmärke', draggable: 'false' })
+        ? envisFoto(bild, { class: 'mg-lagval-logo', alt: 'Lagmärke' }).img
         : el('p', { class: 'mg-lagval-skylt' }, lagetsNamn)
     );
     if (bild) marke.append(el('p', { class: 'mg-lagval-lagnamn' }, '\u00a0'));
@@ -1766,7 +1834,7 @@ function startTeamPick(host: HTMLElement, game: Minigame, onDone: Done): void {
       if (!p) continue;
       const kort = snabbKnapp('', () => svara(id, kort), { class: 'mg-lagval-kort', 'data-sound': 'av', 'data-spelare': id });
       kort.append(
-        el('img', { class: 'mg-lagval-foto', src: quizImageUrl(p.bild), alt: '', draggable: 'false' }),
+        envisFoto(p.bild, { class: 'mg-lagval-foto', alt: '' }).img,
         el('span', { class: 'mg-lagval-namn' }, p.namn)
       );
       rad.append(kort);
