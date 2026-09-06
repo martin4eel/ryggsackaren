@@ -48,6 +48,12 @@ if (process.env.GH_TOKEN) {
   env.GIT_ASKPASS = askpass;
   env.GIT_TERMINAL_PROMPT = '0';
 }
+// Bara när token kommer via miljön ska git:s egna credential helpers hållas
+// borta - annars svarar nyckelringen med fel konto före askpass-filen. Utan
+// token ska helpern tvärtom få göra sitt: det är den som gh auth login satt
+// upp, och stängde vi av den även då kunde skriptet aldrig publicera från
+// ett skal utan terminal, för git hade ingen att fråga.
+const utanHelper = process.env.GH_TOKEN ? ['-c', 'credential.helper='] : [];
 
 // Vi bygger upp branchen i ett eget arbetsträd så att din vanliga
 // arbetskopia aldrig rörs.
@@ -83,7 +89,7 @@ try {
   let nothingToDo = false;
   let hasRemoteBranch = true;
   try {
-    run('git', ['-c', 'credential.helper=', 'fetch', '-q', '--depth', '1', 'origin', BRANCH], {
+    run('git', [...utanHelper, 'fetch', '-q', '--depth', '1', 'origin', BRANCH], {
       cwd: work,
       env,
     });
@@ -112,7 +118,7 @@ try {
 
   if (!nothingToDo) {
     console.log(`Publicerar ${DIST}/ till ${BRANCH} ...`);
-    run('git', ['-c', 'credential.helper=', 'push', 'origin', BRANCH], {
+    run('git', [...utanHelper, 'push', 'origin', BRANCH], {
       cwd: work,
       env,
       stdio: 'inherit',
