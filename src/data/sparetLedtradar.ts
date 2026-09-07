@@ -58,7 +58,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Rutnätsstadsdelen har avskurna hörn på varje kvarter, så att hästvagnar kunde svänga. Nu parkerar man där.' },
     { niva: 8, text: 'En engelsk författare stred här 1937 och sköts i halsen. Boken han skrev om det sålde under tusen exemplar.' },
     { niva: 6, text: 'Bröd gnidet med tomat, vitlök och olja. Den som lägger något ovanpå har missförstått regionen.' },
-    { niva: 4, text: 'Kyrkan som en arkitekt började bygga 1882 blir 172 meter, en meter lägre än stadens berg. Han ville inte tävla med Gud. Byggtiden gör det.' },
+    { niva: 4, text: 'Kyrkan som började byggas 1882 blir 172 meter, en meter lägre än stadens berg. Arkitekten som tog över året efter ville inte tävla med Gud. Byggtiden gör det.' },
     { niva: 2, text: 'Freddie Mercury och en operasångerska sjöng en duett med stadens namn till OS 1992. Fotbollslaget säger sig vara mer än en klubb.' },
   ],
   berlin: [
@@ -84,7 +84,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
   ],
   dakar: [
     { niva: 10, text: 'Staden ligger på en halvö som gett namn åt en ögrupp 60 mil västerut, inte tvärtom.' },
-    { niva: 8, text: 'Landets förste president var poet och den förste afrikanen i Franska akademien. Flygplatsen bär hans namn.' },
+    { niva: 8, text: 'Landets förste president var poet och den förste afrikanen i Franska akademien. Den gamla flygplatsen bar hans namn tills flygen flyttade 2017. Poesin stannade.' },
     { niva: 6, text: 'Norr om staden ligger en rosa sjö. Saltet skördas för hand av män som smörjer in sig i sheasmör för att inte fräta sönder.' },
     { niva: 4, text: 'Ett 49 meter högt monument, byggt av Nordkorea, står här sedan 2010. Landslaget heter Terangas lejon och en världssångare från staden blev turistminister.' },
     { niva: 2, text: 'Afrikas västligaste huvudstad, vars namn ett ökenrally bär fast det inte längre går hit. Ön utanför har Dörren utan återvändo.' },
@@ -93,7 +93,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Staden levde på pärlfiske tills japanska odlade pärlor slog ut handeln på 1930-talet. Oljan står i dag för bara några procent av ekonomin.' },
     { niva: 8, text: 'Tunnelbanan öppnade 2009 helt förarlös. En vagn i varje tåg är Guldklass med skinnfåtöljer.' },
     { niva: 6, text: 'I ett köpcentrum här är det minus fyra grader året runt, med pistmaskin och pingviner. Utanför är det plus fyrtio.' },
-    { niva: 4, text: 'Hotellet som ser ut som ett segel kallar sig sjustjärnigt. Beteckningen finns inte, men ingen har lyckats säga det till dem.' },
+    { niva: 4, text: 'Hotellet som ser ut som ett segel kallas sjustjärnigt. Beteckningen finns inte och hotellet har aldrig använt den själv, men det har inte heller sagt emot.' },
     { niva: 2, text: 'Emiratet med världens högsta byggnad, 163 våningar, och en konstgjord ö formad som en palm. Huvudstaden ligger dock i grannemiratet.' },
   ],
   dublin: [
@@ -142,7 +142,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Staden grundades 969 när planeten Mars stod på himlen och fick sitt namn efter planeten. Det betyder Den segrande.' },
     { niva: 8, text: 'Vardagsrätten här är ris, linser, pasta och kikärter i samma skål: tre kolhydrater till priset av en. Universitetet från 970 är äldre än Bologna och Oxford.' },
     { niva: 6, text: 'En sångerska sände en konsert första torsdagen varje månad och hela arabvärlden stannade. Vid hennes begravning 1975 fyllde miljoner gatorna.' },
-    { niva: 4, text: 'Verdi beställdes att skriva en opera till stadens nya operahus när en kanal invigdes 1869. Han blev två år försenad, vilket är snabbt för en opera.' },
+    { niva: 4, text: 'Verdi tackade nej till att skriva något till invigningen av stadens operahus 1869, men tog beställningen på en opera året efter. Den blev nästan ett år försenad, vilket är snabbt för en opera.' },
     { niva: 2, text: 'I utkanten står världens mest kända gravar, byggda av 2,3 miljoner stenblock, och 2025 öppnade museet med en ung faraos alla fem tusen gravföremål. Floden delar staden och hela landet.' },
   ],
   kapstaden: [
@@ -184,7 +184,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 10, text: 'Den stora branden 1666 började i ett bageri på en gata uppkallad efter pudding. Bagaren nekade till alltihop.' },
     { niva: 8, text: 'Här måste taxiförarna kunna 25 000 gator utantill innan de får köra. Provet tar tre–fyra år, och GPS:en räknas inte.' },
     { niva: 6, text: 'Finanskvarteret kallas kvadratmilen och har en egen borgmästare som väljs varje år. Han bor i ett hus som helt enkelt heter Herrgårdshuset.' },
-    { niva: 4, text: 'Här går nollmeridianen genom en stadsdel i sydöst, så all världens tid räknas härifrån. Grannlandet i söder höll sig till sin egen huvudstad i tjugo år till.' },
+    { niva: 4, text: 'Här går nollmeridianen genom en stadsdel i sydöst, så all världens tid räknas härifrån. Grannlandet i söder höll sig till sin egen huvudstad i tjugosju år till.' },
     { niva: 2, text: 'Här är bussarna röda, taxibilarna svarta och parlamentets klocktorn slår över Themsen. Tunnelbanan kallas röret.' },
   ],
   malmo: [
@@ -259,7 +259,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
   ],
   peking: [
     { niva: 10, text: 'Här försvann 1941 en halv miljon år gammal fossil människa när hon skulle skickas till USA. Ingen har sett henne sedan dess.' },
-    { niva: 8, text: 'Här byggde en änkekejsarinna en båt av marmor, enligt sägnen för flottans pengar. Marmorbåten står kvar; flottan sänktes 1895.' },
+    { niva: 8, text: 'Här lät en änkekejsarinna rusta upp en båt av marmor, enligt sägnen för flottans pengar. Marmorbåten står kvar; flottan sänktes 1895.' },
     { niva: 6, text: 'Staden blev huvudstad på 1200-talet under en khan som Marco Polo tjänade. Farfar hade bränt ner den. Släkten var inte överens om stadsplanering.' },
     { niva: 4, text: 'Här bad kejsaren årligen om god skörd i ett tempel byggt utan en enda spik, och en italiensk regissör fick filma i det förbjudna palatset 1987.' },
     { niva: 2, text: 'Här utropades Folkrepubliken från Himmelska fridens port 1949, och stadens anka äts i pannkaka med hoisin. Skinnet är poängen.' },
@@ -356,7 +356,7 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 2, text: 'Hälsinglands äldsta stad, vid Bottenhavet, med femton tusen invånare och ett glatt tillnamn.' },
   ],
   brescia: [
-    { niva: 10, text: 'Ett landsvägslopp på tusen italienska mil startade här 1927 och körs numera som rally för veteranbilar.' },
+    { niva: 10, text: 'Ett landsvägslopp på tusen mil, engelska sådana, startade här 1927 och körs numera som rally för veteranbilar.' },
     { niva: 8, text: 'Vinet söder om staden jäser en andra gång i flaskan, precis som i Champagne, men får bara heta Franciacorta.' },
     { niva: 6, text: 'Ett astronomiskt ur från 1546 visar månfaser på torget, och två bronsfigurer slår i klockan.' },
     { niva: 4, text: 'Romarna anlade staden och forumet ligger kvar mitt i centrum, på Unescos lista sedan 2011.' },
@@ -375,5 +375,40 @@ export const SPARET_LEDTRADAR: Record<string, Ledtrad[]> = {
     { niva: 6, text: 'På bergskrönet ovanför dalen ligger en stad som zapotekerna började bygga omkring 500 f.Kr.' },
     { niva: 4, text: 'I byarna omkring vävs mattor på trampvävstolar med färger ur indigo och kochenill.' },
     { niva: 2, text: 'Dalstad femtio mil söder om huvudstaden, 1 550 meter över havet, med marknader och allhelgonafirande på kyrkogårdarna.' },
+  ],
+  alicante: [
+    { niva: 10, text: 'Strandpromenaden är lagd med sex och en halv miljon marmorplattor i rött, svart och benvitt, i ett vågmönster som bara syns ordentligt uppifrån borgen. Vi går på den ändå, nerifrån.' },
+    { niva: 8, text: 'Nougaten av mandel och honung görs i en by några mil inåt land och äts till jul i hela landet. Här äts den året om, vilket byn tycker är alldeles rätt.' },
+    { niva: 6, text: 'Vid midsommar reses stora figurer av papp och gips på torgen och bränns på Johannesnatten. En benådas varje år och får flytta in på museum. De andra får inte veta i förväg.' },
+    { niva: 4, text: 'Utanför hamnen ligger landets minsta bebodda ö, och i grannstaden står Europas största palmlund med ett par hundra tusen träd på Unescos lista. Palmerna är inte räknade, de är uppskattade.' },
+    { niva: 2, text: 'Vi är vid Costa Blanca, i staden med två officiella språk och två namn, under en borg på ett kalkberg 166 meter rakt ovanför hamnen. Och vi går på strandpromenaden i marmor.' },
+  ],
+  chicago: [
+    { niva: 10, text: 'Till världsutställningen 1893 byggdes ett hjul på åttio meter som skulle överglänsa Eiffeltornet från förra utställningen. Det snurrade, och sedan skrotades det. Hjulen som kom efter fick ändå behålla ordet pariser.' },
+    { niva: 8, text: 'Här vände ingenjörerna år 1900 på en hel flod, så att avloppet rann bort från dricksvattnet i stället för ut i det. Staden nedströms stämde.' },
+    { niva: 6, text: 'Efter en brand 1871 byggdes här det första huset i världen som bars av en stomme i stål i stället för av sina väggar. Tio våningar. Det revs 1931 för att ge plats åt ett högre.' },
+    { niva: 4, text: 'Bluesen tog tåget hit från Mississippideltat och blev elektrisk i ett skivbolag på South Michigan Avenue. Stadens pizza äts med kniv och gaffel, för kanten är hög och osten ligger under tomaten.' },
+    { niva: 2, text: 'Vi står under en polerad böna i stål och ser oss själva i staden vid Michigansjön, landets tredje största, där ett torn på 442 meter länge var världens högsta och floden färgas grön på Sankt Patriks dag.' },
+  ],
+  kingston: [
+    { niva: 10, text: 'Landets förste svarte miljonär byggde 1881 ett hus här som i dag är mest känt för sin glass. Förmögenheten kom från guldgruvor i Venezuela. Glassen görs på plats.' },
+    { niva: 8, text: 'Staden grundades 1692 åt dem som blev hemlösa när en jordbävning sänkte sjörövarstaden på andra sidan hamnen. Sjörövarna blev inte bofasta av det.' },
+    { niva: 6, text: 'Kaffet från bergen öster om staden är bland världens dyraste och skeppas i tunnor i stället för säckar. Det mesta går till Japan, som betalar för tunnorna också.' },
+    { niva: 4, text: 'Flaggan som hissades den 6 augusti 1962 är svart, grön och gul, en av mycket få i världen utan rött, vitt eller blått. Musiken som växte fram i kvarteren här på sextiotalet står på Unescos lista sedan 2018.' },
+    { niva: 2, text: 'Vi står på Hope Road 56, där kulhålen från 1976 sitter kvar i väggen, i huvudstaden vars mest berömde son sjöng att allt kommer att ordna sig.' },
+  ],
+  montgomery: [
+    { niva: 10, text: 'Två bröder från Ohio öppnade sin första civila flygskola här 1910, på ett fält som sedan blev flygbas. Eleverna var få. Bröderna hade själva bara flugit i sju år.' },
+    { niva: 8, text: 'En countrysångare som dog i baksätet på sin Cadillac på nyårsdagen 1953, tjugonio år gammal, ligger begravd här. Begravningen sägs vara den största folksamlingen i stadens historia.' },
+    { niva: 6, text: 'Här svors den förste presidenten för en stat som inte längre finns in på kapitoliets trappa i februari 1861. Huvudstaden flyttade efter tre månader. Det gjorde inte trappan.' },
+    { niva: 4, text: 'En marsch på drygt åtta mil slutade framför kapitoliet här i mars 1965, efter fem dagars vandring från en småstad vid en bro. Pastorn i baptistkyrkan ett kvarter bort hade tio år tidigare organiserat en bussbojkott från kyrkans källare.' },
+    { niva: 2, text: 'Vi står på Dexter Avenue i Alabamas huvudstad, där en sömmerska den 1 december 1955 satt kvar på bussen och startade en bojkott som varade i 381 dagar.' },
+  ],
+  visby: [
+    { niva: 10, text: 'Vikingatidens största kända silverskatt hittades på ön 1999 och väger 67 kilo. Hittarna gick med metalldetektor över en åker. Åkern hade väntat i tusen år.' },
+    { niva: 8, text: 'Här spelades filmerna om världens starkaste flicka in i slutet av sextiotalet. Villan står kvar i en nöjespark strax utanför staden. Hästen och apan är utbytta.' },
+    { niva: 6, text: 'En dansk kung landsteg 1361 och slog öns bönder utanför muren, medan borgarna innanför tittade på. Massgravarna grävdes ut på 1900-talet; skeletten hade rustningarna på sig, för ingen hann ta av dem.' },
+    { niva: 4, text: 'Sedan 1968, då en statsminister talade från ett lastbilsflak i en park, samlas landets politiker här en vecka varje sommar. Några veckor senare kommer riddarna.' },
+    { niva: 2, text: 'Vi går innanför en ringmur på 3,4 kilometer med 27 torn kvar av 29, förbi kyrkoruiner och rosor, i hansestaden på landets största ö. Saffranspannkakan tar vi med salmbärssylt.' },
   ],
 };
