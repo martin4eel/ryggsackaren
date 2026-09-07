@@ -77,7 +77,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Sagrada Famílias högsta torn blir 172 meter, en meter lägre än berget Montjuïc. Gaudí ville inte tävla med Gud. Byggtiden gör det.',
     'Park Güell var tänkt som ett villaområde med sextio tomter. Två såldes. Gaudí köpte den ena, för någon måste.',
     'Pa amb tomàquet är bröd gnidet med tomat, vitlök och olja. Den som lägger något ovanpå har missförstått Katalonien.',
-    'Columbus står på en kolonn vid hamnen och pekar mot Amerika. Fast han pekar mot Medelhavet, vilket hela hans karriär.',
+    'Columbus står på en kolonn vid hamnen och pekar mot Amerika. Fast han pekar mot Medelhavet, vilket sammanfattar hela hans karriär.',
     'George Orwell stred i Barcelona 1937 och sköts i halsen. Han skrev Hyllning till Katalonien och sålde under tusen exemplar.',
     'Montserrat Caballé och Freddie Mercury sjöng "Barcelona" till spelen 1992. Mercury dog året innan, låten spelades ändå.',
     'Casa Batlló har ett tak som en drakrygg. Sankt Göran, som dödade draken, är Kataloniens skyddshelgon och firas med rosor och böcker.',
@@ -195,7 +195,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   ],
   istanbul: [
 
-    'Hagia Sofia var världens största katedral i nästan tusen år, tills Sevilla byggde en större på 1520-talet. Hela kyrkan tog fem år att bygga, men kupolen rasade i en jordbävning 558 och ersattes 562. Den att bygga - renoveringen har tagit längre.',
+    'Hagia Sofia var världens största katedral i nästan tusen år, tills Sevilla byggde en större på 1520-talet. Hela kyrkan tog fem år att bygga, men kupolen rasade i en jordbävning 558 och ersattes 562. Fem år att bygga; renoveringen har tagit längre.',
     'Blå moskén är inte blå utanpå. Namnet kommer från tjugotusen kakelplattor från Iznik på insidan, och de sex minareterna gjorde att sultanen fick skicka en sjunde till Mecka för att inte förarga någon.',
     'Turkarna dricker mer te per person än något annat folk, ur små tulpanformade glas. Kaffet, som de gjorde världsberömt, är mest till för att spå i sumpen.',
     'Simit, brödringen med sesam, har sålts från vagnar sedan 1500-talet. Den är fortfarande billigare än en tidning, och betydligt mer aktuell.',
@@ -330,7 +330,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Napoleon intog Moskva 1812 och fann staden tom och brinnande. Han stannade en månad, väntade på en kapitulation som aldrig kom, och gick hem i snön.',
     'De sju systrarna är sju stalinistiska skyskrapor från efterkrigstiden. Den högsta, Moskvauniversitetet, var Europas högsta byggnad fram till 1990 och lär inrymma över 30 kilometer korridor.',
     'I Bulgakovs Mästaren och Margarita anländer djävulen till 1930-talets Moskva med en talande svart katt. Manuskriptet fick inte ges ut förrän 26 år efter författarens död.',
-    'Pusjkin föddes i Moskva 1799 och dog 1837 efter en duell. Hans farfars far var afrikan och skänktes som gåva till Peter den store, som gjorde honom till general.',
+    'Pusjkin föddes i Moskva 1799 och dog 1837 efter en duell. Hans morfars far var afrikan och skänktes som gåva till Peter den store, som gjorde honom till general.',
     'Pelmeni, degknyten med köttfyllning, fryses traditionellt utomhus på balkongen. Namnet betyder öronbröd. Ryska vintrar gör frysboxar överflödiga.',
   ],
   mumbai: [
@@ -446,7 +446,7 @@ export const CITY_FACTS: Record<string, string[]> = {
 
     'Golden Gate-bron invigdes 1937. Flottan ville måla den svart med gula ränder. Arkitekten tyckte att rostskyddsfärgen var finare, och så blev det.',
     'Fotbollslaget 49ers är uppkallat efter guldgrävarna som strömmade till 1849. De flesta av dem hittade inget guld heller.',
-    'Bokhandeln City Lights gav ut Ginsbergs "Howl" 1957 och åtalades för det. Beatgenerationen fick ett hem och boken fick reklam.',
+    'Bokhandeln City Lights gav ut Ginsbergs "Howl" 1956 och åtalades för det året efter. Beatgenerationen fick ett hem och boken fick reklam.',
     'Sommaren 1967 samlades hippierörelsen i Haight-Ashbury. Sången om blommor i håret var reklam för en festival i Monterey.',
     'Lombard Street har åtta skarpa kurvor på ett enda kvarter. De byggdes 1922 för att bilarna skulle klara lutningen på 27 procent.',
     'Sjölejonen vid Pier 39 flyttade in efter jordbävningen 1989 och bor kvar. Fiskebåtarna som hade bryggorna fick flytta.',
@@ -459,7 +459,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Under Koreakriget 1950–53 bytte Seoul ägare fyra gånger. Kriget slutade med vapenstillestånd, inte fred, och pågår formellt fortfarande.',
     'Samsung betyder tre stjärnor och började 1938 med torkad fisk och nudlar. Det gick bra sedan.',
     'Gangnam betyder söder om floden och är stadens dyraste stadsdel. Psy gjorde den till Youtubes första miljardvideo 2012.',
-    'Bäcken Cheonggyecheon göms under betong 1958 och fick en motorväg ovanpå sig 1976. 2005 rev staden vägen och grävde fram bäcken. Trafiken minskade, till trafikplanerarnas förvåning.',
+    'Bäcken Cheonggyecheon gömdes under betong 1958 och fick en motorväg ovanpå sig 1976. 2005 rev staden vägen och grävde fram bäcken. Trafiken minskade, till trafikplanerarnas förvåning.',
     'Bibimbap betyder blandat ris, och det knapriga riset i botten på stenskålen är hela poängen. Soju är nationaldrycken; Jinro säljer flest flaskor sprit i världen.',
     'Bong Joon-hos "Parasit" tog Oscar för bästa film 2020, som första icke-engelskspråkiga. Han Kang tog Nobelpriset 2024. BTS tog Billboardlistan 2020. Det var ett bra decennium.',
     'Vid N Seoul Tower på Namsan hänger par upp hänglås och kastar nyckeln. Taekwondo har sitt högkvarter i staden; det blev OS-gren i Sydney 2000.',
@@ -490,7 +490,7 @@ export const CITY_FACTS: Record<string, string[]> = {
 
     'James Cook landsteg vid Botany Bay 1770. Aderton år senare kom elva fartyg med 700 fångar, och Sydney var grundat. Den 26 januari är nationaldag; inte alla firar.',
     'Harbour Bridge invigdes 1932 med sex miljoner nitar. Sedan 1998 får man klättra över bågen, 134 meter upp, i sele och overall.',
-    'Bondi betyder ungefär vatten mot klippor. Livräddarklubben från 1907 är Australiens äldsta, och stranden har den mest fotograferade simhallen.',
+    'Bondi betyder ungefär vatten mot klippor. Livräddarklubben från 1907 är Australiens äldsta, och stranden har den mest fotograferade badbassängen.',
     'Sydneytrattspindeln kan döda en människa. Sedan motgiftet 1981 har den inte gjort det. Blue Mountains är blå av eukalyptusolja i luften.',
     'AC/DC bildades här 1973 av två bröder från Glasgow. Samma år fick Sydneybon Patrick White Nobelpriset i litteratur, och Operahuset invigdes. Det var mycket det året.',
     'Nemo hamnade hos en tandläkare på 42 Wallaby Way, Sydney. Adressen fick brev.',
@@ -538,7 +538,7 @@ export const CITY_FACTS: Record<string, string[]> = {
   ],
   brescia: [
     'Brescia grundades som Brixia och har ett romerskt forum kvar mitt i staden, med tempelrester från år 73 e.Kr. Det står på Unescos världsarvslista sedan 2011.',
-    'Mille Miglia startade här 1927: ett landsvägslopp på tusen romerska mil, drygt 1 600 kilometer, Brescia–Rom–Brescia. Loppet körs numera som rally för veteranbilar, med start på Viale Venezia.',
+    'Mille Miglia startade här 1927: ett landsvägslopp på tusen mil, engelska miles, drygt 1 600 kilometer, Brescia–Rom–Brescia. Loppet körs numera som rally för veteranbilar, med start på Viale Venezia.',
     'Franciacorta väster om staden gör mousserande vin med andrajäsning i flaskan, samma metod som i Champagne. Namnet får bara användas inom området.',
     'Staden är ett centrum för metall och vapentillverkning sedan medeltiden, och Beretta har sin fabrik i dalen norr om Brescia sedan 1526.',
     'Piazza della Loggia har ett astronomiskt ur från 1546 som visar månfaser och stjärntecken. Två bronsfigurer slår i klockan, och kallas på dialekt i màcc de le ure - timmarnas galningar.',
@@ -608,7 +608,7 @@ export const CITY_FACTS: Record<string, string[]> = {
     'Cloud Gate i Millennium Park är gjord av Anish Kapoor och kallas av alla för The Bean. Ytan är polerad rostfri plåt utan synliga skarvar.',
     'Chicagoflodens flöde vändes år 1900, så att avloppet gick bort från sjön i stället för ut i den. På Sankt Patriks dag färgas floden grön.',
     'Deep dish är stadens pizza: hög kant, ost i botten och tomat överst. Den tar närmare en halvtimme i ugnen.',
-    'Chicagobluesen växte fram när musiker från Mississippideltat flyttade norrut. Chess Records spelade in Muddy Waters och Howlin Wolf.',
+    'Chicagobluesen växte fram när musiker från Mississippideltat flyttade norrut. Chess Records spelade in Muddy Waters och Howlin\' Wolf.',
     'På Art Institute of Chicago hänger både Grant Woods American Gothic och Edward Hoppers Nighthawks.',
     'Världsutställningen 1893 hölls i Chicago, och till den byggdes världens första pariserhjul.',
   ],

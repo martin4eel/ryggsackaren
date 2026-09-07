@@ -70,11 +70,11 @@ export const COIN_QUESTIONS: Record<string, Question> = {
     info: 'Colosseum rymde uppåt femtiotusen åskådare.',
   },
   istanbul: {
-    q: 'Byggnaden på bilden har varit tre saker. Vilken var den första?',
+    q: 'Byggnaden på bilden har bytt roll tre gånger. Vad var den från början?',
     a: ['Kyrka', 'Moské', 'Museum', 'Palats'],
     bild: 'stad:istanbul',
     d: 2,
-    info: 'Hagia Sofia byggdes som kyrka 537, blev moské 1453 och museum 1935.',
+    info: 'Hagia Sofia byggdes som kyrka 537, blev moské 1453, museum 1934 och moské igen 2020.',
   },
   moskva: {
     q: 'Katedralen på bilden är känd för sina kupoler. Vad kallas formen?',
@@ -316,7 +316,7 @@ export const COIN_QUESTIONS: Record<string, Question> = {
   },
   addisabeba: {
     q: 'Museet på bilden visar ett berömt fossil. Vad kallas det?',
-    a: ['Lucy', 'Ida', 'Otzi', 'Toumaï'],
+    a: ['Lucy', 'Ida', 'Ötzi', 'Toumaï'],
     bild: 'stad:addisabeba',
     d: 2,
     info: 'Lucy är 3,2 miljoner år gammal och hittades i Afar 1974.',
