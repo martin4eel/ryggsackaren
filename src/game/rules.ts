@@ -258,11 +258,22 @@ export function cityQuizQuestions(
     const nyckel = svar.length >= 4 ? svar : '';
     return Boolean(nyckel) && broschyr.includes(nyckel);
   };
+  /*
+   * Fem lottas först. Bara om färre än tre av dem är täckta byts otäckta
+   * ut mot täckta. Förr togs tre täckta alltid först, och eftersom en stad
+   * har bara tre till åtta täckta frågor blev samma tre stommen i varje
+   * omprov.
+   */
   const ur = shuffle(source);
-  const tackta = ur.filter(tackt).slice(0, Math.min(3, count));
-  const ovriga = ur.filter((q) => !tackta.includes(q));
-  return shuffle([...tackta, ...ovriga.slice(0, count - tackta.length)])
-    .map((q) => prepareQuestion(q, difficulty));
+  const valda = ur.slice(0, count);
+  const reserv = ur.slice(count).filter(tackt);
+  const minst = Math.min(3, count);
+  while (valda.filter(tackt).length < minst && reserv.length > 0) {
+    const i = valda.findIndex((q) => !tackt(q));
+    if (i < 0) break;
+    valda[i] = reserv.shift()!;
+  }
+  return shuffle(valda).map((q) => prepareQuestion(q, difficulty));
 }
 
 /** Frågor för ett arbetsskift. */

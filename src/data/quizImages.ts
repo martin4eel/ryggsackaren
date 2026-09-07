@@ -195,7 +195,7 @@ export const QUIZ_IMAGES: QuizImage[] = [
   { id: 'emmentaler', alt: 'En bit emmentaler', article: 'Emmental cheese', altFraga: 'En bit ljusgul ost med stora hål' },
   { id: 'agave', alt: 'En blå agave', article: 'Agave tequilana', altFraga: 'En stor blågrön växt med tjocka spetsiga blad' },
   { id: 'kora', alt: 'En koraspelare', file: 'Joueur de kora à Toubab Dialaw.jpg', altFraga: 'En man i gul mössa spelar ett stränginstrument med stor kalebass' },
-  { id: 'koniskhatt', alt: 'En konisk vietnamesisk hatt', article: 'Asian conical hat' },
+  { id: 'koniskhatt', alt: 'En konisk vietnamesisk hatt', article: 'Asian conical hat', altFraga: 'En bred, spetsig hatt av flätade blad' },
   { id: 'usjanka', alt: 'En usjanka', article: 'Ushanka', altFraga: 'En grå pälsmössa med nedfällbara öronlappar' },
   { id: 'hanbok', alt: 'En kvinna i hanbok', article: 'Hanbok', altFraga: 'En kvinna i lila jacka och stor rosa kjol på en scen' },
   { id: 'merlion', alt: 'Merlionstatyn i Singapore', article: 'Merlion', altFraga: 'En vit staty som sprutar vatten ur munnen vid ett vattendrag' },
