@@ -399,6 +399,25 @@ export interface ScoreRow {
 }
 
 /**
+ * Städerna som räknas i slutpoängen: de där man svarat på minst en fråga
+ * (turistbyråns prov, myntfrågan eller ett skift) eller jobbat.
+ *
+ * Förr räknades varje besökt stad, och då var den bästa resan att låna
+ * pengar hemma, åka tåg genom fjorton europeiska städer på femton dagar och
+ * aldrig ta ett enda skift: städerna, världsdelarna och tempot gav mer än en
+ * hederlig resa med jobb i varje stad. Att kliva av tåget är inte att ha
+ * varit någonstans.
+ */
+export function aktivaStader(state: GameState): string[] {
+  return [...new Set(state.visited)].filter((id) => {
+    const st = state.cityStats[id];
+    const svarat = (st?.correct ?? 0) + (st?.wrong ?? 0) > 0;
+    const jobbat = (state.progress[id]?.workedJobs?.length ?? 0) > 0;
+    return svarat || jobbat;
+  });
+}
+
+/**
  * Slutpoängen rad för rad. Samma siffror som finalScore, men utskrivna så
  * att den som fått 36 541 poäng kan se varifrån de kom.
  */
@@ -424,11 +443,14 @@ export function finalScoreBreakdown(state: GameState): { rader: ScoreRow[]; tota
       certAntal += n ?? 0;
     }
   }
-  const uniqueCities = new Set(state.visited).size;
+  const aktiva = aktivaStader(state);
+  const uniqueCities = aktiva.length;
+  const besokta = new Set(state.visited).size;
+  const genomresta = besokta - uniqueCities;
   const cityPoints = uniqueCities * 1500;
   // Olika världsdelar är värda mer än flera städer i samma hörn av världen.
   const regions = new Set(
-    state.visited.map((id) => CITY_BY_ID[id]?.region).filter(Boolean)
+    aktiva.map((id) => CITY_BY_ID[id]?.region).filter(Boolean)
   ).size;
   const stampPoints = state.stamps.length * 900;
   /**
@@ -448,13 +470,17 @@ export function finalScoreBreakdown(state: GameState): { rader: ScoreRow[]; tota
   const rader: ScoreRow[] = [
     { namn: 'Kassa minus skuld', detalj: `${cash.toLocaleString('sv-SE')} × 0,6${cashRaw > SCORE_CASH_CAP ? ` (max ${SCORE_CASH_CAP.toLocaleString('sv-SE')} räknas)` : ''}`, poang: Math.round(cash * 0.6) },
     { namn: 'Ryggsäckens värde hemma', detalj: `${Math.round(bag).toLocaleString('sv-SE')} × 0,9${backpackHomeValue(state) > SCORE_BAG_CAP ? ` (max ${SCORE_BAG_CAP.toLocaleString('sv-SE')} räknas)` : ''}`, poang: Math.round(bag * 0.9) },
-    { namn: 'Städer', detalj: `${uniqueCities} × 1 500`, poang: cityPoints },
+    {
+      namn: 'Städer',
+      detalj: `${uniqueCities} × 1 500${genomresta > 0 ? ` (${genomresta} ${genomresta === 1 ? 'stad' : 'städer'} utan prov eller skift räknas inte)` : ''}`,
+      poang: cityPoints,
+    },
     { namn: 'Världsdelar', detalj: `${regions} × 2 000`, poang: regions * 2000 },
     { namn: 'Stämplar', detalj: `${state.stamps.length} × 900`, poang: stampPoints },
     { namn: 'Anseende', detalj: `${rykteVarde >= 0 ? '+' : ''}${rykteVarde} × 700`, poang: rykte },
     { namn: 'Certifikat', detalj: certAntal > 0 ? `${certAmnen} ${certAmnen === 1 ? 'ämne' : 'ämnen'} à 900, ${certAntal - certAmnen} extra à 250` : 'inga', poang: certPoints },
     { namn: 'Träffsäkerhet', detalj: `${Math.round(accuracy * 100)} % av 10 000`, poang: Math.round(accuracy * 10000) },
-    { namn: 'Tempo', detalj: `${daysPerCity.toFixed(1).replace('.', ',')} dagar per stad`, poang: Math.round(pace) },
+    { namn: 'Tempo', detalj: uniqueCities > 0 ? `${daysPerCity.toFixed(1).replace('.', ',')} dagar per stad` : 'ingen stad att räkna på', poang: Math.round(pace) },
   ];
   const total = Math.max(0, rader.reduce((a, r) => a + r.poang, 0));
   return { rader, total };
