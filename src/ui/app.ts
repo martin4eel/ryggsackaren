@@ -658,6 +658,8 @@ export class App {
   private filmNode: HTMLElement | null = null;
   /** Brickan som just vänts upp, för inslaget i ikonraden. */
   private nyBricka: string | null = null;
+  /** Myntvändningen som pågår på stadsbilden, så att den kan avbrytas vid skärmbyte. */
+  private brickTimer: number | null = null;
   /**
    * Vilken station man gått in i. Resebyrån är uppdelad i busstation,
    * tågstation, flygplats och hamn, som i förlagan, och listan visar då bara
@@ -823,6 +825,24 @@ export class App {
       stopHandlare();
       this.butikVald = null;
     }
+    /*
+     * Luren läggs på när man går ut ur kiosken. Annars ringde signalerna
+     * vidare i tre sekunder, mamma svarade på den skärm man hunnit till,
+     * samtalet räknades, och nästa besök i kiosken började mitt i ett
+     * samtal man aldrig ringt.
+     */
+    if (screen !== 'telefon') this.laggPa();
+    /*
+     * Ett mynt som håller på att vändas fullföljer inte om man hunnit lämna
+     * stadsbilden: en mystikbricka lade annars sitt händelsekort över
+     * tidningen, och frågebrickan bytte skärm mitt i vad man än gjorde.
+     * Myntet ligger kvar nedvänt när man kommer tillbaka.
+     */
+    if (screen !== 'stad' && this.brickTimer !== null) {
+      window.clearTimeout(this.brickTimer);
+      this.brickTimer = null;
+      this.nyBricka = null;
+    }
     // Att öppna ryggsäcken kvitterar notisen på knappen.
     if (screen === 'ryggsack' && this.state) {
       this.state.packSeen = {
@@ -841,6 +861,10 @@ export class App {
       this.stampToast = null;
     }
     this.state.screen = screen;
+    // Ett pass som inte längre pågår ska inte ligga kvar i sparfilen: den
+    // som sjukanmälde sig och stängde fliken fick annars skiftet tillbaka
+    // vid nästa start, fast skärmen var stadsbilden.
+    if (!this.quiz) delete this.state.pagaende;
     saveGame(this.state);
     if (changed && this.pendingStamp && !this.quiz) this.commit();
     // Bara ett faktiskt skärmbyte ska rulla upp till toppen.
@@ -2672,9 +2696,11 @@ export class App {
       .querySelectorAll<HTMLButtonElement>('.city-coin')
       .forEach((c) => (c.disabled = true));
     this.nyBricka = spotId;
-    window.setTimeout(() => {
+    if (this.brickTimer !== null) window.clearTimeout(this.brickTimer);
+    this.brickTimer = window.setTimeout(() => {
+      this.brickTimer = null;
       const nu = this.state;
-      if (!nu) return;
+      if (!nu || nu.screen !== 'stad') return;
       const prog = getProgress(nu, nu.currentCityId);
       prog.revealed ??= [];
       if (!prog.revealed.includes(spotId)) prog.revealed.push(spotId);
