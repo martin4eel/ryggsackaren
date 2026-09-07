@@ -1531,12 +1531,18 @@ img.no-photo {
   inset: 0;
   z-index: 60;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 18px;
   background: rgba(4, 16, 26, 0.72);
   backdrop-filter: blur(3px);
   animation: fade 0.16s ease;
+  overflow-y: auto;
+}
+
+.overlay > * {
+  flex-shrink: 0;
+  margin: auto 0;
 }
 
 @keyframes fade {
@@ -4568,22 +4574,34 @@ body.sheet-oppen {
   overflow: hidden;
 }
 
+/* Överlägget är en kolumn som går att rulla. Arket trycks ner mot
+   underkanten med en automatisk övermarginal: finns det plats blir
+   marginalen all luft ovanför, och får arket inte plats blir den noll och
+   arket börjar högst upp, så att allt går att nå. Med align-items: flex-end
+   låg överkanten utanför skärmen på en liten telefon, och knappen Köp
+   biljett gick inte att nå alls. */
 .sheet-overlay {
   position: fixed;
   inset: 0;
   z-index: 60;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: 16px;
   background: rgba(3, 12, 20, 0.72);
   backdrop-filter: blur(3px);
   animation: sheetin 0.22s ease;
+  overflow-y: auto;
+}
+
+.sheet-overlay > * {
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 @media (min-width: 640px) {
-  .sheet-overlay {
-    align-items: center;
+  .sheet-overlay > * {
+    margin: auto 0;
   }
 }
 
@@ -5137,8 +5155,8 @@ body.sheet-oppen {
   inset: 0;
   z-index: 55;
   display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: 16px;
   background: rgba(3, 12, 20, 0.74);
   backdrop-filter: blur(3px);
@@ -5146,9 +5164,16 @@ body.sheet-oppen {
   overflow-y: auto;
 }
 
+/* Samma knep som biljetten: nedtryckt när kortet får plats, rullbart från
+   toppen när det inte gör det. */
+.event-overlay > * {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
 @media (min-width: 640px) {
-  .event-overlay {
-    align-items: center;
+  .event-overlay > * {
+    margin: auto 0;
   }
 }
 
@@ -7601,10 +7626,18 @@ body.sheet-oppen {
   position: fixed;
   inset: 0;
   z-index: 40;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 16px;
   background: rgba(7, 26, 41, 0.55);
+  overflow-y: auto;
+}
+
+/* Mitt på skärmen när rapporten får plats, annars från toppen och rullbar. */
+.rapport-bak > * {
+  flex-shrink: 0;
+  margin: auto 0;
 }
 
 .rapport {
