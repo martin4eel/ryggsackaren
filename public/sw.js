@@ -152,10 +152,26 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       (async () => {
         try {
-          const fresh = await fetch(request);
+          /*
+           * Nätet får tre sekunder på sig. Med täckning men utan
+           * genomströmning - tunnelbanan, ett hotell-wifi som inte släpper
+           * igenom - väntade spelet annars tills webbläsaren gav upp, en
+           * halv minut eller mer, fast en komplett kopia låg i cachen.
+           */
+          const fresh = await Promise.race([
+            fetch(request),
+            new Promise((_, avbryt) => setTimeout(() => avbryt(new Error('tidsgräns')), 3000)),
+          ]);
+          // Bara ett riktigt svar får bli den cachade startsidan. En 404
+          // under en publicering, eller en inloggningssida från ett
+          // hotell-wifi som svarar 200 med html, låg annars kvar offline.
+          if (fresh.ok) {
+            const cache = await caches.open(SKAL);
+            skrivICachen(cache, './', fresh.clone());
+            return fresh;
+          }
           const cache = await caches.open(SKAL);
-          skrivICachen(cache, './', fresh.clone());
-          return fresh;
+          return (await cache.match('./')) ?? fresh;
         } catch {
           const cache = await caches.open(SKAL);
           return (
