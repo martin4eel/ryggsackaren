@@ -1,5 +1,8 @@
 import type { TransportMode } from '../data/transport';
 import type { Huvudkategori, Category } from '../data/types';
+import { CITY_BY_ID } from '../data/cities';
+import { EVENT_BY_ID } from '../data/events';
+import { JOB_BY_ID } from '../data/jobs';
 
 export type Difficulty = 'turist' | 'globetrotter';
 
@@ -384,6 +387,13 @@ export function loadGame(): GameState | null {
       version?: number;
     };
     if (parsed?.version !== 1 && parsed?.version !== 2) return null;
+    /*
+     * En resa vars hemstad eller nuvarande stad inte finns i datan längre
+     * går inte att fortsätta: stadsbilden kraschade förr vid varje start,
+     * utan väg förbi. Hellre startskärmen och en ny resa.
+     */
+    if (!parsed.currentCityId || !CITY_BY_ID[parsed.currentCityId]) return null;
+    if (!parsed.homeCityId || !CITY_BY_ID[parsed.homeCityId]) return null;
     return migrate(parsed);
   } catch {
     return null;
@@ -427,6 +437,27 @@ function migrate(
    * värd att lyfta över - den slängs, och nästa resa ger en ny.
    */
   delete (state as { lastEvent?: unknown }).lastEvent;
+  /*
+   * Det som pekar på data med id kan peka fel efter en ny utgåva: en
+   * händelse, ett jobb eller en stad kan ha bytt namn eller tagits bort.
+   * Ett obesvarat händelsekort med okänt id ritades aldrig, och eftersom
+   * kortet är spärren mot nya händelser kom varken händelser eller uppdrag
+   * under resten av resan. Ett skift med okänt jobb gick inte att avsluta.
+   * Ett Vart är vi på väg? med en okänd stad kraschade vid varje omladdning.
+   * Allt sådant släpps här; resan fortsätter från stadsbilden.
+   */
+  if (state.pendingEvent && !EVENT_BY_ID[state.pendingEvent.eventId]) {
+    delete state.pendingEvent;
+  }
+  const pass = state.pagaende as { kind?: string; jobId?: string } | undefined;
+  if (pass?.kind === 'jobb' && (!pass.jobId || !JOB_BY_ID[pass.jobId])) {
+    delete state.pagaende;
+    if (state.screen === 'jobb') state.screen = 'stad';
+  }
+  if (state.sparet?.cities?.some((id) => !CITY_BY_ID[id])) {
+    delete state.sparet;
+    if (state.screen === 'sparet') state.screen = 'stad';
+  }
   state.tripsByMode ??= {};
   state.kmByMode ??= {};
   // Resor som påbörjades innan namnet fanns får en neutral benämning.
