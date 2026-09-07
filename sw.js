@@ -7,13 +7,17 @@
  * har innehållshash i namnet och cachas därför permanent.
  *
  * Två cacher, inte en. Skalet versioneras och töms vid varje ny utgåva -
- * där ligger startsidan och de hashade bygg-filerna, som ändå byter namn.
+ * där ligger startsidan, ikonerna, ljuden och de hashade bygg-filerna.
+ * Namnet stämplas med byggets commit av scripts/stampa-sw.mjs sist i
+ * npm run build; platshållaren nedan gäller bara i utveckling. Det stod
+ * ett tal här som byttes för hand, tills det slutade bytas, och då låg
+ * den gamla app-ikonen kvar i cachen hur man än laddade om.
  * Mediecachen versioneras inte: fotona heter likadant i alla utgåvor, och
  * ett versionsbyte ska inte tvinga varenda telefon att ladda ner nitton
  * megabyte stadsfoton en gång till bara för att en frågetext rättats.
  */
 
-const SKAL = 'upptackaren-skal-v97';
+const SKAL = 'upptackaren-skal-3befa08';
 const MEDIA = 'upptackaren-media-v1';
 
 /**
