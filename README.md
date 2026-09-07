@@ -66,6 +66,10 @@ Kontrollera att Pages fortfarande står på rätt källa. Om _Source_ har hamnat
 **Settings → Pages → Build and deployment → Source** ska vara
 `Deploy from a branch`, branch `gh-pages`, mapp `/ (root)`.
 
+Service workerns skalcache byter namn automatiskt vid varje bygge, med
+commit-hashen, så att ikoner, ljud och startsida inte ligger kvar från en
+gammal utgåva (`scripts/stampa-sw.mjs`).
+
 Kom också ihåg att spelet cachas av sin service worker. Ladda om sidan två
 gånger, eller hårdladda, om du inte ser ändringen direkt.
 

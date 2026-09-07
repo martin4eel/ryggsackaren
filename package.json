@@ -6,7 +6,7 @@
   "description": "Upptäckaren - ett geografi- och frågesportspel inspirerat av Backpacker 2",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && node scripts/validate-data.mjs && vite build",
+    "build": "tsc --noEmit && node scripts/validate-data.mjs && vite build && node scripts/stampa-sw.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-data.mjs",
