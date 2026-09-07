@@ -11,6 +11,18 @@
     <path d="M-42 -4 l-10 -18 h10 l14 18 z"/><path d="M-42 4 l-10 18 h10 l14 -18 z"/>
   </g>
 
+  <!-- Jordklot bakom ryggsäcken, i samma platta stil: en cirkel med
+       förenklade landmassor längs kanten, där de syns bakom väskan -->
+  <circle cx="256" cy="296" r="200" fill="#2f7d63"/>
+  <g fill="#245f4b">
+    <path d="M96 236 q30 -60 90 -70 q40 -6 30 30 q-10 34 -60 40 q-50 6 -60 0 z"/>
+    <path d="M150 440 q30 40 100 46 q60 4 96 -30 q-30 -10 -70 -8 q-60 4 -126 -8 z"/>
+    <path d="M390 200 q40 30 56 90 q6 40 -10 80 q-30 -30 -34 -80 q-4 -50 -12 -90 z"/>
+    <path d="M120 360 q-30 -20 -40 -60 q20 10 44 30 q10 20 -4 30 z"/>
+  </g>
+  <path d="M60 296 h392" stroke="#245f4b" stroke-opacity="0.5" stroke-width="6"/>
+  <path d="M256 96 q-120 200 0 400" stroke="#245f4b" stroke-opacity="0.5" stroke-width="6" fill="none"/>
+
   <!-- Ryggsäck i platt stil, efter referensen: sidofickor, kropp, lock med
        skugga under, två remmar med öppna spännen, bärögla -->
   <g fill="#f2a63b">
