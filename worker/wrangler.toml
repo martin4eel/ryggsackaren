@@ -17,6 +17,18 @@ send_metrics = false
 binding = "DAGBOK"
 id = "63ae588ccaad4950b050228401d66678"
 
+# Hastighetsgräns per avsändaradress. Utan den kunde någon gå igenom alla
+# niohundratusen nummer och läsa varenda dagbok, och på köpet tömma dagens
+# gratiskvot så att caféet stod stängt för dem som spelar. Trettio anrop i
+# minuten räcker gott för ett par telefoner på samma wifi; spelet självt
+# synkar bara några gånger per resdag. Namnrymden är ett godtyckligt tal som
+# skiljer den här gränsen från andra i samma konto.
+[[unsafe.bindings]]
+name = "BEGRANSNING"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 30, period = 60 }
+
 # Caféet svarar på sin egen underdomän. Cloudflare lägger DNS-posten själv;
 # apex-posten mot GitHub Pages rörs inte.
 [[routes]]

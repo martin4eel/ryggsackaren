@@ -193,6 +193,75 @@ test('för stor kropp släpps inte in', async () => {
   assert.equal(svar.status, 400);
 });
 
+test('storleken räknas i byte, inte tecken', async () => {
+  // 1 200 emoji är 1 200 tecken men 4 800 byte.
+  const svar = await anrop('/dagbok', {
+    method: 'POST',
+    body: { ...DAGBOK, skrap: '🎒'.repeat(1200) },
+  });
+  assert.equal(svar.status, 400);
+});
+
+test('en uppgiven storlek över taket läses aldrig', async () => {
+  const svar = await worker.fetch(
+    new Request('https://cafe.upptackaren.se/dagbok', {
+      method: 'POST',
+      headers: { Origin: URSPRUNG, 'Content-Type': 'application/json', 'Content-Length': '99999' },
+      body: JSON.stringify(DAGBOK),
+    }),
+    env
+  );
+  // Kroppen är en giltig dagbok, så ett 400 kan bara komma från rubriken.
+  assert.equal(svar.status, 400);
+});
+
+test('hastighetsgränsen ger 429 och inget annat', async () => {
+  let fragade = 0;
+  env = {
+    DAGBOK: fejkKV(),
+    BEGRANSNING: {
+      async limit({ key }) {
+        fragade++;
+        assert.equal(key, '203.0.113.7');
+        return { success: fragade <= 2 };
+      },
+    },
+  };
+  const rubriker = { Origin: URSPRUNG, 'cf-connecting-ip': '203.0.113.7' };
+  const hamta = () =>
+    worker.fetch(new Request('https://cafe.upptackaren.se/dagbok/123456', { headers: rubriker }), env);
+  assert.equal((await hamta()).status, 404);
+  assert.equal((await hamta()).status, 404);
+  const stopp = await hamta();
+  assert.equal(stopp.status, 429);
+  assert.equal(stopp.headers.get('Retry-After'), '60');
+  assert.equal(stopp.headers.get('Access-Control-Allow-Origin'), URSPRUNG);
+  // Förfrågan om lov räknas inte: den kommer före gränsen.
+  const lov = await worker.fetch(
+    new Request('https://cafe.upptackaren.se/dagbok/123456', { method: 'OPTIONS', headers: rubriker }),
+    env
+  );
+  assert.equal(lov.status, 204);
+});
+
+test('ett serverfel avslöjar inga detaljer', async () => {
+  env = {
+    DAGBOK: {
+      async get() {
+        throw new Error('KV_NAMESPACE hemlig-sträng nere');
+      },
+    },
+  };
+  const tyst = console.error;
+  console.error = () => {};
+  const svar = await anrop('/dagbok/123456');
+  console.error = tyst;
+  assert.equal(svar.status, 500);
+  const kropp = await svar.json();
+  assert.equal(kropp.detalj, undefined);
+  assert.equal(JSON.stringify(kropp).includes('hemlig'), false);
+});
+
 test('trasig json ger 400, inte 500', async () => {
   const svar = await worker.fetch(
     new Request('https://cafe.upptackaren.se/dagbok', {

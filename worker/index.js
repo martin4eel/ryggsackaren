@@ -24,8 +24,9 @@
 const LIVSLANGD = 60 * 60 * 24 * 60;
 
 /**
- * Största tillåtna kropp. En dagbok är några hundra byte; taket finns för att
- * caféet inte ska gå att använda som gratis fillagring.
+ * Största tillåtna kropp, i byte. En dagbok är några hundra byte; taket
+ * finns för att caféet inte ska gå att använda som gratis fillagring.
+ * Byte, inte tecken: två tusen emoji är åtta kilobyte.
  */
 const MAX_BYTES = 2048;
 
@@ -39,6 +40,22 @@ export default {
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: cors });
+    }
+
+    /*
+     * Hastighetsgränsen räknas per avsändaradress och ligger före allt annat,
+     * så att inte ens en gissning på nummer kostar en KV-läsning. Saknas
+     * bindningen - i proven och i lokal.mjs - släpps allt igenom.
+     */
+    if (env.BEGRANSNING) {
+      const adress = request.headers.get('cf-connecting-ip') || 'okänd';
+      const { success } = await env.BEGRANSNING.limit({ key: adress });
+      if (!success) {
+        return svar({ fel: 'för många anrop, vänta en stund' }, 429, {
+          ...cors,
+          'Retry-After': '60',
+        });
+      }
     }
 
     const url = new URL(request.url);
@@ -61,8 +78,10 @@ export default {
       }
     } catch (err) {
       // Ett fel här får aldrig bli ett fel i spelet. Caféet säger bara att det
-      // inte gick, och resan fortsätter.
-      return svar({ fel: 'något gick fel', detalj: String(err && err.message) }, 500, cors);
+      // inte gick, och resan fortsätter. Felets text stannar i loggen: den
+      // kan innehålla sådant om servern som ingen utanför behöver veta.
+      console.error('internetcaféet:', err && err.message);
+      return svar({ fel: 'något gick fel' }, 500, cors);
     }
 
     return svar({ fel: 'okänd väg' }, 405, cors);
@@ -133,8 +152,11 @@ async function tabort(id, request, env, cors) {
  * en väg att smuggla in märklig text i en annan spelares skärm.
  */
 async function lasKropp(request) {
+  // Säger avsändaren själv att kroppen är för stor läser vi den inte alls.
+  const uppgiven = Number(request.headers.get('content-length'));
+  if (Number.isFinite(uppgiven) && uppgiven > MAX_BYTES) return null;
   const text = await request.text();
-  if (text.length > MAX_BYTES) return null;
+  if (new TextEncoder().encode(text).length > MAX_BYTES) return null;
   let rad;
   try {
     rad = JSON.parse(text);
