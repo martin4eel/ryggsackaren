@@ -30,43 +30,56 @@
     </g>
   </g>
 
-  <!-- Jordklot bakom ryggsäcken: blått hav, gröna kontinenter och iskalotter
-       klippta till cirkeln, skuggning nedtill till höger och en glans uppe
-       till vänster så att det ser runt ut. Tecknat men stiliserat. -->
+  <!-- Jordklot bakom ryggsäcken: blått hav, gröna kontinenter med ljus
+       kustlinje och vita iskalotter, allt klippt till cirkeln. Rundheten
+       kommer från en mjuk sfärisk skuggning och en diskret reflex, inte
+       från band. Väskan kastar en mjuk skugga på klotet. -->
   <defs>
-    <clipPath id="klot"><circle cx="256" cy="296" r="200"/></clipPath>
-    <radialGradient id="hav" cx="0.35" cy="0.3" r="0.8">
-      <stop offset="0" stop-color="#3f9ccb"/><stop offset="1" stop-color="#1f6a95"/>
+    <clipPath id="klot"><circle cx="256" cy="290" r="192"/></clipPath>
+    <radialGradient id="hav" cx="0.38" cy="0.32" r="0.75">
+      <stop offset="0" stop-color="#46a6d6"/><stop offset="1" stop-color="#2273a0"/>
     </radialGradient>
+    <radialGradient id="sfar" cx="0.36" cy="0.32" r="0.78">
+      <stop offset="0.55" stop-color="#071a29" stop-opacity="0"/>
+      <stop offset="1" stop-color="#071a29" stop-opacity="0.42"/>
+    </radialGradient>
+    <radialGradient id="reflex" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="mjuk" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="9"/></filter>
   </defs>
-  <circle cx="256" cy="296" r="200" fill="url(#hav)"/>
+  <circle cx="256" cy="290" r="192" fill="url(#hav)"/>
   <g clip-path="url(#klot)">
-    <g fill="#5cb87c">
+    <g fill="#5cb87c" stroke="#a5e3b8" stroke-opacity="0.55" stroke-width="4" stroke-linejoin="round">
       <!-- Nordamerika -->
-      <path d="M60 200 q30 -70 100 -100 q60 -20 90 10 q-10 40 -50 50 q-40 8 -60 50 q-20 40 -50 30 q-30 -10 -30 -40 z"/>
+      <path d="M62 196 q30 -70 100 -100 q60 -20 90 10 q-10 40 -50 50 q-40 8 -60 50 q-20 40 -50 30 q-30 -10 -30 -40 z"/>
       <!-- Sydamerika -->
-      <path d="M120 350 q40 0 60 30 q20 40 0 90 q-14 36 -34 40 q-10 -50 -30 -90 q-16 -34 4 -70 z"/>
+      <path d="M122 344 q40 0 60 30 q20 40 0 90 q-14 36 -34 40 q-10 -50 -30 -90 q-16 -34 4 -70 z"/>
       <!-- Europa och Afrika -->
       <path d="M330 100 q50 -10 90 30 q30 30 40 80 q6 40 -6 80 q-14 44 -50 60 q-30 -30 -30 -80 q0 -40 -20 -70 q-30 -30 -50 -60 q0 -30 26 -40 z"/>
       <!-- Australien -->
-      <path d="M350 430 q40 -20 70 0 q10 20 -6 36 q-40 10 -64 -6 q-10 -16 0 -30 z"/>
+      <path d="M346 420 q40 -20 70 0 q10 20 -6 36 q-40 10 -64 -6 q-10 -16 0 -30 z"/>
     </g>
-    <!-- mörkare skog på kontinenterna -->
-    <g fill="#3f9a62">
-      <path d="M90 190 q30 -40 70 -50 q-10 30 -40 44 q-20 10 -30 6 z"/>
-      <path d="M380 150 q30 20 44 60 q-24 -10 -40 -34 q-10 -16 -4 -26 z"/>
-      <path d="M140 400 q20 10 26 40 q-16 -10 -26 -40 z"/>
+    <!-- iskalotter, oregelbundna och vita -->
+    <g fill="#f7f4ec">
+      <path d="M170 98 q40 -10 86 -4 q46 -6 86 6 q6 18 -14 26 q-30 -6 -60 2 q-40 -8 -74 4 q-30 -8 -24 -34 z"/>
+      <path d="M176 484 q40 10 80 4 q40 6 78 -6 q6 -18 -12 -22 q-36 8 -66 0 q-40 8 -70 -2 q-20 8 -10 26 z"/>
     </g>
-    <!-- iskalotter -->
-    <path d="M186 96 h140 q20 24 -10 34 h-120 q-30 -10 -10 -34 z" fill="#f6efe0" fill-opacity="0.9"/>
-    <path d="M196 496 h120 q10 -18 -10 -26 h-100 q-20 8 -10 26 z" fill="#f6efe0" fill-opacity="0.9"/>
-    <!-- skuggning nedtill till höger -->
-    <circle cx="200" cy="240" r="250" fill="none" stroke="#071a29" stroke-opacity="0.22" stroke-width="120"/>
+    <!-- väskans slagskugga på klotet -->
+    <g fill="#071a29" fill-opacity="0.35" filter="url(#mjuk)" transform="translate(10 14)">
+      <rect x="108" y="236" width="44" height="112" rx="18"/>
+      <rect x="360" y="236" width="44" height="112" rx="18"/>
+      <rect x="148" y="176" width="216" height="240" rx="42"/>
+      <rect x="138" y="150" width="236" height="100" rx="40"/>
+    </g>
+    <!-- sfärisk skuggning -->
+    <circle cx="256" cy="290" r="192" fill="url(#sfar)"/>
+    <!-- reflex uppe till vänster -->
+    <ellipse cx="150" cy="170" rx="90" ry="60" transform="rotate(-35 150 170)" fill="url(#reflex)"/>
   </g>
-  <!-- glans uppe till vänster -->
-  <path d="M112 200 q30 -80 110 -110" stroke="#f6efe0" stroke-opacity="0.35" stroke-width="16" fill="none" stroke-linecap="round"/>
-  <!-- atmosfärkant -->
-  <circle cx="256" cy="296" r="200" fill="none" stroke="#9fd4e8" stroke-opacity="0.35" stroke-width="6"/>
+  <!-- tunn ljus kant -->
+  <circle cx="256" cy="290" r="192" fill="none" stroke="#b7e0f2" stroke-opacity="0.45" stroke-width="3"/>
 
   <!-- Ryggsäck i platt stil, efter referensen: sidofickor, kropp, lock med
        skugga under, två remmar med öppna spännen, bärögla -->
