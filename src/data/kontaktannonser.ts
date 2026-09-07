@@ -74,7 +74,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     signatur: 'Den som lovade för mycket',
     uppdrag: true,
     utfall: [
-      { text: 'Personen ändrar sig i dörren. "Det var kanske inte ett löfte. Det var mer en tanke." Du får en kaka och går.' },
+      { text: 'Personen ändrar sig i dörren. ”Det var kanske inte ett löfte. Det var mer en tanke.” Du får en kaka och går.' },
     ],
   },
   {
@@ -94,7 +94,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     signatur: 'Diskret, som sagt',
     uppdrag: true,
     utfall: [
-      { text: 'Ni möts vid en bänk. Personen tittar på dig länge, säger "nej, du är för nyfiken" och går. Du hade inte frågat något.' },
+      { text: 'Ni möts vid en bänk. Personen tittar på dig länge, säger ”nej, du är för nyfiken” och går. Du hade inte frågat något.' },
     ],
   },
   {
@@ -104,7 +104,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     signatur: 'Storasyster, envis',
     uppdrag: true,
     utfall: [
-      { text: 'Hon öppnar dörren, säger "jag har ändrat mig" och stänger den igen. Två minuter senare öppnar hon och säger "nej, jag hade rätt första gången". Sedan stänger hon igen.' },
+      { text: 'Hon öppnar dörren, säger ”jag har ändrat mig” och stänger den igen. Två minuter senare öppnar hon och säger ”nej, jag hade rätt första gången”. Sedan stänger hon igen.' },
     ],
   },
   {
@@ -114,7 +114,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     signatur: 'Bordet vid fönstret',
     utfall: [
       { text: 'En pensionerad kapten som pratar i tre timmar om fyrar. Maten är utmärkt och du betalar ingenting.', effekt: { rykte: 1 }, vikt: 3 },
-      { text: 'Det visar sig att "jag bjuder" betydde "jag bjuder in". Notan delas. Din halva är inte liten.', effekt: { money: -400 }, vikt: 2 },
+      { text: 'Det visar sig att ”jag bjuder” betydde ”jag bjuder in”. Notan delas. Din halva är inte liten.', effekt: { money: -400 }, vikt: 2 },
       { text: 'Middagen är på en restaurang som filmas för tv. Du syns i bakgrunden och får ett statistarvode.', effekt: { money: 500 } },
     ],
   },
@@ -126,17 +126,18 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     utfall: [
       { text: 'Du hittar Kanel under ett kafébord efter fyra timmar. Familjen gråter, betalar hittelönen och bjuder på kaffe.', effekt: { money: 700, rykte: 1 }, vikt: 2 },
       { text: 'Du letar hela dagen. Kanel har varit hemma sedan lunch. Ingen tänkte på att ta ner lappen.', vikt: 2 },
-      { text: 'Du hittar en brun hund. Den är inte Kanel, men den följer dig hem till hotellet och vägrar gå. Hotellet debiterar en djuravgift.', effekt: { money: -250 } },
+      { text: 'Du hittar en brun hund. Den är inte Kanel, men den följer dig hem till vandrarhemmet och vägrar gå. Vandrarhemmet debiterar en djuravgift.', effekt: { money: -250 } },
     ],
   },
   {
     id: 'sprak',
     rubrik: 'Språkutbyte',
-    text: 'Vill öva mitt svenska! Byter mot lokala kunskaper och en kopp kaffe. Jag vet var allt ligger.',
+    text: 'Söker svensk att öva på. Kan visa staden i utbyte, om det behövs. Har lärt mig tre ord och använder alla.',
     signatur: 'Nyfiken i staden',
+    regioner: ['europa', 'nordamerika', 'latinamerika', 'afrika', 'mellanostern', 'asien', 'oceanien'],
     utfall: [
-      { text: 'Två timmar på ett kafé. Du lär dig var man äter billigt och hur man säger "för dyrt" med rätt betoning.', effekt: { rating: 8 }, vikt: 3 },
-      { text: 'Hens svenska består av "hej" och "Zlatan". Ni tittar på varandra i fyrtio minuter. Sedan visar hen dig ändå staden.', effekt: { rating: 4 }, vikt: 2 },
+      { text: 'Två timmar på ett kafé. Du lär dig var man äter billigt och hur man säger ”för dyrt” med rätt betoning.', effekt: { rating: 8 }, vikt: 3 },
+      { text: 'Hens svenska består av ”hej” och ”Zlatan”. Ni tittar på varandra i fyrtio minuter. Sedan visar hen dig ändå staden.', effekt: { rating: 4 }, vikt: 2 },
     ],
   },
   {
@@ -168,7 +169,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     signatur: 'Produktionsbolaget',
     utfall: [
       { text: 'Du går förbi i bakgrunden trettio gånger. Regissören är nöjd med den tjugosjunde. Arvode betalas kontant.', effekt: { money: 450 }, vikt: 3 },
-      { text: 'Du går förbi i bakgrunden så trovärdigt att du får en replik. Repliken är "Ursäkta". Arvodet dubblas.', effekt: { money: 900, rykte: 1 } },
+      { text: 'Du går förbi i bakgrunden så trovärdigt att du får en replik. Repliken är ”Ursäkta”. Arvodet dubblas.', effekt: { money: 900, rykte: 1 } },
       { text: 'Inspelningen ställs in på grund av regn. Frukosten var god.', vikt: 2 },
     ],
   },
@@ -179,7 +180,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     signatur: 'Lgh 4B',
     utfall: [
       { text: 'Pianot går upp. Ryggen håller. Betalningen är precis så bra som utlovat.', effekt: { money: 550 }, vikt: 3 },
-      { text: 'Pianot fastnar i trappan i tre timmar. Grannarna klagar. Du får betalt, men något mindre, "för tiden".', effekt: { money: 300 }, vikt: 2 },
+      { text: 'Pianot fastnar i trappan i tre timmar. Grannarna klagar. Du får betalt, men något mindre, ”för tiden”.', effekt: { money: 300 }, vikt: 2 },
       { text: 'Pianot tillhörde inte personen i 4B. Polisen är förstående men tar hela dagen, och du får inget för besväret.', effekt: { rykte: -1 } },
     ],
   },
@@ -208,10 +209,10 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
   {
     id: 'planbok',
     rubrik: 'Hittad: plånbok',
-    text: 'Brun plånbok upphittad på stationen. Ägaren kan beskriva innehållet och hämta den mot bevis.',
+    text: 'Upphittad: brun plånbok med ansenligt innehåll. Ägaren ombeds beskriva innehållet noga. Mycket noga.',
     signatur: 'Ärlig upphittare',
     utfall: [
-      { text: 'Det är inte din plånbok. Men upphittaren är trevlig och har en soffa; du sparar en hotellnatt.', effekt: { money: 200 }, vikt: 2 },
+      { text: 'Det är inte din plånbok. Men upphittaren är trevlig och har en soffa; du sparar en natt på vandrarhemmet.', effekt: { money: 200 }, vikt: 2 },
       { text: 'Du beskriver innehållet i en plånbok du aldrig ägt, blir avslöjad och får en utskällning inför hela kafét.', effekt: { rykte: -1 }, vikt: 2 },
       { text: 'Upphittaren har hittat sjutton plånböcker den här veckan. Du frågar inte hur. Du går därifrån fort.' },
     ],
@@ -223,7 +224,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     signatur: 'Konstskolan, sal 3',
     utfall: [
       { text: 'Du sitter stilla i två timmar. Sjutton teckningar, varav tre liknar dig. Betalt per pass, som utlovat.', effekt: { money: 380 }, vikt: 3 },
-      { text: 'Läraren tycker att din näsa är "intressant" och beställer ett extrapass. Dubbel ersättning.', effekt: { money: 760 } },
+      { text: 'Läraren tycker att din näsa är ”intressant” och beställer ett extrapass. Dubbel ersättning.', effekt: { money: 760 } },
       { text: 'Du somnar efter tjugo minuter. Eleverna tecknar dig sovande. Halv ersättning.', effekt: { money: 180 }, vikt: 2 },
     ],
   },
@@ -232,9 +233,10 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     rubrik: 'Bröllopsgäster sökes',
     text: 'Brudens sida är tunn. Kom, ät, dansa, säg att du är en kusin från utlandet. Klädkod: finkläder eller nästan.',
     signatur: 'Brudens mor',
+    regioner: ['europa', 'nordamerika', 'latinamerika', 'afrika', 'mellanostern', 'asien', 'oceanien'],
     utfall: [
-      { text: 'Du är kusinen från Sverige hela kvällen. Maten är oändlig, dansen likaså, och brudens far stoppar sedlar i din ficka "till resan".', effekt: { money: 500, rykte: 1 }, vikt: 2 },
-      { text: 'Brudgummen har också hyrt gäster. Ni är fyra kusiner från Sverige. Det blir en lång kväll, men en rolig.', effekt: { rykte: 1 }, vikt: 2 },
+      { text: 'Du är kusinen från Sverige hela kvällen. Maten är oändlig, dansen likaså, och brudens far stoppar sedlar i din ficka ”till resan”.', effekt: { money: 500, rykte: 1 }, vikt: 2 },
+      { text: 'Brudgummen har också hyrt gäster. Ni är fyra kusiner från Sverige och ingen av er kan förklara hur ni är släkt. Det behövs inte.', effekt: { rykte: 1 }, vikt: 2 },
       { text: 'Bruden ångrar sig vid altaret. Festen hålls ändå. Du får med dig tårta för en vecka.', vikt: 1 },
     ],
   },
@@ -266,7 +268,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     text: 'Enkel sömnstudie. Du sover, vi tittar. Ersättning utgår. Inga kända biverkningar, hittills.',
     signatur: 'Kliniken',
     utfall: [
-      { text: 'Du sover som en sten och får betalt för det. Bästa jobbet på hela resan.', effekt: { money: 600 }, vikt: 2 },
+      { text: 'Du sover i nio timmar och får betalt per timme. Kliniken frågar om du kan komma tillbaka. Det kan du.', effekt: { money: 600 }, vikt: 2 },
       { text: 'Du sover inte alls, eftersom sex personer tittar på dig. Ersättningen betalas ut ändå, motvilligt.', effekt: { money: 400 }, vikt: 2 },
       { text: 'Biverkningen visade sig vara att du sover i ett dygn till. Kliniken beklagar.', effekt: { days: 1, money: 500 } },
     ],
@@ -291,7 +293,7 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     regioner: ['latinamerika', 'europa'],
     utfall: [
       { text: 'Du har fötter. Det räcker. Efter lektionen bjuder salongen på vin och en biljett till nästa.', effekt: { rykte: 1 }, vikt: 2 },
-      { text: 'Du trampar din partner på foten fjorton gånger. Lektionen slutar tidigt, men du får ett fribrev från läraren: "kom aldrig igen".', vikt: 2 },
+      { text: 'Du trampar din partner på foten fjorton gånger. Lektionen slutar tidigt, men du får ett fribrev från läraren: ”kom aldrig igen”.', vikt: 2 },
       { text: 'Salongen filmar lektionen för sin reklam. Du får arvode för att ha sett tillräckligt vilsen ut.', effekt: { money: 300 } },
     ],
   },
@@ -304,14 +306,15 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     utfall: [
       { text: 'Du håller i repet när skepparen säger till. Sjön ligger blank och lunchen är räkor. Skepparen betalar i kontanter och tips.', effekt: { money: 450, rating: 4 }, vikt: 2 },
       { text: 'Du släpper repet när skepparen säger till. Det var fel rep. Ni ligger still i tre timmar. Ingen lön, men skepparen bjuder ändå på lunch.', vikt: 2 },
-      { text: 'Det blåser upp. Du mår illa hela vägen över och hela vägen tillbaka. Skepparen ger dig extra betalt "för att du inte klagade". Du kunde inte.', effekt: { money: 600 } },
+      { text: 'Det blåser upp. Du mår illa hela vägen över och hela vägen tillbaka. Skepparen ger dig extra betalt ”för att du inte klagade”. Du kunde inte.', effekt: { money: 600 } },
     ],
   },
   {
     id: 'brev',
     rubrik: 'Söker någon som kan svenska',
-    text: 'Har ett brev från en farbror i Sverige. Har haft det i tolv år. Vill veta vad det står. Betalar i mat.',
-    signatur: 'Nyfiken sedan 2014',
+    text: 'Har ett brev från en farbror i Sverige. Har haft det i många år. Vill veta vad det står. Betalar i mat.',
+    signatur: 'Nyfiken sedan länge',
+    regioner: ['europa', 'nordamerika', 'latinamerika', 'afrika', 'mellanostern', 'asien', 'oceanien'],
     utfall: [
       { text: 'Brevet är ett arv. Ett litet, men ett arv. Farbrorn är död sedan länge, men pengarna finns kvar på banken. Du får en andel för besväret.', effekt: { money: 800, rykte: 1 } },
       { text: 'Brevet är en räkning från Bilprovningen. Du översätter så skonsamt du kan. Middagen är ändå god.', vikt: 3 },
@@ -319,14 +322,14 @@ export const KONTAKTANNONSER: Kontaktannons[] = [
     ],
   },
   {
-    id: 'kanel',
+    id: 'provsmakare',
     rubrik: 'Provsmakare sökes',
     text: 'Nytt gatukök behöver ärliga omdömen. Ät allt på menyn, säg vad du tycker. Ingen ersättning, men ingen räkning heller.',
     signatur: 'Kocken',
     utfall: [
       { text: 'Du äter allt på menyn. Allt är gott utom en sak, och kocken tackar dig för just den. Du sparar en hel dags mat.', effekt: { money: 150 }, vikt: 3 },
-      { text: 'Du äter allt på menyn. Det borde du inte ha gjort. Nästa dag tillbringas på hotellrummet.', effekt: { days: 1 } },
-      { text: 'Kocken är så nöjd att hen sätter ditt namn på en rätt. "Upptäckarens special" står på tavlan när du går.', effekt: { rykte: 2 } },
+      { text: 'Du äter allt på menyn. Det borde du inte ha gjort. Nästa dag tillbringas på vandrarhemmet.', effekt: { days: 1 } },
+      { text: 'Kocken är så nöjd att hen sätter ditt namn på en rätt. ”Upptäckarens special” står på tavlan när du går.', effekt: { rykte: 2 } },
     ],
   },
 ];

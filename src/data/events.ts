@@ -159,7 +159,7 @@ export const EVENTS: GameEvent[] = [
       {
         label: 'Ta ersättningen och vänta',
         outcomes: ett(
-          'Du sitter kvar på flygplatsen ett dygn med en kupong i handen, och lämnar den med mer pengar än du kom.',
+          'Ett dygn på en plaststol på flygplatsen med en kupong i handen. Kupongen var värd mer än stolen.',
           { money: 1400, days: 1 }
         ),
       },
@@ -279,6 +279,7 @@ export const EVENTS: GameEvent[] = [
     text: 'En tulltjänsteman pekar på ryggsäcken och sedan på ett långt bord.',
     tone: 'blandat',
     weight: 2,
+    villkor: (c) => c.country !== 'Sverige',
     choices: [
       {
         label: 'Packa upp allt lugnt',
@@ -311,6 +312,7 @@ export const EVENTS: GameEvent[] = [
     text: 'Vägen svämmade över och fordonet fick vänta ut ovädret under ett vägskyltstak.',
     tone: 'daligt',
     weight: 2,
+    villkor: (c) => c.region !== 'norden',
     effect: { money: -80, days: 1 },
   },
   {
@@ -345,6 +347,7 @@ export const EVENTS: GameEvent[] = [
     text: 'Bommen gick ner en timme före utsatt tid. Ingen kan förklara varför, och alla verkar ha räknat med det.',
     tone: 'daligt',
     weight: 2,
+    villkor: (c) => c.country !== 'Sverige',
     effect: { days: 1 },
   },
   {
@@ -387,7 +390,7 @@ export const EVENTS: GameEvent[] = [
     choices: [
       {
         label: 'Ta rummet',
-        outcomes: ett('Dyrt, men du sover som en stock och vaknar utvilad.', { money: -520 }),
+        outcomes: ett('Rummet har utsikt över festivalen. Det är därför det kostar. Det är också därför du inte sover.', { money: -520 }),
       },
       {
         label: 'Sov på stationen',
@@ -702,7 +705,7 @@ export const EVENTS: GameEvent[] = [
         label: 'Följ med gruppen',
         outcomes: [
           {
-            text: 'Du får hela turen gratis och lär dig mer om {stad} än guideboken kunde berätta.',
+            text: 'Du får hela turen gratis. Guiden räknar inte om vid utgången heller.',
             weight: 3,
             effect: { rating: 10, money: 120 },
           },
@@ -753,7 +756,11 @@ export const EVENTS: GameEvent[] = [
       {
         label: 'Köp av killen vid sidan',
         outcomes: [
-          { text: 'Biljetten funkar. Du är inne på tio minuter.', weight: 2, effect: { money: -260, rating: 8 } },
+          {
+            text: 'Biljetten funkar. Du är inne på tio minuter och har tre timmar över till resten av stan.',
+            weight: 3,
+            effect: { money: -260, rating: 14 },
+          },
           {
             text: 'Biljetten är från förra säsongen. Killen är borta. Du också, till slut.',
             weight: 2,
@@ -832,6 +839,7 @@ export const EVENTS: GameEvent[] = [
     text: 'En vakt tar tag i din arm när kameran åker upp och pekar på en skylt som är skriven på fyra språk, inget av dem ditt.',
     tone: 'blandat',
     weight: 2,
+    villkor: (c) => c.country !== 'Sverige',
     choices: [
       {
         label: 'Be om ursäkt och lägg undan den',
@@ -926,7 +934,7 @@ export const EVENTS: GameEvent[] = [
         outcomes: [
           { text: 'Hatten delas lika och kvällen blir minnesvärd.', weight: 3, effect: { money: 480 } },
           {
-            text: 'Det regnade efter tjugo minuter. Ni delade på fyrtio kronor och ett paraply.',
+            text: 'Det regnade efter tjugo minuter. Ni delade på hatten och ett paraply. Paraplyet var värt mer.',
             weight: 2,
             effect: { money: 40 },
           },
@@ -945,6 +953,7 @@ export const EVENTS: GameEvent[] = [
     text: 'Tusentals människor går förbi med plakat på ett språk du inte läser. Stämningen är allvarlig men lugn.',
     tone: 'allvar',
     weight: 2,
+    villkor: (c) => c.country !== 'Sverige',
     choices: [
       {
         label: 'Fråga någon vad det gäller',
@@ -1085,6 +1094,7 @@ export const EVENTS: GameEvent[] = [
     text: 'Två poliser vill se ditt pass. Den ene bläddrar länge i det.',
     tone: 'allvar',
     weight: 2,
+    villkor: (c) => c.country !== 'Sverige',
     choices: [
       {
         label: 'Visa passet och vänta lugnt',
@@ -1177,7 +1187,7 @@ export const EVENTS: GameEvent[] = [
             text: 'Den var äkta. Du inser det först månader senare, men den var det.',
             weight: 2,
             tone: 'bra',
-            effect: { money: -400 },
+            effect: { money: -400, rating: 6 },
           },
           {
             text: 'Den var tillverkad i förra veckan, tre kvarter bort. Fin är den ändå.',
@@ -1188,11 +1198,19 @@ export const EVENTS: GameEvent[] = [
       },
       {
         label: 'Fråga efter intyg',
-        outcomes: ett(
-          'Frågan avslutar samtalet. Handlaren ler och ställer tillbaka den i lådan.',
-          undefined,
-          'stamning'
-        ),
+        outcomes: [
+          {
+            text: 'Frågan avslutar samtalet. Handlaren ler och ställer tillbaka den i lådan.',
+            weight: 3,
+            tone: 'stamning',
+          },
+          {
+            text: 'Intyget finns, säger handlaren, men hemma. När du kommer tillbaka nästa dag är den såld. Han har ett intyg till den nya ägaren.',
+            weight: 2,
+            tone: 'blandat',
+            effect: { days: 1 },
+          },
+        ],
       },
     ],
   },
@@ -1329,7 +1347,7 @@ export const EVENTS: GameEvent[] = [
         label: 'Tacka ja',
         outcomes: [
           {
-            text: 'Det blir kvällen du minns bäst av hela resan. Du får med dig mat för två dagar.',
+            text: 'Sju rätter, fyra generationer och ett fotografi av dig på kylskåpet innan du hunnit gå. Du får med dig mat för två dagar.',
             weight: 4,
             tone: 'bra',
             effect: { money: 260, rating: 10, rykte: 2 },
@@ -1344,7 +1362,7 @@ export const EVENTS: GameEvent[] = [
       },
       {
         label: 'Tacka artigt nej',
-        outcomes: ett('De blir uppriktigt ledsna, och du tänker på det på vandrarhemmet.', undefined, 'stamning'),
+        outcomes: ett('De ser ledsna ut, och du tänker på det på vandrarhemmet.', undefined, 'stamning'),
       },
     ],
   },
@@ -1355,6 +1373,7 @@ export const EVENTS: GameEvent[] = [
     text: 'Du hör ditt eget språk mitt i {stad} och det känns oväntat starkt.',
     tone: 'stamning',
     weight: 3,
+    villkor: (c) => c.country !== 'Sverige',
     effect: {},
   },
   {
@@ -1489,6 +1508,7 @@ export const EVENTS: GameEvent[] = [
     text: 'Samtalet förs med händer, en penna och en servett, och tar tjugo minuter för något som borde ta tjugo sekunder. Ni skrattar båda två.',
     tone: 'stamning',
     weight: 3,
+    villkor: (c) => c.country !== 'Sverige',
     effect: {},
   },
 
@@ -1614,8 +1634,8 @@ export const EVENTS: GameEvent[] = [
       {
         label: 'Betala för uppgraderingen',
         outcomes: ett(
-          'Du sover hela vägen och kliver av som en människa i stället för som en ryggsäck.',
-          { money: -450 },
+          'Du sover hela vägen och kliver av som en människa i stället för som en ryggsäck. Staden ser bättre ut så.',
+          { money: -450, rating: 8 },
           'bra'
         ),
       },
@@ -1648,7 +1668,7 @@ export const EVENTS: GameEvent[] = [
       {
         label: 'Gå tillbaka och leta',
         outcomes: [
-          { text: 'Den låg på kaféet, i en burk märkt "hittegods". Fyra timmar för en nyckel.', weight: 3, effect: { days: 1 } },
+          { text: 'Den låg på kaféet, i en burk märkt ”hittegods”. Fyra timmar för en nyckel.', weight: 3, effect: { days: 1 } },
           { text: 'Den låg i den andra fickan hela tiden. Du säger det till ingen.', weight: 2, tone: 'absurd' },
         ],
       },
@@ -1800,7 +1820,7 @@ export const EVENTS: GameEvent[] = [
     id: 'blomsterflickan',
     triggers: ['stad', 'mote'],
     title: 'En ros i handen',
-    text: 'Hon trycker den i din hand, säger "present", och håller sedan kvar handen framsträckt.',
+    text: 'Hon trycker den i din hand, säger ”present”, och håller sedan kvar handen framsträckt.',
     tone: 'absurd',
     weight: 3,
     choices: [
@@ -1916,6 +1936,7 @@ export const EVENTS: GameEvent[] = [
     text: 'Hon skriver om vad utlänningar tror om {land} och har en penna redo.',
     tone: 'blandat',
     weight: 2,
+    villkor: (c) => c.country !== 'Sverige',
     choices: [
       {
         label: 'Svara ärligt',
@@ -1997,7 +2018,7 @@ export const EVENTS: GameEvent[] = [
         ],
       },
       {
-        label: 'Säga nej',
+        label: 'Säg nej',
         outcomes: ett('Hon förstår, och frågar nästa.', undefined, 'stamning'),
       },
     ],
@@ -2131,7 +2152,7 @@ export const EVENTS: GameEvent[] = [
     choices: [
       {
         label: 'Följ med och ge dricks efteråt',
-        outcomes: ett('Turen är bättre än den betalda, och hon blir uppriktigt glad.', { money: -120, rating: 12, rykte: 2 }),
+        outcomes: ett('Turen är bättre än den betalda. Hon blir glad, och det syns.', { money: -120, rating: 12, rykte: 2 }),
       },
       {
         label: 'Följ med utan att ge något',

@@ -182,7 +182,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
     grundad: 1879,
     artiklar: [
       {
-        rubrik: 'Bompengarna höjs - igen',
+        rubrik: 'Trängselavgiften höjs - igen',
         text:
           'Trängselavgiften för att köra in i Oslo höjs för fjärde gången på två år. Kommunen menar att pengarna går till spårvagnar, cykelvägar och en ny tunnel som ingen ännu vet var den ska mynna ut. Bilister har svarat med att parkera i Drammen och ta tåget. Drammen har inte tillfrågats.',
       },
@@ -285,7 +285,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
     notiser: [
       'Norrskenet väntas i natt, moln tillåtet.',
       'Simhallen i Laugardalur höjer temperaturen i varmaste potten med en grad.',
-      'Ett fårskiljande i Mosfellsbær samlade fler åskådare än fotbollsmatchen.',
+      'En fårskiljning i Mosfellsbær samlade fler åskådare än fotbollsmatchen.',
       'Bensinpriset gick upp, vilket är tidningens mest lästa notis varje vecka.',
       'Regnet kom in horisontellt på tisdagen, vilket räknas som normalt.',
     ],
@@ -400,7 +400,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       'Spårvagn 2 får nya vagnar, som är lika smala som de gamla.',
       'Kanalbåtarnas hastighetsgräns sänks till sex kilometer i timmen, vilket ingen märker.',
       'Anne Frank-huset inför tidsbokning också för kön.',
-      'En häger har flyttat in på Dam-torget och matas av stadens turistkontor.',
+      'En häger har flyttat in på Damtorget och matas av stadens turistkontor.',
       'Stroopwafeln får skyddad ursprungsbeteckning i Gouda, till Amsterdams irritation.',
     ],
   },
@@ -426,7 +426,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       },
     ],
     notiser: [
-      'Brandenburger Tor tvättas i natt, ett tvätt av två.',
+      'Brandenburger Tor tvättas i natt, en tvätt av två.',
       'Museiön inför en gemensam biljett som ingen ännu förstått.',
       'Tempelhofs gamla flygfält får fler grillplatser och färre regler.',
       'Tunnelbanan U8 lovar att lukta bättre efter nyår.',
@@ -609,9 +609,9 @@ export const CITY_PAPERS: Record<string, Tidning> = {
     grundad: 1899,
     artiklar: [
       {
-        rubrik: 'Sagrada Família klar 2026 - eller inte',
+        rubrik: 'Sagrada Família snart klar - igen',
         text:
-          'Byggledningen för Sagrada Família upprepar att kyrkan ska stå klar 2026, hundra år efter Gaudís död. Samtidigt meddelar man att den sista trappan till centraltornet ”kan ta något längre tid”. Barcelonaborna, som hört liknande sedan 1882, nickar. Byggkranarna har blivit en så självklar del av silhuetten att en förening vill skydda dem.',
+          'Byggledningen för Sagrada Família upprepar att kyrkan är på väg att bli färdig och att bara den sista trappan till centraltornet återstår. Trappan ”kan ta något längre tid”. Barcelonaborna, som hört liknande i fem generationer, nickar. Byggkranarna har blivit en så självklar del av silhuetten att en förening vill skydda dem.',
       },
       {
         rubrik: 'Strandförbud mot högtalare från juni',
@@ -711,7 +711,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       },
     ],
     notiser: [
-      'Vinfarmarna i Constantia öppnar för skörden med gratis provsmakning för de som hjälper till.',
+      'Vinfarmarna i Constantia öppnar för skörden med gratis provsmakning för dem som hjälper till.',
       'Long Street får nya trottoarer, i väntan på nya bilar.',
       'Bo-Kaaps färgglada hus har fått en ny färg: turkos.',
       'Ett par valar sågs utanför Hermanus en vecka tidigare än väntat.',
@@ -796,7 +796,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       },
     ],
     notiser: [
-      'Ormtjusarna på torget har kommit överens om ett gemensamt fototaxa.',
+      'Ormtjusarna på torget har kommit överens om en gemensam fototaxa.',
       'Majorelle-trädgården målar om en bänk i samma blå.',
       'Hästdroskorna får nya vagnar, men samma hästar.',
       'Tagine-tävlingen i Mellah avgjordes med oavgjort mellan två mödrar.',
@@ -911,7 +911,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
     ],
     notiser: [
       'Malecón stängs för trafik vid högvatten, som inträffar när det blåser norrifrån.',
-      'Ett glassstånd på Coppelia har infört tre nya smaker och kön har fördubblats.',
+      'Ett glasstånd på Coppelia har infört tre nya smaker och kön har fördubblats.',
       'Cigarrfabriken på Partagás-gatan får en ny uppläsare som läser romaner för rullarna.',
       'Kanonskottet från fästningen klockan nio ljöd klockan nio, som varje kväll sedan 1700-talet.',
       'Bussen till Varadero har fått luftkonditionering, säger chauffören.',
@@ -925,7 +925,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Färjan till Gorée får en ny båt - gamla får vila',
         text:
-          'Färjelinjen mellan Dakars hamn och ön Gorée tar i drift en ny båt med plats för trehundra passagerare, medan den gamla båten från 1970-talet får en välförtjänt ommålning. Överfarten tar tjugo minuter som förut. Besökare som ska till Slavhuset uppmanas köpa biljett tidigt, eftersom söndagens turer är fulla av Dakarbor med picknick. Måsarna följer båda båtarna.',
+          'Färjelinjen mellan Dakars hamn och ön Gorée tar i drift en ny båt med plats för trehundra passagerare. Den gamla, från 1970-talet, målas om och sätts in som reserv. Besökare som ska till Slavhuset uppmanas köpa biljett tidigt, eftersom söndagens turer är fulla av Dakarbor med picknick. Den nya båten har dubbelt så starka motorer som den gamla. Överfarten tar tjugo minuter, som förut.',
       },
       {
         rubrik: 'Brottningsfinal på stadion i kväll',
@@ -1049,7 +1049,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Momo-tävling i Thamel: 400 dumplings på en timme',
         text:
-          'En restaurang i Thamel arrangerade en tävling i att äta momo, den nepalesiska dumplingen, och vinnaren åt fyrtiotvå på en timme. Tvåan gav upp vid trettioåtta med hänvisning till höjden. Restaurangen serverade sammanlagt fyra hundra momo under tävlingen och slut på chilisås efter en halvtimme. Ett lag från Pokhara har utmanat till revansch.',
+          'En restaurang i Thamel arrangerade en tävling i att äta momo, den nepalesiska dumplingen, och vinnaren åt fyrtiotvå på en timme. Tvåan gav upp vid trettioåtta med hänvisning till höjden. Restaurangen serverade sammanlagt fyra hundra momo under tävlingen. Chilisåsen tog slut efter en halvtimme, momon inte. Ett lag från Pokhara har utmanat till revansch, på lägre höjd.',
       },
     ],
     notiser: [
@@ -1072,7 +1072,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Inti Raymi-festen förbereds - solen väntas',
         text:
-          'Solfesten den 24 juni förbereds på Sacsayhuamán med sju hundra skådespelare i inka-dräkter, en lama och en talare som ska spela inkakejsaren och läsa på quechua. Repetitionerna har pågått sedan april. Läktarna som byggs framför fästningens stenmurar rymmer fyra tusen personer och kullarna runt omkring rymmer alla andra. Meteorologerna spår sol, vilket är en förutsättning.',
+          'Solfesten den 24 juni förbereds på Sacsayhuamán med sju hundra skådespelare i inkadräkter, en lama och en talare som ska spela inkakejsaren på quechua. Repetitionerna har pågått sedan april. Läktarna framför fästningens stenmurar rymmer fyra tusen personer, kullarna runt omkring alla andra. Solen väntas medverka som vanligt. Den har inte deltagit i repetitionerna.',
       },
       {
         rubrik: 'Lama i katedralen: ”Det var öppet”',
@@ -1096,7 +1096,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Lucy får ny sal på museet - hon är 3,2 miljoner',
         text:
-          'Nationalmuseets berömda skelett Lucy, som hittades i Afar 1974 och är 3,2 miljoner år gammal, flyttar till en ny sal med bättre ljus och klimatanläggning. Museet framhåller att originalet ligger i ett kassaskåp och att besökare ser en avgjutning, vilket enligt guiden ”inte gör henne mindre viktig”. Salen har också fått en bänk. Lucy uppges inte ha några åsikter om flytten.',
+          'Nationalmuseets berömda skelett Lucy, som hittades i Afar 1974 och är 3,2 miljoner år gammal, flyttar till en ny sal med bättre ljus och klimatanläggning. Museet framhåller att originalet ligger i ett kassaskåp och att besökare ser en avgjutning, vilket enligt guiden ”inte gör henne mindre viktig”. Salen har också fått en bänk. Museet räknar med att hon stannar.',
       },
       {
         rubrik: 'Kaffepriset stiger på Merkato',
@@ -1210,7 +1210,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Gyeongbokgung nattöppet - hanbok gratis',
         text:
-          'Det stora Joseon-palatset håller nattöppet under helgen med lyktor i alla gångar, och besökare som kommer i hanbok slipper betala inträde. Uthyrningsbutikerna vid porten har lagt om till skift. Vaktbytet vid Gwanghwamun hålls som vanligt, men i mörker och med facklor. Palatset ber besökare att inte springa i trappan till tronsalen, som är från 1395 i andan.',
+          'Det stora Joseon-palatset håller nattöppet under helgen med lyktor i alla gångar, och besökare som kommer i hanbok slipper betala inträde. Uthyrningsbutikerna vid porten har lagt om till skift. Vaktbytet vid Gwanghwamun hålls som vanligt, men i mörker och med facklor. Palatset ber besökare att inte springa i trappan till tronsalen. Palatset är från 1395. Trappan har bytts ut några gånger sedan dess, och det syns inte.',
       },
       {
         rubrik: 'Kimchi-säsongen igång - kål slut i Mapo',
@@ -1324,7 +1324,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
       {
         rubrik: 'Bungeehoppen från Sky Tower fortsätter - repet klart',
         text:
-          'Efter en säkerhetsöversyn får hoppen från 192 meters höjd på Sky Tower fortsätta, med nytt rep och samma utsikt. Tornet är Södra halvklotets högsta fristående byggnad och hoppet går i en styrd vajer, så att man inte studsar in i tornet, vilket besökare från Sverige brukar fråga om. Restaurangen på 190 meter roterar ett varv i timmen. Hoppen tar elva sekunder.',
+          'Efter en säkerhetsöversyn får hoppen från 192 meters höjd på Sky Tower fortsätta, med nytt rep och samma utsikt. Tornet är södra halvklotets högsta fristående byggnad, och hoppet går i en styrd vajer så att man inte studsar in i det. Hoppen tar elva sekunder. Restaurangen på 190 meter roterar ett varv i timmen. Gästerna vid fönstret ser hoppen. De flesta beställer ändå.',
       },
       {
         rubrik: 'Färjorna till Waiheke förlängs - vinet räcker',
@@ -1404,7 +1404,7 @@ export const CITY_PAPERS: Record<string, Tidning> = {
   },
   hudiksvall: {
     namn: 'Glada Hudikbladet',
-    devis: 'Hälsinglands äldsta stad, sedan 1582',
+    devis: 'Tidningen i Hälsinglands äldsta stad',
     grundad: 1846,
     artiklar: [
       {
