@@ -11,17 +11,43 @@
     <path d="M-42 -4 l-10 -18 h10 l14 18 z"/><path d="M-42 4 l-10 18 h10 l14 -18 z"/>
   </g>
 
-  <!-- Jordklot bakom ryggsäcken, i samma platta stil: en cirkel med
-       förenklade landmassor längs kanten, där de syns bakom väskan -->
-  <circle cx="256" cy="296" r="200" fill="#2f7d63"/>
-  <g fill="#245f4b">
-    <path d="M96 236 q30 -60 90 -70 q40 -6 30 30 q-10 34 -60 40 q-50 6 -60 0 z"/>
-    <path d="M150 440 q30 40 100 46 q60 4 96 -30 q-30 -10 -70 -8 q-60 4 -126 -8 z"/>
-    <path d="M390 200 q40 30 56 90 q6 40 -10 80 q-30 -30 -34 -80 q-4 -50 -12 -90 z"/>
-    <path d="M120 360 q-30 -20 -40 -60 q20 10 44 30 q10 20 -4 30 z"/>
+  <!-- Jordklot bakom ryggsäcken: blått hav, gröna kontinenter och iskalotter
+       klippta till cirkeln, skuggning nedtill till höger och en glans uppe
+       till vänster så att det ser runt ut. Tecknat men stiliserat. -->
+  <defs>
+    <clipPath id="klot"><circle cx="256" cy="296" r="200"/></clipPath>
+    <radialGradient id="hav" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#3f9ccb"/><stop offset="1" stop-color="#1f6a95"/>
+    </radialGradient>
+  </defs>
+  <circle cx="256" cy="296" r="200" fill="url(#hav)"/>
+  <g clip-path="url(#klot)">
+    <g fill="#5cb87c">
+      <!-- Nordamerika -->
+      <path d="M60 200 q30 -70 100 -100 q60 -20 90 10 q-10 40 -50 50 q-40 8 -60 50 q-20 40 -50 30 q-30 -10 -30 -40 z"/>
+      <!-- Sydamerika -->
+      <path d="M120 350 q40 0 60 30 q20 40 0 90 q-14 36 -34 40 q-10 -50 -30 -90 q-16 -34 4 -70 z"/>
+      <!-- Europa och Afrika -->
+      <path d="M330 100 q50 -10 90 30 q30 30 40 80 q6 40 -6 80 q-14 44 -50 60 q-30 -30 -30 -80 q0 -40 -20 -70 q-30 -30 -50 -60 q0 -30 26 -40 z"/>
+      <!-- Australien -->
+      <path d="M350 430 q40 -20 70 0 q10 20 -6 36 q-40 10 -64 -6 q-10 -16 0 -30 z"/>
+    </g>
+    <!-- mörkare skog på kontinenterna -->
+    <g fill="#3f9a62">
+      <path d="M90 190 q30 -40 70 -50 q-10 30 -40 44 q-20 10 -30 6 z"/>
+      <path d="M380 150 q30 20 44 60 q-24 -10 -40 -34 q-10 -16 -4 -26 z"/>
+      <path d="M140 400 q20 10 26 40 q-16 -10 -26 -40 z"/>
+    </g>
+    <!-- iskalotter -->
+    <path d="M186 96 h140 q20 24 -10 34 h-120 q-30 -10 -10 -34 z" fill="#f6efe0" fill-opacity="0.9"/>
+    <path d="M196 496 h120 q10 -18 -10 -26 h-100 q-20 8 -10 26 z" fill="#f6efe0" fill-opacity="0.9"/>
+    <!-- skuggning nedtill till höger -->
+    <circle cx="200" cy="240" r="250" fill="none" stroke="#071a29" stroke-opacity="0.22" stroke-width="120"/>
   </g>
-  <path d="M60 296 h392" stroke="#245f4b" stroke-opacity="0.5" stroke-width="6"/>
-  <path d="M256 96 q-120 200 0 400" stroke="#245f4b" stroke-opacity="0.5" stroke-width="6" fill="none"/>
+  <!-- glans uppe till vänster -->
+  <path d="M112 200 q30 -80 110 -110" stroke="#f6efe0" stroke-opacity="0.35" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <!-- atmosfärkant -->
+  <circle cx="256" cy="296" r="200" fill="none" stroke="#9fd4e8" stroke-opacity="0.35" stroke-width="6"/>
 
   <!-- Ryggsäck i platt stil, efter referensen: sidofickor, kropp, lock med
        skugga under, två remmar med öppna spännen, bärögla -->
