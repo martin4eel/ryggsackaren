@@ -78,12 +78,12 @@ export interface EventEffect {
   rating?: number;
   /** Anseende, plus eller minus. */
   rykte?: number;
-  /** Souvenir-id du får utan att betala. */
+  /** Souvenir-id du får utan att betala, eller 'lokal' för en slumpad ur stadens sortiment. */
   souvenir?: string;
   /** Sant om du blir av med en souvenir ur ryggsäcken. */
   tapparSouvenir?: boolean;
-  /** Certifikat i ett ämne, som om du klarat ett skift. */
-  certifikat?: Category;
+  /** Certifikat i ett ämne, som om du klarat ett skift; 'senaste' är ämnet för det senast avklarade jobbet. */
+  certifikat?: Category | 'senaste';
 }
 
 export interface EventOutcome {
@@ -676,7 +676,7 @@ export const EVENTS: GameEvent[] = [
     tone: 'bra',
     weight: 1,
     villkor: (c) => c.rykte >= 3,
-    effect: {},
+    effect: { certifikat: 'senaste' },
   },
   {
     id: 'blastes-pa-lonen',
@@ -1243,7 +1243,7 @@ export const EVENTS: GameEvent[] = [
     tone: 'bra',
     weight: 2,
     villkor: (c) => c.rykte >= 2,
-    effect: { rykte: 1 },
+    effect: { rykte: 1, souvenir: 'lokal' },
   },
   {
     id: 'tull-souvenir',

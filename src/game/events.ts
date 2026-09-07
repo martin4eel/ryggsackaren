@@ -10,6 +10,7 @@ import {
 } from '../data/events';
 import { CITY_POPULATION } from '../data/facts';
 import { SOUVENIR_BY_ID } from '../data/souvenirs';
+import { JOB_BY_ID } from '../data/jobs';
 import type { City } from '../data/types';
 import type { GameState } from './state';
 import { getProgress } from './state';
@@ -264,14 +265,18 @@ export function describeEffect(
       tone: effect.rykte > 0 ? 'bra' : 'daligt',
     });
   }
-  if (effect.souvenir) {
+  if (effect.souvenir === 'lokal') {
+    rader.push({ text: 'En souvenir i ryggsäcken', tone: 'bra' });
+  } else if (effect.souvenir) {
     const s = SOUVENIR_BY_ID[effect.souvenir];
     if (s) rader.push({ text: `${s.name} i ryggsäcken`, tone: 'bra' });
   }
   if (effect.tapparSouvenir) {
     rader.push({ text: 'En souvenir är borta', tone: 'daligt' });
   }
-  if (effect.certifikat) {
+  if (effect.certifikat === 'senaste') {
+    rader.push({ text: 'Certifikat i yrkets ämne', tone: 'bra' });
+  } else if (effect.certifikat) {
     rader.push({ text: `Certifikat i ${effect.certifikat}`, tone: 'bra' });
   }
   return rader;
@@ -354,7 +359,13 @@ export function applyEffect(
   }
 
   if (effect.souvenir) {
-    const s = SOUVENIR_BY_ID[effect.souvenir];
+    // 'lokal' är en slumpad vara ur stadens eget sortiment: handlaren ger
+    // något hen har, inte något ur en annan världsdel.
+    const id =
+      effect.souvenir === 'lokal'
+        ? city.souvenirs[Math.floor(Math.random() * city.souvenirs.length)]
+        : effect.souvenir;
+    const s = id ? SOUVENIR_BY_ID[id] : undefined;
     if (s) {
       state.backpack.push({ souvenirId: s.id, paid: 0, boughtIn: city.id });
       rader.push({ text: `${s.name} i ryggsäcken`, tone: 'bra' });
@@ -383,10 +394,15 @@ export function applyEffect(
     });
   }
 
-  if (effect.certifikat) {
-    state.certificates[effect.certifikat] =
-      (state.certificates[effect.certifikat] ?? 0) + 1;
-    rader.push({ text: `Certifikat i ${effect.certifikat}`, tone: 'bra' });
+  // 'senaste' är ämnet för jobbet man just gjort: händelsen slår till
+  // efter ett skift, och det är det skiftet arbetsledaren skriver om.
+  const amne =
+    effect.certifikat === 'senaste'
+      ? JOB_BY_ID[state.senasteYrke?.jobId ?? '']?.category
+      : effect.certifikat;
+  if (amne) {
+    state.certificates[amne] = (state.certificates[amne] ?? 0) + 1;
+    rader.push({ text: `Certifikat i ${amne}`, tone: 'bra' });
   }
 
   return rader;
