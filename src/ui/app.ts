@@ -602,6 +602,12 @@ export class App {
   private scrollToTopNext = true;
   /** Element som ska ha tangentbordsfokus när ombyggnaden är klar. */
   private focusAfterRender: HTMLElement | null = null;
+  /**
+   * Ett element som ska rullas in i bild efter nästa omritning om det hamnat
+   * under skärmkanten: kvittensen på ett svar, som annars låg osedd under
+   * alternativen på en telefon.
+   */
+  private rullaFramAfterRender: HTMLElement | null = null;
   private startPick: { cityId: string; difficulty: Difficulty; name: string } = {
     cityId: 'stockholm',
     difficulty: 'turist',
@@ -1422,6 +1428,28 @@ export class App {
     // preventScroll, så att fokuseringen inte rullar undan det vi just
     // återställt ovan.
     if (target?.isConnected) target.focus({ preventScroll: true });
+
+    /*
+     * Kvittensen på ett svar ritas under alternativen, och på en telefon
+     * hamnade den under skärmkanten: "Rätt" eller "Fel" och knappen vidare
+     * låg på 900 pixlar i en skärm på 840. Spelaren fick rulla för att se
+     * om svaret var rätt. Nu rullas kvittensen upp till skärmens övre
+     * tredjedel om den inte redan syns, så att både det markerade
+     * alternativet ovanför och knappen nedanför får plats.
+     */
+    const fram = this.rullaFramAfterRender;
+    this.rullaFramAfterRender = null;
+    if (fram?.isConnected) {
+      const rect = fram.getBoundingClientRect();
+      const hojd = window.innerHeight;
+      if (rect.top > hojd * 0.55 || rect.bottom > hojd) {
+        const lugn = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({
+          top: Math.max(0, window.scrollY + rect.top - hojd * 0.3),
+          behavior: lugn ? 'auto' : 'smooth',
+        });
+      }
+    }
   }
 
   // ------------------------------------------------------------- startskärm
@@ -4164,6 +4192,7 @@ export class App {
       // Fokus följer med till knappen som ska tryckas, så att svaret kan
       // kvitteras med tangentbordet utan att leta sig tillbaka dit.
       this.focusAfterRender = next;
+      this.rullaFramAfterRender = feedback;
     }
 
     // Raden visas först när något är besvarat: "0 av 0" säger ingenting.
