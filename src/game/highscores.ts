@@ -47,7 +47,14 @@ export function loadHighscores(): Highscore[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw) as Highscore[];
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter((h) => typeof h?.score === 'number');
+    // En post som saknar det startskärmen läser upp kraschade hela skärmen
+    // utan väg förbi. Bara kompletta poster släpps igenom.
+    return parsed.filter(
+      (h) =>
+        typeof h?.score === 'number' &&
+        Number.isFinite(h.score) &&
+        (h.difficulty === 'turist' || h.difficulty === 'globetrotter')
+    );
   } catch {
     return [];
   }

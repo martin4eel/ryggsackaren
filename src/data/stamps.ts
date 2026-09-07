@@ -159,7 +159,8 @@ export function buildStamps(cityRegion: (id: string) => string | undefined): Sta
       name: 'Skuldfri',
       desc: 'Betala tillbaka allt du lånat hemifrån.',
       glyph: '✂',
-      test: (s) => s.callsHome > 0 && s.debt === 0,
+      // Kräver att man faktiskt lånat. Förr räckte ett samtal för att prata.
+      test: (s) => (s.lan ?? 0) > 0 && s.debt === 0,
     },
     {
       id: 'egen-kraft',

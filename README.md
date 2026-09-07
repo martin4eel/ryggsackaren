@@ -716,10 +716,10 @@ till tågprovet och cockpiten är omgjorda med `scripts/facitbild.py`.
 Var fjärde gång slumpen skulle ha gett en händelse kommer i stället en
 människa med ett ärende: en döv katt till systern i Paris, en surdeg från
 1987, farfar i en urna som aldrig fick se Lissabon. Man tackar ja eller
-nej. Ärendet ligger sedan som en egen rad i ryggsäcken med mål, ersättning
-och sista dag, och betalas ut när man kliver av i rätt stad – halva
-summan om man är sen, och ett ärende med passerad sista dag stryks när
-man kommer till fel stad. Målet är alltid en stad man inte varit i, helst
+nej. Ärendet ligger sedan som en egen rad i ryggsäcken med mål och
+ersättning, och betalas ut när man kliver av i rätt stad. Inget ärende går
+på tid: den som väntar har väntat länge nog för att kunna vänta lite till.
+Målet är alltid en stad man inte varit i, helst
 i en annan del av världen, och högst två ärenden får ligga i ryggsäcken.
 Sexton ärenden finns i `src/data/uppdrag.ts`; varje ärende dyker upp högst
 en gång per resa. Tre stämplar hör till: Kurir (1), Budbärare (3) och

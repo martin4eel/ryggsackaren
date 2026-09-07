@@ -269,6 +269,8 @@ export interface GameState {
   pagaende?: Record<string, unknown>;
   /** Antal lån man faktiskt fått hem, inte antal samtal */
   lan?: number;
+  /** Ett nej från föräldrarna: taket de gick med på att diskutera, och vilken dag. Gäller dagen ut. */
+  lanNekat?: { tak: number; dag: number };
   /** Aktiva uppdrag: ärenden till andra städer */
   uppdrag?: AktivtUppdrag[];
   /** Uppdrag som erbjuds just nu, tills man tackar ja eller nej */
@@ -366,11 +368,15 @@ export function getProgress(state: GameState, cityId: string): CityProgress {
   return p;
 }
 
-export function saveGame(state: GameState): void {
+/** Sparar. Falskt om lagringen sa nej: privat läge eller fullt utrymme. */
+export function saveGame(state: GameState): boolean {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    return true;
   } catch {
-    // Privat läge eller fullt lagringsutrymme - spelet fungerar ändå.
+    // Privat läge eller fullt lagringsutrymme - spelet fungerar ändå, men
+    // den som spelar ska få veta det. Anroparen säger till.
+    return false;
   }
 }
 

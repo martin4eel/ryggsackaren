@@ -594,6 +594,10 @@ export class App {
   /** Svaret på en kontaktannons man just besvarat, tills tidningen lämnas. */
   private kontaktSvar: { id: string; text: string; rader: EffectLine[] } | null = null;
   private toastTimer: number | null = null;
+  /** Sagt en gång per session: att sparningen inte fungerar. */
+  private sparfelSagt = false;
+  /** En ny utgåva av spelet har hämtats av service workern och väntar på en omladdning. */
+  private nyVersion = false;
   /**
    * Skärmen byggs om från grunden vid varje förändring. Vid skärmbyte ska vyn
    * börja högst upp, men vid en ombyggnad på samma skärm - som när man svarat
@@ -718,6 +722,13 @@ export class App {
       }
     }
     this.bindKeyboard();
+    // Service workern säger till när en ny utgåva tagit över. Den som har
+    // spelet på hemskärmen laddar sällan om av sig själv, och fick annars
+    // rättningar och nya frågor först vid nästa kallstart.
+    window.addEventListener('upptackaren:nyversion', () => {
+      this.nyVersion = true;
+      this.render();
+    });
     this.render();
   }
 
@@ -734,7 +745,17 @@ export class App {
       const tag = target?.tagName;
       if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
       const s = this.state;
-      if (!s || this.confirmRestart) return;
+      if (!s) return;
+      if (this.confirmRestart) {
+        // Escape avbryter, som i vilken dialog som helst. Övriga tangenter
+        // går till dialogens egna knappar.
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          this.confirmRestart = false;
+          this.render();
+        }
+        return;
+      }
 
       /**
        * En obesvarad händelse äger tangentbordet. A-C väljer, Enter går vidare
@@ -871,7 +892,7 @@ export class App {
     // som sjukanmälde sig och stängde fliken fick annars skiftet tillbaka
     // vid nästa start, fast skärmen var stadsbilden.
     if (!this.quiz) delete this.state.pagaende;
-    saveGame(this.state);
+    this.spara();
     if (changed && this.pendingStamp && !this.quiz) this.commit();
     // Bara ett faktiskt skärmbyte ska rulla upp till toppen.
     if (changed) this.scrollToTopNext = true;
@@ -912,9 +933,24 @@ export class App {
     this.toast = message;
     if (this.toastTimer !== null) window.clearTimeout(this.toastTimer);
     this.toastTimer = window.setTimeout(() => {
+      // Bara notisen tas bort, inte hela skärmen. En omritning startade om
+      // alla mynts animationer på stadsbilden, så mynten hoppade till fyra
+      // sekunder efter varje resa.
       this.toast = null;
-      this.render();
+      this.root.querySelector('.toast:not(.nyversion)')?.remove();
     }, 3600);
+  }
+
+  /**
+   * Sparar, och säger till en gång om det inte går. Safari i privat läge och
+   * en full lagring svalde annars felet tyst, och spelaren märkte först vid
+   * nästa start att ingenting av resan fanns kvar.
+   */
+  private spara(): void {
+    if (!this.state) return;
+    if (saveGame(this.state) || this.sparfelSagt) return;
+    this.sparfelSagt = true;
+    this.notify('Resan går inte att spara i den här webbläsaren. Håll fliken öppen tills du är hemma.');
   }
 
   /**
@@ -944,7 +980,7 @@ export class App {
     const earned = newStamps(s);
     // Dagen stämpeln togs trycks sedan i själva stämpeln, som ett datum.
     for (const stamp of earned) s.stampDays[stamp.id] = s.days;
-    saveGame(s);
+    this.spara();
     // Delar spelaren sin resa får internetcaféet veta hur långt hen kommit.
     // Anropet är strypt i sig självt och gör oftast ingenting alls.
     void kanskeSynka(s);
@@ -961,7 +997,7 @@ export class App {
       this.stampTimer = window.setTimeout(
         () => {
           this.stampToast = null;
-          this.render();
+          this.root.querySelector('.stamp-toast')?.remove();
         },
         this.stampToast.tier ? 7000 : 4200
       );
@@ -1103,8 +1139,9 @@ export class App {
   }
 
   /**
-   * Vid ankomst: uppdrag med den här staden som mål slutförs och betalas;
-   * uppdrag vars sista dag passerat stryks. Rapporten visas som ett kort.
+   * Vid ankomst: uppdrag med den här staden som mål slutförs och betalas.
+   * Inget uppdrag går på tid (se data/uppdrag.ts). Rapporten visas som ett
+   * kort.
    */
   private avslutaUppdragVidAnkomst(city: City): string[] {
     const s = this.state!;
@@ -1333,6 +1370,12 @@ export class App {
 
     if (this.toast) {
       shell.append(el('div', { class: 'toast', role: 'status' }, this.toast));
+    } else if (this.nyVersion) {
+      shell.append(
+        button('En ny version av spelet finns. Tryck för att ladda om.', () => window.location.reload(), {
+          class: 'toast nyversion',
+        })
+      );
     }
     if (s.pendingUppdrag && !s.pendingEvent) {
       const u = s.pendingUppdrag;
@@ -1428,6 +1471,18 @@ export class App {
     // preventScroll, så att fokuseringen inte rullar undan det vi just
     // återställt ovan.
     if (target?.isConnected) target.focus({ preventScroll: true });
+    /*
+     * Vid ett skärmbyte flyttas fokus till skärmens rubrik, så att den som
+     * spelar med tangentbord eller skärmläsare börjar överst på den nya
+     * skärmen i stället för att leta sig dit från dokumentets början.
+     */
+    if (!target && keepScroll === null) {
+      const rubrik = this.root.querySelector<HTMLElement>('main h1, main h2');
+      if (rubrik) {
+        rubrik.tabIndex = -1;
+        rubrik.focus({ preventScroll: true });
+      }
+    }
 
     /*
      * Kvittensen på ett svar ritas under alternativen, och på en telefon
@@ -1515,35 +1570,6 @@ export class App {
      * hjälpknappen. Utfällningen sker på plats, utan att sidan byggs om, så
      * att ett halvskrivet namn inte tappar fokus.
      */
-    const hasSave = Boolean(loadGame());
-    if (hasSave) {
-      const resumeRow = el('div', { class: 'row' });
-      resumeRow.append(
-        button(
-          'Fortsätt sparad resa',
-          () => {
-            const saved = loadGame();
-            if (!saved) return;
-            this.state = saved;
-            if (saved.screen === 'jobb' || saved.screen === 'turistbyra') {
-              saved.screen = 'stad';
-            }
-            this.scrollToTopNext = true;
-            this.render();
-          },
-          { class: 'btn btn-primary' }
-        ),
-        button(
-          'Radera sparfil',
-          () => {
-            clearSave();
-            this.render();
-          },
-          { class: 'btn btn-ghost' }
-        )
-      );
-      hero.append(resumeRow);
-    }
     wrap.append(hero);
 
     /**
@@ -1997,7 +2023,7 @@ export class App {
       stat('Kassa', this.money(s.money), s.money < 0 ? 'bad' : undefined),
       // Under ett skift räknas dagarna upp fråga för fråga, så att räknaren
       // inte står still i en vecka och sedan hoppar.
-      stat('Dag', String(s.days + (this.quiz?.kind === 'jobb' && this.quiz.phase === 'fragor' ? this.quiz.index : 0))),
+      stat('Dag', String(s.days + (this.quiz?.kind === 'jobb' ? (this.quiz.phase === 'fragor' ? this.quiz.index : this.quiz.questions.length) : 0))),
       stat('Städer', `${new Set(s.visited).size}/${CITIES.length}`),
       stat('Stämplar', `${s.stamps.length}/${STAMPS.length}`),
       stat('Skuld', this.money(s.debt), s.debt > 0 ? 'warn' : undefined)
@@ -2282,9 +2308,9 @@ export class App {
           this.travelFilter = mode;
           s.stationMode = mode;
           playSound('valj');
-          this.go('station');
+          // Händelsen lottas före skärmbytet, så att skärmen ritas en gång.
           this.fireEvent('vantan');
-          this.render();
+          this.go('station');
         }
       );
     }
@@ -2961,12 +2987,7 @@ export class App {
     const p = getProgress(s0, city.id);
     p.spent ??= [];
     if (p.spent.includes('sparet')) return;
-    p.spent.push('sparet');
-    playSound('sida');
-    this.spendDays(1, city);
-    this.commit();
-    if (this.checkBroke()) return;
-    const s = this.state!;
+    const s = s0;
     // Tre resmål med fem ledtrådar var, aldrig staden man står i.
     // Aldrig staden man står i, hemstaden eller städer man redan besökt: där
     // har man läst broschyren, och ledtrådarna vore ett facit.
@@ -2977,6 +2998,20 @@ export class App {
         !s.visited.includes(c.id) &&
         ((SPARET_LEDTRADAR[c.id]?.length ?? 0) >= 5 || (CITY_FACTS[c.id]?.length ?? 0) >= 5)
     );
+    // Resmålen räknas innan dagen dras. Förr drogs dagen först, och den som
+    // besökt nästan alla städer fick en tom inspelning som kraschade vid
+    // varje omladdning.
+    if (kandidater.length === 0) {
+      this.notify('Redaktionen hittar inget resmål du inte redan varit i. Inspelningen ställs in.');
+      this.scrollToTopNext = false;
+      this.render();
+      return;
+    }
+    p.spent.push('sparet');
+    playSound('sida');
+    this.spendDays(1, city);
+    this.commit();
+    if (this.checkBroke()) return;
     const valda = shuffle(kandidater).slice(0, 3);
     // De skrivna ledtrådarna ligger i fallande svårighet, som i tv. Saknas
     // de får broschyren duga, maskad.
@@ -3119,7 +3154,14 @@ export class App {
       return wrap;
     }
     const total = sp.scores.reduce((a, b) => a + b, 0);
-    const mal = CITY_BY_ID[sp.cities[sp.round]!]!;
+    const mal = CITY_BY_ID[sp.cities[sp.round] ?? ''];
+    if (!mal) {
+      // En inspelning utan resmål går inte att spela. Den släpps i stället
+      // för att stå och krascha.
+      delete s.sparet;
+      wrap.append(el('section', { class: 'panel' }, el('p', {}, 'Inspelningen ställdes in.')));
+      return wrap;
+    }
     const head = el('section', { class: 'panel sparet-head' });
     head.append(
       el('div', { class: 'sparet-topp' },
@@ -4111,6 +4153,7 @@ export class App {
         : (current.options[current.correctIndex] ?? '');
       const feedback = el('div', {
         class: `feedback ${right ? 'feedback-right' : nara ? 'feedback-near' : 'feedback-wrong'}`,
+        role: 'status',
       });
       const headline = right
         ? q0.ratt
@@ -4224,15 +4267,33 @@ export class App {
     wrap.append(panel);
 
     if (isJob && !answered) {
+      /*
+       * Sjukanmälan var gratis: inga dagar drogs, jobbet stod kvar i
+       * tidningen och frågorna lottades om vid nästa försök, så den som
+       * fick en svår fråga kunde gå och komma tillbaka tills raden var
+       * lätt. Nu kostar de dagar man hunnit jobba, med boende, och jobbet
+       * stryks som gjort. Lönen som hunnit tjänas ihop betalas inte ut.
+       */
+      const dagar = q.index;
       wrap.append(
-        this.backRow('Sjukanmäl dig och gå (ingen lön)', () => {
-          stopAllMinigames();
-          this.quiz = null;
-          this.go('stad');
-        })
+        this.backRow(
+          dagar > 0
+            ? `Sjukanmäl dig och gå (ingen lön, ${dagar} ${dagar === 1 ? 'dag' : 'dagar'} går åt)`
+            : 'Sjukanmäl dig och gå (ingen lön)',
+          () => {
+            stopAllMinigames();
+            if (q.job) {
+              getProgress(s, s.currentCityId).workedJobs.push(q.job.id);
+              if (dagar > 0) this.spendDays(dagar, this.city);
+            }
+            this.quiz = null;
+            this.commit();
+            if (this.checkBroke()) return;
+            this.go('stad');
+          }
+        )
       );
     }
-    void s;
     return wrap;
   }
 
@@ -4407,7 +4468,7 @@ export class App {
     // turistbyrån eller från ett jobb.
     const cityStats = getCityStats(s, s.currentCityId);
     if (right) cityStats.correct += 1;
-    else cityStats.wrong += 1;
+    else if (!nara) cityStats.wrong += 1;
 
     if (right) {
       q.correct += 1;
@@ -4429,6 +4490,21 @@ export class App {
         q.snabb = (q.snabb ?? 0) + speedPart;
       }
       s.wrongStreak = 0;
+    } else if (nara) {
+      /*
+       * Nästan rätt på en reglagefråga. Kommentaren ovan lovade halv lön,
+       * halvt poäng och obruten serie, men svaret gick i fel-grenen: noll i
+       * lön, serien bröts, och återkopplingen skrev "halv dagslön, 0 kr".
+       * Nu räknas det som ett halvt rätt: hälften av grundlönen utan svit-
+       * och snabbhetsbonus, ett halvt poäng i provet, och serien står still.
+       */
+      q.nara = (q.nara ?? 0) + 1;
+      if (q.kind === 'jobb' && q.job) {
+        const wage = wagePerCorrect(q.job, this.city, s.difficulty);
+        payout = Math.round(wage / 2);
+        q.earnings += payout;
+        q.grund = (q.grund ?? 0) + payout;
+      }
     } else {
       s.wrong += 1;
       s.wrongStreak += 1;
@@ -4467,6 +4543,9 @@ export class App {
     if (q.index + 1 < q.questions.length) {
       q.index += 1;
       q.askedAt = performance.now();
+      // Sparas här också, annars kom man tillbaka till förra frågans facit
+      // efter en omladdning.
+      this.commit();
       this.render();
       return;
     }
@@ -4799,8 +4878,7 @@ export class App {
     pt.firstDay ??= s.days;
     this.travelFilter = null;
     delete s.stationMode;
-    // Uppdrag som ska hit lämnas över och betalas innan kassan räknas;
-    // passerade sista dagar stryks.
+    // Uppdrag som ska hit lämnas över och betalas innan kassan räknas.
     const uppdragsrader = this.avslutaUppdragVidAnkomst(target);
     this.commit();
     if (this.checkBroke()) return;
@@ -5031,10 +5109,10 @@ export class App {
             el('p', { class: 'butik-not' },
               cheap
                 ? [
-                    'Görs här, och det märks på priset.',
+                    'Görs i den här delen av världen, och det märks på priset.',
                     'Tillverkas i trakten. Därför priset.',
                     'Lokalt hantverk, lokalt pris.',
-                    'Görs ett kvarter härifrån. Ingen frakt att betala.',
+                    'Görs inte långt härifrån. Ingen frakt att betala.',
                   ][Math.floor(pseudoRandom(`${city.id}|${vald.id}|not`) * 4)]!
                 : hot
                   ? `Eftertraktad här - dyr att köpa, bra att sälja. Billigast i ${lista(vald.cheapIn)}.`
@@ -5778,7 +5856,9 @@ export class App {
           panel.append(
             el('p', { class: 'phone-tips' },
               el('strong', {}, `${inled[Math.floor(seed * inled.length)]} `),
-              mening.charAt(0).toLowerCase() === mening.charAt(0) ? mening : `${mening.charAt(0).toLowerCase()}${mening.slice(1)}`.replace(/^/, 'Att '),
+              // Meningen som den står. Att gemena första bokstaven och sätta
+              // "Att" framför gjorde Phoenix Park till "Att phoenix Park".
+              mening,
               ' Bra att veta till provet, tänkte jag.'
             )
           );
@@ -5790,7 +5870,11 @@ export class App {
          * om, och man får försöka igen så länge det finns något att be om.
          */
         const slutlanat = (s.lan ?? 0) >= LOAN_LIMIT;
-        const tak = slutlanat ? 0 : (samtal.tak ?? LOAN_MAX);
+        // Ett nej gäller dagen ut, inte bara tills man lägger på och ringer
+        // igen. Förr nollställdes taket vid varje nytt samtal, och samtalen
+        // kostar ingen dag, så avslaget var bara en omväg.
+        const dagensTak = s.lanNekat && s.lanNekat.dag === s.days ? s.lanNekat.tak : LOAN_MAX;
+        const tak = slutlanat ? 0 : Math.min(samtal.tak ?? LOAN_MAX, dagensTak);
         if (samtal.nekat) {
           panel.append(el('p', { class: 'phone-nej' }, samtal.nekat.rad));
         }
@@ -5829,12 +5913,16 @@ export class App {
                 '{summa}',
                 this.money(belopp)
               );
-              // De sa nej till summan. Nästa försök måste vara blygsammare.
+              // De sa nej till summan. Nästa försök måste vara blygsammare,
+              // och det minns de resten av dagen.
+              const nyttTak = belopp - LOAN_STEP * 3;
               this.phoneCall = {
                 ...samtal,
-                tak: belopp - LOAN_STEP * 3,
+                tak: nyttTak,
                 nekat: { belopp, rad },
               };
+              s.lanNekat = { tak: nyttTak, dag: s.days };
+              this.commit();
               this.scrollToTopNext = false;
               this.render();
               return;
@@ -5842,6 +5930,7 @@ export class App {
             s.money += belopp;
             s.debt += loanDebt(belopp);
             s.lan = (s.lan ?? 0) + 1;
+            delete s.lanNekat;
             this.commit();
             playSound(pappa ? 'rostpappa' : 'rostmamma');
             window.setTimeout(() => playSound('kassa'), 2400);

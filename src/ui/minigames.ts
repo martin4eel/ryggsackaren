@@ -46,7 +46,13 @@ type Done = (result: MinigameResult) => void;
  * lyssnar därför på pointerdown, och klicket som följer ignoreras.
  */
 function snabbKnapp(label: string, onPress: () => void, attrs: Record<string, string>): HTMLElement {
+  // Ett klick från tangentbordet - Enter eller mellanslag på en fokuserad
+  // knapp - har inget pekardon och detail 0. Det ska också räknas, annars
+  // går bildvalet och lagvalet inte att spela utan finger eller mus.
   const b = button(label, () => {}, attrs);
+  b.addEventListener('click', (event) => {
+    if (event.detail === 0) onPress();
+  });
   b.addEventListener('pointerdown', (event) => {
     event.preventDefault();
     onPress();
@@ -318,7 +324,7 @@ function makeFeedback(): {
   node: HTMLElement;
   say: (text: string, tone: 'ok' | 'fel' | 'topp' | 'neutral') => void;
 } {
-  const node = el('p', { class: 'mg-feedback' });
+  const node = el('p', { class: 'mg-feedback', role: 'status' });
   return {
     node,
     say: (text, tone) => {

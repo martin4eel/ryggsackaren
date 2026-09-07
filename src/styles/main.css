@@ -1130,6 +1130,13 @@ img.no-photo {
 
 /* ---------------------------------------------------------------- toast */
 
+/* Notisen om en ny utgåva är en knapp med notisens utseende. */
+button.toast {
+  font: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+
 .toast {
   position: fixed;
   left: 50%;
@@ -5102,7 +5109,10 @@ body.sheet-oppen {
   background: rgba(0, 0, 0, 0.4);
   color: var(--led);
   font: inherit;
-  font-size: 0.86rem;
+  /* Minst sexton pixlar, annars zoomar iOS in i fältet när det får fokus.
+     Zoomlåset i viewporten som dolde det är borttaget: det stängde också
+     av förstoringen för den som behöver den. */
+  font-size: max(0.86rem, 16px);
 }
 
 .board-sok::placeholder {
