@@ -56,6 +56,7 @@ export const DIFFICULTY_INFO: Record<
       'Ingen hjälp att få: du står och faller med vad du kan',
       'Snävare arkadmoment och tuffare ekonomi',
       'Certifikat först vid 75 procent, men lönen är högre',
+      'Slutpoängen får ett påslag på 25 procent',
     ],
   },
 };

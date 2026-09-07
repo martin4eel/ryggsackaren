@@ -150,6 +150,7 @@ webbläsaren och överlever att sparfilen raderas.
    | Certifikat vid | 65 % | 75 % |
    | Startkapital | 6 000 | 4 000 |
    | Boende | 20 % billigare | fullpris, men högre lön |
+   | Slutpoäng | som den är | +25 % på alla rader |
 
    Det finns ingen livlina och ingen hjälp att få under en fråga. Turisten
    får lättare frågor och färre alternativ, inte färre chanser att tänka.
@@ -418,7 +419,9 @@ webbläsaren och överlever att sparfilen raderas.
      liten vit ram, namn, staden och dagen de köptes, och vad de kostade.
    - **Poängkvittot** på slutskärmen visar slutpoängen rad för rad – kassa,
      ryggsäck, städer, världsdelar, stämplar, anseende, certifikat,
-     träffsäkerhet och tempo – med uträkningen i klartext (`finalScoreBreakdown`).
+     träffsäkerhet och tempo, och för Globetrotter ett påslag på 25 % – med
+     uträkningen i klartext (`finalScoreBreakdown`). Städer, världsdelar och
+     tempo räknas bara på städer där man gjort prov, myntfråga eller skift.
    - **Lönekvittot** på skiftets sista sida räknar upp delarna – grundlön,
      svarsserie, snabba svar, bonus från sista passet – och summan, så att
      773 kronor för två rätt går att förklara.

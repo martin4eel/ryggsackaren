@@ -417,6 +417,9 @@ export function aktivaStader(state: GameState): string[] {
   });
 }
 
+/** Påslaget på slutpoängen för den som spelat Globetrotter. */
+export const GLOBETROTTER_PASLAG = 0.25;
+
 /**
  * Slutpoängen rad för rad. Samma siffror som finalScore, men utskrivna så
  * att den som fått 36 541 poäng kan se varifrån de kom.
@@ -482,6 +485,21 @@ export function finalScoreBreakdown(state: GameState): { rader: ScoreRow[]; tota
     { namn: 'Träffsäkerhet', detalj: `${Math.round(accuracy * 100)} % av 10 000`, poang: Math.round(accuracy * 10000) },
     { namn: 'Tempo', detalj: uniqueCities > 0 ? `${daysPerCity.toFixed(1).replace('.', ',')} dagar per stad` : 'ingen stad att räkna på', poang: Math.round(pace) },
   ];
+  /*
+   * Globetrottern får hela frågebanken, fyra alternativ, snävare
+   * arkadmoment och mindre pengar, och svarade därför sämre och tjänade
+   * mindre - men fick samma poängtabell som turisten och stod i samma
+   * resedagbok. Turist var det bättre läget för den som ville upp på
+   * listan. Ett påslag på en fjärdedel gör lägena jämbördiga på papperet.
+   */
+  if (state.difficulty === 'globetrotter') {
+    const grund = rader.reduce((a, r) => a + r.poang, 0);
+    rader.push({
+      namn: 'Globetrotter',
+      detalj: `+${GLOBETROTTER_PASLAG * 100} % på raderna ovan`,
+      poang: Math.round(Math.max(0, grund) * GLOBETROTTER_PASLAG),
+    });
+  }
   const total = Math.max(0, rader.reduce((a, r) => a + r.poang, 0));
   return { rader, total };
 }
