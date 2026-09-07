@@ -17,7 +17,7 @@
  * megabyte stadsfoton en gång till bara för att en frågetext rättats.
  */
 
-const SKAL = 'upptackaren-skal-3befa08';
+const SKAL = 'upptackaren-skal-71f00ac';
 const MEDIA = 'upptackaren-media-v1';
 
 /**
